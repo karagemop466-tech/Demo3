@@ -10,7 +10,7 @@
  *              labelled est. dollar volume) or a live rebuild via GET /markets?status=open
  *   prices     GET /markets?tickers=a,b,c          (batch poll, chunks of 50)
  *   liquidity  GET /markets/orderbooks?tickers=    (<= 100 tickers/request, documented)
- *   fills      GET /markets/trades?ticker=
+ *   fills      GET /markets/trades?ticker=&limit=100
  *   history    GET /series/{series}/markets/{ticker}/candlesticks?start_ts&end_ts&period_interval
  * Endpoints/fields per https://docs.kalshi.com/api-reference/market/get-markets.md,
  * .../get-multiple-market-orderbooks.md, .../get-market-candlesticks.md, and
@@ -755,16 +755,31 @@
     }
     var trades = (t.trades || []).slice(0, 25);
     var table = el("table", "compact");
-    table.innerHTML = "<thead><tr><th>Time (UTC)</th><th>Yes/no</th><th>Price ($)</th><th>Contracts</th><th>Source</th></tr></thead>";
+    // Field names are the ones the schema marks REQUIRED
+    // (https://docs.kalshi.com/api-reference/market/get-trades.md): yes_price_dollars /
+    // no_price_dollars / count_fp / taker_outcome_side / taker_book_side / created_time /
+    // is_block_trade. The legacy `price`, `count` and `yes_no` names are NOT in that schema,
+    // so nothing falls back to them; a missing required field prints blank with an unverified
+    // flag rather than a guessed number.
+    table.innerHTML = "<thead><tr><th>Time (UTC)</th><th>Yes $</th><th>No $</th><th>Contracts</th>" +
+      "<th>Taker outcome / book side</th><th>Block</th><th>Source</th></tr></thead>";
     var tb = el("tbody");
     trades.forEach(function (x) {
       var tr = el("tr");
-      [String(x.created_time || "").slice(0, 19), x.yes_no || "",
-        x.price === undefined ? "" : money(x.price),
-        x.count === undefined ? "" : String(x.count)].forEach(function (c) { tr.appendChild(el("td", null, c)); });
+      [String(x.created_time || "").slice(0, 19),
+        x.yes_price_dollars === undefined ? "" : "$" + Number(x.yes_price_dollars).toFixed(4),
+        x.no_price_dollars === undefined ? "" : "$" + Number(x.no_price_dollars).toFixed(4),
+        x.count_fp === undefined ? "" : String(Number(x.count_fp).toLocaleString()),
+        (x.taker_outcome_side || "") + (x.taker_book_side ? " / " + x.taker_book_side : ""),
+        x.is_block_trade === undefined ? "" : (x.is_block_trade ? "yes" : "no")].forEach(function (c) {
+        var td0 = el("td");
+        td0.appendChild(document.createTextNode(c));
+        if (c === "") td0.appendChild(el("span", "pill unverified", "unverified"));
+        tr.appendChild(td0);
+      });
       var td = el("td");
       var a = el("a", "src", "trades");
-      a.href = API + "/markets/trades?ticker=" + encodeURIComponent(state.selected);
+      a.href = API + "/markets/trades?ticker=" + encodeURIComponent(state.selected) + "&limit=100";
       a.target = "_blank"; a.rel = "noopener";
       td.appendChild(a); tr.appendChild(td); tb.appendChild(tr);
     });

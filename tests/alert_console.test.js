@@ -64,7 +64,19 @@ function respond(url) {
       yes_dollars: [["0.3800", "400.00"], ["0.3900", "900.00"]],
       no_dollars: [["0.5800", "300.00"]] } }] } };
   }
-  if (url.includes("/markets/trades")) return { ok: true, json: { trades: [] } };
+  if (url.includes("/markets/trades")) {
+    return { ok: true, json: { trades: [
+      // required fields per https://docs.kalshi.com/api-reference/market/get-trades.md
+      { trade_id: "t1", ticker: "KXSMOKE-1-A", count_fp: "250.00", yes_price_dollars: "0.5100",
+        no_price_dollars: "0.4900", taker_outcome_side: "yes", taker_book_side: "offer",
+        created_time: "2026-11-20T19:40:00Z", is_block_trade: false },
+      { trade_id: "t2", ticker: "KXSMOKE-1-A", count_fp: "80.00", yes_price_dollars: "0.4000",
+        no_price_dollars: "0.6000", taker_outcome_side: "no", taker_book_side: "bid",
+        created_time: "2026-11-20T19:39:00Z", is_block_trade: true },
+      // a row missing documented required fields -> blank cells + unverified flag, no guessing
+      { trade_id: "t3", ticker: "KXSMOKE-1-A", created_time: "2026-11-20T19:38:00Z" },
+    ], cursor: "" } };
+  }
   if (url.includes("/series/KXSMOKE")) {
     return { ok: true, json: { series: { ticker: "KXSMOKE", title: "Smoke series",
       category: "Test", tags: ["smoke"], fee_type: "quadratic", fee_multiplier: 1,
@@ -202,6 +214,14 @@ test("selecting a market draws the chart, the depth ladder and the catalyst bloc
     ["$0.3800", "400", "1,300", "$0.6200"]);
   assert.match(d.getElementById("catalysts").textContent, /Smoke Feed/);
   assert.match(d.getElementById("catalysts").textContent, /If the smoke test passes/);
+  // trades table: documented schema, and an unverified flag on the incomplete row
+  const fills = [...d.querySelectorAll("#tradesTable tbody tr")];
+  assert.equal(fills.length, 3, "three fixture prints");
+  assert.deepEqual([...fills[0].querySelectorAll("td")].map(x => x.textContent),
+    ["2026-11-20T19:40:00", "$0.5100", "$0.4900", "250", "yes / offer", "no", "trades"]);
+  assert.match(fills[2].innerHTML, /pill unverified/, "missing required fields must be flagged, not filled in");
+  assert.match(fills[0].innerHTML, /markets\/trades\?ticker=KXSMOKE-1-A&(?:amp;)?limit=100/,
+    "the row's link must be the exact request that produced it");
   assert.match(d.getElementById("catalysts").innerHTML, /class="src"/, "catalyst rows need source links");
 });
 
