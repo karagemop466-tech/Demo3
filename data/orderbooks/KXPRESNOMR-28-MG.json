@@ -1,1 +1,1 @@
-{"ticker":"KXPRESNOMR-28-MG","fetched_at":"2026-11-20T11:59:47Z","source_url":"https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPRESNOMR-28-MG/orderbook","yes_bids":[["0.0300","1.00"]],"no_bids":[],"best_yes_bid":{"price":"0.0300","contracts":"1.00"},"best_no_bid":null}
+{"ticker":"KXPRESNOMR-28-MG","fetched_at":"2026-11-20T12:02:17Z","source_url":"https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPRESNOMR-28-MG/orderbook","yes_bids":[["0.0300","1.00"]],"no_bids":[],"best_yes_bid":{"price":"0.0300","contracts":"1.00"},"best_no_bid":null}
