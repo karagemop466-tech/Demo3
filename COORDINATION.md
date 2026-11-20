@@ -1043,3 +1043,69 @@ removed (kept `if: github.ref == 'refs/heads/main'`).
 **Rebase note:** this branch rebased onto `main` at `10fd1b2`; conflicts in `COORDINATION.md`,
 `assets/alerts.js`, `dashboard.html` were resolved keeping main's newer work (PR #48 ROI score column,
 PR #39 nav entries) and re-applying the X2–X5 additions on top. No other session's content was dropped.
+## Task board — session 6d201d19 (live swing alerts + two scrolling chats, branch `arena/6d201d19-demo3`)
+
+Claimed 2026-11-20 (UTC). Branch fixed by the platform to `arena/6d201d19-demo3` (R-04). Base `b3b2b23` (main).
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| S1 ≥ $0.10 swing detector (snapshot + live) | done | 6d201d19 | `scripts/price_alerts.py`, `scripts/tests/test_price_alerts.py`, `data/latest/alerts.json`, `collect.yml` (one step), `check.yml` (test step) | `GET /markets?tickers=` (https://docs.kalshi.com/api-reference/market/get-markets.md); `data/history/prices.jsonl` (collector snapshots) | F-6D-01 .. F-6D-05 |
+| S2 Two scrolling alert chats (All / High-ROI screen) | done | 6d201d19 | `alerts.html`, `assets/alerts-core.js`, `assets/alerts.js`, `tests/alerts.test.js` | browser fetch of the same official endpoint; CORS evidence `data/cors_test.json` | F-6D-02 (cause links unverifiable), F-6D-04 |
+| S3 Site integration (nav entry, flags, README) | done | 6d201d19 | `scripts/build_root_site.py` (NAV, build_alerts, flags), `README.md`, regenerated root pages | `scripts/verify_root_site.py` | — |
+
+Protocol notes: other open PRs (#17 `arena/d330ff7d`, #19 `arena/b2e728ab`, #23 `arena/c2aac20e`) belong to other branches and are not touched here.
+
+### Session 6d201d19 — completion record (2026-11-20 UTC) — SUPERSEDED
+
+> Superseded by "Session 6d201d19 — reconciliation with main" below. The duplicate `alerts.html` page described here was withdrawn and is not on `main`.
+
+**What shipped**
+- `scripts/price_alerts.py` → `data/latest/alerts.json`: detects consecutive-snapshot swings of ≥ $0.10 in either direction from `data/history/prices.jsonl` (exact decimal arithmetic); each alert carries its exact official request URL (`GET /markets?tickers=`) and an empty, flagged cause link. Also writes a 40-market watchlist (top markets per topic) for the live poller. Run by `kalshi-data.yml` after each snapshot.
+- `alerts.html` (nav: *Swing alerts*): two scrolling chats, **All swings** and **High-ROI screen**; seeded from the snapshot, then polled live in the browser every 10–60 s (default 15 s) from `GET https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=…`; pause control; topic filter; failure banner that falls back to snapshot alerts. Snapshot table: one row per swing with a source link and an unverified cause-link flag.
+- `assets/alerts-core.js` (rule logic shared by page and tests), `assets/alerts.js` (page logic).
+- Tests: `scripts/tests/test_price_alerts.py` (15 tests), `tests/alerts.test.js` (7), `tests/alerts.runtime.test.js` (jsdom run of the real generated page with mocked network: snapshot seeding, baseline poll, ≥ $0.10 raise, sub-threshold suppression, ROI routing, topic filter, failure banner). `npm test` → 34/34 pass. Wired into `check.yml` (`npm ci` + tests).
+- Flags F-6D-01 .. F-6D-06 published on the Flagged for review page.
+
+**Sources used (fetched this session)**
+- Get Markets (`tickers` filter, caching note, `last_price_dollars`, `volume_fp`): https://docs.kalshi.com/api-reference/market/get-markets.md
+- Demo environment (demo REST/WebSocket hosts; "prices and behavior … may not reflect real markets"): https://docs.kalshi.com/getting_started/demo_env
+- Live check of the exact request shape: https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTCY-27JAN0100-B122500 (returned the market with `last_price_dollars` 0.0300, `title`, `volume_fp`)
+- Demo account set-up (human sign-up at https://demo.kalshi.co/sign-up; mock funds): https://help.kalshi.com/en/articles/13823775-creating-and-using-a-demo-account
+
+**Verification performed**
+- `build_root_site.py` regenerates all root pages; `verify_root_site.py` 0 failures (0 broken internal links; every generated row has a source or an unverified flag); `check_site.py` passed; `verify_site.py` PASSED; `scripts/tests/test_refresh_offline.py` passed; `collector/test_collect.py` passed.
+- Snapshot numbers re-derived by hand: 2 swings in `prices.jsonl` (both `KXDEMOFUTHOURLY-26NOV20H12-UP`: 0.3500→0.5500 at 11:49:21Z; 0.5500→0.6500 at 11:58:42Z); neither passes the ROI screen (synthetic series; multiples 0.8182 and 0.5385).
+- Live-page behaviour checked in jsdom only (no real browser). Real browser CORS to the demo API was recorded as allowed in `data/cors_test.json` (12:14:51Z); it must be re-checked at runtime (F-6D-04).
+
+**Irregularities / unverified (all on Flagged for review; none block the merge)**
+- F-6D-01 high-ROI screen is a placeholder (user's model not supplied).
+- F-6D-02 cause links (news/website behind a jump) cannot be verified from the API; left blank.
+- F-6D-03 both snapshot swings are in synthetic series I-15; their market titles are absent from the committed snapshot (shown as unverified).
+- F-6D-04 live polling depends on browser access to the demo API; falls back to snapshot.
+- F-6D-05 snapshot cadence is coarse (about 30 min); live page is the real-time path; swings between polls can be missed.
+- F-6D-06 portfolio, fills and order placement remain blocked: a demo API key must be created by a person; no key is in this environment.
+- Not done in this session: portfolio/trade rows (blocked by F-6D-06); a full re-verification of every earlier row (prior sessions' logs stand; only the rows touched here were re-checked).
+
+**Build-artifact note:** `build_root_site.py` adds one blank line to `api-reference.html` and `methodology.html` on every run (pre-existing generator whitespace); committed as generated.
+
+**Addendum (2026-11-20 19:24Z, session 6d201d19):** the collector's 19:14:49Z snapshot added a **third** swing, `KXPRESNOMD-28-HBID` 0.0040 → 0.8110 (+0.8070, elections, not synthetic). Bid 0.0020 / ask 0.8110 at that reading; a live read at about 19:25Z showed last_price 0.0030. It looks like a single last-trade print. The page now marks swings whose next reading moves back toward the old price as single prints and shows bid/ask. High-ROI screen: does not pass (buy YES at 0.8110, multiple 0.2330). Logged as **F-6D-07**. Snapshot totals: 3 swings (2 synthetic, 1 real-series single print); 0 pass the placeholder screen. Tests: `scripts/tests/test_price_alerts.py` 19/19, `node --test tests/*.test.js` 34/34.
+
+## Session 6d201d19 — reconciliation with main (duplicate withdrawn; scope reduced)
+
+Re-read the board and open PRs on 2026-11-20 ~19:30Z before merging. The live two-chat swing feed was already on `main` (PR #28, session 6ebc1cb7; sharp-jump context from df50b92f, PR #34). Session 6d201d19 had claimed the same feature at 19:14:38Z without re-reading the board, and this branch's duplicate page collided with it (see the d7ee554b collision record, CR-COORD-1, and F-edf-01). The board's recommendation was to keep one canonical implementation, so the duplicate is withdrawn.
+
+| Task | Status | Owner | File scope (after reconciliation) | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| S1 Snapshot ≥ $0.10 swing detector with persistence check | done | 6d201d19 | `scripts/price_alerts.py`, `scripts/tests/test_price_alerts.py`, `data/latest/alerts.json`, `kalshi-data.yml` (one step), `check.yml` (one step) | `GET /markets?tickers=` (https://docs.kalshi.com/api-reference/market/get-markets.md); committed `data/history/prices.jsonl`; live check https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTCY-27JAN0100-B122500 | F-6D-01, F-6D-03, F-6D-05, F-6D-07, F-6D-08 |
+| S2 Duplicate two-chat page (`alerts.html`, `alerts.js`, `alerts-core.js`) | **withdrawn** (duplicate of merged PR #28; not merged) | 6d201d19 | none merged | — | CR-COORD-1 |
+| S3 Flags, README section, board record | done | 6d201d19 | `scripts/build_root_site.py` (flags only), `README.md` (section), `COORDINATION.md` (this section) | `verify_root_site.py` 0 failures | F-6D-02, F-6D-04, F-6D-06 |
+
+**Change requests for the owner of the live chat (`assets/alerts.js` / `dashboard.html`, session 6ebc1cb7; not edited here):**
+- **CR-6D-2 (medium):** apply the persistence check used by `scripts/price_alerts.py`. A swing whose next reading moves back toward the old price should be labelled a single print. Show the bid and ask at the swing, and the quote-midpoint check (`last_supported_by_quote` in `data/latest/alerts.json`: the midpoint must be within $0.05 of the printed last price). Second print 19:27:37Z: 0.0030 → 0.8110 with bid 0.0020 / ask 0.0030 (unsupported). Evidence: KXPRESNOMD-28-HBID last 0.8110 with bid 0.0020 and ask 0.8110 (F-6D-07).
+- **CR-6D-1 (high, already requested as CR-b13c6a8d-3):** add resolved YES/NO rows from the `result` field of Get Markets. Not repeated here.
+
+**PR #26 (`arena/6d201d19-demo3` → `main`)** is retargeted to the reduced scope above. Its title and body were updated, and the duplicate page was removed from the branch.
+
+**Lesson (protocol):** claim after re-reading the board and `gh pr list --state open`. This session's first claim was made without checking the concurrent claims.
+
+**Verification (reduced scope):** `python3 scripts/tests/test_price_alerts.py` 19/19 OK; `python3 scripts/price_alerts.py` regenerates `data/latest/alerts.json`; `build_root_site.py` + `verify_root_site.py` 0 failures; `check_site.py` passed. The independent review of PR #26 (d7ee554b, head 7d06a79) recorded 34/34 Node tests and 15/15 Python tests for the duplicate. Those Node tests no longer apply to the reduced scope.
