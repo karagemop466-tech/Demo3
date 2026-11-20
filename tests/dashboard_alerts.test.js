@@ -1,5 +1,6 @@
-// Session 5125afd8 — end-to-end smoke: real dashboard.html + app.js + dashboard.js + alerts.js,
-// with only the Kalshi HTTP responses mocked. Proves the scan hook feeds both alert feeds.
+// Session 5125afd8 — end-to-end smoke: the real dashboard.html + app.js + dashboard.js + trade.js +
+// alerts.js + site.js run in jsdom; only the Kalshi HTTP responses are mocked. Proves the scan
+// samples reach the alert chats (dashboard.js -> KD.onMarkets / KD.onSample -> alerts.js -> DOM).
 import test from "node:test";
 import assert from "node:assert/strict";
 import path from "node:path";
@@ -24,43 +25,49 @@ function payload(url) {
   return {};
 }
 
-async function waitFor(fn, label, ms = 8000) {
+async function waitFor(fn, label, ms = 12000) {
   const end = Date.now() + ms;
   while (Date.now() < end) { if (fn()) return; await new Promise((r) => setTimeout(r, 25)); }
   assert.fail("timed out: " + label);
 }
 
-test("live scan hook feeds the all-swings and high-ROI feeds on the real dashboard page", async () => {
-  const vc = new VirtualConsole(); // swallow unrelated page-script noise (no network in sandbox)
+test("live scans feed the all-events and high-ROI chats on the real dashboard page", async () => {
   const dom = await JSDOM.fromFile(path.join(repo, "dashboard.html"), {
-    runScripts: "dangerously", resources: "usable", pretendToBeVisual: true, virtualConsole: vc,
+    runScripts: "dangerously", resources: "usable", pretendToBeVisual: true,
+    virtualConsole: new VirtualConsole(),
     beforeParse(window) {
-      window.fetch = async (url) => { const body = payload(String(url));
-        return { ok: true, status: 200, json: async () => body, text: async () => JSON.stringify(body) }; };
+      window.fetch = async (url) => {
+        const body = payload(String(url));
+        return { ok: true, status: 200, json: async () => body, text: async () => JSON.stringify(body) };
+      };
       window.HTMLCanvasElement.prototype.getContext = () => null;
       window.scrollTo = () => {};
     },
   });
-  const d = dom.window.document;
   try {
-  await waitFor(() => dom.window.KalshiAlerts && d.getElementById("alertFeedAll"), "alerts engine loaded");
+    const d = dom.window.document;
+    await waitFor(() => dom.window.KD && d.getElementById("alertsAll"), "alerts engine loaded");
+    d.getElementById("discoverBtn").click();
+    await waitFor(() => /Discovery complete/.test(d.getElementById("discoveryStatus").textContent), "discovery");
 
-  d.getElementById("discoverBtn").click();
-  await waitFor(() => /Discovery complete/.test(d.getElementById("discoveryStatus").textContent), "discovery");
+    d.getElementById("scanBtn").click(); // seeds the anchor at $0.50
+    await waitFor(() => /open markets/.test(d.getElementById("scanStatus").textContent), "scan 1");
+    assert.equal(dom.window.KD.allRows().length, 0);
 
-  d.getElementById("scanBtn").click(); // primes anchors at $0.50, no alert
-  await waitFor(() => /open markets/.test(d.getElementById("scanStatus").textContent), "scan 1");
-  assert.equal(d.querySelectorAll("#alertFeedAll li.alert").length, 0, "first scan raises no alert");
+    // dashboard.js records a sample at most every 5 s; wait past that window before the second scan.
+    await new Promise((r) => setTimeout(r, 5200));
+    price = 0.62;
+    d.getElementById("scanBtn").click();
+    await waitFor(() => dom.window.KD.allRows().length === 1, "swing alert");
 
-  price = 0.62; // +$0.12 move
-  d.getElementById("scanBtn").click();
-  await waitFor(() => d.querySelectorAll("#alertFeedAll li.alert").length === 1, "swing alert");
-  const all = d.querySelector("#alertFeedAll li.alert");
-  assert.match(all.textContent, /KXAAAGASW-26NOV23-3\.9400/);
-  assert.match(all.className, /\bup\b/);
-  assert.match(all.textContent, /\+\$0\.12/);
-  assert.match(all.innerHTML, /href="https:\/\/external-api\.demo\.kalshi\.co\/trade-api\/v2\/markets\//);
-  assert.equal(d.querySelectorAll("#alertFeedRoi li.alert").length, 1, "passes placeholder high-ROI rule");
-  assert.match(d.getElementById("alertCountAll").textContent, /^1$/);
-  } finally { dom.window.close(); }
+    const row = d.querySelector("#alertsAll tr.alert");
+    assert.ok(row, "an alert row is rendered in the all-events chat");
+    assert.match(row.className, /\bup\b/);
+    assert.match(row.textContent, /KXAAAGASW-26NOV23-3\.9400/);
+    assert.match(row.innerHTML, /href="https:\/\/external-api\.demo\.kalshi\.co\/trade-api\/v2\/markets\//);
+    assert.equal(dom.window.KD.roiRows().length, 1, "passes the placeholder high-ROI rule");
+    assert.match(d.getElementById("alertsROI").textContent, /high-ROI signal/);
+  } finally {
+    dom.window.close();
+  }
 });

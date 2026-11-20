@@ -1,197 +1,202 @@
-/* Kalshi Demo Dashboard — live price-swing alerts (session 5125afd8, task T-A1).
+/* Kalshi Demo Tracker — price-swing alert chat.
  *
- * Hooked into the dashboard scan via window.KalshiAlerts.onScan(rows) (assets/dashboard.js).
- *  - Feed 1 "All swings": every open market whose last price moved by >= $0.10
- *    (either direction) from its anchor.
- *  - Feed 2 "High-ROI filter": the subset that passes CONFIG.roiRule.
+ * Detects live contract price swings >= $0.10 (10 cents) in either direction
+ * and publishes them to two scrolling chats:
+ *   - "All events": every swing alert
+ *   - "High ROI model": a selective, labeled heuristic filter (NOT a real model)
  *
- * Anchor = the market's last price at its previous alert (or its first observation).
- * Anchors are re-set on every alert, so a slow drift that adds up to $0.10 also alerts.
+ * Data: reuses the dashboard's live market samples (GET /markets, demo API,
+ * no key needed). No extra network requests. Each alert links its exact market
+ * API URL. Values the exchange does not report are left blank — never inferred.
  *
- * Sources / definitions (all verified, see COORDINATION.md session 5125afd8):
- *  - Price field: `last_price_dollars` (official Get Market schema,
- *    https://docs.kalshi.com/api-reference/market/get-market). Values are dollars per contract.
- *  - Payout: each contract settles to $1 if right, $0 if wrong
- *    (https://news.kalshi.com/p/what-are-event-contracts).
- *  - Gross ROI if right, buying at price p: YES (1 - p) / p ; NO p / (1 - p). Fees and spread are
- *    NOT included. This is arithmetic on the payout rule, not a probability forecast.
- *  - The API does not report what caused a move, so alerts never state a cause.
- *  - Sampling is once per dashboard scan (about 20 s). This is not a tick stream; the official
- *    WebSocket requires signed handshake headers that a browser page cannot attach
- *    (https://docs.kalshi.com/getting_started/quick_start_websockets), so the page polls REST.
+ * The high-ROI rule below is a transparent placeholder heuristic. No model is
+ * defined in this repo, so nothing is presented as a verified ROI signal. It is
+ * flagged for review (F-alert-01) until a real model is specified.
+ *
+ * Source: https://docs.kalshi.com/getting_started/quick_start_market_data
+ *         https://docs.kalshi.com/api-reference/market/get-markets
+ *         https://docs.kalshi.com/getting_started/demo_env
  */
 (function () {
   "use strict";
-  var K = window.KalshiDemo;
-  var $ = function (id) { return document.getElementById(id); };
 
-  var CONFIG = {
-    threshold: 0.10,          // dollars per contract, either direction
-    maxItems: 200,            // rows kept per feed
-    // PLACEHOLDER high-ROI rule. The owner's "model" criteria were NOT supplied to this repo,
-    // so this rule is a visible, editable stand-in (flagged as an open question).
-    roiRule: {
-      minMove: 0.10,
-      minPrice: 0.05,         // skip prices pinned at the extremes
-      maxPrice: 0.95,
-      requireVolume: true,    // total traded contracts > 0 (volume_fp)
-      requireOpenInterest: true // open contracts > 0 (open_interest_fp)
-    }
-  };
-
-  /* ---------- pure logic (exported for tests) ---------- */
-
-  function round4(x) { return Math.round(x * 10000) / 10000; }
-
-  // Gross return per $1 risked if the bought side pays $1. Returns null outside (0,1).
-  function roiIfRight(price) {
-    if (typeof price !== "number" || !(price > 0 && price < 1)) return null;
-    return { yes: (1 - price) / price, no: price / (1 - price) };
-  }
-
-  // rows: markets as built by dashboard.js marketRow(); anchors: {ticker: dollars}.
-  // Returns the alerts raised by this scan and the anchors for the next scan.
-  function evaluate(anchors, rows, threshold, now) {
-    var alerts = [];
-    var next = {};
-    (rows || []).forEach(function (m) {
-      var last = m.last;
-      if (last === null || last === undefined || isNaN(Number(last))) return;
-      last = Number(last);
-      var anchor = anchors[m.ticker];
-      if (anchor === undefined) { next[m.ticker] = last; return; }
-      var delta = round4(last - anchor);
-      if (Math.abs(delta) + 1e-9 >= threshold) {
-        var roi = roiIfRight(last);
-        alerts.push({
-          id: m.ticker + "@" + now,
-          ts: now,
-          ticker: m.ticker,
-          title: m.title || m.ticker,
-          topic: m.topic || "",
-          event_ticker: m.event_ticker || "",
-          series_ticker: m.series_ticker || "",
-          from: anchor,
-          to: last,
-          delta: delta,
-          direction: delta > 0 ? "up" : "down",
-          yb: m.yb, ya: m.ya,
-          vol: Number(m.vol) || 0,
-          oi: Number(m.oi) || 0,
-          roiYes: roi ? roi.yes : null,
-          roiNo: roi ? roi.no : null
-        });
-        next[m.ticker] = last;
-      } else {
-        next[m.ticker] = anchor;
-      }
-    });
-    return { alerts: alerts, anchors: next };
-  }
-
-  function passesRoi(a, rule) {
-    if (!a || !rule) return false;
-    if (!(a.to >= rule.minPrice && a.to <= rule.maxPrice)) return false;
-    if (Math.abs(a.delta) + 1e-9 < rule.minMove) return false;
-    if (rule.requireVolume && !(a.vol > 0)) return false;
-    if (rule.requireOpenInterest && !(a.oi > 0)) return false;
-    return true;
-  }
-
-  /* ---------- state + rendering ---------- */
+  var KD = window.KD = window.KD || {};
+  var ALERT_KEY = "kd_alerts_v1";
+  var SWING = 0.10;                 // dollars = 10 cents, the alert threshold
+  var MAX_ALERTS = 300;
+  var ROI_MIN_PRICE = 0.05;         // placeholder high-ROI rule: skip prices pinned at the extremes
+  var ROI_MAX_PRICE = 0.95;
 
   var state = {
-    anchors: {}, primed: false,
-    all: [], roi: [], pendingAll: [], pendingRoi: [],
-    paused: false, count: { all: 0, roi: 0 }
+    alerts: [],                     // all swing alerts (newest first)
+    lastPrice: {},                  // ticker -> {price, ts} seeded from scans
+    visible: "all",                 // "all" | "roi"
+    enabled: true
+  };
+  try { state.alerts = JSON.parse(localStorage.getItem(ALERT_KEY) || "[]"); } catch (e) { state.alerts = []; }
+
+  function esc(s) {
+    return String(s === null || s === undefined ? "" : s)
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+  function cents(x) {
+    if (x === null || x === undefined || x === "" || isNaN(Number(x))) return "—";
+    return (Number(x) * 100).toFixed(2) + "\u00a2";
+  }
+  function fmtTs(ts) {
+    if (!ts) return "—";
+    var d = new Date(ts * 1000);
+    return d.toLocaleTimeString("en-GB");
+  }
+  // Official Get Market endpoint: GET /markets/{ticker}
+  // (https://docs.kalshi.com/api-reference/market/get-market). The series-scoped path
+  // /series/{s}/markets/{t} is the candlestick route and returns an error for this record.
+  function apiUrl(ticker) {
+    return "https://external-api.demo.kalshi.co/trade-api/v2/markets/" + encodeURIComponent(ticker);
+  }
+  // Float-safe rounding: 0.6 - 0.5 evaluates to 0.09999999999999998 in IEEE doubles, which would
+  // silently drop an exact $0.10 swing. Round to 4 decimals (the API's dollar precision).
+  function round4(x) { return Math.round(Number(x) * 10000) / 10000; }
+
+  /* ---------- swing detection ---------- */
+  KD.onSample = function (m, sample) {
+    if (!state.enabled || !m) return;
+    var cur = sample.price;
+    if (cur === null || cur === undefined) return;
+    var prev = state.lastPrice[m.ticker];
+    if (prev && prev.price !== null && prev.price !== undefined) {
+      var change = round4(cur - prev.price);
+      if (Math.abs(change) >= SWING) {
+        pushAlert(m.ticker, m.title, m.topic, m.series_ticker, prev.price, cur,
+          { vol: m.vol, oi: m.oi });
+      }
+    }
+    state.lastPrice[m.ticker] = { price: cur, ts: sample.t };
   };
 
-  function money(x) { return (x < 0 ? "-$" : "$") + Math.abs(x).toFixed(2); }
-  function pct(x) { return x === null || x === undefined ? "—" : (x * 100).toFixed(0) + "%"; }
-  function clock(ts) { return new Date(ts).toLocaleTimeString("en-GB"); }
+  KD.onMarkets = function (markets) {
+    // Seed lastPrice from full market rows on each scan (no extra API calls).
+    var now = Math.floor(Date.now() / 1000);
+    (markets || []).forEach(function (m) {
+      if (m.last !== null && m.last !== undefined && !state.lastPrice[m.ticker]) {
+        state.lastPrice[m.ticker] = { price: m.last, ts: now };
+      }
+    });
+  };
 
-  function rowHtml(a) {
-    var arrow = a.direction === "up" ? "▲" : "▼";
-    var href = "/markets/" + encodeURIComponent(a.ticker);
-    var src = K.srcLink(href, "API record");
-    var roi = a.roiYes === null ? "" :
-      " · gross ROI if right: YES " + pct(a.roiYes) + " / NO " + pct(a.roiNo);
-    return "<li class='alert " + a.direction + "'>" +
-      "<span class='mono'>" + clock(a.ts) + "</span> " +
-      "<span class='pill'>" + K.esc(a.topic || "—") + "</span> " +
-      "<strong>" + K.esc(a.title) + "</strong> " +
-      "<span class='mono small'>" + K.esc(a.ticker) + "</span><br>" +
-      "<span class='delta " + a.direction + "'>" + arrow + " " +
-      (a.delta > 0 ? "+" : "") + money(a.delta) + "</span> " +
-      "<span class='mono'>" + money(a.from) + " → " + money(a.to) + "</span>" +
-      "<span class='small muted'>" + K.esc(roi) + "</span><br>" +
-      "<span class='small muted'>Cause: not reported by the API (none inferred) · " + src + "</span>" +
-      "</li>";
+  function pushAlert(ticker, title, topic, series, oldP, newP, liq) {
+    var change = round4(Number(newP) - Number(oldP));
+    var dir = change > 0 ? "up" : change < 0 ? "down" : "flat";
+    var alert = {
+      id: "a" + Date.now() + Math.random().toString(36).slice(2, 6),
+      ts: Math.floor(Date.now() / 1000),
+      ticker: ticker,
+      title: title || ticker,
+      topic: topic || "",
+      series: series || "",
+      oldPrice: Number(oldP),
+      newPrice: Number(newP),
+      change: change,
+      dir: dir,
+      api: apiUrl(ticker)
+    };
+    // High-ROI PLACEHOLDER heuristic (NOT a real model; flagged F-alert-01): swing >= $0.10,
+    // price between $0.05 and $0.95 (not pinned at the extremes), and traded and open contracts
+    // > 0 (volume_fp, open_interest_fp from the official Get Market record). A 10%-of-price test
+    // was dropped: with prices capped at $1 it is always true for a $0.10 swing, so it filtered nothing.
+    var liqOk = !!liq && Number(liq.vol) > 0 && Number(liq.oi) > 0;
+    alert.roiSignal = Math.abs(change) >= SWING && newP >= ROI_MIN_PRICE && newP <= ROI_MAX_PRICE && liqOk;
+    state.alerts.unshift(alert);
+    if (state.alerts.length > MAX_ALERTS) state.alerts.length = MAX_ALERTS;
+    try { localStorage.setItem(ALERT_KEY, JSON.stringify(state.alerts)); } catch (e) {}
+    render();
+    if (window.KalshiTrade && window.KalshiTrade.onSwingAlert) {
+      try { window.KalshiTrade.onSwingAlert(alert); } catch (e) { /* automation must not break alerts */ }
+    }
+    return alert;
   }
 
-  function paint(list, el, countEl, count) {
+  /* ---------- chat row selection ---------- */
+  KD.allRows = function () { return state.alerts; };
+  KD.roiRows = function () { return state.alerts.filter(function (a) { return a.roiSignal; }); };
+  KD.setFilter = function (v) { state.visible = v; render(); };
+  KD.clear = function () {
+    state.alerts = [];
+    try { localStorage.removeItem(ALERT_KEY); } catch (e) {}
+    render();
+  };
+  KD.toggle = function () { state.enabled = !state.enabled; render(); };
+
+  /* ---------- rendering (two scrolling chats) ---------- */
+  function alertRow(a) {
+    var cls = "alert " + (a.dir === "up" ? "up" : a.dir === "down" ? "down" : "flat");
+    var arrow = a.dir === "up" ? "\u25b2" : a.dir === "down" ? "\u25bc" : "\u25b6";
+    var dirLabel = a.dir === "up" ? "up" : a.dir === "down" ? "down" : "flat";
+    var roiBadge = a.roiSignal ? " <span class='roi'>&middot; high-ROI signal (heuristic)</span>" : "";
+    return "<tr class='" + esc(cls) + "'><td class='mono small muted'>" + fmtTs(a.ts) + "</td>" +
+      "<td><span class='pill topic'>" + esc(a.topic) + "</span></td>" +
+      "<td class='mono'>" + esc(a.ticker) + "</td>" +
+      "<td>" + esc(a.title) + "</td>" +
+      "<td class='num'>" + cents(a.oldPrice) + " &rarr; " + cents(a.newPrice) + "</td>" +
+      "<td class='num " + esc(dirLabel) + "'>" + arrow + " " + cents(Math.abs(a.change)) + "</td>" +
+      "<td><a class='src' href='" + esc(a.api) + "' target='_blank' rel='noopener'>market API</a>" + esc(roiBadge) + "</td></tr>";
+  }
+  function renderPanel(el, rows, label, emptyHint) {
     if (!el) return;
-    el.innerHTML = list.map(rowHtml).join("") ||
-      "<li class='muted small'>No alerts yet. Alerts appear after a scan sees a move of $0.10 or more.</li>";
-    if (countEl) countEl.textContent = String(count);
+    var rowsHtml = rows.map(alertRow).join("");
+    var empty = rows.length ? "" : "<tr><td colspan='7' class='muted'>No " + label + " swing alerts yet. " + emptyHint + "</td></tr>";
+    el.innerHTML =
+      "<table class='alerts'><thead><tr><th>Time</th><th>Topic</th><th>Ticker</th><th>Event</th>" +
+      "<th>Price move</th><th>Swing</th><th>Source</th></tr></thead><tbody>" + rowsHtml + empty + "</tbody></table>";
   }
-
   function render() {
-    paint(state.all, $("alertFeedAll"), $("alertCountAll"), state.count.all);
-    paint(state.roi, $("alertFeedRoi"), $("alertCountRoi"), state.count.roi);
-    var p = $("alertPauseBtn");
-    if (p) p.textContent = state.paused ? "Resume feeds" : "Pause feeds";
-    var pend = state.pendingAll.length + state.pendingRoi.length;
-    var pn = $("alertPending");
-    if (pn) pn.textContent = state.paused && pend ? pend + " new alert(s) held while paused" : "";
+    renderPanel(document.getElementById("alertsAll"), KD.allRows(), "all",
+      "Swing a tracked market price by >= $0.10 to see alerts here.");
+    renderPanel(document.getElementById("alertsROI"), KD.roiRows(), "high-ROI",
+      "The high-ROI chat applies a labeled placeholder rule — no real model is defined yet.");
   }
 
-  function push(list, items, cap) {
-    items.slice().reverse().forEach(function (a) { list.unshift(a); });
-    if (list.length > cap) list.splice(cap);
-  }
+  /* public */
+  KD.renderAlerts = render;
 
-  function onScan(rows) {
-    if (!K) return;
-    var now = Date.now();
-    var res = evaluate(state.anchors, rows, CONFIG.threshold, now);
-    state.anchors = res.anchors;
-    // The first scan only sets anchors; it raises no alerts (no earlier price to compare).
-    if (!state.primed) { state.primed = true; render(); return; }
-    var roiHits = res.alerts.filter(function (a) { return passesRoi(a, CONFIG.roiRule); });
-    state.count.all += res.alerts.length;
-    state.count.roi += roiHits.length;
-    if (state.paused) {
-      state.pendingAll = res.alerts.concat(state.pendingAll);
-      state.pendingRoi = roiHits.concat(state.pendingRoi);
+  /* ---------- UI wiring ---------- */
+  function wireUI() {
+    var tabAll = document.getElementById("tabAll");
+    var tabROI = document.getElementById("tabROI");
+    var chatAll = document.getElementById("chatAll");
+    var chatROI = document.getElementById("chatROI");
+    var enabled = document.getElementById("alertsEnabled");
+    var clear = document.getElementById("clearAlertsBtn");
+    var countEl = document.getElementById("alertCount");
+    function setActive(tab) {
+      state.visible = tab.getAttribute("data-chat");
+      [tabAll, tabROI].forEach(function (t) {
+        if (t) { t.classList.toggle("active", t === tab); t.setAttribute("aria-pressed", String(t === tab)); }
+      });
+      if (chatAll) chatAll.style.display = tab === tabAll ? "" : "none";
+      if (chatROI) chatROI.style.display = tab === tabROI ? "" : "none";
+      render();
+    }
+    if (tabAll) tabAll.addEventListener("click", function () { setActive(tabAll); });
+    if (tabROI) tabROI.addEventListener("click", function () { setActive(tabROI); });
+    if (clear) clear.addEventListener("click", KD.clear);
+    if (enabled) {
+      enabled.addEventListener("change", function () { KD.toggle(); enabled.checked = state.enabled; });
+    }
+    function updateCount() {
+      if (countEl) countEl.textContent = state.alerts.length + " alert" +
+        (state.alerts.length === 1 ? "" : "s") + (state.enabled ? "" : " (paused)");
+    }
+    var _render = render;
+    render = function () { _render(); updateCount(); };
+    var first = tabAll || document.querySelector(".chat-tab.active");
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", function () { setActive(first); render(); });
     } else {
-      push(state.all, res.alerts, CONFIG.maxItems);
-      push(state.roi, roiHits, CONFIG.maxItems);
+      setActive(first);
+      render();
     }
-    render();
   }
-
-  function togglePause() {
-    state.paused = !state.paused;
-    if (!state.paused) {
-      push(state.all, state.pendingAll, CONFIG.maxItems);
-      push(state.roi, state.pendingRoi, CONFIG.maxItems);
-      state.pendingAll = []; state.pendingRoi = [];
-    }
-    render();
-  }
-
-  function init() {
-    var b = $("alertPauseBtn");
-    if (b) b.addEventListener("click", togglePause);
-    render();
-  }
-  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
-  else init();
-
-  window.KalshiAlerts = {
-    onScan: onScan,
-    config: CONFIG,
-    core: { evaluate: evaluate, roiIfRight: roiIfRight, passesRoi: passesRoi, round4: round4 }
-  };
+  wireUI();
+  setInterval(render, 2000); // keep the chats current while the page is open
 })();

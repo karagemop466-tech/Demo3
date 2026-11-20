@@ -276,12 +276,11 @@ def consolidated_questions():
                                               q.get("missing", "")),
             "00a943bd docs")
     add("5125-Q1", "Which model criteria define a 'high ROI' event? (the live dashboard's second feed)",
-        "The dashboard's second scrolling feed and its filter are implemented as a visible PLACEHOLDER rule: "
-        "a swing of at least $0.10, a price between $0.05 and $0.95, and traded and open contracts above zero. "
-        "Gross ROI if right = (1 − p)/p for YES and p/(1 − p) for NO, from the $1 payout rule.",
+        "The 'High ROI model' chat on the live dashboard is a visible PLACEHOLDER rule: a swing of at least "
+        "$0.10, a price between $0.05 and $0.95, and traded and open contracts above zero. It is not a model.",
         "The owner's model (inputs, thresholds, and whether fees and spread are included) was not supplied. "
         "No model-based ROI can be verified until it is.",
-        "Send the rule (or model code) to the repo owner; edit CONFIG.roiRule in assets/alerts.js.",
+        "Send the rule (or model code) to the repo owner; replace the ROI_MIN_PRICE / ROI_MAX_PRICE constants and the roiSignal line in assets/alerts.js.",
         [f"{DOCS}/getting_started/terms", "https://news.kalshi.com/p/what-are-event-contracts"],
         "5125afd8 alerts")
     return rows
@@ -387,12 +386,12 @@ def consolidated_flags():
         "query string. Fixed in assets/app.js at integration (would otherwise 401 on every "
         "authenticated call).",
         [f"{DOCS}/getting_started/api_keys"], "resolved", "3a22fb0f")
-    add("A-01", "Live alerts", "High-ROI feed uses a placeholder rule",
-        "The second feed (high-ROI filter) is a visible placeholder (move ≥ $0.10, price 5¢–95¢, "
-        "volume_fp > 0, open_interest_fp > 0). It is not the owner's model, so its output is not a "
-        "recommendation. Gross ROI ignores fees and spread.",
+    add("F-alert-01", "Live alerts", "High-ROI chat uses a placeholder heuristic, not a model",
+        "The 'High ROI model' chat applies a labeled placeholder rule (swing >= $0.10, price 5c-95c, traded "
+        "and open contracts > 0). No model is defined in this repo, so its output is not a verified ROI signal. "
+        "Gross ROI, where shown, ignores fees and spread. Replace with the owner's model (question 5125-Q1).",
         [f"{DOCS}/api-reference/market/get-market", "https://news.kalshi.com/p/what-are-event-contracts"],
-        "open", "5125afd8")
+        "open", "6ebc1cb7 / 5125afd8")
     add("A-02", "Live alerts", "Alert causes are not available from the API",
         "The alert feed shows that a price moved, not why. No cause or news link is shown, because "
         "the Kalshi Trade API response carries no cause field and none was inferred. Per-alert links "
@@ -610,25 +609,6 @@ if the browser blocks the request the tables fall back to the snapshot links in
   <div id="rankingTable"></div>
 </div>
 
-<div class="card" id="alerts">
-  <h2>1b · Live swing alerts (move ≥ $0.10, either direction)</h2>
-  <p class="small muted">Two scrolling feeds, newest first, updated on every scan above
-  (<span id="alertCountAll">0</span> swings in <em>All events</em>; <span id="alertCountRoi">0</span> in the
-  <em>High-ROI filter</em>). Each move is measured against the market’s last alerted price (first
-  observation = anchor). Source field: <span class="mono">last_price_dollars</span> from
-  <a href="https://docs.kalshi.com/api-reference/market/get-market" target="_blank" rel="noopener">Get Market</a>.
-  The API does not report causes, so none are shown.
-  <strong>High-ROI filter is a placeholder rule</strong> (move ≥ $0.10, price 5¢–95¢, traded and open
-  contracts &gt; 0). Your model criteria were not supplied; see the open question in
-  <a href="questions.html">Questions</a>. Gross ROI ignores fees and spread.</p>
-  <p><button class="btn secondary" id="alertPauseBtn">Pause feeds</button>
-     <span class="small" id="alertPending"></span></p>
-  <div class="feed-grid">
-    <div><h3>All events (≥ $0.10 swings)</h3><ol class="feed" id="alertFeedAll"></ol></div>
-    <div><h3>High-ROI filter (placeholder rule)</h3><ol class="feed" id="alertFeedRoi"></ol></div>
-  </div>
-</div>
-
 <div class="card">
   <h2>2 · Selected market: price chart &amp; liquidity</h2>
   <p class="muted" id="detailTitle">Select a market above (Track).</p>
@@ -694,6 +674,32 @@ if the browser blocks the request the tables fall back to the snapshot links in
   <h2>5 · Trade categorization &amp; strategy analysis</h2>
   <div id="strategyBody"></div>
 </div>
+<div class="card" id="alerts">
+  <h2>6 · Price-swing alerts &mdash; scrolling chat (&ge; $0.10)</h2>
+  <p class="small muted">Live alerts for contract price swings of <strong>&ge; $0.10 in either direction</strong>,
+     detected from the dashboard's live market samples (GET /markets, demo API, no key). Two scrolling chats:
+     <em>All events</em> shows every swing; <em>High ROI model</em> shows a selective, labeled placeholder
+     heuristic (no real model is defined yet &mdash; flagged F-alert-01, never presented as verified ROI).
+     Each row links its exact market API URL. Alerts persist in this browser only.</p>
+  <div class="alert-controls">
+    <label><input type="checkbox" id="alertsEnabled" checked> Alerts enabled</label>
+    <label><input type="checkbox" id="autoTrade" disabled> Automated paper trades on swing (paper/SIMULATED only)</label>
+    <button class="btn secondary" id="clearAlertsBtn">Clear alerts</button>
+    <span class="alert-pill" id="alertCount">0 alerts</span>
+  </div>
+  <div class="chat-tabs">
+    <button class="chat-tab active" id="tabAll" data-chat="all">All events</button>
+    <button class="chat-tab" id="tabROI" data-chat="roi">High ROI model</button>
+  </div>
+  <div class="chat-wrap" id="chatAll">
+    <div id="alertsAll"></div>
+  </div>
+  <div class="chat-wrap" id="chatROI" style="display:none">
+    <div id="alertsROI"></div>
+    <p class="small muted">High-ROI placeholder rule: swing &ge; $0.10, price 5&cent;&ndash;95&cent;, traded and open contracts &gt; 0. Not a real model (flagged F-alert-01).</p>
+  </div>
+</div>
+
 """
     write_page("dashboard.html", "Live dashboard", "dashboard.html", body,
                scripts=("assets/app.js", "assets/trade.js", "assets/dashboard.js", "assets/alerts.js", "assets/site.js"))

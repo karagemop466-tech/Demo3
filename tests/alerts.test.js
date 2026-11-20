@@ -1,5 +1,6 @@
-// Session 5125afd8 — swing-alert engine tests (assets/alerts.js).
-import test from "node:test";
+// Session 5125afd8 — tests for the swing-alert chat engine (assets/alerts.js, session 6ebc1cb7).
+// Exercises the public KD API directly; no network.
+import test, { after } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import path from "node:path";
@@ -10,108 +11,76 @@ const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const alertsJS = readFileSync(path.join(repo, "assets", "alerts.js"), "utf8");
 const dashboardHTML = readFileSync(path.join(repo, "dashboard.html"), "utf8");
 
-function loadAlerts(html = "<html><body></body></html>") {
-  const dom = new JSDOM(html, { runScripts: "outside-only", pretendToBeVisual: true });
-  const w = dom.window;
-  w.KalshiDemo = {
-    esc: (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"),
-    srcLink: (p, label) => `<a class='src' href='https://external-api.demo.kalshi.co/trade-api/v2${p}'>${label}</a>`,
-  };
-  w.eval(alertsJS);
-  return { w, A: w.KalshiAlerts, dom };
+const doms = [];
+// Close every DOM even when an assertion fails: the engine's setInterval would keep Node alive.
+after(() => { doms.forEach((d) => d.window.close()); });
+function load() {
+  const dom = new JSDOM(dashboardHTML, { runScripts: "outside-only", pretendToBeVisual: true });
+  doms.push(dom);
+  dom.window.eval(alertsJS);
+  return { dom, KD: dom.window.KD };
+}
+const TICKER = "KXAAAGASW-26NOV23-3.9400";
+const mk = (last, extra = {}) => ({
+  ticker: TICKER, title: "Will average gas prices be above $3.9400?", topic: "gas",
+  series_ticker: "KXAAAGASW", last, vol: 3421.27, oi: 3421.27, ...extra,
+});
+// Seed the anchor price from a scan row, then feed one live sample.
+function step(KD, from, to, extra) {
+  KD.onMarkets([mk(from, extra)]);
+  KD.onSample(mk(to, extra), { price: to, t: 1 });
 }
 
-// Wait for DOMContentLoaded so alerts.js has attached its pause-button listener (as in a browser).
-async function ready(dom) {
-  if (dom.window.document.readyState !== "loading") return;
-  await new Promise((resolve) => dom.window.document.addEventListener("DOMContentLoaded", resolve));
-}
-
-const mk = (ticker, last, extra = {}) => ({
-  ticker, title: `T ${ticker}`, topic: "crypto", event_ticker: "E-" + ticker,
-  series_ticker: "S", last, yb: last - 0.01, ya: last + 0.01, vol: 100, oi: 50, ...extra,
+test("an exact $0.10 move alerts (float-safe): 0.50 -> 0.60", () => {
+  const { KD, dom } = load();
+  step(KD, 0.5, 0.6);
+  const rows = KD.allRows();
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].dir, "up");
+  assert.equal(rows[0].change, 0.1);
 });
 
-test("ROI-if-right is gross payout arithmetic on the $1 settlement rule", () => {
-  const { A } = loadAlerts();
-  const r = A.core.roiIfRight(0.25);
-  assert.equal(Number(r.yes.toFixed(6)), 3);             // (1-0.25)/0.25
-  assert.equal(Number(r.no.toFixed(6)), Number((1 / 3).toFixed(6))); // 0.25/0.75
-  assert.equal(A.core.roiIfRight(0), null);
-  assert.equal(A.core.roiIfRight(1), null);
+test("exact $0.10 downward move alerts too: 0.70 -> 0.60 (0.6-0.7 is not exact in doubles)", () => {
+  const { KD, dom } = load();
+  step(KD, 0.7, 0.6);
+  assert.equal(KD.allRows().length, 1);
+  assert.equal(KD.allRows()[0].dir, "down");
 });
 
-test("first observation only sets anchors; no alert", () => {
-  const { A } = loadAlerts();
-  const r = A.core.evaluate({}, [mk("A", 0.5)], 0.10, 1);
-  assert.equal(r.alerts.length, 0);
-  assert.equal(r.anchors.A, 0.5);
+test("a $0.09 move does not alert", () => {
+  const { KD, dom } = load();
+  step(KD, 0.5, 0.59);
+  assert.equal(KD.allRows().length, 0);
 });
 
-test("moves of exactly $0.10 alert in both directions; $0.09 does not", () => {
-  const { A } = loadAlerts();
-  const up = A.core.evaluate({ A: 0.5 }, [mk("A", 0.6)], 0.10, 2);
-  assert.equal(up.alerts.length, 1);
-  assert.equal(up.alerts[0].direction, "up");
-  assert.equal(up.alerts[0].delta, 0.1);
-  const down = A.core.evaluate({ A: 0.5 }, [mk("A", 0.4)], 0.10, 2);
-  assert.equal(down.alerts[0].direction, "down");
-  assert.equal(down.alerts[0].delta, -0.1);
-  const small = A.core.evaluate({ A: 0.5 }, [mk("A", 0.59)], 0.10, 2);
-  assert.equal(small.alerts.length, 0);
-  assert.equal(small.anchors.A, 0.5, "anchor unchanged when no alert fires");
+test("every alert links the official Get Market record, even when series_ticker is set", () => {
+  const { KD, dom } = load();
+  step(KD, 0.5, 0.62);
+  assert.equal(KD.allRows()[0].api,
+    "https://external-api.demo.kalshi.co/trade-api/v2/markets/" + TICKER);
 });
 
-test("slow drift that adds up to $0.10 alerts once; anchor resets on alert", () => {
-  const { A } = loadAlerts();
-  let anchors = { A: 0.5 };
-  const seen = [];
-  for (const p of [0.53, 0.56, 0.59, 0.62]) {
-    const r = A.core.evaluate(anchors, [mk("A", p)], 0.10, 3);
-    seen.push(r.alerts.length);
-    anchors = r.anchors;
-  }
-  assert.deepEqual(seen, [0, 0, 0, 1]);
-  assert.equal(anchors.A, 0.62);
-  const after = A.core.evaluate(anchors, [mk("A", 0.66)], 0.10, 4);
-  assert.equal(after.alerts.length, 0, "a $0.04 move after re-anchoring does not alert");
+test("placeholder high-ROI rule filters: liquid mid-band swing passes; zero volume or extreme price fails", () => {
+  const { KD, dom } = load();
+  step(KD, 0.5, 0.62);                                 // liquid, mid-band
+  step(KD, 0.5, 0.62, { vol: 0, oi: 0, ticker: "NOLIQ" });
+  step(KD, 0.90, 1.00, { ticker: "EXTREME" });         // pinned at 100c
+  const roi = Array.from(KD.roiRows(), (r) => r.ticker); // local realm for deepStrictEqual
+  assert.deepEqual(roi, [TICKER]);
+  assert.equal(KD.allRows().length, 3, "the all-events feed keeps every swing");
 });
 
-test("markets that leave the scan are pruned; null prices are ignored", () => {
-  const { A } = loadAlerts();
-  const r = A.core.evaluate({ A: 0.5, GONE: 0.3 }, [mk("A", 0.5), mk("B", null)], 0.10, 5);
-  assert.equal(Object.prototype.hasOwnProperty.call(r.anchors, "GONE"), false);
-  assert.equal(Object.prototype.hasOwnProperty.call(r.anchors, "B"), false);
+test("the ROI chat is a strict subset of the all-events chat (it filters something)", () => {
+  const { KD, dom } = load();
+  step(KD, 0.5, 0.62);
+  step(KD, 0.2, 0.31, { ticker: "B", vol: 0 });
+  assert.ok(KD.roiRows().length < KD.allRows().length);
 });
 
-test("placeholder high-ROI rule: price band, volume and open interest are required", () => {
-  const { A } = loadAlerts();
-  const rule = A.config.roiRule;
-  const base = { delta: 0.12, to: 0.5, vol: 10, oi: 5 };
-  assert.equal(A.core.passesRoi(base, rule), true);
-  assert.equal(A.core.passesRoi({ ...base, to: 0.97 }, rule), false);
-  assert.equal(A.core.passesRoi({ ...base, vol: 0 }, rule), false);
-  assert.equal(A.core.passesRoi({ ...base, oi: 0 }, rule), false);
-  assert.equal(A.core.passesRoi({ ...base, delta: -0.12 }, rule), true);
-});
-
-test("feeds render newest-first in the dashboard DOM; pause holds new alerts", async () => {
-  const { w, A, dom } = loadAlerts(dashboardHTML);
-  await ready(dom);
-  const d = w.document;
-  const allEl = d.getElementById("alertFeedAll");
-  const roiEl = d.getElementById("alertFeedRoi");
-  assert.ok(allEl && roiEl, "dashboard.html must contain both feed containers");
-  A.onScan([mk("A", 0.5), mk("B", 0.2, { vol: 0 })]); // primes anchors
-  A.onScan([mk("A", 0.62), mk("B", 0.32, { vol: 0 })]); // A: +0.12 (ROI-eligible); B: +0.12 (no volume)
-  assert.equal(allEl.querySelectorAll("li.alert").length, 2);
-  assert.equal(roiEl.querySelectorAll("li.alert").length, 1);
-  assert.match(allEl.textContent, /Cause: not reported by the API/);
-  const btn = d.getElementById("alertPauseBtn");
-  btn.click();
-  A.onScan([mk("A", 0.40)]);
-  assert.equal(allEl.querySelectorAll("li.alert").length, 2, "paused feed does not change");
-  assert.match(d.getElementById("alertPending").textContent, /held while paused/);
-  btn.click();
-  assert.equal(allEl.querySelectorAll("li.alert").length, 3, "resume flushes held alerts");
+test("alerts render into the two chat tables on the dashboard", () => {
+  const { KD, dom } = load();
+  step(KD, 0.5, 0.62);
+  const d = dom.window.document;
+  assert.match(d.getElementById("alertsAll").textContent, /KXAAAGASW-26NOV23-3\.9400/);
+  assert.match(d.getElementById("alertsROI").textContent, /high-ROI signal/);
 });
