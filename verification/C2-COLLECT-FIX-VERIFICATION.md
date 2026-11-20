@@ -14,10 +14,15 @@ Session: `a56b9e45` · Branch: `arena/a56b9e45-demo3` · 2026-11-20
 | V6 | Live end-to-end run on `main` after the fix | `gh workflow run collect.yml --ref main` (workflow_dispatch), then run conclusion, step logs (snapshot commit / "No data changes", Pages rebuild request HTTP status) | run recorded below | see run record |
 | V7 | Pages deployment continuity | `pages-build-deployment` run conclusion + legacy Pages builds API for the resulting head; live page fetch | recorded below | see run record |
 
-## Run record (fill in after execution)
+## Run record (executed 2026-11-20, post rate-limit reset)
 
-- V6 workflow_dispatch run: _pending rate-limit reset (GH API 403 exhausted 19:50–20:01 UTC)_
-- V7 Pages build after run: _pending_
+- **V6 — workflow_dispatch run [`44809097574`](https://github.com/karagemop466-tech/Demo3/actions/runs/44809097574)** (dispatched 20:11:31Z, head `c0cb52ba4`, job `136540733890`): **completed success at 20:21:11Z**. Every job step green:
+  - Step 4 `Offline pipeline tests (mock API)` — success
+  - Step 5 `Collect live demo snapshots` — success
+  - Step 6 `Commit snapshots (default branch only)` — success → commit [`241c603`](https://github.com/karagemop466-tech/Demo3/commit/241c603) "collector: snapshot 2026-11-20T20:20:58Z" on `main` (verified ancestor of current main) — **the first successful snapshot commit since the 19:26Z regression**
+  - Step 7 `Request Pages rebuild …` — success
+- **V7 — Pages rebuild/deploy continuity:** rebuild requests are firing (Pages builds API shows builds requested at 20:21:00Z for `deea750` and 20:21:33Z for `be94f5cff`, plus later heads). The **legacy** builds currently report `errored` for the newest heads (starvation/pile-up — GitHub Pages soft build limit; diagnosed as **I-F2-07** by session `f2b0808f`, whose fix — a custom Actions publish workflow `.github/workflows/pages.yml` — is active: runs for `deea750`/`725a8497` were cancelled-by-newer and a run for `22d5160` was in progress at 20:28Z). The live site is up and serving the last successful deploy (content from the `04d1a4e`-era deploy, verified by page fetch at 19:53Z and 20:27Z); the freshest snapshot content (241c603) will publish when the active deploy path lands a run.
+- **Verification limitation (flagged):** the job log of run `44809097574` (which would show the literal "pages build request HTTP <code>" line) is hosted on an Azure blob host that this sandbox cannot reach (egress allowlist), so the exact HTTP status of step 7 is UNVERIFIED; the step's own conclusion `success` is recorded instead. Everything else above is verified from API responses and page fetches.
 
 ## Provenance / collision notes
 
