@@ -461,6 +461,18 @@ def consolidated_flags():
         "literal <span …> text instead of a styled pill. Fixed by rendering the badge (its dynamic parts "
         "are escaped individually) and covered by the jsdom tests.",
         [f"{DOCS}/getting_started/quick_start_market_data"], "resolved — test-covered", "7b47094a")
+    add("F-7b-07", "CI automation", "kalshi-data.yml pushes data snapshots onto session branches",
+        "The collector triggers on `push: branches: ['**']` and its commit step pushes "
+        "`data: refresh snapshot …` to ${GITHUB_REF_NAME}, so it writes to session/PR branches, not "
+        "only the default branch. Observed on 2026-11-20: commit ba844da landed on "
+        "arena/7b47094a-demo3 at 19:47Z mid-review and produced data/ conflicts against an open PR. "
+        "collect.yml already guards this with `if: github.ref_name == "
+        "github.event.repository.default_branch`; the same guard (or push: branches: [main]) stops "
+        "the churn. Not fixed here: .github/workflows/kalshi-data.yml is outside this session's "
+        "claimed scope, so the request is logged on COORDINATION.md for the workflow owner.",
+        ["https://github.com/karagemop466-tech/Demo3/blob/main/.github/workflows/kalshi-data.yml",
+         "https://github.com/karagemop466-tech/Demo3/blob/main/.github/workflows/collect.yml"],
+        "open — request logged", "7b47094a")
     add("F-7b-04", "WebSocket", "Browser WS streaming is not possible (was listed as unverified)",
         "Earlier registers carried 'WS expected to be blocked in browsers' as unverified (F2/Q-20). "
         "Closed: official docs state the handshake requires the three KALSHI-ACCESS-* headers and that "
