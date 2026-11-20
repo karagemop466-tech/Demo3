@@ -32,6 +32,9 @@ jobs:
             exit "$status"
           fi
 
+      - name: Row-level re-verification against live API
+        run: python scripts/verify_rows.py
+
       - name: Trim rolling history files (retain most recent 20000 lines)
         run: |
           for f in data/history/prices.jsonl data/history/resolutions.jsonl; do
