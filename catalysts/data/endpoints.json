@@ -1,5 +1,5 @@
 {
- "probed_at": "2026-11-20T20:58:58Z",
+ "probed_at": "2026-11-20T21:12:32Z",
  "api_root": "https://external-api.demo.kalshi.co/trade-api/v2",
  "endpoints": [
   {
@@ -16,7 +16,7 @@
     "trading_active"
    ],
    "error": "",
-   "checked_at": "2026-11-20T20:58:56Z"
+   "checked_at": "2026-11-20T21:12:30Z"
   },
   {
    "method": "GET",
@@ -30,7 +30,7 @@
     "markets"
    ],
    "error": "",
-   "checked_at": "2026-11-20T20:58:56Z",
+   "checked_at": "2026-11-20T21:12:30Z",
    "item_count": 1,
    "item_fields": [
     "can_close_early",
@@ -41,7 +41,6 @@
     "exchange_index",
     "expected_expiration_time",
     "expiration_value",
-    "is_provisional",
     "last_price_dollars",
     "latest_expiration_time",
     "market_type",
@@ -72,7 +71,8 @@
     "volume_fp",
     "yes_ask_dollars",
     "yes_ask_size_fp",
-    "yes_bid_dollars"
+    "yes_bid_dollars",
+    "yes_bid_size_fp"
    ]
   },
   {
@@ -86,7 +86,7 @@
     "market"
    ],
    "error": "",
-   "checked_at": "2026-11-20T20:58:56Z"
+   "checked_at": "2026-11-20T21:12:31Z"
   },
   {
    "method": "GET",
@@ -100,7 +100,7 @@
     "markets"
    ],
    "error": "",
-   "checked_at": "2026-11-20T20:58:57Z",
+   "checked_at": "2026-11-20T21:12:31Z",
    "item_count": 1,
    "item_fields": [
     "can_close_early",
@@ -156,7 +156,7 @@
     "milestones"
    ],
    "error": "",
-   "checked_at": "2026-11-20T20:58:57Z",
+   "checked_at": "2026-11-20T21:12:31Z",
    "item_count": 200,
    "item_fields": [
     "category",
@@ -184,7 +184,7 @@
     "series"
    ],
    "error": "",
-   "checked_at": "2026-11-20T20:58:57Z"
+   "checked_at": "2026-11-20T21:12:32Z"
   },
   {
    "method": "GET",
@@ -197,7 +197,7 @@
     "orderbook_fp"
    ],
    "error": "",
-   "checked_at": "2026-11-20T20:58:58Z"
+   "checked_at": "2026-11-20T21:12:32Z"
   }
  ],
  "note": "status = what the runner observed on this run; blank/unverified rows stay blank on the site, they are never back-filled"

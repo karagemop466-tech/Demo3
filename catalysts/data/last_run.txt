@@ -1,20 +1,20 @@
-recorded_at=2026-11-20T20:59:15Z
+recorded_at=2026-11-20T21:12:52Z
 job_status=failure
 workflow=Swing + catalyst ledger refresh
 event=push
-ref=arena/5ab18dc3-demo3
-sha=61e8bfb9b57d4566938fa37fbd7497a65a56d9b2
-run_url=https://github.com/karagemop466-tech/Demo3/actions/runs/44816036449
-status.json: mode=live finished_at=2026-11-20T20:59:02Z requests=24 errors=4 deadline_reached=False tape_rows=540 swings_total=9 simulated_trades=8
+ref=main
+sha=4663749c938154a149c46dc6e8dbf3eca539e3cf
+run_url=https://github.com/karagemop466-tech/Demo3/actions/runs/44818081209
+status.json: mode=live finished_at=2026-11-20T21:12:38Z requests=23 errors=4 deadline_reached=False tape_rows=684 swings_total=9 simulated_trades=8
 swings.json: 9 swings, 0 with candidate links, 2 resolved; threshold >= $0.10 from=https://external-api.demo.kalshi.co/trade-api/v2
-feed_health.json: 11 of 17 feeds usable (mode=live, checked_at=2026-11-20T20:59:08Z)
+feed_health.json: 11 of 17 feeds usable (mode=live, checked_at=2026-11-20T21:12:46Z)
   not usable: AP News (hub RSS is not published; homepage listed for manual review) — HTTP 403
   not usable: Reuters — HTTP 404
   not usable: ESPN — Sports Top News — fetched but no items parsed
   not usable: PGA Tour — News — fetched but no items parsed
   not usable: Golf Digest — HTTP 404
   not usable: U.S. EIA — Petroleum (official government statistics feed) — HTTP 404
-endpoints.json: 7 probed, 7 returned HTTP 200 (probed_at=2026-11-20T20:58:58Z)
+endpoints.json: 7 probed, 7 returned HTTP 200 (probed_at=2026-11-20T21:12:32Z)
   note: status = what the runner observed on this run; blank/unverified rows stay blank on the site, they are never back-filled
   filter ignored by this deployment: GET https://external-api.demo.kalshi.co/trade-api/v2/events?event_tickers=KXDEMOFUTHOURLY-26NOV20H12&with_nested_markets=false
 strategies.json: 8 simulated trade(s), 3 categor(y/ies), 0 above the n>=30 floor
