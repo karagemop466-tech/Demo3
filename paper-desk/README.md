@@ -12,7 +12,7 @@ is written by this feature**, and no shared navigation is edited (a nav entry is
 | `positions.html` | open positions marked at the published bid, resting simulated orders, orderbook ladders (contracts resting at each price), plus a **live panel** that calls the demo API from the browser |
 | `analysis.html` | performance grouped by strategy, topic, side, price band and family; auto-derived trade-type ranking; API politeness counters; disclosed limitations |
 | `resolutions.html` | every tracked market that resolved, with the market's own `result` (yes/no), settlement timestamp and the desk's realized P&L |
-| `methodology.html` | config in force, one-cycle walkthrough, the official source for each mechanic, flagged items F-EB2-01…07 |
+| `methodology.html` | config in force, one-cycle walkthrough, the official source for each mechanic, flagged items F-EB2-01…10 |
 | `sources.html` | replayable API requests, doc register, repo files, universe provenance, exclusions |
 
 ## Data provenance

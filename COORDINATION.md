@@ -685,12 +685,54 @@ entry for this subsite is logged as change request **CR-eb2af75b-1** for the int
 
 | Task | Status | Owner | File scope | Sources / verification | Irregularities |
 |---|---|---|---|---|---|
-| P1 Paper-trading engine (deterministic strategies, taker fills sized by live orderbook depth, mark-to-market, settlement sweep) | in progress | eb2af75b | `trading/paper_engine.py`, `trading/paper_strategies.py` | Live demo responses + official docs fetched this session (register in `paper-desk/SOURCES.md`) | F-EB2-01 (simulated, not account-backed) |
-| P2 Scheduled automation with no manual input | in progress | eb2af75b | `.github/workflows/paper-desk.yml` | GitHub Actions scheduled-workflow doc; run evidence recorded here | F-EB2-02 (first scheduled run only after merge to `main`) |
-| P3 Trade journal + portfolio analytics + categorization (topic × side × price band × strategy) | in progress | eb2af75b | `data/paper/**`, `scripts/build_paper_desk.py` | every row carries the exact demo-API URL it came from | F-EB2-03 (no fee model — disclosed) |
-| P4 Self-contained `paper-desk/` subsite (tables, equity chart, per-row sources) | in progress | eb2af75b | `paper-desk/**` | `scripts/verify_paper_desk.py` link + source check | — |
-| P5 Offline tests (mock API, no network) | in progress | eb2af75b | `trading/test_paper_engine.py` | run recorded below | — |
-| P6 PR → merge → Pages check → record | pending | eb2af75b | — | Pages API + live fetch after merge | — |
+| P1 Paper-trading engine (deterministic strategies, taker fills sized by live orderbook depth, mark-to-market, settlement sweep) | done (code + offline tests; live cycle pending merge) | eb2af75b | `trading/paper_engine.py`, `trading/paper_strategies.py` | Live demo responses + official docs fetched this session (register in `paper-desk/SOURCES.md`) | F-EB2-01 (simulated, not account-backed) |
+| P2 Scheduled automation with no manual input | done (workflow on branch; cron registers only after merge) | eb2af75b | `.github/workflows/paper-desk.yml` | GitHub Actions scheduled-workflow doc; run evidence recorded here | F-EB2-02 (first scheduled run only after merge to `main`) |
+| P3 Trade journal + portfolio analytics + categorization (topic × side × price band × strategy) | done | eb2af75b | `data/paper/**`, `scripts/build_paper_desk.py` | every row carries the exact demo-API URL it came from | F-EB2-03 (no fee model — disclosed) |
+| P4 Self-contained `paper-desk/` subsite (tables, equity chart, per-row sources) | done | eb2af75b | `paper-desk/**` | `scripts/verify_paper_desk.py` link + source check | — |
+| P5 Offline tests (mock API, no network) | done (25 tests) | eb2af75b | `trading/test_paper_engine.py` | run recorded below | — |
+| P6 PR → merge → Pages check → record | in progress | eb2af75b | — | Pages API + live fetch after merge | — |
 
 Claim pushed immediately per board rules. Nothing is marked verified until the official-source check
 is recorded in this section.
+
+**Verification recorded 2026-11-20 (all commands run in the repo root):**
+- `python3 trading/test_paper_engine.py` → `Ran 25 tests … OK` (offline, `FixtureClient`; covers
+  fill sizing, zero-liquidity rejection, off-grid maker rejection, settlement payout, swing rule
+  thresholds, batched-quote parsing, batched orderbook parsing + error accounting).
+- `python3 scripts/build_paper_desk.py` → `built 7 pages + assets in paper-desk/ (ledger: empty)`;
+  two consecutive runs are byte-identical (7/7 `md5sum -c` OK), so the generator is deterministic.
+- `python3 scripts/verify_paper_desk.py` → `result: PASS (0 failures, 40 notes)`; 130 links checked,
+  every table row carries a source anchor or an explicit `unverified` pill; notes are all
+  "`data/paper/*.json` not present yet (written by the next cycle)".
+- `node --test paper-desk/tests/dom.test.mjs` → `# pass 2 / # fail 0` (jsdom, mocked `fetch`):
+  renders the sourced rows, flags a ≥$0.10 move with the desk pill, and on a rejected request shows
+  "Could not reach the demo API from this browser" with no invented prices.
+- Regressions on other owners' files (read-only, all pass): `python3 trading/test_trading.py` →
+  `Ran 9 tests … OK`; `python3 collector/test_collect.py` → `Ran 2 tests … OK`;
+  `python3 scripts/verify_root_site.py` → `verify_root_site: 0 failures`;
+  `python3 scripts/check_site.py` → `site checks passed`.
+- Live API evidence collected with an HTTP page fetch (the sandbox has no shell egress):
+  `GET /events/KXPRESNOMD-28` → 200 with `series_ticker`, `category`, `rules_primary`,
+  `price_ranges`/`price_level_structure`; `GET /series/KXPRESNOMD/markets/KXPRESNOMD-28-AOC/candlesticks?start_ts=1795182000&end_ts=1795203600&period_interval=60`
+  → 200 with 6 candles; the same window a year earlier → 200 with `{"candlesticks":[]}` (recorded as
+  a legitimate empty answer in `paper-desk/SOURCES.md`, not an error).
+- `paper-desk/SOURCES.md` is the claim→source register (23 numbered rows, verbatim doc language,
+  plus the live captures and an "Explicitly NOT claimed" list).
+
+**Additional flags raised by this session (details in `paper-desk/methodology.html`).**
+- F-EB2-08 — GitHub registers a workflow's `schedule`/`workflow_dispatch` only from the default
+  branch: on this branch `gh workflow run .github/workflows/paper-desk.yml --ref …` returned
+  HTTP 404 and `gh workflow list` does not show it, so the first real cycle can only run after
+  merge. Consequence for the board: `paper-desk/` shows the empty-state banner, not stale numbers.
+- F-EB2-09 — `data/latest/top_events.json` rows carry no `series_ticker` (verified by reading the
+  committed snapshot), so anything drawing candlesticks must resolve it via
+  `GET /events/{event_ticker}` first; `paper-desk/assets/paper.js` does exactly that. Affects any
+  session charting from that snapshot (`collector/**`, root `dashboard.js`), so it is a board note,
+  not a silent workaround.
+- F-EB2-10 — `trading/paper_engine.py` reads only documented `*_dollars` / `*_size_fp` field names
+  and never falls back to the legacy integer-cent fields; a fixture or replay file written with
+  short names (`yes_ask`, `last`) silently parses to a stale quote. Anyone replaying fixtures should
+  copy the field names from `test_paper_engine.py::market()`.
+- Change request **CR-eb2af75b-2** (for the integration session, not done here): add a
+  `series_ticker` key to `top_events.json` market rows in the collector so consumers do not need an
+  extra API round-trip.

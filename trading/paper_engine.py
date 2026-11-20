@@ -83,6 +83,7 @@ SOURCES = {
     "orderbook": "https://docs.kalshi.com/api-reference/market/get-market-orderbook.md",
     "orderbooks_batch": "https://docs.kalshi.com/api-reference/market/get-multiple-market-orderbooks.md",
     "get_event": "https://docs.kalshi.com/api-reference/events/get-event.md",
+    "candlesticks": "https://docs.kalshi.com/api-reference/market/get-market-candlesticks.md",
     "orderbook_structure": "https://docs.kalshi.com/getting_started/orderbook_responses.md",
     "market_settlement": "https://docs.kalshi.com/getting_started/market_settlement.md",
     "fixed_point": "https://docs.kalshi.com/getting_started/fixed_point_migration.md",

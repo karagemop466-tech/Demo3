@@ -766,6 +766,12 @@ def build_methodology(data: dict) -> str:
                      "bids-only, ascending arrays, YES-bid = NO-ask reciprocity"),
                     ("orderbook endpoint", docs.get("orderbook"),
                      "GET /markets/{ticker}/orderbook?depth="),
+                    ("batched orderbooks", docs.get("orderbooks_batch"),
+                     "GET /markets/orderbooks, 1-100 tickers per request (what the desk calls)"),
+                    ("event record", docs.get("get_event"),
+                     "series_ticker / category / settlement_sources for each tracked market"),
+                    ("candlesticks", docs.get("candlesticks"),
+                     "1 / 60 / 1440-minute bars for the live chart"),
                     ("settlement", docs.get("market_settlement"),
                      "$1 per winning contract; zero settlement fee for simple yes/no"),
                     ("fixed point", docs.get("fixed_point"),
@@ -817,6 +823,26 @@ def build_methodology(data: dict) -> str:
          "markets, &ldquo;shard&rdquo; placeholders). They are excluded from the tradeable universe by "
          "name in <span class=\"mono\">trading/paper_engine.py</span>; the excluded list and its "
          "evidence live in <a class=\"mono\" href=\"../data/paper/sources.json\">data/paper/sources.json</a>."),
+        ("F-EB2-08", "The schedule is registered on the default branch, not this branch.",
+         "GitHub exposes a workflow's <span class=\"mono\">schedule</span> and "
+         "<em>Run workflow</em> button only for files present on the default branch, so on a "
+         "feature branch <span class=\"mono\">gh workflow run</span> answers HTTP 404 "
+         "(observed 2026-11-20 for <span class=\"mono\">.github/workflows/paper-desk.yml</span>). "
+         "Until this branch merges, the pages therefore render the empty-state banner and "
+         "<span class=\"mono\">data/paper/*.json</span> is absent &mdash; that is a real gap, not a "
+         "load failure, and no ledger numbers were fabricated to hide it."),
+        ("F-EB2-09", "The collector snapshot has no series ticker.",
+         "<span class=\"mono\">data/latest/top_events.json</span> market rows carry no "
+         "<span class=\"mono\">series_ticker</span>, which the candlestick endpoint requires, so the "
+         "live panel resolves it from "
+         f"<a href=\"{docs.get('get_event') or DOC_ROOT + '/api-reference/events/get-event.md'}\" "
+         "target=\"_blank\" rel=\"noopener\">GET /events/{event_ticker}</a> before drawing a chart "
+         "(logged as CR-eb2af75b-2 for the collector owner)."),
+        ("F-EB2-10", "Field names are load-bearing.",
+         "The engine reads only the documented <span class=\"mono\">*_dollars</span> / "
+         "<span class=\"mono\">*_size_fp</span> names and never the legacy integer-cent fields, so a "
+         "replayed fixture written with short names parses to a stale quote instead of erroring. "
+         "<span class=\"mono\">trading/test_paper_engine.py</span> shows the exact shape."),
     ]
     body = f"""{empty_state(data)}
 <h2>What one desk cycle does</h2>
