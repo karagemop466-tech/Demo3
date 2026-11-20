@@ -1,0 +1,33 @@
+name: Checks
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Offline refresh test (mock server, no network)
+        run: python3 scripts/tests/test_refresh_offline.py
+
+      - name: Site and data checks (sources, JSON, internal links)
+        run: python3 scripts/check_site.py
+
+      - name: JavaScript syntax
+        run: node --check assets/app.js

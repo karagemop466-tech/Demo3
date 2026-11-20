@@ -1,0 +1,10 @@
+{
+  "generated_at": "2026-11-20 ~11:30 UTC (manual re-fetch)",
+  "api_base": "https://api.elections.kalshi.com/trade-api/v2",
+  "docs": "https://docs.kalshi.com/llms.txt",
+  "status": "manual snapshot; the scheduled refresh job overwrites these files",
+  "calls_ok": null,
+  "calls_failed": null,
+  "note": "Every value in these files was copied from an official API response read on 2026-11-20. Values not present in a response are left blank.",
+  "errors": []
+}
