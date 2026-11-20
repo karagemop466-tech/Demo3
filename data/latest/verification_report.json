@@ -1,6 +1,36 @@
 {
  "checks": [
   {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1430-2 result",
+   "detail": "stored='yes' live='yes'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1430-2 settlement_value_dollars",
+   "detail": "stored='1.0000' live='1.0000'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1430-2 ticker",
+   "detail": "stored='KXQUICKSETTLE-20NOV26H1430-2' live='KXQUICKSETTLE-20NOV26H1430-2'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1430-3 result",
+   "detail": "stored='no' live='no'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1430-3 settlement_value_dollars",
+   "detail": "stored='0.0000' live='0.0000'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1430-3 ticker",
+   "detail": "stored='KXQUICKSETTLE-20NOV26H1430-3' live='KXQUICKSETTLE-20NOV26H1430-3'",
+   "ok": true
+  },
+  {
    "check": "resolution KXQUICKSETTLE-20NOV26H1420-2 result",
    "detail": "stored='yes' live='yes'",
    "ok": true
@@ -2971,36 +3001,6 @@
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2013-T0.1999 result",
-   "detail": "stored='no' live='no'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXXRPD-26NOV2013-T0.1999 settlement_value_dollars",
-   "detail": "stored='0.0000' live='0.0000'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXXRPD-26NOV2013-T0.1999 ticker",
-   "detail": "stored='KXXRPD-26NOV2013-T0.1999' live='KXXRPD-26NOV2013-T0.1999'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXXRPD-26NOV2013-T0.1799 result",
-   "detail": "stored='no' live='no'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXXRPD-26NOV2013-T0.1799 settlement_value_dollars",
-   "detail": "stored='0.0000' live='0.0000'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXXRPD-26NOV2013-T0.1799 ticker",
-   "detail": "stored='KXXRPD-26NOV2013-T0.1799' live='KXXRPD-26NOV2013-T0.1799'",
-   "ok": true
-  },
-  {
    "check": "top_event KXPRESNOMD-28 market KXPRESNOMD-28-HBID exists",
    "detail": "live query returned 1 markets",
    "ok": true
@@ -3497,12 +3497,12 @@
   },
   {
    "check": "orderbook KXPRESNOMD-28-BOBA structure",
-   "detail": "{\"no_dollars\": [[\"0.1140\", \"250.00\"], [\"0.1150\", \"180.00\"], [\"0.1160\", \"163.00\"], [\"0.1170\", \"150.00\"], [\"0.1180\", \"179.",
+   "detail": "{\"no_dollars\": [[\"0.1130\", \"181.00\"], [\"0.1140\", \"250.00\"], [\"0.1150\", \"180.00\"], [\"0.1160\", \"163.00\"], [\"0.1170\", \"150.",
    "ok": true
   },
   {
    "check": "orderbook KXPRESNOMD-28-BS structure",
-   "detail": "{\"no_dollars\": [[\"0.0300\", \"10.00\"], [\"0.9930\", \"47619.04\"], [\"0.9940\", \"55555.54\"], [\"0.9950\", \"66601.63\"]], \"yes_dolla",
+   "detail": "{\"no_dollars\": [[\"0.0300\", \"10.00\"], [\"0.9930\", \"47619.04\"], [\"0.9940\", \"55555.54\"], [\"0.9950\", \"66447.61\"]], \"yes_dolla",
    "ok": true
   },
   {
@@ -3512,7 +3512,7 @@
   },
   {
    "check": "orderbook KXPRESNOMD-28-EWAR structure",
-   "detail": "{\"no_dollars\": [[\"0.9700\", \"5555.55\"], [\"0.9800\", \"8333.33\"], [\"0.9900\", \"16649.04\"]], \"yes_dollars\": []}",
+   "detail": "{\"no_dollars\": [[\"0.9700\", \"5555.55\"], [\"0.9800\", \"8333.33\"], [\"0.9900\", \"16666.66\"]], \"yes_dollars\": []}",
    "ok": true
   },
   {
@@ -3552,8 +3552,8 @@
   },
   {
    "check": "event KXSTATELEGVA-27NOV02VAS029 exists+title",
-   "detail": "title live='Virginia Senate District 29 winner? (2027)'",
-   "ok": true
+   "detail": "missing",
+   "ok": false
   },
   {
    "check": "event KXSTATELEGMN-28NOV07MNH40A exists+title",
@@ -3567,8 +3567,8 @@
   },
   {
    "check": "event KXSTATELEGLA-27OCT09LAH008 exists+title",
-   "detail": "title live='Louisiana House District 8 winner? (2027)'",
-   "ok": true
+   "detail": "missing",
+   "ok": false
   },
   {
    "check": "event KXSTATELEGMA-28NOV07MASD10 exists+title",
@@ -3577,8 +3577,8 @@
   },
   {
    "check": "event KXHOUSERACE-TN03-28 exists+title",
-   "detail": "title live='TN-03 House winner? (2028)'",
-   "ok": true
+   "detail": "missing",
+   "ok": false
   },
   {
    "check": "event KXSTATELEGMA-28NOV07MAH061 exists+title",
@@ -3587,8 +3587,8 @@
   },
   {
    "check": "event KXSTATELEGMA-28NOV07MAH145 exists+title",
-   "detail": "title live='Massachusetts House 4th Worcester District winner? (2028)'",
-   "ok": true
+   "detail": "missing",
+   "ok": false
   },
   {
    "check": "event KXCPIPARTYCOMBO-30MAR exists+title",
@@ -3597,8 +3597,8 @@
   },
   {
    "check": "event KXSTATELEGVA-27NOV02VAH070 exists+title",
-   "detail": "title live='Virginia House of Delegates District 70 winner? (2027)'",
-   "ok": true
+   "detail": "missing",
+   "ok": false
   },
   {
    "check": "event KXINSCOMMRACE-NC-28 exists+title",
@@ -3607,8 +3607,8 @@
   },
   {
    "check": "event KXSTATELEGOK-28NOV07OKH087 exists+title",
-   "detail": "title live='Oklahoma House District 87 winner? (2028)'",
-   "ok": true
+   "detail": "missing",
+   "ok": false
   },
   {
    "check": "event KXSTATELEGIN-28NOV07INH008 exists+title",
@@ -3617,8 +3617,8 @@
   },
   {
    "check": "event KXMESTATELEG-28SEN exists+title",
-   "detail": "title live='Maine State Senate winner? (2028)'",
-   "ok": true
+   "detail": "missing",
+   "ok": false
   },
   {
    "check": "event KXILSTATELEG-28HOUSE exists+title",
@@ -3627,7 +3627,36 @@
   }
  ],
  "drift_notices": [],
- "hard_failures": [],
+ "hard_failures": [
+  {
+   "check": "event KXSTATELEGVA-27NOV02VAS029 exists+title",
+   "detail": "missing"
+  },
+  {
+   "check": "event KXSTATELEGLA-27OCT09LAH008 exists+title",
+   "detail": "missing"
+  },
+  {
+   "check": "event KXHOUSERACE-TN03-28 exists+title",
+   "detail": "missing"
+  },
+  {
+   "check": "event KXSTATELEGMA-28NOV07MAH145 exists+title",
+   "detail": "missing"
+  },
+  {
+   "check": "event KXSTATELEGVA-27NOV02VAH070 exists+title",
+   "detail": "missing"
+  },
+  {
+   "check": "event KXSTATELEGOK-28NOV07OKH087 exists+title",
+   "detail": "missing"
+  },
+  {
+   "check": "event KXMESTATELEG-28SEN exists+title",
+   "detail": "missing"
+  }
+ ],
  "policy": {
   "dynamic_fields": "drift tolerated (live market), reported only",
   "source_urls": "must resolve and contain the row ticker",
@@ -3636,9 +3665,9 @@
  "summary": {
   "checked": 725,
   "drift_notices": 0,
-  "hard_failures": 0,
-  "passed": 725
+  "hard_failures": 7,
+  "passed": 718
  },
  "tool": "scripts/verify_rows.py v1",
- "verified_at": "2026-11-20T19:54:02+00:00"
+ "verified_at": "2026-11-20T20:18:00+00:00"
 }
