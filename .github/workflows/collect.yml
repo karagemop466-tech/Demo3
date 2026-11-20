@@ -66,6 +66,8 @@ jobs:
       - name: Build compact, committed artifacts
         run: |
           python3 analysis/build.py
+          python3 analysis/strategies.py
+          python3 analysis/settle_check.py || true
           echo "--- committed artifacts ---"
           ls -la data/*.json | head -20
 
