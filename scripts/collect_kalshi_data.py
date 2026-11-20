@@ -123,10 +123,11 @@ class Collector:
         self.requests.append({"url": url, "status": 0, "ts": now_iso(), "error": last_err})
         raise RuntimeError(f"GET {url} failed after retries: {last_err}")
 
-    def paginate(self, path: str, params: dict, key: str, max_pages: int = 20) -> list[dict]:
+    def paginate(self, path: str, params: dict, key: str, max_pages: int = 20) -> tuple[list[dict], bool]:
         out: list[dict] = []
         cursor = None
         limit = int(params.get("limit", 200))
+        truncated = False
         for _ in range(max_pages):
             p = dict(params)
             p["limit"] = limit
@@ -144,7 +145,9 @@ class Collector:
             cursor = body.get("cursor")
             if not cursor:
                 break
-        return out
+        else:
+            truncated = bool(cursor)
+        return out, truncated
 
 
 def now_iso() -> str:
@@ -210,6 +213,19 @@ def series_of(ticker: str) -> str:
     return ticker
 
 
+def resolve_series(ticker: str, event_series: str, catalog: dict) -> str:
+    """True series ticker: event join first, then progressively strip -SEGMENTs
+    until a known series ticker is found (documented heuristic, recorded per row)."""
+    if event_series:
+        return event_series
+    cand = series_of(ticker)
+    while cand:
+        if cand in catalog:
+            return cand
+        cand = cand.rsplit("-", 1)[0] if "-" in cand else ""
+    return series_of(ticker)
+
+
 def write_json(path: str, obj) -> None:
     import os
     os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -225,7 +241,7 @@ def main() -> int:
 
     # 1. Series catalog (used for topic metadata + verification of classification)
     print("fetching series ...")
-    series_list = col.paginate("/series", {"limit": 200}, "series", max_pages=10)
+    series_list, series_truncated = col.paginate("/series", {"limit": 200}, "series", max_pages=20)
     series_catalog: dict[str, dict] = {}
     series_meta = []
     for s in series_list:
@@ -253,7 +269,7 @@ def main() -> int:
 
     # 2. Events (all pages; needed to join market -> event -> series)
     print("fetching events ...")
-    events = col.paginate("/events", {"limit": 200}, "events", max_pages=15)
+    events, events_truncated = col.paginate("/events", {"limit": 200}, "events", max_pages=40)
     ev_by_ticker: dict[str, dict] = {}
     for e in events:
         et = e.get("event_ticker", "")
@@ -282,19 +298,22 @@ def main() -> int:
 
     # 3. Open markets (all, then classified — no topic blind spots)
     print("fetching open markets ...")
-    open_markets = col.paginate("/markets", {"limit": 1000, "status": "open"}, "markets", max_pages=15)
-    print(f"  {len(open_markets)} open markets")
+    open_markets, open_truncated = col.paginate("/markets", {"limit": 1000, "status": "open"},
+                                                "markets", max_pages=60)
+    print(f"  {len(open_markets)} open markets (truncated={open_truncated})")
 
-    # 4. Recently settled/closed markets for resolution tracking
+    # 4. Recently settled markets for resolution tracking (last 30 days)
     print("fetching settled markets ...")
-    settled_markets = col.paginate("/markets", {"limit": 1000, "status": "settled"}, "markets", max_pages=5)
-    print(f"  {len(settled_markets)} settled markets")
+    settled_markets, settled_truncated = col.paginate(
+        "/markets", {"limit": 1000, "status": "settled", "min_close_ts": int(time.time()) - 30 * 86400},
+        "markets", max_pages=20)
+    print(f"  {len(settled_markets)} settled markets (truncated={settled_truncated})")
 
     def classify_market(m: dict) -> tuple[str, str, str]:
         """(topic, rule, true series ticker) using event/series joins."""
         et = m.get("event_ticker", "")
         ev = ev_by_ticker.get(et, {})
-        s_ticker = ev.get("series_ticker") or series_of(m.get("ticker", ""))
+        s_ticker = resolve_series(m.get("ticker", ""), ev.get("series_ticker", ""), series_catalog)
         s_entry = series_catalog.get(s_ticker, {})
         scat = ev.get("category") or s_entry.get("category", "")
         topic, rule = classify(s_ticker, m.get("title", ""),
@@ -372,6 +391,17 @@ def main() -> int:
         "by_topic": top_by_topic,
     })
 
+    # 5b. Per-topic bundles (small payloads for the site's category pages)
+    for t in TOPICS:
+        write_json(f"{REPO_DATA}/latest/topic_{t}.json", {
+            "retrieved_at": retrieved_at,
+            "topic": t,
+            "count": sum(1 for r in rows_open if r["topic"] == t),
+            "markets": [r for r in rows_open if r["topic"] == t][:300],
+            "events": [e for e in topic_events if e["topic"] == t],
+            "top_events": top_by_topic[t],
+        })
+
     # 6. Resolution log: every settled/finalized market with result yes/no (topic scope)
     print("building resolution log ...")
     resolutions = []
@@ -390,11 +420,12 @@ def main() -> int:
                 "source_url": r["source_url"],
             })
     resolutions.sort(key=lambda x: x.get("settlement_ts") or "", reverse=True)
+    resolutions = resolutions[:1000]
     write_json(f"{REPO_DATA}/latest/resolutions.json", {
         "retrieved_at": retrieved_at,
         "count": len(resolutions),
         "resolution_field": "market.result (yes|no) per https://docs.kalshi.com/getting_started/market_settlement",
-        "resolutions": resolutions[:1000],
+        "resolutions": resolutions,
     })
 
     # 7. Liquidity (orderbooks) + trades + candles for the highest-dollar topic markets
@@ -504,6 +535,10 @@ def main() -> int:
             "settlement": "https://docs.kalshi.com/getting_started/market_settlement",
         },
         "topic_counts": topic_counts,
+        "truncated": {
+            "series": series_truncated, "events": events_truncated,
+            "open_markets": open_truncated, "settled_markets": settled_truncated,
+        },
         "api_calls": col.call_count,
         "request_log": col.requests,
     })
