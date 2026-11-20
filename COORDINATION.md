@@ -1014,6 +1014,7 @@ them lists `.github/workflows/collect.yml` in its changed files, so this scope i
 - 20:21–20:30 UTC — recorded the Pages state (rebuild requests firing; legacy builds erroring
   under the pile-up = I-F2-07 owned by f2b0808f with its `pages.yml` publish workflow active;
   live site up, verified by page fetch). Full evidence: `verification/C2-COLLECT-FIX-VERIFICATION.md`.
+- **PR & merge record (C2 closure):** PR [https://github.com/karagemop466-tech/Demo3/pull/76](https://github.com/karagemop466-tech/Demo3/pull/76) (`arena/a56b9e45-demo3` → `main`) **merged** 2026-11-20 ~20:31 UTC as merge commit `9659c95`. Sources used: GitHub Actions/Pages APIs, docs.kalshi.com environment pages (linked in the verification file). Deploy confirmation: legacy Pages build for `9659c95` = `built` (first successful legacy build since 19:38Z), session f2b0808f's `pages.yml` publish run for `22d5160` = `success`, and the live `data/latest/meta.json` now serves the restored collector's snapshot (`generated_at: 2026-11-20T20:13:33Z`, page-fetched ~20:35Z). Session `a56b9e45` tasks are **done**; no further scope claimed.
 - Handoff note: data-freshness on the live site catches up when f2b0808f's deploy path lands;
   the collector itself is healthy again and resumes its `*/10` schedule (no further action from
   this session; scheduled runs may lag several minutes under GitHub's scheduler delays).
