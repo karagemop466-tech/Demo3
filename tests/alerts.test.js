@@ -99,6 +99,39 @@ async function bootAlertsPage(fetchMock) {
   };
 }
 
+async function bootPage(html, scripts, fetchMock) {
+  const dom = new JSDOM(html, {
+    url: "https://demo.example.test/Demo3/page.html",
+    pretendToBeVisual: true,
+  });
+  const keys = ["window", "document", "fetch", "setInterval", "clearInterval", "localStorage"];
+  const old = new Map(keys.map((k) => [k, Object.getOwnPropertyDescriptor(globalThis, k)]));
+  globalThis.window = dom.window;
+  globalThis.document = dom.window.document;
+  globalThis.fetch = fetchMock;
+  globalThis.setInterval = () => ({ mocked: true });
+  globalThis.clearInterval = () => {};
+  globalThis.localStorage = dom.window.localStorage;
+  const n = ++bootNumber;
+  try {
+    for (const src of scripts) {
+      await import(`../${src}?boot=${n}-${src.replace(/[^a-z]/g, "")}`);
+    }
+  } catch (error) {
+    dom.window.close();
+    restoreGlobals(keys, old);
+    throw error;
+  }
+  return {
+    dom,
+    win: dom.window,
+    cleanup() {
+      dom.window.close();
+      restoreGlobals(keys, old);
+    },
+  };
+}
+
 /* ------------------------------------------------------------------ engine */
 test("detectSwing and model gates behave per the published spec", async () => {
   const fetchMock = async (url) => {
@@ -262,6 +295,59 @@ test("alerts.html: two chats, per-row source links, resolution sweep, track wiri
     await waitFor(() =>
       $("chatAll").innerHTML.includes("example-official.test/btc-settlement"),
       "settlement source link");
+  } finally {
+    cleanup();
+  }
+});
+
+/* ------------------------------------------------- merged dashboard coexistence */
+test("dashboard.html: merged PR #28 chat engine (assets/alerts.js) coexists with the page engine and renders swing rows with sources", async () => {
+  const dashboardHTML = readFileSync(path.join(repo, "dashboard.html"), "utf8");
+  const series = { series: [
+    { ticker: "SER-BTC", title: "Bitcoin price levels", category: "Financials",
+      tags: ["Crypto"], categories: ["Financials"], frequency: "daily" }] };
+  const open = { markets: [marketRow({ last_price_dollars: "0.5000",
+      yes_bid_dollars: "0.4900", yes_ask_dollars: "0.5100" })] };
+  const fetchMock = async (url) => {
+    const u = String(url);
+    if (u.includes("resolutions.json") || u.includes("snapshot.json") ||
+        u.includes("verified.json")) {
+      return jsonResponse(u.includes("snapshot.json") ? { markets: [] } :
+        u.includes("verified.json") ? { resolved: [] } : { resolutions: [] });
+    }
+    if (u.endsWith("/series") || u.includes("/series?")) return jsonResponse(series);
+    if (u.includes("/markets?") && u.includes("status=open")) return jsonResponse(open);
+    if (u.includes("/events?")) return jsonResponse({ events: [] });
+    return jsonResponse({});
+  };
+  const { win, cleanup } = await bootPage(dashboardHTML,
+    ["assets/app.js", "assets/trade.js", "assets/dashboard.js", "assets/alerts.js",
+     "assets/site.js"], fetchMock);
+  try {
+    assert.ok(win.KD, "merged alert engine (window.KD) should be loaded");
+    assert.ok(win.KalshiDemo, "shared client loaded");
+    assert.ok(win.KalshiAlerts === undefined,
+      "page engine must not load on the dashboard (no shared-script collision)");
+    // feed the merged engine a >= $0.10 swing exactly like the dashboard samples do
+    const $ = (id) => win.document.getElementById(id);
+    win.KD.onSample(
+      { ticker: "KXBTCD-26DEC31-T100K", title: "Will Bitcoin hit $100K by December 31?",
+        topic: "crypto", series_ticker: "SER-BTC" },
+      { t: Math.floor(Date.now() / 1000), price: 0.50 });
+    win.KD.onSample(
+      { ticker: "KXBTCD-26DEC31-T100K", title: "Will Bitcoin hit $100K by December 31?",
+        topic: "crypto", series_ticker: "SER-BTC" },
+      { t: Math.floor(Date.now() / 1000), price: 0.62 });
+    await waitFor(() => $("alertsAll").innerHTML.includes("KXBTCD-26DEC31-T100K"),
+      "merged chat renders the swing");
+    assert.match($("alertsAll").innerHTML, /market API/);
+    assert.match($("alertsAll").innerHTML, /62\.00¢/);
+    assert.match($("alertCount").textContent, /1 alert/);
+    // persistence key belongs to the merged engine only (page key untouched)
+    assert.equal(win.localStorage.getItem("kd_alerts_page_v1"), null);
+    // let the dashboard's async init (discover + scan chain) settle before teardown
+    await waitFor(() => ($("scanStatus") || {}).textContent?.includes("Last scan"),
+      "dashboard scan to settle");
   } finally {
     cleanup();
   }

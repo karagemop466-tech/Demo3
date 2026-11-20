@@ -1173,7 +1173,7 @@ of cause).</p>
   response. Every gate must pass for chat 2 to show the swing. The model is a
   <strong>heuristic estimate, not a verified Kalshi metric</strong> (flag
   <a href="flagged.html">F-99E28-01</a>); tune the gates in
-  <span class="mono">assets/alerts.js</span> (<span class="mono">KalshiAlerts.MODEL</span>).</p>
+  <span class="mono">assets/alerts-page.js</span> (<span class="mono">KalshiAlerts.MODEL</span>).</p>
   <table><thead><tr><th>Gate</th><th>Default</th><th>Field used (official response)</th><th>Rationale</th><th>Source</th></tr></thead><tbody>
     <tr><td>liquidity</td><td>contracts at swung-side ask ≥ 100</td><td class="mono">yes_ask_size_fp / no_ask_size_fp</td><td>Entry must be executable — size resting at your price.</td><td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noopener">Get Markets</a></td></tr>
     <tr><td>tradeable</td><td>YES bid/ask spread ≤ 20¢</td><td class="mono">yes_bid_dollars / yes_ask_dollars</td><td>Wide spreads eat the swing.</td><td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noopener">Get Markets</a></td></tr>
