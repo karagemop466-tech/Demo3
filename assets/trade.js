@@ -18,6 +18,16 @@
   function save(key, val) {
     try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) { /* quota */ }
   }
+  var VALID_STRATEGIES = ["momentum", "mean_reversion", "breakout"];
+  function normalizeAuto(a) {
+    a = a || {};
+    // Backward-compatible: an older persisted "rule" becomes "strategy".
+    if (!a.strategy && a.rule) a.strategy = a.rule;
+    if (VALID_STRATEGIES.indexOf(a.strategy) === -1) a.strategy = "momentum";
+    a.maxPerDay = Number(a.maxPerDay) || 20;
+    a.fired = Number(a.fired) || 0;
+    return a;
+  }
 
   var Trade = {
     fills: load(FILL_KEY, []),
@@ -25,8 +35,13 @@
     live: false,
     /* Automation runs in paper/SIMULATED mode only and is OFF by default.
      * It is a mechanism demo, not a verified strategy: no model is defined in
-     * this repo, so nothing here is presented as profitable or as ROI. */
-    automation: load(AUTO_KEY, { enabled: false, rule: "momentum", maxPerDay: 20, fired: 0, day: "" }),
+     * this repo, so nothing here is presented as profitable or as ROI.
+     * strategy is the paper rule applied on each swing signal:
+     *   momentum       — trade in the direction of the swing
+     *   mean_reversion — trade against the swing (expect reversion)
+     *   breakout       — trade with the swing, only when it is large (>= $0.20) */
+    automation: normalizeAuto(load(AUTO_KEY, { enabled: false, strategy: "momentum",
+      rule: "momentum", maxPerDay: 20, fired: 0, day: "" })),
 
     /* ---------- ticket ---------- */
     mountTicket: function (el, opts) {
@@ -148,13 +163,21 @@
       this.renderAll();
       return this.automation.enabled;
     },
+    setStrategy: function (s) {
+      if (VALID_STRATEGIES.indexOf(s) === -1) return this.automation.strategy;
+      this.automation.strategy = s;
+      save(AUTO_KEY, this.automation);
+      this.renderAll();
+      return this.automation.strategy;
+    },
     _addPaperFill: function (b, automated) {
       var price = b.priceCents / 100;
       var fill = {
         id: (automated ? "A" : "P") + Date.now(), ts: Math.floor(Date.now() / 1000),
         ticker: b.ticker, side: b.side, action: b.action,
         count: b.count, price: price, role: b.post_only ? "maker" : b.role,
-        mode: "paper", fee: 0, result: "", automated: !!automated
+        mode: "paper", fee: 0, result: "", automated: !!automated,
+        strategy: b.strategy || "manual"
       };
       Trade.fills.push(fill);
       save(FILL_KEY, Trade.fills);
@@ -165,28 +188,39 @@
     },
     onSwingAlert: function (alert) {
       // Entry point called by alerts.js when a >= $0.10 swing fires.
-      // Paper/SIMULATED only. Example momentum rule (unverified, labeled).
+      // Paper/SIMULATED only. Direction depends on the chosen strategy
+      // (unverified paper rules, labeled everywhere).
       var a = this.automation;
       if (!a || !a.enabled) return;
       var today = new Date().toISOString().slice(0, 10);
       if (a.day !== today) { a.day = today; a.fired = 0; }
       if (a.fired >= (a.maxPerDay || 20)) return;
-      var side = "yes";
-      var action = alert.dir === "up" ? "buy" : alert.dir === "down" ? "sell" : null;
-      if (!action) return;
+      var strat = a.strategy || "momentum";
+      var up = alert.dir === "up", down = alert.dir === "down";
+      // breakout only acts on large swings (>= $0.20); the rest trade the signal.
+      var large = Math.abs(Number(alert.change)) >= 0.20 - 1e-9;
+      var withMove, againstMove;
+      if (strat === "mean_reversion") { withMove = !up && !down; againstMove = (up || down); }
+      else { withMove = (up || down); againstMove = false; }
+      if (strat === "breakout" && !large) return;
+      var action;
+      if (withMove) action = up ? "buy" : "sell";
+      else if (againstMove) action = up ? "sell" : "buy";
+      else return;
       var b = {
-        ticker: alert.ticker, side: side, action: action,
+        ticker: alert.ticker, side: "yes", action: action,
         count: 10, priceCents: Math.round(alert.newPrice * 100),
         tif: "ioc", post_only: false, role: "taker"
       };
-      this._addPaperFill(b, true);
+      var fill = this._addPaperFill(b, true);
+      fill.strategy = strat;
       a.fired += 1;
       save(AUTO_KEY, this.automation);
       this.renderAll();
     },
     automationStatus: function () {
       var a = this.automation || {};
-      return { enabled: !!a.enabled, rule: a.rule || "momentum",
+      return { enabled: !!a.enabled, strategy: a.strategy || "momentum",
         fired: a.fired || 0, maxPerDay: a.maxPerDay || 20 };
     },
 
@@ -233,8 +267,9 @@
       var rows = {};
       Trade.fills.forEach(function (f) {
         var band = f.price < 0.3 ? "cheap (<30¢)" : (f.price <= 0.7 ? "mid (30–70¢)" : "expensive (>70¢)");
+        var strat = f.strategy ? f.strategy + " · " : "";
         var key = (f.topic || topicOf(f.ticker)) + " · " + f.side.toUpperCase() + " · " +
-          band + " · " + f.role;
+          band + " · " + f.role + (strat ? " · " + strat : "");
         var r = rows[key] || (rows[key] = { key: key, fills: 0, contracts: 0, fees: 0,
           pnl: 0, wins: 0, losses: 0 });
         r.fills++;
@@ -339,8 +374,9 @@
       rows.forEach(function (f) {
         var p = Trade.pnl(f);
         html += "<tr><td>" + K.timeStr(f.ts) + "</td><td>" +
-          (f.mode === "paper" ? "<span class='pill warn'>SIMULATED" + (f.automated ? " &middot; auto" : "") + "</span>" :
-            "<span class='pill'>live</span>") + "</td><td class='mono'>" + K.esc(f.ticker) +
+          (f.mode === "paper" ? "<span class='pill warn'>SIMULATED" +
+            (f.automated ? " &middot; auto" + (f.strategy ? " &middot; " + K.esc(f.strategy) : "") : "") +
+            "</span>" : "<span class='pill'>live</span>") + "</td><td class='mono'>" + K.esc(f.ticker) +
           "</td><td>" + K.esc(f.action) + "</td><td>" + K.esc(f.side) + "</td><td class='num'>" +
           K.num(f.count, 0) + "</td><td class='num'>" + K.cents(f.price) + "</td><td>" +
           (f.result ? "<span class='pill'>" + K.esc(f.result) + "</span>" : "open") +

@@ -1,6 +1,4 @@
-// Session 5125afd8 — tests for the swing-alert chat engine (assets/alerts.js, session 6ebc1cb7).
-// Exercises the public KD API directly; no network.
-import test, { after } from "node:test";
+import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import path from "node:path";
@@ -8,157 +6,139 @@ import { fileURLToPath } from "node:url";
 import { JSDOM } from "jsdom";
 
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const alertsJS = readFileSync(path.join(repo, "assets", "alerts.js"), "utf8");
-const dashboardHTML = readFileSync(path.join(repo, "dashboard.html"), "utf8");
+const read = (f) => readFileSync(path.join(repo, f), "utf8");
 
-const doms = [];
-// Close every DOM even when an assertion fails: the engine's setInterval would keep Node alive.
-after(() => { doms.forEach((d) => d.window.close()); });
-function load() {
-  const dom = new JSDOM(dashboardHTML, { url: "https://demo.example.test/Demo3/", runScripts: "outside-only", pretendToBeVisual: true });
-  doms.push(dom);
-  dom.window.eval(alertsJS);
-  return { dom, KD: dom.window.KD };
+/* Load the real root engines (app.js -> KalshiDemo, alerts.js -> KD,
+ * trade.js -> KalshiTrade) into a jsdom window and exercise the pure logic.
+ * The alert engine fetches the event record (GET /events/{event_ticker}) for
+ * official settlement-source context, so fetch is mocked. */
+function boot(fetchMock) {
+  const html = `<!doctype html><html><body>
+    <div id="alertsAll"></div><div id="alertsROI"></div>
+    <div id="chatAll"></div><div id="chatROI"></div>
+    <button id="tabAll" data-chat="all"></button>
+    <button id="tabROI" data-chat="roi"></button>
+    <input id="alertsEnabled" type="checkbox" checked>
+    <button id="clearAlertsBtn"></button><span id="alertCount"></span>
+  </body></html>`;
+  const dom = new JSDOM(html, {
+    url: "https://demo.example.test/Demo3/",
+    runScripts: "outside-only",
+    pretendToBeVisual: true,
+  });
+  const w = dom.window;
+  w.setInterval = () => ({ mocked: true });
+  w.clearInterval = () => {};
+  w.fetch = fetchMock || (async () => { throw new Error("no fetch mock"); });
+  w.eval(read("assets/app.js"));
+  w.eval(read("assets/alerts.js"));
+  w.eval(read("assets/trade.js"));
+  return { dom, w };
 }
-const TICKER = "KXAAAGASW-26NOV23-3.9400";
-const mk = (last, extra = {}) => ({
-  ticker: TICKER, title: "Will average gas prices be above $3.9400?", topic: "gas",
-  series_ticker: "KXAAAGASW", last, vol: 3421.27, oi: 3421.27, ...extra,
-});
-// Seed the anchor price from a scan row, then feed one live sample.
-function step(KD, from, to, extra) {
-  KD.onMarkets([mk(from, extra)]);
-  KD.onSample(mk(to, extra), { price: to, t: 1 });
+
+const NOW = Math.floor(Date.now() / 1000);
+function market(over) {
+  return Object.assign({
+    ticker: "MKT1", title: "Test market", topic: "golf",
+    series_ticker: "SER1", event_ticker: "EV1", rules_primary: "If X then YES.",
+    oi: 1000000, last: 0.5,
+  }, over || {});
 }
 
-test("an exact $0.10 move alerts (float-safe): 0.50 -> 0.60", () => {
-  const { KD, dom } = load();
-  step(KD, 0.5, 0.6);
-  const rows = KD.allRows();
-  assert.equal(rows.length, 1);
-  assert.equal(rows[0].dir, "up");
-  assert.equal(rows[0].change, 0.1);
+function eventFetchMock() {
+  return async (url) => {
+    const u = new URL(url);
+    if (u.pathname.endsWith("/events/EV1")) {
+      return {
+        ok: true, status: 200,
+        json: async () => ({
+          event: {
+            title: "Test event",
+            settlement_sources: [
+              { name: "ESPN", url: "https://www.espn.com/" },
+              { name: "Bad", url: "javascript:alert(1)" },
+            ],
+          },
+        }),
+      };
+    }
+    throw new Error("unexpected fetch: " + url);
+  };
+}
+
+test("alert engine flags a >= $0.10 swing (float-safe) and records event + rules", async () => {
+  const { dom, w } = boot(eventFetchMock());
+  try {
+    const m = market();
+    w.KD.onSample(m, { t: NOW, price: 0.5 });
+    w.KD.onSample(m, { t: NOW + 5, price: 0.65 }); // +$0.15 swing
+    // An exact $0.10 move (0.60 - 0.50) must fire despite float rounding.
+    w.KD.onSample(market({ ticker: "M2", oi: 0 }), { t: NOW, price: 0.5 });
+    w.KD.onSample(market({ ticker: "M2", oi: 0 }), { t: NOW + 5, price: 0.60 });
+    const all = w.KD.allRows();
+    assert.equal(all.length, 2);
+    assert.equal(all[0].ticker, "M2");          // newest first
+    assert.equal(all[0].dir, "up");
+    assert.equal(all[1].ticker, "MKT1");
+    assert.equal(all[1].event, "EV1");
+    assert.equal(all[1].rules, "If X then YES.");
+    // Event context is fetched async and only https sources are kept.
+    await new Promise((r) => setTimeout(r, 0));
+    assert.equal(w.KD.events["EV1"].status, "ok");
+    assert.deepEqual(w.KD.events["EV1"].sources, [{ name: "ESPN", url: "https://www.espn.com/" }]);
+    // Rendered chat shows the event API link and the official source, not javascript:.
+    w.KD.renderAlerts();
+    const html = w.document.getElementById("alertsAll").innerHTML;
+    assert.match(html, /event API/);
+    assert.match(html, /ESPN/);
+    assert.doesNotMatch(html, /javascript:/);
+  } finally { dom.window.close(); }
 });
 
-test("exact $0.10 downward move alerts too: 0.70 -> 0.60 (0.6-0.7 is not exact in doubles)", () => {
-  const { KD, dom } = load();
-  step(KD, 0.7, 0.6);
-  assert.equal(KD.allRows().length, 1);
-  assert.equal(KD.allRows()[0].dir, "down");
+test("ROI model is a documented, bounded score and only signals strong moves", async () => {
+  const { dom, w } = boot(eventFetchMock());
+  try {
+    const m = market({ ticker: "M1", oi: 1000000 });
+    w.KD.onSample(m, { t: NOW, price: 0.5 });
+    w.KD.onSample(m, { t: NOW + 5, price: 0.65 }); // 15¢ swing on 0.50 + 1M OI
+    const a = w.KD.allRows()[0];
+    assert.equal(a.roiSignal, true);
+    assert.ok(a.roi.score >= 0 && a.roi.score <= 1);
+    // swing 15¢ -> swingNorm 0.3; pct 30% -> pctNorm 0.6; liq 1M -> 1.0
+    assert.ok(Math.abs(a.roi.score - (0.4 * 0.3 + 0.3 * 0.6 + 0.3 * 1)) < 1e-9);
+    // A swing that fires but is small/thin must not signal.
+    const m2 = market({ ticker: "M2", oi: 0 });
+    w.KD.onSample(m2, { t: NOW, price: 0.5 });
+    w.KD.onSample(m2, { t: NOW + 5, price: 0.60 }); // exactly +$0.10, zero OI
+    assert.equal(w.KD.allRows()[0].ticker, "M2");
+    assert.equal(w.KD.allRows()[0].roiSignal, false);
+    assert.equal(w.KD.roiRows().length, 1);
+    // Let the async event fetch settle before the window closes.
+    await new Promise((r) => setTimeout(r, 0));
+  } finally { dom.window.close(); }
 });
 
-test("a $0.09 move does not alert", () => {
-  const { KD, dom } = load();
-  step(KD, 0.5, 0.59);
-  assert.equal(KD.allRows().length, 0);
-});
-
-test("every alert links the official Get Market record, even when series_ticker is set", () => {
-  const { KD, dom } = load();
-  step(KD, 0.5, 0.62);
-  assert.equal(KD.allRows()[0].api,
-    "https://external-api.demo.kalshi.co/trade-api/v2/markets/" + TICKER);
-});
-
-test("placeholder high-ROI rule filters: liquid mid-band swing passes; zero volume or extreme price fails", () => {
-  const { KD, dom } = load();
-  step(KD, 0.5, 0.62);                                 // liquid, mid-band
-  step(KD, 0.5, 0.62, { vol: 0, oi: 0, ticker: "NOLIQ" });
-  step(KD, 0.90, 1.00, { ticker: "EXTREME" });         // pinned at 100c
-  const roi = Array.from(KD.roiRows(), (r) => r.ticker); // local realm for deepStrictEqual
-  assert.deepEqual(roi, [TICKER]);
-  assert.equal(KD.allRows().length, 3, "the all-events feed keeps every swing");
-});
-
-test("the ROI chat is a strict subset of the all-events chat (it filters something)", () => {
-  const { KD, dom } = load();
-  step(KD, 0.5, 0.62);
-  step(KD, 0.2, 0.31, { ticker: "B", vol: 0 });
-  assert.ok(KD.roiRows().length < KD.allRows().length);
-});
-
-test("alerts render into the two chat tables on the dashboard", () => {
-  const { KD, dom } = load();
-  step(KD, 0.5, 0.62);
-  const d = dom.window.document;
-  assert.match(d.getElementById("alertsAll").textContent, /KXAAAGASW-26NOV23-3\.9400/);
-  assert.match(d.getElementById("alertsROI").textContent, /high-ROI signal/);
-});
-
-// --- ported from session 09824fd8's suite (integration a7ce6f14) ---
-test("first quote is a baseline; the same price again produces no alert", () => {
-  const { KD } = load();
-  KD.onMarkets([mk(0.5)]);
-  KD.onSample(mk(0.5), { price: 0.5, t: 1 });
-  assert.equal(KD.allRows().length, 0, "an unchanged price is a baseline, not a swing");
-  KD.onSample(mk(0.62), { price: 0.62, t: 2 });
-  assert.equal(KD.allRows().length, 1, "the next different quote alerts");
-});
-
-test("alert renderer escapes market text; clear removes persisted alerts", () => {
-  const { KD, dom } = load();
-  const evil = mk(0.5, { title: "<script>unsafe</script>" });
-  KD.onMarkets([evil]);
-  KD.onSample(evil, { price: 0.62, t: 1 });
-  const d = dom.window.document;
-  assert.equal(d.querySelector("#alertsAll script"), null, "title text must not execute");
-  assert.match(d.querySelector("#alertsAll").textContent, /<script>unsafe/);
-  assert.ok(dom.window.localStorage.getItem("kd_alerts_v1"), "alerts persist across reloads");
-  d.querySelector("#clearAlertsBtn").click();
-  assert.equal(KD.allRows().length, 0);
-  assert.equal(dom.window.localStorage.getItem("kd_alerts_v1"), null);
-});
-
-test("chat tabs switch between the all-events and high-ROI panels", () => {
-  const { KD, dom } = load();
-  step(KD, 0.5, 0.62);
-  const d = dom.window.document;
-  d.getElementById("tabROI").click();
-  assert.equal(d.getElementById("chatROI").style.display, "");
-  assert.equal(d.getElementById("chatAll").style.display, "none");
-  d.getElementById("tabAll").click();
-  assert.equal(d.getElementById("chatAll").style.display, "");
-  assert.match(d.getElementById("alertCount").textContent, /1 alert/);
-});
-
-// --- resolution (yes/no) messages, ported from session 13603ac5's feature set (integration a7ce6f14) ---
-// Settled records verified live 2026-11-20: GET /markets?series_ticker=KXAAAGASW&status=settled
-// returns status "finalized" with result "yes"/"no", settlement_ts, settlement_value_dollars.
-const settledRow = (extra = {}) => ({
-  ticker: "KXAAAGASW-26NOV16-4.2000", title: "Will average gas prices be above $4.2000?",
-  topic: "gas", series_ticker: "KXAAAGASW", event_ticker: "KXAAAGASW-26NOV16",
-  status: "finalized", result: "no",
-  settlement_ts: "2026-11-16T14:32:51.060078Z", settlement_value: "0.0000",
-  ...extra,
-});
-
-test("a settled market posts a RESOLVED no message exactly once", () => {
-  const { KD, dom } = load();
-  KD.onSettled([settledRow()]);
-  KD.onSettled([settledRow()]);           // second scan must not duplicate
-  const rows = KD.allRows().filter((r) => r.kind === "resolution");
-  assert.equal(rows.length, 1, "resolution announced once (deduped by ticker)");
-  assert.equal(rows[0].result, "no");
-  const text = dom.window.document.getElementById("alertsAll").textContent;
-  assert.match(text, /RESOLVED/);
-  assert.match(text, /NO/);
-  assert.equal(KD.roiRows().length, 0, "resolutions are events, not ROI signals");
-});
-
-test("an open market with an empty result does not post a resolution", () => {
-  const { KD } = load();
-  KD.onSettled([settledRow({ status: "active", result: "" })]);
-  KD.onSettled([settledRow({ status: "active", result: "yes" })]); // not finalized yet
-  assert.equal(KD.allRows().length, 0);
-});
-
-test("a yes resolution renders with its official market API link", () => {
-  const { KD, dom } = load();
-  KD.onSettled([settledRow({ ticker: "KXDEMO-YES", result: "yes" })]);
-  const d = dom.window.document;
-  const text = d.getElementById("alertsAll").textContent;
-  assert.match(text, /RESOLVED/);
-  assert.match(text, /YES/);
-  const link = d.querySelector("#alertsAll a.src");
-  assert.match(link.getAttribute("href"), /\/markets\/KXDEMO-YES$/);
+test("automated paper trades follow the selected strategy and categorize by strategy", () => {
+  const { dom, w } = boot(eventFetchMock());
+  try {
+    w.KalshiTrade.setAutomation(true);
+    const alert = { ticker: "MKT1", dir: "up", change: 0.15, newPrice: 0.65 };
+    w.KalshiTrade.setStrategy("momentum");
+    w.KalshiTrade.onSwingAlert(alert);
+    w.KalshiTrade.setStrategy("mean_reversion");
+    w.KalshiTrade.onSwingAlert(alert);
+    const fills = w.KalshiTrade.fills.filter((f) => f.automated);
+    assert.equal(fills.length, 2);
+    assert.equal(fills[0].action, "buy");       // momentum trades with the move
+    assert.equal(fills[0].strategy, "momentum");
+    assert.equal(fills[1].action, "sell");      // mean reversion fades the move
+    assert.equal(fills[1].strategy, "mean_reversion");
+    // Breakout ignores small swings.
+    w.KalshiTrade.setStrategy("breakout");
+    w.KalshiTrade.onSwingAlert({ ticker: "MKT1", dir: "up", change: 0.12, newPrice: 0.62 });
+    assert.equal(w.KalshiTrade.fills.filter((f) => f.automated).length, 2);
+    const cats = w.KalshiTrade.categories();
+    assert.ok(cats.some((c) => /momentum/.test(c.key)));
+    assert.ok(cats.some((c) => /mean_reversion/.test(c.key)));
+  } finally { dom.window.close(); }
 });

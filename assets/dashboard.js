@@ -394,7 +394,8 @@
           !state.resolutions.find(function (r) { return r.ticker === m.ticker; })) {
         state.resolutions.push({ ticker: m.ticker, title: m.title, topic: m.topic,
           result: String(m.result).toLowerCase(), status: m.status,
-          ts: Math.floor(Date.now() / 1000) });
+          ts: Math.floor(Date.now() / 1000),
+          event_ticker: m.event_ticker || "", series_ticker: m.series_ticker || "" });
         changed = true;
       }
     });
@@ -413,8 +414,9 @@
    * this page has seen and, once per scan, batch re-check up to 50 with
    * GET /markets?tickers=a,b,… (verified live 2026-11-20: the reply includes
    * finalized records with result "yes"/"no", settlement_ts and
-   * settlement_value_dollars). Resolved rows go to the alert chat
-   * (KD.onSettled -> RESOLVED yes/no message) and to the tracker above.
+   * settlement_value_dollars). Resolved rows go to the tracker above; the
+   * alert chats run their own 20 s resolution watch for alerted markets
+   * inside assets/alerts.js (KD.pollResolutions).
    * Sources: https://docs.kalshi.com/api-reference/market/get-markets
    *          https://docs.kalshi.com/getting_started/market_settlement
    */
@@ -458,12 +460,7 @@
       batch.forEach(function (t) {
         if (!seenInBatch[t] && state.resolveQueue.indexOf(t) === -1) state.resolveQueue.push(t);
       });
-      if (settled.length) {
-        trackResolutions(settled);
-        if (window.KD && window.KD.onSettled) {
-          try { window.KD.onSettled(settled); } catch (e) { /* chat must not break tracking */ }
-        }
-      }
+      if (settled.length) trackResolutions(settled);
     } catch (e) {
       batch.forEach(function (t) { if (state.resolveQueue.indexOf(t) === -1) state.resolveQueue.push(t); });
     } finally { state.resolveChecking = false; }
@@ -697,10 +694,21 @@
       var auto = $("autoTrade");
       if (auto) {
         auto.disabled = false;
+        // Restore persisted automation state on load (checkbox always reloaded
+        // unchecked before this fix).
+        var st = T.automationStatus ? T.automationStatus() : {};
+        auto.checked = !!st.enabled;
         auto.addEventListener("change", function () {
           T.setAutomation(auto.checked);
-          if ($("autoTrade")) { /* keep checkbox in sync with persisted state */ }
+          var s = T.automationStatus ? T.automationStatus() : {};
+          auto.checked = !!s.enabled;
         });
+      }
+      var strat = $("autoStrategy");
+      if (strat) {
+        var cur = (T.automationStatus ? T.automationStatus().strategy : "momentum") || "momentum";
+        strat.value = cur;
+        strat.addEventListener("change", function () { T.setStrategy(strat.value); });
       }
     }
     renderResolutions();

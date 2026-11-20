@@ -96,6 +96,10 @@ summary { cursor: pointer; font-weight: 600; }
 .roi { background: #fff7e6; color: #8a5b00; border: 1px solid #f0d48a; border-radius: 6px;
   padding: 0 6px; font-size: .75rem; font-weight: 700; }
 .pill.topic { background: #eef1f6; color: #45506b; }
+.alert-controls select { padding: 2px 4px; font-size: .85rem; font-weight: 500; }
+.chat-wrap > div { overflow-x: auto; }
+.chat-wrap table.alerts { min-width: 780px; }
+.chat-wrap table.alerts td.small, .chat-wrap table.alerts td a.src { word-break: break-word; }
 
 /* sharp-jump context (df50b92f) */
 .chat-wrap table.alerts td.ctx { min-width: 220px; }

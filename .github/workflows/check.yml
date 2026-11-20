@@ -38,6 +38,21 @@ jobs:
       - name: Canonical root site checks (links, per-row sources, syntax)
         run: python3 scripts/verify_root_site.py
 
+      - name: High-ROI model artefact (deterministic rebuild + consistency tests)
+        run: |
+          # data/ is refreshed by the scheduled collector on its own cadence, so the test is
+          # that the generator is deterministic and its numbers recompute from the data on
+          # this commit - not that the committed artefact equals a rebuild.
+          python3 model/build_roi_model.py
+          cp data/latest/roi_model.json /tmp/roi1.json
+          python3 model/build_roi_model.py
+          cmp /tmp/roi1.json data/latest/roi_model.json
+          echo "roi model rebuild is deterministic"
+          python3 scripts/tests/test_roi_model.py
+          python3 scripts/build_report_pages.py
+          git checkout -- data/latest/roi_model.json model.html requirements.html
+          echo "artefacts restored"
+
       - name: Strategy backtest (deterministic rebuild + consistency tests)
         run: |
           # The published artefacts are pinned to a data snapshot; the scheduled collector

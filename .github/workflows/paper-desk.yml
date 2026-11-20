@@ -1,0 +1,116 @@
+name: Paper desk (automated simulated trading)
+
+# Unattended strategy desk for the Kalshi DEMO exchange: every cycle it pulls live
+# public quotes for the tracked universe, evaluates five deterministic rules
+# (trading/paper_strategies.py), simulates fills against the published top-of-book
+# prices with the size actually resting there, marks positions to market, realizes
+# P&L when a market resolves, and commits the ledger + a rebuilt subsite.
+#
+# No credentials are used and no order is ever sent: every endpoint called is public
+# market data (https://docs.kalshi.com/getting_started/quick_start_market_data.md).
+# Real demo-ACCOUNT tracking stays blocked until demo API keys exist as repository
+# secrets (see data/latest/portfolio.json -> status "credentials_missing").
+#
+# Snapshot data pushes are made with GITHUB_TOKEN, which does not trigger the legacy
+# pages-build-deployment workflow (GitHub recursion guard), so a Pages build is
+# requested explicitly afterwards — same approach already recorded on this repo by
+# session 3b5e95bd for collect.yml. Reference:
+# https://docs.github.com/en/rest/pages/pages#request-a-github-pages-build
+
+on:
+  schedule:
+    - cron: '*/20 * * * *'      # 20-minute cadence; GitHub only runs schedules on the default branch
+  workflow_dispatch:
+    inputs:
+      reset:
+        description: "start a fresh paper ledger (archive-free; overwrites data/paper)"
+        required: false
+        type: boolean
+        default: false
+      max_orders:
+        description: "max simulated orders this run (blank = config default 6)"
+        required: false
+        default: ""
+      build_only:
+        description: "only rebuild paper-desk/ from the committed ledger"
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: paper-desk-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  desk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Offline desk tests (mocked responses, no network)
+        run: python3 trading/test_paper_engine.py -v
+
+      - name: Run one desk cycle against the live demo API
+        if: ${{ github.event.inputs.build_only != 'true' }}
+        env:
+          KALSHI_API_ROOT: https://external-api.demo.kalshi.co/trade-api/v2
+        run: |
+          ARGS="run"
+          if [ "${{ github.event.inputs.reset }}" = "true" ]; then ARGS="$ARGS --reset"; fi
+          if [ -n "${{ github.event.inputs.max_orders }}" ]; then ARGS="$ARGS --max-orders ${{ github.event.inputs.max_orders }}"; fi
+          python3 trading/paper_engine.py $ARGS | tee desk-run.json
+
+      - name: Rebuild the paper-desk subsite from the ledger
+        run: python3 scripts/build_paper_desk.py
+
+      - name: Verify the subsite (links, per-row sources, JS syntax)
+        run: python3 scripts/verify_paper_desk.py
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Runs against the freshly generated pages (not the committed copies), so a builder
+      # regression cannot slip through; CI=true makes a skipped gate fail instead of pass.
+      - name: Subsite DOM gate (jsdom, mocked fetch — no network)
+        run: |
+          npm ci --no-audit --no-fund
+          node --test paper-desk/tests/dom.test.mjs
+
+      - name: Commit ledger + subsite
+        run: |
+          git config user.name "paper-desk-bot"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin "$GITHUB_REF_NAME" || echo "::warning::rebase skipped; other bot commits raced this run"
+          git add data/paper paper-desk
+          if git diff --cached --quiet; then
+            echo "No desk changes this cycle"
+          else
+            git commit -m "paper desk: cycle $(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          fi
+
+      - name: Request a Pages rebuild
+        if: github.ref == 'refs/heads/main'
+        # Tolerant by design: the ledger commit above is the source of truth. This repository has
+        # an open Pages incident (board flag I-F2-07: legacy builds reporting "Page build failed."
+        # since PR #37, cause unattributed), and failing this job on a Pages 5xx would wrongly
+        # report that the trading cycle itself failed.
+        run: |
+          code=$(curl -s -o /tmp/pages_build.json -w "%{http_code}" \
+            -X POST \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/pages/builds")
+          echo "pages build request HTTP $code"
+          head -c 400 /tmp/pages_build.json || true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
