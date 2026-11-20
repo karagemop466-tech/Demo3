@@ -587,3 +587,34 @@ Change request for the final integration session: none.
 - 2026-11-20 b13c6a8d — merge record for the withdrawal. PR #29 (`arena/b13c6a8d-demo3`): its feature files were removed from the branch and the PR was retitled to the board-only withdrawal before merging. **Merged 2026-11-20 19:30:14 UTC, merge commit `0d4ab58`**, board only (COORDINATION.md, +12 lines). The live-alert feature was NOT merged from this session; the merged live-alert chat on the dashboard is from PR #28 (session 6ebc1cb7).
 - Pages after this merge: the build for `0d4ab58` reported `errored` ("Page build failed."), as did two overlapping builds (`df3bf70`, `5f0335f`). The next build, for `fa6525b`, also errored; the build for `04d1a4e` then reported `built` (2026-11-20 19:38:30 UTC). Live checks via page fetch: https://karagemop466-tech.github.io/Demo3/ (landing with executive summary) and https://karagemop466-tech.github.io/Demo3/dashboard.html (section 6 "Price-swing alerts — scrolling chat (≥ $0.10)"). The site is live at `main` `04d1a4e`. Pages failures for the superseded commits are not re-run; the latest commit built and serves.
 - Open items for the integration owner (not changed here): duplicate alert PRs #26 and #27 remain open; PR #36 and #34 (alert-related) remain open; the root alert chat lacks resolution rows (CR-b13c6a8d-3).
+
+---
+
+## Task board — session 67643e12 (independent live-state verification audit, branch `arena/67643e12-demo3`)
+
+Claimed 2026-11-20 ~19:45 UTC. Branch: `arena/67643e12-demo3`, based on `main` @ `e2cfd3c`
+(PR #45 merged). **Scope: `COORDINATION.md` (this section only) — no other file is created, edited
+or regenerated.** Rationale for the scope: at claim time every other task in the brief is either
+delivered on `main` or actively claimed by an open PR (alerts/integration: #26, #27, #36, #38–#43;
+executive-summary/published-data audit: #37). This session therefore claims the one unclaimed
+deliverable — an **independent verification audit of the live site, CI health and committed data**,
+per the brief's "REPO WORK / VERIFICATION" requirements. It deliberately does not duplicate:
+- the `collect.yml` duplicate-`if:` fix — claimed and implemented by session `6d201d19` (PR #26,
+  flag F-6D-10), independently confirmed by this session before the claim (diagnosis identical;
+  the one-line deletion in PR #26 is the correct fix);
+- the final-integration/canonical-alert choice — claimed by session `13603ac5` (PR #43);
+- the executive-summary/published-data row audit — claimed by session `d7d7a733` (PR #37, merged
+  into `main` at `1e41bff` during this session's preparation; its `audit/` artifacts are merged).
+
+| # | Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|---|
+| V1 | Page-by-page fetch of the LIVE GitHub Pages site (every canonical root page), verifying each serves and renders its key sections | in progress | 67643e12 | `COORDINATION.md` (this section) | `fetch_page` of each live URL; results logged below | none yet |
+| V2 | GitHub Pages + Actions health through the concurrent merge storm | in progress | 67643e12 | `COORDINATION.md` (this section) | Pages API (`/pages`, `/pages/builds/latest`, build list), Actions API per workflow | collect.yml startup failures (claimed fix in PR #26) |
+| V3 | Independent row-level data verification: re-fetch sampled rows across all five topics from the live demo API and compare against committed `data/latest/` values | in progress | 67643e12 | `COORDINATION.md` (this section) | Official demo API URLs embedded per row in `data/latest/topic_*.json`, `top_events.json`, `markets_settled.json` | none yet |
+| V4 | Verify the merged live-alert feature is actually served on the live site (two chat panels, ≥$0.10 threshold, context links) | in progress | 67643e12 | `COORDINATION.md` (this section) | Live `dashboard.html` + `assets/alerts.js` fetches | none yet |
+| V5 | Repo hygiene + check-suite run on current `main` (all four site checkers, `node --check`, npm test, offline pipeline tests) | in progress | 67643e12 | `COORDINATION.md` (this section) | Runs logged below | none yet |
+| V6 | Open-PR overlap matrix to assist the claimed final-integration session (information only; no merge/close decision made here) | in progress | 67643e12 | `COORDINATION.md` (this section) | `gh pr view --json files` per open PR | none yet |
+| V7 | PR of this section to `main`, merge, confirm Pages deploy, record result | pending | 67643e12 | PR from `arena/67643e12-demo3` | merge + Pages API check | none yet |
+
+Progress log:
+- 2026-11-20 ~19:45 UTC — claim committed and pushed (this commit). Work in progress; results appended below as they complete.
