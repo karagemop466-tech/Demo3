@@ -103,8 +103,8 @@ async function loadPage() {
   // or it terminates the inline element early.
   const inline = (f) => fs.readFileSync(path.join(ROOT, f), "utf8").replace(/<\/script/g, "<\\/script");
   const html = fs.readFileSync(path.join(ROOT, "alerts.html"), "utf8")
-    .replace('<script src="assets/swing-core.js"></script><script src="assets/alerts.js"></script>',
-      `<script>${inline("assets/swing-core.js")}</script><script>${inline("assets/alerts.js")}</script>`);
+    .replace('<script src="assets/swing-core.js"></script><script src="assets/alert-console.js"></script>',
+      `<script>${inline("assets/swing-core.js")}</script><script>${inline("assets/alert-console.js")}</script>`);
   const errors = [];
   const vc = new VirtualConsole();
   vc.on("jsdomError", e => {

@@ -162,7 +162,8 @@ negative — **the loss is the spread being crossed, not the commission**. That 
 | 7 | A `git stash -u` of my own untracked work (before pulling a CI data commit) temporarily removed `assets/alerts.js`/`alerts.css`; recovered from `stash@{0}^3`, re-verified with `node --check` + the jsdom smoke test. Lesson recorded in `COORDINATION.md`: commit WIP before stashing/pulling on this branch. | `git stash list` at the time |
 | 8 | `alerts/model.json` currently carries an `alert_rule.definition` string from an earlier revision ("max … for up"), which does not describe the implemented rule (up is measured off the window **low**). The code is corrected and pinned by a test (`TestSpecStringsMatchCode`); the published string
 updates on the next scan run, and both runtimes' behaviour was always pinned by the shared reference vectors, not by that sentence. | `git log -p scripts/scan_swings.py`, `tests/swing_core.test.js` |
-| 9 | Another session's collector bot pushed `data: refresh snapshot 2026-11-20T20:04Z` to this branch mid-work; merged without discarding it (`86d9f67`), and my restored live scan data sits alongside it. | `git log` on this branch |
+| 9 | **feature collision, resolved without discarding either session.** `main` merged PR #83 (session a7ce6f14, 20:50:56Z) containing its own `assets/alerts.js` chat engine, loaded by `dashboard.html`; this session's console (claimed earlier, 19:15, board rows A1–A6) had written its engine to the same path. Resolution: `main`'s file stays at `assets/alerts.js` untouched, this console's engine is `assets/alert-console.js`, and both are checked by `verify_root_site.py`. Two engines still exist for one requirement — the integration owner should pick one (this one is the one wired to the calibrated backtest; theirs is the one `dashboard.html` loads). Their `F-7b-05` flag (float `>= 0.10` comparisons silently dropping exact 10-cent moves) does not apply here: this engine compares integer bits, and `$0.0999`-no / `$0.1000`-yes is an asserted vector. | `git log --oneline origin/main -- assets/alerts.js`, `assets/alert-console.js`, `tests/swing_core.test.js` |
+| 10 | Another session's collector bot pushed `data: refresh snapshot 2026-11-20T20:04Z` to this branch mid-work; merged without discarding it (`86d9f67`), and my restored live scan data sits alongside it. | `git log` on this branch |
 
 ## 7. Review trail
 
@@ -173,7 +174,8 @@ updates on the next scan run, and both runtimes' behaviour was always pinned by 
   depth + fills + catalyst panel render, resolution recorded exactly once).
 * `npm test` → 41 tests, 0 failures (the new tests run beside the existing suite).
 * `python3 scripts/build_root_site.py && python3 scripts/verify_root_site.py` → **0 failures**
-  (`alerts.html` in `PAGES`, `assets/alerts.js` + `assets/swing-core.js` in the `node --check` list).
+  (`alerts.html` in `PAGES`; `assets/alert-console.js` + `assets/swing-core.js` added to the
+  `node --check` list beside session a7ce6f14's `assets/alerts.js`).
 * `python3 scripts/check_site.py` → passes.
 * The irregularities in §6 are published on `flagged.html` as I-18…I-24, per the session protocol;
   "needs review" items do not block the merge, they are listed there with their sources.

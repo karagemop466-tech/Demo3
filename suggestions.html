@@ -9,7 +9,7 @@
 <body>
 <header class="top"><div class="wrap"><nav class="main">
 <a class="brand" href="index.html">Kalshi Demo Tracker</a>
-<a href="index.html">Home</a><a href="dashboard.html">Live dashboard</a><a href="alerts.html">Swing alerts</a><a href="data-tracking.html">Data tracking</a><a href="gas-prices.html">Gas prices</a><a href="elections.html">Elections</a><a href="culture.html">Culture</a><a href="crypto.html">Crypto</a><a href="golf.html">Golf</a><a href="portfolio.html">Portfolio</a><a href="trades.html">Trades</a><a href="questions.html">Questions</a><a href="suggestions.html" class="active">Suggestions</a><a href="flagged.html">Flagged for review</a><a href="sources.html">Sources</a><a href="repo-review.html">Repo review</a><a href="methodology.html">Methodology</a><a href="api-reference.html">API reference</a>
+<a href="index.html">Home</a><a href="dashboard.html">Live dashboard</a><a href="alerts.html">Swing alerts</a><a href="live/index.html">Alert desk (live)</a><a href="data-tracking.html">Data tracking</a><a href="gas-prices.html">Gas prices</a><a href="elections.html">Elections</a><a href="culture.html">Culture</a><a href="crypto.html">Crypto</a><a href="golf.html">Golf</a><a href="portfolio.html">Portfolio</a><a href="strategy.html">Strategy lab</a><a href="trades.html">Trades</a><a href="questions.html">Questions</a><a href="suggestions.html" class="active">Suggestions</a><a href="flagged.html">Flagged for review</a><a href="sources.html">Sources</a><a href="repo-review.html">Repo review</a><a href="methodology.html">Methodology</a><a href="api-reference.html">API reference</a><a href="requirements.html">Requirements</a><a href="model.html">High-ROI model</a>
 </nav></div></header>
 <main class="wrap">
 
@@ -529,7 +529,40 @@ implemented</strong>. Set a decision and note per row — they are saved in this
   <option>Proposed</option><option>Approved</option><option>Rejected</option>
   <option>Deferred</option><option>Implemented</option></select><br>
   <input class="decision-note" data-sid="S-07" placeholder="reviewer note (saved locally)"></td>
-<td><a class="src" href="https://docs.kalshi.com/getting_started/demo_env.md" target="_blank" rel="noopener">source</a></td></tr></tbody></table></div>
+<td><a class="src" href="https://docs.kalshi.com/getting_started/demo_env.md" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="S-7b-01">
+<td><span class="mono">S-7b-01</span></td>
+<td><strong>Jump annotations on the price chart</strong><br><span class='small'>Alert rows already carry the event&#x27;s official settlement_sources; the chart itself does not mark the &gt;= $0.10 jumps. assets/dashboard.js keeps `state.selected` private, so a marker layer needs one export (e.g. KD.selectedTicker or a KD.onSelect hook). Requested of the file owner on COORDINATION.md rather than edited here.</span>
+<ul class='small'><li class='muted'>—</li></ul></td>
+<td>The brief asks the live chart to show the events/links around sharp jumps.</td>
+<td>low</td>
+<td>none — read-only hook</td>
+<td><select class="decision" data-sid="S-7b-01">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="S-7b-01" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-market" target="_blank" rel="noopener">source</a> · <a class="src" href="https://docs.kalshi.com/api-reference/events/get-event" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="S-7b-02">
+<td><span class="mono">S-7b-02</span></td>
+<td><strong>Record sub-minute tick history server-side so the ROI screen can be calibrated</strong><br><span class='small'>Candles from GET /markets/{ticker}/candlesticks stop at 1 minute and only 12 markets have recorded windows, while the settled snapshot exposes just previous/last price — enough to describe, not to fit. A CI job that appends 1-second samples of the tracked watchlist to data/history/ would let the screen&#x27;s parameters be measured (with n and confidence shown).</span>
+<ul class='small'><li class='muted'>—</li></ul></td>
+<td>Turns the published uncalibrated threshold into a fitted, verifiable one.</td>
+<td>medium</td>
+<td>more committed data; keep the collector rate-limit friendly (&gt;= 400 ms between calls)</td>
+<td><select class="decision" data-sid="S-7b-02">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="S-7b-02" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-market-candlesticks" target="_blank" rel="noopener">source</a> · <a class="src" href="https://docs.kalshi.com/getting_started/rate_limits" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="S-7b-03">
+<td><span class="mono">S-7b-03</span></td>
+<td><strong>Add a signed WebSocket recorder for true tick streaming</strong><br><span class='small'>Official docs require KALSHI-ACCESS-KEY/-SIGNATURE/-TIMESTAMP headers on the WS handshake, and public channels still ride the authenticated session, so a static Pages page cannot open the socket. A small authenticated client (Actions runner or a user-hosted service) could subscribe to `ticker`/`orderbook_delta` for the watchlist and publish the same JSON the dashboard already consumes; the browser keeps polling when it is absent.</span>
+<ul class='small'><li class='muted'>—</li></ul></td>
+<td>Sub-second alerts and order-book deltas without hammering REST limits.</td>
+<td>high</td>
+<td>never ship a private key to the browser; keep it as a repo secret</td>
+<td><select class="decision" data-sid="S-7b-03">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="S-7b-03" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/getting_started/quick_start_websockets" target="_blank" rel="noopener">source</a> · <a class="src" href="https://docs.kalshi.com/getting_started/api_keys" target="_blank" rel="noopener">source</a></td></tr></tbody></table></div>
 <p class="small muted">Consolidated from every session's suggestion registers; each row links its evidence.</p>
 </div>
 

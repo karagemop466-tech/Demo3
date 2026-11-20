@@ -31,8 +31,9 @@ on:
       - 'scripts/scan_swings.py'
       - 'alerts/**'
       - 'assets/swing-core.js'
-      - 'assets/alerts.js'
+      - 'assets/alert-console.js'
       - 'tests/swing_core.test.js'
+      - 'tests/alert_console.test.js'
       - '.github/workflows/swing-scan.yml'
 
 permissions:

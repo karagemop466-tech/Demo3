@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Positions &amp; liquidity &middot; Kalshi demo paper desk</title>
+<link rel="stylesheet" href="assets/paper.css">
+</head>
+<body>
+<header class="top"><div class="bar"><a class="brand" href="index.html">Kalshi demo &middot; paper desk</a><nav class="main"><a href="index.html">Desk summary</a><a href="trades.html">Trade journal</a><a href="positions.html" class="active">Positions & liquidity</a><a href="analysis.html">Strategy analysis</a><a href="resolutions.html">Resolutions</a><a href="methodology.html">Rules & methodology</a><a href="sources.html">Sources</a></nav><span class="flexrow" style="margin-left:auto"><span class="pill sim">no runs yet</span><span class="pill ok">ledger updated awaiting first cycle</span><span class="pill">collector ok</span></span></div></header>
+<main>
+<h1>Positions &amp; liquidity</h1>
+
+
+<div class="banner"><strong>No ledger yet.</strong> <span class="mono">data/paper/</span> is
+created by the first run of <span class="mono">.github/workflows/paper-desk.yml</span>
+(scheduled every 20 minutes on the default branch, or on demand). The pages below stay
+valid and fill in as cycles complete; nothing on this site is back-filled by hand.</div>
+<div class="card"><h2>Live refresh</h2>
+<p class="small muted">Reads <span class="mono">GET /markets?tickers=&hellip;</span> and
+<span class="mono">GET /markets/&lt;ticker&gt;/orderbook</span> from this browser against the
+official demo REST root &mdash; no key required for public market data
+(<a href="https://docs.kalshi.com/getting_started/quick_start_market_data.md" target="_blank" rel="noopener">docs</a>).
+Answers are as-of the API's own short response cache
+(<a href="https://docs.kalshi.com/api-reference/market/get-markets.md" target="_blank" rel="noopener">documented lag</a>).</p>
+<p class="flexrow"><button id="liveRefresh">Refresh from the demo API</button>
+<label class="small"><input type="checkbox" id="liveAuto"> auto-refresh
+<select id="liveInterval"><option>10</option><option selected>30</option><option>60</option></select> s</label>
+<select id="liveChart" aria-label="Chart granularity"><option value="1">chart: 1-minute candles</option>
+<option value="60" selected>chart: 1-hour candles</option><option value="1440">chart: 1-day candles</option>
+<option value="live">chart: live seconds (this browser only)</option></select>
+<span id="liveStatus" class="muted small">0 tracked market(s) loaded</span></p>
+<div id="liveTable"></div><div id="liveChartBox"></div></div>
+<h2>Open positions (marked at the published bid)</h2>
+<table><thead><tr><th>market</th><th>title</th><th>topic</th><th>side</th><th>contracts</th><th>avg entry</th><th>cost basis</th><th>mark</th><th>value</th><th>unrealized</th><th>strategy</th><th>opened run</th><th>source</th></tr></thead><tbody><tr><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td></tr></tbody></table>
+<h2>Resting simulated orders</h2>
+<table><thead><tr><th>market</th><th>strategy</th><th>limit</th><th>age (cycles)</th><th>expiry rule (cycles)</th><th>placed</th><th>status</th><th>last block</th><th>source</th></tr></thead><tbody><tr><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td></tr></tbody></table>
+<h2>Liquidity snapshots at decision time (contracts resting at each price)</h2>
+<div class="scroll">
+<table><thead><tr><th>market</th><th>book</th><th>price</th><th>contracts</th><th>relative depth</th><th>fetched</th><th>source</th></tr></thead><tbody><tr><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td></tr></tbody></table>
+</div>
+<h2>Latest quote the desk recorded per tracked market</h2>
+<div class="scroll">
+<table><thead><tr><th>market</th><th>ts</th><th>YES bid</th><th>YES ask</th><th>NO bid</th><th>NO ask</th><th>last</th><th>24h volume</th><th>run</th><th>source</th></tr></thead><tbody><tr><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td></tr></tbody></table>
+</div>
+<script>window.PAPER_TICKERS=[];window.PAPER_MARKS={};window.PAPER_API_ROOT="https://external-api.demo.kalshi.co/trade-api/v2";</script>
+<script src="assets/paper.js"></script>
+</main>
+<footer>Simulated ledger only &mdash; not a demo-account balance, and not investment advice. Demo prices "may not be reflective of those in real markets" per <a href="https://docs.kalshi.com/getting_started/demo_env.md" target="_blank" rel="noopener">Kalshi&rsquo;s demo-environment doc</a>. Generated by <span class="mono">scripts/build_paper_desk.py</span> from <span class="mono">data/paper/*.json</span> (refreshed by <span class="mono">.github/workflows/paper-desk.yml</span>).</footer>
+</body>
+</html>

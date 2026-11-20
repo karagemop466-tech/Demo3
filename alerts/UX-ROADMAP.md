@@ -1,7 +1,7 @@
 # UX roadmap — swing-alert console
 
 What is shipped, what is deliberately not, and what to build next, in the order that buys the most
-trust per hour of work. "Shipped" means it is in `alerts.html` + `assets/alerts.js` on this branch and
+trust per hour of work. "Shipped" means it is in `alerts.html` + `assets/alert-console.js` and
 covered by a test; "not shipped" means the console does not pretend to do it.
 
 ## Shipped in v1 (this branch)

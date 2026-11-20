@@ -122,7 +122,7 @@ WebSockets are not used: the handshake needs `KALSHI-ACCESS-*` headers a browser
 | file | role |
 |---|---|
 | `alerts/page-body.html` | the page body; `scripts/build_root_site.py` wraps it in the shared shell so nav/footer/styles match every other root page |
-| `assets/alerts.js` / `assets/alerts.css` | console engine + styles |
+| `assets/alert-console.js` / `assets/alerts.css` | console engine + styles. The file is named `alert-console.js`, **not** `alerts.js`: `assets/alerts.js` on `main` is session a7ce6f14's dashboard chat engine, which `dashboard.html` loads; the two engines coexist rather than fight over one path (the repo has already been bitten by duplicate engines — flag R-05) |
 | `assets/swing-core.js` | the shared rule, fee model and ROI score (loaded by the console, mirrored by the scanner) |
 | `scripts/scan_swings.py` | detector + backtest + bucket calibration + resolution re-poll + event-page probe |
 | `data/swings/{swings,strategies,events,meta,series_meta}.json`, `alerts/model.json` | published outputs |

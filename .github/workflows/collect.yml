@@ -14,6 +14,7 @@ on:
 permissions:
   contents: write
   pages: write
+  actions: write
 
 concurrency:
   group: collect-kalshi
@@ -40,7 +41,11 @@ jobs:
           KALSHI_API_ROOT: https://external-api.demo.kalshi.co/trade-api/v2
         run: python3 collector/collect.py
 
-      - name: Commit snapshots
+      # Snapshot commits happen on the default branch only. Committing on every push (as an
+      # earlier version did) rewrites data/ on feature branches while other sessions work,
+      # which forces rebases mid-task and puts open pull requests into a conflicted state.
+      - name: Commit snapshots (default branch only)
+        if: github.ref_name == github.event.repository.default_branch
         run: |
           git config user.name "collector-bot"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -54,18 +59,21 @@ jobs:
             git push origin "HEAD:$GITHUB_REF_NAME"
           fi
 
-      - name: Request Pages rebuild (data pushes use GITHUB_TOKEN, which does not
-              trigger the legacy pages-build-deployment workflow)
+      - name: Dispatch Pages deploy (pages.yml; GITHUB_TOKEN may dispatch workflow_dispatch)
         if: github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          # Pushes made with GITHUB_TOKEN do not trigger workflow runs (GitHub
-          # recursion guard), so the legacy "deploy from branch" Pages build would
-          # not fire for data-only commits. Request it explicitly via the API
-          # (https://docs.github.com/en/rest/pages/pages#request-a-page-build).
-          code=$(curl -s -o /tmp/pages_build.json -w "%{http_code}" \
+          # Data-only pushes made with GITHUB_TOKEN do not trigger push workflows (GitHub
+          # recursion guard). pages.yml is workflow_dispatch-enabled, so request it here.
+          # Legacy branch builds are not used (soft limit of 10 builds per hour:
+          # https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits).
+          code=$(curl -s -o /tmp/dispatch.out -w "%{http_code}" \
             -X POST \
-            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Authorization: Bearer $GH_TOKEN" \
             -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/$GITHUB_REPOSITORY/pages/builds")
-          echo "pages build request HTTP $code"
-          cat /tmp/pages_build.json | head -5
+            -d '{"ref":"main"}' \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/workflows/pages.yml/dispatches")
+          echo "pages.yml dispatch HTTP $code"
+          cat /tmp/dispatch.out | head -5
+          test "$code" = "204"
