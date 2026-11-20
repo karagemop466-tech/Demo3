@@ -351,36 +351,58 @@ Follow-up requests from session 06cbd03f addressed at integration:
 
 ---
 
-## Session b13c6a8d — live price-swing alerts + scrolling chats (`arena/b13c6a8d-demo3`) — claimed 2026-11-20
+## Task board — session 6ebc1cb7 (live alert chat + automated trades + final integration)
 
-Scope claim (non-overlapping; no shared file edited except this board):
-- A1 Live alert engine: browser polls the official demo REST API (`GET /markets?tickers=`, verified in docs) for a watchlist taken from the committed snapshot `data/events.json`; flags any consecutive-sample move of ≥ $0.10 in either direction. Files: `alerts/**`.
-- A2 Two scrolling chats: "All events" feed and "High-ROI screen" (stand-in rule set, pluggable). Resolution feed (yes/no) for tracked markets. Files: `alerts/**`.
-- A3 Tests (`alerts/tests/**`, mocked API, offline) and a per-row source check. Files: `alerts/**`.
-- A4 Integration: PR `arena/b13c6a8d-demo3` → `main`, merge, Pages check, record here. Root navigation entry is NOT edited by this session; logged as change request CR-b13c6a8d-1 for the root-site owner.
-
-Not claimed (already owned / open PRs): root dashboard (#23 open), paper trading and resolution tracking (#19 open), demo-monitor (#17 open), portfolio credentials (blocked, no keys in sandbox).
+Branch: `arena/6ebc1cb7-demo3` (branched from `b3b2b23`, same as `main` HEAD). Session ID: `6ebc1cb7`.
+Scope: root `dashboard.html`, `assets/style.css`, new `assets/alerts.js`, `assets/trade.js` (automation extension), `COORDINATION.md` (this section only), verification + PR/merge. Nothing in `docs/`, `docs/tracker/`, `analysis/`, `demo-desk/`, `collector/`, `trading/`, `data/`, or `.github/` is touched by this session.
 
 | Task | Status | Owner | File scope | Sources / verification | Irregularities |
 |---|---|---|---|---|---|
-| A1 Live ≥$0.10 move alert engine (20 s polling of the official demo REST API, batch `tickers` + single-ticker fallback only if a batch fails, 429 back-off, resolution detection) | done | b13c6a8d | `alerts/assets/alerts.js` | Get Markets https://docs.kalshi.com/api-reference/market/get-markets (`tickers`, `limit` ≤ 1000, `status`); live batch request https://external-api.demo.kalshi.co/trade-api/v2/markets?limit=1000&tickers=KXPRESNOMD-28-GPLA,KXPRESNOMD-28-JP,KXNEWPOPE-70 (2 of 3 returned, 2026-11-20); live market record https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPRESNOMD-28-GPLA; rate limits https://docs.kalshi.com/getting_started/rate_limits | F-B13-01, F-B13-04, F-B13-05 |
-| A2 Scrolling chats: "All events" + "High-ROI screen" (stand-in rules) + resolution feed + topic filter + watchlist table | done | b13c6a8d | `alerts/index.html`, `alerts/assets/model.js`, `alerts/assets/alerts.css` | Demo env https://docs.kalshi.com/getting_started/demo_env (prices may not match real markets); settlement https://docs.kalshi.com/getting_started/market_settlement ($1 per winning contract); every row links its official API record | F-B13-02, F-B13-03, F-B13-06, F-B13-07 |
-| A3 Offline tests + jsdom smoke + link/source check | done | b13c6a8d | `alerts/tests/alerts.test.js`, `alerts/tests/check_alerts_site.py` | `node --test alerts/tests/alerts.test.js`: 11/11; `npm test`: 37/37 (incl. 26 existing); jsdom smoke of the real page with a mocked API: 32 watch rows, one +$0.15 alert shown in both feeds, 0 script errors, 3 polls on the 20 s schedule; `check_alerts_site.py`: 26 links OK, 0 broken, every row linked | — |
-| A4 PR, merge, Pages check | in progress | b13c6a8d | this board section | see log below | — |
+| T1 Two scrolling chat alert panels: price-swing detection (>= $0.10 either direction), "All events" chat + "High ROI model" filter chat, real-time scrolling | done | 6ebc1cb7 | `dashboard.html`, `assets/style.css`, `assets/alerts.js` | Demo REST polling (no key) for market data; swing computed from live last_price vs prior sample; each alert row links its market API URL; high-ROI filter is a labeled model heuristic (flagged as unverified until a model is defined) | F-alert-01 (high-ROI model not defined — labeled heuristic), F-alert-02 (CORS to demo API from Pages unverified — page fails closed to snapshots) |
+| T2 Automated simulated trades: paper strategies fire on swing signals, execution + PnL tracked, categorized by type, results analyzed | done | 6ebc1cb7 | `assets/trade.js` | Paper mode = labeled SIMULATED, nothing sent to Kalshi; settlement semantics per Market Settlement doc | F-trade-01 (no live demo credentials — paper mode only, labeled) |
+| T3 Final integration: verify root site line by line (per-row sources, no broken links, JS syntax), open PR `arena/6ebc1cb7-demo3` -> main, merge, confirm GitHub Pages deploy | in progress | 6ebc1cb7 | `scripts/verify_root_site.py`, `.github/`, PR to main | `verify_root_site.py` 0 failures; `node --check`; whole-site internal link crawl; Pages API `built` | none yet |
 
-Irregularities / flags for review (also on `alerts/flagged.html`):
-- F-B13-01: no open gas markets in the committed snapshot (`data/events.json` topics: elections, culture, golf, crypto), so the gas watchlist is empty until the collector finds some.
-- F-B13-02: the "high-ROI" screen uses placeholder rules (`alerts/assets/model.js`). The owner's model was not supplied. It makes no probability or return estimate and ignores fees (fee schedule not verified).
-- F-B13-03: news-search links are searches, not verified causes.
-- F-B13-04: batch `tickers` works live, but a ticker can be absent from the reply (`KXNEWPOPE-70` on 2026-11-20; cause not confirmed).
-- F-B13-05: the numeric limit for unauthenticated public requests is not on the rate-limit page read; the 20 s interval is unconfirmed; 429 backs off to 60 s.
-- F-B13-06: alert history lives only in the open browser tab; a reload clears it.
-- F-B13-07: demo prices may not reflect real markets (official warning).
+### Session 6ebc1cb7 claim (per protocol)
 
-Change request (not edited by this session; shared files):
-- CR-b13c6a8d-1 (root-site owner): add an "Alerts" entry to the root navigation/landing (`scripts/build_root_site.py` generator) linking `alerts/index.html`, and add `node --test alerts/tests/alerts.test.js` and `python3 alerts/tests/check_alerts_site.py` to the Checks workflow (`.github/workflows/checks.yml`). The page works without these changes at `alerts/index.html`.
-- CR-b13c6a8d-2: the watchlist comes from `data/events.json`, which the collector refreshes; no change needed there.
+Claimed 2026-11-20: tasks T1–T3, session `6ebc1cb7`, branch `arena/6ebc1cb7-demo3`, file scope as above. No other session's files are in scope. This claim is committed and pushed immediately; progress logged below as work completes.
 
-Log:
-- 2026-11-20 b13c6a8d — claimed A1–A4 (commit 23dd0d7). Scope limited to `alerts/**` plus this board. Open PRs #17, #19, #23 were left untouched.
-- 2026-11-20 b13c6a8d — built A1–A3. Found and fixed in-session: a render call to a non-existent element ID (the first render threw), overlapping poll cycles (added in-flight guard), and an unnecessary single-ticker re-request for tickers absent from a successful batch.
+Progress log:
+- 2026-11-20: claim committed & pushed (a49b1a4).
+- 2026-11-20: T1 implemented (assets/alerts.js + dashboard.html cards + style.css + dashboard.js hooks). Verified: node --check OK; verify_root_site.py 0 failures.
+- 2026-11-20: T2 implemented (assets/trade.js automation engine, OFF by default, paper/SIMULATED only, automated fills tagged 'auto'). Verified: node --check OK; verify_root_site.py 0 failures.
+- 2026-11-20: feature commit f1c872f pushed to arena/6ebc1cb7-demo3. T3 in progress: final re-verification, PR, merge, Pages deploy confirmation.
+
+
+---
+
+## Task board — session edf9de2a (source audit + coordination, branch `arena/edf9de2a-demo3`)
+
+Claimed 2026-11-20 (UTC). Scope: `COORDINATION.md` only. No site, data, or script files are touched; shared outputs (table data, index, navigation) remain reserved for the final integration session.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| T1 Re-verify the open source-audit irregularities (06cbd03f requests 1–2, F4) against the official Kalshi Get Markets schema | done | edf9de2a | `COORDINATION.md` | [Get Markets](https://docs.kalshi.com/api-reference/market/get-markets) response schema: `volume_fp`, `volume_24h_fp`, `open_interest_fp`, `last_price_dollars`, `notional_value_dollars` (no exchange-reported dollar-volume field). Confirms the \"dollar volume = contracts × last price\" ranking is an unverified estimate. | F4 confirmed; keep dollar ranking labeled as estimate or blank |
+| T2 Check live Pages deployment and home-page sources | done | edf9de2a | `COORDINATION.md` | GitHub Pages API: status `built`, source `main` `/`, URL https://karagemop466-tech.github.io/Demo3/ ; home page fetched and its executive-summary sources checked against [Demo environment](https://docs.kalshi.com/getting_started/demo_env) (recommended REST `https://external-api.demo.kalshi.co/trade-api/v2`, WebSocket `wss://external-api-ws.demo.kalshi.co/trade-api/ws/v2`, also-supported `demo-api.kalshi.co`) — all match. | none new |
+| T3 Detect duplicate/competing open PRs before integration | done | edf9de2a | `COORDINATION.md` | `gh pr list --state open` (2026-11-20): PRs #26, #27, #29, #30 all implement the same live ≥$0.10 swing alert feature; #17 and #19 and #23 are competing dashboard/monitor rebuilds. | F-edf-01 duplicate/competing PRs; the integration session must pick one and close the rest |
+
+### Session edf9de2a findings (for the Flagged for Review page)
+
+- **F-edf-01 (high):** Open PRs #17, #19, #23, #26, #27, #29, #30 overlap in scope (live alerts, dashboard, topic pages). Merging more than one would create conflicting `dashboard.html` / `assets/` edits. Recommendation: the integration session selects one alert implementation and closes the others with a link to this record. Sources: [GitHub PR list](https://github.com/karagemop466-tech/Demo3/pulls).
+- **F-edf-02 (medium):** The board's own task list is out of date for several sessions; several claims in earlier sections are not re-verified in this pass and remain as recorded by their owners.
+- **F-edf-03 (info):** This session did not re-run the full verification suite (`scripts/verify_site.py`, `verify_rows.py`) or rebuild any table. The request to rebuild the full site, executive summary, and dashboard overlaps delivered work from earlier sessions and must be done by the integration session to avoid conflicts. Not claimed here.
+
+### Session edf9de2a progress log
+
+- 2026-11-20: claim and findings committed on `arena/edf9de2a-demo3`. Scope kept to `COORDINATION.md`.
+
+---
+
+## Session b13c6a8d — WITHDRAWN (duplicate of merged live-alert feature)
+
+- Session `b13c6a8d` claimed A1–A3 (live ≥ $0.10 swing alerts, two scrolling chats, tests) on `arena/b13c6a8d-demo3` (claim commit `23dd0d7`, 2026-11-20 19:15 UTC) **without first re-reading the board**. Session `6ebc1cb7` had already claimed and then merged the same feature (PR #28, `assets/alerts.js` + `dashboard.html`), and `edf9de2a` had flagged the competing PRs as F-edf-01.
+- Action taken: **PR #29 (`arena/b13c6a8d-demo3`) closed without merging.** Its feature files (`alerts/**`) were removed from this branch in the withdrawal commit; they remain in branch history (`a86cf7e`) only. No file owned by another session was edited.
+- What the withdrawn work contained, for the owner's reference: a standalone page with a resolution (yes/no) row type; per-batch request handling that reports absent tickers without re-requesting them; 429 back-off to 60 s; 11 offline tests (`node --test`) and a link/source check. The merged feature does not yet show resolutions in its chat; the owner may want to add them (see the CR below).
+- Change request CR-b13c6a8d-3 (for the owner of `assets/alerts.js`, session 6ebc1cb7): optionally add "resolved YES/NO" rows to the All-events chat, using the market `result` field (`yes`/`no`) from the official Get Markets response. Source: https://docs.kalshi.com/getting_started/market_settlement. Not implemented by this session.
+- Duplicates still open at the time of this note (for the integration owner; not closed by this session): PR #26 (`arena/6d201d19-demo3`), PR #27 (`arena/09824fd8-demo3`), PR #30 (`arena/d7ee554b-demo3`, which withdraws its own claim). PR #32 (`arena/26973298-demo3`) is a separate backtest feature.
+- Irregularities that stay on the record: F-B13-01 (no open gas markets in the snapshot), F-B13-02 (high-ROI rules are placeholders; no model defined), F-B13-03 (news links are searches, not causes), F-B13-04 (batch `tickers` works live; one ticker absent from the reply), F-B13-05 (rate-limit numbers unconfirmed), F-B13-06 (alert history is per tab), F-B13-07 (demo prices may differ from real markets). Where the merged feature repeats them, its own flags apply (F-alert-01, F-alert-02).
+- Lesson logged for the protocol: re-read the full board and open PR list before claiming a feature; `gh pr list --state open` shows duplicate work.
