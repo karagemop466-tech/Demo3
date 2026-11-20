@@ -352,7 +352,16 @@
       el.innerHTML = html;
     },
 
+    syncAutomationControl: function () {
+      // `dashboard.js` calls renderAll during startup before enabling the control.
+      // Reflect the persisted setting so the visible switch cannot silently say OFF
+      // while onSwingAlert is still running the saved paper strategy.
+      var control = $("autoTrade");
+      if (control) control.checked = !!(Trade.automation && Trade.automation.enabled);
+    },
+
     renderAll: function () {
+      Trade.syncAutomationControl();
       Trade.renderPerf();
       Trade.renderStrategy();
       Trade.renderJournal();
