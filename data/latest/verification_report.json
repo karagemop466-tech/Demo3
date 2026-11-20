@@ -3512,7 +3512,7 @@
   },
   {
    "check": "orderbook KXPRESNOMD-28-EWAR structure",
-   "detail": "{\"no_dollars\": [[\"0.9700\", \"5555.55\"], [\"0.9800\", \"8333.33\"], [\"0.9900\", \"16664.06\"]], \"yes_dollars\": []}",
+   "detail": "{\"no_dollars\": [], \"yes_dollars\": []}",
    "ok": true
   },
   {
@@ -3640,5 +3640,5 @@
   "passed": 725
  },
  "tool": "scripts/verify_rows.py v1",
- "verified_at": "2026-11-20T19:36:09+00:00"
+ "verified_at": "2026-11-20T19:36:30+00:00"
 }

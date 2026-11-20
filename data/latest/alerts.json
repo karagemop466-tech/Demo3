@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-20T19:38:18Z",
+ "generated_at": "2026-11-20T19:39:22Z",
  "api_root": "https://external-api.demo.kalshi.co/trade-api/v2",
  "rule": {
   "threshold_dollars": "0.10",
@@ -21,8 +21,8 @@
  "snapshot_samples": 156,
  "snapshot_tickers": 24,
  "counts": {
-  "alerts": 2,
-  "up": 2,
+  "alerts": 3,
+  "up": 3,
   "down": 0,
   "high_roi": 0,
   "reverted_next_reading": 0,
@@ -79,6 +79,32 @@
    "roi_side": "YES",
    "roi_bought_price_dollars": "0.6500",
    "roi_multiple": "0.5385",
+   "cause_link": "",
+   "cause_status": "unverified - not inferred"
+  },
+  {
+   "ts": "2026-11-20T19:27:37+00:00",
+   "prev_ts": "2026-11-20T19:20:48+00:00",
+   "ticker": "KXPRESNOMD-28-HBID",
+   "event_ticker": "KXPRESNOMD-28",
+   "title": "Will Hunter Biden be the nominee for the Presidency for the Democratic party?",
+   "topic": "elections",
+   "from_dollars": "0.0030",
+   "to_dollars": "0.8110",
+   "delta_dollars": "+0.8080",
+   "direction": "up",
+   "to_bid_dollars": "0.0020",
+   "to_ask_dollars": "0.0030",
+   "next_reading_dollars": "0.8110",
+   "next_reading_ts": "2026-11-20T19:34:48+00:00",
+   "reverted_next_reading": false,
+   "volume_fp": "537225607.6900",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-HBID",
+   "synthetic": false,
+   "high_roi": false,
+   "roi_side": "YES",
+   "roi_bought_price_dollars": "0.8110",
+   "roi_multiple": "0.2330",
    "cause_link": "",
    "cause_status": "unverified - not inferred"
   }

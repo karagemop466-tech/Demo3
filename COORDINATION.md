@@ -29,6 +29,7 @@ without an official source link, blank/flagged values are unverified and never i
 | 3b5e95bd | `arena/3b5e95bd-demo3` | active - automation + final integration (this session) | Scheduled server-side collector (`collector/`, `collect.yml`, committed `data/`: ranked events, orderbooks, 1m/60m/1440m candles, resolution sweeps, CORS probe), demo-account trade/portfolio pipeline (`trading/`, `trade.yml`), `data-tracking.html` snapshot-rendering page, final PR/merge/Pages. Details in its completion section below. |
 | d7ee554b | `arena/d7ee554b-demo3` | withdrawn (duplicate claim; no alerts code merged) — see its section below | Claimed the live swing-alert task at 19:14:50Z, twelve seconds after session 6d201d19 claimed it at 19:14:38Z. Alerts code is now on `main` from PR #28 (6ebc1cb7), and PRs #26, #27 and #29 are open. d7ee554b merges no alerts code (its commit `48e99ef` stays in branch history only). |
 | 4d10aedf | `arena/4d10aedf-demo3` | delivered - data pipeline + tooling + integration pass | Early false "done" claims (R-03/R1) corrected 2026-11-20 11:40 UTC. Delivered: series-first CI collector + row-level verification (`scripts/collect_kalshi_data.py`, `verify_rows.py`, `kalshi-data.yml`, `data/latest/`, `data/history/`), portfolio/trade tooling (`kalshi_client.py`, `portfolio_pull.py`, `trade_runner.py`, `kalshi-portfolio.yml`), docs/ integration pass (top-dollar events, resolution tracker, pipeline snapshots, verification report, I-17 flags). Sections below. |
+| 26973298 | `arena/26973298-demo3` | claimed 2026-11-20 19:20 UTC - measured strategy backtest | `strategy.html`, `assets/strategy.js`, `strategy/**` (new files only), `scripts/backtest_strategies.py`, `tests/` additions, NAV/index entry at final integration | Data: committed demo snapshots only (`data/latest/markets_settled.json` 22,065 settled markets with `result`/`settlement_value_dollars`/`source_url`, `data/latest/candles.json`, `data/history/*.json`, `data/history/resolutions.jsonl`); field semantics from docs.kalshi.com | See section below |
 
 ## Task board — session d7ee554b (live ≥$0.10 swing alerts): WITHDRAWN as duplicate
 
@@ -481,6 +482,113 @@ Log (df50b92f):
 - Duplicates still open at the time of this note (for the integration owner; not closed by this session): PR #26 (`arena/6d201d19-demo3`), PR #27 (`arena/09824fd8-demo3`), PR #30 (`arena/d7ee554b-demo3`, which withdraws its own claim). PR #32 (`arena/26973298-demo3`) is a separate backtest feature.
 - Irregularities that stay on the record: F-B13-01 (no open gas markets in the snapshot), F-B13-02 (high-ROI rules are placeholders; no model defined), F-B13-03 (news links are searches, not causes), F-B13-04 (batch `tickers` works live; one ticker absent from the reply), F-B13-05 (rate-limit numbers unconfirmed), F-B13-06 (alert history is per tab), F-B13-07 (demo prices may differ from real markets). Where the merged feature repeats them, its own flags apply (F-alert-01, F-alert-02).
 - Lesson logged for the protocol: re-read the full board and open PR list before claiming a feature; `gh pr list --state open` shows duplicate work.
+
+
+## Task board — session 26973298 (measured strategy backtest, `arena/26973298-demo3`) — claimed 2026-11-20 19:20 UTC
+
+Branch: `arena/26973298-demo3` (base `b3b2b231`). Scope is **new files only** plus the final
+integration step (NAV entry + README link), logged here. No existing page, data file, or script is
+overwritten. Audit of `main` at `b3b2b231`: the brief asks to "automate simulated trades to test
+different strategies" and to "analyze the results of the trades and categorize trades and create
+strategies based on the type of trade". The site has a paper-trade engine and generic "candidate
+strategy" notes (`assets/trade.js` `strategyNotes()`), but **no measured backtest** of any strategy
+on recorded data. Session `5ab18dc3` has claimed the live swing-alert console (`alerts.html`,
+`assets/alerts.js`, `assets/roi.js`); this session does not touch those files.
+
+| # | Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|---|
+| S1 | Strategy backtest engine over committed demo data: entry/exit rules, fill model, fees (only if officially verified), per-strategy metrics | done | 26973298 | `scripts/backtest_strategies.py` | Field semantics from docs.kalshi.com; every simulated trade row carries the exact demo API URL of its market | demo-only data; no production inference |
+| S2 | Published strategy page with measured results, trade categorization, and per-row sources | done | 26973298 | `strategy.html`, `assets/strategy.js`, `strategy/data/backtest.json`, `strategy/SPEC.md` | Each row links the settled-market API URL it was computed from | unverified fields left blank + flagged |
+| S3 | Integration: NAV entry, README line, checks, PR, merge, Pages confirmation | in progress (PR pending) | 26973298 | `scripts/build_root_site.py` (NAV row + page generator only), `README.md` (one line), `COORDINATION.md` | `scripts/verify_root_site.py`, `scripts/verify_site.py`, `node --check` | none |
+
+### Session 26973298 — sources, verification performed, irregularities
+
+Sources read on 2026-11-20 while building this task (all linked from `strategy.html#sources`):
+`kalshi.com/docs/kalshi-fee-schedule.pdf` (fee formula + the 21-row table),
+`kalshi.com/fee-schedule`, `docs.kalshi.com/api-reference/market/get-market-candlesticks`
+(`period_interval` 1/60/1440, `price.close_dollars` = "last traded YES contract price"),
+`docs.kalshi.com/getting_started/orderbook_responses` (binary complement),
+`docs.kalshi.com/getting_started/fixed_point_migration`, `docs.kalshi.com/getting_started/market_settlement`,
+`docs.kalshi.com/getting_started/demo_env`, `docs.kalshi.com/api-reference/market/get-markets`,
+`docs.kalshi.com/api-reference/market/get-trades`.
+
+Verification performed:
+- Fee function reproduces **all 21 rows** of the official 100-contract fee table
+  (`FeeFormulaTest`, `strategy/data/backtest.json → fee_verification.all_match = true`).
+- 17 unit tests pass (`scripts/tests/test_backtest.py`), including: every trade carries its
+  source URL; metrics equal the recomputed sums; the resolved dataset contains settlement exits
+  only; the exploratory dataset never claims settlement.
+- Every recorded series was checked for a settlement with
+  `GET /markets?status=settled&tickers=…` in three batches; only `KXDEMOFUTHOURLY-26NOV20H12-UP`
+  returned a row, and the 37 `data/history` series returned `status: active`, `result: ""`.
+  This is why the resolved dataset has 2 markets and the exploratory set is marked, not settled.
+- Page verified in jsdom against a local server: 8 tables, 96 data rows, 119 in-row source links,
+  chart renders 2 paths (resolved) / 8 paths (exploratory) and both selects redraw; no console errors.
+- `python3 scripts/verify_root_site.py` → 0 failures; `scripts/verify_site.py` → PASSED;
+  `scripts/check_site.py` → passed; `node --check` on every root script.
+- CI (`.github/workflows/check.yml`) now rebuilds the backtest and fails if the committed
+  numbers drift from the committed data.
+
+Irregularities reported (published on `strategy.html` and in `strategy/SPEC.md` §7):
+- ST-U1 whether the demo environment charges fees (mock funds; fee behaviour not stated) — fees are
+  a modelling assumption.
+- ST-U2 candle closes are not guaranteed achievable fills.
+- ST-U3 no sub-minute candles (`period_interval` limited to 1/60/1440), so second-level strategies
+  cannot be backtested from candles.
+- ST-U4 per-series fee multipliers not applied (default `M = 1`).
+- ST-U5 the resolved sample is 2 markets / 4 trades — reported as too small to establish an edge.
+- Note: `scripts/build_root_site.py` regenerates `dashboard.html` and would drop the alert cards
+  added by session 6ebc1cb7; this session added `EXTERNALLY_MAINTAINED = {"dashboard.html"}` so the
+  generator preserves them. No other session's markup was changed.
+
+Change request for the final integration session: none.
+
+## Task board — session 6d201d19 (live swing alerts + two scrolling chats, branch `arena/6d201d19-demo3`)
+
+Claimed 2026-11-20 (UTC). Branch fixed by the platform to `arena/6d201d19-demo3` (R-04). Base `b3b2b23` (main).
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| S1 ≥ $0.10 swing detector (snapshot + live) | done | 6d201d19 | `scripts/price_alerts.py`, `scripts/tests/test_price_alerts.py`, `data/latest/alerts.json`, `collect.yml` (one step), `check.yml` (test step) | `GET /markets?tickers=` (https://docs.kalshi.com/api-reference/market/get-markets.md); `data/history/prices.jsonl` (collector snapshots) | F-6D-01 .. F-6D-05 |
+| S2 Two scrolling alert chats (All / High-ROI screen) | done | 6d201d19 | `alerts.html`, `assets/alerts-core.js`, `assets/alerts.js`, `tests/alerts.test.js` | browser fetch of the same official endpoint; CORS evidence `data/cors_test.json` | F-6D-02 (cause links unverifiable), F-6D-04 |
+| S3 Site integration (nav entry, flags, README) | done | 6d201d19 | `scripts/build_root_site.py` (NAV, build_alerts, flags), `README.md`, regenerated root pages | `scripts/verify_root_site.py` | — |
+
+Protocol notes: other open PRs (#17 `arena/d330ff7d`, #19 `arena/b2e728ab`, #23 `arena/c2aac20e`) belong to other branches and are not touched here.
+
+### Session 6d201d19 — completion record (2026-11-20 UTC) — SUPERSEDED
+
+> Superseded by "Session 6d201d19 — reconciliation with main" below. The duplicate `alerts.html` page described here was withdrawn and is not on `main`.
+
+**What shipped**
+- `scripts/price_alerts.py` → `data/latest/alerts.json`: detects consecutive-snapshot swings of ≥ $0.10 in either direction from `data/history/prices.jsonl` (exact decimal arithmetic); each alert carries its exact official request URL (`GET /markets?tickers=`) and an empty, flagged cause link. Also writes a 40-market watchlist (top markets per topic) for the live poller. Run by `kalshi-data.yml` after each snapshot.
+- `alerts.html` (nav: *Swing alerts*): two scrolling chats, **All swings** and **High-ROI screen**; seeded from the snapshot, then polled live in the browser every 10–60 s (default 15 s) from `GET https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=…`; pause control; topic filter; failure banner that falls back to snapshot alerts. Snapshot table: one row per swing with a source link and an unverified cause-link flag.
+- `assets/alerts-core.js` (rule logic shared by page and tests), `assets/alerts.js` (page logic).
+- Tests: `scripts/tests/test_price_alerts.py` (15 tests), `tests/alerts.test.js` (7), `tests/alerts.runtime.test.js` (jsdom run of the real generated page with mocked network: snapshot seeding, baseline poll, ≥ $0.10 raise, sub-threshold suppression, ROI routing, topic filter, failure banner). `npm test` → 34/34 pass. Wired into `check.yml` (`npm ci` + tests).
+- Flags F-6D-01 .. F-6D-06 published on the Flagged for review page.
+
+**Sources used (fetched this session)**
+- Get Markets (`tickers` filter, caching note, `last_price_dollars`, `volume_fp`): https://docs.kalshi.com/api-reference/market/get-markets.md
+- Demo environment (demo REST/WebSocket hosts; "prices and behavior … may not reflect real markets"): https://docs.kalshi.com/getting_started/demo_env
+- Live check of the exact request shape: https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTCY-27JAN0100-B122500 (returned the market with `last_price_dollars` 0.0300, `title`, `volume_fp`)
+- Demo account set-up (human sign-up at https://demo.kalshi.co/sign-up; mock funds): https://help.kalshi.com/en/articles/13823775-creating-and-using-a-demo-account
+
+**Verification performed**
+- `build_root_site.py` regenerates all root pages; `verify_root_site.py` 0 failures (0 broken internal links; every generated row has a source or an unverified flag); `check_site.py` passed; `verify_site.py` PASSED; `scripts/tests/test_refresh_offline.py` passed; `collector/test_collect.py` passed.
+- Snapshot numbers re-derived by hand: 2 swings in `prices.jsonl` (both `KXDEMOFUTHOURLY-26NOV20H12-UP`: 0.3500→0.5500 at 11:49:21Z; 0.5500→0.6500 at 11:58:42Z); neither passes the ROI screen (synthetic series; multiples 0.8182 and 0.5385).
+- Live-page behaviour checked in jsdom only (no real browser). Real browser CORS to the demo API was recorded as allowed in `data/cors_test.json` (12:14:51Z); it must be re-checked at runtime (F-6D-04).
+
+**Irregularities / unverified (all on Flagged for review; none block the merge)**
+- F-6D-01 high-ROI screen is a placeholder (user's model not supplied).
+- F-6D-02 cause links (news/website behind a jump) cannot be verified from the API; left blank.
+- F-6D-03 both snapshot swings are in synthetic series I-15; their market titles are absent from the committed snapshot (shown as unverified).
+- F-6D-04 live polling depends on browser access to the demo API; falls back to snapshot.
+- F-6D-05 snapshot cadence is coarse (about 30 min); live page is the real-time path; swings between polls can be missed.
+- F-6D-06 portfolio, fills and order placement remain blocked: a demo API key must be created by a person; no key is in this environment.
+- Not done in this session: portfolio/trade rows (blocked by F-6D-06); a full re-verification of every earlier row (prior sessions' logs stand; only the rows touched here were re-checked).
+
+**Build-artifact note:** `build_root_site.py` adds one blank line to `api-reference.html` and `methodology.html` on every run (pre-existing generator whitespace); committed as generated.
+
+**Addendum (2026-11-20 19:24Z, session 6d201d19):** the collector's 19:14:49Z snapshot added a **third** swing, `KXPRESNOMD-28-HBID` 0.0040 → 0.8110 (+0.8070, elections, not synthetic). Bid 0.0020 / ask 0.8110 at that reading; a live read at about 19:25Z showed last_price 0.0030. It looks like a single last-trade print. The page now marks swings whose next reading moves back toward the old price as single prints and shows bid/ask. High-ROI screen: does not pass (buy YES at 0.8110, multiple 0.2330). Logged as **F-6D-07**. Snapshot totals: 3 swings (2 synthetic, 1 real-series single print); 0 pass the placeholder screen. Tests: `scripts/tests/test_price_alerts.py` 19/19, `node --test tests/*.test.js` 34/34.
 
 ## Session 6d201d19 — reconciliation with main (duplicate withdrawn; scope reduced)
 
