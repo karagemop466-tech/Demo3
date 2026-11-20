@@ -81,6 +81,19 @@ def main():
         if r.returncode != 0:
             fail(f"py_compile {py.name}: {r.stderr.strip()[:200]}")
 
+    # 5. live swing-alert chat system present (brief requirement)
+    dash = (ROOT / "dashboard.html").read_text()
+    for aid in ("allChat", "pickChat", "swingThreshold", "pauseAlertsBtn",
+                "clearAlertsBtn", "alertStatus"):
+        if f'id="{aid}"' not in dash:
+            fail(f"dashboard.html: missing swing-alert panel id {aid}")
+    for fn in ("emitAlert", "pollTopForAlerts", "renderAlerts"):
+        if fn not in (ROOT / "assets/dashboard.js").read_text():
+            fail(f"assets/dashboard.js: missing swing-alert function {fn}")
+    for fn in ("highRoiScore", "makeSwingAlert", "swingDelta"):
+        if fn not in (ROOT / "assets/app.js").read_text():
+            fail(f"assets/app.js: missing swing-alert helper {fn}")
+
     print(f"\nverify_root_site: {len(FAIL)} failures")
     return 1 if FAIL else 0
 

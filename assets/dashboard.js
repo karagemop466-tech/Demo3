@@ -13,7 +13,10 @@
     samples: {}, candles: [], orderbook: null, trades: [],
     windowSec: 3600, scanSec: 20, obSec: 10,
     timers: [], resolutions: [], fills: [],
-    connected: false, lastScan: null, errors: 0
+    connected: false, lastScan: null, errors: 0,
+    // live swing-alerting chats
+    alerts: [], lastAlertTs: {}, paused: false,
+    swingThreshold: K.SWING_THRESHOLD, alertSec: 15, alertCap: 300
   };
   try { state.resolutions = JSON.parse(localStorage.getItem("kd_resolutions") || "[]"); }
   catch (e) { state.resolutions = []; }
@@ -187,11 +190,102 @@
       if (m.last === null) return;
       var arr = state.samples[m.ticker] || (state.samples[m.ticker] = []);
       var last = arr[arr.length - 1];
-      if (!last || now - last.t >= 5) {
+      // Record a new sample on a price change (so swings are caught promptly) or
+      // every 5s for unchanged prices (cadence to limit chart points).
+      if (!last || now - last.t >= 5 || Number(last.price) !== Number(m.last)) {
+        var prevPrice = last ? last.price : null;
         arr.push({ t: now, price: m.last, bid: m.yb, ask: m.ya });
         if (arr.length > 4000) arr.splice(0, arr.length - 4000);
+        // swing alert: |Δ| >= threshold in either direction
+        if (prevPrice !== null && !state.paused) {
+          var delta = K.swingDelta(prevPrice, m.last);
+          if (delta !== null && Math.abs(delta) >= state.swingThreshold) {
+            // dedupe: at most one alert per ticker per 20s
+            if (!state.lastAlertTs[m.ticker] || now - state.lastAlertTs[m.ticker] >= 20) {
+              state.lastAlertTs[m.ticker] = now;
+              emitAlert(m, prevPrice, now, delta);
+            }
+          }
+        }
       }
     });
+  }
+
+  /* ---------- 2b. Live swing alerts: two scrolling chats ---------- */
+  function emitAlert(m, prevPrice, ts, delta) {
+    var a = K.makeSwingAlert(m, prevPrice, ts);
+    if (a.delta === null || a.delta === undefined) return;
+    state.alerts.push(a);
+    if (state.alerts.length > state.alertCap) {
+      state.alerts.splice(0, state.alerts.length - state.alertCap);
+    }
+    renderAlerts();
+  }
+  function renderAlertMessage(a) {
+    var dirCls = a.direction === "down" ? " down" : "";
+    var arrow = a.direction === "up" ? "▲" : (a.direction === "down" ? "▼" : "•");
+    var srcs = K.srcLink("/markets/" + encodeURIComponent(a.ticker), "market");
+    if (a.event_ticker) {
+      srcs += " · " + K.srcLink("/events/" + encodeURIComponent(a.event_ticker), "event");
+    }
+    return "<div class='msg" + dirCls + "'>" +
+      "<div class='mtitle'>" + arrow + " " + K.esc(a.title) +
+      " <span class='mono small muted'>" + K.esc(a.ticker) + "</span></div>" +
+      "<div class='mmeta'>" + K.timeStr(a.ts) + " · <span class='pill'>" +
+      K.esc(a.topic || "—") + "</span> " + K.cents(a.prev) + " → " + K.cents(a.price) +
+      " (Δ " + (a.delta >= 0 ? "+" : "") + K.cents(a.delta) + ")" +
+      (a.highRoi ? " · <span class='mscore'>model score " + Number(a.score).toFixed(2) + "</span>" : "") +
+      "</div>" +
+      "<div class='msrc'>Source: " + srcs +
+      " · candidate cause: event/market record (external cause link: unverified — not inferred)</div>" +
+      "</div>";
+  }
+  function renderAlerts() {
+    var all = state.alerts;
+    var picks = all.filter(function (a) { return a.highRoi; });
+    var allEl = $("allChat"), pickEl = $("pickChat");
+    if (allEl) {
+      allEl.innerHTML = all.length ? all.slice(-200).map(renderAlertMessage).join("") :
+        "<div class='msg'><div class='mmeta'>No swings ≥ $" +
+        Number(state.swingThreshold).toFixed(2) + " yet. Alerts stream here as tracked " +
+        "contracts move.</div></div>";
+      allEl.scrollTop = allEl.scrollHeight;
+    }
+    if (pickEl) {
+      pickEl.innerHTML = picks.length ? picks.slice(-200).map(renderAlertMessage).join("") :
+        "<div class='msg'><div class='mmeta'>No high-ROI-preference swings yet. The model " +
+        "heuristic (labeled, unverified) filters the all-events chat.</div></div>";
+      pickEl.scrollTop = pickEl.scrollHeight;
+    }
+    if ($("allCount")) $("allCount").textContent = "(" + all.length + ")";
+    if ($("pickCount")) $("pickCount").textContent = "(" + picks.length + ")";
+    if ($("alertStatus")) {
+      $("alertStatus").textContent = state.paused ?
+        "paused — " + all.length + " alerts" :
+        all.length + " alerts · threshold ≥ $" + Number(state.swingThreshold).toFixed(2) +
+        " · last " + (all.length ? K.timeStr(all[all.length - 1].ts) : "—");
+    }
+  }
+  /* Poll the highest-dollar tracked markets for fresh prices so swings are
+   * detected promptly (in addition to the full scan). Top 15 by estimated $. */
+  async function pollTopForAlerts() {
+    if (!state.markets.length || state.paused) return;
+    var top = state.markets.slice(0, 15);
+    for (var i = 0; i < top.length; i++) {
+      try {
+        var j = await K.apiGet("/markets/" + encodeURIComponent(top[i].ticker), {});
+        var mm = j.market || j;
+        var row = state.markets.find(function (x) { return x.ticker === top[i].ticker; });
+        if (row) {
+          var nr = marketRow(mm);
+          row.last = nr.last; row.yb = nr.yb; row.ya = nr.ya;
+          row.vol = nr.vol; row.oi = nr.oi;
+          row.volDollars = nr.volDollars; row.oiDollars = nr.oiDollars;
+          row.status = nr.status; row.result = nr.result;
+        }
+      } catch (e) { /* one ticker failing must not kill the poll */ }
+    }
+    recordSamples();
   }
 
   /* ---------- 3. Detail: chart (seconds/minutes/hours) + orderbook + trades ---------- */
@@ -543,7 +637,8 @@
       }, state.obSec * 1000),
       setInterval(function () {
         if (state.selected) { recordSamples(); loadCandles().then(drawChart); }
-      }, 15000)
+      }, 15000),
+      setInterval(pollTopForAlerts, state.alertSec * 1000)
     ];
   }
   async function init() {
@@ -576,6 +671,25 @@
       state.resolutions = []; localStorage.removeItem("kd_resolutions");
       renderResolutions();
     });
+    // swing-alert chat controls
+    if ($("swingThreshold")) {
+      $("swingThreshold").value = String(state.swingThreshold);
+      $("swingThreshold").addEventListener("change", function (e) {
+        var v = Number(e.target.value);
+        if (!isNaN(v) && v > 0) state.swingThreshold = v;
+        renderAlerts();
+      });
+    }
+    if ($("pauseAlertsBtn")) $("pauseAlertsBtn").addEventListener("click", function () {
+      state.paused = !state.paused;
+      $("pauseAlertsBtn").textContent = state.paused ? "Resume" : "Pause";
+      renderAlerts();
+    });
+    if ($("clearAlertsBtn")) $("clearAlertsBtn").addEventListener("click", function () {
+      state.alerts = []; state.lastAlertTs = {};
+      renderAlerts();
+    });
+    renderAlerts();
     Array.prototype.forEach.call(document.querySelectorAll("[data-window]"),
       function (b) {
         b.addEventListener("click", function () {

@@ -153,6 +153,53 @@
     return Number(contracts) * Number(price);
   }
 
+  /* ---------- swing alerting + high-ROI preference (documented heuristic) ----------
+   * Detects contract-price swings >= SWING_THRESHOLD dollars in either direction and
+   * scores a transparent "high-ROI preference" using ONLY exchange-reported fields
+   * (last price, yes bid/ask, volume, open interest). The score is a labeled
+   * heuristic preference, NOT a verified ROI predictor (flagged F-1D-01 on the
+   * Flagged for review page). Threshold SWING_THRESHOLD = $0.10 per the project brief.
+   * Sources: https://docs.kalshi.com/api-reference/market/get-markets (last_price_dollars,
+   * yes_bid_dollars/yes_ask_dollars, volume_fp, open_interest_fp). */
+  var SWING_THRESHOLD = 0.10;
+  var HIGH_ROI_THRESHOLD = 0.25;
+  function swingDelta(prevPrice, price) {
+    if (prevPrice === null || prevPrice === undefined || prevPrice === "" ||
+        isNaN(Number(prevPrice))) return null;
+    if (price === null || price === undefined || price === "" ||
+        isNaN(Number(price))) return null;
+    // Round to the API's price step (0.0001 dollars) so a true $0.10 move is not
+    // lost to float error (0.60 - 0.50 === 0.09999999999999998 without rounding).
+    return Math.round((Number(price) - Number(prevPrice)) * 10000) / 10000;
+  }
+  function highRoiScore(m, prevPrice) {
+    var delta = swingDelta(prevPrice, m.last);
+    var move = delta === null ? null : Math.abs(delta);
+    var relMove = 0;
+    if (move !== null) {
+      relMove = move / Math.max(Number(prevPrice), 0.01); // guard div-by-zero
+    }
+    var liq = (Number(m.vol) || 0) + (Number(m.oi) || 0);
+    var liqScore = Math.min(1, Math.log10(Math.max(liq, 1) + 1) / 4);
+    var spread = (m.yb !== null && m.ya !== null && !isNaN(Number(m.yb)) &&
+      !isNaN(Number(m.ya))) ? (Number(m.ya) - Number(m.yb)) : 0.02;
+    var spreadScore = Math.max(0, 1 - spread / 0.5); // tighter book = higher
+    var moveScore = Math.min(1, relMove / 0.5); // 50% relative move = full score
+    var score = 0.45 * moveScore + 0.35 * liqScore + 0.20 * spreadScore;
+    return { score: score, delta: delta, move: move, relMove: relMove,
+      liqScore: liqScore, spreadScore: spreadScore,
+      highRoi: score >= HIGH_ROI_THRESHOLD };
+  }
+  function makeSwingAlert(m, prevPrice, ts) {
+    var s = highRoiScore(m, prevPrice);
+    return { ticker: m.ticker, event_ticker: m.event_ticker || "",
+      title: m.title || m.ticker, topic: m.topic || "",
+      prev: prevPrice, price: m.last, delta: s.delta, move: s.move,
+      relMove: s.relMove, score: s.score, highRoi: s.highRoi,
+      direction: s.delta === null ? "" : (s.delta > 0 ? "up" : "down"),
+      ts: ts || Math.floor(Date.now() / 1000) };
+  }
+
   /* ---------- canvas line chart (X=time, Y=price) ---------- */
   function drawPriceChart(canvas, points, opts) {
     opts = opts || {};
@@ -364,6 +411,8 @@
     discoverSeries: discoverSeries, classifySeries: classifySeries,
     num: num, money: money, cents: cents, timeStr: timeStr, esc: esc,
     estDollars: estDollars, srcLink: srcLink,
+    SWING_THRESHOLD: SWING_THRESHOLD, HIGH_ROI_THRESHOLD: HIGH_ROI_THRESHOLD,
+    swingDelta: swingDelta, highRoiScore: highRoiScore, makeSwingAlert: makeSwingAlert,
     drawPriceChart: drawPriceChart, drawDepthChart: drawDepthChart,
     Auth: Auth
   };

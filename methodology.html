@@ -22,6 +22,8 @@
 
 
 
+
+
 <h1>Methodology</h1>
 <p class="muted">How every number on the dashboard is produced — and its limits.
 Nothing here is inferred beyond the stated formulas.</p>
@@ -128,6 +130,46 @@ Treat the ranking as a screening tool, not a precise dollar figure. See
 
 
 
+
+
+
+
+<section class="card">
+<h2>6 &middot; Live swing alerts &amp; high-ROI preference</h2>
+<table>
+<thead><tr><th>Item</th><th>Detail</th><th>Source</th></tr></thead>
+<tbody>
+<tr><td>Swing detection</td><td>A tracked contract fires an alert when its last price moves
+<strong>&ge; $0.10</strong> in either direction vs. the previous sample (threshold selectable:
+$0.05 / $0.10 / $0.20). Top 15 markets by estimated $ are re-polled every 15s for prompt
+detection; the full scan also samples every 20s.</td>
+<td><a href="https://docs.kalshi.com/api-reference/market/get-market">Get Market</a></td></tr>
+<tr><td>Two chats</td><td>&ldquo;All events&rdquo; streams every qualifying swing;
+&ldquo;Model picks — high ROI&rdquo; streams only swings the heuristic scores &ge; 0.25. Both
+scroll in real time and keep the newest 200 messages.</td>
+<td>Dashboard code (<code>assets/dashboard.js</code>).</td>
+<td><a class='src' href='https://docs.kalshi.com/getting_started/quick_start_market_data' target='_blank' rel='noopener'>source</a></td></tr>
+<tr><td>High-ROI score</td><td><code>0.45&times;moveScore + 0.35&times;liquidityScore +
+0.20&times;spreadScore</code>, where moveScore = relative move &divide; 0.50 (capped at 1),
+liquidityScore = log10(volume + open interest + 1) &divide; 4 (capped at 1), spreadScore =
+1 &minus; spread &divide; 0.50.</td>
+<td><a href="https://docs.kalshi.com/api-reference/market/get-markets">Get Markets</a>,
+<a href="https://docs.kalshi.com/getting_started/orderbook_responses">Orderbook Responses</a></td></tr>
+<tr><td>Source links</td><td>Every alert links its exact official market (and event, when
+present) API record.</td>
+<td><a href="https://docs.kalshi.com/api-reference/market/get-market">Get Market</a>,
+<a href="https://docs.kalshi.com/api-reference/events/get-events">Get Events</a></td></tr>
+<tr><td>Candidate cause</td><td>External news/cause links are <strong>not</strong> fabricated:
+each alert names the event/market record as the candidate cause and marks the external-cause
+link <em>unverified</em> unless an official source is available.</td>
+<td><a class='src' href='https://docs.kalshi.com/getting_started/demo_env' target='_blank' rel='noopener'>source</a></td></tr>
+<tr><td>Limitation</td><td>The high-ROI score is a labeled <strong>heuristic preference</strong>,
+not a verified ROI predictor; it uses only exchange-reported fields and assumes a tradable book.
+Flagged F-1D-01.</td>
+<td><a href="flagged.html">Flagged for review</a></td><td><a class='src' href='https://docs.kalshi.com/getting_started/rate_limits' target='_blank' rel='noopener'>source</a></td></tr>
+</tbody>
+</table>
+</section>
 
 
 

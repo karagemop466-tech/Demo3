@@ -67,3 +67,16 @@ pre { background: #f0f2f6; padding: 12px; border-radius: 8px; overflow-x: auto;
   font-size: .85rem; }
 details { margin: 8px 0; }
 summary { cursor: pointer; font-weight: 600; }
+
+/* live swing-alert scrolling chats */
+.chats { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+.chat h3 { margin: 6px 0 4px; }
+.chatlog { max-height: 360px; overflow-y: auto; border: 1px solid var(--line);
+  border-radius: 8px; background: #fbfcfe; padding: 6px; }
+.msg { border-left: 3px solid var(--accent); padding: 6px 8px; margin: 6px 0;
+  background: #fff; border-radius: 6px; font-size: .85rem; }
+.msg.down { border-left-color: var(--bad); }
+.msg .mtitle { font-weight: 600; }
+.msg .mmeta { color: var(--muted); font-size: .8rem; margin-top: 2px; }
+.msg .msrc { font-size: .78rem; color: var(--muted); margin-top: 2px; }
+.msg .mscore { font-variant-numeric: tabular-nums; color: var(--accent); font-weight: 600; }
