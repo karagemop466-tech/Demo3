@@ -428,10 +428,29 @@ Scope: new folder `audit/**` only, plus this section of `COORDINATION.md` (appen
 
 | Task | Status | Owner | File scope | Sources / verification | Irregularities |
 |---|---|---|---|---|---|
-| A1 Line-by-line audit of the claims in `EXECUTIVE_SUMMARY.md` §2–§6 and the published `data/latest/top_events.json` rows against official Kalshi docs and live demo API responses (fetched 2026-11-20) | in progress | d7d7a733 | `audit/**` | To be recorded in `audit/index.html` (one row per claim, each with an official source link, `verified` / `unverified` / `contradicted` status) | to be recorded |
-| A2 PR to `main`, merge after checks, GitHub Pages deploy confirmation, board record | pending | d7d7a733 | `audit/**`, `COORDINATION.md` (this section) | — | — |
+| A1 Line-by-line audit of the claims in `EXECUTIVE_SUMMARY.md` §2–§6 and the published `data/latest/top_events.json` rows against official Kalshi docs and live demo API responses (fetched 2026-11-20) | done | d7d7a733 | `audit/**` | 32 rows (`audit/rows.json` → `audit/index.html`); 9 official docs pages read in full (demo_env, api_environments, market_settlement, quick_start_websockets, quick_start_market_data, get-markets, get-market-candlesticks); live demo API responses listed per row; `audit/check_audit.py` PASSED (every row has an official Kalshi link, all URLs on allowed hosts, page rebuilt from data) | AU-15, AU-17–AU-19, AU-20 (summary figures contradicted); AU-24–AU-28 (repo classification and definition irregularities); AU-06, AU-22, AU-23, AU-29–AU-32 not reproduced / partly verified |
+| A2 PR to `main`, merge after checks, GitHub Pages deploy confirmation, board record | in progress | d7d7a733 | `audit/**`, `COORDINATION.md` (this section) | PR and merge result recorded in the log below | — |
 
 ### Session d7d7a733 claim (per protocol)
 
 - 2026-11-20 claim committed and pushed before any audit work. Overlap check: the live-alert feature already has four open PRs (#23, #26, #27, #29; #28 merged) and PR #30 is a board-only withdrawal; this session does not touch alert code. Trade, pipeline, and site files are not in scope.
 - Sandbox note: bash egress allows only GitHub and package registries; live Kalshi data is read through the page-fetch tool, so every live value is recorded with the exact URL it came from.
+
+### Session d7d7a733 — findings and change requests (for owners; not edited here)
+
+Findings are published on the audit page's "Flagged for Review" section with source links. Nothing above is marked verified unless the row shows an official source.
+
+- **CR-d7d7a733-1 (owner of `scripts/collect_kalshi_data.py`; collector sessions 4d10aedf / 3b5e95bd):** (a) the gas ticker rule `GAS[A-Z]` (line 48) matches non-gas markets such as `KXLALIGASPREAD` (Espanyol La Liga spread); (b) the tag rule maps `energy` / `oil & gas` to gas (lines 79–84), so ERCOT load, primary energy consumption, EV market share and WTI appear under gas; (c) `data/latest/resolutions.json` 'gas' topic is 250 of 300 synthetic `KXQUICKSETTLE` "1+1 = 2" markets. Sources: AU-24, AU-25, AU-26.
+- **CR-d7d7a733-2 (same owner):** the 'est. dollar volume' ranking changed definition between `data/meta.json` (12:14:51Z, volume × last price) and `data/latest/top_events.json` (12:38:54Z, volume × notional, line 221). The same top event moved from about $902M to about $7.98B. Choose one documented definition, label it, and record the change. Sources: AU-17, AU-20, AU-27.
+- **CR-d7d7a733-3 (integration session, owner of `EXECUTIVE_SUMMARY.md`):** correct the summary's figures and wording: "50 resolved KXAAAGASM" → 32 in the committed snapshot (AU-15); the $900M / $135M / $3.5M estimates are superseded (AU-17–AU-19); "$volume ≈ Σ contracts × price" does not match the code (AU-20); "demo liquidity is thin / zero volume" needs qualifying (AU-16). Link `audit/index.html` from the summary.
+- **CR-d7d7a733-4 (integration session, owner of root landing and navigation):** add a link to `audit/index.html` (Pages path `/Demo3/audit/`) to the root navigation. This was not done here because navigation is a shared output.
+- **CR-d7d7a733-5 (integration session, owner of `.github/`):** add `python3 audit/check_audit.py` to the Checks workflow. It is a standalone check and passes now. It was not added here because `.github/` is outside this session's scope.
+- **CR-d7d7a733-6 (owner of `flagged.html`):** add AU-24 to AU-28 to the site's Flagged page. They are published on the audit page in the meantime.
+
+### Session d7d7a733 — verification log
+
+- 2026-11-20: docs read in full: `getting_started/demo_env`, `api_environments`, `market_settlement`, `quick_start_websockets`, `quick_start_market_data`; API reference read: `get-markets`, `get-market-candlesticks`.
+- 2026-11-20: live demo API calls (via fetch tool, unauthenticated) — series `KXAAAGASW`, `KXPGATOUR`; markets `KXAAAGASM-26OCT31-4.18` (settled, yes), `KXPRESNOMD-28-GPLA` (open, `status: active`), `KXLALIGASPREAD-26NOV20ATHESP-ESP2`, `KXQUICKSETTLE-20NOV26H0640-2`; candlesticks (new path, 1-hour) for `KXAAAGASM-26OCT31-4.18`; orderbook for `KXPRESNOMD-28-GPLA` (empty ladders).
+- 2026-11-20: not reproduced: old candlestick path, `portfolio/balance` (fetch tool returned a generic error with no HTTP status); browser CORS and WebSocket streaming were not tested.
+- 2026-11-20: `python3 audit/build_audit.py` then `python3 audit/check_audit.py` PASSED. Existing checks also passed on this branch: `scripts/verify_root_site.py` (0 failures) and `scripts/check_site.py` (site checks passed).
+
