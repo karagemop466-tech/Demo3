@@ -1,18 +1,20 @@
-# Publishes the repository root as a GitHub Pages site through a custom Actions workflow.
+# Publishes the repository root as the GitHub Pages site through a custom Actions workflow.
 #
-# STATUS: manual only (workflow_dispatch). It runs only after the repository's Pages
-# source is switched to "GitHub Actions" (Settings > Pages > Build and deployment >
-# Source). The guard step below refuses to deploy while the source is still
-# "deploy from a branch", so a run can never publish a stale or partial site.
+# Why: legacy "deploy from branch" Pages builds are limited to a soft 10 builds per hour
+# (https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits).
+# Repository pushes from many sessions and the 10-minute collector exceeded that limit on
+# 2026-11-20 and legacy builds errored ("Page build failed.") from 19:39Z. Sites published
+# through a custom Actions workflow are not subject to that limit. Run 44811117945 (commit
+# 22d5160, 2026-11-20T20:24:42Z) completed "Enable Pages" and "Deploy to GitHub Pages" successfully.
 #
-# Why this exists: legacy "deploy from branch" Pages builds are limited to a soft 10 builds
-# per hour (https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits).
-# Repository pushes from many sessions exceeded that limit on 2026-11-20 and builds from
-# 19:39Z errored ("Page build failed."). Actions-published sites are not subject to that limit.
+# Triggers: every push to main, and workflow_dispatch. collect.yml dispatches this workflow
+# after each snapshot, because data-only commits made with GITHUB_TOKEN do not trigger push workflows.
 
-name: Deploy GitHub Pages site (manual; needs Pages source = GitHub Actions)
+name: Deploy GitHub Pages site
 
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -35,16 +37,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Guard - Pages source must be GitHub Actions
+      - name: Report current Pages source (informational)
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          build_type=$(gh api "repos/$GITHUB_REPOSITORY/pages" -q .build_type 2>/dev/null || echo "unknown")
-          echo "Pages build_type: $build_type"
-          if [ "$build_type" != "workflow" ]; then
-            echo "::error::Pages build_type is '$build_type'. Set Settings > Pages > Source to 'GitHub Actions', then re-run this workflow."
-            exit 1
-          fi
+          gh api "repos/$GITHUB_REPOSITORY/pages" -q '"build_type=" + .build_type' || echo "build_type unavailable"
 
       - name: Stage site
         run: |
