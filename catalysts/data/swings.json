@@ -1,0 +1,161 @@
+{
+ "generated_at": "2026-11-20T19:49:35Z",
+ "api_root": "https://external-api.demo.kalshi.co/trade-api/v2",
+ "threshold_dollars": "0.10",
+ "threshold_note": ">= $0.10 (10 cents) per contract between consecutive samples, either direction; exact decimal arithmetic.",
+ "window_minutes": {
+  "pre": 180,
+  "post": 60
+ },
+ "mode": "offline",
+ "swings": [
+  {
+   "id": "ea1d2ce3d678e666",
+   "ticker": "KXDEMOFUTHOURLY-26NOV20H12-UP",
+   "topic": "crypto",
+   "event_ticker": "KXDEMOFUTHOURLY-26NOV20H12",
+   "series_ticker": "KXDEMOFUTHOURLY",
+   "direction": "up",
+   "delta_dollars": "0.1000",
+   "abs_delta_dollars": "0.1000",
+   "from": {
+    "ts": "2026-11-20T11:49:21Z",
+    "last_price_dollars": "0.5500",
+    "price_field": "last_price_dollars"
+   },
+   "to": {
+    "ts": "2026-11-20T11:58:42Z",
+    "last_price_dollars": "0.6500",
+    "price_field": "last_price_dollars"
+   },
+   "sample_gap_seconds": 561,
+   "detected_by": "price_tape",
+   "origin": "data/history/prices.jsonl",
+   "detected_at": "2026-11-20T19:46:25Z",
+   "record_source": "committed demo-API snapshot data/resolutions.json (retrieved 2026-11-20T12:15:42Z)",
+   "status": "finalized",
+   "result": "no",
+   "close_time": "2026-11-20T12:00:00Z",
+   "settlement_ts": "2026-11-20T12:00:00Z",
+   "settlement_value_dollars": "",
+   "volume_fp": "",
+   "open_interest_fp": "",
+   "market_url_pair": "",
+   "title": "Demo BTC at or above 61985.83 USD",
+   "resolved": true,
+   "tracking": "stopped_resolved",
+   "links": {
+    "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXDEMOFUTHOURLY-26NOV20H12-UP",
+    "event_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/events/KXDEMOFUTHOURLY-26NOV20H12",
+    "kalshi_market_page": "https://demo.kalshi.co/market/KXDEMOFUTHOURLY-26NOV20H12",
+    "series_ticker": "KXDEMOFUTHOURLY"
+   },
+   "series": {
+    "series_ticker": "KXDEMOFUTHOURLY",
+    "title": "Demo BTC at or above 61985.83 USD",
+    "category": "",
+    "frequency": "",
+    "settlement_sources": [
+     {
+      "name": "Coinbase Exchange",
+      "url": "https://api.exchange.coinbase.com/products/BTC-USD/candles"
+     }
+    ],
+    "contract_terms_url": "",
+    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXDEMOFUTHOURLY",
+    "error": "not_fetched_offline",
+    "provenance": "committed snapshot: data/resolutions.json"
+   },
+   "title_source": "api:markets",
+   "resolution_label": "NO",
+   "catalysts": [],
+   "catalyst_match": {
+    "candidates": [],
+    "items_in_window": 0,
+    "match_status": "feeds_not_polled_offline",
+    "note": "The build sandbox has no egress to news hosts; the scheduled CI run performs feed matching. Nothing is inferred here."
+   },
+   "threshold_dollars": "0.1000"
+  },
+  {
+   "id": "28b120148bda8c96",
+   "ticker": "KXDEMOFUTHOURLY-26NOV20H12-UP",
+   "topic": "crypto",
+   "event_ticker": "KXDEMOFUTHOURLY-26NOV20H12",
+   "series_ticker": "KXDEMOFUTHOURLY",
+   "direction": "up",
+   "delta_dollars": "0.2000",
+   "abs_delta_dollars": "0.2000",
+   "from": {
+    "ts": "2026-11-20T11:45:09Z",
+    "last_price_dollars": "0.3500",
+    "price_field": "last_price_dollars"
+   },
+   "to": {
+    "ts": "2026-11-20T11:49:21Z",
+    "last_price_dollars": "0.5500",
+    "price_field": "last_price_dollars"
+   },
+   "sample_gap_seconds": 252,
+   "detected_by": "price_tape",
+   "origin": "data/history/prices.jsonl",
+   "detected_at": "2026-11-20T19:46:25Z",
+   "record_source": "committed demo-API snapshot data/resolutions.json (retrieved 2026-11-20T12:15:42Z)",
+   "status": "finalized",
+   "result": "no",
+   "close_time": "2026-11-20T12:00:00Z",
+   "settlement_ts": "2026-11-20T12:00:00Z",
+   "settlement_value_dollars": "",
+   "volume_fp": "",
+   "open_interest_fp": "",
+   "market_url_pair": "",
+   "title": "Demo BTC at or above 61985.83 USD",
+   "resolved": true,
+   "tracking": "stopped_resolved",
+   "links": {
+    "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXDEMOFUTHOURLY-26NOV20H12-UP",
+    "event_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/events/KXDEMOFUTHOURLY-26NOV20H12",
+    "kalshi_market_page": "https://demo.kalshi.co/market/KXDEMOFUTHOURLY-26NOV20H12",
+    "series_ticker": "KXDEMOFUTHOURLY"
+   },
+   "series": {
+    "series_ticker": "KXDEMOFUTHOURLY",
+    "title": "Demo BTC at or above 61985.83 USD",
+    "category": "",
+    "frequency": "",
+    "settlement_sources": [
+     {
+      "name": "Coinbase Exchange",
+      "url": "https://api.exchange.coinbase.com/products/BTC-USD/candles"
+     }
+    ],
+    "contract_terms_url": "",
+    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXDEMOFUTHOURLY",
+    "error": "not_fetched_offline",
+    "provenance": "committed snapshot: data/resolutions.json"
+   },
+   "title_source": "api:markets",
+   "resolution_label": "NO",
+   "catalysts": [],
+   "catalyst_match": {
+    "candidates": [],
+    "items_in_window": 0,
+    "match_status": "feeds_not_polled_offline",
+    "note": "The build sandbox has no egress to news hosts; the scheduled CI run performs feed matching. Nothing is inferred here."
+   },
+   "threshold_dollars": "0.1000"
+  }
+ ],
+ "link_root_note": "",
+ "docs": {
+  "demo_env": "https://docs.kalshi.com/getting_started/demo_env",
+  "environments": "https://docs.kalshi.com/getting_started/api_environments",
+  "market_data_no_auth": "https://docs.kalshi.com/getting_started/quick_start_market_data",
+  "get_markets": "https://docs.kalshi.com/api-reference/market/get-markets",
+  "get_series": "https://docs.kalshi.com/api-reference/market/get-series",
+  "get_events": "https://docs.kalshi.com/api-reference/market/get-events",
+  "market_settlement": "https://docs.kalshi.com/getting_started/market_settlement",
+  "fixed_point": "https://docs.kalshi.com/getting_started/fixed_point_migration"
+ },
+ "disclaimer": "Catalyst links are CANDIDATE explanations: a feed item inside the swing window that shares keywords with the market title. Correlation only \u2014 the API exposes no news field and nothing here proves cause. Demo prices are simulated (see docs demo_env)."
+}

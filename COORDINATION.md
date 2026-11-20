@@ -434,3 +434,55 @@ Environment note: the platform binds each session to `arena/<id>-demo3`, so per-
 - **CR-22661044-2** (`flagged.html`, owner: integration session): mirror F-cat-01…F-cat-05 from this
   section onto the root Flagged for Review page; the same list is published on
   `catalysts/index.html#flags` in the meantime.
+
+### Session 22661044 — progress log
+
+- 2026-11-20 19:35 UTC: claim committed & pushed (`205a705`) before any implementation, per protocol.
+- 2026-11-20: C1/C2 implemented — `catalysts/scan.py` (exact-decimal ≥ $0.10 detection over the
+  price tape + live `GET /markets?tickers=` polling + resolution tracking + fail-closed catalyst
+  matching), `catalysts/feeds.json` (17 feeds, all `pending_ci_probe`; the aggregator slot is
+  deliberately disabled).
+- 22661044 C3: `catalysts/index.html` + `assets/catalysts.js` + `assets/catalysts.css` — run-status
+  chips, filters (topic / direction / has-link), price chart (x = 1 min…7 d with sec/min/hour labels,
+  y = contract price in cents, triangles mark ≥ $0.10 swings and are clickable), the swing ledger with
+  per-row market/event/series API links + official `settlement_sources`, in-browser live watch
+  (off by default; same ≥ $0.10 rule; stops polling a market once the API reports it settled),
+  simulated-strategy table, feed-health and endpoint-probe tables, flags + suggestions.
+- 22661044 C4: `.github/workflows/catalysts.yml` — every 15 min: tests → endpoint probe → feed probe
+  → scan → `check_page.py` gate → jsdom render test → commit `catalysts/data/**` → Pages rebuild
+  request. Data-only bot pushes cannot trigger the legacy Pages build, so the job requests it
+  explicitly (same fix session 3b5e95bd recorded for `collect.yml`).
+- Verification (2026-11-20, this session):
+  - `python3 catalysts/tests/test_scan.py` → **Ran 36 tests … OK** (mock demo API + mock feed:
+    threshold inclusive at exactly $0.10, 9¢ does not alert, 1-cent walks never accumulate into an
+    alert, per-ticker isolation, dedupe, lookback window, garbage prices skipped, dollars-vs-legacy-cents
+    field disclosure, window + keyword matching, undated items never matched, RSS/Atom/CDATA parsing,
+    broken XML → no items, enrich/resolution transitions, tape append-dedupe, full live run, offline
+    fallback, strategy arithmetic + sample floor).
+  - `python3 catalysts/tests/check_page.py` → **PASSED** (re-derives every published `abs_delta_dollars`
+    with `Decimal`, re-checks wins+losses+pushes = n and mean = net/n, requires an official demo-host
+    source URL on every row, requires https + matched keywords on every catalyst link, forbids a
+    `matched` status with no items, checks all local hrefs resolve, and rejects placeholder text).
+  - `node --check catalysts/assets/catalysts.js` → OK; `node catalysts/tests/smoke.mjs` →
+    **28/28 checks passed** (rows render, every row links its API record, feed table covers every
+    probed feed, endpoint table stays empty rather than inventing statuses, filters narrow/restore,
+    strategy rows refuse a verdict below the 30-trade floor, and the browser poll fires on +$0.15,
+    stays silent on +$0.09 and reports "resolved NO · tracking stopped").
+  - Repo-wide checkers re-run with this directory added, all still green: `scripts/verify_root_site.py`
+    0 failures, `scripts/verify_site.py` PASSED (28 pages), `scripts/tracker_check.py` OK,
+    `scripts/check_site.py` passed.
+- Live API verification (this session, via the page-fetch tool; sandbox `curl` is blocked by the
+  egress allowlist): `/exchange/status` 200 trading_active; `GET /markets/KXDEMOFUTHOURLY-26NOV20H12-UP`
+  200 with `result:"no"`, `settlement_value_dollars:"0.0000"`, `last_price_dollars:"0.6500"` — which
+  confirms the seeded ledger row's price and outcome against the exchange record; `GET /markets?tickers=`
+  omits unknown tickers (no error), so the scan re-queries misses with `status=settled`;
+  `GET /events?event_tickers=…` **ignores its filter** (returned `KXELONMARS-99`) → F-cat-05;
+  `GET /series?limit=3&category=Crypto` **ignores `limit`** → F-cat-06 (corroborates 6908a11a F9) and
+  proves series rows carry `settlement_sources`, which this layer publishes per row.
+- Irregularities raised by this session (full text on `catalysts/index.html#flags`):
+  F-cat-01 sampling-gap bound; F-cat-02 correlation-not-cause + demo-price warning; F-cat-03 feed
+  allowlist unverified from the build sandbox (probe-gated, pruned only by evidence); F-cat-04 the
+  demo tape is thin and partly synthetic (`KXDEMOFUTHOURLY` is a synthetic exchange-test series, so the
+  seeded swings prove the mechanism, not a market); F-cat-05 `/events?event_tickers=` filter ignored;
+  F-cat-06 `/series?limit=` ignored; F-cat-07 nav/flagged-page integration deferred to the
+  integration session (CR-22661044-1/2).

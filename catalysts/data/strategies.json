@@ -1,0 +1,48 @@
+{
+ "generated_at": "2026-11-20T19:49:35Z",
+ "threshold_dollars": "0.10",
+ "skipped_observations": {
+  "s1_hold_to_resolution": 2,
+  "s2_flat_at_next_sample": 0
+ },
+ "skipped_note": "s1 rows are skipped when the source record carries no settlement_value_dollars (the payout is NOT derived from the yes/no result here \u2014 the scheduled run reads it from the market record itself); s2 rows are skipped when no later sample exists.",
+ "min_n_for_a_claim": 30,
+ "strategies": [
+  {
+   "id": "s1_hold_to_resolution",
+   "name": "Momentum follow, hold to resolution",
+   "entry_rule": "buy YES at the market's last traded price on the sample that triggered the >= $0.10 alert",
+   "exit_rule": "hold until the API reports settlement_value_dollars ($1.00 if it resolves yes, $0.00 if no)",
+   "docs": "https://docs.kalshi.com/getting_started/market_settlement"
+  },
+  {
+   "id": "s2_flat_at_next_sample",
+   "name": "Momentum follow, flat at the next sample",
+   "entry_rule": "same entry as s1",
+   "exit_rule": "exit at the next recorded sample of the same market (the tape's sampling interval, not a real order book)",
+   "docs": "https://docs.kalshi.com/getting_started/market_settlement"
+  }
+ ],
+ "results": [
+  {
+   "strategy": "s2_flat_at_next_sample",
+   "category": "crypto/up-follow",
+   "n": 1,
+   "wins": 1,
+   "losses": 0,
+   "pushes": 0,
+   "net_pnl_dollars_per_contract": "0.1000",
+   "mean_pnl_dollars_per_contract": "0.1000",
+   "evaluable": false,
+   "markets": [
+    {
+     "ticker": "KXDEMOFUTHOURLY-26NOV20H12-UP",
+     "pnl_dollars": "0.1000",
+     "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXDEMOFUTHOURLY-26NOV20H12-UP"
+    }
+   ]
+  }
+ ],
+ "trade_count": 1,
+ "disclaimer": "Simulated trades on demo prices. Gross of fees, spread and slippage: the public API publishes no fee estimate for a hypothetical order, so none is assumed. Entry is a trade print, not a book quote \u2014 a real order would cross the spread. Not evidence of profitability."
+}

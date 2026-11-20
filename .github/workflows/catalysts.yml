@@ -1,0 +1,105 @@
+name: Swing + catalyst ledger refresh
+
+# Runs the swing/catalyst scan and commits its snapshots under catalysts/data/, then
+# asks Pages to rebuild. GitHub Actions runners have the network egress this repo's
+# build sandbox lacks (the sandbox allowlists github.com / npmjs.org / pypi.org only),
+# which is why the live polling and the news-feed probe live here.
+#
+# Data provenance: every value written by this job comes from the official demo API
+# (https://external-api.demo.kalshi.co/trade-api/v2 — see
+# https://docs.kalshi.com/getting_started/api_environments.md) or from a feed the run
+# actually parsed; both are recorded in catalysts/data/status.json,
+# feed_health.json and endpoints.json. Nothing is generated when a source is silent.
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  push:
+    branches: ['main']
+    paths:
+      - 'catalysts/**'
+      - '.github/workflows/catalysts.yml'
+  workflow_dispatch:
+    inputs:
+      lookback_hours:
+        description: "How many hours of tape to publish swings from"
+        required: false
+        default: "168"
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: catalysts-ledger
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Offline tests (mock demo API + mock feed; no network needed)
+        run: python3 catalysts/tests/test_scan.py -v
+
+      - name: Record official endpoint statuses
+        env:
+          KALSHI_API_ROOT: https://external-api.demo.kalshi.co/trade-api/v2
+        run: python3 catalysts/scan.py --probe-endpoints --quiet
+
+      - name: Probe the news-feed allowlist
+        run: python3 catalysts/scan.py --probe-feeds --quiet
+
+      - name: Detect swings >= $0.10 and attach candidate catalyst links
+        env:
+          KALSHI_API_ROOT: https://external-api.demo.kalshi.co/trade-api/v2
+          CATALYST_LOOKBACK_HOURS: ${{ github.event.inputs.lookback_hours || '168' }}
+        run: python3 catalysts/scan.py --quiet
+
+      - name: Fail if the scan wrote an inconsistent ledger
+        run: python3 catalysts/tests/check_page.py
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install the dev dependency used by the render test (jsdom)
+        run: npm ci --no-audit --no-fund
+
+      - name: Headless render test of the ledger page (incl. the $0.10 browser rule)
+        run: node catalysts/tests/smoke.mjs
+
+      - name: Commit snapshots
+        run: |
+          git config user.name "catalyst-bot"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add catalysts/data || true
+          if git diff --cached --quiet; then
+            echo "No ledger changes to commit"
+          else
+            git commit -m "catalysts: ledger refresh $(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+            git pull --rebase origin "$GITHUB_REF_NAME" --autostash || \
+              echo "::warning::rebase failed; committing on top of the latest local state"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          fi
+
+      - name: Request Pages rebuild (bot pushes do not trigger the legacy Pages workflow)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          code=$(curl -s -o /tmp/pages_build.json -w "%{http_code}" \
+            -X POST \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/pages/builds")
+          echo "pages build request HTTP $code"
+          head -c 300 /tmp/pages_build.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

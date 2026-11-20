@@ -1,0 +1,13 @@
+{
+ "markets": {
+  "KXDEMOFUTHOURLY-26NOV20H12-UP": {
+   "resolved": true,
+   "topic": "crypto",
+   "result": "no",
+   "checked_at": "2026-11-20T19:46:25Z",
+   "tracking": "stopped_resolved"
+  }
+ },
+ "updated_at": "2026-11-20T19:49:35Z",
+ "policy": "A market is polled until the API reports it settled/finalized with a result; then tracking stops and the yes/no outcome is kept."
+}

@@ -1,0 +1,6 @@
+{
+ "probed_at": "2026-11-20T19:46:25Z",
+ "api_root": "https://external-api.demo.kalshi.co/trade-api/v2",
+ "endpoints": [],
+ "note": "skipped: this runner has no egress to the demo API (the build sandbox allowlists github.com / npmjs / pypi only). The scheduled GitHub Actions run rewrites this file with real HTTP statuses."
+}
