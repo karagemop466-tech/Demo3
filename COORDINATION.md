@@ -2090,3 +2090,27 @@ record; #39/#46/#48/#51–#60 merged during the session.
 | INT-1 | Final integration pass: close duplicate/unclaimed alert PRs with rationale, verification suite, PR → merge → Pages confirmation, board record | done — 9 duplicate/unclaimed PRs closed with rationale (#26 #27 #36 #38 #40 #41 #42 #43 #47); suite green on the branch (`verify_root_site.py` 0 failures, `verify_site.py` PASSED, `check_site.py` passed, `npm test` 44/46-pass at head incl. the folded pins, `collector/test_collect.py` OK, `test_refresh_offline.py` 88/88, backtest 17/17, all `node --check` OK); CI on PR #63: checks/collect/verify all pass (collect green = schedule recovered, closing F-2a0-03); PR #63 closed superseded by 81c58501 — final registers PR recorded below | 2a0ddd99 | PR management + `COORDINATION.md` follow-up commit | GitHub Actions runs on PR #63: checks 44808291131, collect 44808234896, verify 44808291328 — all pass | F-2a0-04 |
 
 Verification protocol unchanged: no value without an official source; blanks stay blank and flagged.
+| 21:0x | **PR #71 merged** into `main` (merge commit `4663749`); `Checks` run `44817860695` green on the merged head `c17aab3` (every step incl. this session's three added steps); Pages verified live: `https://karagemop466-tech.github.io/Demo3/alerts.html` renders the console with `model: live calibration generated 2026-11-20T20:54:26Z · buckets 5` and `series metadata: 8 series`, and every universe row carries its own `GET /markets?tickers=` link. | `gh pr view 71`, `gh run view 44817860695`, page fetch 2026-11-20T21:0xZ |
+| 21:0x | A6 done. Follow-up PR (docs only) refreshes `alerts/FINDINGS.md` to the newest published scan (207 swings @ 20:54:26Z) because the 30-minute workflow republished the data after #71 merged. | `alerts/FINDINGS.md` §1/§3/§4 |
+
+### Collision record (session 5ab18dc3) — read before touching `assets/alerts.js`
+
+Two sessions built the alert console in parallel. `main` carries session a7ce6f14's engine at
+**`assets/alerts.js`** (505 lines, loaded by `dashboard.html`, its own tests in
+`tests/alerts.test.js` / `tests/alerts_resolution.test.js`), and PR #83 merged it at 20:50:56Z while
+this session's engine sat on the same path on `arena/5ab18dc3-demo3`. Nothing was overwritten: this
+session's engine is **`assets/alert-console.js`** (1 195 lines) and is loaded by the new root page
+`alerts.html`. `verify_root_site.py` syntax-checks both, and the root page lists both entries in the
+nav ("Swing alerts" → `alerts.html`, "Alert desk (live)" → `live/index.html`).
+
+What differs, so the integration owner can decide instead of guessing:
+
+| | `assets/alerts.js` (a7ce6f14) | `assets/alert-console.js` + `assets/swing-core.js` (5ab18dc3) |
+|---|---|---|
+| ROI filter | documented multi-factor screen, parameters published on `model.html`; explicitly labelled "placeholder rule until the owner supplies the model" | gate requires the bucket's **best measured strategy** to have positive net-of-fee expectancy in `data/swings/strategies.json`; refuses every alert on the current demo data and prints why |
+| price arithmetic | dollars with a 1e-9 tolerance (their F-7b-05 fixed a float `>= 0.10` miss) | integer bits end to end; `$0.0999` no / `$0.1000` yes is an asserted vector in both languages |
+| backtest | reversion study in `model/build_roi_model.py` + `strategy backtest` CI steps | `scripts/scan_swings.py`: 4 exits × per-bucket calibration × resolution re-poll, published as `data/swings/*.json` every 30 min |
+| tests | `tests/alerts.test.js`, `tests/alerts_resolution.test.js` (jsdom) | `tests/swing_core.test.js` (11), `scripts/tests/test_scan_swings.py` (15), `tests/alert_console.test.js` (4, jsdom) |
+
+Both engines read the same official endpoints; neither places orders. Consolidating them onto one
+engine is a follow-up for the integration owner, not something to do silently from either branch.
