@@ -220,6 +220,24 @@
     ctx.beginPath(); ctx.arc(X(last.t), Y(last.price), 3, 0, 7); ctx.fill();
     ctx.fillText(cents(last.price) + " @ " + timeStr(last.t), padL + 4, padT + 12);
     if (opts.windowLabel) ctx.fillText(opts.windowLabel, padL + pw - 90, padT + 12);
+    /* Swing-event annotations (opts.annotations: [{t, label, dir}]).
+     * Additive & optional — no effect when omitted. Marks >=$0.10 swing points
+     * with the related event ticker; the clickable event/source links live in
+     * the caption beneath the chart (dashboard.js) and in the alert chats. */
+    if (opts.annotations && opts.annotations.length) {
+      ctx.font = "10px " + getComputedStyle(document.body).fontFamily;
+      opts.annotations.forEach(function (an) {
+        var x = X(an.t);
+        if (x < padL || x > padL + pw) return;
+        ctx.strokeStyle = "rgba(178,106,0,.45)";
+        ctx.setLineDash([3, 3]);
+        ctx.beginPath(); ctx.moveTo(x, padT); ctx.lineTo(x, padT + ph); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = an.dir === "down" ? "#b23a2a" : "#9a6a00";
+        ctx.fillText(an.label || "",
+          Math.max(padL, Math.min(x - 26, padL + pw - 40)), padT + ph - 6);
+      });
+    }
   }
 
   /* ---------- canvas depth chart (contracts per price level) ---------- */
