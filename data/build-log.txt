@@ -1,0 +1,12 @@
+=== build.py ===
+Traceback (most recent call last):
+  File "/home/runner/work/Demo3/Demo3/analysis/build.py", line 510, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/home/runner/work/Demo3/Demo3/analysis/build.py", line 275, in main
+    (ANALYSIS / "REPORT.md").write_text(render_md(report), encoding="utf-8")
+                                        ^^^^^^^^^^^^^^^^^
+  File "/home/runner/work/Demo3/Demo3/analysis/build.py", line 496, in render_md
+    lines += [f"### {k}", "", v["reason"], "", f"To enable: {v['to_enable']}", "",
+                                                             ~^^^^^^^^^^^^^
+KeyError: 'to_enable'
