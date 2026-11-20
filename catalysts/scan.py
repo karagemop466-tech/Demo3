@@ -865,6 +865,8 @@ def probe_endpoints(http: Http, root: str, out_path: str, log) -> dict:
 
 # ------------------------------------------------------------------ strategies
 STRATEGY_MIN_N = int(os.environ.get("CATALYST_MIN_N", "30"))
+BANKROLL = Decimal(os.environ.get("CATALYST_BANKROLL", "1000"))
+CONTRACTS = Decimal(os.environ.get("CATALYST_CONTRACTS", "100"))
 STRATEGY_DOCS = "https://docs.kalshi.com/getting_started/market_settlement"
 
 
@@ -922,6 +924,61 @@ def strategy_study(swings: list[dict], tape: list[dict]) -> dict:
                                "exit_basis": "next recorded sample of the same market",
                                "pnl_dollars": f"{nxt - entry:.4f}", "side": "YES"})
 
+    def portfolios(rows: list[dict]) -> dict:
+        """Bankroll view of the same simulated trades (still gross of fees)."""
+        books: dict = {}
+        for t in rows:
+            book = books.setdefault(t["strategy"], {"trades": [], "deduped": 0})
+            keys = {x["ticker"] for x in book["trades"]}
+            if t["ticker"] in keys:
+                book["deduped"] += 1        # one position per market per strategy
+                continue
+            book["trades"].append(t)
+        out = {}
+        for strategy, book in books.items():
+            items = sorted(book["trades"], key=lambda x: (x.get("exit_ts") or "", x["ticker"]))
+            equity = BANKROLL
+            peak = equity
+            max_dd = Decimal("0")
+            curve, by_topic, wins, losses = [], {}, 0, 0
+            for t in items:
+                stake = (entry := parse_dollars(t["entry_dollars"])) * CONTRACTS
+                pnl = parse_dollars(t["pnl_dollars"]) * CONTRACTS
+                equity += pnl
+                if pnl > 0:
+                    wins += 1
+                elif pnl < 0:
+                    losses += 1
+                peak = max(peak, equity)
+                max_dd = max(max_dd, peak - equity)
+                curve.append({"ts": t.get("exit_ts") or t["entry_ts"],
+                              "equity_dollars": f"{equity:.4f}",
+                              "pnl_dollars": f"{pnl:.4f}",
+                              "stake_dollars": f"{stake:.4f}",
+                              "ticker": t["ticker"],
+                              "market_api_url": t["market_api_url"]})
+                bt = by_topic.setdefault(t["topic"], {"n": 0, "pnl_dollars": Decimal("0")})
+                bt["n"] += 1
+                bt["pnl_dollars"] += pnl
+            out[strategy] = {
+                "n": len(items),
+                "deduped_duplicates": book["deduped"],
+                "starting_bankroll_dollars": f"{BANKROLL:.4f}",
+                "contracts_per_trade": str(CONTRACTS),
+                "realized_pnl_dollars": f"{(equity - BANKROLL):.4f}",
+                "ending_equity_dollars": f"{equity:.4f}",
+                "return_on_bankroll_pct": (f"{((equity - BANKROLL) / BANKROLL * 100):.2f}"
+                                           if BANKROLL else ""),
+                "wins": wins, "losses": losses,
+                "win_rate": f"{(wins / len(items) * 100):.1f}" if items else "",
+                "max_drawdown_dollars": f"{max_dd:.4f}",
+                "evaluable": len(items) >= STRATEGY_MIN_N,
+                "by_topic": {k: {"n": v["n"], "pnl_dollars": f"{v['pnl_dollars']:.4f}"}
+                             for k, v in sorted(by_topic.items())},
+                "equity_curve": curve[:200],
+            }
+        return out
+
     def aggregate(rows: list[dict]) -> list[dict]:
         buckets: dict = defaultdict(list)
         for t in rows:
@@ -968,6 +1025,16 @@ def strategy_study(swings: list[dict], tape: list[dict]) -> dict:
              "docs": STRATEGY_DOCS},
         ],
         "results": aggregate(trades),
+        "portfolio": {
+            "accounting": ("simulated book per strategy: one position per market (later alerts on the "
+                           "same market are deduped and counted), "
+                           f"{CONTRACTS} contracts per trade, stake = contracts x entry price, "
+                           "realized when the exit rule fires; equity starts at the bankroll"),
+            "note": ("Simulated demo-account trading driven by the alert rules — no order is sent to "
+                     "Kalshi and no live account is touched. Gross of fees/spread. Numbers below "
+                     "the evaluation floor are published for transparency, not as a result."),
+            "books": portfolios(trades),
+        },
         "trade_count": len(trades),
         "disclaimer": ("Simulated trades on demo prices. Gross of fees, spread and slippage: the "
                         "public API publishes no fee estimate for a hypothetical order, so none is "

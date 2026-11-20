@@ -335,6 +335,92 @@
                  " \u2014 " + (d.skipped_note || ""));
     }
     $("strategyNote").textContent = notes.filter(Boolean).join(" ");
+    renderBooks(d.portfolio || {});
+  }
+
+  function renderBooks(pf) {
+    var books = pf.books || {};
+    var ids = Object.keys(books).sort();
+    var body = $("books").tBodies[0];
+    if (!ids.length) {
+      body.innerHTML = "<tr><td colspan=\"8\" class=\"muted\">Nothing scoreable yet — every alert " +
+        "was skipped because its exit field was not published by the API. No position is invented.</td></tr>";
+      $("equityNote").textContent = pf.note || "";
+      drawEquity([], "");
+      return;
+    }
+    body.innerHTML = ids.map(function (id) {
+      var b = books[id];
+      var topics = Object.keys(b.by_topic || {}).map(function (k) {
+        return k + ": " + b.by_topic[k].n + " \u00b7 " + b.by_topic[k].pnl_dollars + "$";
+      }).join("<br>") || "\u2014";
+      var verdict = b.evaluable
+        ? "<span class=\"res yes\">\u2265 evaluation floor met</span>"
+        : flag("not evaluable (n=" + b.n + ")", "below the scan's trade floor: no expectancy claim");
+      return "<tr><td><strong>" + esc(id) + "</strong><div class=\"small muted\">" +
+          esc(b.contracts_per_trade) + " contracts/trade" +
+          (b.deduped_duplicates ? " \u00b7 " + b.deduped_duplicates + " duplicate alert(s) on the same market ignored" : "") +
+          "</div></td>" +
+        "<td class=\"mono\">" + esc(b.n) + "</td>" +
+        "<td class=\"mono small\">" + esc(b.starting_bankroll_dollars) + " \u2192 " +
+          esc(b.ending_equity_dollars) +
+          "<div class=\"muted\">" + esc(b.return_on_bankroll_pct) + "% of bankroll</div></td>" +
+        "<td class=\"mono\">" + esc(b.realized_pnl_dollars) + "</td>" +
+        "<td class=\"mono\">" + esc(b.wins) + " / " + esc(b.losses) +
+          (b.win_rate ? "<div class=\"muted\">" + esc(b.win_rate) + "% win rate</div>" : "") + "</td>" +
+        "<td class=\"mono\">" + esc(b.max_drawdown_dollars) + "</td>" +
+        "<td class=\"small\">" + topics + "</td><td>" + verdict + "</td></tr>";
+    }).join("");
+    $("equityNote").textContent = (pf.accounting || "") + " " + (pf.note || "");
+    drawEquity((books[ids[0]].equity_curve) || [], ids[0]);
+  }
+
+  function drawEquity(curve, label) {
+    var cv = $("equityChart");
+    var ctx = cv && cv.getContext ? cv.getContext("2d") : null;
+    if (!ctx) return;
+    var dpr = window.devicePixelRatio || 1;
+    var w = cv.clientWidth || 900, h = cv.height || 150;
+    cv.width = w * dpr; cv.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, w, h);
+    ctx.font = "11px system-ui, sans-serif";
+    if (!curve.length) {
+      ctx.fillStyle = "#8a8f98";
+      ctx.fillText("No simulated equity points yet — the curve appears as positions are closed.", 12, 22);
+      return;
+    }
+    var xs = curve.map(function (p) { return new Date(p.ts).getTime(); });
+    var ys = curve.map(function (p) { return Number(p.equity_dollars); });
+    var minX = Math.min.apply(null, xs), maxX = Math.max.apply(null, xs);
+    if (maxX - minX < 1000) maxX = minX + 1000;
+    var minY = Math.min.apply(null, ys), maxY = Math.max.apply(null, ys);
+    if (maxY === minY) { maxY += 1; minY -= 1; }
+    var padL = 74, padB = 22, padT = 10, padR = 12;
+    var X = function (t) { return padL + (t - minX) / (maxX - minX) * (w - padL - padR); };
+    var Y = function (v) { return h - padB - (v - minY) / (maxY - minY) * (h - padT - padB); };
+    ctx.strokeStyle = "#e8eaee"; ctx.fillStyle = "#6b7280";
+    for (var g = 0; g <= 3; g++) {
+      var val = minY + (maxY - minY) * g / 3, yy = Y(val);
+      ctx.beginPath(); ctx.moveTo(padL, yy); ctx.lineTo(w - padR, yy); ctx.stroke();
+      ctx.fillText("$" + val.toFixed(2), 8, yy + 3);
+    }
+    ctx.fillText(fmtTime(new Date(minX).toISOString(), (maxX - minX) / 1000), padL, h - 6);
+    ctx.fillText(fmtTime(new Date(maxX).toISOString(), (maxX - minX) / 1000), w - padR - 90, h - 6);
+    ctx.strokeStyle = "#7c3aed"; ctx.lineWidth = 1.8; ctx.beginPath();
+    curve.forEach(function (p, i) {
+      var x = X(new Date(p.ts).getTime()), y = Y(Number(p.equity_dollars));
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+    ctx.fillStyle = "#7c3aed";
+    curve.forEach(function (p) {
+      ctx.beginPath();
+      ctx.arc(X(new Date(p.ts).getTime()), Y(Number(p.equity_dollars)), 2.4, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    ctx.fillStyle = "#6b7280";
+    ctx.fillText("simulated equity \u2014 book: " + label + " \u00b7 " + curve.length + " closed position(s) \u00b7 gross of fees", padL, 14);
   }
 
   function renderFeeds() {

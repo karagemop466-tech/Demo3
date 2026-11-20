@@ -501,5 +501,31 @@ class StrategyStudyTests(unittest.TestCase):
         self.assertEqual(rows[0]["net_pnl_dollars_per_contract"], "0.1500")
 
 
+    def test_portfolio_accumulates_from_the_published_bankroll(self):
+        swings = [self.swing(ticker=f"KXMOCK-{i}", settle="1.0000") for i in range(3)]
+        out = scan.strategy_study(swings, [])
+        book = out["portfolio"]["books"]["s1_hold_to_resolution"]
+        from decimal import Decimal
+        stake = Decimal("0.6500") * scan.CONTRACTS
+        # each win pays (1.00 - entry) x contracts
+        per_trade = (Decimal("1.0000") - Decimal("0.6500")) * scan.CONTRACTS
+        self.assertEqual(book["n"], 3)
+        self.assertEqual(Decimal(book["realized_pnl_dollars"]), per_trade * 3)
+        self.assertEqual(Decimal(book["ending_equity_dollars"]),
+                         scan.BANKROLL + per_trade * 3)
+        self.assertEqual(book["wins"], 3)
+        self.assertEqual(book["by_topic"]["crypto"]["n"], 3)
+        self.assertEqual(len(book["equity_curve"]), 3)
+
+    def test_duplicate_alerts_on_one_market_do_not_inflate_the_book(self):
+        same = [self.swing(ticker="KXMOCK-SAME", settle="1.0000", entry="0.6500"),
+                self.swing(ticker="KXMOCK-SAME", settle="1.0000", entry="0.5500")]
+        out = scan.strategy_study(same, [])
+        book = out["portfolio"]["books"]["s1_hold_to_resolution"]
+        self.assertEqual(book["n"], 1, "one position per market per strategy")
+        self.assertEqual(book["deduped_duplicates"], 1)
+        self.assertEqual(len(out["results"]), 1, "the category count must match the book")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

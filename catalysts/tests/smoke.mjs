@@ -163,7 +163,23 @@ if (fs.existsSync(stratPath)) {
          `strategy row ${i + 1} links each simulated trade to its market API record`);
     });
   });
-  ok(/gross of fees/i.test(doc.getElementById("strategyNote").textContent),
+  const books = Object.keys((strat.portfolio && strat.portfolio.books) || {});
+  const brows = [...doc.querySelectorAll("#books tbody tr")];
+  ok(books.length ? brows.length === books.length
+     : /Nothing scoreable yet/.test(brows[0].textContent),
+     `simulated book table renders one row per strategy book (${brows.length})`);
+  books.forEach((id, i) => {
+    const b = strat.portfolio.books[id];
+    const tr = brows[i];
+    ok(tr && tr.textContent.includes(String(b.n)), `book ${id} states its position count`);
+    ok(/\u2192|->/.test(tr.textContent) || tr.textContent.includes(b.ending_equity_dollars),
+       `book ${id} shows bankroll to equity, not just a PnL headline`);
+    ok(/not evaluable|floor met/.test(tr.textContent),
+       `book ${id} carries an explicit verdict gate`);
+  });
+  ok(/gross of fees/i.test(doc.getElementById("equityNote").textContent),
+     "the equity curve is labelled gross of fees");
+  ok(/gross of fees|fees/i.test(doc.getElementById("strategyNote").textContent),
      "the fee/spread caveat is printed next to the table, not hidden in the data file");
 } else {
   ok(/No strategy snapshot committed yet/.test(doc.querySelector("#strategies tbody").textContent),

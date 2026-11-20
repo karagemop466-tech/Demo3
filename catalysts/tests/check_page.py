@@ -236,6 +236,44 @@ def check_strategies() -> dict:
         total_n += n
         stats["trades"] += n
         stats["evaluable"] += 1 if r.get("evaluable") else 0
+    pf = doc.get("portfolio") or {}
+    if "books" not in pf:
+        fail("strategies.json portfolio block is missing its books")
+    for strategy, b in (pf.get("books") or {}).items():
+        label = f"portfolio/{strategy}"
+        try:
+            bank = Decimal(str(b.get("starting_bankroll_dollars")))
+            end = Decimal(str(b.get("ending_equity_dollars")))
+            real = Decimal(str(b.get("realized_pnl_dollars")))
+            dd = Decimal(str(b.get("max_drawdown_dollars")))
+        except InvalidOperation:
+            fail(f"{label}: bankroll/equity/pnl are not decimal strings")
+            continue
+        if bank + real != end:
+            fail(f"{label}: bankroll {bank} + realized {real} != equity {end}")
+        if int(b.get("wins") or 0) + int(b.get("losses") or 0) > int(b.get("n") or 0):
+            fail(f"{label}: wins+losses exceed n={b.get('n')}")
+        if dd < 0:
+            fail(f"{label}: negative max drawdown is impossible")
+        curve = b.get("equity_curve") or []
+        if len(curve) > int(b.get("n") or 0):
+            fail(f"{label}: equity curve has {len(curve)} points for {b.get('n')} positions")
+        run = bank
+        for pt in curve:
+            run += Decimal(str(pt.get("pnl_dollars")))
+            if Decimal(str(pt.get("equity_dollars"))) != run:
+                fail(f"{label}: curve point at {pt.get('ts')} says {pt.get('equity_dollars')} "
+                     f"but the trades accumulate to {run}")
+        if curve and Decimal(str(curve[-1]["equity_dollars"])) != end:
+            fail(f"{label}: curve ends at {curve[-1]['equity_dollars']} but equity says {end}")
+        for m in curve:
+            if urllib.parse.urlparse(m.get("market_api_url") or "").netloc not in DEMO_HOSTS:
+                fail(f"{label}: curve point {m.get('ticker')} has no official demo-API link")
+        if bool(b.get("evaluable")) != (int(b.get("n") or 0) >= int(doc.get("min_n_for_a_claim") or 0)):
+            fail(f"{label}: evaluable flag contradicts n vs the floor")
+        topic_n = sum(int(v.get("n") or 0) for v in (b.get("by_topic") or {}).values())
+        if topic_n != int(b.get("n") or 0):
+            fail(f"{label}: by_topic covers {topic_n} of {b.get('n')} positions")
     declared = doc.get("trade_count")
     if declared is not None and total_n > int(declared):
         fail(f"strategies.json: results cover {total_n} trades but trade_count says {declared}")
