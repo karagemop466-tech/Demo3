@@ -1,0 +1,48 @@
+name: Kalshi demo portfolio pull
+
+# Optional: activates only when repo secrets are configured:
+#   KALSHI_KEY_ID        - demo account API key ID
+#   KALSHI_PRIVATE_KEY   - demo account API private key (PEM)
+# Without secrets the job records status "credentials_missing" (see
+# data/latest/portfolio.json) so the dashboard never shows unverified numbers.
+
+on:
+  schedule:
+    - cron: '23 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  portfolio:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Pull portfolio, positions and fills (or record missing credentials)
+        env:
+          KALSHI_KEY_ID: ${{ secrets.KALSHI_KEY_ID }}
+          KALSHI_PRIVATE_KEY: ${{ secrets.KALSHI_PRIVATE_KEY }}
+        run: python scripts/portfolio_pull.py
+
+      - name: Commit and push
+        run: |
+          git config user.name "kalshi-data-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/
+          if git diff --cached --quiet; then
+            echo "no changes"
+          else
+            git commit -m "data: portfolio snapshot $(date -u +%Y-%m-%dT%H:%MZ)"
+            git pull --rebase origin "${GITHUB_REF_NAME}"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi

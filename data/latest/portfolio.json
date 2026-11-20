@@ -1,0 +1,15 @@
+{
+ "balance": {},
+ "fills": [],
+ "note": "No demo-account API credentials are configured (repo secrets KALSHI_KEY_ID, KALSHI_PRIVATE_KEY). Per official docs, portfolio endpoints require authentication; no values are inferred.",
+ "orders": [],
+ "positions": [],
+ "retrieved_at": "2026-11-20T11:28:35+00:00",
+ "settlements": [],
+ "sources": {
+  "api_keys": "https://docs.kalshi.com/getting_started/api_keys",
+  "auth_quickstart": "https://docs.kalshi.com/getting_started/quick_start_authenticated_requests",
+  "demo_env": "https://docs.kalshi.com/getting_started/demo_env"
+ },
+ "status": "credentials_missing"
+}
