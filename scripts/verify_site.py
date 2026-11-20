@@ -85,10 +85,44 @@ def check_js():
         failures.append("app.js syntax error: " + r.stderr.strip()[:300])
 
 
+RENDER = re.compile(r'data-render="([^"]+)"')
+EXPECTED_HOOKS = {
+    "index.html": {"counts", "volume"},
+    "dashboard.html": {"top-events"},
+    "resolved.html": {"resolved", "pipeline-resolved"},
+    "portfolio.html": {"schema", "portfolio-state", "strategies", "order-ticket"},
+    "sources.html": {"sources", "pipeline-sources", "verify-report"},
+    "flagged.html": {"irregularities", "unverified", "repo", "pipeline-flags"},
+    "questions.html": {"questions"},
+    "suggestions.html": {"decisions"},
+    "findings.html": {"findings", "volume"},
+}
+
+
+def check_hooks():
+    app = (DOCS / "assets" / "app.js").read_text(encoding="utf-8")
+    dispatch = set(re.findall(r"what === '([a-z-]+)'", app))
+    for page, expected in EXPECTED_HOOKS.items():
+        text = (DOCS / page).read_text(encoding="utf-8")
+        found = set(RENDER.findall(text))
+        for hook in expected:
+            if hook not in found:
+                failures.append(f"{page}: expected data-render=\"{hook}\" hook missing")
+        for hook in found:
+            if hook not in dispatch:
+                failures.append(f"{page}: data-render=\"{hook}\" has no app.js renderer")
+    for page in (DOCS / "categories").glob("*.html"):
+        found = set(RENDER.findall(page.read_text(encoding="utf-8")))
+        if "pipeline-markets" not in found:
+            failures.append(f"categories/{page.name}: missing pipeline-markets hook")
+    notes.append(f"render hooks checked against app.js dispatch ({len(dispatch)} renderers)")
+
+
 def main():
     check_data()
     check_html()
     check_js()
+    check_hooks()
     for n in notes:
         print("NOTE  ", n)
     for f in failures:
