@@ -27,6 +27,26 @@ table row links to an official source and unconfirmed values stay blank and flag
 | Flagged-irregularities register with evidence links | **This session (T5)** | [FLAGGED.md](FLAGGED.md) |
 | Shared task board | **Maintained by all sessions; this session audited claims** | [COORDINATION.md](COORDINATION.md) |
 
+## 2b. Live swing-alert system (session 13603ac5, integration pass)
+
+The brief asks for a live alerting system on swings of **$0.10 or more in either direction**, shown
+as **two scrolling chats** (all events + a selective high-ROI filter), with live events tracked to
+their **yes/no resolution** and swings linked to the **event and website** behind the move.
+
+| Requirement | How it is delivered | Official source |
+|---|---|---|
+| Swing >= $0.10 either direction | `assets/alerts-core.js` compares prices in integer ten-thousandths (no float drift). Two detection paths: against the exchange's own `previous_price_dollars` (so the first read of a market can already alert) and against the browser's previous sample. | [Get Markets](https://docs.kalshi.com/api-reference/market/get-markets.md) |
+| Two scrolling chats | `alerts.html` — *All swings* and *High-ROI screen* (a published placeholder screen; **no user model was supplied**, so it is labelled, never presented as a verified ROI signal). | [Get Markets](https://docs.kalshi.com/api-reference/market/get-markets.md) |
+| Track live events until they resolve (yes / no) | A settled market returns `status: "finalized"` and `result: "yes"|"no"` with `settlement_ts` and `settlement_value_dollars`. The chats post a *RESOLVED — yes / no* message and the page lists the official outcomes per topic. | [Market settlement](https://docs.kalshi.com/getting_started/market_settlement) |
+| Events and website links behind a sharp jump | The market API publishes **no news or attribution field**, so a cause cannot be verified. What it does publish is the official event record's `settlement_sources` — the sites Kalshi names as the contract's settlement reference (e.g. `KXPRESNOMD-28` -> `https://democrats.org/`, `KXSOLE-26NOV2102` -> `https://www.cfbenchmarks.com/`). These are shown as reference links and clearly not as an attribution; where an event publishes no source the cell stays blank and is flagged. | [Get Event](https://docs.kalshi.com/api-reference/events/get-event) |
+| Liquidity at a given price | The dashboard's orderbook-depth chart and table list resting contracts per price level; each swing also shows the bid/ask at the moment of the move. | [Orderbook responses](https://docs.kalshi.com/getting_started/orderbook_responses) |
+
+**Integration note (flagged for review):** four sessions implemented the same alert feature in
+parallel (PRs #26, #27, #28, #29). The integration session merged the earliest claim (PR #26) with
+the already-merged PR #28, kept both code paths (`alerts.html` + `assets/alerts-core.js` and the
+dashboard chat in `assets/alerts-dashboard.js`), and closed the two superseded duplicates. Details in
+[COORDINATION.md](COORDINATION.md).
+
 ## 3. Key technical facts (all source-linked in the research reference)
 
 1. **Public market data needs no key** on demo — markets, events, series, orderbooks, candlesticks

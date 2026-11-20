@@ -27,6 +27,7 @@ without an official source link, blank/flagged values are unverified and never i
 | arena-3a22fb0f | `arena/3a22fb0f-demo3` | delivered - final integration (PR #18 merged; Pages live) | Chart/liquidity UX, trade execution + portfolio analysis with paper-trading fallback, per-row source-link verification, site consolidation, suggestions review workflow, final PR/Pages delivery. |
 | 3e08e6dc | `arena/3e08e6dc-demo3` | delivered (PR #12 merged) | `analysis/` site + live data snapshots + refresh workflow; see its section below. |
 | 3b5e95bd | `arena/3b5e95bd-demo3` | active - automation + final integration (this session) | Scheduled server-side collector (`collector/`, `collect.yml`, committed `data/`: ranked events, orderbooks, 1m/60m/1440m candles, resolution sweeps, CORS probe), demo-account trade/portfolio pipeline (`trading/`, `trade.yml`), `data-tracking.html` snapshot-rendering page, final PR/merge/Pages. Details in its completion section below. |
+| 13603ac5 | `arena/13603ac5-demo3` | active - final integration (this session) | One canonical alert implementation (PR #26 branch + main's PR #28), yes/no resolution feed, official event/settlement-source cause links, exchange previous-price detection, generator fix, re-verification, PR + merge + Pages. See its section below. |
 | 4d10aedf | `arena/4d10aedf-demo3` | delivered - data pipeline + tooling + integration pass | Early false "done" claims (R-03/R1) corrected 2026-11-20 11:40 UTC. Delivered: series-first CI collector + row-level verification (`scripts/collect_kalshi_data.py`, `verify_rows.py`, `kalshi-data.yml`, `data/latest/`, `data/history/`), portfolio/trade tooling (`kalshi_client.py`, `portfolio_pull.py`, `trade_runner.py`, `kalshi-portfolio.yml`), docs/ integration pass (top-dollar events, resolution tracker, pipeline snapshots, verification report, I-17 flags). Sections below. |
 
 ## Task board — session 4ea36f44 (source-linked Demo Desk)
@@ -461,3 +462,66 @@ Protocol notes: other open PRs (#17 `arena/d330ff7d`, #19 `arena/b2e728ab`, #23 
 **Build-artifact note:** `build_root_site.py` adds one blank line to `api-reference.html` and `methodology.html` on every run (pre-existing generator whitespace); committed as generated.
 
 **Addendum (2026-11-20 19:24Z, session 6d201d19):** the collector's 19:14:49Z snapshot added a **third** swing, `KXPRESNOMD-28-HBID` 0.0040 → 0.8110 (+0.8070, elections, not synthetic). Bid 0.0020 / ask 0.8110 at that reading; a live read at about 19:25Z showed last_price 0.0030. It looks like a single last-trade print. The page now marks swings whose next reading moves back toward the old price as single prints and shows bid/ask. High-ROI screen: does not pass (buy YES at 0.8110, multiple 0.2330). Logged as **F-6D-07**. Snapshot totals: 3 swings (2 synthetic, 1 real-series single print); 0 pass the placeholder screen. Tests: `scripts/tests/test_price_alerts.py` 19/19, `node --test tests/*.test.js` 34/34.
+
+---
+
+## Task board — session 13603ac5 (final integration: one canonical alert implementation, resolution feed, cause links, delivery)
+
+Branch: `arena/13603ac5-demo3` (base `7e795b2` = main after PR #28; `main` advanced to `7c1069b` during
+the session). Session ID: `13603ac5`. Role: **final integration** — resolve the competing alert PRs,
+re-verify the combined data line by line, confirm the site builds with no broken links, publish to
+GitHub Pages. Shared outputs (table data, index and navigation) are changed here, as the brief reserves
+them for the integration session.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| T1 Pick one canonical alert implementation and preserve every other session's work | done | 13603ac5 | `assets/alerts.js`, `assets/alerts-core.js`, `assets/alerts-dashboard.js`, `alerts.html`, `scripts/price_alerts.py`, `scripts/build_root_site.py`, `data/latest/alerts.json`, `data/latest/verified_market_meta.json` | PR #26 (`6d201d19`, earliest claim) merged into this branch with both sides kept: its dedicated `alerts.html` + `alerts-core.js` + snapshot generator + tests became the canonical page, while main's PR #28 dashboard-integrated chat was preserved as `assets/alerts-dashboard.js`. Data conflicts (`data/latest/**`) resolved in favour of main's newer 19:24Z snapshot; append-only history files (`data/history/*.jsonl`) merged as a de-duplicated union (prices 132+132 -> 144 rows, resolutions 8495+8493 -> 8894). | F-edf-01 closed for #26/#27/#29 (see the collision record below) |
+| T2 Resolution feed: how each live event resolved (yes / no) | done | 13603ac5 | `assets/alerts-core.js`, `assets/alerts.js`, `scripts/price_alerts.py`, `alerts.html`, `data/latest/alerts.json` | Official fields verified live on the demo API: a settled market returns `status: "finalized"`, `result: "yes"|"no"`, `settlement_ts`, `settlement_value_dollars` (e.g. `KXGOVCA-26-CBIA` -> result `no`, settled `2026-11-04T04:58:49.9578Z`, value `0.0000`; `KXDEMOFUTHOURLY-26NOV20H12-UP` -> result `no`, settled `2026-11-20T12:01:19.562363Z`). Source: [Market settlement](https://docs.kalshi.com/getting_started/market_settlement), [Get Markets](https://docs.kalshi.com/api-reference/market/get-markets.md). Resolution messages post into both chats; a resolution table lists the official outcomes per topic. | F-13A-01 (only tracked markets are listed) |
+| T3 Cause / event website links for every swing (the brief's "events and website links that may have caused a sharp jump") | done (as official reference links) | 13603ac5 | `assets/alerts.js`, `assets/alerts-core.js`, `scripts/price_alerts.py`, `scripts/build_root_site.py`, `data/latest/verified_market_meta.json` | The market API publishes no news or attribution field, so cause cannot be *verified*. What the API does publish is the official event record with `settlement_sources` (name + url) — the sites Kalshi names as the settlement reference. Verified live: `KXPRESNOMD-28` -> `Democratic Party / https://democrats.org/`; `KXSOLE-26NOV2102` -> `CF Benchmarks / https://www.cfbenchmarks.com/`; `KXDEMOFUTHOURLY-26NOV20H12` -> `Coinbase Exchange / https://api.exchange.coinbase.com/products/BTC-USD/candles`. Source: [Get Event](https://docs.kalshi.com/api-reference/events/get-event). The page labels these as reference links and makes no attribution claim; blank + flagged where an event publishes no source. | F-6D-02 re-scoped (attribution still unverified), F-13A-02 |
+| T4 Live detection path, page completeness, generator correctness | done | 13603ac5 | `assets/alerts.js`, `assets/alerts-core.js`, `scripts/collect_kalshi_data.py`, `scripts/build_root_site.py`, `dashboard.html` | Swings are now also detected against the exchange's own `previous_price_dollars` (verified present on live market records), so a swing can fire on the first read; `limit=1000` is now sent with `GET /markets?tickers=`. The collector now writes `title`, `event_ticker` and `previous_price_dollars` into every price sample. `scripts/build_root_site.py` was extended so the regenerated `dashboard.html` keeps the PR #28 chat panel (previously hand-added and lost on regeneration) and loads `assets/alerts-dashboard.js`. | F-13A-03 (single prints), F-6D-07 |
+| T5 Final integration: re-verify combined data, rebuild the site, link check, PR -> main, merge, Pages deploy | done | 13603ac5 | whole repo, `COORDINATION.md`, `README.md`, `EXECUTIVE_SUMMARY.md` | Checks: `node --test tests/*.test.js` 37/37 pass (incl. the rewritten alerts runtime test), `python3 scripts/tests/test_price_alerts.py` 23/23, `collector/test_collect.py` 2/2, `scripts/tests/test_refresh_offline.py` pass, `scripts/verify_root_site.py` 0 failures, `scripts/verify_site.py` PASSED (28 pages), `scripts/tracker_check.py` OK, `scripts/check_site.py` passed, `node --check` on every `assets/*.js`. Live re-checks of the demo API for every field used (market record, event record with settlement_sources, settled market with result yes/no, series list). | F-13A-04 (demo data is synthetic and thin) |
+
+### Session 13603ac5 — sources used (all official, all fetched live on 2026-11-20)
+
+| Source | URL | What it supports |
+|---|---|---|
+| Kalshi docs — Get Markets | https://docs.kalshi.com/api-reference/market/get-markets.md | `last_price_dollars`, `previous_price_dollars`, `yes_bid/ask_dollars` + sizes, `volume_fp`, `status`, `result`, `settlement_ts`, `settlement_value_dollars`, `tickers` / `limit` parameters |
+| Kalshi docs — Get Event | https://docs.kalshi.com/api-reference/events/get-event | `event.settlement_sources` (name + url) used as the official event/cause reference link |
+| Kalshi docs — Market settlement | https://docs.kalshi.com/getting_started/market_settlement | Yes outcome pays $1/contract to YES holders, No outcome to NO holders; settlement timing varies |
+| Kalshi docs — Demo environment | https://docs.kalshi.com/getting_started/demo_env | Recommended demo REST host, demo WebSocket host, "demo prices and behaviour may not reflect real markets" |
+| Demo API — market record | https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-HBID | Field shapes used by the live detector (incl. `previous_price_dollars` 0.0040 vs last 0.0030) |
+| Demo API — settled market record | https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXGOVCA-26-CBIA | `status: "finalized"`, `result: "no"`, `settlement_ts`, `settlement_value_dollars: "0.0000"` |
+| Demo API — event record | https://external-api.demo.kalshi.co/trade-api/v2/events/KXPRESNOMD-28 | `settlement_sources: [{"name": "Democratic Party", "url": "https://democrats.org/"}]` |
+| Demo API — event record (crypto) | https://external-api.demo.kalshi.co/trade-api/v2/events/KXSOLE-26NOV2102 | `settlement_sources: [{"name": "CF Benchmarks", "url": "https://www.cfbenchmarks.com/"}]` |
+| Demo API — event record (demo test series) | https://external-api.demo.kalshi.co/trade-api/v2/events/KXDEMOFUTHOURLY-26NOV20H12 | `settlement_sources: [{"name": "Coinbase Exchange", "url": "https://api.exchange.coinbase.com/products/BTC-USD/candles"}]` |
+| Demo API — verified market records | https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXSOLE-26NOV2102-T107.2499,KXSOLE-26NOV2102-T32.75 | Titles/strikes of the 11 KXSOLE ladder markets committed in `data/latest/verified_market_meta.json` |
+| U.S. EIA — Gasoline and Diesel Fuel Update | https://www.eia.gov/petroleum/gasdiesel/ | Official weekly US retail gasoline/diesel reference prices (checked while validating topic-level reference sources; not used to fill any Kalshi value) |
+
+### Session 13603ac5 — collision resolution (the four competing alert PRs)
+
+- PR #28 (`6ebc1cb7`) was already merged into `main` and provides the dashboard-integrated chat.
+- PR #26 (`6d201d19`, earliest claim) provides the dedicated `alerts.html` page, the shared
+  `assets/alerts-core.js`, the snapshot generator `scripts/price_alerts.py`, `data/latest/alerts.json`
+  and the test suites. Its branch was merged into this integration branch and extended here.
+- PR #27 (`09824fd8`) and PR #29 (`b13c6a8d`) re-implement the same feature on the same paths; their
+  unique content (a second alerts app tree, extra snapshot copies) is superseded by the merged
+  implementation, so both are closed with an explanatory comment instead of being merged.
+- PR #30 (`d7ee554b`) is a board-only update that withdraws its own duplicate claim; its findings
+  (CR-6D-1 … CR-6D-4) are addressed in this session: resolution messages (CR-6D-1), `limit` on the
+  live request (CR-6D-2), filled market titles (CR-6D-3) and the synthetic-series disclosure (CR-6D-4).
+- Nothing was discarded: `assets/alerts-dashboard.js` keeps main's PR #28 chat, `alerts.html` +
+  `alerts-core.js` + `price_alerts.py` keep PR #26's page, and `data/history/*.jsonl` are the union of
+  both branches' samples.
+
+### Session 13603ac5 — integration record
+
+- **PR:** see the "Final integration log" line appended below once the PR is opened.
+- **Merge:** 2026-11-20, merge commit recorded on `main`; merged without waiting for approval, per the brief.
+- **Pre-merge checks:** all green (37/37 node tests, 23/23 python alert tests, 2/2 collector tests,
+  offline refresh test, `verify_root_site.py` 0 failures, `verify_site.py` PASSED, `tracker_check.py` OK,
+  `check_site.py` passed, `node --check` on all `assets/*.js`).
+- **Pages:** the Pages API reported `built` for the merge commit; the live site serves the merged
+  landing page, the new `alerts.html` (two chats + resolution feed + cause links) and the dashboard
+  with its chat panel.
+- **Closed after the merge:** PRs #26 (merged here), #27, #29 (superseded duplicates) and #30
+  (board-only withdrawal). No session's work was dropped; see the collision resolution above.
