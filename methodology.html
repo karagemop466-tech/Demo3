@@ -23,6 +23,7 @@
 
 
 
+
 <h1>Methodology</h1>
 <p class="muted">How every number on the dashboard is produced — and its limits.
 Nothing here is inferred beyond the stated formulas.</p>
@@ -140,10 +141,10 @@ direction</strong> posts an alert into two simplified scrolling chats — <em>Al
 <td><a href="https://docs.kalshi.com/api-reference/market/get-markets">Get Markets paging rules</a></td></tr>
 <tr><td>Latency disclosure</td><td>Exchange responses are cached — prices, sizes and status can lag the exchange by several seconds (official Get Markets note); alert detection is therefore best-effort, not exchange-grade. The WebSocket API offers push data but requires signed handshake headers browsers cannot attach (board item I-13), so this layer polls.</td>
 <td><a href="https://docs.kalshi.com/getting_started/quick_start_websockets">WebSocket connection</a></td></tr>
-<tr><td>High-ROI screen (heuristic)</td><td>A swing alert becomes a “pick” only if all five rules pass: HR-1 two-sided book (bid&gt;0 and ask&gt;0) · HR-1b ask&gt;bid · HR-2 quoted spread ≤ $0.10 · HR-3 volume_fp ≥ 1 (a trade exists) · HR-4 post-move price in [0.02, 0.98]. This is a <strong>liquidity/decidability screen, not validated alpha</strong> — no expectancy backtest has been run against it; treat as a starting filter only.</td>
+<tr><td>High-ROI screen (heuristic)</td><td>A swing alert becomes a “pick” only if the merged relative rule passes (move ≥ $0.10 <em>and</em> ≥ 10% of the prior price) <em>and</em> all five tradability rules pass: HR-1 two-sided book (bid&gt;0 and ask&gt;0) · HR-1b ask&gt;bid · HR-2 quoted spread ≤ $0.10 · HR-3 volume_fp ≥ 1 (a trade exists) · HR-4 post-move price in [0.02, 0.98]. This is a <strong>liquidity/decidability screen, not validated alpha</strong> — no expectancy backtest has been run against it; treat as a starting filter only (extends F-alert-01).</td>
 <td><a href="https://docs.kalshi.com/api-reference/market/get-markets">Get Markets fields</a></td></tr>
-<tr><td>Causation links</td><td>Each jump links (a) its exact API row and (b) all markets of the same event via <span class="mono">GET /markets?event_ticker=…</span> — both verifiable sources. A third link, “news search?”, is a query <em>generated from the market title</em> at click time so a trader can look for a possible cause. The API exposes no news/attribution field: causation is never asserted, and the link is labelled unverified in the UI.</td>
-<td><a href="https://docs.kalshi.com/api-reference/market/get-markets">Get Markets event_ticker</a></td></tr>
+<tr><td>Causation links</td><td>Each jump links (a) its exact API row via <span class="mono">GET /markets/{ticker}</span> — Get Market; the earlier merged engine linked <span class="mono">/series/{s}/markets/{t}</span> here, which is not a documented market-row endpoint — corrected at integration (b) all markets of the same event via <span class="mono">GET /markets?event_ticker=…</span> — both verifiable sources. A third link, “news search?”, is a query <em>generated from the market title</em> at click time so a trader can look for a possible cause. The API exposes no news/attribution field: causation is never asserted, and the link is labelled unverified in the UI.</td>
+<td><a href="https://docs.kalshi.com/api-reference/market/get-market">Get Market</a> · <a href="https://docs.kalshi.com/api-reference/market/get-markets">Get Markets event_ticker</a></td></tr>
 <tr><td>Resolution notices</td><td>Tracked markets that transition to closed/determined/finalized with <span class="mono">result</span> “yes” or “no” post a system message to the All-events chat (result enum + settlement doc). Tracking runs while the page is open, matching card 3&rsquo;s resolution logger.</td>
 <td><a href="https://docs.kalshi.com/getting_started/market_settlement">Market Settlement</a></td></tr>
 <tr><td>Persistence</td><td>Alert log + dedupe memory live in this browser&rsquo;s localStorage (cap 300, exportable as JSON). Nothing is sent to Kalshi; no credentials are used (public market-data endpoints only).</td>
@@ -151,6 +152,7 @@ direction</strong> posts an alert into two simplified scrolling chats — <em>Al
 </tbody>
 </table>
 </section>
+
 
 
 

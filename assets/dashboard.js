@@ -136,6 +136,7 @@
       renderRanking();
       recordSamples();
       trackResolutions();
+      if (window.KD && window.KD.onMarkets) { try { window.KD.onMarkets(state.markets); } catch (e) { /* alert sink must not break the scan */ } }
       var capNote = depth > 0 ? ("top " + depth + " matched series per topic") : "ALL matched series";
       $("scanStatus").textContent = "Last scan: " + new Date().toLocaleTimeString() +
         " — " + state.markets.length + " open markets (coverage: " + capNote + ").";
@@ -188,8 +189,10 @@
       var arr = state.samples[m.ticker] || (state.samples[m.ticker] = []);
       var last = arr[arr.length - 1];
       if (!last || now - last.t >= 5) {
-        arr.push({ t: now, price: m.last, bid: m.yb, ask: m.ya });
+        var sample = { t: now, price: m.last, bid: m.yb, ask: m.ya };
+        arr.push(sample);
         if (arr.length > 4000) arr.splice(0, arr.length - 4000);
+        if (window.KD && window.KD.onSample) { try { window.KD.onSample(m, sample); } catch (e) { /* alert sink must not break sampling */ } }
       }
     });
   }
@@ -592,6 +595,14 @@
     if (T) {
       T.mountTicket($("tradeTicket"));
       T.renderAll();
+      var auto = $("autoTrade");
+      if (auto) {
+        auto.disabled = false;
+        auto.addEventListener("change", function () {
+          T.setAutomation(auto.checked);
+          if ($("autoTrade")) { /* keep checkbox in sync with persisted state */ }
+        });
+      }
     }
     renderResolutions();
     loadSeededResolutions();

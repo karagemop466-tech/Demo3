@@ -649,42 +649,54 @@ if the browser blocks the request the tables fall back to the snapshot links in
 </div>
 
 <div class="card">
-  <h2>6 · Live swing alerts (chat feeds)</h2>
+  <h2>6 · Live swing alerts — two scrolling chats (≥ $0.10 either direction)</h2>
   <p class="small muted">Simplified scrolling chats that alert <strong>sudden YES-price swings
   ≥ $0.10 (10¢) in either direction</strong> on the markets in the current scan (top-ranked by
-  estimated dollar volume, up to 80 markets; polled every 10 s from
+  estimated dollar volume, up to 80; the 20 s dashboard scan is layered with a 10 s batch poll
   <span class="mono">GET /markets?tickers=…</span> — no key needed; official filter semantics:
   <a href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noopener">Get Markets</a>).
   Tracked price = YES bid/ask mid when a two-sided book exists, otherwise the last trade
-  (<span class="mono">last_price_dollars</span>). The exchange caches responses, so alerts can lag
-  by several seconds; the browser cannot attach the signed headers the
+  (<span class="mono">last_price_dollars</span>). One alert per market and direction per 5-minute
+  bucket. The exchange caches responses, so alerts can lag by several seconds; the browser cannot
+  attach the signed headers the
   <a href="https://docs.kalshi.com/getting_started/quick_start_websockets" target="_blank" rel="noopener">WebSocket API</a>
-  requires (flag I-13), so this layer polls. Resolution notices (yes/no) join the All-events feed.
-  Auto-scroll pauses while you scroll up. Alerts persist in this browser only (localStorage) —
-  export them for records.</p>
+  requires (flag I-13), so this layer polls. Resolution notices (yes/no) join the All-events feed;
+  jumps ≥ $0.10 also mark the card-2 chart. Auto-scroll pauses while you scroll up. Alerts persist
+  in this browser only (localStorage) and can be exported below.</p>
+  <div class="alert-controls">
+    <label><input type="checkbox" id="alertsEnabled" checked> Alerts enabled</label>
+    <label><input type="checkbox" id="autoTrade" disabled> Automated paper trades on swing (paper/SIMULATED only)</label>
+    <button class="btn secondary" id="clearAlertsBtn" type="button">Clear alerts</button>
+    <button class="btn secondary" id="exportAlertsBtn" type="button">Export alerts (JSON)</button>
+    <span class="alert-pill" id="alertCount">0 alerts</span>
+  </div>
   <p class="small"><span id="alertStatus">starting…</span></p>
-  <p><button class="btn secondary" id="pauseAlertsBtn" type="button">⏸ Pause alerts</button>
-     <button class="btn secondary" id="exportAlertsBtn" type="button">Export alerts (JSON)</button>
-     <button class="btn secondary" id="clearAlertsBtn" type="button">Clear alerts (this browser)</button></p>
+  <div class="chat-tabs">
+    <button class="chat-tab" id="tabAll" data-chat="all" type="button">All events only</button>
+    <button class="chat-tab" id="tabROI" data-chat="roi" type="button">High ROI model only</button>
+    <button class="chat-tab active" id="tabSplit" data-chat="split" type="button">Split (both chats)</button>
+  </div>
   <div class="chatwrap">
     <div class="chatcol">
       <div class="chathead"><h3>All events</h3>
-        <span class="muted small"><span id="alertCountAll">0</span> swings this session</span></div>
-      <div class="chat" id="chatAll" role="log" aria-live="polite"></div>
+        <span class="muted small"><span id="alertCountAll">0</span> swings ·
+        <span id="noticeCountAll">0</span> resolutions</span></div>
+      <div class="chat-wrap" id="chatAll" role="log" aria-live="polite"><div id="alertsAll"></div></div>
     </div>
     <div class="chatcol">
       <div class="chathead"><h3>High-ROI model picks</h3>
-        <span class="muted small"><span id="alertCountRoi">0</span> picks this session</span></div>
-      <div class="chat" id="chatRoi" role="log" aria-live="polite"></div>
+        <span class="muted small"><span id="alertCountRoi">0</span> picks</span></div>
+      <div class="chat-wrap" id="chatROI" role="log" aria-live="polite"><div id="alertsROI"></div></div>
     </div>
   </div>
   <p class="small muted"><strong>High-ROI screen (heuristic — not validated alpha; definition in
-  <a href="methodology.html">Methodology</a>):</strong> a swing enters the right-hand feed only if all
-  five rules pass — HR-1 two-sided book exists · HR-1b ask &gt; bid · HR-2 quoted spread ≤ $0.10 ·
-  HR-3 at least one trade (volume ≥ 1 contract) · HR-4 post-move price inside 2¢–98¢ (event not decided).
-  Every alert shows which rules passed (✓) or failed (✗). The <em>news search?</em> link is a query
-  generated from the market title so a trader can look for a cause — <strong>causation is never
-  asserted</strong> (the API exposes no attribution field; see <a href="flagged.html">Flagged</a>).</p>
+  <a href="methodology.html">Methodology</a> §6):</strong> a swing enters the right-hand feed only if
+  the move is ≥ 10% of the prior price <em>and</em> all five tradability rules pass — HR-1 two-sided
+  book exists · HR-1b ask &gt; bid · HR-2 quoted spread ≤ $0.10 · HR-3 at least one trade
+  (volume ≥ 1 contract) · HR-4 post-move price inside 2¢–98¢ (event not decided). Every alert shows
+  which rules passed (✓) or failed (✗). The <em>news search?</em> link is a query generated from the
+  market title so a trader can look for a cause — <strong>causation is never asserted</strong> (the
+  API exposes no attribution field; see <a href="flagged.html">Flagged</a>).</p>
 </div>
 """
     write_page("dashboard.html", "Live dashboard", "dashboard.html", body,
