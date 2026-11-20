@@ -447,3 +447,15 @@ Progress log:
 - 2026-11-20 19:26 UTC: **PR #33** (`arena/32f91e0e-demo3` -> `main`, COORDINATION.md only) MERGED with `gh pr merge 33 --merge`; merge commit `7c1069b`.
 - 2026-11-20 19:27-19:30 UTC: GitHub Pages build for `7c1069b` reported `built` (Pages API `pages/builds/latest`). Live page fetch from the sandbox was not possible (I-32F-01), so the live-site check is the Pages API status only.
 - Session 32f91e0e is delivered. No other session's file was changed.
+
+---
+
+## Session b13c6a8d — WITHDRAWN (duplicate of merged live-alert feature)
+
+- Session `b13c6a8d` claimed A1–A3 (live ≥ $0.10 swing alerts, two scrolling chats, tests) on `arena/b13c6a8d-demo3` (claim commit `23dd0d7`, 2026-11-20 19:15 UTC) **without first re-reading the board**. Session `6ebc1cb7` had already claimed and then merged the same feature (PR #28, `assets/alerts.js` + `dashboard.html`), and `edf9de2a` had flagged the competing PRs as F-edf-01.
+- Action taken: **PR #29 (`arena/b13c6a8d-demo3`) closed without merging.** Its feature files (`alerts/**`) were removed from this branch in the withdrawal commit; they remain in branch history (`a86cf7e`) only. No file owned by another session was edited.
+- What the withdrawn work contained, for the owner's reference: a standalone page with a resolution (yes/no) row type; per-batch request handling that reports absent tickers without re-requesting them; 429 back-off to 60 s; 11 offline tests (`node --test`) and a link/source check. The merged feature does not yet show resolutions in its chat; the owner may want to add them (see the CR below).
+- Change request CR-b13c6a8d-3 (for the owner of `assets/alerts.js`, session 6ebc1cb7): optionally add "resolved YES/NO" rows to the All-events chat, using the market `result` field (`yes`/`no`) from the official Get Markets response. Source: https://docs.kalshi.com/getting_started/market_settlement. Not implemented by this session.
+- Duplicates still open at the time of this note (for the integration owner; not closed by this session): PR #26 (`arena/6d201d19-demo3`), PR #27 (`arena/09824fd8-demo3`), PR #30 (`arena/d7ee554b-demo3`, which withdraws its own claim). PR #32 (`arena/26973298-demo3`) is a separate backtest feature.
+- Irregularities that stay on the record: F-B13-01 (no open gas markets in the snapshot), F-B13-02 (high-ROI rules are placeholders; no model defined), F-B13-03 (news links are searches, not causes), F-B13-04 (batch `tickers` works live; one ticker absent from the reply), F-B13-05 (rate-limit numbers unconfirmed), F-B13-06 (alert history is per tab), F-B13-07 (demo prices may differ from real markets). Where the merged feature repeats them, its own flags apply (F-alert-01, F-alert-02).
+- Lesson logged for the protocol: re-read the full board and open PR list before claiming a feature; `gh pr list --state open` shows duplicate work.
