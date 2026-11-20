@@ -1,194 +1,168 @@
-/* Kalshi Demo Tracker — price-swing alert chat.
- *
- * Detects live contract price swings >= $0.10 (10 cents) in either direction
- * and publishes them to two scrolling chats:
- *   - "All events": every swing alert
- *   - "High ROI model": a selective, labeled heuristic filter (NOT a real model)
- *
- * Data: reuses the dashboard's live market samples (GET /markets, demo API,
- * no key needed). No extra network requests. Each alert links its exact market
- * API URL. Values the exchange does not report are left blank — never inferred.
- *
- * The high-ROI rule below is a transparent placeholder heuristic. No model is
- * defined in this repo, so nothing is presented as a verified ROI signal. It is
- * flagged for review (F-alert-01) until a real model is specified.
- *
- * Source: https://docs.kalshi.com/getting_started/quick_start_market_data
- *         https://docs.kalshi.com/api-reference/market/get-markets
- *         https://docs.kalshi.com/getting_started/demo_env
+/* Live price-swing alert engine.
+ * Observations are made only from the markets returned by the dashboard scan. The
+ * first successful observation seeds a baseline; later observations alert at an
+ * absolute price change of at least $0.10. This is sampled REST polling, not a
+ * continuous feed or a claim that a particular news item caused the move.
  */
-(function () {
+(function (root) {
   "use strict";
 
-  var KD = window.KD = window.KD || {};
-  var ALERT_KEY = "kd_alerts_v1";
-  var SWING = 0.10;                 // dollars = 10 cents, the alert threshold
-  var MAX_ALERTS = 300;
+  var STORAGE_KEY = "kd_swing_alerts_v1";
+  var HISTORY_LIMIT = 120;
+  var DELTA_THRESHOLD = 0.10;
+  var SCREEN_MAX_SPREAD = 0.05;
+  var previousByTicker = Object.create(null);
+  var history = loadHistory();
 
-  var state = {
-    alerts: [],                     // all swing alerts (newest first)
-    lastPrice: {},                  // ticker -> {price, ts} seeded from scans
-    visible: "all",                 // "all" | "roi"
-    enabled: true
-  };
-  try { state.alerts = JSON.parse(localStorage.getItem(ALERT_KEY) || "[]"); } catch (e) { state.alerts = []; }
-
-  function esc(s) {
-    return String(s === null || s === undefined ? "" : s)
-      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-  }
-  function cents(x) {
-    if (x === null || x === undefined || x === "" || isNaN(Number(x))) return "—";
-    return (Number(x) * 100).toFixed(2) + "\u00a2";
-  }
-  function fmtTs(ts) {
-    if (!ts) return "—";
-    var d = new Date(ts * 1000);
-    return d.toLocaleTimeString("en-GB");
-  }
-  function apiUrl(ticker, series) {
-    var path = series
-      ? "/series/" + encodeURIComponent(series) + "/markets/" + encodeURIComponent(ticker)
-      : "/markets/" + encodeURIComponent(ticker);
-    return "https://external-api.demo.kalshi.co/trade-api/v2" + path;
+  function finite(value) {
+    if (value === null || value === undefined || value === "") return null;
+    var n = Number(value);
+    return Number.isFinite(n) ? n : null;
   }
 
-  /* ---------- swing detection ---------- */
-  KD.onSample = function (m, sample) {
-    if (!state.enabled || !m) return;
-    var cur = sample.price;
-    if (cur === null || cur === undefined) return;
-    var prev = state.lastPrice[m.ticker];
-    if (prev && prev.price !== null && prev.price !== undefined) {
-      var change = cur - prev.price;
-      if (Math.abs(change) >= SWING) {
-        pushAlert(m.ticker, m.title, m.topic, m.series_ticker, prev.price, cur);
-      }
+  function validBinaryPrice(value) {
+    return value !== null && value >= 0 && value <= 1;
+  }
+
+  function observedPrice(market) {
+    var bid = finite(market.yb);
+    var ask = finite(market.ya);
+    if (validBinaryPrice(bid) && validBinaryPrice(ask) && bid <= ask) {
+      return { price: (bid + ask) / 2, basis: "YES quote midpoint" };
     }
-    state.lastPrice[m.ticker] = { price: cur, ts: sample.t };
-  };
+    var last = finite(market.last);
+    if (validBinaryPrice(last)) return { price: last, basis: "last traded price" };
+    return null;
+  }
 
-  KD.onMarkets = function (markets) {
-    // Seed lastPrice from full market rows on each scan (no extra API calls).
-    var now = Math.floor(Date.now() / 1000);
-    (markets || []).forEach(function (m) {
-      if (m.last !== null && m.last !== undefined && !state.lastPrice[m.ticker]) {
-        state.lastPrice[m.ticker] = { price: m.last, ts: now };
-      }
-    });
-  };
-
-  function pushAlert(ticker, title, topic, series, oldP, newP) {
-    var change = Number(newP) - Number(oldP);
-    var dir = change > 0 ? "up" : change < 0 ? "down" : "flat";
-    var alert = {
-      id: "a" + Date.now() + Math.random().toString(36).slice(2, 6),
-      ts: Math.floor(Date.now() / 1000),
-      ticker: ticker,
-      title: title || ticker,
-      topic: topic || "",
-      series: series || "",
-      oldPrice: Number(oldP),
-      newPrice: Number(newP),
-      change: change,
-      dir: dir,
-      api: apiUrl(ticker, series)
+  function screen(market) {
+    var bid = finite(market.yb);
+    var ask = finite(market.ya);
+    var volume = finite(market.vol);
+    var validQuotes = validBinaryPrice(bid) && validBinaryPrice(ask) && bid <= ask;
+    var spread = validQuotes ? ask - bid : null;
+    var reason;
+    if (!validQuotes) reason = "valid YES bid/ask unavailable";
+    else if (spread > SCREEN_MAX_SPREAD + 1e-9) reason = "YES spread wider than 5¢";
+    else if (volume === null || volume <= 0) reason = "reported volume is zero or unavailable";
+    else reason = "10¢+ move, YES spread ≤5¢, reported volume >0";
+    return {
+      pass: validQuotes && spread <= SCREEN_MAX_SPREAD + 1e-9 &&
+        volume !== null && volume > 0,
+      spread: spread,
+      reason: reason
     };
-    // High-ROI placeholder heuristic: swing >= $0.10 AND the move is at least 10%
-    // of the prior price. NOT a real model — labeled, unverified, flagged F-alert-01.
-    var pct = Number(oldP) ? Math.abs(change) / Number(oldP) : 0;
-    alert.roiSignal = Math.abs(change) >= SWING && pct >= 0.10;
-    state.alerts.unshift(alert);
-    if (state.alerts.length > MAX_ALERTS) state.alerts.length = MAX_ALERTS;
-    try { localStorage.setItem(ALERT_KEY, JSON.stringify(state.alerts)); } catch (e) {}
-    render();
-    if (window.KalshiTrade && window.KalshiTrade.onSwingAlert) {
-      try { window.KalshiTrade.onSwingAlert(alert); } catch (e) { /* automation must not break alerts */ }
-    }
-    return alert;
   }
 
-  /* ---------- chat row selection ---------- */
-  KD.allRows = function () { return state.alerts; };
-  KD.roiRows = function () { return state.alerts.filter(function (a) { return a.roiSignal; }); };
-  KD.setFilter = function (v) { state.visible = v; render(); };
-  KD.clear = function () {
-    state.alerts = [];
-    try { localStorage.removeItem(ALERT_KEY); } catch (e) {}
-    render();
-  };
-  KD.toggle = function () { state.enabled = !state.enabled; render(); };
+  function observe(markets, timestampMs) {
+    var now = finite(timestampMs);
+    if (now === null) now = Date.now();
+    var emitted = [];
 
-  /* ---------- rendering (two scrolling chats) ---------- */
-  function alertRow(a) {
-    var cls = "alert " + (a.dir === "up" ? "up" : a.dir === "down" ? "down" : "flat");
-    var arrow = a.dir === "up" ? "\u25b2" : a.dir === "down" ? "\u25bc" : "\u25b6";
-    var dirLabel = a.dir === "up" ? "up" : a.dir === "down" ? "down" : "flat";
-    var roiBadge = a.roiSignal ? " <span class='roi'>&middot; high-ROI signal (heuristic)</span>" : "";
-    return "<tr class='" + esc(cls) + "'><td class='mono small muted'>" + fmtTs(a.ts) + "</td>" +
-      "<td><span class='pill topic'>" + esc(a.topic) + "</span></td>" +
-      "<td class='mono'>" + esc(a.ticker) + "</td>" +
-      "<td>" + esc(a.title) + "</td>" +
-      "<td class='num'>" + cents(a.oldPrice) + " &rarr; " + cents(a.newPrice) + "</td>" +
-      "<td class='num " + esc(dirLabel) + "'>" + arrow + " " + cents(Math.abs(a.change)) + "</td>" +
-      "<td><a class='src' href='" + esc(a.api) + "' target='_blank' rel='noopener'>market API</a>" + esc(roiBadge) + "</td></tr>";
-  }
-  function renderPanel(el, rows, label, emptyHint) {
-    if (!el) return;
-    var rowsHtml = rows.map(alertRow).join("");
-    var empty = rows.length ? "" : "<tr><td colspan='7' class='muted'>No " + label + " swing alerts yet. " + emptyHint + "</td></tr>";
-    el.innerHTML =
-      "<table class='alerts'><thead><tr><th>Time</th><th>Topic</th><th>Ticker</th><th>Event</th>" +
-      "<th>Price move</th><th>Swing</th><th>Source</th></tr></thead><tbody>" + rowsHtml + empty + "</tbody></table>";
-  }
-  function render() {
-    renderPanel(document.getElementById("alertsAll"), KD.allRows(), "all",
-      "Swing a tracked market price by >= $0.10 to see alerts here.");
-    renderPanel(document.getElementById("alertsROI"), KD.roiRows(), "high-ROI",
-      "The high-ROI chat applies a labeled placeholder rule — no real model is defined yet.");
-  }
+    (Array.isArray(markets) ? markets : []).forEach(function (market) {
+      if (!market || !market.ticker) return;
+      var ticker = String(market.ticker);
+      var current = observedPrice(market);
+      if (!current) {
+        // Do not compare across a gap where no valid price was observed.
+        delete previousByTicker[ticker];
+        return;
+      }
+      var previous = previousByTicker[ticker];
+      previousByTicker[ticker] = { price: current.price, basis: current.basis, at: now };
+      if (!previous || previous.basis !== current.basis) return;
 
-  /* public */
-  KD.renderAlerts = render;
+      var delta = current.price - previous.price;
+      if (Math.abs(delta) + 1e-9 < DELTA_THRESHOLD) return;
 
-  /* ---------- UI wiring ---------- */
-  function wireUI() {
-    var tabAll = document.getElementById("tabAll");
-    var tabROI = document.getElementById("tabROI");
-    var chatAll = document.getElementById("chatAll");
-    var chatROI = document.getElementById("chatROI");
-    var enabled = document.getElementById("alertsEnabled");
-    var clear = document.getElementById("clearAlertsBtn");
-    var countEl = document.getElementById("alertCount");
-    function setActive(tab) {
-      state.visible = tab.getAttribute("data-chat");
-      [tabAll, tabROI].forEach(function (t) {
-        if (t) { t.classList.toggle("active", t === tab); t.setAttribute("aria-pressed", String(t === tab)); }
+      var screened = screen(market);
+      var previousPrice = previous.price;
+      emitted.push({
+        id: ticker + "|" + now + "|" + previousPrice.toFixed(6) + "|" +
+          current.price.toFixed(6),
+        ticker: ticker,
+        eventTicker: market.event_ticker ? String(market.event_ticker) : "",
+        title: String(market.title || ticker),
+        topic: String(market.topic || "unclassified"),
+        previousPrice: previousPrice,
+        currentPrice: current.price,
+        delta: delta,
+        basis: current.basis,
+        elapsedSeconds: Math.max(0, (now - previous.at) / 1000),
+        observedAt: new Date(now).toISOString(),
+        yesBid: finite(market.yb),
+        yesAsk: finite(market.ya),
+        spread: screened.spread,
+        volume: finite(market.vol),
+        openInterest: finite(market.oi),
+        sourcePath: "/markets/" + encodeURIComponent(ticker),
+        screenPass: screened.pass,
+        screenReason: screened.reason
       });
-      if (chatAll) chatAll.style.display = tab === tabAll ? "" : "none";
-      if (chatROI) chatROI.style.display = tab === tabROI ? "" : "none";
-      render();
-    }
-    if (tabAll) tabAll.addEventListener("click", function () { setActive(tabAll); });
-    if (tabROI) tabROI.addEventListener("click", function () { setActive(tabROI); });
-    if (clear) clear.addEventListener("click", KD.clear);
-    if (enabled) {
-      enabled.addEventListener("change", function () { KD.toggle(); enabled.checked = state.enabled; });
-    }
-    function updateCount() {
-      if (countEl) countEl.textContent = state.alerts.length + " alert" +
-        (state.alerts.length === 1 ? "" : "s") + (state.enabled ? "" : " (paused)");
-    }
-    var _render = render;
-    render = function () { _render(); updateCount(); };
-    var first = tabAll || document.querySelector(".chat-tab.active");
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", function () { setActive(first); render(); });
-    } else {
-      setActive(first);
-      render();
+    });
+
+    return emitted;
+  }
+
+  function loadHistory() {
+    try {
+      if (!root.localStorage) return [];
+      var raw = root.localStorage.getItem(STORAGE_KEY);
+      var parsed = raw ? JSON.parse(raw) : [];
+      if (!Array.isArray(parsed)) return [];
+      return parsed.filter(function (entry) {
+        return entry && typeof entry.id === "string" &&
+          typeof entry.ticker === "string" && typeof entry.sourcePath === "string" &&
+          Number.isFinite(Number(entry.delta));
+      }).slice(0, HISTORY_LIMIT);
+    } catch (e) {
+      return [];
     }
   }
-  wireUI();
-  setInterval(render, 2000); // keep the chats current while the page is open
-})();
+
+  function persist() {
+    try {
+      if (root.localStorage) root.localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+    } catch (e) {
+      // The live in-memory feed still works if browser storage is unavailable.
+    }
+  }
+
+  function append(entries) {
+    var ids = Object.create(null);
+    history.forEach(function (entry) { ids[entry.id] = true; });
+    var fresh = (Array.isArray(entries) ? entries : []).filter(function (entry) {
+      if (!entry || typeof entry.id !== "string" || ids[entry.id]) return false;
+      ids[entry.id] = true;
+      return true;
+    });
+    if (fresh.length) {
+      history = fresh.concat(history).slice(0, HISTORY_LIMIT);
+      persist();
+    }
+    return history.slice();
+  }
+
+  function clearHistory() {
+    history = [];
+    try {
+      if (root.localStorage) root.localStorage.removeItem(STORAGE_KEY);
+    } catch (e) {
+      // In-memory history is still cleared.
+    }
+    return [];
+  }
+
+  function getHistory() {
+    return history.slice();
+  }
+
+  root.KalshiAlerts = {
+    threshold: DELTA_THRESHOLD,
+    screenMaxSpread: SCREEN_MAX_SPREAD,
+    observe: observe,
+    append: append,
+    history: getHistory,
+    clearHistory: clearHistory
+  };
+})(typeof window !== "undefined" ? window : globalThis);

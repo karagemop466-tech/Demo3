@@ -7,13 +7,16 @@
   "use strict";
   var K = window.KalshiDemo;
   var T = window.KalshiTrade;
+  var A = window.KalshiAlerts;
+  var P = window.KalshiPaperStrategies;
   var $ = function (id) { return document.getElementById(id); };
   var state = {
     seriesByTopic: {}, markets: [], selected: null,
     samples: {}, candles: [], orderbook: null, trades: [],
     windowSec: 3600, scanSec: 20, obSec: 10,
     timers: [], resolutions: [], fills: [],
-    connected: false, lastScan: null, errors: 0
+    connected: false, lastScan: null, errors: 0, scanning: false,
+    paperResolveCursor: 0, paperResolving: false
   };
   try { state.resolutions = JSON.parse(localStorage.getItem("kd_resolutions") || "[]"); }
   catch (e) { state.resolutions = []; }
@@ -78,7 +81,7 @@
       html += "<h3>" + K.esc(t.label) + " — " + list.length + " series matched</h3>";
       if (!list.length) {
         html += "<p class='muted'>No series matched the keywords. Discovery is keyword-based " +
-          "(see <a href='methodology.html'>Methodology</a>); add a series manually below.</p>";
+          "(see <a href='methodology.html'>Methodology</a>); no out-of-scope series are added.</p>";
         return;
       }
       html += "<table><thead><tr><th>Series ticker</th><th>Title</th>" +
@@ -100,10 +103,13 @@
 
   /* ---------- 2. Market scan + ranking ---------- */
   async function scan() {
+    if (state.scanning) return;
+    state.scanning = true;
     try {
       var markets = [];
+      var failedSeries = 0;
       var depthSel = $("scanDepth");
-      var depth = depthSel ? Number(depthSel.value) : 15; // 0 = all
+      var depth = depthSel ? Number(depthSel.value) : 15; // 0 = all matched series
       var topics = Object.keys(state.seriesByTopic);
       for (var i = 0; i < topics.length; i++) {
         var topic = topics[i];
@@ -114,34 +120,51 @@
             var page = await K.apiGetAll("/markets",
               { series_ticker: series[j].ticker, status: "open", limit: 200 }, 3);
             page.forEach(function (m) { m._topic = topic; markets.push(m); });
-          } catch (e) { /* one series failing must not kill the scan */ }
+          } catch (e) {
+            failedSeries++;
+          }
         }
       }
-      var manual = (($("manualSeries") || {}).value || "").split(",").map(function (s) {
-        return s.trim();
-      }).filter(Boolean);
-      for (var k = 0; k < manual.length; k++) {
-        try {
-          var mp = await K.apiGetAll("/markets",
-            { series_ticker: manual[k], status: "open", limit: 200 }, 2);
-          mp.forEach(function (m) { m._topic = m._topic || "manual"; markets.push(m); });
-        } catch (e) { /* ignore */ }
-      }
-      state.markets = markets.map(marketRow);
+      var seen = Object.create(null);
+      state.markets = markets.map(marketRow).filter(function (market) {
+        if (!market.ticker || seen[market.ticker]) return false;
+        seen[market.ticker] = true;
+        return true;
+      });
       state.markets.sort(function (a, b) {
         return (b.volDollars || 0) - (a.volDollars || 0) ||
           (b.oiDollars || 0) - (a.oiDollars || 0);
       });
       state.lastScan = Date.now();
+      var newAlerts = A ? A.observe(state.markets, state.lastScan) : [];
+      if (A && newAlerts.length) A.append(newAlerts);
+      if (P) {
+        P.processAlerts(newAlerts);
+        P.markToMarket(state.markets, state.lastScan);
+        renderPaperStrategy();
+      }
+      renderSwingAlerts();
       renderRanking();
       recordSamples();
       trackResolutions();
       if (window.KD && window.KD.onMarkets) { try { window.KD.onMarkets(state.markets); } catch (e) { /* alert sink must not break the scan */ } }
       var capNote = depth > 0 ? ("top " + depth + " matched series per topic") : "ALL matched series";
+      var partialNote = failedSeries ? "; partial scan — " + failedSeries +
+        " series request(s) failed" : "";
       $("scanStatus").textContent = "Last scan: " + new Date().toLocaleTimeString() +
-        " — " + state.markets.length + " open markets (coverage: " + capNote + ").";
+        " — " + state.markets.length + " open markets (coverage: " + capNote +")." + partialNote;
+      if (A && $("alertStatus")) {
+        $("alertStatus").textContent = newAlerts.length ?
+          (newAlerts.length + " new swing alert(s) · " + new Date().toLocaleTimeString()) :
+          ("Monitoring scanned markets · " + new Date().toLocaleTimeString());
+        $("alertStatus").className = "pill" + (failedSeries ? " warn" : "");
+      }
       banner("", "");
-    } catch (e) { showError(e); }
+    } catch (e) {
+      showError(e);
+    } finally {
+      state.scanning = false;
+    }
   }
   function renderRanking() {
     if (!$("rankingTable")) return;
@@ -182,6 +205,155 @@
         b.addEventListener("click", function () { selectMarket(b.getAttribute("data-ticker")); });
       });
   }
+  function elapsedLabel(seconds) {
+    var n = Number(seconds);
+    if (!Number.isFinite(n) || n < 0) return "between observations";
+    if (n < 60) return Math.max(1, Math.round(n)) + " sec";
+    var mins = Math.floor(n / 60);
+    var secs = Math.round(n % 60);
+    return mins + " min " + secs + " sec";
+  }
+  function renderAlertMessage(alert, candidate) {
+    var date = new Date(alert.observedAt);
+    var time = isNaN(date.getTime()) ? "time unavailable" : date.toLocaleTimeString();
+    var direction = Number(alert.delta) >= 0 ? "up" : "down";
+    var text = Number(alert.delta) >= 0 ? "+" + K.cents(alert.delta) : K.cents(alert.delta);
+    var priceDescription = K.esc(alert.basis || "observed price");
+    var quote = "YES bid/ask: " + K.cents(alert.yesBid) + " / " + K.cents(alert.yesAsk);
+    var screenText = candidate ?
+      "Heuristic screen passed: " + alert.screenReason :
+      "Heuristic screen not passed: " + alert.screenReason;
+    return "<article class='alert-message alert-" + direction + "'>" +
+      "<div class='alert-meta'><time>" + K.esc(time) + "</time> " +
+      "<span class='pill'>" + K.esc(alert.topic || "unclassified") + "</span> " +
+      "<span class='pill " + (direction === "up" ? "" : "warn") + "'>" +
+      K.esc(text) + "</span></div>" +
+      "<p class='alert-title'>" + K.esc(alert.title || alert.ticker) +
+      " <span class='mono muted'>" + K.esc(alert.ticker) + "</span></p>" +
+      "<p class='small'>" + priceDescription + " moved from <strong>" +
+      K.cents(alert.previousPrice) + "</strong> to <strong>" +
+      K.cents(alert.currentPrice) + "</strong> (" + K.esc(text) + ") over " +
+      K.esc(elapsedLabel(alert.elapsedSeconds)) + ".</p>" +
+      "<p class='small muted'>" + K.esc(quote) + " · Volume " +
+      K.num(alert.volume, 2) + " contracts · Open interest " +
+      K.num(alert.openInterest, 2) + ".</p>" +
+      "<p class='small " + (candidate ? "candidate-note" : "muted") + "'>" +
+      K.esc(screenText) + ". Cause is unverified; no external news attribution is provided.</p>" +
+      "<p class='small'>Source: " +
+      K.srcLink("/markets/" + encodeURIComponent(alert.ticker), "official Kalshi market record") +
+      "</p></article>";
+  }
+  function renderSwingAlerts() {
+    if (!A || !$("allAlerts") || !$("roiAlerts")) return;
+    var history = A.history();
+    var candidates = history.filter(function (entry) { return !!entry.screenPass; });
+    function renderFeed(target, list, candidate) {
+      if (!list.length) {
+        target.innerHTML = "<p class='alert-empty muted'>No qualifying price swings yet. " +
+          "The first complete scan seeds the baseline; later scans alert at ≥$0.10.</p>";
+        return;
+      }
+      target.innerHTML = list.slice(0, 100).map(function (entry) {
+        return renderAlertMessage(entry, candidate);
+      }).join("");
+    }
+    renderFeed($("allAlerts"), history, false);
+    renderFeed($("roiAlerts"), candidates, true);
+    if ($("allAlertCount")) $("allAlertCount").textContent = String(history.length);
+    if ($("roiAlertCount")) $("roiAlertCount").textContent = String(candidates.length);
+  }
+
+  function renderPaperStrategy() {
+    var summaryEl = $("paperStrategySummary");
+    var tableEl = $("paperStrategyTable");
+    if (!P || !summaryEl || !tableEl) return;
+    var totals = P.stats();
+    var html = "<div class='paper-summary-grid'>" +
+      "<div class='paper-stat'><span>Paper positions</span><strong>" + totals.trades +
+      "</strong></div><div class='paper-stat'><span>Open</span><strong>" + totals.open +
+      "</strong></div><div class='paper-stat'><span>Settled</span><strong>" + totals.settled +
+      "</strong></div><div class='paper-stat'><span>Gross realized P&amp;L</span><strong>" +
+      K.money(totals.realizedGrossPnl) + "</strong></div><div class='paper-stat'><span>Gross unrealized mark</span><strong>" +
+      K.money(totals.unrealizedGrossPnl) + "</strong></div></div>";
+    html += "<div class='paper-strategy-grid'>";
+    totals.byStrategy.forEach(function (row) {
+      html += "<div class='paper-strategy-card'><strong>" + K.esc(row.name) + "</strong>" +
+        "<p class='small muted'>" + K.esc(row.trigger) + "</p><p>Trades: " + row.trades +
+        " · Open: " + row.open + " · Settled: " + row.settled + "</p><p>Wins / losses: " +
+        row.wins + " / " + row.losses + "</p><p>Gross realized: <strong>" +
+        K.money(row.realizedGrossPnl) + "</strong> · Gross unrealized: <strong>" +
+        K.money(row.unrealizedGrossPnl) + "</strong></p></div>";
+    });
+    html += "</div>";
+    summaryEl.innerHTML = html;
+
+    var positions = P.list();
+    var table = "<div class='tablewrap'><table><thead><tr><th>Strategy</th><th>Topic</th>" +
+      "<th>Market</th><th>Signal</th><th class='num'>Entry YES ask</th>" +
+      "<th class='num'>Current mark</th><th>Status / result</th><th class='num'>Gross P&amp;L</th>" +
+      "<th>Source</th></tr></thead><tbody>";
+    if (!positions.length) {
+      table += "<tr><td colspan='9' class='muted'>No paper positions yet. The automatic simulator waits for a qualifying alert. " +
+        K.srcLink("/markets", "official markets endpoint") + "</td></tr>";
+    }
+    positions.forEach(function (position) {
+      var pnl = position.status === "settled" ? position.grossPnl :
+        position.unrealizedGrossPnl;
+      var pnlLabel = pnl === null || pnl === undefined ? "—" : K.money(pnl);
+      var stateLabel = position.status === "settled" ?
+        "settled · " + String(position.result || "").toUpperCase() : "open · awaiting resolution";
+      var marketSource = "/markets/" + encodeURIComponent(position.ticker);
+      table += "<tr><td>" + K.esc(position.strategyName) + "</td><td>" +
+        K.esc(position.topic) + "</td><td><span class='mono'>" +
+        K.esc(position.title) + "<br>" + K.esc(position.ticker) + "</span></td><td>" +
+        K.esc(position.signal) + "</td><td class='num'>" + K.cents(position.entryPrice) +
+        "</td><td class='num'>" + (position.markPrice === null ? "—" :
+        K.cents(position.markPrice) + " <span class='small muted'>" +
+        K.esc(position.markBasis || "") + "</span>") + "</td><td>" +
+        K.esc(stateLabel) + "</td><td class='num'>" + K.esc(pnlLabel) +
+        "</td><td>" + K.srcLink(marketSource,
+          position.status === "settled" ? "settlement market record" : "market record") +
+        "</td></tr>";
+    });
+    table += "</tbody></table></div><p class='small muted'>Settled gross P&amp;L uses the official $1 winning-contract payout; fees are not deducted. Open P&amp;L is only a mark, not a realized result. " +
+      "Source: <a href='https://docs.kalshi.com/getting_started/market_settlement' target='_blank' rel='noopener'>Kalshi market settlement</a>.</p>";
+    tableEl.innerHTML = table;
+  }
+
+  async function refreshPaperSettlements() {
+    if (!P || state.paperResolving || !$("paperStrategyTable")) return;
+    var tickers = P.openTickers();
+    if (!tickers.length) {
+      if ($("paperResolutionStatus")) $("paperResolutionStatus").textContent = "No open paper positions to resolve";
+      return;
+    }
+    state.paperResolving = true;
+    var batchSize = Math.min(5, tickers.length);
+    var start = state.paperResolveCursor % tickers.length;
+    var batch = [];
+    for (var i = 0; i < batchSize; i++) batch.push(tickers[(start + i) % tickers.length]);
+    state.paperResolveCursor = (start + batchSize) % tickers.length;
+    var resolved = 0;
+    try {
+      for (var j = 0; j < batch.length; j++) {
+        try {
+          var response = await K.apiGet("/markets/" + encodeURIComponent(batch[j]), {});
+          var market = response.market || {};
+          resolved += P.settle(batch[j], market, Date.now());
+        } catch (e) {
+          // Keep the position open and retry during a later rotating check.
+        }
+      }
+    } finally {
+      state.paperResolving = false;
+    }
+    if ($("paperResolutionStatus")) {
+      $("paperResolutionStatus").textContent = "Checked " + batch.length +
+        " open market(s) · " + resolved + " resolved · " + new Date().toLocaleTimeString();
+    }
+    renderPaperStrategy();
+  }
+
   function recordSamples() {
     var now = Math.floor(Date.now() / 1000);
     state.markets.forEach(function (m) {
@@ -548,6 +720,9 @@
         if (state.selected) { recordSamples(); loadCandles().then(drawChart); }
       }, 15000)
     ];
+    if ($("paperStrategyTable")) {
+      state.timers.push(setInterval(refreshPaperSettlements, 60000));
+    }
   }
   async function init() {
     try {
@@ -579,6 +754,17 @@
       state.resolutions = []; localStorage.removeItem("kd_resolutions");
       renderResolutions();
     });
+    if ($("clearSwingAlerts") && A) $("clearSwingAlerts").addEventListener("click", function () {
+      A.clearHistory();
+      renderSwingAlerts();
+      if ($("alertStatus")) $("alertStatus").textContent = "Alert history cleared on this browser";
+    });
+    if ($("clearPaperStrategy") && P) $("clearPaperStrategy").addEventListener("click", function () {
+      P.clear();
+      renderPaperStrategy();
+      if ($("paperResolutionStatus")) $("paperResolutionStatus").textContent =
+        "Local paper results cleared; automatic simulation remains enabled";
+    });
     Array.prototype.forEach.call(document.querySelectorAll("[data-window]"),
       function (b) {
         b.addEventListener("click", function () {
@@ -599,12 +785,15 @@
       }
     }
     renderResolutions();
+    renderSwingAlerts();
+    renderPaperStrategy();
     loadSeededResolutions();
     startTimers();
     if ($("discoveryTable")) {
       try {
         await discover();
         await scan();
+        if ($("paperStrategyTable")) refreshPaperSettlements();
       } catch (e) { showError(e); }
     }
   }
