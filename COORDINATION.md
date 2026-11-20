@@ -384,6 +384,35 @@ Progress log:
   ROI model; trade.js strategy selection). `node --check` OK; `verify_root_site.py` 0 failures.
 - 2026-11-20: T5 in progress — re-verification, PR, merge, Pages confirmation.
 
+### Session 5bc43641 irregularities
+
+- F-5B-01: alert rows list the series' official Kalshi `settlement_sources` website links. These are
+  Kalshi's official settlement/governing-body sources for the series; they are presented as related
+  context and are **not** verified as the cause of any price swing. Labeled in the UI and here.
+- F-5B-02: the "High ROI model" chat uses a documented, transparent heuristic score
+  (0.4·swing size + 0.3·relative move + 0.3·liquidity, signal at ≥ 0.5). **No trained model exists
+  in this repo**, so it is labeled an unverified model heuristic everywhere and is never presented as
+  verified ROI or investment advice.
+- F-trade-01 (inherited, unchanged): no live demo credentials exist in this environment, so automated
+  trades run in labeled paper/SIMULATED mode only; nothing is sent to Kalshi.
+
+### Session 5bc43641 verification log
+
+- 2026-11-20: Official sources re-fetched and matched line by line against the live demo API and
+  docs.kalshi.com: `GET /series` (`settlement_sources: [{name,url}]` — documented on Get Series List),
+  `GET /series/KXPGATOUR` (Fox Sports / ESPN / PGATOUR), `GET /markets?series_ticker=KXPGATOUR`
+  (field names `last_price_dollars`, `yes_bid_dollars`, `yes_ask_dollars`, `volume_fp`,
+  `open_interest_fp`, `notional_value_dollars`, `event_ticker`, `status:"active"`),
+  `GET /events/KXPGATOUR-THRC26` (event `settlement_sources` + nested markets),
+  `GET /series/{s}/markets/{t}/candlesticks` (path + OHLC envelope `price.close_dollars`,
+  `yes_bid.close_dollars`, `yes_ask.close_dollars`, `period_interval` 1/60/1440), `GET /markets/{t}`,
+  and the demo_env endpoint table. Every field the alert engine uses traces to one of these.
+- 2026-11-20: `node --check` OK on all root assets; `npm test` 29/29 (26 prior + 3 new alert/strategy
+  tests); `scripts/verify_root_site.py` 0 failures; `verify_site.py`, `tracker_check.py`,
+  `check_site.py`, `npm run check` all pass.
+- Unsafe URLs in `settlement_sources` (e.g. `javascript:`) are dropped by `safeHttps` and never
+  rendered (mirrors the demo-desk policy tested in `tests/core.test.js`).
+
 ## Task board — session 6ebc1cb7 (live alert chat + automated trades + final integration)
 
 Branch: `arena/6ebc1cb7-demo3` (branched from `b3b2b23`, same as `main` HEAD). Session ID: `6ebc1cb7`.
