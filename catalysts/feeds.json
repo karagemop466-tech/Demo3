@@ -1,0 +1,157 @@
+{
+  "_comment": "Candidate-catalyst feed allowlist. Every entry is PROBE-GATED: catalysts/scan.py parses each feed at run time and only uses items from a feed that actually returned items in that same run; per-feed HTTP status, item count and error text are published in catalysts/data/feed_health.json. A feed that fails contributes nothing and is shown as failed on the site — no item is ever attributed from memory, inference or a cached assumption.",
+  "_verification_policy": "The build sandbox for this repository has no egress to news hosts (only github.com, npmjs, pypi and pythonhosted are allowed), so these feed URLs could not be verified locally. Each row therefore carries status 'pending_ci_probe' plus the publisher homepage a reviewer can open manually. The scheduled GitHub Actions run (which does have egress) records the real probe result into feed_health.json, and the site shows that result per feed. Feeds that never return items are flagged for removal (F-cat-03).",
+  "_sources_are_candidates": "Items found here are candidate catalysts: a headline published inside the swing window that shares keywords with the market title. Correlation only, never a proven cause.",
+  "generated_by": "session 22661044",
+  "updated_at": "2026-11-20T19:40:00Z",
+  "feeds": [
+    {
+      "name": "AP News (hub RSS is not published; homepage listed for manual review)",
+      "url": "https://apnews.com/hub/ap-top-news/rss",
+      "homepage": "https://apnews.com/",
+      "topics": ["elections", "gas", "culture", "golf", "crypto"],
+      "enabled": true,
+      "status": "pending_ci_probe",
+      "note": "AP is one of the settlement sources the Kalshi API itself lists for many election/finance series (see a series' settlement_sources field), which is why it is on the allowlist."
+    },
+    {
+      "name": "Reuters",
+      "url": "https://www.reuters.com/arc/outboundfeeds/rss/category/business/?outputType=xml",
+      "homepage": "https://www.reuters.com/",
+      "topics": ["crypto", "gas", "elections"],
+      "enabled": true,
+      "status": "pending_ci_probe"
+    },
+    {
+      "name": "BBC News — World",
+      "url": "https://feeds.bbci.co.uk/news/world/rss.xml",
+      "homepage": "https://www.bbc.com/news/world",
+      "topics": ["elections", "culture"],
+      "enabled": true,
+      "status": "pending_ci_probe"
+    },
+    {
+      "name": "BBC News — Business",
+      "url": "https://feeds.bbci.co.uk/news/business/rss.xml",
+      "homepage": "https://www.bbc.com/news/business",
+      "topics": ["gas", "crypto"],
+      "enabled": true,
+      "status": "pending_ci_probe"
+    },
+    {
+      "name": "BBC News — Entertainment & Arts",
+      "url": "https://feeds.bbci.co.uk/news/entertainment_and_arts/rss.xml",
+      "homepage": "https://www.bbc.com/news/entertainment_and_arts",
+      "topics": ["culture"],
+      "enabled": true,
+      "status": "pending_ci_probe"
+    },
+    {
+      "name": "NPR — News Topics",
+      "url": "https://feeds.npr.org/1001/rss.xml",
+      "homepage": "https://www.npr.org/sections/news/",
+      "topics": ["elections", "gas", "culture"],
+      "enabled": true,
+      "status": "pending_ci_probe"
+    },
+    {
+      "name": "NPR — Politics",
+      "url": "https://feeds.npr.org/1013/rss.xml",
+      "homepage": "https://www.npr.org/sections/politics/",
+      "topics": ["elections"],
+      "enabled": true,
+      "status": "pending_ci_probe"
+    },
+    {
+      "name": "NPR — Business",
+      "url": "https://feeds.npr.org/1006/rss.xml",
+      "homepage": "https://www.npr.org/sections/business/",
+      "topics": ["gas", "crypto"],
+      "enabled": true,
+      "status": "pending_ci_probe"
+    },
+    {
+      "name": "CoinDesk",
+      "url": "https://www.coindesk.com/arc/outboundfeeds/rss/",
+      "homepage": "https://www.coindesk.com/",
+      "topics": ["crypto"],
+      "enabled": true,
+      "status": "pending_ci_probe"
+    },
+    {
+      "name": "The Block",
+      "url": "https://www.theblock.co/rss.xml",
+      "homepage": "https://www.theblock.co/",
+      "topics": ["crypto"],
+      "enabled": true,
+      "status": "pending_ci_probe"
+    },
+    {
+      "name": "ESPN — Sports Top News",
+      "url": "https://www.espn.com/espn/rss/news",
+      "homepage": "https://www.espn.com/",
+      "topics": ["golf", "culture"],
+      "enabled": true,
+      "status": "pending_ci_probe"
+    },
+    {
+      "name": "PGA Tour — News",
+      "url": "https://www.pgatour.com/en/news/rss",
+      "homepage": "https://www.pgatour.com/",
+      "topics": ["golf"],
+      "enabled": true,
+      "status": "pending_ci_probe"
+    },
+    {
+      "name": "Golf Digest",
+      "url": "https://www.golfdigest.com/rss.xml",
+      "homepage": "https://www.golfdigest.com/",
+      "topics": ["golf"],
+      "enabled": true,
+      "status": "pending_ci_probe"
+    },
+    {
+      "name": "AAA — Gas Prices (publisher page; no RSS published)",
+      "url": "https://gasprices.aaa.com/feed/",
+      "homepage": "https://gasprices.aaa.com/",
+      "topics": ["gas"],
+      "enabled": true,
+      "status": "pending_ci_probe",
+      "note": "AAA is the underlying-price publisher for the KXAAAGAS*/KXAAA* state gas series; the /feed/ path is probed like every other entry and disabled automatically if it returns nothing."
+    },
+    {
+      "name": "U.S. EIA — Petroleum (official government statistics feed)",
+      "url": "https://www.eia.gov/feed/petroleum.xml",
+      "homepage": "https://www.eia.gov/petroleum/gasdiesel/",
+      "topics": ["gas"],
+      "enabled": true,
+      "status": "pending_ci_probe",
+      "note": "Official EIA weekly retail gasoline data page; the feed path is probe-gated like every other entry."
+    },
+    {
+      "name": "The Guardian — World",
+      "url": "https://www.theguardian.com/world/rss",
+      "homepage": "https://www.theguardian.com/world",
+      "topics": ["elections", "culture"],
+      "enabled": true,
+      "status": "pending_ci_probe"
+    },
+    {
+      "name": "Variety",
+      "url": "https://variety.com/feed/",
+      "homepage": "https://variety.com/",
+      "topics": ["culture"],
+      "enabled": true,
+      "status": "pending_ci_probe"
+    },
+    {
+      "name": "Google News RSS (aggregator) — DISABLED",
+      "url": "https://news.google.com/rss/search",
+      "homepage": "https://news.google.com/",
+      "topics": [],
+      "enabled": false,
+      "status": "not_used",
+      "note": "Kept disabled on purpose: item links are redirect URLs through news.google.com rather than the publisher's own address, which would break the 'website link' requirement's auditability. Reviewers can enable it in this file."
+    }
+  ]
+}

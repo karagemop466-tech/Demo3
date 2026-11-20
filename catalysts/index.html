@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Swing &amp; catalyst ledger — Kalshi Demo Tracker</title>
+<meta name="description" content="Live price swings of >= $0.10 on Kalshi demo events in the five tracked topics, with candidate catalyst links, resolution results and per-row official sources.">
+<link rel="stylesheet" href="assets/catalysts.css">
+</head>
+<body>
+<header class="top"><div class="wrap"><nav class="main" aria-label="Site">
+<a class="brand" href="../index.html">Kalshi Demo Tracker</a>
+<a href="../index.html">Home</a>
+<a href="../dashboard.html">Live dashboard</a>
+<a href="index.html" class="active">Swing &amp; catalysts</a>
+<a href="../gas-prices.html">Gas</a><a href="../elections.html">Elections</a>
+<a href="../culture.html">Culture</a><a href="../crypto.html">Crypto</a><a href="../golf.html">Golf</a>
+<a href="../portfolio.html">Portfolio</a><a href="../trades.html">Trades</a>
+<a href="../flagged.html">Flagged for review</a><a href="../sources.html">Sources</a>
+<a href="../methodology.html">Methodology</a>
+</nav></div></header>
+
+<main class="wrap">
+<h1>Swing &amp; catalyst ledger</h1>
+<p class="lede">Every market move of <strong>&ge; $0.10 per contract in either direction</strong>,
+in the five tracked topics, with the <strong>website links that may have caused it</strong> — a
+headline published inside the swing window that shares keywords with the market. Links are
+candidates, never claims of cause: Kalshi's API exposes no news field, so
+<a href="#method">the matching rule is published in full</a>. Each row links the exact official
+API record it came from; anything the API did not return is blank and flagged, never filled in.</p>
+
+<div id="banner" class="banner" role="status" hidden></div>
+
+<section class="card" id="statusCard" aria-live="polite">
+  <h2>Run status</h2>
+  <div class="chips" id="statusChips"><span class="chip">loading…</span></div>
+  <p class="small muted" id="statusNote"></p>
+  <details id="lastRunBox" hidden><summary class="small muted">Pipeline run note
+  (<span class="mono">catalysts/data/last_run.txt</span> — written by the scheduled job on every
+  run, success or failure)</summary><pre class="lastrun" id="lastRun"></pre></details>
+</section>
+
+<section class="card" id="watchCard">
+  <h2>Live watch</h2>
+  <p class="small muted">The ledger below is a committed snapshot. Turn the watch on to re-poll the
+  same markets straight from the demo API in this browser
+  (<span class="mono">GET /markets?tickers=…</span>, no key needed) — new samples extend the chart,
+  fire new alerts at the same &ge; $0.10 rule, and stop tracking a market once the API reports it
+  settled with a yes/no result.</p>
+  <div class="controls">
+    <label><input type="checkbox" id="watchToggle"> Poll live in this browser</label>
+    <label>Every <select id="pollEvery">
+      <option value="15">15 s</option><option value="30" selected>30 s</option>
+      <option value="60">60 s</option><option value="300">5 min</option>
+    </select></label>
+    <button class="btn" id="pollNow">Poll once now</button>
+    <span class="pill" id="watchState">idle</span>
+    <span class="small muted" id="watchLog"></span>
+  </div>
+  <div id="watchAlerts" class="alerts"></div>
+</section>
+
+<section class="card" id="filtersCard">
+  <h2>Filter the ledger</h2>
+  <div class="controls">
+    <span class="lbl">Topic</span>
+    <div class="seg" id="topicFilter" role="group" aria-label="Topic filter">
+      <button data-topic="all" class="on">All</button>
+      <button data-topic="gas">Gas prices</button>
+      <button data-topic="elections">Elections</button>
+      <button data-topic="culture">Culture</button>
+      <button data-topic="crypto">Crypto</button>
+      <button data-topic="golf">Golf</button>
+      <button data-topic="other">Other</button>
+    </div>
+    <span class="lbl">Direction</span>
+    <div class="seg" id="dirFilter" role="group" aria-label="Direction filter">
+      <button data-dir="all" class="on">Both</button>
+      <button data-dir="up">Up</button>
+      <button data-dir="down">Down</button>
+    </div>
+    <span class="lbl">Links</span>
+    <div class="seg" id="linkFilter" role="group" aria-label="Catalyst link filter">
+      <button data-link="all" class="on">All swings</button>
+      <button data-link="with">With candidate link</button>
+      <button data-link="without">No link found</button>
+    </div>
+    <span class="pill" id="rowCount"></span>
+  </div>
+</section>
+
+<section class="card" id="chartCard">
+  <h2>Price chart <span class="small muted">— select a row in the ledger</span></h2>
+  <p class="small muted" id="chartTitle">No market selected.</p>
+  <div class="controls">
+    <span class="lbl">X axis</span>
+    <div class="seg" id="windowPick" role="group" aria-label="Chart time window">
+      <button data-window="60">1 min</button>
+      <button data-window="300">5 min</button>
+      <button data-window="1800" class="on">30 min</button>
+      <button data-window="7200">2 h</button>
+      <button data-window="21600">6 h</button>
+      <button data-window="86400">24 h</button>
+      <button data-window="604800">7 d</button>
+    </div>
+    <button class="btn secondary" id="candlesBtn">Load 1-minute candles</button>
+    <span class="pill" id="chartState"></span>
+  </div>
+  <canvas id="priceChart" height="280" aria-label="Contract price over time, with swing markers"></canvas>
+  <p class="small muted">X axis: time (labels switch between seconds, minutes and hours with the
+  chosen window). Y axis: contract price in cents. Triangles mark a logged &ge; $0.10 swing; click
+  one (or hover) to see its candidate catalyst links below the chart.
+  <span class="mono" id="chartSource"></span></p>
+  <div id="chartCatalysts"></div>
+  <h3>Liquidity at the touch (from the last live poll or the committed orderbook snapshot)</h3>
+  <div id="bookBox" class="small muted">Select a market to see contracts available at each price.</div>
+</section>
+
+<section class="card" id="ledgerCard">
+  <h2>Swing ledger</h2>
+  <p class="small muted">Newest first. Columns marked <span class="flag">—</span> are blank because
+  the source did not report a value; they are never estimated. Threshold
+  <span class="mono" id="thresholdLabel">&ge; $0.10</span>.</p>
+  <div class="tablewrap">
+    <table id="ledger">
+      <thead><tr>
+        <th>Topic</th><th>Market</th><th>Move</th><th>From → To</th>
+        <th>Resolution</th><th>Live price</th><th>Candidate catalyst links</th><th>Sources</th>
+      </tr></thead>
+      <tbody><tr><td colspan="8" class="muted">Loading snapshot…</td></tr></tbody>
+    </table>
+  </div>
+</section>
+
+<section class="card" id="strategyCard">
+  <h2>Simulated strategy study</h2>
+  <p class="small muted">The two automated paper strategies below are scored on the swings in the
+  ledger: the entry is the trade print that triggered the alert, and the exit is either the payout
+  the API published when the market resolved, or the next recorded sample. Everything is
+  <strong>gross of fees, spread and slippage</strong> (the public API returns no fee estimate for a
+  hypothetical order, so none is assumed) and <strong>no order was sent</strong>. A category with too
+  few observations is published but marked <em>not evaluable</em> — no expectancy claim is made on a
+  two-trade sample. <span class="mono" id="strategyMin"></span></p>
+  <div class="tablewrap">
+    <table id="strategies">
+      <thead><tr><th>Strategy</th><th>Category</th><th>Trades</th><th>Win / loss / flat</th>
+      <th>Mean $ / contract</th><th>Net $ / contract</th><th>Verdict</th><th>Audit</th></tr></thead>
+      <tbody><tr><td colspan="8" class="muted">No strategy snapshot committed yet.</td></tr></tbody>
+    </table>
+  </div>
+  <p class="small muted" id="strategyNote"></p>
+  <h3>Alert-rule study: what the &ge; $0.10 alert would have done (no order is ever sent)</h3>
+  <p class="small muted">Automated paper positions fired by the same &ge; $0.10 alert and closed by
+  the rules in the table above. This is <strong>not</strong> the site's account ledger — that is the
+  paper desk (<a href="../paper-desk/index.html">Simulated Paper Desk</a>, written by
+  <span class="mono">trading/paper_engine.py</span> into <span class="mono">data/paper/</span>, with
+  <a href="../trades.html">Trades</a> and <a href="../portfolio.html">Portfolio</a>), which simulates
+  fills against live quotes and resting size for five strategies. This table answers the narrower
+  question the brief pairs with the alert rule: <em>does acting on a $0.10 jump pay, and what was
+  published when it fired</em>. It is persisted in the repository rather than one browser's storage, so
+  it survives a refresh and is auditable row by row; cells below the evaluation floor are shown for
+  transparency and are <em>not</em> a result.</p>
+  <div class="tablewrap">
+    <table id="books">
+      <thead><tr><th>Book</th><th>Positions</th><th>Bankroll → equity</th><th>Realized $</th>
+      <th>Win / loss</th><th>Max drawdown</th><th>By topic</th><th>Verdict</th></tr></thead>
+      <tbody><tr><td colspan="8" class="muted">No simulated book committed yet.</td></tr></tbody>
+    </table>
+  </div>
+  <canvas id="equityChart" height="150" aria-label="Simulated equity curve"></canvas>
+  <p class="small muted" id="equityNote"></p>
+</section>
+
+<section class="card" id="feedsCard">
+  <h2>Feed allowlist health</h2>
+  <p class="small muted">A news feed may only attach a link after the same run actually parsed items
+  from it. This table is the proof: per-feed HTTP status, item count and error text written by the
+  scheduled run (<span class="mono">catalysts/feeds.json</span> is the allowlist). Failed feeds
+  contribute nothing.</p>
+  <div class="tablewrap">
+    <table id="feeds">
+      <thead><tr><th>Feed</th><th>Topics</th><th>Items parsed</th><th>Status</th>
+      <th>Checked (UTC)</th><th>Probe URL</th></tr></thead>
+      <tbody><tr><td colspan="6" class="muted">No probe result committed yet.</td></tr></tbody>
+    </table>
+  </div>
+</section>
+
+<section class="card" id="endpointsCard">
+  <h2>Official endpoint probe</h2>
+  <p class="small muted">Status of every demo-API request this layer depends on, as observed by the
+  runner that collects the data.</p>
+  <div class="tablewrap">
+    <table id="endpoints">
+      <thead><tr><th>Request</th><th>Why</th><th>HTTP</th><th>Docs</th><th>URL</th></tr></thead>
+      <tbody><tr><td colspan="5" class="muted">No probe result committed yet.</td></tr></tbody>
+    </table>
+  </div>
+</section>
+
+<section class="card" id="method">
+  <h2>How a link becomes a "candidate catalyst"</h2>
+  <ol class="method">
+    <li><strong>Swing rule.</strong> Consecutive samples of the <em>same</em> market, in exact decimal
+    dollars: <span class="mono">|last − previous| ≥ 0.10</span> either direction. Float arithmetic is
+    never used, so nine-cent moves cannot round up into an alert.</li>
+    <li><strong>Window.</strong> A news item qualifies only if its published timestamp falls inside
+    <span class="mono">[swing start − pre, swing end + post]</span> (currently shown in the run status;
+    default 180 min before, 60 min after).</li>
+    <li><strong>Relevance.</strong> The item title must share at least two significant words with the
+    market/series title, or one word of six+ letters. The matched words are printed with every link so
+    you can judge the hit yourself.</li>
+    <li><strong>Provenance.</strong> Each feed item stores its own URL plus the feed URL that produced
+    it; each market row stores the exact API request its numbers came from. Official series
+    <span class="mono">settlement_sources</span> — the sources Kalshi itself cites for that series —
+    are listed separately, because they come back from the API rather than from a guess.</li>
+    <li><strong>Fail closed.</strong> No qualifying item ⇒ empty cell + reason
+    (<span class="mono">items_in_window_but_no_keyword_overlap</span> or
+    <span class="mono">no_feed_item_in_window</span>). No feed parsed ⇒
+    <span class="mono">no_feed_items_available</span>. Nothing is back-filled from memory.</li>
+  </ol>
+</section>
+
+<section class="card" id="flags">
+  <h2>Flagged for review (this page)</h2>
+  <p class="small muted">Also recorded in <a href="../COORDINATION.md">COORDINATION.md</a> for the
+  integration session to mirror into the site-wide
+  <a href="../flagged.html">Flagged for review</a> page.</p>
+  <ul class="flags">
+    <li><strong>F-cat-01 · detection depends on the sampling gap (high).</strong> A swing is only
+      visible if two samples straddle it, so a move that reverts between samples is missed. The
+      scheduled run and the in-browser watch set that gap; Kalshi's WebSocket feed would close it
+      entirely, but its handshake requires <span class="mono">KALSHI-ACCESS-*</span> headers a
+      browser cannot attach, so this layer stays on REST polling.
+      <a href="https://docs.kalshi.com/getting_started/quick_start_websockets" target="_blank" rel="noopener">WebSockets docs</a></li>
+    <li><strong>F-cat-02 · catalyst links are correlation, never cause (high).</strong> No Kalshi
+      field ties news to a price. The rule published above decides every link, and the demo
+      exchange is explicitly a testing environment whose prices may not track real markets.
+      <a href="https://docs.kalshi.com/getting_started/demo_env" target="_blank" rel="noopener">Demo environment docs</a></li>
+    <li><strong>F-cat-03 · the feed allowlist is unverified from this build environment (medium).</strong>
+      The sandbox that assembled this page can reach only github.com / npmjs.org / pypi.org, so no
+      RSS host could be checked here; every entry in <span class="mono">catalysts/feeds.json</span>
+      is labelled <span class="mono">pending_ci_probe</span> and only the scheduled probe can make it
+      usable. Prune anything that keeps failing. (No feed has been dropped either — the health table
+      shows the real result.)</li>
+    <li><strong>F-cat-04 · the demo ledger is thin and partly synthetic (medium).</strong> The
+      collector's own notes record synthetic exchange-test series (for example the hourly
+      <span class="mono">KXDEMOFUTHOURLY</span> demo-BTC markets) ranking high on demo volume; the
+      seeded swings on this page come from exactly such a market. Treat the ledger as a mechanism
+      proof until the owner decides which series count as real
+      (<a href="../questions.html">Questions</a>).</li>
+    <li><strong>F-cat-05 · <span class="mono">GET /events?event_tickers=…</span> ignores its filter on
+      this deployment (verified here, 2026-11-20).</strong> The request for one hourly event returned
+      unrelated events, so this layer looks markets up by <span class="mono">/markets?tickers=</span>
+      and <span class="mono">/markets/{ticker}</span> only. The endpoint table above re-checks it on
+      every run.
+      <a href="https://docs.kalshi.com/api-reference/market/get-events" target="_blank" rel="noopener">Get Events docs</a></li>
+    <li><strong>F-cat-06 · <span class="mono">limit</span> is not honoured on
+      <span class="mono">GET /series?category=</span> (verified here, 2026-11-20).</strong> A request
+      with <span class="mono">limit=3</span> returned the full category page set, so catalog paging here
+      is cursor-based — this corroborates F9 recorded by session 6908a11a.
+      <a href="https://docs.kalshi.com/api-reference/market/get-series-list" target="_blank" rel="noopener">Get Series List docs</a></li>
+    <li><strong>F-cat-08 · the exchange cross-check covers prices, not the interval.</strong> The
+    official market record publishes <span class="mono">previous_price_dollars</span> and
+    <span class="mono">last_price_dollars</span>, which lets the exchange corroborate a row's two
+    prices (the 2026-11-20 <span class="mono">KXPRESNOMD-28-BOBA</span> row is labelled
+    <em>exchange-corroborated</em> for exactly that reason: its tape prices
+    <span class="mono">0.0050 → 0.8630</span> reproduce the record's own
+    <span class="mono">previous → last</span>). It publishes <em>no</em> timestamp for
+    <span class="mono">previous_price_dollars</span>, so the time the move took remains bounded only
+    by the sample gap, and rows whose record lacks those fields are labelled
+    <em>not cross-checked</em> rather than assumed correct.</li>
+    <li><strong>F-cat-09 · no per-event page URL is published.</strong> The demo desk host is documented
+    (<a href="https://docs.kalshi.com/getting_started/demo_env">demo environment</a> →
+    <span class="mono">demo.kalshi.co</span>) but the URL <em>pattern for a single event</em> is not,
+    and this build environment cannot load the site's app to confirm one. Guessing
+    <span class="mono">/market/&lt;event&gt;</span> would be an inferred value, so each row links the
+    canonical API records (market / event / series) plus the host root instead, and
+    <span class="mono">kalshi_market_page</span> is published empty with the reason in
+    <span class="mono">kalshi_market_page_note</span>.</li>
+    <li><strong>F-cat-10 · a "jump" can be one print against a wide quote.</strong> The
+    <span class="mono">KXPRESNOMD-28-BOBA</span> sample that produced a $0.858 move reported
+    <span class="mono">yes_bid_dollars 0.0010</span> against <span class="mono">yes_ask_dollars
+    0.8630</span> and <span class="mono">price_level_structure "deci_cent"</span> (1/10-cent ticks, so
+    858 ticks in one sample); lifetime volume is <span class="mono">418,777,737</span> contracts while
+    <span class="mono">volume_24h_fp</span> is only <span class="mono">63,615</span>. Every row therefore
+    prints the quote and the ladder next to the move: a large Δ in a thin book is not a tradable signal,
+    and this page makes no claim that it is.</li>
+    <li><strong>F-cat-07 · this page is not in the site navigation yet (process).</strong> Root nav
+      and the root Flagged page are shared outputs owned by the integration session; change requests
+      <span class="mono">CR-22661044-1/2</span> are logged in COORDINATION.md instead of editing them.</li>
+  </ul>
+
+  <h3>Suggestions for making this layer more live and interactive</h3>
+  <ol class="method">
+    <li><strong>S-cat-01</strong> — signed WebSocket relay (a small worker holding the
+      <span class="mono">ticker</span>/<span class="mono">trade</span> channel and republishing to
+      browsers) removes both the polling gap and F-cat-01.</li>
+    <li><strong>S-cat-02</strong> — alert on orderbook shape, not just last price: bid/ask collapse or
+      a one-sided ladder of &ge; N contracts at a level is an earlier, cleaner signal than a trade.</li>
+    <li><strong>S-cat-03</strong> — per-topic daily digest ("what moved and what was published around
+      it") generated by the same scan, so the ledger is readable without a live tab.</li>
+    <li><strong>S-cat-04</strong> — a pre-trade checklist beside each alert: spread, top-of-book size,
+      time to close, and the estimated-dollar caveat, so a trader can act without leaving the page.</li>
+    <li><strong>S-cat-05</strong> — a thumbs up/down on every alert fed back into
+      <span class="mono">catalysts/data/feedback.json</span>; that labelled history is what a real
+      high-ROI screen needs (today's filter on the dashboard is an explicitly labeled placeholder).</li>
+    <li><strong>S-cat-06</strong> — candlestick overlay with the spread shaded, plus click-and-drag
+      zoom on the time axis.</li>
+  </ol>
+</section>
+</main>
+
+<footer class="wrap"><p class="small muted">Kalshi demo environment (mock funds; prices are
+simulated): <span class="mono">https://external-api.demo.kalshi.co/trade-api/v2</span> ·
+official docs <a href="https://docs.kalshi.com/getting_started/demo_env" target="_blank"
+rel="noopener">docs.kalshi.com/getting_started/demo_env</a> · Candidate-catalyst links are
+correlation only.</p></footer>
+
+<script src="assets/catalysts.js"></script>
+</body>
+</html>

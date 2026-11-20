@@ -1,0 +1,233 @@
+{
+ "checked_at": "2026-11-20T19:46:25Z",
+ "mode": "offline",
+ "feeds": [
+  {
+   "name": "AP News (hub RSS is not published; homepage listed for manual review)",
+   "url": "https://apnews.com/hub/ap-top-news/rss",
+   "topics": [
+    "elections",
+    "gas",
+    "culture",
+    "golf",
+    "crypto"
+   ],
+   "items_parsed": 0,
+   "http_status": null,
+   "ok": false,
+   "error": "skipped_offline",
+   "checked_at": "2026-11-20T19:46:25Z"
+  },
+  {
+   "name": "Reuters",
+   "url": "https://www.reuters.com/arc/outboundfeeds/rss/category/business/?outputType=xml",
+   "topics": [
+    "crypto",
+    "gas",
+    "elections"
+   ],
+   "items_parsed": 0,
+   "http_status": null,
+   "ok": false,
+   "error": "skipped_offline",
+   "checked_at": "2026-11-20T19:46:25Z"
+  },
+  {
+   "name": "BBC News \u2014 World",
+   "url": "https://feeds.bbci.co.uk/news/world/rss.xml",
+   "topics": [
+    "elections",
+    "culture"
+   ],
+   "items_parsed": 0,
+   "http_status": null,
+   "ok": false,
+   "error": "skipped_offline",
+   "checked_at": "2026-11-20T19:46:25Z"
+  },
+  {
+   "name": "BBC News \u2014 Business",
+   "url": "https://feeds.bbci.co.uk/news/business/rss.xml",
+   "topics": [
+    "gas",
+    "crypto"
+   ],
+   "items_parsed": 0,
+   "http_status": null,
+   "ok": false,
+   "error": "skipped_offline",
+   "checked_at": "2026-11-20T19:46:25Z"
+  },
+  {
+   "name": "BBC News \u2014 Entertainment & Arts",
+   "url": "https://feeds.bbci.co.uk/news/entertainment_and_arts/rss.xml",
+   "topics": [
+    "culture"
+   ],
+   "items_parsed": 0,
+   "http_status": null,
+   "ok": false,
+   "error": "skipped_offline",
+   "checked_at": "2026-11-20T19:46:25Z"
+  },
+  {
+   "name": "NPR \u2014 News Topics",
+   "url": "https://feeds.npr.org/1001/rss.xml",
+   "topics": [
+    "elections",
+    "gas",
+    "culture"
+   ],
+   "items_parsed": 0,
+   "http_status": null,
+   "ok": false,
+   "error": "skipped_offline",
+   "checked_at": "2026-11-20T19:46:25Z"
+  },
+  {
+   "name": "NPR \u2014 Politics",
+   "url": "https://feeds.npr.org/1013/rss.xml",
+   "topics": [
+    "elections"
+   ],
+   "items_parsed": 0,
+   "http_status": null,
+   "ok": false,
+   "error": "skipped_offline",
+   "checked_at": "2026-11-20T19:46:25Z"
+  },
+  {
+   "name": "NPR \u2014 Business",
+   "url": "https://feeds.npr.org/1006/rss.xml",
+   "topics": [
+    "gas",
+    "crypto"
+   ],
+   "items_parsed": 0,
+   "http_status": null,
+   "ok": false,
+   "error": "skipped_offline",
+   "checked_at": "2026-11-20T19:46:25Z"
+  },
+  {
+   "name": "CoinDesk",
+   "url": "https://www.coindesk.com/arc/outboundfeeds/rss/",
+   "topics": [
+    "crypto"
+   ],
+   "items_parsed": 0,
+   "http_status": null,
+   "ok": false,
+   "error": "skipped_offline",
+   "checked_at": "2026-11-20T19:46:25Z"
+  },
+  {
+   "name": "The Block",
+   "url": "https://www.theblock.co/rss.xml",
+   "topics": [
+    "crypto"
+   ],
+   "items_parsed": 0,
+   "http_status": null,
+   "ok": false,
+   "error": "skipped_offline",
+   "checked_at": "2026-11-20T19:46:25Z"
+  },
+  {
+   "name": "ESPN \u2014 Sports Top News",
+   "url": "https://www.espn.com/espn/rss/news",
+   "topics": [
+    "golf",
+    "culture"
+   ],
+   "items_parsed": 0,
+   "http_status": null,
+   "ok": false,
+   "error": "skipped_offline",
+   "checked_at": "2026-11-20T19:46:25Z"
+  },
+  {
+   "name": "PGA Tour \u2014 News",
+   "url": "https://www.pgatour.com/en/news/rss",
+   "topics": [
+    "golf"
+   ],
+   "items_parsed": 0,
+   "http_status": null,
+   "ok": false,
+   "error": "skipped_offline",
+   "checked_at": "2026-11-20T19:46:25Z"
+  },
+  {
+   "name": "Golf Digest",
+   "url": "https://www.golfdigest.com/rss.xml",
+   "topics": [
+    "golf"
+   ],
+   "items_parsed": 0,
+   "http_status": null,
+   "ok": false,
+   "error": "skipped_offline",
+   "checked_at": "2026-11-20T19:46:25Z"
+  },
+  {
+   "name": "AAA \u2014 Gas Prices (publisher page; no RSS published)",
+   "url": "https://gasprices.aaa.com/feed/",
+   "topics": [
+    "gas"
+   ],
+   "items_parsed": 0,
+   "http_status": null,
+   "ok": false,
+   "error": "skipped_offline",
+   "checked_at": "2026-11-20T19:46:25Z"
+  },
+  {
+   "name": "U.S. EIA \u2014 Petroleum (official government statistics feed)",
+   "url": "https://www.eia.gov/feed/petroleum.xml",
+   "topics": [
+    "gas"
+   ],
+   "items_parsed": 0,
+   "http_status": null,
+   "ok": false,
+   "error": "skipped_offline",
+   "checked_at": "2026-11-20T19:46:25Z"
+  },
+  {
+   "name": "The Guardian \u2014 World",
+   "url": "https://www.theguardian.com/world/rss",
+   "topics": [
+    "elections",
+    "culture"
+   ],
+   "items_parsed": 0,
+   "http_status": null,
+   "ok": false,
+   "error": "skipped_offline",
+   "checked_at": "2026-11-20T19:46:25Z"
+  },
+  {
+   "name": "Variety",
+   "url": "https://variety.com/feed/",
+   "topics": [
+    "culture"
+   ],
+   "items_parsed": 0,
+   "http_status": null,
+   "ok": false,
+   "error": "skipped_offline",
+   "checked_at": "2026-11-20T19:46:25Z"
+  }
+ ],
+ "docs": {
+  "demo_env": "https://docs.kalshi.com/getting_started/demo_env",
+  "environments": "https://docs.kalshi.com/getting_started/api_environments",
+  "market_data_no_auth": "https://docs.kalshi.com/getting_started/quick_start_market_data",
+  "get_markets": "https://docs.kalshi.com/api-reference/market/get-markets",
+  "get_series": "https://docs.kalshi.com/api-reference/market/get-series",
+  "get_events": "https://docs.kalshi.com/api-reference/market/get-events",
+  "market_settlement": "https://docs.kalshi.com/getting_started/market_settlement",
+  "fixed_point": "https://docs.kalshi.com/getting_started/fixed_point_migration"
+ }
+}
