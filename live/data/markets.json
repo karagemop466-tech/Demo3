@@ -1,6 +1,6 @@
 {
  "count": 66,
- "generated_at": "2026-11-20T19:37:32.070524+00:00",
+ "generated_at": "2026-11-20T19:38:22.895144+00:00",
  "markets": [
   {
    "classification_rule": "tag=Oil & Gas",
@@ -261,30 +261,30 @@
    "has_candle_history": true,
    "is_top_dollar_in_topic": true,
    "kalshi_web_url": "https://demo.kalshi.co/markets/kxpresnomd/kxpresnomd-28-hbid",
-   "last_price": 0.811,
+   "last_price": 0.003,
    "liquidity": {
-    "open_interest": 140195196.8,
-    "top_of_book_contracts": 222222.21,
-    "yes_ask_size": 55555.55,
-    "yes_bid_size": 166666.66
+    "open_interest": 140195221.96,
+    "top_of_book_contracts": 83526.09,
+    "yes_ask_size": 192.76,
+    "yes_bid_size": 83333.33
    },
    "market_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-HBID",
-   "model_high_roi": false,
+   "model_high_roi": true,
    "open_time": "2025-08-24T19:10:03Z",
    "orderbook_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPRESNOMD-28-HBID/orderbook?depth=20",
    "previous_price": 0.003,
-   "price": 0.0025,
+   "price": 0.4065,
    "roi": {
-    "cost": 0.0025,
-    "ev": 0.0175,
-    "is_high_roi": false,
+    "cost": 0.5935,
+    "ev": 0.1214,
+    "is_high_roi": true,
     "momentum_1h": 0.0,
-    "p_hat": 0.02,
-    "roi_pct": 700.0,
-    "side": "yes",
+    "p_hat": 0.2851,
+    "roi_pct": 20.45,
+    "side": "no",
     "spread_source": "quoted yes_bid/yes_ask",
-    "spread_used": 0.001,
-    "taker_edge": 0.0165
+    "spread_used": 0.809,
+    "taker_edge": -0.6877
    },
    "rules_primary": "If Hunter Biden wins and accepts the nomination for the Presidency for the Democratic party, then the market resolves to Yes.",
    "series_ticker": "KXPRESNOMD",
@@ -296,10 +296,10 @@
    "topic": "elections",
    "topic_label": "Elections",
    "topic_rank": 1,
-   "volume": 537225607.69,
-   "volume_dollars_derived": 537225607.69,
+   "volume": 537225642.23,
+   "volume_dollars_derived": 537225642.23,
    "volume_is_derived": true,
-   "yes_ask": 0.003,
+   "yes_ask": 0.811,
    "yes_bid": 0.002
   },
   {
@@ -313,16 +313,16 @@
    "kalshi_web_url": "https://demo.kalshi.co/markets/kxpresperson/kxpresperson-28-vram",
    "last_price": 0.003,
    "liquidity": {
-    "open_interest": 190196537.0,
-    "top_of_book_contracts": 138805.97,
-    "yes_ask_size": 55472.64,
+    "open_interest": 190196570.71,
+    "top_of_book_contracts": 138772.26,
+    "yes_ask_size": 55438.93,
     "yes_bid_size": 83333.33
    },
    "market_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESPERSON-28-VRAM",
    "model_high_roi": false,
    "open_time": "2025-05-19T22:39:51Z",
    "orderbook_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPRESPERSON-28-VRAM/orderbook?depth=20",
-   "previous_price": 0.003,
+   "previous_price": 0.004,
    "price": 0.0025,
    "roi": {
     "cost": 0.0025,
@@ -346,8 +346,8 @@
    "topic": "elections",
    "topic_label": "Elections",
    "topic_rank": 2,
-   "volume": 507697376.94,
-   "volume_dollars_derived": 507697376.94,
+   "volume": 507697410.65,
+   "volume_dollars_derived": 507697410.65,
    "volume_is_derived": true,
    "yes_ask": 0.003,
    "yes_bid": 0.002
@@ -363,9 +363,9 @@
    "kalshi_web_url": "https://demo.kalshi.co/markets/kxpresnomd/kxpresnomd-28-eslo",
    "last_price": 0.009,
    "liquidity": {
-    "open_interest": 150321037.26,
-    "top_of_book_contracts": 60217.01,
-    "yes_ask_size": 34169.98,
+    "open_interest": 150321070.02,
+    "top_of_book_contracts": 60184.25,
+    "yes_ask_size": 34137.22,
     "yes_bid_size": 26047.03
    },
    "market_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-ESLO",
@@ -396,8 +396,8 @@
    "topic": "elections",
    "topic_label": "Elections",
    "topic_rank": 3,
-   "volume": 468264495.07,
-   "volume_dollars_derived": 468264495.07,
+   "volume": 468264527.83,
+   "volume_dollars_derived": 468264527.83,
    "volume_is_derived": true,
    "yes_ask": 0.009,
    "yes_bid": 0.008
@@ -464,8 +464,8 @@
    "last_price": 0.006,
    "liquidity": {
     "open_interest": 169497438.62,
-    "top_of_book_contracts": 180007.44,
-    "yes_ask_size": 80005.45,
+    "top_of_book_contracts": 179979.44,
+    "yes_ask_size": 79977.45,
     "yes_bid_size": 100001.99
    },
    "market_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-GW",
@@ -496,8 +496,8 @@
    "topic": "elections",
    "topic_label": "Elections",
    "topic_rank": 5,
-   "volume": 432107328.57,
-   "volume_dollars_derived": 432107328.57,
+   "volume": 432107356.57,
+   "volume_dollars_derived": 432107356.57,
    "volume_is_derived": true,
    "yes_ask": 0.006,
    "yes_bid": 0.005
@@ -763,9 +763,9 @@
    "kalshi_web_url": "https://demo.kalshi.co/markets/kxbtcy/kxbtcy-27jan0100-b122500",
    "last_price": 0.01,
    "liquidity": {
-    "open_interest": 23505706.79,
-    "top_of_book_contracts": 16666.14,
-    "yes_ask_size": 16666.14,
+    "open_interest": 23505707.36,
+    "top_of_book_contracts": 16666.66,
+    "yes_ask_size": 16666.66,
     "yes_bid_size": 0.0
    },
    "market_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTCY-27JAN0100-B122500",
@@ -796,8 +796,8 @@
    "topic": "crypto",
    "topic_label": "Crypto",
    "topic_rank": 1,
-   "volume": 162214690.3,
-   "volume_dollars_derived": 162214690.3,
+   "volume": 162214716.69,
+   "volume_dollars_derived": 162214716.69,
    "volume_is_derived": true,
    "yes_ask": 0.01,
    "yes_bid": 0.0
@@ -864,8 +864,8 @@
    "last_price": 0.01,
    "liquidity": {
     "open_interest": 21106124.34,
-    "top_of_book_contracts": 16652.47,
-    "yes_ask_size": 16652.47,
+    "top_of_book_contracts": 16626.27,
+    "yes_ask_size": 16626.27,
     "yes_bid_size": 0.0
    },
    "market_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTCY-27JAN0100-B117500",
@@ -896,8 +896,8 @@
    "topic": "crypto",
    "topic_label": "Crypto",
    "topic_rank": 3,
-   "volume": 125408445.51,
-   "volume_dollars_derived": 125408445.51,
+   "volume": 125408471.71,
+   "volume_dollars_derived": 125408471.71,
    "volume_is_derived": true,
    "yes_ask": 0.01,
    "yes_bid": 0.0
@@ -964,8 +964,8 @@
    "last_price": 0.04,
    "liquidity": {
     "open_interest": 25229904.76,
-    "top_of_book_contracts": 19431.43,
-    "yes_ask_size": 8320.33,
+    "top_of_book_contracts": 19403.66,
+    "yes_ask_size": 8292.56,
     "yes_bid_size": 11111.1
    },
    "market_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTCY-27JAN0100-B42500",
@@ -996,8 +996,8 @@
    "topic": "crypto",
    "topic_label": "Crypto",
    "topic_rank": 5,
-   "volume": 89207349.92,
-   "volume_dollars_derived": 89207349.92,
+   "volume": 89207377.69,
+   "volume_dollars_derived": 89207377.69,
    "volume_is_derived": true,
    "yes_ask": 0.04,
    "yes_bid": 0.03
@@ -1013,9 +1013,9 @@
    "kalshi_web_url": "https://demo.kalshi.co/markets/kxpgatour/kxpgatour-thrc26-tmoo",
    "last_price": 0.005,
    "liquidity": {
-    "open_interest": 1151961.57,
-    "top_of_book_contracts": 369491.27,
-    "yes_ask_size": 91713.52,
+    "open_interest": 1151983.28,
+    "top_of_book_contracts": 369469.56,
+    "yes_ask_size": 91691.81,
     "yes_bid_size": 277777.75
    },
    "market_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPGATOUR-THRC26-TMOO",
@@ -1046,8 +1046,8 @@
    "topic": "golf",
    "topic_label": "Golf",
    "topic_rank": 1,
-   "volume": 1157450.46,
-   "volume_dollars_derived": 1157450.46,
+   "volume": 1157472.17,
+   "volume_dollars_derived": 1157472.17,
    "volume_is_derived": true,
    "yes_ask": 0.005,
    "yes_bid": 0.003
@@ -1114,8 +1114,8 @@
    "last_price": 0.025,
    "liquidity": {
     "open_interest": 681894.62,
-    "top_of_book_contracts": 11794.8,
-    "yes_ask_size": 3858.3,
+    "top_of_book_contracts": 11767.82,
+    "yes_ask_size": 3831.32,
     "yes_bid_size": 7936.5
    },
    "market_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPGATOUR-THRC26-SSTR",
@@ -1146,8 +1146,8 @@
    "topic": "golf",
    "topic_label": "Golf",
    "topic_rank": 3,
-   "volume": 761430.2,
-   "volume_dollars_derived": 761430.2,
+   "volume": 761457.18,
+   "volume_dollars_derived": 761457.18,
    "volume_is_derived": true,
    "yes_ask": 0.025,
    "yes_bid": 0.021
@@ -1163,7 +1163,7 @@
    "kalshi_web_url": "https://demo.kalshi.co/markets/kxpgatour/kxpgatour-thrc26-kroy",
    "last_price": 0.003,
    "liquidity": {
-    "open_interest": 576783.65,
+    "open_interest": 576798.02,
     "top_of_book_contracts": 138888.88,
     "yes_ask_size": 55555.55,
     "yes_bid_size": 83333.33
@@ -1196,8 +1196,8 @@
    "topic": "golf",
    "topic_label": "Golf",
    "topic_rank": 4,
-   "volume": 580394.13,
-   "volume_dollars_derived": 580394.13,
+   "volume": 580408.5,
+   "volume_dollars_derived": 580408.5,
    "volume_is_derived": true,
    "yes_ask": 0.003,
    "yes_bid": 0.002
@@ -1213,28 +1213,28 @@
    "kalshi_web_url": "https://demo.kalshi.co/markets/kxpgatour/kxpgatour-thrc26-mmei",
    "last_price": 0.003,
    "liquidity": {
-    "open_interest": 347499.16,
-    "top_of_book_contracts": 138888.88,
-    "yes_ask_size": 55555.55,
-    "yes_bid_size": 83333.33
+    "open_interest": 347517.68,
+    "top_of_book_contracts": 20.0,
+    "yes_ask_size": 0.0,
+    "yes_bid_size": 20.0
    },
    "market_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPGATOUR-THRC26-MMEI",
    "model_high_roi": false,
    "open_time": "2026-11-16T01:34:34Z",
    "orderbook_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPGATOUR-THRC26-MMEI/orderbook?depth=20",
    "previous_price": 0.005,
-   "price": 0.0025,
+   "price": 0.003,
    "roi": {
-    "cost": 0.0025,
-    "ev": 0.0175,
+    "cost": 0.003,
+    "ev": 0.017,
     "is_high_roi": false,
     "momentum_1h": 0.0,
     "p_hat": 0.02,
-    "roi_pct": 700.0,
+    "roi_pct": 566.67,
     "side": "yes",
     "spread_source": "quoted yes_bid/yes_ask",
-    "spread_used": 0.001,
-    "taker_edge": 0.0165
+    "spread_used": 0.999,
+    "taker_edge": -0.982
    },
    "rules_primary": "If Mac Meissner wins the The RSM Classic, then the market resolves to Yes.",
    "series_ticker": "KXPGATOUR",
@@ -1246,11 +1246,11 @@
    "topic": "golf",
    "topic_label": "Golf",
    "topic_rank": 5,
-   "volume": 495505.14,
-   "volume_dollars_derived": 495505.14,
+   "volume": 495523.66,
+   "volume_dollars_derived": 495523.66,
    "volume_is_derived": true,
-   "yes_ask": 0.003,
-   "yes_bid": 0.002
+   "yes_ask": 1.0,
+   "yes_bid": 0.001
   },
   {
    "classification_rule": "series_ticker~/(^KXGAS|GAS(W|NY|US)?$|GAS[A-Z]|NATGAS|HEATINGOIL|DIESEL|PROPANE)/",
@@ -2063,9 +2063,9 @@
    "kalshi_web_url": "https://demo.kalshi.co/markets/kxpgatour/kxpgatour-thrc26-bbro",
    "last_price": 0.013,
    "liquidity": {
-    "open_interest": 86887.91,
-    "top_of_book_contracts": 23967.24,
-    "yes_ask_size": 10078.36,
+    "open_interest": 86911.31,
+    "top_of_book_contracts": 23943.84,
+    "yes_ask_size": 10054.96,
     "yes_bid_size": 13888.88
    },
    "market_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPGATOUR-THRC26-BBRO",
@@ -2096,8 +2096,8 @@
    "topic": "golf",
    "topic_label": "Golf",
    "topic_rank": null,
-   "volume": 117093.62,
-   "volume_dollars_derived": 117093.62,
+   "volume": 117117.02,
+   "volume_dollars_derived": 117117.02,
    "volume_is_derived": true,
    "yes_ask": 0.013,
    "yes_bid": 0.012
@@ -2163,9 +2163,9 @@
    "kalshi_web_url": "https://demo.kalshi.co/markets/kxpgatour/kxpgatour-thrc26-jkoi",
    "last_price": 0.03,
    "liquidity": {
-    "open_interest": 122787.32,
-    "top_of_book_contracts": 11894.68,
-    "yes_ask_size": 5484.43,
+    "open_interest": 122828.09,
+    "top_of_book_contracts": 11853.91,
+    "yes_ask_size": 5443.66,
     "yes_bid_size": 6410.25
    },
    "market_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPGATOUR-THRC26-JKOI",
@@ -2196,8 +2196,8 @@
    "topic": "golf",
    "topic_label": "Golf",
    "topic_rank": null,
-   "volume": 131269.12,
-   "volume_dollars_derived": 131269.12,
+   "volume": 131309.89,
+   "volume_dollars_derived": 131309.89,
    "volume_is_derived": true,
    "yes_ask": 0.03,
    "yes_bid": 0.026
@@ -2214,8 +2214,8 @@
    "last_price": 0.151,
    "liquidity": {
     "open_interest": 14795886.21,
-    "top_of_book_contracts": 1506.9,
-    "yes_ask_size": 316.43,
+    "top_of_book_contracts": 1475.37,
+    "yes_ask_size": 284.9,
     "yes_bid_size": 1190.47
    },
    "market_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-AOC",
@@ -2246,8 +2246,8 @@
    "topic": "elections",
    "topic_label": "Elections",
    "topic_rank": null,
-   "volume": 59044604.18,
-   "volume_dollars_derived": 59044604.18,
+   "volume": 59044635.71,
+   "volume_dollars_derived": 59044635.71,
    "volume_is_derived": true,
    "yes_ask": 0.151,
    "yes_bid": 0.14
@@ -2264,8 +2264,8 @@
    "last_price": 0.005,
    "liquidity": {
     "open_interest": 137412877.49,
-    "top_of_book_contracts": 115322.72,
-    "yes_ask_size": 31989.39,
+    "top_of_book_contracts": 115293.96,
+    "yes_ask_size": 31960.63,
     "yes_bid_size": 83333.33
    },
    "market_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-BOBA",
@@ -2296,8 +2296,8 @@
    "topic": "elections",
    "topic_label": "Elections",
    "topic_rank": null,
-   "volume": 418777487.19,
-   "volume_dollars_derived": 418777487.19,
+   "volume": 418777515.95,
+   "volume_dollars_derived": 418777515.95,
    "volume_is_derived": true,
    "yes_ask": 0.005,
    "yes_bid": 0.002
@@ -2314,8 +2314,8 @@
    "last_price": 0.005,
    "liquidity": {
     "open_interest": 126693212.93,
-    "top_of_book_contracts": 299430.31,
-    "yes_ask_size": 132762.64,
+    "top_of_book_contracts": 299399.8,
+    "yes_ask_size": 132732.13,
     "yes_bid_size": 166667.67
    },
    "market_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-BS",
@@ -2346,8 +2346,8 @@
    "topic": "elections",
    "topic_label": "Elections",
    "topic_rank": null,
-   "volume": 430915990.14,
-   "volume_dollars_derived": 430915990.14,
+   "volume": 430916020.65,
+   "volume_dollars_derived": 430916020.65,
    "volume_is_derived": true,
    "yes_ask": 0.005,
    "yes_bid": 0.004
@@ -2363,9 +2363,9 @@
    "kalshi_web_url": "https://demo.kalshi.co/markets/kxpresnomd/kxpresnomd-28-ewar",
    "last_price": 0.01,
    "liquidity": {
-    "open_interest": 19112960.39,
-    "top_of_book_contracts": 16617.33,
-    "yes_ask_size": 16617.33,
+    "open_interest": 19112962.02,
+    "top_of_book_contracts": 16665.03,
+    "yes_ask_size": 16665.03,
     "yes_bid_size": 0.0
    },
    "market_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-EWAR",
@@ -2396,8 +2396,8 @@
    "topic": "elections",
    "topic_label": "Elections",
    "topic_rank": null,
-   "volume": 271940406.52,
-   "volume_dollars_derived": 271940406.52,
+   "volume": 271940432.67,
+   "volume_dollars_derived": 271940432.67,
    "volume_is_derived": true,
    "yes_ask": 0.01,
    "yes_bid": 0.0
@@ -2464,9 +2464,9 @@
    "last_price": 0.272,
    "liquidity": {
     "open_interest": 10488392.76,
-    "top_of_book_contracts": 697.8,
-    "yes_ask_size": 56.78,
-    "yes_bid_size": 641.02
+    "top_of_book_contracts": 669.26,
+    "yes_ask_size": 24.24,
+    "yes_bid_size": 645.02
    },
    "market_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-JOSS",
    "model_high_roi": false,
@@ -2496,8 +2496,8 @@
    "topic": "elections",
    "topic_label": "Elections",
    "topic_rank": null,
-   "volume": 54532627.6,
-   "volume_dollars_derived": 54532627.6,
+   "volume": 54532664.14,
+   "volume_dollars_derived": 54532664.14,
    "volume_is_derived": true,
    "yes_ask": 0.272,
    "yes_bid": 0.26
@@ -2514,8 +2514,8 @@
    "last_price": 0.945,
    "liquidity": {
     "open_interest": 89344735.06,
-    "top_of_book_contracts": 1045.79,
-    "yes_ask_size": 1044.79,
+    "top_of_book_contracts": 1018.53,
+    "yes_ask_size": 1017.53,
     "yes_bid_size": 1.0
    },
    "market_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-JP",
@@ -2546,8 +2546,8 @@
    "topic": "elections",
    "topic_label": "Elections",
    "topic_rank": null,
-   "volume": 186515583.9,
-   "volume_dollars_derived": 186515583.9,
+   "volume": 186515611.16,
+   "volume_dollars_derived": 186515611.16,
    "volume_is_derived": true,
    "yes_ask": 0.945,
    "yes_bid": 0.01
@@ -2564,8 +2564,8 @@
    "last_price": 0.003,
    "liquidity": {
     "open_interest": 116960569.97,
-    "top_of_book_contracts": 222208.59,
-    "yes_ask_size": 55541.93,
+    "top_of_book_contracts": 222181.64,
+    "yes_ask_size": 55514.98,
     "yes_bid_size": 166666.66
    },
    "market_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-JSTE",
@@ -2596,8 +2596,8 @@
    "topic": "elections",
    "topic_label": "Elections",
    "topic_rank": null,
-   "volume": 292805166.98,
-   "volume_dollars_derived": 292805166.98,
+   "volume": 292805193.93,
+   "volume_dollars_derived": 292805193.93,
    "volume_is_derived": true,
    "yes_ask": 0.003,
    "yes_bid": 0.002
@@ -2614,8 +2614,8 @@
    "last_price": 0.018,
    "liquidity": {
     "open_interest": 82392481.21,
-    "top_of_book_contracts": 64720.93,
-    "yes_ask_size": 15701.33,
+    "top_of_book_contracts": 64691.32,
+    "yes_ask_size": 15671.72,
     "yes_bid_size": 49019.6
    },
    "market_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-JTAL",
@@ -2646,8 +2646,8 @@
    "topic": "elections",
    "topic_label": "Elections",
    "topic_rank": null,
-   "volume": 311522839.97,
-   "volume_dollars_derived": 311522839.97,
+   "volume": 311522869.58,
+   "volume_dollars_derived": 311522869.58,
    "volume_is_derived": true,
    "yes_ask": 0.018,
    "yes_bid": 0.017
@@ -2664,8 +2664,8 @@
    "last_price": 0.05,
    "liquidity": {
     "open_interest": 17647637.07,
-    "top_of_book_contracts": 19306.41,
-    "yes_ask_size": 8889.75,
+    "top_of_book_contracts": 19273.62,
+    "yes_ask_size": 8856.96,
     "yes_bid_size": 10416.66
    },
    "market_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-KH",
@@ -2696,8 +2696,8 @@
    "topic": "elections",
    "topic_label": "Elections",
    "topic_rank": null,
-   "volume": 134222699.92,
-   "volume_dollars_derived": 134222699.92,
+   "volume": 134222732.71,
+   "volume_dollars_derived": 134222732.71,
    "volume_is_derived": true,
    "yes_ask": 0.05,
    "yes_bid": 0.048
@@ -2714,8 +2714,8 @@
    "last_price": 0.033,
    "liquidity": {
     "open_interest": 38595763.54,
-    "top_of_book_contracts": 7221.84,
-    "yes_ask_size": 2013.51,
+    "top_of_book_contracts": 7189.06,
+    "yes_ask_size": 1980.73,
     "yes_bid_size": 5208.33
    },
    "market_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-MK",
@@ -2746,8 +2746,8 @@
    "topic": "elections",
    "topic_label": "Elections",
    "topic_rank": null,
-   "volume": 201921220.78,
-   "volume_dollars_derived": 201921220.78,
+   "volume": 201921253.56,
+   "volume_dollars_derived": 201921253.56,
    "volume_is_derived": true,
    "yes_ask": 0.033,
    "yes_bid": 0.032
@@ -2764,8 +2764,8 @@
    "last_price": 0.054,
    "liquidity": {
     "open_interest": 34090026.08,
-    "top_of_book_contracts": 11231.86,
-    "yes_ask_size": 4821.62,
+    "top_of_book_contracts": 11210.61,
+    "yes_ask_size": 4800.37,
     "yes_bid_size": 6410.24
    },
    "market_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-PB",
@@ -2796,8 +2796,8 @@
    "topic": "elections",
    "topic_label": "Elections",
    "topic_rank": null,
-   "volume": 118660720.87,
-   "volume_dollars_derived": 118660720.87,
+   "volume": 118660742.12,
+   "volume_dollars_derived": 118660742.12,
    "volume_is_derived": true,
    "yes_ask": 0.054,
    "yes_bid": 0.052
@@ -2814,8 +2814,8 @@
    "last_price": 0.038,
    "liquidity": {
     "open_interest": 189529515.91,
-    "top_of_book_contracts": 4313.66,
-    "yes_ask_size": 4309.19,
+    "top_of_book_contracts": 4279.69,
+    "yes_ask_size": 4275.22,
     "yes_bid_size": 4.47
    },
    "market_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-RW",
@@ -2846,8 +2846,8 @@
    "topic": "elections",
    "topic_label": "Elections",
    "topic_rank": null,
-   "volume": 414925012.89,
-   "volume_dollars_derived": 414925012.89,
+   "volume": 414925046.86,
+   "volume_dollars_derived": 414925046.86,
    "volume_is_derived": true,
    "yes_ask": 0.038,
    "yes_bid": 0.035
@@ -2864,27 +2864,27 @@
    "last_price": 0.003,
    "liquidity": {
     "open_interest": 162254359.41,
-    "top_of_book_contracts": 138888.88,
-    "yes_ask_size": 55555.55,
-    "yes_bid_size": 83333.33
+    "top_of_book_contracts": 0.0,
+    "yes_ask_size": 0.0,
+    "yes_bid_size": 0.0
    },
    "market_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-SAS",
    "model_high_roi": false,
    "open_time": "2025-02-07T19:24:58Z",
    "orderbook_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPRESNOMD-28-SAS/orderbook?depth=20",
    "previous_price": 0.003,
-   "price": 0.0025,
+   "price": 0.003,
    "roi": {
-    "cost": 0.0025,
-    "ev": 0.0175,
+    "cost": 0.003,
+    "ev": 0.017,
     "is_high_roi": false,
     "momentum_1h": 0.0,
     "p_hat": 0.02,
-    "roi_pct": 700.0,
+    "roi_pct": 566.67,
     "side": "yes",
     "spread_source": "quoted yes_bid/yes_ask",
-    "spread_used": 0.001,
-    "taker_edge": 0.0165
+    "spread_used": 1.0,
+    "taker_edge": -0.983
    },
    "rules_primary": "If Stephen A. Smith wins and accepts the nomination for the Presidency for the Democratic party, then the market resolves to Yes.",
    "series_ticker": "KXPRESNOMD",
@@ -2896,11 +2896,11 @@
    "topic": "elections",
    "topic_label": "Elections",
    "topic_rank": null,
-   "volume": 358761530.95,
-   "volume_dollars_derived": 358761530.95,
+   "volume": 358761548.67,
+   "volume_dollars_derived": 358761548.67,
    "volume_is_derived": true,
-   "yes_ask": 0.003,
-   "yes_bid": 0.002
+   "yes_ask": 1.0,
+   "yes_bid": 0.0
   },
   {
    "classification_rule": "series_ticker~/^KX(PRES|SENATE|HOUSE|GOV|MAYOR|PRIMARY|ELECTION|FRENCHPRES|NEXT[A-Z]*PRES|POLIT|PARTISAN|NOMD|NATOSECGEN|KNESS|PARL)/",
@@ -3013,9 +3013,9 @@
    "kalshi_web_url": "https://demo.kalshi.co/markets/kxpresperson/kxpresperson-28-gabb",
    "last_price": 0.003,
    "liquidity": {
-    "open_interest": 65750254.1,
-    "top_of_book_contracts": 138888.88,
-    "yes_ask_size": 55555.55,
+    "open_interest": 65750261.79,
+    "top_of_book_contracts": 138882.04,
+    "yes_ask_size": 55548.71,
     "yes_bid_size": 83333.33
    },
    "market_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESPERSON-28-GABB",
@@ -3046,8 +3046,8 @@
    "topic": "elections",
    "topic_label": "Elections",
    "topic_rank": null,
-   "volume": 136143230.98,
-   "volume_dollars_derived": 136143230.98,
+   "volume": 136143261.39,
+   "volume_dollars_derived": 136143261.39,
    "volume_is_derived": true,
    "yes_ask": 0.003,
    "yes_bid": 0.002
@@ -3063,9 +3063,9 @@
    "kalshi_web_url": "https://demo.kalshi.co/markets/kxpresperson/kxpresperson-28-joss",
    "last_price": 0.181,
    "liquidity": {
-    "open_interest": 5250465.94,
-    "top_of_book_contracts": 1889.42,
-    "yes_ask_size": 909.03,
+    "open_interest": 5250491.18,
+    "top_of_book_contracts": 1864.18,
+    "yes_ask_size": 883.79,
     "yes_bid_size": 980.39
    },
    "market_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESPERSON-28-JOSS",
@@ -3096,8 +3096,8 @@
    "topic": "elections",
    "topic_label": "Elections",
    "topic_rank": null,
-   "volume": 33461703.62,
-   "volume_dollars_derived": 33461703.62,
+   "volume": 33461728.86,
+   "volume_dollars_derived": 33461728.86,
    "volume_is_derived": true,
    "yes_ask": 0.181,
    "yes_bid": 0.17
