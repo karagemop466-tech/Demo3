@@ -9,7 +9,7 @@
 <body>
 <header class="top"><div class="wrap"><nav class="main">
 <a class="brand" href="index.html">Kalshi Demo Tracker</a>
-<a href="index.html">Home</a><a href="dashboard.html" class="active">Live dashboard</a><a href="data-tracking.html">Data tracking</a><a href="gas-prices.html">Gas prices</a><a href="elections.html">Elections</a><a href="culture.html">Culture</a><a href="crypto.html">Crypto</a><a href="golf.html">Golf</a><a href="portfolio.html">Portfolio</a><a href="trades.html">Trades</a><a href="questions.html">Questions</a><a href="suggestions.html">Suggestions</a><a href="flagged.html">Flagged for review</a><a href="sources.html">Sources</a><a href="repo-review.html">Repo review</a><a href="methodology.html">Methodology</a><a href="api-reference.html">API reference</a>
+<a href="index.html">Home</a><a href="dashboard.html" class="active">Live dashboard</a><a href="live/index.html">Alert desk (live)</a><a href="data-tracking.html">Data tracking</a><a href="gas-prices.html">Gas prices</a><a href="elections.html">Elections</a><a href="culture.html">Culture</a><a href="crypto.html">Crypto</a><a href="golf.html">Golf</a><a href="portfolio.html">Portfolio</a><a href="trades.html">Trades</a><a href="questions.html">Questions</a><a href="suggestions.html">Suggestions</a><a href="flagged.html">Flagged for review</a><a href="sources.html">Sources</a><a href="repo-review.html">Repo review</a><a href="methodology.html">Methodology</a><a href="api-reference.html">API reference</a>
 </nav></div></header>
 <main class="wrap">
 
@@ -60,6 +60,7 @@ if the browser blocks the request the tables fall back to the snapshot links in
   <p class="small muted">X axis: time (labels switch to seconds/minutes/hours with the window).
   Y axis: current contract price (cents). Live samples merge with 1-minute candlesticks
   (<span class="mono">/series/{series}/markets/{ticker}/candlesticks</span>).</p>
+  <p class="small" id="swingCaption"></p>
   <h3>Orderbook depth — contracts available at each price</h3>
   <canvas id="depthChart" height="220" aria-label="Orderbook depth"></canvas>
   <p class="small" id="obSummary"></p>

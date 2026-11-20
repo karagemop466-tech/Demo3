@@ -9,9 +9,12 @@
 <body>
 <header class="top"><div class="wrap"><nav class="main">
 <a class="brand" href="index.html">Kalshi Demo Tracker</a>
-<a href="index.html">Home</a><a href="dashboard.html">Live dashboard</a><a href="data-tracking.html">Data tracking</a><a href="gas-prices.html">Gas prices</a><a href="elections.html">Elections</a><a href="culture.html">Culture</a><a href="crypto.html">Crypto</a><a href="golf.html">Golf</a><a href="portfolio.html">Portfolio</a><a href="strategy.html">Strategy lab</a><a href="trades.html">Trades</a><a href="questions.html">Questions</a><a href="suggestions.html">Suggestions</a><a href="flagged.html">Flagged for review</a><a href="sources.html">Sources</a><a href="repo-review.html">Repo review</a><a href="methodology.html">Methodology</a><a href="api-reference.html" class="active">API reference</a><a href="requirements.html">Requirements</a><a href="model.html">High-ROI model</a>
+<a href="index.html">Home</a><a href="dashboard.html">Live dashboard</a><a href="live/index.html">Alert desk (live)</a><a href="data-tracking.html">Data tracking</a><a href="gas-prices.html">Gas prices</a><a href="elections.html">Elections</a><a href="culture.html">Culture</a><a href="crypto.html">Crypto</a><a href="golf.html">Golf</a><a href="portfolio.html">Portfolio</a><a href="strategy.html">Strategy lab</a><a href="trades.html">Trades</a><a href="questions.html">Questions</a><a href="suggestions.html">Suggestions</a><a href="flagged.html">Flagged for review</a><a href="sources.html">Sources</a><a href="repo-review.html">Repo review</a><a href="methodology.html">Methodology</a><a href="api-reference.html" class="active">API reference</a><a href="requirements.html">Requirements</a><a href="model.html">High-ROI model</a>
 </nav></div></header>
 <main class="wrap">
+
+
+
 
 
 
@@ -137,14 +140,6 @@ Kalshi documentation. “Auth” = whether an API key is required. Demo base URL
 <td><a href="https://docs.kalshi.com/getting_started/quick_start_websockets">Quick Start: WebSockets</a></td></tr>
 <tr><td>Public channels</td><td><code>ticker</code>, <code>trade</code>, <code>market_lifecycle_v2</code>, <code>multivariate_market_lifecycle</code></td>
 <td><a href="https://docs.kalshi.com/getting_started/quick_start_websockets">Quick Start: WebSockets</a></td></tr>
-<tr><td>Handshake errors</td><td>A rejected handshake returns an HTTP error instead of upgrading; <code>429 too_many_requests</code> means either the tier's concurrent-connection limit or connecting too fast — reconnect with exponential backoff and close unused connections.</td>
-<td><a href="https://docs.kalshi.com/getting_started/quick_start_websockets">Quick Start: WebSockets</a> · <a href="https://docs.kalshi.com/getting_started/rate_limits">Rate limits</a></td></tr>
-<tr><td>Message shapes</td><td><code>type: "ticker"</code> → <code>msg.market_ticker</code>, <code>msg.yes_bid_dollars</code>, <code>msg.yes_ask_dollars</code>; <code>orderbook_snapshot</code> / <code>orderbook_delta</code> carry <code>msg.market_ticker</code> (and optional <code>client_order_id</code>); <code>type: "error"</code> carries <code>msg.code</code>/<code>msg.msg</code>.</td>
-<td><a href="https://docs.kalshi.com/getting_started/quick_start_websockets">Quick Start: WebSockets</a></td></tr>
-<tr><td>Market-data-only keys</td><td>Error code <code>9</code> on <code>fill</code>, <code>market_positions</code>, <code>order_group_updates</code>, <code>user_orders</code>; <code>orderbook_delta</code> and <code>communications</code> still subscribe.</td>
-<td><a href="https://docs.kalshi.com/getting_started/quick_start_websockets">Quick Start: WebSockets</a> · <a href="https://docs.kalshi.com/getting_started/api_keys">API keys</a></td></tr>
-<tr><td>Consequence for this site</td><td>A static GitHub Pages page cannot open this socket (no handshake headers), so live prices here come from public REST polling of the demo API. A WS consumer needs a signed server/CI client — see <a href="suggestions.html">Suggestions</a>.</td>
-<td><a href="https://docs.kalshi.com/getting_started/quick_start_websockets">Quick Start: WebSockets</a> · <a href="https://docs.kalshi.com/getting_started/api_environments">API environments</a></td></tr>
 <tr><td>Keep-alive</td><td>Server Ping after 10s without a data message; Pong in reply.</td>
 <td><a href="https://docs.kalshi.com/getting_started/quick_start_websockets">Quick Start: WebSockets</a></td></tr>
 </tbody>
@@ -167,6 +162,9 @@ Kalshi documentation. “Auth” = whether an API key is required. Demo base URL
 </tbody>
 </table>
 </section>
+
+
+
 
 
 

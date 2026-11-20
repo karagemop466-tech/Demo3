@@ -72,7 +72,8 @@ def main():
                 fail(f"{page}: table row without source link or unverified flag: {text!r}")
 
     # 3. syntax checks
-    for js in ["assets/app.js", "assets/dashboard.js", "assets/trade.js", "assets/site.js"]:
+    for js in ["assets/app.js", "assets/dashboard.js", "assets/trade.js",
+               "assets/site.js", "assets/alerts.js"]:
         r = subprocess.run(["node", "--check", js], cwd=ROOT, capture_output=True, text=True)
         if r.returncode != 0:
             fail(f"node --check {js}: {r.stderr.strip()[:200]}")
