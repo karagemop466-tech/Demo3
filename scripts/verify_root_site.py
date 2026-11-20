@@ -72,6 +72,7 @@ def main():
 
     # 3. syntax checks
     for js in ["assets/app.js", "assets/dashboard.js", "assets/alerts.js",
+               "assets/alerts-page.js",
                "assets/trade.js", "assets/site.js", "assets/data-tracking.js"]:
         r = subprocess.run(["node", "--check", js], cwd=ROOT, capture_output=True, text=True)
         if r.returncode != 0:

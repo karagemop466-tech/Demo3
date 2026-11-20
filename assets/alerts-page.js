@@ -138,7 +138,7 @@
   };
   try { state.resolutions = JSON.parse(localStorage.getItem("kd_resolutions") || "[]"); }
   catch (e) { state.resolutions = []; }
-  var ALERTS_KEY = "kd_alerts_v1";
+  var ALERTS_KEY = "kd_alerts_page_v1";
   var messages = [];
   try { messages = JSON.parse(localStorage.getItem(ALERTS_KEY) || "[]"); }
   catch (e) { messages = []; }

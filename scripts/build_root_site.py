@@ -1196,7 +1196,7 @@ of cause).</p>
 </div>
 """
     write_page("alerts.html", "Live alerts", "alerts.html", body,
-               scripts=("assets/app.js", "assets/alerts.js"))
+               scripts=("assets/app.js", "assets/alerts-page.js"))
 
 
 def main():

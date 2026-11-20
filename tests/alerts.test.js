@@ -82,7 +82,7 @@ async function bootAlertsPage(fetchMock) {
   const n = ++bootNumber;
   try {
     await import(`../assets/app.js?alerts=${n}`);
-    await import(`../assets/alerts.js?alerts=${n}`);
+    await import(`../assets/alerts-page.js?alerts=${n}`);
   } catch (error) {
     dom.window.close();
     restoreGlobals(keys, old);
