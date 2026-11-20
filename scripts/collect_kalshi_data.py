@@ -210,6 +210,8 @@ def series_of(ticker: str) -> str:
 
 
 def write_json(path: str, obj) -> None:
+    import os
+    os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
         json.dump(obj, f, indent=1, sort_keys=True, ensure_ascii=False)
         f.write("\n")
@@ -481,4 +483,14 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    import traceback
+    status_path = f"{REPO_DATA}/latest/collector_status.json"
+    try:
+        rc = main()
+        write_json(status_path, {"status": "ok", "finished_at": now_iso()})
+        sys.exit(rc)
+    except Exception as e:  # noqa: BLE001 — report and re-raise for CI visibility
+        write_json(status_path, {
+            "status": "error", "finished_at": now_iso(),
+            "error": str(e), "traceback": traceback.format_exc()[-4000:]})
+        raise
