@@ -28,3 +28,12 @@ Kalshi documentation at https://docs.kalshi.com (the `llms.txt` index lists ever
 ## Not included
 
 No trading or order placement. No credentials are stored in this repo.
+
+## Analysis site (session 3e08e6dc) — `analysis/`
+
+A second, self-contained dashboard lives in `analysis/` (it does not replace `docs/` or the root pages). It covers gas prices, elections, culture, crypto and golf, with a landing page, category subpages, resolutions, price history, liquidity, a flagged page, sources and repo review.
+
+- Open: `analysis/index.html` on Pages at `https://karagemop466-tech.github.io/Demo3/analysis/`
+- Data: `analysis/data/live/*.json` (Kalshi public API snapshot; each row links to its query) and `analysis/data/findings.json` (sources, repo review, flagged items, questions, suggestions).
+- Refresh (stdlib): `python3 scripts/refresh_kalshi.py`, scheduled hourly by `.github/workflows/refresh.yml`. It does not overwrite data when no API call succeeds.
+- Rebuild pages: `python3 scripts/build_analysis_site.py`. Checks: `python3 scripts/check_site.py` and `python3 scripts/tests/test_refresh_offline.py`.

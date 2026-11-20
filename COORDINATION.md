@@ -190,3 +190,38 @@ Log:
 - 2026-11-20 e2aacbd6 — GitHub Pages: build for 75dac00 reports `built`. Live pages checked with the page-fetch tool: https://karagemop466-tech.github.io/Demo3/docs/tracker/ (home, counts 19 series / 18 verified / 12 markets / 3 finalized / 22 flags) and https://karagemop466-tech.github.io/Demo3/docs/tracker/data/snapshot.json. The Pages source was not changed.
 - Still open for the owner (not blocking, see Flagged and Questions): demo API key for portfolio/trades (Q-01); browser CORS for the live dashboard (F-19; falls back to snapshot); gasoline series (F-18).
 
+
+---
+
+## Session 3e08e6dc — analysis site (`analysis/`) — added 2026-11-20
+
+Branch: `arena/3e08e6dc-demo3` (PR → `main`). Scope is limited to `analysis/**`, `scripts/refresh_kalshi.py`, `scripts/config.json`, `scripts/build_analysis_site.py`, `scripts/check_site.py`, `scripts/tests/test_refresh_offline.py`, `.github/workflows/check.yml`, `.github/workflows/refresh.yml`, and this section (appended). Nothing else was edited.
+
+Why `analysis/`: the names `index.html`, `assets/`, `scripts/build_site.py` and `.nojekyll` were already used on `main` by other sessions. The analysis site is therefore self-contained under `analysis/`, and its build script is `scripts/build_analysis_site.py`.
+
+Protocol note: per-task `session-<id>/<task>` branches were not created. The session rules bind this session to `arena/3e08e6dc-demo3`. The other protocol rules are followed (claims here, small commits, `git pull --rebase`/merge before each push, integration by this session).
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|------|--------|-------|-----------|------------------------|----------------|
+| T1 Repo review, line by line | done | 3e08e6dc | `analysis/data/findings.json` (`repo_review`) | git/GitHub API checks; R-01..R-16 | Irregular items on Flagged page |
+| T2 Kalshi data: top-volume tracking, resolutions, price history, liquidity, refresh job | done (snapshot); live refresh unverified | 3e08e6dc | `analysis/data/live/*`, `scripts/refresh_kalshi.py`, `scripts/config.json`, `scripts/tests/*`, `.github/workflows/refresh.yml` | Values re-fetched from official API responses on 2026-11-20; every row has `source_url` | Q-20, F-21 (scheduled run unverified) |
+| T3 Dashboard site: landing, category subpages, nav, styles | done | 3e08e6dc | `analysis/index.html`, `analysis/pages/*`, `analysis/assets/*`, `scripts/build_analysis_site.py` | DOM harness: all 17 pages render, row links present | — |
+| T4 Demo-account portfolio, trading, trade analysis | **blocked** | 3e08e6dc | `analysis/pages/portfolio.html`, `analysis/pages/strategies.html` | No demo API credentials in this sandbox; no trades placed | F-15 |
+| T5 Suggestions and questions | done (suggestions pending owner decision) | 3e08e6dc | `analysis/data/findings.json` (`suggestions`, `questions`) | Cited per row | S-01..S-13 Pending; Q-01..Q-20 |
+| T6 Flagged for Review (irregularities, unverified items) | done | 3e08e6dc | `analysis/data/findings.json` (`flagged`, `sources`) | 44 registered sources, every flagged row cites them | F-01..F-21 |
+| T7 Integration: checks, PR, merge, Pages check | in progress | 3e08e6dc | whole repo (shared files only by append) | `scripts/check_site.py`, offline refresh test, `node --check`, DOM harness | Merge record below |
+
+Integration checks (3e08e6dc):
+- `python3 scripts/tests/test_refresh_offline.py`: passed (88 calls OK, 0 failed; 14 resolutions, 15 orderbooks, 15 candle series, mock server).
+- `python3 scripts/check_site.py`: passed (44 sources registered, 39 cited, 0 broken internal links, every data row has an official `source_url`).
+- DOM harness (jsdom, not committed): all 17 pages render; tables, tabs, filters, chart and selectors checked.
+- The `main` checks of other sessions (`scripts/verify_site.py`, `scripts/tracker_check.py`) were run after merging `main` and are not affected by these files.
+
+Log:
+- 2026-11-20 ~11:25 UTC — `3e08e6dc` claimed T1–T7 (commit `63d4d71`).
+- 2026-11-20 ~11:30 UTC — Re-fetched official API responses for every value in `analysis/data/live`. Removed seed values no response supported. Added SYEL. Removed the derived `max_payout_usd` field.
+- 2026-11-20 — Built the site and checks. PR #12 was opened on the pre-merge branch, but could not merge: `main` had moved (DIRTY, add/add on overlapping filenames). Resolved by moving everything under `analysis/`, renaming the build script, and merging `main`. Other sessions' files were not changed.
+
+Merge record (3e08e6dc):
+- PR: _see the merge record below_
+- Pages: _pending_

@@ -1,0 +1,68 @@
+{
+  "generated_at": "2026-11-20 ~11:30 UTC (manual re-fetch)",
+  "api_base": "https://api.elections.kalshi.com/trade-api/v2",
+  "series": {
+    "KXPGATOUR-THRC26-ZBAU": {
+      "topic": "golf",
+      "series": "KXPGATOUR",
+      "title": "The RSM Classic: Zachary Bauchou wins",
+      "fetched_at": "2026-11-20 ~11:30 UTC (manual re-fetch)",
+      "1440": {
+        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXPGATOUR/markets/KXPGATOUR-THRC26-ZBAU/candlesticks?start_ts=1793491200&end_ts=1795176000&period_interval=1440",
+        "candles": [
+          {
+            "end_period_ts": 1794805200,
+            "end_period_utc": "2026-11-16T05:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 0.0,
+            "note": "No trade prices in this candle. yes_ask open 0.9900, high 0.9900, low 0.0320, close 0.0330 (API)."
+          },
+          {
+            "end_period_ts": 1794891600,
+            "end_period_utc": "2026-11-17T05:00:00Z",
+            "price_open": 0.02,
+            "price_high": 0.033,
+            "price_low": 0.002,
+            "price_close": 0.01,
+            "volume_contracts": 7049.28,
+            "open_interest_contracts": 6830.3
+          },
+          {
+            "end_period_ts": 1794978000,
+            "end_period_utc": "2026-11-18T05:00:00Z",
+            "price_open": 0.01,
+            "price_high": 0.011,
+            "price_low": 0.01,
+            "price_close": 0.01,
+            "volume_contracts": 10807.58,
+            "open_interest_contracts": 17622.5
+          },
+          {
+            "end_period_ts": 1795064400,
+            "end_period_utc": "2026-11-19T05:00:00Z",
+            "price_open": 0.01,
+            "price_high": 0.011,
+            "price_low": 0.01,
+            "price_close": 0.011,
+            "volume_contracts": 84053.28,
+            "open_interest_contracts": 101675.78
+          },
+          {
+            "end_period_ts": 1795150800,
+            "end_period_utc": "2026-11-20T05:00:00Z",
+            "price_open": 0.011,
+            "price_high": 0.013,
+            "price_low": 0.001,
+            "price_close": 0.003,
+            "volume_contracts": 67465.94,
+            "open_interest_contracts": 164802.6
+          }
+        ]
+      }
+    }
+  }
+}
