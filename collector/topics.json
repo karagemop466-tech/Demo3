@@ -1,0 +1,173 @@
+{
+  "_readme": [
+    "Topic-mapping rules for the Kalshi dashboard. Only the five requested topics are in scope:",
+    "gas prices, elections, culture, crypto, golf.",
+    "",
+    "Each rule is evaluated in this fixed order per series: category match, categories[] match,",
+    "tag match, ticker prefix match, title substring match. Rules are exact-match only (no fuzzy",
+    "matching, no inference) so the same input always produces the same classification, and any",
+    "series that matches nothing is excluded and counted rather than guessed into a topic.",
+    "",
+    "Where the category name comes from: GET /trade-api/v2/series returns `category`, `categories`",
+    "and `tags` for every series. Values below were observed live from that endpoint on",
+    "2026-11-20 (see data/meta.json request log and data/live.json series rows).",
+    "API reference: https://docs.kalshi.com/api-reference/market/get-series-list.md"
+  ],
+  "topics": {
+    "crypto": {
+      "label": "Crypto",
+      "categories": [
+        "Crypto"
+      ],
+      "tags_any": [
+        "crypto",
+        "bitcoin",
+        "btc",
+        "ethereum",
+        "eth",
+        "solana",
+        "dogecoin",
+        "doge",
+        "xrp",
+        "ripple"
+      ],
+      "ticker_prefixes": [
+        "KXBTC",
+        "KXETH",
+        "KXSOL",
+        "KXDOGE",
+        "KXXRP",
+        "KXADA",
+        "KXUSDT"
+      ],
+      "title_contains": [
+        "bitcoin",
+        "ethereum",
+        "solana",
+        "dogecoin",
+        "crypto"
+      ],
+      "why": "Kalshi publishes a Crypto series category; settlement source for crypto price series is CF Benchmarks."
+    },
+    "elections": {
+      "label": "Elections",
+      "categories": [
+        "Elections",
+        "Politics"
+      ],
+      "tags_any": [
+        "elections",
+        "election",
+        "politics",
+        "political",
+        "senate",
+        "congress",
+        "president",
+        "governor",
+        "mayor"
+      ],
+      "ticker_prefixes": [
+        "KXPRES",
+        "KXSENATE",
+        "KXHOUSE",
+        "KXGOV",
+        "KXMAYOR",
+        "KXELECT"
+      ],
+      "title_contains": [
+        "election",
+        "senate",
+        "presidential",
+        "governor"
+      ],
+      "why": "Kalshi publishes Elections and Politics series categories."
+    },
+    "culture": {
+      "label": "Culture",
+      "categories": [
+        "Entertainment",
+        "Culture",
+        "Pop Culture",
+        "Media"
+      ],
+      "tags_any": [
+        "culture",
+        "entertainment",
+        "music",
+        "movies",
+        "film",
+        "tv",
+        "celebrities",
+        "celebrity",
+        "awards",
+        "music charts"
+      ],
+      "ticker_prefixes": [
+        "KXOSCAR",
+        "KXGRAMMY",
+        "KXEMMY",
+        "KXBILLBOARD",
+        "KXSONG"
+      ],
+      "title_contains": [
+        "box office",
+        "billboard",
+        "oscar",
+        "grammy",
+        "emmy"
+      ],
+      "why": "Kalshi publishes Entertainment/Culture series categories and music-chart series (e.g. a #1 hit series settled from Billboard)."
+    },
+    "golf": {
+      "label": "Golf",
+      "categories": [],
+      "tags_any": [
+        "golf"
+      ],
+      "ticker_prefixes": [
+        "KXPGATOUR",
+        "KXPGARYDER",
+        "KXGOLF",
+        "KXMASTERS",
+        "KXUSOPEN",
+        "KXTHEOPEN"
+      ],
+      "title_contains": [
+        "golf",
+        "pga",
+        "ryder cup",
+        "masters"
+      ],
+      "why": "Golf is a tag inside the Sports category, not its own category (observed on /series); matching is therefore tag/prefix based."
+    },
+    "gas": {
+      "label": "Gas prices",
+      "categories": [
+        "Economics",
+        "Commodities"
+      ],
+      "tags_any": [
+        "gas prices",
+        "gasoline",
+        "aaa"
+      ],
+      "ticker_prefixes": [
+        "KXAAAGAS",
+        "KXGAS",
+        "KXGASOLINE"
+      ],
+      "title_contains": [
+        "gas price",
+        "gasoline",
+        "aaa gas"
+      ],
+      "why": "Kalshi runs an AAA national average gas price series (KXAAAGASW) inside Economics; matched by ticker prefix and title."
+    }
+  },
+  "notes": {
+    "excluded_on_purpose": "Sports series other than Golf are excluded even though they carry the largest demo volumes, because the brief limits scope to the five topics.",
+    "overlap": "A series may map to more than one topic (e.g. a crypto series tagged 'Crypto' inside 'Financials'); all matched topics are recorded on the row.",
+    "no_inference": "If a series has no category, no tag and no matching prefix, it is dropped and counted in meta.counts.open_markets_belonging_to_untracked_series.",
+    "over_broad_avoided": "Tags like 'oil' or 'energy' were deliberately NOT used for the gas topic: they also match crude-oil and general energy series, which would mislabel non-gasoline markets as gas prices."
+  }
+}

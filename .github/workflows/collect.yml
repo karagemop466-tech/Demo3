@@ -1,0 +1,125 @@
+# Collects Kalshi market data and commits it to the repository.
+#
+# Why this exists: the agent sandbox used to develop this repo cannot reach *.kalshi.co.
+# GitHub Actions runners can (verified: run 44727245939, .github/workflows/smoke.yml).
+# Every artifact the collector writes records the request URL and fetch time it came from.
+#
+# Auth: none. Only public endpoints are used. Portfolio/trade endpoints need an Ed25519
+# API key ("API Keys", https://docs.kalshi.com/getting_started/api_keys.md) which this
+# repository does not have, so those panels are published blank and flagged instead of
+# being filled with invented numbers.
+name: collect-kalshi
+
+on:
+  workflow_dispatch:
+    inputs:
+      host:
+        description: "Which environment to collect (demo is the brief's requirement)"
+        type: choice
+        options: [demo, prod, both]
+        default: both
+  schedule:
+    # Hourly. Kalshi applies separate limits to unauthenticated traffic and we stay well
+    # under them: one series sweep, one open-market sweep, one settled sweep per run.
+    - cron: "17 * * * *"
+  push:
+    branches: [arena/c2aac20e-demo3]
+    paths:
+      - "collector/**"
+      - ".github/workflows/collect.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: collect-kalshi
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: arena/c2aac20e-demo3
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Collect demo environment
+        if: ${{ github.event.inputs.host != 'prod' }}
+        run: |
+          python3 collector/collect.py demo
+          echo "--- demo artifacts ---"
+          ls -la data data/history | head -30
+
+      - name: Collect production environment
+        if: ${{ github.event.inputs.host != 'demo' }}
+        run: |
+          python3 collector/collect.py prod
+          echo "--- prod artifacts ---"
+          ls -la data | head -30
+
+      - name: Validate artifacts are parseable JSON
+        run: |
+          python3 - <<'PY'
+          import json, pathlib, sys
+          bad = []
+          for p in pathlib.Path("data").rglob("*.json"):
+              try:
+                  json.loads(p.read_text())
+              except Exception as exc:
+                  bad.append((str(p), repr(exc)))
+          for p in pathlib.Path("data").rglob("*.jsonl"):
+              for i, line in enumerate(p.read_text().splitlines(), 1):
+                  if not line.strip():
+                      continue
+                  try:
+                      json.loads(line)
+                  except Exception as exc:
+                      bad.append((f"{p}:{i}", repr(exc)))
+          print("invalid artifacts:", bad)
+          sys.exit(1 if bad else 0)
+          PY
+
+      - name: Commit and push data
+        run: |
+          git config user.name "kalshi-collector-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data
+          if git diff --cached --quiet; then
+            echo "no data changes"
+            exit 0
+          fi
+          git commit -m "data: Kalshi snapshot $(date -u +%Y-%m-%dT%H:%MZ)"
+          for i in 1 2 3; do
+            if git pull --rebase --autostash origin arena/c2aac20e-demo3 && git push origin HEAD:arena/c2aac20e-demo3; then
+              echo "pushed on attempt $i"
+              exit 0
+            fi
+            echo "push attempt $i failed, retrying"
+            sleep 5
+          done
+          echo "all push attempts failed" >&2
+          exit 1
+
+      - name: Summary
+        if: always()
+        run: |
+          python3 - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json, pathlib
+          for name in ("live.json", "live-prod.json"):
+              p = pathlib.Path("data") / name
+              if not p.exists():
+                  continue
+              d = json.loads(p.read_text())
+              m = d.get("meta", {})
+              print(f"### {name}")
+              print(f"- run_id: `{m.get('run_id')}`  env: `{m.get('environment')}`")
+              print(f"- counts: `{m.get('counts')}`")
+              print(f"- requests: `{m.get('request_count')}`  duration: `{m.get('duration_seconds')}s`")
+              print()
+          PY
