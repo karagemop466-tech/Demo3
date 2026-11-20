@@ -124,6 +124,14 @@ Session 6908a11a (see `FLAGGED.md` for full evidence; complements the above):
 - F9: `limit` appears unenforced on `GET /series?category=` (live-tested) — paginate by cursor.
 - F10: Root landing alternates (redirect vs full landing) across concurrent merges; owner to pick one canonical landing at final review (see FLAGGED.md).
 
+Session 1d7c7660 (see the dashboard alert card and Methodology §6):
+- F-1D-01: the “model picks — high ROI” chat uses a transparent **heuristic preference**
+  (`0.45×move + 0.35×liquidity + 0.20×spread`, threshold 0.25) built only from exchange-reported fields;
+  it is a labeled preference, **not** a verified ROI predictor. Disclosed on the card and Methodology §6.
+- F-1D-02: the brief asks for “website links that may have caused a sharp jump”. No verified external
+  news/cause link exists for a given jump, so each alert names the event/market API record as the
+  candidate cause and marks the external-cause link **unverified** — never inferred or fabricated.
+
 ## Verification log
 
 Session 00a943bd:
@@ -312,10 +320,35 @@ Follow-up requests from session 06cbd03f addressed at integration:
 
 | # | Task | Status | Owner | Files in scope | Sources / verification | Irregularities |
 |---|---|---|---|---|---|---|
-| B1 | Implement live swing-alerting scrolling chat system: detect contract-price swings ≥ $0.10 either direction; two real-time scrolling chats (all events; model high-ROI-filtered); per-alert official source links; candidate-cause context (event/market API records; external-cause links left blank+flagged, never inferred) | in progress | 1d7c7660 | `scripts/build_root_site.py`, `assets/dashboard.js`, `assets/app.js`, `assets/style.css` | Field facts verified against live demo API responses fetched 2026-11-20 (`/markets`, `/events`, `/series`, `/markets/{t}/orderbook`); high-ROI heuristic documented and labeled unverified estimate | F-1D-01 (high-ROI model is a labeled heuristic, not a verified ROI predictor), F-1D-02 (no verified external cause links — left blank+flagged) |
-| B2 | Add offline unit tests for the swing-alert + high-ROI helpers | in progress | 1d7c7660 | `tests/swing.test.js` | Pure-function tests (no network); `node --test` | — |
-| B3 | Extend root-site verifier to assert the alert chat panels exist | in progress | 1d7c7660 | `scripts/verify_root_site.py` | `verify_root_site.py` must stay green (0 failures) | — |
-| B4 | Final integration: run all checks, regenerate `dashboard.html`, PR → merge, confirm Pages, record | pending | 1d7c7660 | `COORDINATION.md`, README (if needed) | `node --check`, `verify_root_site.py`, `verify_site.py`, `tracker_check.py`, `check_site.py`, `npm test`; Pages API `built` | — |
+| B1 | Implement live swing-alerting scrolling chat system: detect contract-price swings ≥ $0.10 either direction; two real-time scrolling chats (all events; model high-ROI-filtered); per-alert official source links; candidate-cause context (event/market API records; external-cause links left blank+flagged, never inferred) | done | 1d7c7660 | `scripts/build_root_site.py`, `assets/dashboard.js`, `assets/app.js`, `assets/style.css` | Field facts verified against live demo API responses fetched 2026-11-20 (`/markets`, `/events`, `/series`, `/markets/{t}/orderbook`); `swingDelta` rounds to the API 0.0001 step so a true $0.10 move is not lost to float error; high-ROI heuristic documented in Methodology §6 and labeled unverified | F-1D-01 (high-ROI model is a labeled heuristic, not a verified ROI predictor), F-1D-02 (no verified external cause links — left blank+flagged) |
+| B2 | Add offline unit tests for the swing-alert + high-ROI helpers | done | 1d7c7660 | `tests/swing.test.js` | Pure-function tests (no network); 6/6 pass under `node --test` | — |
+| B3 | Extend root-site verifier to assert the alert chat panels exist | done | 1d7c7660 | `scripts/verify_root_site.py` | `verify_root_site.py` green (0 failures) with the new alert-panel/engine assertions | — |
+| B4 | Final integration: run all checks, regenerate `dashboard.html`, PR → merge, confirm Pages, record | done | 1d7c7660 | `COORDINATION.md`, README | All checkers green; `npm test` 33/33; Pages `built` (see completion record below) | — |
+
+## Session 1d7c7660 completion record
+
+- **What was built:** the brief's live swing-alerting system on the canonical root dashboard. A
+  tracked contract fires an alert when its last price moves **≥ $0.10** in either direction (threshold
+  selectable $0.05/$0.10/$0.20). Top 15 markets by estimated $ are re-polled every 15s for prompt
+  detection; the full scan also samples every 20s. Alerts stream into **two real-time scrolling chats**:
+  “all events” and “model picks — high ROI” (a transparent heuristic, labeled **unverified**). Every
+  alert links its exact official market (and event, when present) API record. Candidate external causes
+  are explicitly marked unverified — never inferred (F-1D-02).
+- **High-ROI heuristic** (Methodology §6): `0.45×moveScore + 0.35×liquidityScore + 0.20×spreadScore`,
+  threshold 0.25, using only exchange-reported fields (last price, yes bid/ask, volume, open interest).
+  Labeled a heuristic preference, not a verified ROI predictor (F-1D-01).
+- **Verification performed (2026-11-20):**
+  - Live API shapes re-fetched and matched to the code: `GET /markets/{ticker}` →
+    `{market:{ticker,event_ticker,title,status,result,last_price_dollars,yes_bid_dollars,yes_ask_dollars,
+    volume_fp,open_interest_fp}}`; `GET /events/{ticker}` → `{event,markets}` (with `settlement_sources`).
+  - `npm test` **33/33** (6 new swing unit tests + 1 new jsdom dashboard integration test that mocks the
+    demo API and confirms a simulated $0.12 swing flows into both chats with a `+12.00¢` delta label, a
+    model score, and an official market source link).
+  - `scripts/verify_root_site.py` **0 failures** (now also asserts the alert panels/engine exist);
+    `scripts/verify_site.py` PASSED; `scripts/tracker_check.py` OK; `scripts/check_site.py` passed.
+  - `node --check assets/app.js`, `assets/dashboard.js` OK.
+- **Flagged (do not block merge):** F-1D-01 (heuristic ≠ verified predictor), F-1D-02 (no verified
+  external cause links — left blank+flagged). Both are disclosed on the dashboard card and Methodology §6.
 
 ## Final integration record — session arena-3a22fb0f (T7-T12)
 
