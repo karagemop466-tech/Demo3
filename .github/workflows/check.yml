@@ -35,6 +35,11 @@ jobs:
       - name: Canonical root site checks (links, per-row sources, syntax)
         run: python3 scripts/verify_root_site.py
 
+      - name: High-ROI model artefact (deterministic rebuild + consistency tests)
+        run: |
+          python3 model/build_roi_model.py --check
+          python3 scripts/tests/test_roi_model.py
+
       - name: Strategy backtest (deterministic rebuild + consistency tests)
         run: |
           # The published artefacts are pinned to a data snapshot; the scheduled collector

@@ -184,6 +184,8 @@ NAV = [
     ("repo-review.html", "Repo review"),
     ("methodology.html", "Methodology"),
     ("api-reference.html", "API reference"),
+    ("requirements.html", "Requirements"),
+    ("model.html", "High-ROI model"),
 ]
 
 EXTRA_HEAD = ""
@@ -318,6 +320,34 @@ def consolidated_suggestions():
     for s in verified.get("suggestions", []):
         add(s.get("id", "VS"), s.get("title", ""), s.get("detail", ""), "",
             "", "", s.get("options", []), [s.get("source", "")], "00a943bd docs")
+    add("S-7b-01", "Jump annotations on the price chart",
+        "Alert rows already carry the event's official settlement_sources; the chart itself does not "
+        "mark the >= $0.10 jumps. assets/dashboard.js keeps `state.selected` private, so a marker layer "
+        "needs one export (e.g. KD.selectedTicker or a KD.onSelect hook). Requested of the file owner on "
+        "COORDINATION.md rather than edited here.",
+        "The brief asks the live chart to show the events/links around sharp jumps.", "low",
+        "none — read-only hook", [],
+        [f"{DOCS}/api-reference/market/get-market", f"{DOCS}/api-reference/events/get-event"],
+        "7b47094a")
+    add("S-7b-02", "Record sub-minute tick history server-side so the ROI screen can be calibrated",
+        "Candles from GET /markets/{ticker}/candlesticks stop at 1 minute and only 12 markets have "
+        "recorded windows, while the settled snapshot exposes just previous/last price — enough to "
+        "describe, not to fit. A CI job that appends 1-second samples of the tracked watchlist to "
+        "data/history/ would let the screen's parameters be measured (with n and confidence shown).",
+        "Turns the published uncalibrated threshold into a fitted, verifiable one.", "medium",
+        "more committed data; keep the collector rate-limit friendly (>= 400 ms between calls)", [],
+        [f"{DOCS}/api-reference/market/get-market-candlesticks", f"{DOCS}/getting_started/rate_limits"],
+        "7b47094a")
+    add("S-7b-03", "Add a signed WebSocket recorder for true tick streaming",
+        "Official docs require KALSHI-ACCESS-KEY/-SIGNATURE/-TIMESTAMP headers on the WS handshake, and "
+        "public channels still ride the authenticated session, so a static Pages page cannot open the "
+        "socket. A small authenticated client (Actions runner or a user-hosted service) could subscribe "
+        "to `ticker`/`orderbook_delta` for the watchlist and publish the same JSON the dashboard already "
+        "consumes; the browser keeps polling when it is absent.",
+        "Sub-second alerts and order-book deltas without hammering REST limits.", "high",
+        "never ship a private key to the browser; keep it as a repo secret", [],
+        [f"{DOCS}/getting_started/quick_start_websockets", f"{DOCS}/getting_started/api_keys"],
+        "7b47094a")
     return rows
 
 
@@ -395,6 +425,47 @@ def consolidated_flags():
         "query string. Fixed in assets/app.js at integration (would otherwise 401 on every "
         "authenticated call).",
         [f"{DOCS}/getting_started/api_keys"], "resolved", "3a22fb0f")
+    add("F-7b-01", "Alerts", "High-ROI screen parameters are uncalibrated (supersedes F-alert-01)",
+        "The screen now lives in data/latest/roi_model.json with every measured rate on model.html. The "
+        "10%-of-prior parameter is a stated choice: the committed demo data cannot fit it — of 341 "
+        "settled markets with |last - prior| >= $0.10, 340 have a prior below $0.05, so "
+        "`previous_price_dollars` is not a usable price path, and only 12 markets have candle windows.",
+        [f"{DOCS}/api-reference/market/get-markets",
+         "https://github.com/karagemop466-tech/Demo3/blob/main/model/build_roi_model.py"],
+        "open — disclosed in UI", "7b47094a")
+    add("F-7b-02", "Ranking", "No exchange-reported dollar-volume field exists",
+        "Highest-dollar ranking rows are contracts x last price, labelled as a derived estimate on the "
+        "dashboard. The docs expose volume_fp / open_interest_fp (contract counts), not a dollar-volume "
+        "field, so no dollar ranking is claimed as official.",
+        [f"{DOCS}/api-reference/market/get-markets"], "open — labelled in UI", "7b47094a")
+    add("F-7b-03", "Resolution tracking", "Live in-browser behaviour not verifiable from the sandbox",
+        "The resolution watcher (assets/alerts.js) and the ROI screen are unit-tested in jsdom and use "
+        "only documented fields (result, settlement_value_dollars, settlement_ts), but this sandbox has "
+        "no network path to external-api.demo.kalshi.co (measured: TLS blocked, curl exit 35), so the "
+        "poll could not be exercised against the live demo API here. Both demo-API responses used for "
+        "this session's verification were captured through the agent fetch tool and are replayable.",
+        [f"{DOCS}/getting_started/demo_env", DEMO + "/markets?limit=2&status=settled"],
+        "open — fails closed", "7b47094a")
+    add("F-7b-05", "Alerts", "Exact $0.10 swings were dropped by float comparison (fixed)",
+        "The chat tested |change| >= 0.10 on IEEE-754 dollars, where 0.6499 - 0.5499 evaluates to "
+        "0.09999999999999998 — measured in this repo with node -e on 2026-11-20 — so some moves of "
+        "exactly 10 cents silently failed to alert. The threshold now uses a 1e-9 tolerance in "
+        "assets/alerts.js and assets/roi-model.js, and tests/alerts_resolution.test.js asserts both "
+        "the 9.99c (must not fire) and 10c (must fire) cases.",
+        [f"{DOCS}/api-reference/market/get-markets",
+         "https://github.com/karagemop466-tech/Demo3/blob/main/tests/alerts_resolution.test.js"],
+        "resolved — test-covered", "7b47094a")
+    add("F-7b-06", "Alerts", "Alert-row badge rendered as escaped markup text (fixed)",
+        "assets/alerts.js wrapped the already-built HTML badge in esc(), so the Source column showed the "
+        "literal <span …> text instead of a styled pill. Fixed by rendering the badge (its dynamic parts "
+        "are escaped individually) and covered by the jsdom tests.",
+        [f"{DOCS}/getting_started/quick_start_market_data"], "resolved — test-covered", "7b47094a")
+    add("F-7b-04", "WebSocket", "Browser WS streaming is not possible (was listed as unverified)",
+        "Earlier registers carried 'WS expected to be blocked in browsers' as unverified (F2/Q-20). "
+        "Closed: official docs state the handshake requires the three KALSHI-ACCESS-* headers and that "
+        "even public channels ride the authenticated session — the WebSocket API cannot be used from a "
+        "static Pages page by design, so REST polling is the correct fallback, not a defect.",
+        [f"{DOCS}/getting_started/quick_start_websockets"], "resolved — documented", "7b47094a")
     return rows
 
 

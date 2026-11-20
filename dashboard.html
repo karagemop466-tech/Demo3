@@ -112,10 +112,21 @@ if the browser blocks the request the tables fall back to the snapshot links in
   <h2>6 · Price-swing alerts &mdash; scrolling chat (&ge; $0.10)</h2>
   <p class="small muted">Live alerts for contract price swings of <strong>&ge; $0.10 in either direction</strong>,
      detected from the dashboard's live market samples (GET /markets, demo API, no key). Two scrolling chats:
-     <em>All events</em> shows every swing; <em>High ROI model</em> shows a selective, labeled placeholder
-     heuristic (no real model is defined yet &mdash; flagged F-alert-01, never presented as verified ROI).
+     <em>All events</em> shows every swing; <em>High ROI model</em> shows the selective screen published on
+     <a href="model.html">High-ROI model</a> (definition + the rates measured from the committed demo
+     snapshots, thresholds labelled uncalibrated &mdash; never presented as verified ROI). The full
+     requirement-by-requirement map of this site is on <a href="requirements.html">Requirements</a>.
      Each row links its exact market API URL and, in <em>Context</em>, the event's official <code>settlement_sources</code> (Get Event).
-     Those are resolution sources, not proof of cause: each row says "Cause not verified". Alerts persist in this browser only.</p>
+     Those are resolution sources, not proof of cause: each row says "Cause not verified". Each alerted
+     market is then followed (batched <code>GET /markets?tickers=&hellip;&amp;limit=100</code>, every 20 s)
+     until the exchange reports <code>result</code>; the chat then shows
+     <strong>RESOLVED YES</strong> (&rarr; $1.00) or <strong>RESOLVED NO</strong> (&rarr; $0.00) with the
+     official <code>settlement_value_dollars</code> and <code>settlement_ts</code>. While
+     <code>result</code> is empty the row stays open &mdash; no outcome is guessed. Alerts persist in this
+     browser only.</p>
+  <p class="small muted"><span id="resPollStatus">resolution watch idle</span> &mdash; sources:
+     <a href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noopener">Get Markets (<code>result</code>)</a> ·
+     <a href="https://docs.kalshi.com/getting_started/market_settlement" target="_blank" rel="noopener">Market settlement</a></p>
   <div class="alert-controls">
     <label><input type="checkbox" id="alertsEnabled" checked> Alerts enabled</label>
     <label><input type="checkbox" id="autoTrade" disabled> Automated paper trades on swing (paper/SIMULATED only)</label>
@@ -131,7 +142,11 @@ if the browser blocks the request the tables fall back to the snapshot links in
   </div>
   <div class="chat-wrap" id="chatROI" style="display:none">
     <div id="alertsROI"></div>
-    <p class="small muted">High-ROI placeholder rule: swing &ge; $0.10 AND move &ge; 10% of prior price. Not a real model.</p>
+    <p class="small muted">High-ROI screen (<a href="model.html">definition and measured context</a>,
+       data in <a href="data/latest/roi_model.json">roi_model.json</a>): swing &ge; $0.10 in either
+       direction AND &ge; 10% of the prior price. The 10% parameter is a stated choice, not a fitted
+       value &mdash; the recorded demo data cannot calibrate or validate it (see
+       <a href="model.html">calibration feasibility</a>).</p>
   </div>
 </div>
 
@@ -140,6 +155,6 @@ if the browser blocks the request the tables fall back to the snapshot links in
 (mock funds): <span class="mono">https://external-api.demo.kalshi.co/trade-api/v2</span> · Docs:
 <a href="https://docs.kalshi.com" target="_blank" rel="noopener">docs.kalshi.com</a> ·
 Every table row links its source; blank cells are flagged on <a href="flagged.html">Flagged for review</a>.</p></footer>
-<script src="assets/app.js"></script><script src="assets/trade.js"></script><script src="assets/dashboard.js"></script><script src="assets/alerts.js"></script><script src="assets/site.js"></script>
+<script src="assets/app.js"></script><script src="assets/trade.js"></script><script src="assets/dashboard.js"></script><script src="assets/roi-model.js"></script><script src="assets/alerts.js"></script><script src="assets/site.js"></script>
 </body>
 </html>

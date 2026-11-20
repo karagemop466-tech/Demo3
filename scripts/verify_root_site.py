@@ -28,6 +28,7 @@ PAGES = [
     "gas-prices.html", "elections.html", "culture.html", "crypto.html", "golf.html",
     "questions.html", "suggestions.html", "flagged.html", "sources.html",
     "repo-review.html", "methodology.html", "api-reference.html",
+    "requirements.html", "model.html",
 ]
 
 
