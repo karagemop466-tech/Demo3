@@ -374,6 +374,25 @@ def temporal_split(rows):
     }
 
 
+
+def data_as_of():
+    """Newest `retrieved_at` among the committed inputs (never the wall clock)."""
+    stamps = []
+    for rel in ("data/latest/markets_settled.json", "data/latest/candles.json",
+                "data/latest/markets_open.json"):
+        p = ROOT / rel
+        if not p.exists():
+            continue
+        v = json.loads(p.read_text()).get("retrieved_at")
+        if v:
+            stamps.append(v)
+    for f in sorted((ROOT / "strategy" / "data" / "raw").glob("*.json")):
+        v = json.loads(f.read_text()).get("retrieved_at_utc")
+        if v:
+            stamps.append(v)
+    return max(stamps) if stamps else "unknown"
+
+
 def load_raw_resolved(settled):
     """Yield (ticker, topic, minutes, points, source_url) for strategy/data/raw/*.json."""
     for f in sorted((ROOT / "strategy" / "data" / "raw").glob("*.json")):
@@ -560,8 +579,9 @@ def main():
         }
 
     doc = {
-        "generated_at_utc": __import__("datetime").datetime.now(
-            __import__("datetime").timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        # Deterministic: the newest retrieval timestamp among the committed inputs, so a
+        # rebuild against unchanged data is byte-identical (CI enforces this).
+        "data_as_of_utc": data_as_of(),
         "contracts_per_trade": CONTRACTS,
         "swing_threshold": SWING,
         "fee_model": {
