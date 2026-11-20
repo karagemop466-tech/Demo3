@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-20T19:24:46Z",
+ "generated_at": "2026-11-20T19:30:24Z",
  "api_root": "https://external-api.demo.kalshi.co/trade-api/v2",
  "rule": {
   "threshold_dollars": "0.10",
@@ -18,24 +18,28 @@
    "KXQUICKSETTLE"
   ]
  },
- "snapshot_samples": 132,
+ "snapshot_samples": 144,
  "snapshot_tickers": 24,
  "counts": {
-  "alerts": 3,
+  "alerts": 4,
   "up": 3,
-  "down": 0,
+  "down": 1,
   "high_roi": 0,
-  "reverted_next_reading": 0,
+  "reverted_next_reading": 1,
   "synthetic": 2,
-  "watchlist": 40
+  "watchlist": 40,
+  "resolved": 1,
+  "resolved_yes": 0,
+  "resolved_no": 1,
+  "recent_resolutions": 20
  },
  "alerts": [
   {
    "ts": "2026-11-20T11:49:21+00:00",
    "prev_ts": "2026-11-20T11:45:09+00:00",
    "ticker": "KXDEMOFUTHOURLY-26NOV20H12-UP",
-   "event_ticker": "",
-   "title": "",
+   "event_ticker": "KXDEMOFUTHOURLY-26NOV20H12",
+   "title": "Demo BTC at or above 61985.83 USD",
    "topic": "crypto",
    "from_dollars": "0.3500",
    "to_dollars": "0.5500",
@@ -53,15 +57,33 @@
    "roi_side": "YES",
    "roi_bought_price_dollars": "0.5500",
    "roi_multiple": "0.8182",
-   "cause_link": "",
-   "cause_status": "unverified - not inferred"
+   "event_title": "Demo hourly BTC price",
+   "event_url": "https://external-api.demo.kalshi.co/trade-api/v2/events/KXDEMOFUTHOURLY-26NOV20H12",
+   "settlement_sources": [
+    {
+     "name": "Coinbase Exchange",
+     "url": "https://api.exchange.coinbase.com/products/BTC-USD/candles"
+    }
+   ],
+   "cause_link": "https://api.exchange.coinbase.com/products/BTC-USD/candles",
+   "cause_status": "official settlement source (reference link, not an attribution of the move)",
+   "resolution": {
+    "result": "no",
+    "status": "finalized",
+    "settlement_ts": "2026-11-20T12:01:19.562363Z",
+    "settlement_value_dollars": "0.0000",
+    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXDEMOFUTHOURLY-26NOV20H12-UP",
+    "title": "Demo BTC at or above 61985.83 USD",
+    "topic": "",
+    "event_ticker": "KXDEMOFUTHOURLY-26NOV20H12"
+   }
   },
   {
    "ts": "2026-11-20T11:58:42+00:00",
    "prev_ts": "2026-11-20T11:49:21+00:00",
    "ticker": "KXDEMOFUTHOURLY-26NOV20H12-UP",
-   "event_ticker": "",
-   "title": "",
+   "event_ticker": "KXDEMOFUTHOURLY-26NOV20H12",
+   "title": "Demo BTC at or above 61985.83 USD",
    "topic": "crypto",
    "from_dollars": "0.5500",
    "to_dollars": "0.6500",
@@ -79,8 +101,26 @@
    "roi_side": "YES",
    "roi_bought_price_dollars": "0.6500",
    "roi_multiple": "0.5385",
-   "cause_link": "",
-   "cause_status": "unverified - not inferred"
+   "event_title": "Demo hourly BTC price",
+   "event_url": "https://external-api.demo.kalshi.co/trade-api/v2/events/KXDEMOFUTHOURLY-26NOV20H12",
+   "settlement_sources": [
+    {
+     "name": "Coinbase Exchange",
+     "url": "https://api.exchange.coinbase.com/products/BTC-USD/candles"
+    }
+   ],
+   "cause_link": "https://api.exchange.coinbase.com/products/BTC-USD/candles",
+   "cause_status": "official settlement source (reference link, not an attribution of the move)",
+   "resolution": {
+    "result": "no",
+    "status": "finalized",
+    "settlement_ts": "2026-11-20T12:01:19.562363Z",
+    "settlement_value_dollars": "0.0000",
+    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXDEMOFUTHOURLY-26NOV20H12-UP",
+    "title": "Demo BTC at or above 61985.83 USD",
+    "topic": "",
+    "event_ticker": "KXDEMOFUTHOURLY-26NOV20H12"
+   }
   },
   {
    "ts": "2026-11-20T19:14:49+00:00",
@@ -95,9 +135,9 @@
    "direction": "up",
    "to_bid_dollars": "0.0020",
    "to_ask_dollars": "0.8110",
-   "next_reading_dollars": "",
-   "next_reading_ts": "",
-   "reverted_next_reading": false,
+   "next_reading_dollars": "0.0030",
+   "next_reading_ts": "2026-11-20T19:20:48+00:00",
+   "reverted_next_reading": true,
    "volume_fp": "537225527.6800",
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-HBID",
    "synthetic": false,
@@ -105,8 +145,316 @@
    "roi_side": "YES",
    "roi_bought_price_dollars": "0.8110",
    "roi_multiple": "0.2330",
-   "cause_link": "",
-   "cause_status": "unverified - not inferred"
+   "event_title": "Who will be the Democratic nominee in 2028?",
+   "event_url": "https://external-api.demo.kalshi.co/trade-api/v2/events?series_ticker=KXPRESNOMD",
+   "settlement_sources": [
+    {
+     "name": "Democratic Party",
+     "url": "https://democrats.org/"
+    }
+   ],
+   "cause_link": "https://democrats.org/",
+   "cause_status": "official settlement source (reference link, not an attribution of the move)",
+   "resolution": null
+  },
+  {
+   "ts": "2026-11-20T19:20:48+00:00",
+   "prev_ts": "2026-11-20T19:14:49+00:00",
+   "ticker": "KXPRESNOMD-28-HBID",
+   "event_ticker": "KXPRESNOMD-28",
+   "title": "Will Hunter Biden be the nominee for the Presidency for the Democratic party?",
+   "topic": "elections",
+   "from_dollars": "0.8110",
+   "to_dollars": "0.0030",
+   "delta_dollars": "-0.8080",
+   "direction": "down",
+   "to_bid_dollars": "0.0020",
+   "to_ask_dollars": "0.0030",
+   "next_reading_dollars": "",
+   "next_reading_ts": "",
+   "reverted_next_reading": false,
+   "volume_fp": "537225560.6500",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-HBID",
+   "synthetic": false,
+   "high_roi": false,
+   "roi_side": "NO",
+   "roi_bought_price_dollars": "0.9970",
+   "roi_multiple": "0.0030",
+   "event_title": "Who will be the Democratic nominee in 2028?",
+   "event_url": "https://external-api.demo.kalshi.co/trade-api/v2/events?series_ticker=KXPRESNOMD",
+   "settlement_sources": [
+    {
+     "name": "Democratic Party",
+     "url": "https://democrats.org/"
+    }
+   ],
+   "cause_link": "https://democrats.org/",
+   "cause_status": "official settlement source (reference link, not an attribution of the move)",
+   "resolution": null
+  }
+ ],
+ "resolutions": [
+  {
+   "ticker": "KXDEMOFUTHOURLY-26NOV20H12-UP",
+   "title": "Demo BTC at or above 61985.83 USD",
+   "topic": "",
+   "result": "no",
+   "status": "finalized",
+   "settlement_ts": "2026-11-20T12:01:19.562363Z",
+   "settlement_value_dollars": "0.0000",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXDEMOFUTHOURLY-26NOV20H12-UP",
+   "event_ticker": "KXDEMOFUTHOURLY-26NOV20H12",
+   "event_title": "Demo hourly BTC price",
+   "event_url": "https://external-api.demo.kalshi.co/trade-api/v2/events/KXDEMOFUTHOURLY-26NOV20H12",
+   "settlement_sources": [
+    {
+     "name": "Coinbase Exchange",
+     "url": "https://api.exchange.coinbase.com/products/BTC-USD/candles"
+    }
+   ],
+   "synthetic": true
+  }
+ ],
+ "recent_resolutions": [
+  {
+   "ticker": "KXQUICKSETTLE-20NOV26H1350-3",
+   "title": "1+1 = 3",
+   "topic": "gas",
+   "event_ticker": "KXQUICKSETTLE-20NOV26H1350",
+   "result": "no",
+   "settlement_ts": "2026-11-20T19:20:33.775273Z",
+   "settlement_value_dollars": "0.0000",
+   "close_time": "2026-11-20T18:50:00Z",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXQUICKSETTLE-20NOV26H1350-3",
+   "synthetic": true
+  },
+  {
+   "ticker": "KXQUICKSETTLE-20NOV26H1350-2",
+   "title": "1+1 = 2",
+   "topic": "gas",
+   "event_ticker": "KXQUICKSETTLE-20NOV26H1350",
+   "result": "yes",
+   "settlement_ts": "2026-11-20T19:20:33.775273Z",
+   "settlement_value_dollars": "1.0000",
+   "close_time": "2026-11-20T18:50:00Z",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXQUICKSETTLE-20NOV26H1350-2",
+   "synthetic": true
+  },
+  {
+   "ticker": "KXQUICKSETTLE-20NOV26H1330-3",
+   "title": "1+1 = 3",
+   "topic": "gas",
+   "event_ticker": "KXQUICKSETTLE-20NOV26H1330",
+   "result": "no",
+   "settlement_ts": "2026-11-20T19:11:13.777103Z",
+   "settlement_value_dollars": "0.0000",
+   "close_time": "2026-11-20T18:30:00Z",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXQUICKSETTLE-20NOV26H1330-3",
+   "synthetic": true
+  },
+  {
+   "ticker": "KXQUICKSETTLE-20NOV26H1330-2",
+   "title": "1+1 = 2",
+   "topic": "gas",
+   "event_ticker": "KXQUICKSETTLE-20NOV26H1330",
+   "result": "yes",
+   "settlement_ts": "2026-11-20T19:11:13.777103Z",
+   "settlement_value_dollars": "1.0000",
+   "close_time": "2026-11-20T18:30:00Z",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXQUICKSETTLE-20NOV26H1330-2",
+   "synthetic": true
+  },
+  {
+   "ticker": "KXBTC-26NOV2013-T72799.99",
+   "title": "Bitcoin price range on Nov 20, 2026?",
+   "topic": "crypto",
+   "event_ticker": "KXBTC-26NOV2013",
+   "result": "no",
+   "settlement_ts": "2026-11-20T19:07:34.207893Z",
+   "settlement_value_dollars": "0.0000",
+   "close_time": "2026-11-20T18:00:00Z",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTC-26NOV2013-T72799.99",
+   "synthetic": false
+  },
+  {
+   "ticker": "KXBTC-26NOV2013-T54200",
+   "title": "Bitcoin price range on Nov 20, 2026?",
+   "topic": "crypto",
+   "event_ticker": "KXBTC-26NOV2013",
+   "result": "no",
+   "settlement_ts": "2026-11-20T19:07:34.207893Z",
+   "settlement_value_dollars": "0.0000",
+   "close_time": "2026-11-20T18:00:00Z",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTC-26NOV2013-T54200",
+   "synthetic": false
+  },
+  {
+   "ticker": "KXBTC-26NOV2013-B72750",
+   "title": "Bitcoin price range on Nov 20, 2026?",
+   "topic": "crypto",
+   "event_ticker": "KXBTC-26NOV2013",
+   "result": "no",
+   "settlement_ts": "2026-11-20T19:07:34.207893Z",
+   "settlement_value_dollars": "0.0000",
+   "close_time": "2026-11-20T18:00:00Z",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTC-26NOV2013-B72750",
+   "synthetic": false
+  },
+  {
+   "ticker": "KXBTC-26NOV2013-B72650",
+   "title": "Bitcoin price range on Nov 20, 2026?",
+   "topic": "crypto",
+   "event_ticker": "KXBTC-26NOV2013",
+   "result": "no",
+   "settlement_ts": "2026-11-20T19:07:34.207893Z",
+   "settlement_value_dollars": "0.0000",
+   "close_time": "2026-11-20T18:00:00Z",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTC-26NOV2013-B72650",
+   "synthetic": false
+  },
+  {
+   "ticker": "KXPGATOP10-THRC26-CCHA",
+   "title": "Cameron Champ finishes top 10",
+   "topic": "golf",
+   "event_ticker": "KXPGATOP10-THRC26",
+   "result": "no",
+   "settlement_ts": "2026-11-20T02:49:40.839538Z",
+   "settlement_value_dollars": "0.0000",
+   "close_time": "2026-11-20T02:41:41Z",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPGATOP10-THRC26-CCHA",
+   "synthetic": false
+  },
+  {
+   "ticker": "KXPGATOP5-THRC26-CCHA",
+   "title": "Cameron Champ finishes top 5",
+   "topic": "golf",
+   "event_ticker": "KXPGATOP5-THRC26",
+   "result": "no",
+   "settlement_ts": "2026-11-20T02:49:40.839492Z",
+   "settlement_value_dollars": "0.0000",
+   "close_time": "2026-11-20T02:41:41Z",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPGATOP5-THRC26-CCHA",
+   "synthetic": false
+  },
+  {
+   "ticker": "KXPGATOP20-THRC26-CCHA",
+   "title": "Cameron Champ finishes top 20",
+   "topic": "golf",
+   "event_ticker": "KXPGATOP20-THRC26",
+   "result": "no",
+   "settlement_ts": "2026-11-20T02:49:40.839425Z",
+   "settlement_value_dollars": "0.0000",
+   "close_time": "2026-11-20T02:41:41Z",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPGATOP20-THRC26-CCHA",
+   "synthetic": false
+  },
+  {
+   "ticker": "KXPGATOP5-THRC26-CVIL",
+   "title": "Camilo Villegas finishes top 5",
+   "topic": "golf",
+   "event_ticker": "KXPGATOP5-THRC26",
+   "result": "no",
+   "settlement_ts": "2026-11-19T23:46:19.354063Z",
+   "settlement_value_dollars": "0.0000",
+   "close_time": "2026-11-19T23:38:31Z",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPGATOP5-THRC26-CVIL",
+   "synthetic": false
+  },
+  {
+   "ticker": "KXRT-EBE-90",
+   "title": "Ebenezer Rotten Tomatoes score?",
+   "topic": "culture",
+   "event_ticker": "KXRT-EBE",
+   "result": "no",
+   "settlement_ts": "2026-11-16T17:55:05.683558Z",
+   "settlement_value_dollars": "0.0000",
+   "close_time": "2026-11-16T15:00:00Z",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXRT-EBE-90",
+   "synthetic": false
+  },
+  {
+   "ticker": "KXRT-EBE-85",
+   "title": "Ebenezer Rotten Tomatoes score?",
+   "topic": "culture",
+   "event_ticker": "KXRT-EBE",
+   "result": "no",
+   "settlement_ts": "2026-11-16T17:55:05.683558Z",
+   "settlement_value_dollars": "0.0000",
+   "close_time": "2026-11-16T15:00:00Z",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXRT-EBE-85",
+   "synthetic": false
+  },
+  {
+   "ticker": "KXRT-EBE-80",
+   "title": "Ebenezer Rotten Tomatoes score?",
+   "topic": "culture",
+   "event_ticker": "KXRT-EBE",
+   "result": "no",
+   "settlement_ts": "2026-11-16T17:55:05.683558Z",
+   "settlement_value_dollars": "0.0000",
+   "close_time": "2026-11-16T15:00:00Z",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXRT-EBE-80",
+   "synthetic": false
+  },
+  {
+   "ticker": "KXRT-EBE-75",
+   "title": "Ebenezer Rotten Tomatoes score?",
+   "topic": "culture",
+   "event_ticker": "KXRT-EBE",
+   "result": "no",
+   "settlement_ts": "2026-11-16T17:55:05.683558Z",
+   "settlement_value_dollars": "0.0000",
+   "close_time": "2026-11-16T15:00:00Z",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXRT-EBE-75",
+   "synthetic": false
+  },
+  {
+   "ticker": "KXGOVCA-26-XBEC",
+   "title": "Who will win the governorship in California?",
+   "topic": "elections",
+   "event_ticker": "KXGOVCA-26",
+   "result": "yes",
+   "settlement_ts": "2026-11-04T04:58:49.9578Z",
+   "settlement_value_dollars": "1.0000",
+   "close_time": "2026-11-04T04:26:15Z",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXGOVCA-26-XBEC",
+   "synthetic": false
+  },
+  {
+   "ticker": "KXGOVCA-26-TTHU",
+   "title": "Who will win the governorship in California?",
+   "topic": "elections",
+   "event_ticker": "KXGOVCA-26",
+   "result": "no",
+   "settlement_ts": "2026-11-04T04:58:49.9578Z",
+   "settlement_value_dollars": "0.0000",
+   "close_time": "2026-11-04T04:26:15Z",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXGOVCA-26-TTHU",
+   "synthetic": false
+  },
+  {
+   "ticker": "KXGOVCA-26-TSTE",
+   "title": "Who will win the governorship in California?",
+   "topic": "elections",
+   "event_ticker": "KXGOVCA-26",
+   "result": "no",
+   "settlement_ts": "2026-11-04T04:58:49.9578Z",
+   "settlement_value_dollars": "0.0000",
+   "close_time": "2026-11-04T04:26:15Z",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXGOVCA-26-TSTE",
+   "synthetic": false
+  },
+  {
+   "ticker": "KXGOVCA-26-TATK",
+   "title": "Who will win the governorship in California?",
+   "topic": "elections",
+   "event_ticker": "KXGOVCA-26",
+   "result": "no",
+   "settlement_ts": "2026-11-04T04:58:49.9578Z",
+   "settlement_value_dollars": "0.0000",
+   "close_time": "2026-11-04T04:26:15Z",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXGOVCA-26-TATK",
+   "synthetic": false
   }
  ],
  "watchlist": [
@@ -115,6 +463,9 @@
    "topic": "crypto",
    "title": "BTC price  on Jan 1, 2027?",
    "event_ticker": "KXBTCY-27JAN0100",
+   "event_title": "",
+   "event_url": "",
+   "settlement_sources": [],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTCY-27JAN0100-B122500",
    "synthetic": false
   },
@@ -123,6 +474,9 @@
    "topic": "crypto",
    "title": "BTC price  on Jan 1, 2027?",
    "event_ticker": "KXBTCY-27JAN0100",
+   "event_title": "",
+   "event_url": "",
+   "settlement_sources": [],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTCY-27JAN0100-B142500",
    "synthetic": false
   },
@@ -131,6 +485,9 @@
    "topic": "crypto",
    "title": "BTC price  on Jan 1, 2027?",
    "event_ticker": "KXBTCY-27JAN0100",
+   "event_title": "",
+   "event_url": "",
+   "settlement_sources": [],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTCY-27JAN0100-B117500",
    "synthetic": false
   },
@@ -139,6 +496,9 @@
    "topic": "crypto",
    "title": "BTC price  on Jan 1, 2027?",
    "event_ticker": "KXBTCY-27JAN0100",
+   "event_title": "",
+   "event_url": "",
+   "settlement_sources": [],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTCY-27JAN0100-B137500",
    "synthetic": false
   },
@@ -147,6 +507,9 @@
    "topic": "crypto",
    "title": "BTC price  on Jan 1, 2027?",
    "event_ticker": "KXBTCY-27JAN0100",
+   "event_title": "",
+   "event_url": "",
+   "settlement_sources": [],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTCY-27JAN0100-B42500",
    "synthetic": false
   },
@@ -155,6 +518,9 @@
    "topic": "crypto",
    "title": "ETH price  on Jan 1, 2027?",
    "event_ticker": "KXETHY-27JAN0100",
+   "event_title": "",
+   "event_url": "",
+   "settlement_sources": [],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXETHY-27JAN0100-B3875",
    "synthetic": false
   },
@@ -163,6 +529,9 @@
    "topic": "crypto",
    "title": "ETH price  on Jan 1, 2027?",
    "event_ticker": "KXETHY-27JAN0100",
+   "event_title": "",
+   "event_url": "",
+   "settlement_sources": [],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXETHY-27JAN0100-B3125",
    "synthetic": false
   },
@@ -171,6 +540,9 @@
    "topic": "crypto",
    "title": "ETH price  on Jan 1, 2027?",
    "event_ticker": "KXETHY-27JAN0100",
+   "event_title": "",
+   "event_url": "",
+   "settlement_sources": [],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXETHY-27JAN0100-T4999.99",
    "synthetic": false
   },
@@ -179,6 +551,14 @@
    "topic": "culture",
    "title": "Will Digger win Best Picture at the Oscars?",
    "event_ticker": "KXOSCARPIC-27",
+   "event_title": "Oscar for Best Picture?",
+   "event_url": "https://external-api.demo.kalshi.co/trade-api/v2/events?series_ticker=KXOSCARPIC",
+   "settlement_sources": [
+    {
+     "name": "Academy of Motion Picture Arts and Sciences",
+     "url": "https://www.oscars.org/oscars"
+    }
+   ],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXOSCARPIC-27-DIG",
    "synthetic": false
   },
@@ -187,6 +567,14 @@
    "topic": "culture",
    "title": "Will Josephine win Best Picture at the Oscars?",
    "event_ticker": "KXOSCARPIC-27",
+   "event_title": "Oscar for Best Picture?",
+   "event_url": "https://external-api.demo.kalshi.co/trade-api/v2/events?series_ticker=KXOSCARPIC",
+   "settlement_sources": [
+    {
+     "name": "Academy of Motion Picture Arts and Sciences",
+     "url": "https://www.oscars.org/oscars"
+    }
+   ],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXOSCARPIC-27-JOS",
    "synthetic": false
   },
@@ -195,6 +583,14 @@
    "topic": "culture",
    "title": "Will Wild Horse Nine win Best Picture at the Oscars?",
    "event_ticker": "KXOSCARPIC-27",
+   "event_title": "Oscar for Best Picture?",
+   "event_url": "https://external-api.demo.kalshi.co/trade-api/v2/events?series_ticker=KXOSCARPIC",
+   "settlement_sources": [
+    {
+     "name": "Academy of Motion Picture Arts and Sciences",
+     "url": "https://www.oscars.org/oscars"
+    }
+   ],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXOSCARPIC-27-WIL",
    "synthetic": false
   },
@@ -203,6 +599,14 @@
    "topic": "culture",
    "title": "Will The Debut win Best Picture at the Oscars?",
    "event_ticker": "KXOSCARPIC-27",
+   "event_title": "Oscar for Best Picture?",
+   "event_url": "https://external-api.demo.kalshi.co/trade-api/v2/events?series_ticker=KXOSCARPIC",
+   "settlement_sources": [
+    {
+     "name": "Academy of Motion Picture Arts and Sciences",
+     "url": "https://www.oscars.org/oscars"
+    }
+   ],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXOSCARPIC-27-DEB",
    "synthetic": false
   },
@@ -211,6 +615,14 @@
    "topic": "culture",
    "title": "Will The Black Ball win Best Picture at the Oscars?",
    "event_ticker": "KXOSCARPIC-27",
+   "event_title": "Oscar for Best Picture?",
+   "event_url": "https://external-api.demo.kalshi.co/trade-api/v2/events?series_ticker=KXOSCARPIC",
+   "settlement_sources": [
+    {
+     "name": "Academy of Motion Picture Arts and Sciences",
+     "url": "https://www.oscars.org/oscars"
+    }
+   ],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXOSCARPIC-27-BLA",
    "synthetic": false
   },
@@ -219,6 +631,9 @@
    "topic": "culture",
    "title": "Will Harry Shum Jr. win Dancing with the Stars Season 35?",
    "event_ticker": "KXDANCINGWITHTHESTARS-26DEC31",
+   "event_title": "",
+   "event_url": "",
+   "settlement_sources": [],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXDANCINGWITHTHESTARS-26DEC31-HSHU",
    "synthetic": false
   },
@@ -227,6 +642,9 @@
    "topic": "culture",
    "title": "Will Maura Higgins win Dancing with the Stars Season 35?",
    "event_ticker": "KXDANCINGWITHTHESTARS-26DEC31",
+   "event_title": "",
+   "event_url": "",
+   "settlement_sources": [],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXDANCINGWITHTHESTARS-26DEC31-MHIG",
    "synthetic": false
   },
@@ -235,6 +653,9 @@
    "topic": "culture",
    "title": "Will Connor Wood win Dancing with the Stars Season 35?",
    "event_ticker": "KXDANCINGWITHTHESTARS-26DEC31",
+   "event_title": "",
+   "event_url": "",
+   "settlement_sources": [],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXDANCINGWITHTHESTARS-26DEC31-CWOO",
    "synthetic": false
   },
@@ -243,6 +664,14 @@
    "topic": "elections",
    "title": "Will Hunter Biden be the nominee for the Presidency for the Democratic party?",
    "event_ticker": "KXPRESNOMD-28",
+   "event_title": "Who will be the Democratic nominee in 2028?",
+   "event_url": "https://external-api.demo.kalshi.co/trade-api/v2/events?series_ticker=KXPRESNOMD",
+   "settlement_sources": [
+    {
+     "name": "Democratic Party",
+     "url": "https://democrats.org/"
+    }
+   ],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-HBID",
    "synthetic": false
   },
@@ -251,6 +680,14 @@
    "topic": "elections",
    "title": "Will Elissa Slotkin be the nominee for the Presidency for the Democratic party?",
    "event_ticker": "KXPRESNOMD-28",
+   "event_title": "Who will be the Democratic nominee in 2028?",
+   "event_url": "https://external-api.demo.kalshi.co/trade-api/v2/events?series_ticker=KXPRESNOMD",
+   "settlement_sources": [
+    {
+     "name": "Democratic Party",
+     "url": "https://democrats.org/"
+    }
+   ],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-ESLO",
    "synthetic": false
   },
@@ -259,6 +696,14 @@
    "topic": "elections",
    "title": "Will Graham Platner be the nominee for the Presidency for the Democratic party?",
    "event_ticker": "KXPRESNOMD-28",
+   "event_title": "Who will be the Democratic nominee in 2028?",
+   "event_url": "https://external-api.demo.kalshi.co/trade-api/v2/events?series_ticker=KXPRESNOMD",
+   "settlement_sources": [
+    {
+     "name": "Democratic Party",
+     "url": "https://democrats.org/"
+    }
+   ],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-GPLA",
    "synthetic": false
   },
@@ -267,6 +712,14 @@
    "topic": "elections",
    "title": "Will Gretchen Whitmer be the Democratic Presidential nominee in 2028?",
    "event_ticker": "KXPRESNOMD-28",
+   "event_title": "Who will be the Democratic nominee in 2028?",
+   "event_url": "https://external-api.demo.kalshi.co/trade-api/v2/events?series_ticker=KXPRESNOMD",
+   "settlement_sources": [
+    {
+     "name": "Democratic Party",
+     "url": "https://democrats.org/"
+    }
+   ],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-GW",
    "synthetic": false
   },
@@ -275,6 +728,14 @@
    "topic": "elections",
    "title": "Will Bernie Sanders be the Democratic Presidential nominee in 2028?",
    "event_ticker": "KXPRESNOMD-28",
+   "event_title": "Who will be the Democratic nominee in 2028?",
+   "event_url": "https://external-api.demo.kalshi.co/trade-api/v2/events?series_ticker=KXPRESNOMD",
+   "settlement_sources": [
+    {
+     "name": "Democratic Party",
+     "url": "https://democrats.org/"
+    }
+   ],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-BS",
    "synthetic": false
   },
@@ -283,6 +744,14 @@
    "topic": "elections",
    "title": "Who will win the next presidential election?",
    "event_ticker": "KXPRESPERSON-28",
+   "event_title": "Who will win the next presidential election?",
+   "event_url": "https://external-api.demo.kalshi.co/trade-api/v2/events?series_ticker=KXPRESPERSON",
+   "settlement_sources": [
+    {
+     "name": "Office of the Presidency",
+     "url": "https://www.whitehouse.gov/administration/executive-office-of-the-president/"
+    }
+   ],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESPERSON-28-VRAM",
    "synthetic": false
   },
@@ -291,6 +760,14 @@
    "topic": "elections",
    "title": "Who will win the next presidential election?",
    "event_ticker": "KXPRESPERSON-28",
+   "event_title": "Who will win the next presidential election?",
+   "event_url": "https://external-api.demo.kalshi.co/trade-api/v2/events?series_ticker=KXPRESPERSON",
+   "settlement_sources": [
+    {
+     "name": "Office of the Presidency",
+     "url": "https://www.whitehouse.gov/administration/executive-office-of-the-president/"
+    }
+   ],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESPERSON-28-GABB",
    "synthetic": false
   },
@@ -299,6 +776,14 @@
    "topic": "elections",
    "title": "Who will win the next presidential election?",
    "event_ticker": "KXPRESPERSON-28",
+   "event_title": "Who will win the next presidential election?",
+   "event_url": "https://external-api.demo.kalshi.co/trade-api/v2/events?series_ticker=KXPRESPERSON",
+   "settlement_sources": [
+    {
+     "name": "Office of the Presidency",
+     "url": "https://www.whitehouse.gov/administration/executive-office-of-the-president/"
+    }
+   ],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESPERSON-28-TCAR",
    "synthetic": false
   },
@@ -307,6 +792,9 @@
    "topic": "gas",
    "title": "Will the maximum WTI front month settle price reach $180.01 by Dec 31, 2026?",
    "event_ticker": "KXWTIMAX-26DEC31",
+   "event_title": "",
+   "event_url": "",
+   "settlement_sources": [],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXWTIMAX-26DEC31-T180",
    "synthetic": false
   },
@@ -315,6 +803,9 @@
    "topic": "gas",
    "title": "Will the maximum WTI front month settle price reach $160.01 by Dec 31, 2026?",
    "event_ticker": "KXWTIMAX-26DEC31",
+   "event_title": "",
+   "event_url": "",
+   "settlement_sources": [],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXWTIMAX-26DEC31-T160",
    "synthetic": false
   },
@@ -323,6 +814,9 @@
    "topic": "gas",
    "title": "Will the maximum WTI front month settle price reach $150.01 by Dec 31, 2026?",
    "event_ticker": "KXWTIMAX-26DEC31",
+   "event_title": "",
+   "event_url": "",
+   "settlement_sources": [],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXWTIMAX-26DEC31-T150",
    "synthetic": false
   },
@@ -331,6 +825,9 @@
    "topic": "gas",
    "title": "Will the maximum WTI front month settle price reach $130.01 by Dec 31, 2026?",
    "event_ticker": "KXWTIMAX-26DEC31",
+   "event_title": "",
+   "event_url": "",
+   "settlement_sources": [],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXWTIMAX-26DEC31-T130",
    "synthetic": false
   },
@@ -339,6 +836,9 @@
    "topic": "gas",
    "title": "Will the maximum WTI front month settle price reach $140.01 by Dec 31, 2026?",
    "event_ticker": "KXWTIMAX-26DEC31",
+   "event_title": "",
+   "event_url": "",
+   "settlement_sources": [],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXWTIMAX-26DEC31-T140",
    "synthetic": false
   },
@@ -347,6 +847,9 @@
    "topic": "gas",
    "title": "Will integrated system load on the ERCOT grid during 2026 get above 91,500 MW?",
    "event_ticker": "KXTXERCOTPEAK-27JAN01",
+   "event_title": "",
+   "event_url": "",
+   "settlement_sources": [],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXTXERCOTPEAK-27JAN01-T91500",
    "synthetic": false
   },
@@ -355,6 +858,9 @@
    "topic": "gas",
    "title": "Will integrated system load on the ERCOT grid during 2026 get above 92,500 MW?",
    "event_ticker": "KXTXERCOTPEAK-27JAN01",
+   "event_title": "",
+   "event_url": "",
+   "settlement_sources": [],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXTXERCOTPEAK-27JAN01-T92500",
    "synthetic": false
   },
@@ -363,6 +869,9 @@
    "topic": "gas",
    "title": "Will integrated system load on the ERCOT grid during 2026 get above 93,000 MW?",
    "event_ticker": "KXTXERCOTPEAK-27JAN01",
+   "event_title": "",
+   "event_url": "",
+   "settlement_sources": [],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXTXERCOTPEAK-27JAN01-T93000",
    "synthetic": false
   },
@@ -371,6 +880,9 @@
    "topic": "golf",
    "title": "The RSM Classic: Taylor Moore wins",
    "event_ticker": "KXPGATOUR-THRC26",
+   "event_title": "",
+   "event_url": "",
+   "settlement_sources": [],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPGATOUR-THRC26-TMOO",
    "synthetic": false
   },
@@ -379,6 +891,9 @@
    "topic": "golf",
    "title": "The RSM Classic: Sepp Straka wins",
    "event_ticker": "KXPGATOUR-THRC26",
+   "event_title": "",
+   "event_url": "",
+   "settlement_sources": [],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPGATOUR-THRC26-SSTR",
    "synthetic": false
   },
@@ -387,6 +902,9 @@
    "topic": "golf",
    "title": "The RSM Classic: Kevin Roy wins",
    "event_ticker": "KXPGATOUR-THRC26",
+   "event_title": "",
+   "event_url": "",
+   "settlement_sources": [],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPGATOUR-THRC26-KROY",
    "synthetic": false
   },
@@ -395,6 +913,9 @@
    "topic": "golf",
    "title": "The RSM Classic: Mac Meissner wins",
    "event_ticker": "KXPGATOUR-THRC26",
+   "event_title": "",
+   "event_url": "",
+   "settlement_sources": [],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPGATOUR-THRC26-MMEI",
    "synthetic": false
   },
@@ -403,6 +924,9 @@
    "topic": "golf",
    "title": "The RSM Classic: Marco Penge wins",
    "event_ticker": "KXPGATOUR-THRC26",
+   "event_title": "",
+   "event_url": "",
+   "settlement_sources": [],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPGATOUR-THRC26-MPEN",
    "synthetic": false
   },
@@ -411,6 +935,9 @@
    "topic": "golf",
    "title": "Masters Tournament: Matt Fitzpatrick wins",
    "event_ticker": "KXPGATOUR-MAST27",
+   "event_title": "",
+   "event_url": "",
+   "settlement_sources": [],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPGATOUR-MAST27-MFIT",
    "synthetic": false
   },
@@ -419,6 +946,9 @@
    "topic": "golf",
    "title": "Masters Tournament: Ryan Gerard wins",
    "event_ticker": "KXPGATOUR-MAST27",
+   "event_title": "",
+   "event_url": "",
+   "settlement_sources": [],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPGATOUR-MAST27-RGER",
    "synthetic": false
   },
@@ -427,13 +957,24 @@
    "topic": "golf",
    "title": "Masters Tournament: Keith Mitchell wins",
    "event_ticker": "KXPGATOUR-MAST27",
+   "event_title": "",
+   "event_url": "",
+   "settlement_sources": [],
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPGATOUR-MAST27-KMIT",
    "synthetic": false
   }
  ],
+ "cause_rule": {
+  "what_it_is": "the official event record's settlement_sources (name + url) - the websites Kalshi names as the settlement reference for the contract",
+  "not_a_claim": "these are reference links for the trader to check; this repo makes no claim about which page caused a move",
+  "source": "https://docs.kalshi.com/api-reference/events/get-event"
+ },
  "sources": [
   "https://docs.kalshi.com/api-reference/market/get-markets.md",
+  "https://docs.kalshi.com/api-reference/events/get-event",
+  "https://docs.kalshi.com/getting_started/market_settlement",
   "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=<ticker>",
+  "https://external-api.demo.kalshi.co/trade-api/v2/events/<event_ticker>",
   "https://docs.kalshi.com/getting_started/demo_env"
  ]
 }

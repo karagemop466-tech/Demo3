@@ -385,10 +385,14 @@ def consolidated_flags():
         "volume > 0, not a synthetic series) because the model's rules were not supplied. Replace it with "
         "the user's model output; the screen is in scripts/price_alerts.py and assets/alerts-core.js.",
         [f"{DOCS}/api-reference/market/get-markets.md"], "open - user to supply model rules", "6d201d19")
-    add("F-6D-02", "Alerts / cause links", "Website/event links behind sharp price jumps are not verified",
-        "The Kalshi market API returns prices and volume but no news or cause field. Cause-link cells are "
-        "left blank and flagged; nothing is inferred from news or timing.",
-        [f"{DOCS}/api-reference/market/get-markets.md"], "open - needs an external, verified news source", "6d201d19")
+    add("F-6D-02", "Alerts / cause links", "No news or attribution field exists in the API",
+        "The Kalshi market API returns prices and volume but no news, headline or attribution field, so the "
+        "site cannot verify which page moved a price. The cause cell now links the official event record and "
+        "that event's published settlement_sources (the websites Kalshi names as the settlement reference for "
+        "the contract) - these are reference links for the trader to check, not a claim about cause. When an "
+        "event publishes no settlement source the cell stays blank and is flagged.",
+        [f"{DOCS}/api-reference/market/get-markets.md", f"{DOCS}/api-reference/events/get-event"],
+        "open - needs an external, verified news source if attribution is wanted", "6d201d19 / 13603ac5")
     add("F-6D-03", "Alerts / snapshot", "Snapshot swings are in a synthetic exchange-test series",
         "Both swings in data/history/prices.jsonl are in KXDEMOFUTHOURLY-26NOV20H12-UP (repo finding I-15). "
         "The official demo page says demo prices and behavior may not reflect real markets. The market title "
@@ -415,6 +419,32 @@ def consolidated_flags():
         ["https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-HBID",
          f"{DOCS}/api-reference/market/get-markets.md"],
         "open - review whether alerts should use bid/ask midpoint or require confirmation", "6d201d19")
+    # session 13603ac5 — resolution feed, cause/event links, exchange previous-price detection
+    add("F-13A-01", "Alerts / resolution", "Resolution feed only covers markets the collector tracks",
+        "The yes/no resolution feed reports the exchange's own result for markets this site tracks "
+        "(alert tickers, the 40-market watchlist and the collector's settled rows). Markets that are not "
+        "tracked and have not settled are not listed - nothing is inferred or back-filled.",
+        [f"{DEMO}/markets?tickers=<ticker>", f"{DOCS}/getting_started/market_settlement"],
+        "disclosed", "13603ac5")
+    add("F-13A-02", "Alerts / snapshot", "Twelve price-sample markets were outside the collector snapshots",
+        "12 tickers in data/history/prices.jsonl (the synthetic KXDEMOFUTHOURLY market and the 11 KXSOLE "
+        "strike ladder) are not covered by the collector's market snapshots, so their titles and resolutions "
+        "were blank. Their official records were read directly from the demo API and are committed in "
+        "data/latest/verified_market_meta.json, each row carrying its own request URL. Nothing was inferred.",
+        [f"{DEMO}/markets?tickers=KXDEMOFUTHOURLY-26NOV20H12-UP", f"{DEMO}/events/KXSOLE-26NOV2102"],
+        "resolved - verified records committed", "13603ac5")
+    add("F-13A-03", "Alerts / detection", "Swings can now be raised from the exchange's own previous price",
+        "The live detector compares last_price_dollars with the exchange's previous_price_dollars, so a swing "
+        "is raised on the first read of a market instead of only after a second sample. A last-trade price can "
+        "be a single print (see F-6D-07); the persistence check still labels snap-backs.",
+        [f"{DEMO}/markets?tickers=KXPRESNOMD-28-HBID", f"{DOCS}/api-reference/market/get-markets.md"],
+        "disclosed", "13603ac5")
+    add("F-13A-04", "Alerts / demo data", "Demo exchange data is synthetic and thin",
+        "The demo exchange contains exchange-test markets (KXDEMOFUTHOURLY hourly BTC demo, KXQUICKSETTLE "
+        "1+1=2 markets) that dominate the committed snapshot swings and resolutions, and most real series have "
+        "no resting liquidity. Official docs warn that demo prices and behaviour may not reflect real markets.",
+        [f"{DOCS}/getting_started/demo_env", f"{DEMO}/markets?tickers=KXQUICKSETTLE-20NOV26H1350-2"],
+        "disclosed", "13603ac5")
     add("F-6D-06", "Trading / portfolio", "Demo account portfolio and live trades still blocked",
         "Portfolio, fills and order placement need a Kalshi demo API key. The demo key is created by a "
         "person at demo.kalshi.co; this agent cannot create one. Until a key is provided, trade rows stay "
@@ -457,6 +487,10 @@ def consolidated_sources():
         f"{DEMO}/series", "Series tickers, categories, tags per topic.")
     add("LIVE-MARKETS", "Demo markets list (live)",
         f"{DEMO}/markets", "Status, prices (dollars), volume_fp, open_interest_fp.")
+    add("DOCS-EVENT", "Kalshi docs — Get Event",
+        f"{DOCS}/api-reference/events/get-event", "Event title + settlement_sources (name, url).")
+    add("LIVE-EVENT", "Demo event record (live)",
+        f"{DEMO}/events/KXPRESNOMD-28", "event.settlement_sources and per-market rules_primary.")
     add("LIVE-OB", "Demo orderbook (live)",
         f"{DEMO}/markets/KXPGATOP40-26NOV22-LUDVIC/orderbook", "orderbook_fp price/size levels.")
     return rows
@@ -684,24 +718,71 @@ if the browser blocks the request the tables fall back to the snapshot links in
   <h2>5 · Trade categorization &amp; strategy analysis</h2>
   <div id="strategyBody"></div>
 </div>
+
+<div class="card">
+  <h2>6 &middot; Price-swing alerts &mdash; scrolling chat (&ge; $0.10)</h2>
+  <p class="small muted">Live alerts for contract price swings of <strong>&ge; $0.10 in either direction</strong>,
+     detected from the dashboard&rsquo;s live market samples (GET /markets, demo API, no key). Two scrolling chats:
+     <em>All events</em> shows every swing; <em>High ROI model</em> shows a selective, labeled placeholder
+     heuristic (no real model is defined yet &mdash; flagged F-alert-01, never presented as verified ROI).
+     Each row links its exact market API URL. Alerts persist in this browser only. The dedicated
+     <a href="alerts.html">Swing alerts page</a> adds the yes/no resolution feed, the official event
+     settlement-source links and the committed snapshot swings.</p>
+  <div class="alert-controls">
+    <label><input type="checkbox" id="alertsEnabled" checked> Alerts enabled</label>
+    <label><input type="checkbox" id="autoTrade" disabled> Automated paper trades on swing (paper/SIMULATED only)</label>
+    <button class="btn secondary" id="clearAlertsBtn">Clear alerts</button>
+    <span class="alert-pill" id="alertCount">0 alerts</span>
+  </div>
+  <div class="chat-tabs">
+    <button class="chat-tab active" id="tabAll" data-chat="all">All events</button>
+    <button class="chat-tab" id="tabROI" data-chat="roi">High ROI model</button>
+  </div>
+  <div class="chat-wrap" id="chatAll">
+    <div id="alertsAll"></div>
+  </div>
+  <div class="chat-wrap" id="chatROI" style="display:none">
+    <div id="alertsROI"></div>
+    <p class="small muted">High-ROI placeholder rule: swing &ge; $0.10 AND move &ge; 10% of prior price. Not a real model.</p>
+  </div>
+</div>
 """
     write_page("dashboard.html", "Live dashboard", "dashboard.html", body,
-               scripts=("assets/app.js", "assets/trade.js", "assets/dashboard.js", "assets/site.js"))
+               scripts=("assets/app.js", "assets/trade.js", "assets/dashboard.js",
+                        "assets/alerts-dashboard.js", "assets/site.js"))
 
 
 def build_alerts():
-    """Live swing alerts (>= $0.10) with two scrolling chats (session 6d201d19)."""
+    """Live swing alerts (>= $0.10) with two scrolling chats, resolutions and cause links.
+
+    Sessions: 6d201d19 (page + detector), 13603ac5 (resolution yes/no feed, official
+    cause/event links, exchange previous-price detection).
+    """
     body = """
 <h1>Live swing alerts (&ge; $0.10)</h1>
 <p>Two scrolling chats show contract-price swings of <strong>$0.10 or more in either direction</strong>.
 <strong>All swings</strong> lists every swing. <strong>High-ROI screen</strong> lists only swings that pass a
 <em>placeholder</em> screen (the user&rsquo;s model was not supplied &mdash; see
 <a href="flagged.html">Flagged for review</a> F-6D-01). The browser polls the official demo REST endpoint
-<span class="mono">GET /markets?tickers=</span> (<a href="https://docs.kalshi.com/api-reference/market/get-markets.md"
-target="_blank" rel="noopener">docs</a>); the first reading of a market sets its baseline, and a swing is a later
-change of at least $0.10. Nothing here is inferred: cause links are left blank and flagged.</p>
+<span class="mono">GET /markets?tickers=&hellip;&amp;limit=1000</span>
+(<a href="https://docs.kalshi.com/api-reference/market/get-markets.md" target="_blank" rel="noopener">docs</a>).</p>
+<ul class="small">
+  <li><strong>Detection:</strong> a swing is raised when the contract price moved at least $0.10 against
+      the exchange&rsquo;s own <span class="mono">previous_price_dollars</span> (so the first read of a market can
+      already alert) or against this browser&rsquo;s previous sample. Both directions count.</li>
+  <li><strong>Resolution:</strong> when a tracked market settles, a <em>RESOLVED &mdash; yes / no</em> message is
+      posted to both chats with the official <span class="mono">result</span>, <span class="mono">settlement_ts</span>
+      and <span class="mono">settlement_value_dollars</span>
+      (<a href="https://docs.kalshi.com/getting_started/market_settlement" target="_blank" rel="noopener">market settlement</a>).</li>
+  <li><strong>Cause / event links:</strong> each swing links the official event record
+      (<span class="mono">GET /events/{event_ticker}</span>) and that event&rsquo;s official
+      <span class="mono">settlement_sources</span> &mdash; the websites Kalshi names as the settlement reference for
+      the contract. These are reference links for the trader to check; this site makes <strong>no claim</strong> about
+      which page caused a move. If the event publishes no settlement source the cell stays blank and is flagged.</li>
+</ul>
 <div class="card">
-  <p class="small"><span id="alertStatus" class="pill">loading</span></p>
+  <p class="small"><span id="alertStatus" class="pill">loading</span>
+     &middot; resolutions posted: <span id="countRes">0</span></p>
   <p>
     <button class="btn secondary" id="pauseBtn">Pause live polling</button>
     <label>Poll every <select id="intervalSel">
@@ -721,6 +802,7 @@ change of at least $0.10. Nothing here is inferred: cause links are left blank a
   .chat .msg { border-bottom: 1px dashed #e3e7ec; padding: 6px 0; font-size: .92rem; }
   .chat .msg.up { border-left: 4px solid #1e8e3e; padding-left: 8px; }
   .chat .msg.down { border-left: 4px solid #c5221f; padding-left: 8px; }
+  .chat .msg.resolved { border-left: 4px solid #1a73e8; padding-left: 8px; background: #f3f8ff; }
   .chat .msg.synthetic { opacity: .75; }
   .chat .empty { color: #5f6b7a; }
   .pill.ok { background: #e6f4ea; color: #137333; }
@@ -742,13 +824,25 @@ change of at least $0.10. Nothing here is inferred: cause links are left blank a
   <p class="small muted" id="snapMeta">Loading data/latest/alerts.json&hellip;</p>
   <div class="tablewrap"><table><thead><tr>
     <th>Snapshot time (UTC)</th><th>Topic</th><th>Market</th><th>Price (from &rarr; to)</th>
-    <th>Change</th><th>Bid / ask at swing</th><th>Next reading (persistence)</th><th>High-ROI screen</th><th>Source</th><th>Cause link</th>
+    <th>Change</th><th>Bid / ask at swing</th><th>Next reading (persistence)</th><th>High-ROI screen</th><th>Source</th>
+    <th>Event / cause link</th><th>Resolution</th>
   </tr></thead><tbody id="snapRows"></tbody></table></div>
   <p class="small muted">Rule: two consecutive snapshots of the same market with last prices differing by at least
   $0.10. Sources: <a href="https://docs.kalshi.com/api-reference/market/get-markets.md" target="_blank" rel="noopener">get-markets</a>,
+  <a href="https://docs.kalshi.com/api-reference/events/get-event" target="_blank" rel="noopener">get-event</a>,
+  <a href="https://docs.kalshi.com/getting_started/market_settlement" target="_blank" rel="noopener">market settlement</a>,
   <a href="https://docs.kalshi.com/getting_started/demo_env" target="_blank" rel="noopener">demo environment</a>.
-  The two swings in the snapshot are in the synthetic exchange-test series KXDEMOFUTHOURLY (repo finding I-15).
-  Titles missing from the committed snapshot are shown as unverified.</p>
+  Swings that sit in the synthetic exchange-test series KXDEMOFUTHOURLY are labelled (repo finding I-15); the
+  demo exchange also contains exchange-test markets that are not real-world bets.</p>
+</div>
+<div class="card">
+  <h2>How events resolved (yes / no)</h2>
+  <p class="small muted">Official settlement outcomes for the tracked topics, newest first. <span class="mono">result</span>
+  is the exchange&rsquo;s own field (<span class="mono">yes</span> or <span class="mono">no</span>); the settlement value is
+  <span class="mono">settlement_value_dollars</span> ($1.00 for a winning side, $0.00 for the other).</p>
+  <div class="tablewrap"><table><thead><tr>
+    <th>Settled (UTC)</th><th>Topic</th><th>Market</th><th>Result</th><th>Settlement value</th><th>Source</th>
+  </tr></thead><tbody id="resRows"></tbody></table></div>
 </div>
 <div class="card">
   <h2>How the high-ROI screen works (placeholder)</h2>

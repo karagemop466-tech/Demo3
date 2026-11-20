@@ -55,6 +55,47 @@ var AlertsCore = (function () {
     return { deltaTicks: d, direction: d > 0 ? "up" : "down" };
   }
 
+  // Swing computed from the exchange's own previous_price_dollars field
+  // (Get Markets -> previous_price_dollars). Lets the live page raise a swing on the
+  // FIRST read of a market instead of waiting for a second sample.
+  // https://docs.kalshi.com/api-reference/market/get-markets
+  function detectSwingFromPrevious(lastTicks, prevTicks) {
+    return detectSwing(prevTicks, lastTicks);
+  }
+
+  // Resolution state of a market record.
+  // Verified live 2026-11-20 on the demo API: a settled market returns
+  // status "finalized" and result "yes" or "no" (plus settlement_ts,
+  // settlement_value_dollars). Empty result on an open market means "not resolved".
+  // https://docs.kalshi.com/getting_started/market_settlement
+  function resolutionOf(market) {
+    var out = { resolved: false, result: "", status: "", settlementTs: "", settlementValue: "" };
+    if (!market) return out;
+    out.status = market.status || "";
+    var r = String(market.result || "").toLowerCase();
+    out.result = (r === "yes" || r === "no") ? r : "";
+    out.settlementTs = market.settlement_ts || "";
+    out.settlementValue = market.settlement_value_dollars || "";
+    out.resolved = !!out.result && (out.status === "finalized" || out.status === "settled");
+    return out;
+  }
+
+  // Official settlement-source links of an event (Get Event -> event.settlement_sources).
+  // These are the websites Kalshi itself names as the settlement reference for the
+  // contract: the authoritative places to look for what moved the price. They are NOT
+  // presented as a claim about what caused a particular move.
+  // https://docs.kalshi.com/api-reference/events/get-event
+  function settlementSourceLinks(sources) {
+    var out = [];
+    (sources || []).forEach(function (s) {
+      if (!s) return;
+      var url = String(s.url || "");
+      if (!/^https?:\/\//i.test(url)) return;
+      out.push({ name: String(s.name || url), url: url });
+    });
+    return out;
+  }
+
   // Placeholder high-ROI screen. Returns {passes, side, boughtTicks, multiple}.
   function roiScreen(ticks, volumeFp, ticker, direction) {
     var out = { passes: false, side: "", boughtTicks: null, multiple: null };
@@ -76,6 +117,9 @@ var AlertsCore = (function () {
     fmtSigned: fmtSigned,
     isSynthetic: isSynthetic,
     detectSwing: detectSwing,
+    detectSwingFromPrevious: detectSwingFromPrevious,
+    resolutionOf: resolutionOf,
+    settlementSourceLinks: settlementSourceLinks,
     roiScreen: roiScreen
   };
 })();

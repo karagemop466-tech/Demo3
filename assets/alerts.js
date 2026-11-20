@@ -1,18 +1,30 @@
-/* Live swing alerts page (session 6d201d19). Requires assets/alerts-core.js (loaded first).
+/* Live swing alerts page (session 6d201d19; resolution + cause links added by session 13603ac5).
+ * Requires assets/alerts-core.js (loaded first).
  * 1. Seeds both chats and the snapshot table from data/latest/alerts.json (committed collector output).
- * 2. Polls the official demo REST endpoint in the browser: GET {API}/markets?tickers=... every N seconds
- *    (docs: https://docs.kalshi.com/api-reference/market/get-markets.md). The first observation of a
- *    market only sets the baseline; a swing is a later change of >= $0.10 in either direction.
- * 3. Two scrolling chats: "All swings" and "High-ROI screen" (placeholder rule, see alerts.html).
- * Nothing is inferred: cause links stay blank and flagged; missing titles are shown as unverified.
+ * 2. Polls the official demo REST endpoint in the browser:
+ *      GET {API}/markets?tickers=...&limit=1000   every N seconds
+ *    (docs: https://docs.kalshi.com/api-reference/market/get-markets.md).
+ *    A swing is a change of >= $0.10 in either direction. Two detection paths:
+ *      - exchange path: |last_price_dollars - previous_price_dollars| >= $0.10, so a swing can
+ *        be raised on the very first read of a market;
+ *      - baseline path: |last_price_dollars - previous sample| >= $0.10.
+ * 3. Resolution feed: a tracked market that returns status "finalized"/"settled" with
+ *    result "yes" or "no" posts a RESOLVED message (how the event resolved).
+ *    (docs: https://docs.kalshi.com/getting_started/market_settlement)
+ * 4. Cause / event links: for each swing the official event record is read once and its
+ *    settlement_sources (name + url, the sites Kalshi names as the settlement reference)
+ *    are shown. These are reference links, NOT an attribution of the move.
+ * Nothing is inferred: missing values are shown as "unverified - not inferred".
  */
 (function () {
   var API = "https://external-api.demo.kalshi.co/trade-api/v2";
   var CHUNK = 20;
   var MAX_MSGS = 300;
+  var LIMIT = 1000;              // official maximum for Get Markets (docs)
   var C = AlertsCore;
   var st = { interval: 15, paused: false, timer: null, prev: {}, meta: {}, watch: [],
-             polls: 0, marketsSeen: 0, errors: 0, lastOk: null, topic: "all" };
+             polls: 0, marketsSeen: 0, errors: 0, lastOk: null, topic: "all",
+             announced: {}, events: {} };
   function $(id) { return document.getElementById(id); }
   function esc(s) {
     return String(s === null || s === undefined ? "" : s).replace(/[&<>"']/g, function (c) {
@@ -20,23 +32,64 @@
     });
   }
   function hms(d) { return d.toISOString().slice(11, 19) + " UTC"; }
-  function utcFromIso(ts) { var d = new Date(ts); return isNaN(d) ? String(ts) : hms(d); }
+  function utcFromIso(ts) { var d = new Date(ts); isNaN(d) ? (ts = String(ts)) : (ts = hms(d)); return ts; }
+  function link(url, label) {
+    return '<a href="' + esc(url) + '" target="_blank" rel="noopener">' + esc(label) + "</a>";
+  }
 
+  /* ---------- event metadata (official settlement sources) ---------- */
+  function eventUrl(eventTicker) {
+    return API + "/events/" + encodeURIComponent(eventTicker);
+  }
+  function loadEventSources(eventTicker) {
+    if (!eventTicker) return Promise.resolve(null);
+    if (st.events[eventTicker]) return Promise.resolve(st.events[eventTicker]);
+    return fetch(eventUrl(eventTicker), { cache: "no-store" })
+      .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+      .then(function (j) {
+        var ev = (j && j.event) || {};
+        var rec = { title: ev.title || "", url: eventUrl(eventTicker),
+                    sources: C.settlementSourceLinks(ev.settlement_sources || []) };
+        st.events[eventTicker] = rec;
+        return rec;
+      })
+      .catch(function () { st.events[eventTicker] = null; return null; });
+  }
+  function causeHtml(a) {
+    var parts = [];
+    if (a.eventUrl) parts.push("event: " + link(a.eventUrl, a.eventTitle || "official event record"));
+    (a.sources || []).forEach(function (s) {
+      parts.push("settlement source: " + link(s.url, s.name || s.url));
+    });
+    if (!parts.length) {
+      return '<span class="pill warn">cause link unverified - not inferred</span>';
+    }
+    return parts.join(" &middot; ");
+  }
+
+  /* ---------- message rendering ---------- */
   function line(a) {
-    var arrow = a.direction === "up" ? "&#9650;" : "&#9660;";
+    var arrow = a.direction === "up" ? "&#9650;" : (a.direction === "down" ? "&#9660;" : "&#9679;");
     var titleHtml = a.title
       ? "<strong>" + esc(a.title) + "</strong>"
       : '<span class="pill warn">title unverified</span>';
     var html = '<span class="mono">' + esc(a.timeLabel) + "</span> " +
       '<span class="pill">' + esc(a.topic || "unknown topic") + "</span> " + titleHtml +
       ' <span class="mono small">' + esc(a.ticker) + "</span>" +
-      (a.synthetic ? ' <span class="pill warn">synthetic exchange-test series (I-15)</span>' : "") +
-      '<div class="small">' + arrow + " " + esc(a.fromLabel) + " &rarr; " + esc(a.toLabel) +
-      " (" + esc(C.fmtSigned(a.deltaTicks)) + ") &middot; " +
-      '<a href="' + esc(a.sourceUrl) + '" target="_blank" rel="noopener">API source</a> &middot; ' +
-      'cause link: <span class="pill warn">unverified - not inferred</span> &middot; ' +
-      '<span class="muted">' + esc(a.origin) + "</span></div>" +
-      '<div class="small">' + esc(a.persist) + "</div>";
+      (a.synthetic ? ' <span class="pill warn">synthetic exchange-test series (I-15)</span>' : "");
+    if (a.kind === "resolution") {
+      html += '<div class="small">RESOLVED &mdash; the event resolved <strong>' + esc(a.result) + "</strong>" +
+        (a.settlementTs ? ' <span class="mono">settled ' + esc(a.settlementTs) + "</span>" : "") +
+        (a.settlementValue ? ' &middot; settlement value ' + esc(a.settlementValue) : "") +
+        " &middot; " + link(a.sourceUrl, "API source") + "</div>";
+    } else {
+      html += '<div class="small">' + arrow + " " + esc(a.fromLabel) + " &rarr; " + esc(a.toLabel) +
+        " (" + esc(C.fmtSigned(a.deltaTicks)) + ")" +
+        (a.bidLabel ? " &middot; bid/ask " + esc(a.bidLabel) : "") +
+        " &middot; " + link(a.sourceUrl, "API source") + "</div>" +
+        '<div class="small">cause: ' + causeHtml(a) + "</div>" +
+        '<div class="small muted">' + esc(a.persist) + "</div>";
+    }
     if (a.roi) {
       html += '<div class="small muted">High-ROI screen (placeholder): ' +
         (a.roi.passes ? "passes" : "does not pass") + " - would buy " + esc(a.roi.side) + " at " +
@@ -50,7 +103,8 @@
     var chat = $(chatId);
     if (!chat) return;
     var el = document.createElement("div");
-    el.className = "msg " + a.direction + (a.synthetic ? " synthetic" : "");
+    el.className = "msg " + (a.direction || "") + (a.synthetic ? " synthetic" : "") +
+      (a.kind === "resolution" ? " resolved" : "");
     el.dataset.topic = a.topic || "";
     el.innerHTML = line(a);
     var atBottom = chat.scrollTop + chat.clientHeight >= chat.scrollHeight - 40;
@@ -62,15 +116,21 @@
     if (st.topic !== "all" && el.dataset.topic !== st.topic) el.hidden = true;
   }
 
-  function emit(a, origin) {
+  function emit(a) {
     push("chatAll", a);
-    if (a.roi && a.roi.passes) push("chatRoi", a);
+    if (a.kind === "resolution") {
+      push("chatRoi", a);          // a resolution closes the position -> both chats show it
+    } else if (a.roi && a.roi.passes) {
+      push("chatRoi", a);
+    }
     setCount();
   }
 
   function setCount() {
     var n = document.querySelectorAll("#chatAll .msg").length;
     var r = document.querySelectorAll("#chatRoi .msg").length;
+    var rid = $("countRes");
+    if (rid) rid.textContent = String(st.resolvedCount || 0);
     $("countAll").textContent = n;
     $("countRoi").textContent = r;
   }
@@ -94,7 +154,7 @@
       : "Persistence: next reading " + a.next_reading_dollars + " held near the new level.";
   }
 
-  // ---------------------------------------------------------------- snapshot (committed)
+  /* ---------- snapshot (committed collector output) ---------- */
   function loadSnapshot() {
     return fetch("data/latest/alerts.json", { cache: "no-store" })
       .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
@@ -104,7 +164,8 @@
         $("snapMeta").textContent = "Snapshot generated " + (snap.generated_at || "?") +
           " from " + (snap.snapshot_samples || 0) + " collector samples of " +
           (snap.snapshot_tickers || 0) + " markets. Swings found: " + (snap.counts ? snap.counts.alerts : 0) +
-          " (high-ROI screen passes: " + (snap.counts ? snap.counts.high_roi : 0) + ").";
+          " (high-ROI screen passes: " + (snap.counts ? snap.counts.high_roi : 0) +
+          ", resolved markets tracked: " + (snap.counts ? (snap.counts.resolved || 0) : 0) + ").";
         var tb = $("snapRows");
         tb.innerHTML = "";
         (snap.alerts || []).forEach(function (a) {
@@ -113,32 +174,80 @@
             timeLabel: utcFromIso(a.ts), topic: a.topic, title: a.title, ticker: a.ticker,
             synthetic: !!a.synthetic, direction: a.direction, fromLabel: C.fmtDollars(from),
             toLabel: C.fmtDollars(to), deltaTicks: to - from, sourceUrl: a.source_url,
+            bidLabel: (a.to_bid_dollars || a.to_ask_dollars)
+              ? (a.to_bid_dollars || "?") + " / " + (a.to_ask_dollars || "?") : "",
             persist: persistText(a),
+            eventUrl: a.event_url || "", eventTitle: a.event_title || "",
+            sources: a.settlement_sources || [],
             origin: "snapshot " + a.ts, roi: { passes: !!a.high_roi, side: a.roi_side,
               boughtTicks: C.toTicks(a.roi_bought_price_dollars), multiple: parseFloat(a.roi_multiple) }
           };
           var tr = document.createElement("tr");
-          tr.innerHTML = "<td class=\"mono\">" + esc(a.ts) + "</td><td>" + esc(a.topic) + "</td><td>" +
+          tr.innerHTML = '<td class="mono">' + esc(a.ts) + "</td><td>" + esc(a.topic) + "</td><td>" +
             (a.title ? esc(a.title) : '<span class="pill warn">title unverified</span>') +
-            "<div class=\"mono small\">" + esc(a.ticker) + "</div></td><td class=\"mono\">" +
-            esc(a.from_dollars) + " &rarr; " + esc(a.to_dollars) + "</td><td class=\"mono\">" +
-            esc(a.delta_dollars) + "</td><td class=\"mono\">" + esc(a.to_bid_dollars || "") + " / " + esc(a.to_ask_dollars || "") +
+            '<div class="mono small">' + esc(a.ticker) + "</div></td><td class=\"mono\">" +
+            esc(a.from_dollars) + " &rarr; " + esc(a.to_dollars) + '</td><td class="mono">' +
+            esc(a.delta_dollars) + '</td><td class="mono">' +
+            esc(a.to_bid_dollars || "") + " / " + esc(a.to_ask_dollars || "") +
             "</td><td>" + esc(persistLabel(a)) + "</td><td>" + (a.high_roi ? "yes" : "no") + "</td><td>" +
-            '<a href="' + esc(a.source_url) + '" target="_blank" rel="noopener">API source</a></td><td>' +
-            '<span class="pill warn">unverified - not inferred</span></td>';
+            link(a.source_url, "API source") + "</td><td>" +
+            (a.event_url
+              ? link(a.event_url, "event") +
+                ((a.settlement_sources || []).length
+                  ? " &middot; " + a.settlement_sources.map(function (s) {
+                      return link(s.url, s.name || s.url); }).join(", ")
+                  : ' <span class="pill warn">no settlement source published</span>')
+              : '<span class="pill warn">cause link unverified - not inferred</span>') + "</td>" +
+            "<td>" + (a.resolution
+              ? "resolved <strong>" + esc(a.resolution.result) + "</strong>" +
+                (a.resolution.settlement_ts ? ' <span class="mono">' + esc(a.resolution.settlement_ts) + "</span>" : "")
+              : "not resolved yet") + "</td>";
           tb.appendChild(tr);
           emit(item);
         });
         if (!(snap.alerts || []).length) {
-          tb.innerHTML = '<tr><td colspan="10" class="muted">No snapshot swings of &ge; $0.10.</td></tr>';
+          tb.innerHTML = '<tr><td colspan="11" class="muted">No snapshot swings of &ge; $0.10.</td></tr>';
+        }
+        // Seed resolution messages from the committed resolution log.
+        (snap.resolutions || []).forEach(function (r) {
+          if (st.announced[r.ticker]) return;
+          st.announced[r.ticker] = true;
+          st.resolvedCount = (st.resolvedCount || 0) + 1;
+          emit({
+            kind: "resolution", timeLabel: utcFromIso(r.settlement_ts || r.ts), topic: r.topic,
+            title: r.title || "", ticker: r.ticker, synthetic: !!r.synthetic, direction: "",
+            fromLabel: "", toLabel: "", deltaTicks: 0, sourceUrl: r.source_url || "",
+            result: r.result, settlementTs: r.settlement_ts || "", settlementValue: r.settlement_value_dollars || "",
+            eventUrl: r.event_url || "", eventTitle: r.event_title || "", sources: r.settlement_sources || []
+          });
+        });
+        // Resolution table: how each tracked event resolved (yes / no).
+        var rtb = $("resRows");
+        if (rtb) {
+          rtb.innerHTML = "";
+          (snap.recent_resolutions || []).forEach(function (r) {
+            var tr = document.createElement("tr");
+            tr.innerHTML = '<td class="mono">' + esc(r.settlement_ts || "") + "</td><td>" +
+              esc(r.topic || "") + "</td><td>" +
+              (r.title ? esc(r.title) : '<span class="pill warn">title unverified</span>') +
+              '<div class="mono small">' + esc(r.ticker) + "</div></td><td><strong>" +
+              esc(r.result || "") + "</strong></td><td class=\"mono\">" +
+              esc(r.settlement_value_dollars || "") + "</td><td>" +
+              link(r.source_url, "API source") + "</td>";
+            rtb.appendChild(tr);
+          });
+          if (!(snap.recent_resolutions || []).length) {
+            rtb.innerHTML = '<tr><td colspan="6" class="muted">No settled markets in the committed snapshot yet.</td></tr>';
+          }
         }
         applyTopic();
       });
   }
 
-  // ---------------------------------------------------------------- live poll (browser -> demo API)
+  /* ---------- live poll (browser -> official demo API) ---------- */
   function fetchChunk(tickers) {
-    var url = API + "/markets?tickers=" + tickers.map(encodeURIComponent).join(",");
+    var url = API + "/markets?tickers=" + tickers.map(encodeURIComponent).join(",") +
+      "&limit=" + LIMIT;
     return fetch(url, { cache: "no-store" }).then(function (r) {
       if (!r.ok) throw new Error("HTTP " + r.status);
       return r.json();
@@ -165,7 +274,8 @@
       if (okAny) {
         st.lastOk = new Date();
         status("LIVE - polled " + tickers.length + " markets every " + st.interval + "s (poll #" +
-               st.polls + ", " + st.marketsSeen + " quotes read, errors " + st.errors + "). Last OK " + hms(st.lastOk) + ".", "ok");
+               st.polls + ", " + st.marketsSeen + " quotes read, " + (st.resolvedCount || 0) +
+               " resolutions posted, errors " + st.errors + "). Last OK " + hms(st.lastOk) + ".", "ok");
       } else {
         status("Browser could not read the demo API (" + esc(errMsg) + "). Snapshot alerts only - see F-6D-04.", "warn");
       }
@@ -176,31 +286,68 @@
   function handleMarket(m) {
     var t = m.ticker;
     if (!t) return;
-    var ticks = C.toTicks(m.last_price_dollars);
     st.marketsSeen += 1;
-    var prev = st.prev.hasOwnProperty(t) ? st.prev[t] : undefined;
-    if (ticks !== null) {
-      if (prev !== undefined && prev !== null) {
-        var sw = C.detectSwing(prev, ticks);
-        if (sw) {
-          var w = st.meta[t] || {};
-          var roi = C.roiScreen(ticks, m.volume_fp, t, sw.direction);
-          emit({
-            timeLabel: hms(new Date()), topic: w.topic || "", title: w.title || m.title || "",
-            ticker: t, synthetic: C.isSynthetic(t), direction: sw.direction,
-            fromLabel: C.fmtDollars(prev), toLabel: C.fmtDollars(ticks), deltaTicks: sw.deltaTicks,
-            sourceUrl: API + "/markets?tickers=" + t, origin: "live (browser)",
-            persist: "Single live reading - not yet confirmed by a later reading (persistence check pending).",
-            roi: { passes: roi.passes, side: roi.side, boughtTicks: roi.boughtTicks, multiple: roi.multiple }
-          });
-        }
-      }
-      st.prev[t] = ticks;
+    var w = st.meta[t] || {};
+    var topic = w.topic || "";
+
+    /* resolution first: a market that has settled is reported as resolved yes/no */
+    var res = C.resolutionOf(m);
+    if (res.resolved && !st.announced[t]) {
+      st.announced[t] = true;
+      st.resolvedCount = (st.resolvedCount || 0) + 1;
+      var ev = m.event_ticker ? loadEventSources(m.event_ticker) : Promise.resolve(null);
+      ev.then(function (rec) {
+        emit({
+          kind: "resolution", timeLabel: hms(new Date()), topic: topic,
+          title: m.title || w.title || "", ticker: t, synthetic: C.isSynthetic(t), direction: "",
+          fromLabel: "", toLabel: "", deltaTicks: 0,
+          sourceUrl: API + "/markets?tickers=" + encodeURIComponent(t),
+          result: res.result, settlementTs: res.settlementTs, settlementValue: res.settlementValue,
+          eventUrl: rec ? rec.url : (m.event_ticker ? eventUrl(m.event_ticker) : ""),
+          eventTitle: rec ? rec.title : "", sources: rec ? rec.sources : []
+        });
+      });
     }
+
+    var ticks = C.toTicks(m.last_price_dollars);
+    if (ticks === null) return;
+    var baseline = st.prev.hasOwnProperty(t) ? st.prev[t] : undefined;
+    var exchangePrev = C.toTicks(m.previous_price_dollars);
+
+    var sw = null, fromTicks = null;
+    if (exchangePrev !== null && exchangePrev !== undefined) {
+      sw = C.detectSwingFromPrevious(ticks, exchangePrev);
+      if (sw) fromTicks = exchangePrev;
+    }
+    if (!sw && baseline !== undefined && baseline !== null) {
+      sw = C.detectSwing(baseline, ticks);
+      if (sw) fromTicks = baseline;
+    }
+    if (sw) {
+      var roi = C.roiScreen(ticks, m.volume_fp, t, sw.direction);
+      var bidAsk = (m.yes_bid_dollars || m.yes_ask_dollars)
+        ? (m.yes_bid_dollars || "?") + " / " + (m.yes_ask_dollars || "?") : "";
+      var evTicker = m.event_ticker || w.event_ticker || "";
+      loadEventSources(evTicker).then(function (rec) {
+        emit({
+          timeLabel: hms(new Date()), topic: topic, title: m.title || w.title || "",
+          ticker: t, synthetic: C.isSynthetic(t), direction: sw.direction,
+          fromLabel: C.fmtDollars(fromTicks), toLabel: C.fmtDollars(ticks),
+          deltaTicks: sw.deltaTicks, bidLabel: bidAsk,
+          sourceUrl: API + "/markets?tickers=" + encodeURIComponent(t),
+          persist: "Live reading (not yet confirmed by a later reading - persistence check pending).",
+          eventUrl: rec ? rec.url : (evTicker ? eventUrl(evTicker) : ""),
+          eventTitle: rec ? rec.title : "", sources: rec ? rec.sources : [],
+          roi: { passes: roi.passes, side: roi.side, boughtTicks: roi.boughtTicks, multiple: roi.multiple }
+        });
+      });
+    }
+    st.prev[t] = ticks;
   }
 
   function status(text, kind) {
     var el = $("alertStatus");
+    if (!el) return;
     el.className = "pill " + (kind === "ok" ? "ok" : kind === "warn" ? "warn" : "");
     el.textContent = text;
   }

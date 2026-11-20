@@ -66,6 +66,48 @@ test("ROI screen never passes with zero volume or on synthetic exchange-test ser
   assert.equal(C.isSynthetic("KXBTC-26"), false);
 });
 
+test("detectSwingFromPrevious uses the exchange's own previous_price_dollars", () => {
+  // last 0.2000 with previous 0.0500 -> +0.15 move that the browser baseline cannot see
+  const sw = C.detectSwingFromPrevious(C.toTicks("0.2000"), C.toTicks("0.0500"));
+  assert.equal(sw.deltaTicks, 1500);
+  assert.equal(sw.direction, "up");
+  assert.equal(C.detectSwingFromPrevious(C.toTicks("0.2000"), C.toTicks("0.2000")), null);
+  assert.equal(C.detectSwingFromPrevious(null, C.toTicks("0.2000")), null);
+});
+
+test("resolutionOf reads the official result only on a settled market", () => {
+  // verified live on the demo API: status "finalized" + result "no"/"yes"
+  const yes = C.resolutionOf({ status: "finalized", result: "yes", settlement_ts: "2026-11-20T12:00:00Z",
+    settlement_value_dollars: "1.0000" });
+  assert.equal(yes.resolved, true);
+  assert.equal(yes.result, "yes");
+  assert.equal(yes.settlementValue, "1.0000");
+  const no = C.resolutionOf({ status: "finalized", result: "no" });
+  assert.equal(no.resolved, true);
+  assert.equal(no.result, "no");
+  // open market: empty result means "not resolved" - never inferred
+  const open = C.resolutionOf({ status: "active", result: "" });
+  assert.equal(open.resolved, false);
+  assert.equal(open.result, "");
+  // a result on a market that is not finalized is not treated as resolved
+  assert.equal(C.resolutionOf({ status: "active", result: "yes" }).resolved, false);
+  assert.equal(C.resolutionOf(null).resolved, false);
+});
+
+test("settlementSourceLinks keeps only http(s) official sources", () => {
+  const links = C.settlementSourceLinks([
+    { name: "Democratic Party", url: "https://democrats.org/" },
+    { name: "bad", url: "javascript:alert(1)" },
+    { name: "", url: "https://www.cfbenchmarks.com/" },
+    null,
+  ]);
+  assert.equal(links.length, 2);
+  assert.equal(links[0].url, "https://democrats.org/");
+  assert.equal(links[1].name, "https://www.cfbenchmarks.com/");
+  assert.equal(C.settlementSourceLinks(undefined).length, 0);
+  assert.equal(C.settlementSourceLinks([]).length, 0);
+});
+
 test("ROI screen rejects prices outside (0,1) and missing prices", () => {
   assert.equal(C.roiScreen(0, "5", "X", "up").passes, false);
   assert.equal(C.roiScreen(10000, "5", "X", "down").passes, false);

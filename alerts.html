@@ -18,11 +18,25 @@
 <strong>All swings</strong> lists every swing. <strong>High-ROI screen</strong> lists only swings that pass a
 <em>placeholder</em> screen (the user&rsquo;s model was not supplied &mdash; see
 <a href="flagged.html">Flagged for review</a> F-6D-01). The browser polls the official demo REST endpoint
-<span class="mono">GET /markets?tickers=</span> (<a href="https://docs.kalshi.com/api-reference/market/get-markets.md"
-target="_blank" rel="noopener">docs</a>); the first reading of a market sets its baseline, and a swing is a later
-change of at least $0.10. Nothing here is inferred: cause links are left blank and flagged.</p>
+<span class="mono">GET /markets?tickers=&hellip;&amp;limit=1000</span>
+(<a href="https://docs.kalshi.com/api-reference/market/get-markets.md" target="_blank" rel="noopener">docs</a>).</p>
+<ul class="small">
+  <li><strong>Detection:</strong> a swing is raised when the contract price moved at least $0.10 against
+      the exchange&rsquo;s own <span class="mono">previous_price_dollars</span> (so the first read of a market can
+      already alert) or against this browser&rsquo;s previous sample. Both directions count.</li>
+  <li><strong>Resolution:</strong> when a tracked market settles, a <em>RESOLVED &mdash; yes / no</em> message is
+      posted to both chats with the official <span class="mono">result</span>, <span class="mono">settlement_ts</span>
+      and <span class="mono">settlement_value_dollars</span>
+      (<a href="https://docs.kalshi.com/getting_started/market_settlement" target="_blank" rel="noopener">market settlement</a>).</li>
+  <li><strong>Cause / event links:</strong> each swing links the official event record
+      (<span class="mono">GET /events/{event_ticker}</span>) and that event&rsquo;s official
+      <span class="mono">settlement_sources</span> &mdash; the websites Kalshi names as the settlement reference for
+      the contract. These are reference links for the trader to check; this site makes <strong>no claim</strong> about
+      which page caused a move. If the event publishes no settlement source the cell stays blank and is flagged.</li>
+</ul>
 <div class="card">
-  <p class="small"><span id="alertStatus" class="pill">loading</span></p>
+  <p class="small"><span id="alertStatus" class="pill">loading</span>
+     &middot; resolutions posted: <span id="countRes">0</span></p>
   <p>
     <button class="btn secondary" id="pauseBtn">Pause live polling</button>
     <label>Poll every <select id="intervalSel">
@@ -42,6 +56,7 @@ change of at least $0.10. Nothing here is inferred: cause links are left blank a
   .chat .msg { border-bottom: 1px dashed #e3e7ec; padding: 6px 0; font-size: .92rem; }
   .chat .msg.up { border-left: 4px solid #1e8e3e; padding-left: 8px; }
   .chat .msg.down { border-left: 4px solid #c5221f; padding-left: 8px; }
+  .chat .msg.resolved { border-left: 4px solid #1a73e8; padding-left: 8px; background: #f3f8ff; }
   .chat .msg.synthetic { opacity: .75; }
   .chat .empty { color: #5f6b7a; }
   .pill.ok { background: #e6f4ea; color: #137333; }
@@ -63,13 +78,25 @@ change of at least $0.10. Nothing here is inferred: cause links are left blank a
   <p class="small muted" id="snapMeta">Loading data/latest/alerts.json&hellip;</p>
   <div class="tablewrap"><table><thead><tr>
     <th>Snapshot time (UTC)</th><th>Topic</th><th>Market</th><th>Price (from &rarr; to)</th>
-    <th>Change</th><th>Bid / ask at swing</th><th>Next reading (persistence)</th><th>High-ROI screen</th><th>Source</th><th>Cause link</th>
+    <th>Change</th><th>Bid / ask at swing</th><th>Next reading (persistence)</th><th>High-ROI screen</th><th>Source</th>
+    <th>Event / cause link</th><th>Resolution</th>
   </tr></thead><tbody id="snapRows"></tbody></table></div>
   <p class="small muted">Rule: two consecutive snapshots of the same market with last prices differing by at least
   $0.10. Sources: <a href="https://docs.kalshi.com/api-reference/market/get-markets.md" target="_blank" rel="noopener">get-markets</a>,
+  <a href="https://docs.kalshi.com/api-reference/events/get-event" target="_blank" rel="noopener">get-event</a>,
+  <a href="https://docs.kalshi.com/getting_started/market_settlement" target="_blank" rel="noopener">market settlement</a>,
   <a href="https://docs.kalshi.com/getting_started/demo_env" target="_blank" rel="noopener">demo environment</a>.
-  The two swings in the snapshot are in the synthetic exchange-test series KXDEMOFUTHOURLY (repo finding I-15).
-  Titles missing from the committed snapshot are shown as unverified.</p>
+  Swings that sit in the synthetic exchange-test series KXDEMOFUTHOURLY are labelled (repo finding I-15); the
+  demo exchange also contains exchange-test markets that are not real-world bets.</p>
+</div>
+<div class="card">
+  <h2>How events resolved (yes / no)</h2>
+  <p class="small muted">Official settlement outcomes for the tracked topics, newest first. <span class="mono">result</span>
+  is the exchange&rsquo;s own field (<span class="mono">yes</span> or <span class="mono">no</span>); the settlement value is
+  <span class="mono">settlement_value_dollars</span> ($1.00 for a winning side, $0.00 for the other).</p>
+  <div class="tablewrap"><table><thead><tr>
+    <th>Settled (UTC)</th><th>Topic</th><th>Market</th><th>Result</th><th>Settlement value</th><th>Source</th>
+  </tr></thead><tbody id="resRows"></tbody></table></div>
 </div>
 <div class="card">
   <h2>How the high-ROI screen works (placeholder)</h2>

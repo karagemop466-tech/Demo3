@@ -79,6 +79,48 @@ class DetectSwings(unittest.TestCase):
         self.assertEqual(b[0]["event_ticker"], "KX-E")
 
 
+class CauseAndResolutionFields(unittest.TestCase):
+    """Cause links come only from the official event lookup; resolutions only from the
+    official settlement records. Nothing is invented."""
+
+    EVENTS = {"KX-E": {"title": "Official event title",
+                       "event_url": f"{pa.DEMO}/events/KX-E",
+                       "settlement_sources": [{"name": "Official Source", "url": "https://example.org/"}]}}
+
+    def test_cause_link_comes_from_the_supplied_official_event_lookup(self):
+        a = pa.detect_swings([row("KX-1", "t1", "0.20"), row("KX-1", "t2", "0.35")],
+                             {"KX-1": {"title": "T?", "event_ticker": "KX-E"}},
+                             self.EVENTS)
+        self.assertEqual(a[0]["cause_link"], "https://example.org/")
+        self.assertEqual(a[0]["event_title"], "Official event title")
+        self.assertEqual(a[0]["event_url"], f"{pa.DEMO}/events/KX-E")
+        self.assertIn("reference link", a[0]["cause_status"])
+        self.assertEqual(a[0]["settlement_sources"], self.EVENTS["KX-E"]["settlement_sources"])
+
+    def test_no_event_lookup_leaves_the_cause_fields_blank_and_flagged(self):
+        a = pa.detect_swings([row("KX-1", "t1", "0.20"), row("KX-1", "t2", "0.35")])
+        self.assertEqual(a[0]["cause_link"], "")
+        self.assertEqual(a[0]["cause_status"], "unverified - not inferred")
+        self.assertEqual(a[0]["settlement_sources"], [])
+
+    def test_resolution_is_attached_only_from_an_official_settlement_record(self):
+        res = {"KX-1": {"result": "no", "status": "finalized",
+                        "settlement_ts": "2026-11-20T12:00:00Z",
+                        "settlement_value_dollars": "0.0000",
+                        "source_url": f"{pa.DEMO}/markets?tickers=KX-1",
+                        "title": "T?", "topic": "elections", "event_ticker": "KX-E"}}
+        a = pa.detect_swings([row("KX-1", "t1", "0.20"), row("KX-1", "t2", "0.35")], {}, {}, res)
+        self.assertEqual(a[0]["resolution"]["result"], "no")
+        self.assertEqual(a[0]["resolution"]["settlement_value_dollars"], "0.0000")
+        b = pa.detect_swings([row("KX-1", "t1", "0.20"), row("KX-1", "t2", "0.35")])
+        self.assertIsNone(b[0]["resolution"])
+
+    def test_decimal_threshold_is_inclusive_and_exact(self):
+        a = pa.detect_swings([row("T-A", "t1", "0.1000"), row("T-A", "t2", "0.2000")])
+        self.assertEqual(len(a), 1)
+        self.assertEqual(a[0]["delta_dollars"], "+0.1000")
+
+
 class RoiScreen(unittest.TestCase):
     def test_up_move_buys_yes_at_new_price(self):
         ok, side, bought, mult = pa.roi_screen(pa.dec("0.2000"), pa.dec("5"), "KX-1", +1)

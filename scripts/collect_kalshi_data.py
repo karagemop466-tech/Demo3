@@ -552,10 +552,17 @@ def main() -> int:
     os.makedirs(f"{REPO_DATA}/history", exist_ok=True)
     sample_lines = []
     for r in focus:
+        # title / event_ticker / previous_price_dollars are official API fields on the
+        # same market record (https://docs.kalshi.com/api-reference/market/get-markets).
+        # Carrying them in the sample lets the alert feed show a real title and lets the
+        # swing detector use the exchange's own previous price instead of inferring one.
         sample_lines.append(json.dumps({
             "ts": retrieved_at, "ticker": r["ticker"], "topic": r["topic"],
+            "title": r.get("title", ""), "event_ticker": r.get("event_ticker", ""),
             "last_price_dollars": r["last_price_dollars"],
+            "previous_price_dollars": r.get("previous_price_dollars", ""),
             "yes_bid_dollars": r["yes_bid_dollars"], "yes_ask_dollars": r["yes_ask_dollars"],
+            "yes_bid_size_fp": r.get("yes_bid_size_fp", ""), "yes_ask_size_fp": r.get("yes_ask_size_fp", ""),
             "volume_fp": r["volume_fp"], "open_interest_fp": r["open_interest_fp"],
         }, sort_keys=True))
     with open(f"{REPO_DATA}/history/prices.jsonl", "a", encoding="utf-8") as f:
