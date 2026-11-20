@@ -355,8 +355,39 @@ Claimed 2026-11-20 (UTC). Branch fixed by the platform to `arena/6d201d19-demo3`
 
 | Task | Status | Owner | File scope | Sources / verification | Irregularities |
 |---|---|---|---|---|---|
-| S1 ≥ $0.10 swing detector (snapshot + live) | in progress | 6d201d19 | `scripts/price_alerts.py`, `scripts/tests/test_price_alerts.py`, `data/latest/alerts.json`, `collect.yml` (one step), `check.yml` (test step) | `GET /markets?tickers=` (https://docs.kalshi.com/api-reference/market/get-markets.md); `data/history/prices.jsonl` (collector snapshots) | F-6D-01 .. F-6D-05 |
-| S2 Two scrolling alert chats (All / High-ROI screen) | in progress | 6d201d19 | `alerts.html`, `assets/alerts-core.js`, `assets/alerts.js`, `tests/alerts.test.js` | browser fetch of the same official endpoint; CORS evidence `data/cors_test.json` | F-6D-02 (cause links unverifiable), F-6D-04 |
-| S3 Site integration (nav entry, flags, README) | in progress | 6d201d19 | `scripts/build_root_site.py` (NAV, build_alerts, flags), `README.md`, regenerated root pages | `scripts/verify_root_site.py` | — |
+| S1 ≥ $0.10 swing detector (snapshot + live) | done | 6d201d19 | `scripts/price_alerts.py`, `scripts/tests/test_price_alerts.py`, `data/latest/alerts.json`, `collect.yml` (one step), `check.yml` (test step) | `GET /markets?tickers=` (https://docs.kalshi.com/api-reference/market/get-markets.md); `data/history/prices.jsonl` (collector snapshots) | F-6D-01 .. F-6D-05 |
+| S2 Two scrolling alert chats (All / High-ROI screen) | done | 6d201d19 | `alerts.html`, `assets/alerts-core.js`, `assets/alerts.js`, `tests/alerts.test.js` | browser fetch of the same official endpoint; CORS evidence `data/cors_test.json` | F-6D-02 (cause links unverifiable), F-6D-04 |
+| S3 Site integration (nav entry, flags, README) | done | 6d201d19 | `scripts/build_root_site.py` (NAV, build_alerts, flags), `README.md`, regenerated root pages | `scripts/verify_root_site.py` | — |
 
 Protocol notes: other open PRs (#17 `arena/d330ff7d`, #19 `arena/b2e728ab`, #23 `arena/c2aac20e`) belong to other branches and are not touched here.
+
+### Session 6d201d19 — completion record (2026-11-20 UTC)
+
+**What shipped**
+- `scripts/price_alerts.py` → `data/latest/alerts.json`: detects consecutive-snapshot swings of ≥ $0.10 in either direction from `data/history/prices.jsonl` (exact decimal arithmetic); each alert carries its exact official request URL (`GET /markets?tickers=`) and an empty, flagged cause link. Also writes a 40-market watchlist (top markets per topic) for the live poller. Run by `kalshi-data.yml` after each snapshot.
+- `alerts.html` (nav: *Swing alerts*): two scrolling chats, **All swings** and **High-ROI screen**; seeded from the snapshot, then polled live in the browser every 10–60 s (default 15 s) from `GET https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=…`; pause control; topic filter; failure banner that falls back to snapshot alerts. Snapshot table: one row per swing with a source link and an unverified cause-link flag.
+- `assets/alerts-core.js` (rule logic shared by page and tests), `assets/alerts.js` (page logic).
+- Tests: `scripts/tests/test_price_alerts.py` (15 tests), `tests/alerts.test.js` (7), `tests/alerts.runtime.test.js` (jsdom run of the real generated page with mocked network: snapshot seeding, baseline poll, ≥ $0.10 raise, sub-threshold suppression, ROI routing, topic filter, failure banner). `npm test` → 34/34 pass. Wired into `check.yml` (`npm ci` + tests).
+- Flags F-6D-01 .. F-6D-06 published on the Flagged for review page.
+
+**Sources used (fetched this session)**
+- Get Markets (`tickers` filter, caching note, `last_price_dollars`, `volume_fp`): https://docs.kalshi.com/api-reference/market/get-markets.md
+- Demo environment (demo REST/WebSocket hosts; "prices and behavior … may not reflect real markets"): https://docs.kalshi.com/getting_started/demo_env
+- Live check of the exact request shape: https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTCY-27JAN0100-B122500 (returned the market with `last_price_dollars` 0.0300, `title`, `volume_fp`)
+- Demo account set-up (human sign-up at https://demo.kalshi.co/sign-up; mock funds): https://help.kalshi.com/en/articles/13823775-creating-and-using-a-demo-account
+
+**Verification performed**
+- `build_root_site.py` regenerates all root pages; `verify_root_site.py` 0 failures (0 broken internal links; every generated row has a source or an unverified flag); `check_site.py` passed; `verify_site.py` PASSED; `scripts/tests/test_refresh_offline.py` passed; `collector/test_collect.py` passed.
+- Snapshot numbers re-derived by hand: 2 swings in `prices.jsonl` (both `KXDEMOFUTHOURLY-26NOV20H12-UP`: 0.3500→0.5500 at 11:49:21Z; 0.5500→0.6500 at 11:58:42Z); neither passes the ROI screen (synthetic series; multiples 0.8182 and 0.5385).
+- Live-page behaviour checked in jsdom only (no real browser). Real browser CORS to the demo API was recorded as allowed in `data/cors_test.json` (12:14:51Z); it must be re-checked at runtime (F-6D-04).
+
+**Irregularities / unverified (all on Flagged for review; none block the merge)**
+- F-6D-01 high-ROI screen is a placeholder (user's model not supplied).
+- F-6D-02 cause links (news/website behind a jump) cannot be verified from the API; left blank.
+- F-6D-03 both snapshot swings are in synthetic series I-15; their market titles are absent from the committed snapshot (shown as unverified).
+- F-6D-04 live polling depends on browser access to the demo API; falls back to snapshot.
+- F-6D-05 snapshot cadence is coarse (about 30 min); live page is the real-time path; swings between polls can be missed.
+- F-6D-06 portfolio, fills and order placement remain blocked: a demo API key must be created by a person; no key is in this environment.
+- Not done in this session: portfolio/trade rows (blocked by F-6D-06); a full re-verification of every earlier row (prior sessions' logs stand; only the rows touched here were re-checked).
+
+**Build-artifact note:** `build_root_site.py` adds one blank line to `api-reference.html` and `methodology.html` on every run (pre-existing generator whitespace); committed as generated.
