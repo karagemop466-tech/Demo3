@@ -45,6 +45,11 @@ pseudo-count 10):
 | `elections\|0-5c\|>40c\|>14d` | 32 | 6 | sufficient | 0.84375 | 0.838542 | `fade_settle` | −0.307669 |
 | `elections\|80-95c\|>40c\|>14d` | 32 | 3 | sufficient | 0.75 | 0.755208 | `fade60` | −0.185614 |
 
+(Reproducing that table needs `python3 scripts/scan_swings.py --offline --out /tmp/x`: an offline run
+refuses to write into `data/swings/` and `alerts/model.json`, because those two files are the published
+live feed and a self-test must not masquerade as it. Section 2's numbers come from that mode; the
+committed `data/swings/*.json` remain the newest **live** workflow output.)
+
 Read that carefully: prices **do** revert (75–84 % of swings retrace into the anchor band inside the
 hour), and the fade still loses money, because the entry price after a jump is already through the
 fair value and the taker fee is paid twice. `hit_rate` is 0.0 — no measured exit produced a positive

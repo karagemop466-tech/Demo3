@@ -741,6 +741,13 @@ def live_units(args) -> tuple[list[dict], dict]:
 def run(args) -> int:
     started = datetime.now(timezone.utc)
     client = None
+    if args.offline and args.out == "data/swings" and not args.allow_offline_overwrite:
+        # The published files are the workflow's job; the offline self-test is a code test.
+        # Two sessions tripped over this in one hour, so the foot-gun is now a hard error.
+        print("refusing to write synthetic offline data into the published data/swings/ and "
+              "alerts/model.json - pass --out /tmp/yourdir (or --allow-offline-overwrite if you "
+              "really mean it)", file=sys.stderr)
+        return 4
     if args.offline:
         units, stats = load_offline(), {"mode": "offline", "requests": 0, "errors": 0,
                                        "warnings": [], "event_page_probe": {"attempted": False,
@@ -1135,6 +1142,8 @@ def main() -> int:
     p = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     p.add_argument("--offline", action="store_true", help="use committed snapshot, no network")
     p.add_argument("--out", default="data/swings", help="output directory (repo-relative)")
+    p.add_argument("--allow-offline-overwrite", action="store_true",
+                   help="let --offline write into the published data/swings/ + alerts/model.json")
     p.add_argument("--per-topic", type=int, default=12, dest="per_topic",
                    help="top-dollar open markets per topic to scan (live mode)")
     p.add_argument("--hours-1m", type=int, default=48, dest="hours_1m")
