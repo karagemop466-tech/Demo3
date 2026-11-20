@@ -309,6 +309,10 @@ class CycleTests(unittest.TestCase):
         for t, book in (books or {}).items():
             with open(os.path.join(self.fixtures, f"orderbook_{t}.json"), "w") as fh:
                 json.dump({"orderbook_fp": book}, fh)
+        if books:
+            with open(os.path.join(self.fixtures, "orderbooks.json"), "w") as fh:
+                json.dump({"orderbooks": [{"ticker": t, "orderbook_fp": b}
+                                          for t, b in books.items()]}, fh)
 
     def test_universe_skips_synthetic_series(self):
         universe, meta = pe.load_universe(self.tmp, dict(pe.DEFAULT_CONFIG))
@@ -354,6 +358,10 @@ class CycleTests(unittest.TestCase):
         self.assertAlmostEqual(rec["notional_dollars"], rec["count"] * rec["price_dollars"], 4)
         self.assertIn("source_urls", rec)
         self.assertTrue(rec["source_urls"]["markets"].startswith("https://x/trade-api/v2/markets?tickers="))
+        # the book snapshot attached to the fill comes from the batched orderbook call
+        self.assertTrue(rec["book"], "expected an orderbook snapshot on the fill record")
+        self.assertIn("/markets/orderbooks", rec["book"]["source_url"])
+        self.assertEqual(rec["book"]["best_no_bid"], [0.60, 250.0])
 
         # accounting identity with no fees: equity == cash + positions value,
         # and cash moved exactly by the fills
@@ -419,6 +427,46 @@ class CycleTests(unittest.TestCase):
                    if t.get("action") == "open" and t.get("role") == "maker"]
         self.assertTrue(crossed, "expected the resting bid to fill once the ask crossed it")
         self.assertLessEqual(crossed[0]["price_dollars"], 0.41)
+
+
+class BookTests(unittest.TestCase):
+    class _C:
+        root = "https://r/trade-api/v2"
+
+        def __init__(self, payload):
+            self.payload = payload
+            self.paths = []
+
+        def get_raw(self, path):
+            self.paths.append(path)
+            return self.payload
+
+    def test_batch_books_parse_and_expose_implied_asks(self):
+        client = self._C({"orderbooks": [
+            {"ticker": "A", "orderbook_fp": {"yes_dollars": [["0.4000", "10.00"]],
+                                             "no_dollars": [["0.5800", "4.00"],
+                                                            ["0.6000", "2.00"]]}},
+            {"ticker": "B", "orderbook_fp": {"yes_dollars": [], "no_dollars": []}},
+        ]})
+        books, stats = pe.fetch_books(client, ["A", "B"], 100, depth=6)
+        self.assertEqual(stats["requests"], 1)
+        self.assertIn("tickers=A&tickers=B", client.paths[0])
+        a = books["A"]
+        self.assertEqual(a["best_yes_bid"], [0.4, 10.0])
+        self.assertEqual(a["best_no_bid"], [0.6, 2.0])       # ascending -> best last
+        self.assertEqual(a["implied_yes_ask"], 0.4)           # 1 - 0.60
+        self.assertEqual(a["implied_no_ask"], 0.6)
+        self.assertEqual(books["B"]["best_yes_bid"], None)
+        self.assertEqual(stats["tickers"], 2)
+
+    def test_batch_errors_are_recorded_not_retried_into_values(self):
+        class Boom(self._C):
+            def get_raw(self, path):
+                raise RuntimeError("429 too many requests")
+        books, stats = pe.fetch_books(Boom({}), ["A"], 100)
+        self.assertEqual(books, {})
+        self.assertEqual(stats["errors"], 1)
+        self.assertIn("429", stats["batches"][0]["error"])
 
 
 class AnalysisTests(unittest.TestCase):

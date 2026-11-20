@@ -80,7 +80,9 @@ SOURCES = {
     "api_environments": "https://docs.kalshi.com/getting_started/api_environments.md",
     "get_markets": "https://docs.kalshi.com/api-reference/market/get-markets.md",
     "get_market": "https://docs.kalshi.com/api-reference/market/get-market.md",
-    "orderbook": "https://docs.kalshi.com/api-reference/market/get-market-order-book.md",
+    "orderbook": "https://docs.kalshi.com/api-reference/market/get-market-orderbook.md",
+    "orderbooks_batch": "https://docs.kalshi.com/api-reference/market/get-multiple-market-orderbooks.md",
+    "get_event": "https://docs.kalshi.com/api-reference/events/get-event.md",
     "orderbook_structure": "https://docs.kalshi.com/getting_started/orderbook_responses.md",
     "market_settlement": "https://docs.kalshi.com/getting_started/market_settlement.md",
     "fixed_point": "https://docs.kalshi.com/getting_started/fixed_point_migration.md",
@@ -101,7 +103,8 @@ DEFAULT_CONFIG = {
     "max_open_notional_per_market_dollars": 50.0,
     "max_open_positions": 20,
     "max_new_orders_per_run": 6,
-    "max_orderbook_lookups_per_run": 15,
+    "max_orderbook_tickers_per_run": 40,   # tickers whose books are pulled, batched
+    "orderbook_batch_size": 100,           # documented max per /markets/orderbooks call
     "max_resting_runs": 24,
     "markets_per_event": 3,
     "events_per_topic": 15,
@@ -158,6 +161,10 @@ class LiveClient:
     def get(self, path: str, params=None):
         return self._c.request("GET", path, params=params)
 
+    def get_raw(self, path_with_query: str):
+        """GET a path that already carries its query string (repeated params)."""
+        return self._c.request("GET", path_with_query)
+
     def begin_run(self) -> None:
         """Hook called once per desk cycle (fixture clients reset their replay index)."""
 
@@ -199,11 +206,21 @@ class FixtureClient:
         with open(path) as fh:
             return json.load(fh)
 
+    def get_raw(self, path_with_query: str):
+        return self.get(path_with_query)
+
     def get(self, path: str, params=None):
         self.requests += 1
+        if path.startswith("/markets/orderbooks"):
+            try:
+                return self._load("orderbooks.json")
+            except FileNotFoundError:
+                return {"orderbooks": []}
         if path == "/markets" and params and "tickers" in params:
             self._batch += 1
             return self._load(f"markets_tickers_{self._batch}.json")
+        if "?" in path:
+            path = path.split("?")[0]
         if path.startswith("/markets/") and path.endswith("/orderbook"):
             ticker = path.split("/")[2]
             return self._load(f"orderbook_{ticker}.json")
@@ -302,22 +319,66 @@ def fetch_quotes(client, tickers: list[str], batch: int) -> tuple[dict, dict]:
 
 
 def fetch_book(client, ticker: str, depth: int = 6) -> dict | None:
+    """Single-market read; kept for spot checks (the desk batches via fetch_books)."""
+    url = f"{client.root}/markets/{ticker}/orderbook?depth={depth}"
     try:
         data = client.get(f"/markets/{ticker}/orderbook", {"depth": depth})
     except Exception:
         return None
-    book = data.get("orderbook_fp") or data.get("orderbook") or {}
+    return parse_book(ticker, data.get("orderbook_fp") or data.get("orderbook"), url, depth)
+
+
+def parse_book(ticker: str, orderbook_fp: dict, source_url: str, depth: int | None = None) -> dict:
+    """Normalize an `orderbook_fp` object (bids-only, ascending; best = last)."""
+    book = orderbook_fp or {}
     yes = [[dollars(p), count_fp(s)] for p, s in (book.get("yes_dollars") or [])]
     no = [[dollars(p), count_fp(s)] for p, s in (book.get("no_dollars") or [])]
-    return {
+    out = {
         "ticker": ticker,
-        "yes_bid_levels": yes,      # ascending; best bid is the LAST element
-        "no_bid_levels": no,        # per orderbook_responses.md
+        "yes_bid_levels": yes,
+        "no_bid_levels": no,
         "best_yes_bid": yes[-1] if yes else None,
         "best_no_bid": no[-1] if no else None,
+        # implied best YES ask = 1 - best NO bid (documented reciprocity)
+        "implied_yes_ask": (round(1.0 - no[-1][0], 4) if no and no[-1][0] is not None else None),
+        "implied_no_ask": (round(1.0 - yes[-1][0], 4) if yes and yes[-1][0] is not None else None),
         "fetched_at": now_iso(),
-        "source_url": f"{client.root}/markets/{ticker}/orderbook?depth={depth}",
+        "source_url": source_url,
     }
+    if depth:
+        out["depth_requested"] = depth
+    return out
+
+
+def fetch_books(client, tickers: list[str], batch: int, depth: int = 6) -> tuple[dict, dict]:
+    """`GET /markets/orderbooks?tickers=...&tickers=...` (form/explode, max 100).
+
+    https://docs.kalshi.com/api-reference/market/get-multiple-market-orderbooks.md:
+    "Returns one orderbook per requested market ticker, in request order. A ticker
+    that has no order book ... is returned with empty arrays."
+    """
+    from urllib.parse import quote
+    stats = {"requests": 0, "errors": 0, "tickers": 0, "batches": []}
+    out: dict[str, dict] = {}
+    for i in range(0, len(tickers), batch):
+        chunk = tickers[i:i + batch]
+        query = "&".join(f"tickers={quote(t, safe='')}" for t in chunk)
+        url = f"{client.root}/markets/orderbooks?{query}&depth={depth}"
+        try:
+            data = client.get_raw(f"/markets/orderbooks?{query}&depth={depth}")
+            stats["requests"] += 1
+            stats["batches"].append({"size": len(chunk), "status": 200})
+        except Exception as exc:
+            stats["errors"] += 1
+            stats["batches"].append({"size": len(chunk), "error": str(exc)[:200]})
+            continue
+        for ob in data.get("orderbooks") or []:
+            t = ob.get("ticker")
+            if not t:
+                continue
+            out[t] = parse_book(t, ob.get("orderbook_fp"), url, depth)
+        stats["tickers"] += len(chunk)
+    return out, stats
 
 
 def size_at_touch(side: str, want: str, quote: dict) -> float | None:
@@ -876,10 +937,15 @@ def run_cycle(client, data_dir: str, config: dict, reset: bool = False,
     candidates.sort(key=lambda c: (
         -abs(((c[0].get("signal") or {}).get("delta_desk_dollars")) or 0.0), c[0]["ticker"]))
 
-    books = load_json(os.path.join(paper, "books.json"), {"books": []}) or {"books": []}
-    book_rows = list(books.get("books") or [])
-    lookups = 0
+    books_doc_prev = load_json(os.path.join(paper, "books.json"), {"books": []}) or {"books": []}
+    book_rows = list(books_doc_prev.get("books") or [])
     placed = 0
+    want_books = list(dict.fromkeys(c[0]["ticker"] for c in candidates))
+    want_books = want_books[: config.get("max_orderbook_tickers_per_run", 40)]
+    books_by_ticker, bstats = fetch_books(client, want_books,
+                                          config.get("orderbook_batch_size", 100))
+    log.update({"book_requests": bstats["requests"], "book_errors": bstats["errors"],
+                "book_tickers": bstats["tickers"]})
     for intent, ctx, kind in candidates:
         if placed >= config["max_new_orders_per_run"]:
             log["notes"].append("max_new_orders_per_run reached; remaining intents not sent")
@@ -888,13 +954,10 @@ def run_cycle(client, data_dir: str, config: dict, reset: bool = False,
             log["notes"].append("max_open_positions reached")
             break
         ticker = intent["ticker"]
-        book = None
-        if lookups < config["max_orderbook_lookups_per_run"]:
-            book = fetch_book(client, ticker)
-            lookups += 1
-            if book:
-                book["topic"] = intent.get("topic")
-                book_rows.append(book)
+        book = books_by_ticker.get(ticker)
+        if book:
+            book = dict(book, topic=intent.get("topic"))
+            book_rows.append(book)
         if intent["role"] == "maker":
             if not price_on_grid(intent["price_dollars"], ctx["market"]):
                 state["counters"]["rejections"] += 1
@@ -1014,10 +1077,12 @@ def run_cycle(client, data_dir: str, config: dict, reset: bool = False,
     analysis["requests"] = {"this_run": client.requests - log["requests_start"],
                             "errors_this_run": client.errors - log["errors_start"],
                             "quote_batches": qstats["requests"],
-                            "orderbook_lookups": lookups,
+                            "orderbook_batches": bstats["requests"],
+                            "orderbook_tickers": bstats["tickers"],
                             "note": "unauthenticated public requests have their own limits "
                                     "and no published number; this desk throttles to "
-                                    f"{config['ticker_batch_size']} tickers/request and backs "
+                                    f"{config['ticker_batch_size']} tickers/request (books batched at "
+                                    f"{config.get('orderbook_batch_size', 100)}/request) and backs "
                                     "off on 429 (" + SOURCES["rate_limits"] + ")"}
     run_row = dict(log)
     run_row.update({
