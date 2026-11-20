@@ -282,6 +282,14 @@ def consolidated_questions():
             [q.get("source", "")] + citations(q.get("q", ""), q.get("known", ""),
                                               q.get("missing", "")),
             "00a943bd docs")
+    add("5125-Q1", "Which model criteria define a 'high ROI' event? (the live dashboard's second feed)",
+        "The 'High ROI model' chat on the live dashboard is a visible PLACEHOLDER rule: a swing of at least "
+        "$0.10, a price between $0.05 and $0.95, and traded and open contracts above zero. It is not a model.",
+        "The owner's model (inputs, thresholds, and whether fees and spread are included) was not supplied. "
+        "No model-based ROI can be verified until it is.",
+        "Send the rule (or model code) to the repo owner; replace the ROI_MIN_PRICE / ROI_MAX_PRICE constants and the roiSignal line in assets/alerts.js.",
+        [f"{DOCS}/getting_started/terms", "https://news.kalshi.com/p/what-are-event-contracts"],
+        "5125afd8 alerts")
     return rows
 
 
@@ -424,6 +432,13 @@ def consolidated_flags():
         "Cells found without an official source during the per-row verification pass are left "
         "blank and flagged; never inferred.",
         [f"{DOCS}/getting_started/quick_start_market_data"], "open", "3a22fb0f")
+    add("I-13", "Alerts", "Price swings do not establish an external-news cause",
+        "Live alerts detect a qualifying price change from market observations only. The public "
+        "market data response does not verify which external article or event caused that move, so "
+        "the dashboard leaves catalyst attribution unverified rather than inventing a link. A news "
+        "source integration and a verified event-to-market attribution method remain open.",
+        [f"{DOCS}/api-reference/market/get-markets"],
+        "open — catalyst source integration not implemented", "arena/09824fd8-demo3")
     add("R-06", "Documentation", "Archive pages use the production API base",
         "docs/ and analysis/ fetch public data from api.elections.kalshi.com while the brief "
         "specifies the demo endpoints. The canonical root site uses the demo API. Archives are "
@@ -436,73 +451,6 @@ def consolidated_flags():
         "query string. Fixed in assets/app.js at integration (would otherwise 401 on every "
         "authenticated call).",
         [f"{DOCS}/getting_started/api_keys"], "resolved", "3a22fb0f")
-    # session 6d201d19 — snapshot swing detector (scripts/price_alerts.py -> data/latest/alerts.json).
-    # The live two-chat alert page is the merged feature in dashboard.html (PR #28, session 6ebc1cb7);
-    # this session's duplicate page was withdrawn (see COORDINATION.md, session 6d201d19).
-    add("F-6D-01", "Alerts / high-ROI", "High-ROI screen is a placeholder, not the user's model",
-        "The high-ROI screen (scripts/price_alerts.py, and the live chat in dashboard.html) is arithmetic on "
-        "official prices: buy the side the move made cheaper, gross payout multiple (1 - p) / p >= 1.00, volume "
-        "> 0, not a synthetic series. The user's model was not supplied, so this is not a forecast. Replace it "
-        "with the user's model output.",
-        [f"{DOCS}/api-reference/market/get-markets.md"], "open - user to supply model rules", "6d201d19")
-    add("F-6D-02", "Alerts / cause links", "Website/event links behind sharp price jumps are not verified",
-        "The Kalshi market API returns prices, volume and bid/ask but no news or cause field. Cause-link cells "
-        "are left blank and labelled unverified; nothing is inferred from news or timing.",
-        [f"{DOCS}/api-reference/market/get-markets.md"], "open - needs an external, verified news source", "6d201d19")
-    add("F-6D-03", "Alerts / snapshot", "Snapshot swings are in a synthetic exchange-test series",
-        "Both early swings in data/history/prices.jsonl are in KXDEMOFUTHOURLY-26NOV20H12-UP (repo finding I-15). "
-        "The official demo page says demo prices and behavior may not reflect real markets. The market title is "
-        "not in any committed market file, so it is shown as unverified.",
-        [f"{DOCS}/getting_started/demo_env"], "disclosed", "6d201d19")
-    add("F-6D-04", "Alerts / live browser", "Live polling depends on browser access to the demo API",
-        "The live chat in dashboard.html reads GET /markets?tickers= from the browser. Access was recorded as allowed "
-        "in data/cors_test.json (12:14:51Z, repo artifact). The official docs say market responses are cached "
-        "briefly, so prices can lag the exchange by several seconds. Re-check at runtime.",
-        [f"{DOCS}/getting_started/demo_env", f"{DOCS}/api-reference/market/get-markets.md"],
-        "open - re-verify at runtime", "6d201d19")
-    add("F-6D-05", "Alerts / cadence", "Snapshot history is sparse; live polling is the real-time path",
-        "prices.jsonl gets one row per market per kalshi-data.yml run (twice hourly, plus pushes), so snapshot "
-        "swings are coarse. The live chat is the real-time path. Swings between polls can be missed.",
-        [f"{DOCS}/api-reference/market/get-markets.md"], "disclosed", "6d201d19")
-    add("F-6D-07", "Alerts / single prints", "A single last-trade print can look like a swing",
-        "On 2026-11-20 KXPRESNOMD-28-HBID printed last_price 0.8110 at 19:14:49Z while yes_bid was 0.0020 and "
-        "yes_ask 0.8110 (208 contracts offered). A later live read (about 19:25Z) showed last_price 0.0030. A "
-        "last-trade price can be one print. scripts/price_alerts.py therefore marks a swing whose next reading "
-        "moves back toward the old price as a single print, and shows 'no later reading yet' when there is none. "
-        "A second print on 19:27:37Z (0.0030 -> 0.8110) had bid 0.0020 and ask 0.0030, so its quote midpoint (0.0025) "
-        "does not support the printed last price. scripts/price_alerts.py now records last_supported_by_quote. The "
-        "19:14:49Z row was written on branch arena/6d201d19-demo3 (commit 7d06a79) and is absent from main's later "
-        "prices.jsonl (see F-6D-08). The live chat does not yet do this (CR-6D-2 in COORDINATION.md).",
-        ["https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-HBID",
-         f"{DOCS}/api-reference/market/get-markets.md"],
-        "open - owner of the live chat to add the persistence check", "6d201d19")
-    add("F-6D-08", "Data pipeline", "Concurrent collector runs from several branches rewrite the same rolling history",
-        "data/history/prices.jsonl is appended by kalshi-data.yml on every branch that pushes, and the workflow "
-        "trims it to 20000 lines. Each branch then commits its own copy. Rows written on one branch (e.g. the "
-        "19:14:49Z KXPRESNOMD-28-HBID row on arena/6d201d19-demo3) can be lost when another branch's copy is taken. "
-        "Snapshot history is therefore not a complete record. Owner: pipeline. Fix: write the history from main only, or key rows by a unique id.",
-        ["https://docs.kalshi.com/api-reference/market/get-markets.md", f"{DOCS}/getting_started/demo_env"],
-        "open - pipeline owner to decide", "6d201d19")
-    add("F-6D-09", "Generator / dashboard", "build_root_site.py overwrites dashboard.html and drops the live alert cards",
-        "build_dashboard() writes dashboard.html from its own template. The live two-chat alert cards merged in PR #28 "
-        "(session 6ebc1cb7) were added to dashboard.html by hand, so running this generator on main removes them. "
-        "CI runs only verify_root_site.py, so nothing breaks today. Owner: the integration session. Fix: move the alert "
-        "cards into build_dashboard() before any future regeneration.",
-        [f"{DOCS}/getting_started/demo_env"], "open - integration owner", "6d201d19")
-    add("F-6D-10", "CI / collector", "collect.yml failed at workflow level on main (duplicate 'if' key)",
-        "The 'Request Pages rebuild' step in .github/workflows/collect.yml had two 'if:' keys after a merge. The "
-        "collector runs on main (44804291212, 44804259549, 44804243948) ended with 0 jobs and no log. The duplicate key "
-        "is the likely cause, but this is not confirmed by an error message. Fixed on session 6d201d19 by keeping the "
-        "single 'refs/heads/main' condition. All workflow files were checked for duplicate keys (none others). "
-        "Confirm with the next scheduled run.",
-        ["https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions"],
-        "fixed in this branch - verify the next scheduled run", "6d201d19")
-    add("F-6D-06", "Trading / portfolio", "Demo account portfolio and live trades still blocked",
-        "Portfolio, fills and order placement need a Kalshi demo API key. The demo key is created by a "
-        "person at demo.kalshi.co; this agent cannot create one. Until a key is provided, trade rows stay "
-        "blank and flagged (see I-12 and F-3B-03).",
-        [f"{DOCS}/getting_started/demo_env", "https://help.kalshi.com/en/articles/13823775-creating-and-using-a-demo-account"],
-        "open - needs a user-created demo key", "6d201d19")
     add("F-7b-01", "Alerts", "High-ROI screen parameters are uncalibrated (supersedes F-alert-01)",
         "The screen now lives in data/latest/roi_model.json with every measured rate on model.html. The "
         "10%-of-prior parameter is a stated choice: the committed demo data cannot fit it — of 341 "
@@ -569,6 +517,86 @@ def consolidated_flags():
         "even public channels ride the authenticated session — the WebSocket API cannot be used from a "
         "static Pages page by design, so REST polling is the correct fallback, not a defect.",
         [f"{DOCS}/getting_started/quick_start_websockets"], "resolved — documented", "7b47094a")
+    add("A-02", "Live alerts", "Alert causes are not available from the API",
+        "The alert feed shows that a price moved, not why. The Kalshi Trade API has no cause field, so no "
+        "cause is inferred. The 'Context' column lists the event's official settlement_sources (Get Event) "
+        "as resolution sources only, not as evidence of what moved the price. Per-alert links go to the exact API record.",
+        [f"{DOCS}/api-reference/market/get-market"], "open", "5125afd8")
+    add("A-03", "Live alerts", "Alerts sample REST once per scan, not a tick stream",
+        "Moves are detected between dashboard scans (about every 20 s, scan depth set on the page). "
+        "Brief moves that revert between two scans are missed, and the scan covers only the series "
+        "selected by the depth setting. The official WebSocket requires signed handshake headers that "
+        "a browser page cannot attach, so a true stream needs a signed server-side proxy.",
+        [f"{DOCS}/getting_started/quick_start_websockets", f"{DOCS}/getting_started/quick_start_market_data"],
+        "open", "5125afd8")
+    # session 6d201d19 — snapshot swing detector (scripts/price_alerts.py -> data/latest/alerts.json).
+    # The live two-chat alert page is the merged feature in dashboard.html (PR #28, session 6ebc1cb7);
+    # this session's duplicate page was withdrawn (see COORDINATION.md, session 6d201d19).
+    add("F-6D-01", "Alerts / high-ROI", "High-ROI screen is a placeholder, not the user's model",
+        "The high-ROI screen (scripts/price_alerts.py, and the live chat in dashboard.html) is arithmetic on "
+        "official prices: buy the side the move made cheaper, gross payout multiple (1 - p) / p >= 1.00, volume "
+        "> 0, not a synthetic series. The user's model was not supplied, so this is not a forecast. Replace it "
+        "with the user's model output.",
+        [f"{DOCS}/api-reference/market/get-markets.md"], "open - user to supply model rules", "6d201d19")
+    add("F-6D-02", "Alerts / cause links", "Website/event links behind sharp price jumps are not verified",
+        "The Kalshi market API returns prices, volume and bid/ask but no news or cause field. Cause-link cells "
+        "are left blank and labelled unverified; nothing is inferred from news or timing.",
+        [f"{DOCS}/api-reference/market/get-markets.md"], "open - needs an external, verified news source", "6d201d19")
+    add("F-6D-03", "Alerts / snapshot", "Snapshot swings are in a synthetic exchange-test series",
+        "Both early swings in data/history/prices.jsonl are in KXDEMOFUTHOURLY-26NOV20H12-UP (repo finding I-15). "
+        "The official demo page says demo prices and behavior may not reflect real markets. The market title is "
+        "not in any committed market file, so it is shown as unverified.",
+        [f"{DOCS}/getting_started/demo_env"], "disclosed", "6d201d19")
+    add("F-6D-04", "Alerts / live browser", "Live polling depends on browser access to the demo API",
+        "The live chat in dashboard.html reads GET /markets?tickers= from the browser. Access was recorded as allowed "
+        "in data/cors_test.json (12:14:51Z, repo artifact). The official docs say market responses are cached "
+        "briefly, so prices can lag the exchange by several seconds. Re-check at runtime.",
+        [f"{DOCS}/getting_started/demo_env", f"{DOCS}/api-reference/market/get-markets.md"],
+        "open - re-verify at runtime", "6d201d19")
+    add("F-6D-05", "Alerts / cadence", "Snapshot history is sparse; live polling is the real-time path",
+        "prices.jsonl gets one row per market per kalshi-data.yml run (twice hourly, plus pushes), so snapshot "
+        "swings are coarse. The live chat is the real-time path. Swings between polls can be missed.",
+        [f"{DOCS}/api-reference/market/get-markets.md"], "disclosed", "6d201d19")
+    add("F-6D-07", "Alerts / single prints", "A single last-trade print can look like a swing",
+        "On 2026-11-20 KXPRESNOMD-28-HBID printed last_price 0.8110 at 19:14:49Z while yes_bid was 0.0020 and "
+        "yes_ask 0.8110 (208 contracts offered). A later live read (about 19:25Z) showed last_price 0.0030. A "
+        "last-trade price can be one print. scripts/price_alerts.py therefore marks a swing whose next reading "
+        "moves back toward the old price as a single print, and shows 'no later reading yet' when there is none. "
+        "A second print on 19:27:37Z (0.0030 -> 0.8110) had bid 0.0020 and ask 0.0030, so its quote midpoint (0.0025) "
+        "does not support the printed last price. scripts/price_alerts.py now records last_supported_by_quote. The "
+        "19:14:49Z row was written on branch arena/6d201d19-demo3 (commit 7d06a79) and is absent from main's later "
+        "prices.jsonl (see F-6D-08). The live chat does not yet do this (CR-6D-2 in COORDINATION.md).",
+        ["https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-HBID",
+         f"{DOCS}/api-reference/market/get-markets.md"],
+        "open - owner of the live chat to add the persistence check", "6d201d19")
+    add("F-6D-08", "Data pipeline", "Concurrent collector runs from several branches rewrite the same rolling history",
+        "data/history/prices.jsonl is appended by kalshi-data.yml on every branch that pushes, and the workflow "
+        "trims it to 20000 lines. Each branch then commits its own copy. Rows written on one branch (e.g. the "
+        "19:14:49Z KXPRESNOMD-28-HBID row on arena/6d201d19-demo3) can be lost when another branch's copy is taken. "
+        "Snapshot history is therefore not a complete record. Owner: pipeline. Fix: write the history from main only, or key rows by a unique id.",
+        ["https://docs.kalshi.com/api-reference/market/get-markets.md", f"{DOCS}/getting_started/demo_env"],
+        "open - pipeline owner to decide", "6d201d19")
+    add("F-6D-09", "Generator / dashboard", "build_root_site.py overwrites dashboard.html and drops the live alert cards",
+        "build_dashboard() writes dashboard.html from its own template. The live two-chat alert cards merged in PR #28 "
+        "(session 6ebc1cb7) were added to dashboard.html by hand, so running this generator on main removes them. "
+        "CI runs only verify_root_site.py, so nothing breaks today. Owner: the integration session. Fix: move the alert "
+        "cards into build_dashboard() before any future regeneration. RESOLVED at integration: the alert "
+        "panel now lives in build_dashboard() (fix by 5125afd8, merged by a7ce6f14); regeneration keeps it.",
+        [f"{DOCS}/getting_started/demo_env"], "resolved - panel owned by the generator since 2026-11-20", "6d201d19 / 5125afd8 / a7ce6f14")
+    add("F-6D-10", "CI / collector", "collect.yml failed at workflow level on main (duplicate 'if' key)",
+        "The 'Request Pages rebuild' step in .github/workflows/collect.yml had two 'if:' keys after a merge. The "
+        "collector runs on main (44804291212, 44804259549, 44804243948) ended with 0 jobs and no log. The duplicate key "
+        "is the likely cause, but this is not confirmed by an error message. Fixed on session 6d201d19 by keeping the "
+        "single 'refs/heads/main' condition. All workflow files were checked for duplicate keys (none others). "
+        "Confirm with the next scheduled run.",
+        ["https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions"],
+        "fixed in this branch - verify the next scheduled run", "6d201d19")
+    add("F-6D-06", "Trading / portfolio", "Demo account portfolio and live trades still blocked",
+        "Portfolio, fills and order placement need a Kalshi demo API key. The demo key is created by a "
+        "person at demo.kalshi.co; this agent cannot create one. Until a key is provided, trade rows stay "
+        "blank and flagged (see I-12 and F-3B-03).",
+        [f"{DOCS}/getting_started/demo_env", "https://help.kalshi.com/en/articles/13823775-creating-and-using-a-demo-account"],
+        "open - needs a user-created demo key", "6d201d19")
     return rows
 
 
@@ -607,6 +635,12 @@ def consolidated_sources():
         f"{DEMO}/markets", "Status, prices (dollars), volume_fp, open_interest_fp.")
     add("LIVE-OB", "Demo orderbook (live)",
         f"{DEMO}/markets/KXPGATOP40-26NOV22-LUDVIC/orderbook", "orderbook_fp price/size levels.")
+    add("5125-S1", "Get Market (fields: last_price_dollars, yes_bid/ask_dollars, volume_fp, open_interest_fp, previous_price_dollars)",
+        f"{DOCS}/api-reference/market/get-market", "Alert price fields and the per-alert API record link")
+    add("5125-S2", "Kalshi News: contracts settle to $1 if right, $0 otherwise",
+        "https://news.kalshi.com/p/what-are-event-contracts", "Payout rule behind gross ROI-if-right")
+    add("5125-S3", "Kalshi Glossary: category, series, event, market",
+        f"{DOCS}/getting_started/terms", "Object model used for topic and event grouping of alerts")
     return rows
 
 
@@ -719,6 +753,7 @@ questions and suggestions before making decisions.</p>
 <table><thead><tr><th>Goal</th><th>Page</th><th>Source</th></tr></thead><tbody>
 <tr><td><strong>Live alert desk (new)</strong>: two scrolling streams (all swings ≥ $0.10 / high-ROI model filter), auto-simulated strategies, event resolution, 30 s–30 d price graphs</td><td><a href="live/index.html">/live alert desk</a></td><td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-market-candlesticks" target="_blank" rel="noopener">source</a></td></tr>
 <tr><td>Track highest-dollar live events, price chart (seconds/minutes/hours), orderbook liquidity, resolutions</td><td><a href="dashboard.html">Live dashboard</a></td><td><a class="src" href="https://docs.kalshi.com/getting_started/quick_start_market_data" target="_blank" rel="noopener">source</a></td></tr>
+<tr><td>Live alerts for price swings ≥ $0.10 (either direction) in two scrolling feeds: all swings, and a high-ROI filter (placeholder rule until the owner supplies the model)</td><td><a href="dashboard.html#alerts">Live alerts</a></td><td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-market" target="_blank" rel="noopener">source</a></td></tr>
 <tr><td>Execute trades (demo key or labeled paper mode), analyze performance, categorize trades, build strategies</td><td><a href="portfolio.html">Portfolio</a> · <a href="trades.html">Trades</a></td><td><a class="src" href="https://docs.kalshi.com/api-reference/orders/create-order-v2" target="_blank" rel="noopener">source</a></td></tr>
 <tr><td>Decide before changing anything: questions, missing information, discovery steps</td><td><a href="questions.html">Questions</a> · <a href="suggestions.html">Suggestions</a></td><td><a class="src" href="https://docs.kalshi.com/getting_started/demo_env" target="_blank" rel="noopener">source</a></td></tr>
 <tr><td>Verify every value: per-row sources, flagged items, repo review</td><td><a href="sources.html">Sources</a> · <a href="flagged.html">Flagged</a> · <a href="repo-review.html">Repo review</a></td><td><a class="src" href="https://docs.kalshi.com/getting_started/quick_start_market_data" target="_blank" rel="noopener">source</a></td></tr>
@@ -833,9 +868,37 @@ if the browser blocks the request the tables fall back to the snapshot links in
   <h2>5 · Trade categorization &amp; strategy analysis</h2>
   <div id="strategyBody"></div>
 </div>
+
+<div class="card" id="alerts">
+  <h2>6 · Price-swing alerts &mdash; scrolling chat (&ge; $0.10)</h2>
+  <p class="small muted">Live alerts for contract price swings of <strong>&ge; $0.10 in either direction</strong>,
+     detected from the dashboard's live market samples (GET /markets, demo API, no key). Two scrolling chats:
+     <em>All events</em> shows every swing; <em>High ROI model</em> shows a selective, labeled placeholder
+     heuristic (no real model is defined yet &mdash; flagged F-alert-01, never presented as verified ROI).
+     Each row links its exact market API URL and, in <em>Context</em>, the event's official <code>settlement_sources</code> (Get Event).
+     Those are resolution sources, not proof of cause: each row says "Cause not verified". Alerts persist in this browser only.
+     The market response does not verify an external news cause &mdash; see Flagged item I-13.</p>
+  <div class="alert-controls">
+    <label><input type="checkbox" id="alertsEnabled" checked> Alerts enabled</label>
+    <label><input type="checkbox" id="autoTrade" disabled> Automated paper trades on swing (paper/SIMULATED only)</label>
+    <button class="btn secondary" id="clearAlertsBtn">Clear alerts</button>
+    <span class="alert-pill" id="alertCount">0 alerts</span>
+  </div>
+  <div class="chat-tabs">
+    <button class="chat-tab active" id="tabAll" data-chat="all">All events</button>
+    <button class="chat-tab" id="tabROI" data-chat="roi">High ROI model</button>
+  </div>
+  <div class="chat-wrap" id="chatAll">
+    <div id="alertsAll"></div>
+  </div>
+  <div class="chat-wrap" id="chatROI" style="display:none">
+    <div id="alertsROI"></div>
+    <p class="small muted">High-ROI placeholder rule: swing &ge; $0.10, price 5&cent;&ndash;95&cent;, traded and open contracts &gt; 0. Not a real model (flagged F-alert-01).</p>
+  </div>
+</div>
 """
     write_page("dashboard.html", "Live dashboard", "dashboard.html", body,
-               scripts=("assets/app.js", "assets/trade.js", "assets/dashboard.js", "assets/site.js"))
+               scripts=("assets/app.js", "assets/trade.js", "assets/dashboard.js", "assets/alerts.js", "assets/site.js"))
 
 
 def build_portfolio():

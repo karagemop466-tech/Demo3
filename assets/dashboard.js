@@ -14,7 +14,7 @@
     windowSec: 3600, scanSec: 20, obSec: 10,
     timers: [], resolutions: [], fills: [],
     watch: {},
-    connected: false, lastScan: null, errors: 0
+    connected: false, lastScan: null, errors: 0, scanInProgress: false
   };
   try { state.resolutions = JSON.parse(localStorage.getItem("kd_resolutions") || "[]"); }
   catch (e) { state.resolutions = []; }
@@ -54,6 +54,8 @@
     return {
       ticker: m.ticker, event_ticker: m.event_ticker, title: m.title || m.ticker,
       status: m.status, result: m.result || "",
+      settlement_ts: m.settlement_ts || "",
+      settlement_value: m.settlement_value_dollars || "",
       last: last, yb: yb, ya: ya, vol: vol, oi: oi,
       volDollars: K.estDollars(vol, last), oiDollars: K.estDollars(oi, last),
       close_time: m.close_time, series_ticker: m.series_ticker || "",
@@ -102,6 +104,8 @@
 
   /* ---------- 2. Market scan + ranking ---------- */
   async function scan() {
+    if (state.scanInProgress) return;
+    state.scanInProgress = true;
     try {
       var markets = [];
       var depthSel = $("scanDepth");
@@ -155,6 +159,7 @@
         " — " + state.markets.length + " open markets (coverage: " + capNote + ").";
       banner("", "");
     } catch (e) { showError(e); }
+    finally { state.scanInProgress = false; }
   }
   function renderRanking() {
     if (!$("rankingTable")) return;
@@ -414,6 +419,8 @@
         window.KD.onResolution({ ticker: res.ticker, title: res.title, topic: res.topic,
           result: res.result, status: res.status, ts: res.ts,
           event_ticker: res.event_ticker, series: res.series_ticker,
+          settlement_value_dollars: m.settlement_value,
+          settlement_ts: m.settlement_ts,
           rules_primary: m.rules_primary });
       } catch (e) { /* alert sink must not break resolution tracking */ }
     }
