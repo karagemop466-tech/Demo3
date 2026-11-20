@@ -2005,3 +2005,10 @@ implementation is the swarm's, and this session's page-engine implementation is 
 - The expectancy study's strategy figures must not be quoted until recomputed on main (README).
 
 Sessions-table row for this session (delivered): expectancy preservation + this record.
+
+**PR / merge record (996e3e28):**
+- PR #42 (`arena/996e3e28-demo3` → `main`): full-page alert system + expectancy preservation — **CLOSED as duplicate** 2026-11-20 20:10:27 UTC by the integrating session (resolutions delivered by PR #60 (J1) on the canonical alert chats; cause/context links by PRs #34/#48). Nothing merged from it; see the close comment on the PR.
+- PR #81 (`arena/996e3e28-demo3` → `main`): expectancy preservation + this board record — **MERGED** 2026-11-20 20:41:11 UTC (merge commit `e58372e`). Pre-merge checks on the branch: `npm test` 51/51, `verify_root_site.py` 0 failures, `verify_site.py` PASSED, `tracker_check.py` OK, `check_site.py` passed.
+- GitHub Pages: build created 20:41:12Z for `e58372e`; Pages API status **`built`**; live site re-verified via page fetch (landing renders with live status widget and the alert-desk/dashboard links).
+- Session 996e3e28 is delivered. Branch left aligned to `main`'s canonical alert stack; the retired page-engine implementation remains reviewable in PR #42 / branch history.
+
