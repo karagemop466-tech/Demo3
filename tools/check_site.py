@@ -26,6 +26,11 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SITE = ROOT / "docs"
+# The portal at the repository root is what Pages serves first, so it is part of the published
+# surface. The archive is published too (it is linked from the portal), so its internal links must
+# resolve or a visitor lands on a 404 from a page we chose to keep.
+PORTAL = ROOT / "index.html"
+ARCHIVE = ROOT / "legacy"
 
 ALLOWED_CITATION_HOSTS = (
     "kalshi.com", "docs.kalshi.com", "kalshi.co", "external-api.kalshi.com",
@@ -92,6 +97,40 @@ def check() -> list[str]:
     for rel in REQUIRED_PAGES:
         if not (SITE / rel).exists():
             problems.append(f"missing required page: docs/{rel}")
+
+    # --- root portal ---------------------------------------------------------------------
+    # Pages serves the repository root, so the portal is part of the published surface and every
+    # local link in it must resolve inside the repository root.
+    if not PORTAL.exists():
+        problems.append("missing root portal: index.html")
+    else:
+        parser = LinkParser()
+        parser.feed(PORTAL.read_text(encoding="utf-8", errors="replace"))
+        for _tag, value in parser.links:
+            if value.startswith(("http://", "https://", "mailto:", "#", "data:", "javascript:")):
+                continue
+            target = (ROOT / value.split("#")[0].split("?")[0]).resolve()
+            if not str(target).startswith(str(ROOT.resolve())):
+                problems.append(f"index.html: link escapes the repository: {value}")
+                continue
+            if not target.exists():
+                problems.append(f"index.html: broken link -> {value}")
+
+    # The archive under legacy/ is repository material, deliberately not served: its pages were
+    # written against the old repo-root layout. Nothing published may link into it, or visitors
+    # would follow a link into pages whose assets are not where they expect.
+    archive_prefixes = ("legacy/",)
+    for page in list(html_files) + ([PORTAL] if PORTAL.exists() else []):
+        parser = LinkParser()
+        parser.feed(page.read_text(encoding="utf-8", errors="replace"))
+        for _tag, value in parser.links:
+            if value.startswith(("http://", "https://", "mailto:", "#", "data:", "javascript:")):
+                continue
+            resolved = (page.parent / value).resolve()
+            rel = str(resolved.relative_to(ROOT.resolve())) if str(resolved).startswith(str(ROOT.resolve())) else ""
+            if rel.startswith(archive_prefixes):
+                problems.append(
+                    f"{page.relative_to(ROOT)}: published page links into the non-served archive: {value}")
 
     json_cache: dict[Path, object] = {}
 

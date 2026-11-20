@@ -15,10 +15,14 @@ const path = require("path");
 const { JSDOM, VirtualConsole } = require("jsdom");
 
 const SITE = path.resolve(__dirname, "..", "docs");
+const ROOTDIR = path.resolve(__dirname, "..");
+// The root portal is what Pages serves first, so it is render-tested too. It is not a data page,
+// so it is checked for chrome and links rather than for tables.
+const PORTAL = "index.html";
 const PAGES = [
   "index.html", "dashboard.html", "resolutions.html", "liquidity.html",
   "portfolio.html", "strategy.html", "suggestions.html", "questions.html",
-  "flagged.html", "sources.html",
+  "flagged.html", "sources.html", "index.html",
   "categories/gas.html", "categories/elections.html", "categories/culture.html",
   "categories/crypto.html", "categories/golf.html",
 ];
@@ -29,7 +33,7 @@ const notes = [];
 function sleep(ms) { return new Promise((r) => setTimeout(r, ms)); }
 
 async function renderPage(rel) {
-  const file = path.join(SITE, rel);
+  const file = rel === PORTAL ? path.join(ROOTDIR, "index.html") : path.join(SITE, rel);
   let html = fs.readFileSync(file, "utf8");
   // Inline the shared runtime so the test does not depend on jsdom fetching external scripts.
   const shared = fs.readFileSync(path.join(SITE, "assets", "app.js"), "utf8");
@@ -101,8 +105,23 @@ async function renderPage(rel) {
   const nav = doc.querySelectorAll("header.top nav.main a");
   if (nav.length < 10) failures.push(rel + ": navigation did not render (" + nav.length + " links)");
   const tables = doc.querySelectorAll("table tbody tr");
-  if (tables.length === 0) failures.push(rel + ": no table rows rendered at all");
+  if (rel !== PORTAL && tables.length === 0) failures.push(rel + ": no table rows rendered at all");
 
+  if (rel === PORTAL) {
+    if (doc.querySelectorAll("a[href^='docs/']").length < 8) {
+      failures.push(rel + ": portal does not link to the dashboard sections");
+    }
+    // Only a *relative* link into the archive is a problem; explaining the archive with a GitHub
+    // URL is exactly what the portal is supposed to do (jsdom never sees a shared script load, so
+    // the generated header cannot be asserted here — check_site.py covers the static links).
+    const relativeLegacy = Array.from(doc.querySelectorAll("a[href]")).filter((a) => {
+      const href = a.getAttribute("href");
+      return !/^(?:https?:|mailto:|#)/.test(href) && href.indexOf("legacy/") === 0;
+    });
+    if (relativeLegacy.length) {
+      failures.push(rel + ": portal links into the non-served archive -> " + relativeLegacy[0].getAttribute("href"));
+    }
+  }
   if (rel === "liquidity.html" && drawCalls.length < 3) {
     failures.push(rel + ": chart drawing produced almost no canvas operations (" + drawCalls.length + ")");
   }

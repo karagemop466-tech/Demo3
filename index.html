@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kalshi demo dashboard — five topics, every row sourced</title>
+<link rel="stylesheet" href="docs/assets/app.css">
+<style>
+  .hero { max-width: 980px; margin: 0 auto; padding: 56px 20px 8px; }
+  .hero h1 { font-size: clamp(28px, 4.4vw, 44px); line-height: 1.12; margin: 0 0 14px; letter-spacing: -0.02em; }
+  .hero p.lede { font-size: 1.06rem; max-width: 720px; }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; margin: 26px 0 8px; }
+  .cta a.primary, .cta a.ghost {
+    display: inline-flex; align-items: center; gap: 8px; padding: 12px 18px; border-radius: 10px;
+    font-weight: 600; text-decoration: none; font-size: 0.97rem; }
+  .cta a.primary { background: var(--ink, #101418); color: #fff; border: 1px solid var(--ink, #101418); }
+  .cta a.ghost { border: 1px solid var(--line, #d7dce2); color: inherit; }
+  .cta a.primary:hover { opacity: 0.9; }
+  .cta a.ghost:hover { background: rgba(0,0,0,0.04); }
+  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin: 34px 0; }
+  .fact { border: 1px solid var(--line, #d7dce2); border-radius: 12px; padding: 14px 16px; background: #fff; }
+  .fact .n { font-size: 1.5rem; font-weight: 650; letter-spacing: -0.02em; }
+  .fact .l { font-size: 0.79rem; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.62; margin-top: 2px; }
+  .fact .s { font-size: 0.82rem; opacity: 0.72; margin-top: 6px; }
+  .sites { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+  .site { border: 1px solid var(--line, #d7dce2); border-radius: 12px; padding: 16px; background: #fff; }
+  .site .tag { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 8px;
+    border-radius: 999px; background: #eef1f5; display: inline-block; margin-bottom: 8px; }
+  .site .tag.live { background: #e6f4ea; color: #146c2e; }
+  .site .tag.arch { background: #fdf0e3; color: #8a4b00; }
+  .site h3 { margin: 2px 0 6px; font-size: 1rem; }
+  .site p { margin: 0 0 10px; font-size: 0.88rem; opacity: 0.82; }
+  .site code { font-size: 0.78rem; }
+</style>
+</head>
+<body>
+
+<header class="top"></header>
+
+<main class="hero">
+  <div class="badge" style="font-size:0.75rem;letter-spacing:0.06em;text-transform:uppercase;opacity:0.6">
+    Kalshi demo account · gas prices · elections · culture · crypto · golf
+  </div>
+  <h1>A market dashboard where every number has a link back to the exchange response that produced it.</h1>
+  <p class="lede">Five topics, live until settlement, with resolution outcomes, a contract-price chart whose window you
+  control, order-book depth, a portfolio view that refuses to invent balances, and a strategy section built on
+  12,521 settled markets. Where a value cannot be confirmed, the cell is blank and flagged — nothing is inferred.</p>
+
+  <div class="cta">
+    <a class="primary" href="docs/index.html">Open the dashboard →</a>
+    <a class="ghost" href="docs/flagged.html">What is flagged</a>
+    <a class="ghost" href="docs/sources.html">Sources</a>
+  </div>
+
+  <div class="facts">
+    <div class="fact"><div class="n">5</div><div class="l">topics only</div>
+      <div class="s">Gas, elections, culture, crypto, golf — nothing else collected.</div></div>
+    <div class="fact"><div class="n">12,521</div><div class="l">settled markets studied</div>
+      <div class="s">Enough to test the obvious strategies. Two of four failed.</div></div>
+    <div class="fact"><div class="n">15</div><div class="l">pages</div>
+      <div class="s">All render-tested against the committed data on every push.</div></div>
+    <div class="fact"><div class="n">0</div><div class="l">invented values</div>
+      <div class="s">Blank + flagged beats a plausible-looking guess.</div></div>
+  </div>
+</main>
+
+<div class="wrap" style="max-width:980px">
+  <h2>Start here</h2>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>If you want…</th><th>Go to</th><th>What you get</th></tr></thead>
+      <tbody>
+        <tr><td>The short version</td><td><a href="docs/index.html">Overview</a></td>
+          <td>KPIs, top markets under four different size metrics, topic cards, portfolio state.</td></tr>
+        <tr><td>The biggest live events</td><td><a href="docs/dashboard.html">All-topic table</a></td>
+          <td>Sortable by contracts, 24h activity, open interest, resting liquidity, or production.</td></tr>
+        <tr><td>One topic in detail</td><td><a href="docs/categories/gas.html">Gas</a> ·
+          <a href="docs/categories/elections.html">Elections</a> · <a href="docs/categories/culture.html">Culture</a> ·
+          <a href="docs/categories/crypto.html">Crypto</a> · <a href="docs/categories/golf.html">Golf</a></td>
+          <td>Which series matched the topic and why, series table, resolution counts.</td></tr>
+        <tr><td>A price chart with depth</td><td><a href="docs/liquidity.html">Price &amp; liquidity</a></td>
+          <td>Window from 60 seconds to 30 days, bid/ask/close series, order-book ladder, contract depth.</td></tr>
+        <tr><td>How events ended</td><td><a href="docs/resolutions.html">Resolutions</a></td>
+          <td>YES/NO outcomes per market, by topic and by month; scalar markets kept separate.</td></tr>
+        <tr><td>Account performance</td><td><a href="docs/portfolio.html">Portfolio</a></td>
+          <td>Balance, positions, fills and P&amp;L components — or an explicit "not configured" state.</td></tr>
+        <tr><td>What to do differently</td><td><a href="docs/strategy.html">Strategy</a> ·
+          <a href="docs/suggestions.html">Suggestions</a></td>
+          <td>Rule output with its edge and its costs; 14 suggestions you can accept, defer or reject.</td></tr>
+        <tr><td>What is still unknown</td><td><a href="docs/questions.html">Open questions</a> ·
+          <a href="docs/flagged.html">Flagged</a></td>
+          <td>Every decision that needs an answer, and every irregularity found, with evidence.</td></tr>
+        <tr><td>Where numbers come from</td><td><a href="docs/sources.html">Sources</a></td>
+          <td>23 official Kalshi pages and the stored API responses behind the tables.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>One site, not four</h2>
+  <p class="small dim">Earlier sessions each shipped a landing page, so the repository briefly had four sites
+  with different feature lists. This page is now the single front door. The other builds are kept intact and
+  read-only for reference, and the repository layout is documented in <code>README.md</code>.</p>
+  <div class="sites">
+    <div class="site"><span class="tag live">published</span>
+      <h3>docs/ — the dashboard</h3>
+      <p>Server-collected data, computed analysis, per-row citations, render-tested in CI.</p>
+      <a href="docs/index.html">docs/index.html →</a></div>
+    <div class="site"><span class="tag arch">reference</span>
+      <h3>legacy/live-desk/</h3>
+      <p>The former root site: a browser-side desk that signed requests with a key pasted into the page.
+      Kept because its chart and trade-ticket UX are worth reading; not linked as live data.</p>
+      <a href="https://github.com/karagemop466-tech/Demo3/tree/main/legacy/live-desk">legacy/live-desk on GitHub →</a></div>
+    <div class="site"><span class="tag arch">reference</span>
+      <h3>legacy/docs-site/ · legacy/demo-desk/ · legacy/analysis/</h3>
+      <p>Three earlier static builds. Preserved verbatim so no session's work is lost; superseded by
+      <code>docs/</code>, which has the analysis engine none of them had.</p>
+      <a href="https://github.com/karagemop466-tech/Demo3/blob/main/legacy/README.md">legacy/README.md →</a>
+      <p class="small dim" style="margin:8px 0 0">Kept in the repository as source, not served: their links
+      assume the old repo-root layout, so publishing them would create dead ends.</p></div>
+  </div>
+
+  <h2>How the data gets here</h2>
+  <div class="card">
+    <p class="small">A GitHub Actions job calls the Kalshi <strong>demo</strong> REST API, selects at most
+    14 series per topic by series volume, pulls open and settled markets, order books and candlesticks, and commits
+    a compact artifact. <code>analysis/build.py</code> then computes per-topic aggregates, the settlement study and
+    the strategy rules, and <code>tools/check_site.py</code> plus <code>tools/render_test.js</code> refuse to ship
+    a page with a broken link, an uncited row or a table that renders empty.</p>
+    <p class="small dim">Kalshi states that demo prices may not reflect real markets; when credentials are absent the
+    portfolio section says so rather than showing zero. Both points are on the
+    <a href="docs/flagged.html">Flagged for review</a> page.</p>
+  </div>
+</div>
+
+<footer class="foot" style="margin-top:40px"></footer>
+
+<script src="docs/assets/app.js"></script>
+<script>
+(function () {
+  KD.renderChrome("__portal__");
+  // renderChrome assumes it is running inside docs/; the portal lives one level up, so rewrite the
+  // generated links and replace the footer with portal-specific text.
+  var NAV = [
+    ["docs/index.html", "Overview"], ["docs/dashboard.html", "All topics"],
+    ["docs/categories/gas.html", "Gas"], ["docs/categories/elections.html", "Elections"],
+    ["docs/categories/culture.html", "Culture"], ["docs/categories/crypto.html", "Crypto"],
+    ["docs/categories/golf.html", "Golf"], ["docs/liquidity.html", "Price &amp; liquidity"],
+    ["docs/resolutions.html", "Resolutions"], ["docs/portfolio.html", "Portfolio"],
+    ["docs/strategy.html", "Strategy"], ["docs/suggestions.html", "Suggestions"],
+    ["docs/questions.html", "Questions"], ["docs/flagged.html", "Flagged"],
+    ["docs/sources.html", "Sources"]
+  ];
+  document.querySelector("header.top").innerHTML =
+    '<div class="wrap"><a class="brand" href="index.html">Kalshi <span>demo</span> dashboard</a>' +
+    '<nav class="main">' + NAV.map(function (n) {
+      return '<a href="' + n[0] + '">' + n[1] + '</a>';
+    }).join("") + '</nav></div>';
+  document.querySelector("footer.foot").innerHTML =
+    '<div class="wrap"><p>Market data from the Kalshi demo API ' +
+    '(<code class="mono">external-api.demo.kalshi.co</code>), with a labelled production comparison. ' +
+    'Every table row carries the request URL it came from; blank cells are values the API did not ' +
+    'return and are never filled in.</p>' +
+    '<p><a href="docs/flagged.html">Flagged for review</a> · <a href="docs/sources.html">Sources</a> · ' +
+    '<a href="https://docs.kalshi.com/getting_started/api_environments.md" target="_blank" rel="noopener">' +
+    'Kalshi API docs</a> · <span class="small dim">Not investment advice; the historical edges on this ' +
+    'site are narrow, fee-free and mostly from one month.</span></p></div>';
+})();
+</script>
+</body>
+</html>
