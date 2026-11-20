@@ -1,6 +1,36 @@
 {
  "checks": [
   {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1350-2 result",
+   "detail": "stored='yes' live='yes'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1350-2 settlement_value_dollars",
+   "detail": "stored='1.0000' live='1.0000'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1350-2 ticker",
+   "detail": "stored='KXQUICKSETTLE-20NOV26H1350-2' live='KXQUICKSETTLE-20NOV26H1350-2'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1350-3 result",
+   "detail": "stored='no' live='no'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1350-3 settlement_value_dollars",
+   "detail": "stored='0.0000' live='0.0000'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1350-3 ticker",
+   "detail": "stored='KXQUICKSETTLE-20NOV26H1350-3' live='KXQUICKSETTLE-20NOV26H1350-3'",
+   "ok": true
+  },
+  {
    "check": "resolution KXQUICKSETTLE-20NOV26H1330-2 result",
    "detail": "stored='yes' live='yes'",
    "ok": true
@@ -2971,36 +3001,6 @@
    "ok": true
   },
   {
-   "check": "resolution KXETH-26NOV2013-B2522 result",
-   "detail": "stored='no' live='no'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXETH-26NOV2013-B2522 settlement_value_dollars",
-   "detail": "stored='0.0000' live='0.0000'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXETH-26NOV2013-B2522 ticker",
-   "detail": "stored='KXETH-26NOV2013-B2522' live='KXETH-26NOV2013-B2522'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXETH-26NOV2013-B2517 result",
-   "detail": "stored='no' live='no'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXETH-26NOV2013-B2517 settlement_value_dollars",
-   "detail": "stored='0.0000' live='0.0000'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXETH-26NOV2013-B2517 ticker",
-   "detail": "stored='KXETH-26NOV2013-B2517' live='KXETH-26NOV2013-B2517'",
-   "ok": true
-  },
-  {
    "check": "top_event KXPRESNOMD-28 market KXPRESNOMD-28-HBID exists",
    "detail": "live query returned 1 markets",
    "ok": true
@@ -3502,7 +3502,7 @@
   },
   {
    "check": "orderbook KXPRESNOMD-28-BS structure",
-   "detail": "{\"no_dollars\": [[\"0.0300\", \"10.00\"], [\"0.9930\", \"95238.08\"], [\"0.9940\", \"111111.08\"], [\"0.9950\", \"132816.89\"]], \"yes_dol",
+   "detail": "{\"no_dollars\": [[\"0.0300\", \"10.00\"], [\"0.9930\", \"95238.08\"], [\"0.9940\", \"111111.08\"], [\"0.9950\", \"132771.95\"]], \"yes_dol",
    "ok": true
   },
   {
@@ -3512,7 +3512,7 @@
   },
   {
    "check": "orderbook KXPRESNOMD-28-EWAR structure",
-   "detail": "{\"no_dollars\": [[\"0.9700\", \"5555.55\"], [\"0.9800\", \"8333.33\"], [\"0.9900\", \"16656.41\"]], \"yes_dollars\": []}",
+   "detail": "{\"no_dollars\": [[\"0.9700\", \"5555.55\"], [\"0.9800\", \"8333.33\"], [\"0.9900\", \"16623.53\"]], \"yes_dollars\": []}",
    "ok": true
   },
   {
@@ -3557,8 +3557,8 @@
   },
   {
    "check": "event KXSTATELEGVA-27NOV02VAS029 exists+title",
-   "detail": "title live='Virginia Senate District 29 winner? (2027)'",
-   "ok": true
+   "detail": "missing",
+   "ok": false
   },
   {
    "check": "event KXSTATELEGMN-28NOV07MNH40A exists+title",
@@ -3567,8 +3567,8 @@
   },
   {
    "check": "event KXSTATELEGMA-28NOV07MAH126 exists+title",
-   "detail": "title live='Massachusetts House 4th Suffolk District winner? (2028)'",
-   "ok": true
+   "detail": "missing",
+   "ok": false
   },
   {
    "check": "event KXSTATELEGLA-27OCT09LAH008 exists+title",
@@ -3577,8 +3577,8 @@
   },
   {
    "check": "event KXSTATELEGMA-28NOV07MASD10 exists+title",
-   "detail": "title live='Massachusetts Senate Worcester and Middlesex District winner? (2028)'",
-   "ok": true
+   "detail": "missing",
+   "ok": false
   },
   {
    "check": "event KXHOUSERACE-TN03-28 exists+title",
@@ -3587,8 +3587,8 @@
   },
   {
    "check": "event KXSTATELEGMA-28NOV07MAH061 exists+title",
-   "detail": "title live='Massachusetts House 3rd Middlesex District winner? (2028)'",
-   "ok": true
+   "detail": "missing",
+   "ok": false
   },
   {
    "check": "event KXSTATELEGMA-28NOV07MAH145 exists+title",
@@ -3597,8 +3597,8 @@
   },
   {
    "check": "event KXCPIPARTYCOMBO-30MAR exists+title",
-   "detail": "title live='2029 inflation × 2028 winner'",
-   "ok": true
+   "detail": "missing",
+   "ok": false
   },
   {
    "check": "event KXSTATELEGVA-27NOV02VAH070 exists+title",
@@ -3612,8 +3612,8 @@
   },
   {
    "check": "event KXSTATELEGOK-28NOV07OKH087 exists+title",
-   "detail": "title live='Oklahoma House District 87 winner? (2028)'",
-   "ok": true
+   "detail": "missing",
+   "ok": false
   },
   {
    "check": "event KXSTATELEGIN-28NOV07INH008 exists+title",
@@ -3622,12 +3622,41 @@
   },
   {
    "check": "event KXMESTATELEG-28SEN exists+title",
-   "detail": "title live='Maine State Senate winner? (2028)'",
-   "ok": true
+   "detail": "missing",
+   "ok": false
   }
  ],
  "drift_notices": [],
- "hard_failures": [],
+ "hard_failures": [
+  {
+   "check": "event KXSTATELEGVA-27NOV02VAS029 exists+title",
+   "detail": "missing"
+  },
+  {
+   "check": "event KXSTATELEGMA-28NOV07MAH126 exists+title",
+   "detail": "missing"
+  },
+  {
+   "check": "event KXSTATELEGMA-28NOV07MASD10 exists+title",
+   "detail": "missing"
+  },
+  {
+   "check": "event KXSTATELEGMA-28NOV07MAH061 exists+title",
+   "detail": "missing"
+  },
+  {
+   "check": "event KXCPIPARTYCOMBO-30MAR exists+title",
+   "detail": "missing"
+  },
+  {
+   "check": "event KXSTATELEGOK-28NOV07OKH087 exists+title",
+   "detail": "missing"
+  },
+  {
+   "check": "event KXMESTATELEG-28SEN exists+title",
+   "detail": "missing"
+  }
+ ],
  "policy": {
   "dynamic_fields": "drift tolerated (live market), reported only",
   "source_urls": "must resolve and contain the row ticker",
@@ -3636,9 +3665,9 @@
  "summary": {
   "checked": 725,
   "drift_notices": 0,
-  "hard_failures": 0,
-  "passed": 725
+  "hard_failures": 7,
+  "passed": 718
  },
  "tool": "scripts/verify_rows.py v1",
- "verified_at": "2026-11-20T19:19:28+00:00"
+ "verified_at": "2026-11-20T19:25:39+00:00"
 }
