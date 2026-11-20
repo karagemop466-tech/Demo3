@@ -479,12 +479,24 @@ sessions are edited. Where verification finds defects, they are flagged here and
 
 | Task | Status | Owner | File scope | Sources / verification | Irregularities |
 |---|---|---|---|---|---|
-| V1 Live GitHub Pages page verification (renders, content, links) — the gap left by I-32F-01 | pending | a613b9fd | `verification/LIVE-VERIFICATION-REPORT.md` | Fetch live pages (landing, dashboard, data-tracking, flagged, sources) via page-fetch; confirm live content matches the repo at the deployed commit | (to fill) |
-| V2 CI + collector health: recent Actions conclusions, committed snapshot freshness | pending | a613b9fd | `verification/LIVE-VERIFICATION-REPORT.md` | `gh run list` / `gh run view` (official GitHub API), `data/latest/*` timestamps vs run times | (to fill) |
-| V3 Live demo-API row re-verification (sample of committed rows re-fetched from their own source URLs) — the gap left by I-32F-03 | pending | a613b9fd | `verification/LIVE-VERIFICATION-REPORT.md` | Each sampled row's `source_url` re-fetched live via page-fetch; stored vs live diff recorded exactly | (to fill) |
-| V4 PR from this branch to `main`, merge without waiting for approval, confirm Pages deploy, record result | pending | a613b9fd | PR `arena/a613b9fd-demo3` -> `main` | `gh pr view/merge`, Pages API `pages/builds/latest`, live page fetch after deploy | (to fill) |
+| V1 Live GitHub Pages page verification (renders, content, links) — the gap left by I-32F-01 | done | a613b9fd | `verification/LIVE-VERIFICATION-REPORT.md` | All 5 key pages fetched live and confirmed rendering (landing + live status widget, dashboard 6 sections incl. two ≥$0.10 alert chats, data-tracking, flagged, sources) | V-A613-03 (re-confirmed live: seeded resolution + SRC-10… rows link the production host — already I-14/R-06) |
+| V2 CI + collector health: recent Actions conclusions, committed snapshot freshness | done | a613b9fd | `verification/LIVE-VERIFICATION-REPORT.md` | `gh run list`: main workflows 0 failures (only PR #32's branch runs failed); collect.yml 31/31 OK; collector_status ok 19:28:28Z; verify_rows 725/725; CORS evidence on file | V-A613-04 (collect.yml triggers on every branch push — runner congestion; logged, not edited) |
+| V3 Live demo-API row re-verification (sample of committed rows re-fetched from their own source URLs) — the gap left by I-32F-03 | done | a613b9fd | `verification/LIVE-VERIFICATION-REPORT.md` | 3/3 resolutions match exactly (result + settlement_ts + value); 5/5 top events live-confirmed per topic; derived OI formula = Σ open_interest_fp verified to the cent; orderbook prices exact (1 size drift); candlesticks path live non-empty; exchange trading_active | V-A613-01 (gas topic includes WTI crude-oil series), V-A613-02 (two labeled dollar proxies), drift notices recorded |
+| V4 PR from this branch to `main`, merge without waiting for approval, confirm Pages deploy, record result | in progress | a613b9fd | PR `arena/a613b9fd-demo3` -> `main` | Local suite green: verify_root_site 0 failures, verify_site PASSED (28 pages), tracker_check OK, check_site passed, node --check 6/6, npm test 26/26, collector tests 2/2, trading tests 9/9 | V-A613-05 (sandbox clone history unrelated to main; reset before work) |
 
 ### Session a613b9fd claim (per protocol)
 
 Claimed 2026-11-20 19:31 UTC, session `a613b9fd`, branch `arena/a613b9fd-demo3`, file scope as in
 the table. Claim committed and pushed immediately (this commit).
+
+### Session a613b9fd progress log
+
+- 2026-11-20 19:31 UTC — claim committed and pushed (`90afd51`) after resetting the branch to actual
+  `main` (`0d4ab58`); the seeded clone had an unrelated copy of `7e795b2` (no merge base) and the
+  branch had zero unique commits, so nothing was lost (V-A613-05).
+- 2026-11-20 ~19:35 UTC — local suite run green (V4 table); live API re-verification complete
+  (V3): 3/3 resolutions exact, 5/5 top events confirmed, derived OI formula exact, orderbook prices
+  exact with one size drift notice, candlesticks path non-empty live, exchange trading_active.
+- 2026-11-20 ~19:37 UTC — live Pages pages verified (V1): all 5 pages render with per-row sources
+  and the merged two-chat ≥$0.10 alert feature; CI/collector health recorded (V2). Full details in
+  `verification/LIVE-VERIFICATION-REPORT.md`. V4 (PR/merge/Pages) in progress.
