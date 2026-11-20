@@ -1280,13 +1280,13 @@ per the brief's "REPO WORK / VERIFICATION" requirements. It deliberately does no
 
 | # | Task | Status | Owner | File scope | Sources / verification | Irregularities |
 |---|---|---|---|---|---|---|
-| V1 | Page-by-page fetch of the LIVE GitHub Pages site (every canonical root page), verifying each serves and renders its key sections | in progress | 67643e12 | `COORDINATION.md` (this section) | `fetch_page` of each live URL; results logged below | none yet |
-| V2 | GitHub Pages + Actions health through the concurrent merge storm | in progress | 67643e12 | `COORDINATION.md` (this section) | Pages API (`/pages`, `/pages/builds/latest`, build list), Actions API per workflow | collect.yml startup failures (claimed fix in PR #26) |
-| V3 | Independent row-level data verification: re-fetch sampled rows across all five topics from the live demo API and compare against committed `data/latest/` values | in progress | 67643e12 | `COORDINATION.md` (this section) | Official demo API URLs embedded per row in `data/latest/topic_*.json`, `top_events.json`, `markets_settled.json` | none yet |
-| V4 | Verify the merged live-alert feature is actually served on the live site (two chat panels, ≥$0.10 threshold, context links) | in progress | 67643e12 | `COORDINATION.md` (this section) | Live `dashboard.html` + `assets/alerts.js` fetches | none yet |
-| V5 | Repo hygiene + check-suite run on current `main` (all four site checkers, `node --check`, npm test, offline pipeline tests) | in progress | 67643e12 | `COORDINATION.md` (this section) | Runs logged below | none yet |
-| V6 | Open-PR overlap matrix to assist the claimed final-integration session (information only; no merge/close decision made here) | in progress | 67643e12 | `COORDINATION.md` (this section) | `gh pr view --json files` per open PR | none yet |
-| V7 | PR of this section to `main`, merge, confirm Pages deploy, record result | pending | 67643e12 | PR from `arena/67643e12-demo3` | merge + Pages API check | none yet |
+| V1 | Page-by-page fetch of the LIVE GitHub Pages site (every canonical root page), verifying each serves and renders its key sections | done | 67643e12 | `COORDINATION.md` (this section) | `fetch_page` of each live URL; results logged below | none |
+| V2 | GitHub Pages + Actions health through the concurrent merge storm | done | 67643e12 | `COORDINATION.md` (this section) | Pages API (`/pages`, `/pages/builds/latest`, build list), Actions API per workflow; final states in the addendum below | collect.yml defect fixed on `main` by merged PRs #55/#56 (see addendum); Pages deployment starvation (F-7b-08) confirmed |
+| V3 | Independent row-level data verification: re-fetch sampled rows across all five topics from the live demo API and compare against committed `data/latest/` values | done | 67643e12 | `COORDINATION.md` (this section) | Official demo API URLs embedded per row in `data/latest/topic_*.json`, `top_events.json`, `markets_settled.json` | none (live drift only; see V3) |
+| V4 | Verify the merged live-alert feature is actually served on the live site (two chat panels, ≥$0.10 threshold, context links) | done | 67643e12 | `COORDINATION.md` (this section) | Live `dashboard.html` + `assets/alerts.js` fetches | none |
+| V5 | Repo hygiene + check-suite run on current `main` (all four site checkers, `node --check`, npm test, offline pipeline tests) | done | 67643e12 | `COORDINATION.md` (this section) | Runs logged below | none |
+| V6 | Open-PR overlap matrix to assist the claimed final-integration session (information only; no merge/close decision made here) | done | 67643e12 | `COORDINATION.md` (this section) | `gh pr view --json files` per open PR; addendum below records the 19:45–20:15 UTC resolution wave | none |
+| V7 | PR of this section to `main`, merge, confirm Pages deploy, record result | in progress | 67643e12 | PR from `arena/67643e12-demo3` | merge + Pages API check | none |
 
 Progress log:
 - 2026-11-20 ~19:45 UTC — claim committed and pushed (this commit). Work in progress; results appended below as they complete.
@@ -1424,3 +1424,29 @@ files` (V6); workflow YAML parsed with PyYAML + per-step `if:` scan (V2); Kalshi
 cross-checked against https://docs.kalshi.com/api-reference/market/get-markets (result, volume_fp,
 last_price_dollars) and https://docs.kalshi.com/getting_started/market_settlement (yes/no payout).
 No values were inferred; unchecked items are stated as unchecked.
+
+### Session 67643e12 — addendum: final states (checked 2026-11-20 20:04–20:16 UTC)
+
+- **collect.yml fix verified on `main`:** merged PRs #55 (19:47:39Z) and #56 (19:50:09Z) both removed
+  the duplicate `if:`; the file at `main` now carries a single condition
+  (`if: github.ref == 'refs/heads/main'`) — confirmed in the file fetched from `main` and on this
+  session's merged branch. This supersedes the PR #26 branch-side fix (their F-6D-10); PR #26 is no
+  longer open. Post-fix verification: a `workflow_dispatch` run of collect.yml was queued on `main`
+  `c0cb52b` at 20:11:33Z (run 44809097574); push-triggered failures continuing after 19:50 on
+  *feature branches* are expected — GitHub runs the workflow copy **on the pushed branch**, which
+  still contains the old duplicate-key file until each branch merges main. Scheduled/dispatched runs
+  on `main` are the meaningful check.
+- **Pages deployment starvation (independently observed, matching session 7b47094a's F-7b-08):** as
+  of 20:04–20:13 UTC the newest builds (`c0cb52b` 20:10:23Z, then `a3451de` 20:13:27Z) were still
+  `building`; the live site still served the 19:38Z artifact (`/audit/index.html` not yet served).
+  The practical remedy is the one 7b47094a recorded: a quiet window + explicit
+  `POST /repos/…/pages/builds`. Final confirmation for V7 recorded below after this session's merge.
+- **Open-PR wave resolved (V6 addendum):** between 19:47 and 20:13 UTC the following merged —
+  #55, #56 (collect.yml fix), #57 (alerts: ROI model + official event context + trade desk),
+  #58 (paper trading desk + strategy analytics), #60 (yes/no resolution tracking + published
+  high-ROI model + requirements/model pages), #61, #64, #65 (board/data records); #54, #59, #63
+  closed. Open at 20:14 UTC: #62 only (custom Actions Pages-deployment workflow, proposed fix for
+  the legacy-build starvation). The overlap matrix above describes the pre-resolution state and is
+  kept for the record.
+- **Checks re-run on this session's merged branch** (main @ `a3451de`-era + board sections):
+  `verify_root_site.py` 0 failures; `verify_site.py` PASSED (28 pages).
