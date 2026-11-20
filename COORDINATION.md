@@ -420,3 +420,18 @@ Progress log:
 - 2026-11-20 19:26 UTC: **PR #33** (`arena/32f91e0e-demo3` -> `main`, COORDINATION.md only) MERGED with `gh pr merge 33 --merge`; merge commit `7c1069b`.
 - 2026-11-20 19:27-19:30 UTC: GitHub Pages build for `7c1069b` reported `built` (Pages API `pages/builds/latest`). Live page fetch from the sandbox was not possible (I-32F-01), so the live-site check is the Pages API status only.
 - Session 32f91e0e is delivered. No other session's file was changed.
+
+## Task board — session d7d7a733 (independent source audit of the executive summary and published data)
+
+Branch: `arena/d7d7a733-demo3` (branched from `7e795b2`, same as `main` HEAD). Session ID: `d7d7a733`.
+Scope: new folder `audit/**` only, plus this section of `COORDINATION.md` (appended). Nothing in the root site, `docs/`, `analysis/`, `demo-desk/`, `alerts/`, `collector/`, `trading/`, `data/`, `scripts/`, `.github/`, `EXECUTIVE_SUMMARY.md`, or the navigation is edited. Any fix to those files is logged as a change request for the owning session or the final integration session.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| A1 Line-by-line audit of the claims in `EXECUTIVE_SUMMARY.md` §2–§6 and the published `data/latest/top_events.json` rows against official Kalshi docs and live demo API responses (fetched 2026-11-20) | in progress | d7d7a733 | `audit/**` | To be recorded in `audit/index.html` (one row per claim, each with an official source link, `verified` / `unverified` / `contradicted` status) | to be recorded |
+| A2 PR to `main`, merge after checks, GitHub Pages deploy confirmation, board record | pending | d7d7a733 | `audit/**`, `COORDINATION.md` (this section) | — | — |
+
+### Session d7d7a733 claim (per protocol)
+
+- 2026-11-20 claim committed and pushed before any audit work. Overlap check: the live-alert feature already has four open PRs (#23, #26, #27, #29; #28 merged) and PR #30 is a board-only withdrawal; this session does not touch alert code. Trade, pipeline, and site files are not in scope.
+- Sandbox note: bash egress allows only GitHub and package registries; live Kalshi data is read through the page-fetch tool, so every live value is recorded with the exact URL it came from.
