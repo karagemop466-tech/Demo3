@@ -444,6 +444,28 @@ Progress log:
 - 2026-11-20: claim committed and pushed (`fd85f0d`).
 - 2026-11-20: T1 and T2 completed as above; Pages API reported `built` at `b1f1dfd` after a build from `main`.
 - 2026-11-20: T3 PR opened and merged (see PR line below).
+
+---
+
+## Task board — session df50b92f (sharp-jump context links on live alert chats)
+
+Branch: `arena/df50b92f-demo3` (base `7e795b2`, `main` after PR #28). Session ID: `df50b92f`.
+Gap found on `main`: the brief requires that live charts show "events and website links that may have caused a sharp jump (>= $0.10)". PR #28 alert rows link only the market API record. Other open PRs (#19, #21-#23, #26, #27, #29, #30) re-build the same alert feature; this session does NOT re-build the alert chat and only adds context to the merged one.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| C1 Per-alert context: event record + the event's official `settlement_sources` (name + URL) shown on each sharp-jump row; rules text from the market record; causation labelled unverified | done | df50b92f | `assets/alerts.js` (context columns only), `assets/dashboard.js` (`marketRow` passes `event_ticker` and `rules_primary` through), `dashboard.html` (header text), `COORDINATION.md` (this section) | Get Event: https://docs.kalshi.com/api-reference/events/get-event (`settlement_sources[].name/url`); Get Market: https://docs.kalshi.com/api-reference/market/get-market (`rules_primary`, `event_ticker`) | F-df-01 (settlement sources are the resolution sources, not proven price-move causes); F-df-02 (CORS to the demo API from Pages still unverified in this sandbox) |
+
+Log (df50b92f):
+- 2026-11-20: claim committed and pushed (565db12).
+- 2026-11-20: C1 implemented. `assets/dashboard.js` `marketRow` passes `rules_primary`; `assets/alerts.js` stores `event_ticker` + rules per alert, fetches `GET /events/{event_ticker}` once per event (cached), shows only `https://` `settlement_sources` as links, labels each row "Cause not verified", and adds a Context column (8 columns). `dashboard.html` header text and `assets/style.css` (3 rules) updated.
+- Verification: `node --check` OK for `assets/alerts.js` and `assets/dashboard.js`; `scripts/verify_root_site.py` 0 failures; jsdom test (scratch, not committed; mocked demo API) PASS: a +12c swing produced 1 alert, +5c produced none, the HTTPS settlement source rendered, an `http://` source was excluded, rules text rendered, and the event fetch ran once.
+- Sources: https://docs.kalshi.com/api-reference/events/get-event (`settlement_sources`, `event_ticker`); https://docs.kalshi.com/api-reference/market/get-market (`rules_primary`, `event_ticker`, `result`, `status`).
+- Irregularities: F-df-01 (settlement sources are the resolution sources; they do NOT prove a price move was caused by that source; no news feed exists in this repo and none is claimed); F-df-02 (the sandbox cannot reach the demo API host, so the live event fetch from Pages is unverified and the UI shows "event record unavailable" on failure rather than guessing).
+- Open PRs #19, #21-#23, #26, #27, #29, #30 duplicate the alert chat already merged in PR #28. Not merged or closed by this session. Their owners should close or rebase them; log only.
+
+---
+
 - 2026-11-20 19:26 UTC: **PR #33** (`arena/32f91e0e-demo3` -> `main`, COORDINATION.md only) MERGED with `gh pr merge 33 --merge`; merge commit `7c1069b`.
 - 2026-11-20 19:27-19:30 UTC: GitHub Pages build for `7c1069b` reported `built` (Pages API `pages/builds/latest`). Live page fetch from the sandbox was not possible (I-32F-01), so the live-site check is the Pages API status only.
 - Session 32f91e0e is delivered. No other session's file was changed.
