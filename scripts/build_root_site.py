@@ -366,6 +366,26 @@ def consolidated_flags():
         "Cells found without an official source during the per-row verification pass are left "
         "blank and flagged; never inferred.",
         [f"{DOCS}/getting_started/quick_start_market_data"], "open", "3a22fb0f")
+    add("I-18", "Decision support", "The high-ROI shortlist is an unvalidated heuristic, not an ROI forecast",
+        "The shortlist is an explicit triage rule (price move ≥$0.10, YES spread ≤$0.05, and "
+        "reported volume >0). It does not estimate probability or expected return and has no "
+        "validated backtest. Treat it as exploratory until tested against settled outcomes.",
+        [f"{DOCS}/api-reference/market/get-markets", f"{DOCS}/getting_started/demo_env"],
+        "open — validate before strategy use", "028b2648")
+    add("I-19", "News attribution", "Price jumps have no verified causal news link",
+        "Alert rows link to the official Kalshi market record only. This project does not ingest "
+        "or validate an external news source for a given move; cause remains unverified and no "
+        "causal claim is made.",
+        [f"{DOCS}/api-reference/market/get-market", f"{DOCS}/getting_started/quick_start_market_data"],
+        "unverified — no validated attribution source", "028b2648")
+    add("I-20", "Paper trading", "Automated strategy results are browser-local simulations",
+        "The baseline assumes one contract at the displayed YES ask, marks at the displayed YES "
+        "bid (or last trade when the bid is unavailable), omits fees and slippage, and stores "
+        "results in this browser only. These are not exchange fills, account balances, or "
+        "verified performance records.",
+        [f"{DOCS}/api-reference/market/get-market", f"{DOCS}/getting_started/market_settlement",
+         f"{DOCS}/getting_started/demo_env"],
+        "open — exploratory only", "028b2648")
     add("R-06", "Documentation", "Archive pages use the production API base",
         "docs/ and analysis/ fetch public data from api.elections.kalshi.com while the brief "
         "specifies the demo endpoints. The canonical root site uses the demo API. Archives are "
@@ -404,6 +424,9 @@ def consolidated_sources():
         f"{DOCS}/getting_started/api_keys", "Signature = timestamp + method + path (no query).")
     add("DOCS-MKT", "Kalshi docs — Quick start: market data",
         f"{DOCS}/getting_started/quick_start_market_data", "Public endpoints; orderbook format.")
+    add("DOCS-GET-MARKET", "Kalshi docs — Get Market",
+        f"{DOCS}/api-reference/market/get-market",
+        "Official per-market response schema with quote, volume, and resolution fields.")
     add("DOCS-SETTLE", "Kalshi docs — Market settlement",
         f"{DOCS}/getting_started/market_settlement", "Yes/No resolution, $1/contract payout.")
     add("DOCS-RATE", "Kalshi docs — Rate limits",
@@ -548,11 +571,12 @@ for manual review and linked here: <a href="docs/index.html">docs/ (session 00a9
 def build_dashboard():
     body = """
 <h1>Live dashboard</h1>
-<p>Highest-dollar live events in the five tracked topics, with price chart (x = time in
-seconds/minutes/hours, y = current contract price), orderbook liquidity (contracts available at
-each price), recent trades, and yes/no resolution tracking. All data is fetched
-<strong>live in your browser</strong> from the Kalshi demo API (no key needed for market data);
-if the browser blocks the request the tables fall back to the snapshot links in
+<p>Highest estimated-dollar live events in the five tracked topics, with ≥$0.10 price-swing alert
+feeds, a price chart (x = time in seconds/minutes/hours, y = current contract price), orderbook
+liquidity (contracts available at each price), recent trades, and yes/no resolution tracking.
+Public market data is fetched <strong>live in your browser</strong> from the Kalshi demo API (no
+key needed for market data); the alerts and paper-strategy tests are browser-local and simulated.
+If the browser blocks a request, the tables fall back to the snapshot links in
 <a href="sources.html">Sources</a>.</p>
 <div id="banner" style="display:none"></div>
 <div class="card">
@@ -566,7 +590,6 @@ if the browser blocks the request the tables fall back to the snapshot links in
       <option value="50">50 series/topic</option>
       <option value="0">All matched series (slower)</option>
     </select></label>
-    <label>Extra series (comma) <input id="manualSeries" size="18" placeholder="KXAAAGASW"></label>
   </p>
   <p class="small muted">Coverage note: the scan pages open markets for every matched series up to the
   depth chosen above (rate-limit friendly). The dollar ranking is an <strong>unverified
@@ -576,8 +599,50 @@ if the browser blocks the request the tables fall back to the snapshot links in
   <div id="rankingTable"></div>
 </div>
 
+<div class="card" id="swingAlertsCard">
+  <h2>2 · Live price-swing alerts</h2>
+  <p class="small muted">The all-events feed records each scanned market whose observed price changes by
+  <strong>at least $0.10 up or down</strong> between two successful scans. It uses the YES quote midpoint
+  when a valid bid/ask pair exists; otherwise it uses the last traded price. The first scan seeds a
+  baseline. This is REST polling, not a continuous tick feed; the elapsed time between observations is
+  shown. Coverage follows the scan-depth selection above and is limited to the five tracked topics.
+  Each alert links to the official Kalshi market record. That link is context only: no causal news source
+  is verified or implied (see <a href="flagged.html">I-19</a>). Feed history is stored in this browser only.</p>
+  <p class="small"><button class="btn secondary" id="clearSwingAlerts">Clear alert history on this browser</button>
+     <span id="alertStatus" class="pill warn">Waiting for first scan</span></p>
+  <div class="alert-columns">
+    <section class="alert-panel" aria-labelledby="allAlertsHeading">
+      <h3 id="allAlertsHeading">All scanned-event swings <span class="pill" id="allAlertCount">0</span></h3>
+      <div id="allAlerts" class="alert-feed" role="log" aria-live="polite" aria-relevant="additions"></div>
+    </section>
+    <section class="alert-panel" aria-labelledby="roiAlertsHeading">
+      <h3 id="roiAlertsHeading">High-ROI candidate screen <span class="pill" id="roiAlertCount">0</span></h3>
+      <p class="small muted">Transparent triage heuristic—not predicted ROI or a validated model:
+      alert ≥$0.10, valid YES bid/ask spread ≤$0.05, and API-reported volume &gt;0. See
+      <a href="flagged.html">I-18</a> before treating it as a strategy.</p>
+      <div id="roiAlerts" class="alert-feed" role="log" aria-live="polite" aria-relevant="additions"></div>
+    </section>
+  </div>
+</div>
+
+<div class="card" id="paperStrategyCard">
+  <h2>3 · Automated paper-strategy lab</h2>
+  <p class="small muted"><strong>Simulation only; no Kalshi order is sent.</strong> On a qualifying alert,
+  this browser automatically records one simulated YES contract for the matching baseline: Momentum YES
+  after an upward move, or Pullback YES after a downward move. The assumed entry is the displayed YES ask;
+  the top-level size/fill is not verified. Open positions are marked at the displayed YES bid (last trade
+  only if no bid is available) and checked for resolution through the official market endpoint. Gross P&amp;L
+  excludes fees and slippage. Local results persist in this browser only. This is an exploratory rules test,
+  not a profitability claim; demo prices may not reflect real markets (see <a href="flagged.html">I-20</a>).</p>
+  <p class="small"><span class="pill warn">AUTO · PAPER ONLY</span>
+     <button class="btn secondary" id="clearPaperStrategy">Clear local paper results</button>
+     <span id="paperResolutionStatus" class="muted">Resolution check pending</span></p>
+  <div id="paperStrategySummary" class="paper-summary"></div>
+  <div id="paperStrategyTable"></div>
+</div>
+
 <div class="card">
-  <h2>2 · Selected market: price chart &amp; liquidity</h2>
+  <h2>4 · Selected market: price chart &amp; liquidity</h2>
   <p class="muted" id="detailTitle">Select a market above (Track).</p>
   <p class="small muted" id="detailMeta"></p>
   <div class="seg" role="group" aria-label="Chart window">
@@ -603,7 +668,7 @@ if the browser blocks the request the tables fall back to the snapshot links in
 </div>
 
 <div class="card">
-  <h2>3 · Resolution tracking (yes / no)</h2>
+  <h2>5 · Resolution tracking (yes / no)</h2>
   <p class="small muted">Markets are logged here when they close or settle with a result while the
   page is open. Seeded rows below come from the verified snapshot
   (<a href="docs/tracker/data/snapshot.json">snapshot.json</a> ·
@@ -614,11 +679,11 @@ if the browser blocks the request the tables fall back to the snapshot links in
 </div>
 
 <div class="card">
-  <h2>4 · Demo account (optional) &amp; trading</h2>
+  <h2>6 · Demo account (optional) &amp; trading</h2>
   <p class="small muted">A Kalshi demo API key (from <a href="https://demo.kalshi.co/" target="_blank" rel="noopener">demo.kalshi.co</a> →
   Account Settings → API Keys; see <a href="https://docs.kalshi.com/getting_started/api_keys" target="_blank" rel="noopener">API keys</a>)
   enables live demo trading and portfolio reads. Without a key the ticket runs in
-  <strong>paper mode</strong> (simulated fills at the live best bid/ask — labeled everywhere; nothing is sent to Kalshi).
+  <strong>paper mode</strong> for the manual ticket (an instant simulated fill at the entered limit price; nothing is sent to Kalshi). The separate auto strategy lab assumes an entry at the displayed YES ask and labels results as simulated.
   Your key never leaves this browser (localStorage).</p>
   <p><label>Key ID <input id="keyId" size="24" autocomplete="off"></label>
      <label>Private key PEM <textarea id="keyPem" rows="4" cols="60" placeholder="-----BEGIN PRIVATE KEY-----"></textarea></label></p>
@@ -638,12 +703,13 @@ if the browser blocks the request the tables fall back to the snapshot links in
 </div>
 
 <div class="card">
-  <h2>5 · Trade categorization &amp; strategy analysis</h2>
+  <h2>7 · Trade categorization &amp; strategy analysis</h2>
   <div id="strategyBody"></div>
 </div>
 """
     write_page("dashboard.html", "Live dashboard", "dashboard.html", body,
-               scripts=("assets/app.js", "assets/trade.js", "assets/dashboard.js", "assets/site.js"))
+               scripts=("assets/app.js", "assets/trade.js", "assets/alerts.js",
+                        "assets/paper-strategy.js", "assets/dashboard.js", "assets/site.js"))
 
 
 def build_portfolio():

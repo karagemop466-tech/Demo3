@@ -114,8 +114,43 @@ stable state.
 of `https://karagemop466-tech.github.io/Demo3/` returning `docs/index.html` content while Pages
 rebuilds were queued; Pages API builds list.
 
+## Session 028b2648 — live alerts and paper-strategy limitations (2026-11-20)
+
+### I-18 — High-ROI candidate feed is an unvalidated heuristic
+
+The new shortlist is an explicit rule: a sampled price move of at least $0.10, a valid YES bid/ask
+spread no wider than $0.05, and reported volume greater than zero. These thresholds are project
+choices, not Kalshi recommendations. The feed does not estimate probability or expected ROI, and
+no backtest has validated it. Treat it as exploratory triage only.
+
+**Official references:** [Get Markets](https://docs.kalshi.com/api-reference/market/get-markets) for
+market price/volume fields; [Demo environment](https://docs.kalshi.com/getting_started/demo_env)
+for Kalshi's warning that demo prices and behavior may not reflect real markets.
+
+### I-19 — No verified news-cause attribution
+
+Swing messages link to the official Kalshi market record for context. This repo does not ingest or
+verify external news links for individual jumps. A market record is not evidence of what caused a
+price movement; any causal website attribution remains unverified.
+
+**Official references:** [Get Market](https://docs.kalshi.com/api-reference/market/get-market) and
+[Quick start: market data](https://docs.kalshi.com/getting_started/quick_start_market_data).
+
+### I-20 — Automated strategy results are browser-local simulations
+
+The automatic paper lab simulates one YES contract at the displayed YES ask, marks an open position
+at the displayed YES bid (falling back to last trade when no bid is available), and settles only when
+the official market response has a settled/finalized status and a yes/no result. Results are stored
+in browser localStorage, are not linked to the demo account, and exclude fees and slippage. The
+simulated entry is not a confirmed exchange fill and the displayed mark is not realized P&L.
+
+**Official references:** [Get Market](https://docs.kalshi.com/api-reference/market/get-market) for
+market quotes and result fields; [Market settlement](https://docs.kalshi.com/getting_started/market_settlement)
+for the $1 winning-contract payout; [Demo environment](https://docs.kalshi.com/getting_started/demo_env)
+for the demo-market caveat.
+
 ## Cross-references
 
-- Site's Flagged page (deployed): https://karagemop466-tech.github.io/Demo3/docs/flagged.html — items I-01…I-10, unverified list (7), by session 00a943bd.
+- Site's Flagged page (deployed): https://karagemop466-tech.github.io/Demo3/flagged.html — consolidated flags include I-18…I-20 alongside inherited items.
 - Board irregularities: [COORDINATION.md](COORDINATION.md) (R-01…R-04 by 00a943bd; R1 here is independent evidence for their R-03).
 - Research evidence base: [research/kalshi-api-verified-reference.md](research/kalshi-api-verified-reference.md).
