@@ -99,6 +99,10 @@ jobs:
 
       - name: Request a Pages rebuild
         if: github.ref == 'refs/heads/main'
+        # Tolerant by design: the ledger commit above is the source of truth. This repository has
+        # an open Pages incident (board flag I-F2-07: legacy builds reporting "Page build failed."
+        # since PR #37, cause unattributed), and failing this job on a Pages 5xx would wrongly
+        # report that the trading cycle itself failed.
         run: |
           code=$(curl -s -o /tmp/pages_build.json -w "%{http_code}" \
             -X POST \
