@@ -1,0 +1,605 @@
+"""Collect + organize Kalshi demo market data for the tracked topics.
+
+Topic scope (per project brief): gas prices, elections, culture, crypto, golf.
+Ranking: estimated dollar volume per live event (see `estimate_event_dollars` — an
+approximation, clearly labeled; Kalshi's public market object exposes contract volume
+(`volume_fp`) and last price (`last_price_dollars`), not a dollar-volume field).
+
+All endpoint shapes were verified against the official docs and live demo responses on
+2026-11-20 — see docs/API_VERIFICATION.md for the per-field evidence table.
+
+Outputs (committed under data/):
+  data/meta.json          run log: times, counts, statuses, warnings
+  data/events.json        tracked live events per topic, ranked, with market snapshots
+  data/orderbooks/{t}.json  full bid ladders (yes/no) for the top markets
+  data/history/{t}.json   candlestick series: 1m (24h), 60m (30d), 1440m (180d)
+  data/resolutions.json   settled markets for tracked series -> resolved yes/no + source
+  data/tracked.json       persistent tracking state (events followed until resolution)
+  data/cors_test.json     CORS probe result (browser live-fetch feasibility)
+"""
+
+from __future__ import annotations
+
+import json
+import os
+import re
+import sys
+import time
+import urllib.error
+import urllib.request
+from collections import defaultdict
+from datetime import datetime, timedelta, timezone
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from kalshi_api import DEMO_REST_ROOT, KalshiClient, utc_now_iso  # noqa: E402
+
+DATA_DIR = os.environ.get(
+    "KALSHI_DATA_DIR",
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data"))
+MAX_ORDERBOOKS = 12          # top markets (by est dollar volume) that get ladder + candles
+MAX_EVENTS_PER_TOPIC = 15
+MAX_EVENTS_OVERALL = 40
+TRACKED_CAP = 150
+RESOLUTION_LOOKBACK_DAYS = 90
+CANDLE_RANGES = {1: (1, 24 * 60), 60: (60, 30 * 24 * 60), 1440: (1440, 180 * 24 * 60)}
+
+# --------------------------------------------------------------------------
+# Topic rules. Each event is matched by (series ticker prefix, exact category,
+# title/series keyword regex). Verified category strings on the demo exchange are
+# logged to data/meta.json on every run so the rules can be audited.
+# --------------------------------------------------------------------------
+TOPIC_RULES = {
+    "gas": {
+        "label": "Gas prices",
+        "series_prefixes": ("KXGAS", "KXAAAGAS"),
+        "categories": ("gas",),
+        "keywords": re.compile(r"\bgas price|\bgas prices|price of gas|regular gas", re.I),
+    },
+    "elections": {
+        "label": "Elections",
+        "series_prefixes": tuple(),
+        "categories": ("election",),
+        "keywords": re.compile(r"\belection|\belectoral|governor|senate seat|house seat|"
+                               r"presidential|primary|nominee|mayoral|mayor of|referendum", re.I),
+    },
+    "culture": {
+        "label": "Culture",
+        "series_prefixes": tuple(),
+        "categories": ("culture", "entertainment"),
+        "keywords": re.compile(r"oscar|academy award|grammy|emmy|golden globe|box office|"
+                               r"spotify|billboard|met gala|eurovision|miss universe|"
+                               r"nobel prize|rotten tomatoes|time person of the year|"
+                               r"game of the year|album|super bowl halftime|severance|"
+                               r"stranger things|knives out|squid game|taylor swift|mrbeast", re.I),
+    },
+    "crypto": {
+        "label": "Crypto",
+        "series_prefixes": ("KXBTC", "KXETH", "KXSOL", "KXXRP", "KXDOGE", "KXCRYPTO"),
+        "categories": ("crypto",),
+        "keywords": re.compile(r"\bbitcoin\b|\bbtc\b|\bethereum\b|\beth\b|\bsolana\b|\bsol\b|"
+                               r"\bxrp\b|\bdogecoin\b|\bdoge\b|\bcrypto\b|\bstablecoin\b|"
+                               r"\btether\b|\busdc\b|\bblockchain\b", re.I),
+    },
+    "golf": {
+        "label": "Golf",
+        "series_prefixes": ("KXPGATOUR", "KXPGARYDER", "KXPGASOLHEIM", "KXGOLF", "KXLPGA",
+                            "KXPGA", "KXDPWORLD"),
+        "categories": ("golf",),
+        "keywords": re.compile(r"\bgolf\b|\bpga\b|\bryder cup\b|\bsolheim\b|"
+                               r"\bmasters\b|fedex cup|\blpga\b|open championship", re.I),
+    },
+}
+
+
+def classify_event(event: dict, category_lower: str) -> str | None:
+    """Return the topic key for an event, or None if it is out of scope."""
+    series = (event.get("series_ticker") or "").upper()
+    title = " ".join(filter(None, [event.get("title") or "", event.get("sub_title") or ""]))
+    for topic, rules in TOPIC_RULES.items():
+        if any(series.startswith(p) for p in rules["series_prefixes"]):
+            return topic
+        if any(cat in category_lower for cat in rules["categories"]):
+            return topic
+        if rules["keywords"].search(title):
+            return topic
+    return None
+
+
+def fp(value) -> float | None:
+    """Parse a fixed-point string field like '100.00' -> 100.0 (None if absent/garbage)."""
+    try:
+        if value in (None, "", "null"):
+            return None
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def classify_market_status(status: str | None) -> str:
+    s = (status or "").lower()
+    if s in ("active", "open", "finalized-active"):
+        return "open"
+    if s in ("settled", "finalized"):
+        return "settled"
+    if s in ("closed", "halted"):
+        return "closed"
+    return s or "unknown"
+
+
+def estimate_event_dollars(markets: list[dict]) -> tuple[float, float, float]:
+    """Estimated notional dollars traded per event.
+
+    Kalshi's public market object exposes contract volume (`volume_fp`) and last trade
+    price (`last_price_dollars`) but not dollar volume; dollar volume here is the
+    standard approximation sum(volume * last_price). Labeled 'estimated' everywhere.
+    Returns (total, last24h, open_interest).
+    """
+    total = oi = 0.0
+    vol24 = 0.0
+    for m in markets:
+        price = fp(m.get("last_price_dollars")) or 0.0
+        vol = fp(m.get("volume_fp")) or 0.0
+        vol24 += (fp(m.get("volume_24h_fp")) or 0.0)
+        oi += (fp(m.get("open_interest_fp")) or 0.0)
+        total += vol * price
+    return round(total, 2), round(vol24, 2), round(oi, 2)
+
+
+def trim_market(m: dict) -> dict:
+    keep = ("ticker", "event_ticker", "title", "yes_sub_title", "no_sub_title",
+            "market_type", "status", "result", "can_close_early", "strike_type",
+            "rules_primary", "custom_strike")
+    out = {k: m.get(k) for k in keep if m.get(k) not in (None, "")}
+    for k_src, k_dst in (("yes_bid_dollars", "yes_bid"), ("yes_ask_dollars", "yes_ask"),
+                         ("no_bid_dollars", "no_bid"), ("no_ask_dollars", "no_ask"),
+                         ("last_price_dollars", "last_price"),
+                         ("previous_yes_bid_dollars", "prev_yes_bid"),
+                         ("previous_yes_ask_dollars", "prev_yes_ask")):
+        v = fp(m.get(k_src))
+        if v is not None:
+            out[k_dst] = v
+    for k_src, k_dst in (("volume_fp", "volume"), ("volume_24h_fp", "volume_24h"),
+                         ("open_interest_fp", "open_interest"),
+                         ("yes_bid_size_fp", "yes_bid_size"),
+                         ("yes_ask_size_fp", "yes_ask_size")):
+        v = fp(m.get(k_src))
+        if v is not None:
+            out[k_dst] = v
+    for k in ("open_time", "close_time", "expected_expiration_time",
+              "latest_expiration_time", "game_start_time"):
+        if m.get(k):
+            out[k.replace("expected_expiration_time", "exp_close").replace(
+                "latest_expiration_time", "hard_close")] = m[k]
+    return out
+
+
+def trim_event(event: dict) -> dict:
+    return {
+        "event_ticker": event.get("event_ticker"),
+        "series_ticker": event.get("series_ticker"),
+        "title": event.get("title"),
+        "sub_title": event.get("sub_title"),
+        "category": event.get("category"),
+        "mutually_exclusive": event.get("mutually_exclusive"),
+        "last_updated_ts": event.get("last_updated_ts"),
+        "settlement_sources": [
+            {"name": s.get("name"), "url": s.get("url")}
+            for s in (event.get("settlement_sources") or [])[:6]
+        ],
+    }
+
+
+class Collector:
+    def __init__(self, api_root: str | None = None):
+        self.warnings: list[str] = []
+        self.category_counts: dict[str, int] = defaultdict(int)
+        self.client = KalshiClient(
+            root=api_root or os.environ.get("KALSHI_API_ROOT", DEMO_REST_ROOT),
+            logger=self.warn)
+        self.meta = {
+            "generated_at": utc_now_iso(),
+            "api_root": api_root or os.environ.get("KALSHI_API_ROOT", DEMO_REST_ROOT),
+            "api_root_alt_supported": "https://demo-api.kalshi.co/trade-api/v2",
+            "topics": {k: v["label"] for k, v in TOPIC_RULES.items()},
+            "ranking_method": "estimated dollar volume = sum(market volume_fp * last_price_dollars); "
+                              "approximation - Kalshi public market object has no dollar-volume field",
+            "sources": [
+                "https://docs.kalshi.com/getting_started/api_environments.md",
+                "https://docs.kalshi.com/getting_started/quick_start_market_data.md",
+                "https://docs.kalshi.com/api-reference/market/get-market-candlesticks.md",
+            ],
+        }
+
+    def warn(self, msg: str) -> None:
+        line = f"[{utc_now_iso()}] {msg}"
+        print(line, flush=True)
+        self.warnings.append(msg)
+
+    # ------------------------------------------------------------ file output
+    def out_path(self, rel: str) -> str:
+        path = os.path.normpath(os.path.join(DATA_DIR, rel))
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        return path
+
+    def write_json(self, rel: str, payload) -> None:
+        path = self.out_path(rel)
+        tmp = path + ".tmp"
+        with open(tmp, "w") as fh:
+            json.dump(payload, fh, separators=(",", ":"))
+        os.replace(tmp, path)
+        print(f"wrote {rel} ({os.path.getsize(path)} bytes)", flush=True)
+
+    def read_json(self, rel: str, default):
+        path = os.path.join(DATA_DIR, rel)
+        if not os.path.exists(path):
+            return default
+        try:
+            with open(path) as fh:
+                return json.load(fh)
+        except (OSError, json.JSONDecodeError) as exc:
+            self.warn(f"could not read {rel}: {exc}")
+            return default
+
+    # ---------------------------------------------------------------- stages
+    def probe_cors(self) -> None:
+        """Record whether the demo API sends CORS headers to a browser origin.
+
+        This decides whether the static site can fetch the API directly from the
+        visitor's browser or must rely on committed snapshots + WebSocket.
+        """
+        url = self.client.root + "/exchange/status"
+        req = urllib.request.Request(url, headers={
+            "Origin": "https://karagemop466-tech.github.io",
+            "Accept": "application/json",
+        })
+        result = {"tested_url": url, "tested_at": utc_now_iso(),
+                  "origin_sent": "https://karagemop466-tech.github.io"}
+        try:
+            with urllib.request.urlopen(req, timeout=15) as resp:
+                result["http_status"] = resp.status
+                headers = {k.lower(): v for k, v in resp.headers.items()}
+                result["acao"] = headers.get("access-control-allow-origin")
+                result["acam"] = headers.get("access-control-allow-methods")
+                result["acah"] = headers.get("access-control-allow-headers")
+        except urllib.error.HTTPError as exc:
+            result["http_status"] = exc.code
+        except Exception as exc:  # network issue - record, don't fail the run
+            result["http_status"] = None
+            result["error"] = str(exc)
+        result["browser_direct_fetch_allowed"] = (
+            result.get("acao") in ("*", "https://karagemop466-tech.github.io", "null")
+            and result.get("http_status") == 200
+        )
+        self.write_json("cors_test.json", result)
+
+    def load_open_events(self) -> list[dict]:
+        events = []
+        seen = set()
+        for ev in self.client.paginate("/events", {"status": "open"}, "events",
+                                       max_pages=30):
+            if ev.get("event_ticker") in seen:
+                continue
+            seen.add(ev.get("event_ticker"))
+            events.append(ev)
+        self.warn(f"loaded {len(events)} open events via /events?status=open")
+        return events
+
+    def load_nested_markets(self, event_ticker: str) -> list[dict]:
+        try:
+            data = self.client.request("GET", f"/events/{event_ticker}",
+                                       params={"with_nested_markets": "true"})
+            event = data.get("event") or {}
+            markets = event.get("markets") or []
+            if not markets:
+                return []
+            return markets
+        except Exception as exc:
+            self.warn(f"nested markets fetch failed for {event_ticker}: {exc}")
+            return []
+
+    def collect(self) -> None:
+        print(f"=== collect start {utc_now_iso()} ===", flush=True)
+        self.probe_cors()
+
+        open_events = self.load_open_events()
+
+        # Stage 1: classify by topic using top-level fields (cheap, no per-event calls).
+        staged: list[tuple[str, dict, float, float, float]] = []
+        for ev in open_events:
+            cat = (ev.get("category") or "").lower()
+            self.category_counts[ev.get("category") or "(none)"] += 1
+            topic = classify_event(ev, cat)
+            if not topic:
+                continue
+            markets = ev.get("markets") or []
+            dollars, vol24, oi = estimate_event_dollars(markets)
+            staged.append((topic, ev, dollars, vol24, oi))
+
+        # Events endpoint (without nested markets) lacks per-market volume; enrich the
+        # candidate set with nested markets, most promising first (by title frequency of
+        # known big topics is unknown, so enrich everything in scope).
+        enriched = []
+        for topic, ev, dollars, vol24, oi in staged:
+            if not (ev.get("markets") or []):
+                markets = self.load_nested_markets(ev["event_ticker"])
+                if markets:
+                    ev = dict(ev, markets=markets)
+                    dollars, vol24, oi = estimate_event_dollars(markets)
+            enriched.append((topic, ev, dollars, vol24, oi))
+
+        # Stage 2: rank and select.
+        enriched.sort(key=lambda t: t[2], reverse=True)
+        by_topic: dict[str, list] = defaultdict(list)
+        selected = []
+        for topic, ev, dollars, vol24, oi in enriched:
+            if len(by_topic[topic]) >= MAX_EVENTS_PER_TOPIC:
+                continue
+            if len(selected) >= MAX_EVENTS_OVERALL:
+                break
+            by_topic[topic].append((ev, dollars, vol24, oi))
+            selected.append((topic, ev, dollars, vol24, oi))
+
+        if not selected:
+            self.warn("no in-scope live events found - check topic rules / API status")
+
+        # Stage 3: build events.json payload.
+        markets_flat: dict[str, dict] = {}
+        events_json = {
+            "generated_at": utc_now_iso(),
+            "api_root": self.client.root,
+            "topics": {},
+        }
+        ranked_all = []
+        for topic, ev, dollars, vol24, oi in selected:
+            markets = [trim_market(m) for m in (ev.get("markets") or [])]
+            for m in markets:
+                if m.get("ticker"):
+                    markets_flat[m["ticker"]] = m
+            payload_event = trim_event(ev)
+            payload_event.update({
+                "topic": topic,
+                "topic_label": TOPIC_RULES[topic]["label"],
+                "est_dollar_volume": dollars,
+                "est_dollar_volume_24h": vol24,
+                "open_interest": oi,
+                "markets": markets,
+                "market_count": len(markets),
+                "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/events/"
+                              + str(ev.get("event_ticker")),
+            })
+            events_json["topics"].setdefault(topic, []).append(payload_event)
+            ranked_all.append(payload_event)
+
+        events_json["ranked"] = sorted(
+            ranked_all, key=lambda e: -(e["est_dollar_volume"] or 0))
+        events_json["category_counts_open_exchange"] = dict(self.category_counts)
+        self.write_json("events.json", events_json)
+
+        # Stage 4: orderbooks + candlesticks for the top markets.
+        top_markets = [m["ticker"] for m in list(markets_flat.values())
+                       if classify_market_status(m.get("status")) == "open"]
+        # rank markets by (event dollars share) — approximate by last_price*volume desc
+        def market_dollars(t: str) -> float:
+            m = markets_flat.get(t) or {}
+            return (fp(m.get("last_price")) or 0) * (fp(m.get("volume")) or 0)
+        top_markets.sort(key=market_dollars, reverse=True)
+        top_markets = top_markets[:MAX_ORDERBOOKS]
+
+        for ticker in top_markets:
+            self.fetch_orderbook(ticker)
+            self.fetch_history(ticker, markets_flat.get(ticker) or {})
+
+        # Stage 5: tracking + resolutions.
+        self.update_tracking(events_json)
+        self.sweep_resolutions()
+
+        # Stage 6: meta.
+        self.meta.update({
+            "request_count": self.client.request_count,
+            "error_count": self.client.error_count,
+            "tracked_open_events": len(ranked_all),
+            "top_event": (ranked_all[0]["title"], ranked_all[0]["est_dollar_volume"]) if ranked_all else None,
+            "category_counts_open_exchange": dict(self.category_counts),
+            "warnings": self.warnings[-50:],
+        })
+        self.write_json("meta.json", self.meta)
+        print(f"=== collect done {utc_now_iso()} ===", flush=True)
+
+    # ------------------------------------------------------------- orderbooks
+    def fetch_orderbook(self, ticker: str) -> None:
+        """GET /markets/{ticker}/orderbook -> orderbook_fp.yes_dollars/no_dollars.
+
+        Official semantics (docs.kalshi.com/getting_started/orderbook_responses.md and
+        quick_start_market_data.md): bids only; arrays of [price_dollars, count_fp]
+        sorted ASCENDING, best bid is the LAST element.
+        """
+        try:
+            data = self.client.request("GET", f"/markets/{ticker}/orderbook")
+            book = data.get("orderbook_fp") or data.get("orderbook") or {}
+            yes = book.get("yes_dollars") or []
+            no = book.get("no_dollars") or []
+            payload = {
+                "ticker": ticker,
+                "fetched_at": utc_now_iso(),
+                "source_url": f"{self.client.root}/markets/{ticker}/orderbook",
+                "yes_bids": [[str(p), str(q)] for p, q in yes],
+                "no_bids": [[str(p), str(q)] for p, q in no],
+                "best_yes_bid": {"price": str(yes[-1][0]), "contracts": str(yes[-1][1])} if yes else None,
+                "best_no_bid": {"price": str(no[-1][0]), "contracts": str(no[-1][1])} if no else None,
+            }
+            self.write_json(f"orderbooks/{ticker}.json", payload)
+        except Exception as exc:
+            self.warn(f"orderbook fetch failed for {ticker}: {exc}")
+
+    # ---------------------------------------------------------------- history
+    def fetch_history(self, ticker: str, market: dict) -> None:
+        series = market.get("event_ticker", "").rsplit("-", 1)[0] if market else ticker.rsplit("-", 1)[0]
+        now = int(time.time())
+        out: dict[str, list] = {"ticker": ticker, "series_ticker": series,
+                                "fetched_at": utc_now_iso()}
+        for interval, (_, span_minutes) in CANDLE_RANGES.items():
+            start = now - span_minutes * 60
+            try:
+                data = self.client.request(
+                    "GET", f"/series/{series}/markets/{ticker}/candlesticks",
+                    params={"start_ts": start, "end_ts": now,
+                            "period_interval": interval})
+                candles = []
+                for c in (data.get("candlesticks") or []):
+                    price = c.get("price") or {}
+                    close = fp(price.get("close_dollars"))
+                    if close is None:
+                        close = fp((c.get("yes_bid") or {}).get("close_dollars"))
+                    if close is None:
+                        continue
+                    candles.append([
+                        c.get("end_period_ts"),
+                        fp(price.get("open_dollars")), close,
+                        fp(price.get("high_dollars")), fp(price.get("low_dollars")),
+                        fp(c.get("volume_fp")),
+                    ])
+                out[{1: "1m", 60: "60m", 1440: "1440m"}[interval]] = candles
+            except Exception as exc:
+                self.warn(f"candlesticks {interval}m failed for {ticker}: {exc}")
+        self.write_json(f"history/{ticker}.json", out)
+
+    # --------------------------------------------------------------- tracking
+    def update_tracking(self, events_json: dict) -> None:
+        tracked = self.read_json("tracked.json", {"events": {}})
+        events = tracked.setdefault("events", {})
+        now_iso = utc_now_iso()
+        for topic, evs in (events_json.get("topics") or {}).items():
+            for ev in evs:
+                t = ev["event_ticker"]
+                rec = events.get(t) or {
+                    "first_seen": now_iso, "title": ev.get("title"),
+                    "series_ticker": ev.get("series_ticker"), "topic": topic,
+                }
+                rec["last_seen"] = now_iso
+                rec["title"] = ev.get("title")
+                rec["topic"] = topic
+                rec["resolved"] = rec.get("resolved")
+                events[t] = rec
+        # prune: resolved entries older than the lookback window are dropped
+        cutoff = (datetime.now(timezone.utc) - timedelta(days=RESOLUTION_LOOKBACK_DAYS)
+                  ).strftime("%Y-%m-%dT%H:%M:%SZ")
+        for t in list(events.keys()):
+            rec = events[t]
+            resolved = rec.get("resolved") or {}
+            if resolved.get("resolved_at") and resolved["resolved_at"] < cutoff:
+                del events[t]
+        if len(events) > TRACKED_CAP:
+            keep = sorted(events.items(),
+                          key=lambda kv: kv[1].get("last_seen", ""), reverse=True)
+            events.clear()
+            events.update(dict(keep[:TRACKED_CAP]))
+        tracked["updated_at"] = now_iso
+        self.write_json("tracked.json", tracked)
+
+    # ------------------------------------------------------------ resolutions
+    def sweep_resolutions(self) -> None:
+        """Re-fetch every tracked event; record how each resolved (yes/no) once settled.
+
+        Market settlement semantics: settled markets carry `result` = "yes" | "no"
+        (https://docs.kalshi.com/getting_started/market_settlement.md). For multi-market
+        events the winning market(s) are those with result "yes".
+        """
+        tracked = self.read_json("tracked.json", {"events": {}})
+        resolutions = self.read_json("resolutions.json", {"resolved": {}})
+        resolved_map = resolutions.setdefault("resolved", {})
+        events = tracked.get("events") or {}
+        checked = 0
+        skipped = 0
+        sweep_cap = 40
+        run_start_epoch = time.time()
+        # Oldest-last-seen first; skip events seen in this run (they are live-open);
+        # cap per run to respect API rate budgets on scheduled runs.
+        def _last_seen(item):
+            return item[1].get("last_seen") or ""
+        for ticker, rec in sorted(list(events.items()), key=_last_seen):
+            if rec.get("resolved"):
+                continue
+            if sweep_cap <= 0:
+                skipped += 1
+                continue
+            try:
+                seen_epoch = time.mktime(time.strptime(
+                    rec["last_seen"], "%Y-%m-%dT%H:%M:%SZ"))
+            except (ValueError, KeyError):
+                seen_epoch = 0
+            if run_start_epoch - seen_epoch < 15 * 60:
+                skipped += 1
+                continue
+            try:
+                data = self.client.request(
+                    "GET", f"/events/{ticker}", params={"with_nested_markets": "true"})
+            except Exception as exc:
+                self.warn(f"resolution check failed for {ticker}: {exc}")
+                continue
+            sweep_cap -= 1
+            checked += 1
+            event = data.get("event") or {}
+            markets = event.get("markets") or []
+            if not markets:
+                continue
+            statuses = {classify_market_status(m.get("status")) for m in markets}
+            if "open" in statuses or "closed" in statuses:
+                continue  # still live
+            settled = [m for m in markets if classify_market_status(m.get("status")) == "settled"]
+            if not settled:
+                continue
+            winners = [m for m in settled if (m.get("result") or "").lower() == "yes"]
+            settled_ts = max((m.get("settled_time") or m.get("close_time") or
+                              m.get("latest_expiration_time") or "") for m in settled)
+            resolution = {
+                "resolved_at": settled_ts or utc_now_iso(),
+                "outcome_side": "yes" if winners else "no",
+                "winners": [
+                    {"ticker": m.get("ticker"), "title": m.get("title") or m.get("yes_sub_title"),
+                     "result": (m.get("result") or "").lower(),
+                     "source_url": f"{self.client.root}/markets/{m.get('ticker')}"}
+                    for m in (winners or settled)
+                ],
+                "market_count": len(settled),
+                "event_source_url": f"{self.client.root}/events/{ticker}",
+                "settlement_sources": [
+                    {"name": s.get("name"), "url": s.get("url")}
+                    for s in (event.get("settlement_sources") or [])[:4]
+                ],
+            }
+            rec["resolved"] = resolution
+            resolved_map[ticker] = {
+                "title": rec.get("title"), "topic": rec.get("topic"),
+                "series_ticker": rec.get("series_ticker"), **resolution,
+            }
+        resolutions["updated_at"] = utc_now_iso()
+        # keep the newest 300 resolutions
+        items = sorted(resolved_map.items(),
+                       key=lambda kv: (kv[1].get("resolved_at") or ""), reverse=True)
+        resolutions["resolved"] = dict(items[:300])
+        self.write_json("resolutions.json", resolutions)
+        self.write_json("tracked.json", tracked)
+        self.warn(f"resolution sweep: checked {checked}, deferred {skipped} to later runs")
+
+
+def main() -> int:
+    collector = Collector()
+    failures = 0
+    try:
+        collector.collect()
+    except Exception as exc:
+        collector.warn(f"FATAL during collect: {type(exc).__name__}: {exc}")
+        failures += 1
+        # still write meta so the site can show collector health
+        collector.meta["warnings"] = collector.warnings[-50:]
+        try:
+            collector.write_json("meta.json", collector.meta)
+        except Exception:
+            pass
+    # Partial success is fine; total failure is not.
+    return 1 if failures and collector.client.request_count == 0 else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

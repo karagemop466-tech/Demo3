@@ -1,0 +1,54 @@
+name: Collect Kalshi demo snapshots
+
+# Snapshots the Kalshi DEMO exchange (official recommended root
+# https://external-api.demo.kalshi.co/trade-api/v2, per
+# https://docs.kalshi.com/getting_started/api_environments.md) into data/.
+# GitHub Actions runners have unrestricted egress; this repo's dev sandbox does not,
+# which is why collection lives here rather than in a local shell.
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'   # every 10 minutes (runs on the default branch after merge)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: collect-kalshi
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Offline pipeline tests (mock API)
+        run: python3 collector/test_collect.py -v
+
+      - name: Collect live demo snapshots
+        env:
+          KALSHI_API_ROOT: https://external-api.demo.kalshi.co/trade-api/v2
+        run: python3 collector/collect.py
+
+      - name: Commit snapshots
+        run: |
+          git config user.name "collector-bot"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin "$GITHUB_REF_NAME" --autostash || \
+            echo "::warning::rebase failed; pushing snapshot on top of latest origin state"
+          git add data
+          if git diff --cached --quiet; then
+            echo "No data changes to commit"
+          else
+            git commit -m "collector: snapshot $(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          fi
