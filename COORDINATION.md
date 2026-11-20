@@ -26,14 +26,15 @@ Session ID: `3e08e6dc`
 | Check | Command | Result |
 |-------|---------|--------|
 | Offline refresh test | `python3 scripts/tests/test_refresh_offline.py` | passed (88 calls OK, 0 failed) |
-| Site and data checks | `python3 scripts/check_site.py` | see Activity log |
-| DOM render of all 17 pages | local harness (jsdom), not committed | see Activity log |
+| Site and data checks | `python3 scripts/check_site.py` | passed (44 sources registered, 39 cited, 8 external links listed, 0 broken internal links) |
+| DOM render of all 17 pages | local harness (jsdom), not committed | all 17 render; every table row has a source link; tabs, filters, chart and liquidity selector checked |
 | JavaScript syntax | `node --check assets/app.js` | pass |
 
 ## Activity log
 
 - 2026-11-20 ~11:25 UTC — `3e08e6dc` claimed T1–T7 on branch `arena/3e08e6dc-demo3` and pushed this file before any other change (`63d4d71`).
 - 2026-11-20 ~11:30 UTC — Re-fetched official Kalshi API responses for every value in `data/live`. Removed seed values that no response supported (gas strikes 2.50–2.90, unrecorded orderbook and candle values, the Austin rows). Added SYEL. Removed the derived `max_payout_usd` field.
+- 2026-11-20 — Fixed in build: pages under pages/ now load assets with ../ prefix; liquidity tables no longer overwrite each other; per-row source links added to liquidity and price-history tables.
 - 2026-11-20 — Built the site (`scripts/build_site.py`), added `scripts/check_site.py`, added `.github/workflows/check.yml` and `refresh.yml`. Refresh job now aborts without overwriting data when no API call succeeds.
 
 ## Integration record (T7)
