@@ -578,6 +578,47 @@ Log (df50b92f):
 - 2026-11-20 19:26 UTC: **PR #33** (`arena/32f91e0e-demo3` -> `main`, COORDINATION.md only) MERGED with `gh pr merge 33 --merge`; merge commit `7c1069b`.
 - 2026-11-20 19:27-19:30 UTC: GitHub Pages build for `7c1069b` reported `built` (Pages API `pages/builds/latest`). Live page fetch from the sandbox was not possible (I-32F-01), so the live-site check is the Pages API status only.
 - Session 32f91e0e is delivered. No other session's file was changed.
+- 2026-11-20 ~19:33Z: **PR #34** (`arena/df50b92f-demo3` -> `main`) MERGED, merge commit `5f0335f` (`gh pr merge 34 --merge`). `checks` workflow passed. The `collect` workflow was still running on the branch (data push, not a required check). Main moved twice during the PR; each time `main` was merged in and the COORDINATION conflict was resolved by keeping both sides (no records dropped).
+- Pages: the build for `5f0335f` was cancelled as superseded by newer main pushes (the 10-minute data collector and other merges). Pages then reported `built` at `04d1a4e`, which contains `5f0335f`. Live check via page fetch: https://karagemop466-tech.github.io/Demo3/assets/alerts.js serves the `settlement_sources` / `loadEvent` code.
+- Branch hygiene: my own pre-rebase claim/feature commits (`565db12`, `0363d22`) were replaced on the remote with `--force-with-lease` after `git pull --rebase` rewrote them (same content, own branch only). Logged, nothing from other sessions was overwritten.
+- **R-07 (generator drift, high):** `scripts/build_root_site.py` does NOT contain the hand-edited alert section of `dashboard.html`. Running it removes the "Price-swing alerts" card and the `assets/alerts.js` script tag. **Do not run the generator without first porting the alert section into it.** This session reverted every generator side effect except the two new flags.
+- Follow-up: F-df-01 and F-df-02 added to the integration flags block in `scripts/build_root_site.py`, so they appear on the Flagged for Review page (`flagged.html`) with source links. Index count updated 83 -> 85.
+
+---
+
+## Task board — session d7d7a733 (independent source audit of the executive summary and published data)
+
+Branch: `arena/d7d7a733-demo3` (branched from `7e795b2`, same as `main` HEAD). Session ID: `d7d7a733`.
+Scope: new folder `audit/**` only, plus this section of `COORDINATION.md` (appended). Nothing in the root site, `docs/`, `analysis/`, `demo-desk/`, `alerts/`, `collector/`, `trading/`, `data/`, `scripts/`, `.github/`, `EXECUTIVE_SUMMARY.md`, or the navigation is edited. Any fix to those files is logged as a change request for the owning session or the final integration session.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| A1 Line-by-line audit of the claims in `EXECUTIVE_SUMMARY.md` §2–§6 and the published `data/latest/top_events.json` rows against official Kalshi docs and live demo API responses (fetched 2026-11-20) | done | d7d7a733 | `audit/**` | 32 rows (`audit/rows.json` → `audit/index.html`); 9 official docs pages read in full (demo_env, api_environments, market_settlement, quick_start_websockets, quick_start_market_data, get-markets, get-market-candlesticks); live demo API responses listed per row; `audit/check_audit.py` PASSED (every row has an official Kalshi link, all URLs on allowed hosts, page rebuilt from data) | AU-15, AU-17–AU-19, AU-20 (summary figures contradicted); AU-24–AU-28 (repo classification and definition irregularities); AU-06, AU-22, AU-23, AU-29–AU-32 not reproduced / partly verified |
+| A2 PR to `main`, merge after checks, GitHub Pages deploy confirmation, board record | in progress | d7d7a733 | `audit/**`, `COORDINATION.md` (this section) | PR and merge result recorded in the log below | — |
+
+### Session d7d7a733 claim (per protocol)
+
+- 2026-11-20 claim committed and pushed before any audit work. Overlap check: the live-alert feature already has four open PRs (#23, #26, #27, #29; #28 merged) and PR #30 is a board-only withdrawal; this session does not touch alert code. Trade, pipeline, and site files are not in scope.
+- Sandbox note: bash egress allows only GitHub and package registries; live Kalshi data is read through the page-fetch tool, so every live value is recorded with the exact URL it came from.
+
+### Session d7d7a733 — findings and change requests (for owners; not edited here)
+
+Findings are published on the audit page's "Flagged for Review" section with source links. Nothing above is marked verified unless the row shows an official source.
+
+- **CR-d7d7a733-1 (owner of `scripts/collect_kalshi_data.py`; collector sessions 4d10aedf / 3b5e95bd):** (a) the gas ticker rule `GAS[A-Z]` (line 48) matches non-gas markets such as `KXLALIGASPREAD` (Espanyol La Liga spread); (b) the tag rule maps `energy` / `oil & gas` to gas (lines 79–84), so ERCOT load, primary energy consumption, EV market share and WTI appear under gas; (c) `data/latest/resolutions.json` 'gas' topic is 250 of 300 synthetic `KXQUICKSETTLE` "1+1 = 2" markets. Sources: AU-24, AU-25, AU-26.
+- **CR-d7d7a733-2 (same owner):** the 'est. dollar volume' ranking changed definition between `data/meta.json` (12:14:51Z, volume × last price) and `data/latest/top_events.json` (12:38:54Z, volume × notional, line 221). The same top event moved from about $902M to about $7.98B. Choose one documented definition, label it, and record the change. Sources: AU-17, AU-20, AU-27.
+- **CR-d7d7a733-3 (integration session, owner of `EXECUTIVE_SUMMARY.md`):** correct the summary's figures and wording: "50 resolved KXAAAGASM" → 32 in the committed snapshot (AU-15); the $900M / $135M / $3.5M estimates are superseded (AU-17–AU-19); "$volume ≈ Σ contracts × price" does not match the code (AU-20); "demo liquidity is thin / zero volume" needs qualifying (AU-16). Link `audit/index.html` from the summary.
+- **CR-d7d7a733-4 (integration session, owner of root landing and navigation):** add a link to `audit/index.html` (Pages path `/Demo3/audit/`) to the root navigation. This was not done here because navigation is a shared output.
+- **CR-d7d7a733-5 (integration session, owner of `.github/`):** add `python3 audit/check_audit.py` to the Checks workflow. It is a standalone check and passes now. It was not added here because `.github/` is outside this session's scope.
+- **CR-d7d7a733-6 (owner of `flagged.html`):** add AU-24 to AU-28 to the site's Flagged page. They are published on the audit page in the meantime.
+
+### Session d7d7a733 — verification log
+
+- 2026-11-20: docs read in full: `getting_started/demo_env`, `api_environments`, `market_settlement`, `quick_start_websockets`, `quick_start_market_data`; API reference read: `get-markets`, `get-market-candlesticks`.
+- 2026-11-20: live demo API calls (via fetch tool, unauthenticated) — series `KXAAAGASW`, `KXPGATOUR`; markets `KXAAAGASM-26OCT31-4.18` (settled, yes), `KXPRESNOMD-28-GPLA` (open, `status: active`), `KXLALIGASPREAD-26NOV20ATHESP-ESP2`, `KXQUICKSETTLE-20NOV26H0640-2`; candlesticks (new path, 1-hour) for `KXAAAGASM-26OCT31-4.18`; orderbook for `KXPRESNOMD-28-GPLA` (empty ladders).
+- 2026-11-20: not reproduced: old candlestick path, `portfolio/balance` (fetch tool returned a generic error with no HTTP status); browser CORS and WebSocket streaming were not tested.
+- 2026-11-20: `python3 audit/build_audit.py` then `python3 audit/check_audit.py` PASSED. Existing checks also passed on this branch: `scripts/verify_root_site.py` (0 failures) and `scripts/check_site.py` (site checks passed).
+- 2026-11-20 (rebase): `git pull --rebase` hit a conflict in `COORDINATION.md` because `main` had advanced (PR #33 and session edf9de2a's board-only section). Resolution: both sides kept verbatim, with session d7d7a733's section after edf9de2a's. Nothing from the other session was removed. edf9de2a's T1 independently confirmed AU-10 (no dollar-volume field in Get Markets). No file overlap: that session touched `COORDINATION.md` only.
 
 ---
 
@@ -590,7 +631,7 @@ Log (df50b92f):
 - Duplicates still open at the time of this note (for the integration owner; not closed by this session): PR #26 (`arena/6d201d19-demo3`), PR #27 (`arena/09824fd8-demo3`), PR #30 (`arena/d7ee554b-demo3`, which withdraws its own claim). PR #32 (`arena/26973298-demo3`) is a separate backtest feature.
 - Irregularities that stay on the record: F-B13-01 (no open gas markets in the snapshot), F-B13-02 (high-ROI rules are placeholders; no model defined), F-B13-03 (news links are searches, not causes), F-B13-04 (batch `tickers` works live; one ticker absent from the reply), F-B13-05 (rate-limit numbers unconfirmed), F-B13-06 (alert history is per tab), F-B13-07 (demo prices may differ from real markets). Where the merged feature repeats them, its own flags apply (F-alert-01, F-alert-02).
 - Lesson logged for the protocol: re-read the full board and open PR list before claiming a feature; `gh pr list --state open` shows duplicate work.
-
+- 2026-11-20 (sync incident, d7d7a733): while syncing with `main` I pushed an intermediate merge (`dcf7c48`) before `main`'s newest commit was merged in. That state briefly lacked main's latest `assets/` and `dashboard.html` changes relative to `main`. It was corrected in the next commit (merge of `origin/main` with both board sections kept; `data/` set to main's generated snapshot). Nothing was merged to `main` in the interim, and no other session's content was removed. The diff against `main` is now additions only (`COORDINATION.md`, `audit/**`).
 
 ## Task board — session 26973298 (measured strategy backtest, `arena/26973298-demo3`) — claimed 2026-11-20 19:20 UTC
 
@@ -650,3 +691,7 @@ Irregularities reported (published on `strategy.html` and in `strategy/SPEC.md` 
   generator preserves them. No other session's markup was changed.
 
 Change request for the final integration session: none.
+
+- 2026-11-20 b13c6a8d — merge record for the withdrawal. PR #29 (`arena/b13c6a8d-demo3`): its feature files were removed from the branch and the PR was retitled to the board-only withdrawal before merging. **Merged 2026-11-20 19:30:14 UTC, merge commit `0d4ab58`**, board only (COORDINATION.md, +12 lines). The live-alert feature was NOT merged from this session; the merged live-alert chat on the dashboard is from PR #28 (session 6ebc1cb7).
+- Pages after this merge: the build for `0d4ab58` reported `errored` ("Page build failed."), as did two overlapping builds (`df3bf70`, `5f0335f`). The next build, for `fa6525b`, also errored; the build for `04d1a4e` then reported `built` (2026-11-20 19:38:30 UTC). Live checks via page fetch: https://karagemop466-tech.github.io/Demo3/ (landing with executive summary) and https://karagemop466-tech.github.io/Demo3/dashboard.html (section 6 "Price-swing alerts — scrolling chat (≥ $0.10)"). The site is live at `main` `04d1a4e`. Pages failures for the superseded commits are not re-run; the latest commit built and serves.
+- Open items for the integration owner (not changed here): duplicate alert PRs #26 and #27 remain open; PR #36 and #34 (alert-related) remain open; the root alert chat lacks resolution rows (CR-b13c6a8d-3).
