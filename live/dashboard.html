@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard — Kalshi Live Alert Desk</title>
+<meta name="description" content="Live swing-alert desk for the Kalshi demo exchange: gas, elections, culture, crypto, golf.">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="brand" href="index.html">Kalshi <span>Live Alert Desk</span></a>
+<nav class="main"><a href="index.html">Home</a><a href="dashboard.html" class="active">Dashboard</a><a href="gas.html">Gas</a><a href="elections.html">Elections</a><a href="culture.html">Culture</a><a href="crypto.html">Crypto</a><a href="golf.html">Golf</a><a href="graph.html">Graph &amp; liquidity</a><a href="tracking.html">Resolution tracking</a><a href="strategies.html">Strategies</a><a href="portfolio.html">Simulated portfolio</a><a href="suggestions.html">Suggestions</a><a href="methodology.html">Methodology</a><a href="flagged.html">Flagged for review</a><a href="sources.html">Sources</a></nav>
+</div></header>
+<main class="wrap">
+
+<h1>Live dashboard</h1>
+<p class="muted">Highest-dollar live events in the five topics, two scrolling alert streams, live
+swings from browser polling, the price graph with selectable windows, liquidity and resolution
+tracking. <span class="small" id="deskVersion"></span></p>
+<div class="banner" id="banner"><span class="pulse warn"></span><span id="liveStatus">checking the demo API…</span>
+<span class="small" id="liveCount"></span></div>
+<p class="small muted" id="thresholdNote"></p>
+<p class="small muted" id="roiNote"></p>
+<p class="small muted" id="snapshotNote"></p>
+
+<div class="card" id="alerts">
+<h2>The two alert streams</h2>
+<p class="small muted">Left: every swing ≥ $0.10. Right: the same alerts that pass the model filter.
+New alerts are prepended, so the newest is always at the top; both streams pause and resume on
+demand and keep the full history in memory for the session.</p>
+<div class="chatgrid">
+<div id="chatAll"></div>
+<div id="chatRoi"></div>
+</div>
+<div class="toolbar">
+<label class="small muted">Filter the left stream by topic
+<select id="chatTopicFilter"><option value="all">all topics</option>
+<option value="gas">gas</option><option value="elections">elections</option>
+<option value="culture">culture</option><option value="crypto">crypto</option>
+<option value="golf">golf</option></select></label>
+<span class="small muted">Price data: <a href="https://docs.kalshi.com/api-reference/market/get-market-candlesticks" target="_blank" rel="noopener">candlesticks</a> ·
+headline links: <a href="methodology.html#causation">the association is unverified</a></span>
+</div>
+</div>
+
+<div class="card" id="graph">
+<h2>Selected market — price graph (x = time, y = contract price)</h2>
+<p id="detailTitle" class="muted">Pick any contract from a topic table below or the dropdown.</p>
+<p class="small muted" id="detailMeta"></p>
+<div class="toolbar">
+<label class="small muted">Ticker
+<select id="obTicker"></select></label>
+</div>
+<div class="seg" id="windowSeg" role="group" aria-label="Chart window"></div>
+<canvas id="priceChart" height="270" aria-label="Contract price against time"></canvas>
+<p class="small muted" id="chartCaption"></p>
+</div>
+
+<div class="card">
+<h2>Liquidity — contracts available at each price</h2>
+<p class="small muted">Orderbook levels from
+<a href="https://docs.kalshi.com/api-reference/market/get-market-orderbook" target="_blank" rel="noopener">Get Market Orderbook</a>:
+the response publishes YES bids and NO bids; a NO bid at price P is a YES ask at (1 − P), which is
+how the depth chart is built. Green bars are YES bids, red bars are NO bids shown at their
+YES-equivalent price.</p>
+<canvas id="depthChart" height="230" aria-label="Orderbook depth by price"></canvas>
+<p class="small" id="obSummary"></p>
+<div id="obTable"></div>
+</div>
+
+<div class="card" id="topics">
+<h2>Tracked lines by topic</h2>
+<p class="small muted">Topics are kept separate and each topic's events are grouped together.
+Rows are the top-dollar lines per topic plus every contract that has committed candlestick history.
+Click a ticker to load it in the graph.</p>
+<div id="topicTables"></div>
+</div>
+
+<div class="card" id="resolutions">
+<h2>Resolution tracking (YES / NO)</h2>
+<p class="small muted">Open events stay listed until they settle; resolved events show how they
+resolved. Full settlement data: <a href="../data-tracking.html">the collector's tracking page</a>.</p>
+<div id="resolutionBody"></div>
+</div>
+
+<h3>Recent trades</h3>
+<div id="tradesTable" class="card"></div>
+
+</main>
+<footer class="wrap">
+<p><strong>Kalshi Live Alert Desk</strong> — asks only about the Kalshi <em>demo</em> exchange
+(<span class="mono">https://external-api.demo.kalshi.co/trade-api/v2</span>). Every table row links its official source request; values that
+cannot be confirmed are left blank and listed on <a href="flagged.html">Flagged for review</a>.
+Simulated trades are labelled SIMULATED everywhere and are never sent to Kalshi.</p>
+<p class="small">Official docs:
+<a href="https://docs.kalshi.com/getting_started/demo_env" target="_blank" rel="noopener">demo environment</a> ·
+<a href="https://docs.kalshi.com/getting_started/quick_start_market_data" target="_blank" rel="noopener">market data without auth</a> ·
+<a href="https://docs.kalshi.com/api-reference/market/get-market-candlesticks" target="_blank" rel="noopener">candlesticks</a> ·
+<a href="https://docs.kalshi.com/api-reference/market/get-market-orderbook" target="_blank" rel="noopener">orderbook</a> ·
+<a href="https://docs.kalshi.com/getting_started/market_settlement" target="_blank" rel="noopener">settlement</a>.
+Other views in this repo: <a href="../index.html">canonical tracker</a> ·
+<a href="../docs/">docs archive</a> · <a href="../demo-desk/">demo desk</a> ·
+<a href="../analysis/">analysis</a>.</p>
+</footer>
+<script src="assets/desk.js"></script><script src="assets/dashboard.js"></script>
+</body>
+</html>

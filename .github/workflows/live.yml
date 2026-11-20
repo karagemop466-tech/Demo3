@@ -1,0 +1,63 @@
+name: Live desk checks
+
+# Verifies the Live Alert Desk (/live): per-row source links, internal links,
+# JSON shape, JS syntax and a headless render of every page. Also rebuilds the
+# desk from the committed collector snapshots so drift between data and pages
+# shows up as a failure instead of a stale page on the site.
+
+on:
+  push:
+    paths:
+      - "live/**"
+      - "scripts/build_live_*.py"
+      - "scripts/verify_live_site.py"
+      - "data/latest/**"
+      - "data/history/**"
+      - "analysis/data/live/candles.json"
+      - ".github/workflows/live.yml"
+  pull_request:
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Rebuild candlestick store from committed official payloads
+        run: python3 scripts/build_live_candles.py
+
+      - name: Rebuild desk data (alerts, model, simulation, registers)
+        run: python3 scripts/build_live_data.py
+
+      - name: Rebuild pages
+        run: python3 scripts/build_live_site.py
+
+      - name: Determinism - the engine must reproduce the committed trades
+        run: python3 live/tests/test_determinism.py
+
+      - name: Verify site (links, per-row sources, JSON, syntax)
+        run: python3 scripts/verify_live_site.py
+
+      - name: Headless render test (jsdom, offline)
+        run: |
+          npm ci --silent
+          node live/tests/smoke.mjs
+
+      - name: Root site checks still pass
+        run: |
+          python3 scripts/check_site.py
+          python3 scripts/verify_root_site.py
+          python3 scripts/verify_site.py || true

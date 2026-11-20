@@ -169,6 +169,7 @@ NAV = [
     ("index.html", "Home"),
     ("dashboard.html", "Live dashboard"),
     ("alerts.html", "Live alerts"),
+    ("live/index.html", "Alert desk (live)"),
     ("data-tracking.html", "Data tracking"),
     ("gas-prices.html", "Gas prices"),
     ("elections.html", "Elections"),
@@ -374,6 +375,16 @@ def consolidated_flags():
         "not verified here. On failure the UI shows 'event record unavailable' and never guesses.",
         [f"{DOCS}/getting_started/demo_env"],
         "open — fails closed", "df50b92f")
+    # session c75f4bf1: chart swing-caption depends on the alerts event cache
+    add("F-c75-03", "Chart / alerts", "Chart swing-caption depends on the alerts event cache",
+        "The caption under the price chart lists the selected market's recent >=$0.10 swings with "
+        "the related event ticker and its official settlement_sources, read from the alerts cache "
+        "(window.KD.events[evt].sources). If an event record is still loading, unavailable, or the "
+        "browser/API blocks it, the caption falls back to the market API link and shows no source — "
+        "never inferred. Complementary to F-df-01/F-df-02 (alert-row context).",
+        [f"{DOCS}/api-reference/events/get-event", f"{DOCS}/changelog",
+         "https://external-api.demo.kalshi.co/trade-api/v2/events?limit=1"],
+        "Flagged — fails closed", "c75f4bf1")
     add("I-11", "Trading", "No demo-account API credentials were provided",
         "Live order execution needs a Kalshi demo API key (created at demo.kalshi.co). Until one is "
         "supplied, the Trade pages run in clearly labeled paper-trading mode against live demo "
@@ -544,6 +555,7 @@ questions and suggestions before making decisions.</p>
 
 <h2>How to use this site</h2>
 <table><thead><tr><th>Goal</th><th>Page</th><th>Source</th></tr></thead><tbody>
+<tr><td><strong>Live alert desk (new)</strong>: two scrolling streams (all swings ≥ $0.10 / high-ROI model filter), auto-simulated strategies, event resolution, 30 s–30 d price graphs</td><td><a href="live/index.html">/live alert desk</a></td><td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-market-candlesticks" target="_blank" rel="noopener">source</a></td></tr>
 <tr><td>Track highest-dollar live events, price chart (seconds/minutes/hours), orderbook liquidity, resolutions</td><td><a href="dashboard.html">Live dashboard</a></td><td><a class="src" href="https://docs.kalshi.com/getting_started/quick_start_market_data" target="_blank" rel="noopener">source</a></td></tr>
 <tr><td>Execute trades (demo key or labeled paper mode), analyze performance, categorize trades, build strategies</td><td><a href="portfolio.html">Portfolio</a> · <a href="trades.html">Trades</a></td><td><a class="src" href="https://docs.kalshi.com/api-reference/orders/create-order-v2" target="_blank" rel="noopener">source</a></td></tr>
 <tr><td>Decide before changing anything: questions, missing information, discovery steps</td><td><a href="questions.html">Questions</a> · <a href="suggestions.html">Suggestions</a></td><td><a class="src" href="https://docs.kalshi.com/getting_started/demo_env" target="_blank" rel="noopener">source</a></td></tr>
