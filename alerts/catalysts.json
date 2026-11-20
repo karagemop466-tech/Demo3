@@ -2,7 +2,7 @@
   "title": "Topic catalyst register - what each tracked topic actually settles on",
   "verified_at": "2026-11-20",
   "topics_count": 5,
-  "entries_count": 9,
+  "entries_count": 12,
   "read_this_way": "These are not news items. Each row is the settlement reference the exchange itself names for a series, read straight out of GET /series/{series_ticker}. A price jump is only 'explained' when the referenced feed published something at that moment; this file tells you where to look, it does not claim a cause.",
   "primary_source": {
     "endpoint": "https://external-api.demo.kalshi.co/trade-api/v2/series/{series_ticker}",
@@ -13,140 +13,162 @@
   "topics": {
     "gas": {
       "label": "Gas prices",
-      "series": ["KXWTIMAX"],
+      "series": [
+        "KXWTIMAX"
+      ],
       "sources": [
         {
           "label": "ICE - WTI front-month settlement prices (named settlement source for KXWTIMAX)",
           "url": "https://www.ice.com/report/10",
           "kind": "official settlement source",
-          "verified_by": "session 5ab18dc3, GET /series/KXWTIMAX",
+          "verified_by": "session 5ab18dc3 (series record via GET /series/KXWTIMAX, page via the official fetcher)",
           "checked_at": "2026-11-20",
           "http_status": 200,
           "rule_quote": "If ICE reports that the maximum price of oil (as defined exclusively by the set of WTI front-month settle prices) is above $180 between Issuance and Dec 31, 2026, then the market resolves to Yes.",
-          "why_it_matters": "A printed ICE settle outside the expected band is the only thing that moves a max/min-of-settles contract; a swing without an ICE publication is demo liquidity, not news."
+          "why_it_matters": "A printed ICE settle outside the expected band is the only thing that moves a max/min-of-settles contract; a swing without an ICE publication is demo liquidity, not news.",
+          "page_observed": "ICE Report Center - 'End of Day Report - ICE Futures Europe - Futures'; settlement/price report categories are listed behind a click-through agreement. See irregularity 3 in FINDINGS.md: WTI front-month settles on NYMEX/CME, not ICE Futures Europe."
         },
         {
           "label": "EIA weekly gasoline prices (reference for the retail-gas series KXWTIREF, not re-fetched in this run)",
           "url": "https://www.eia.gov/dnav/pet/pet_pri_gpt_dc_wfr_m.htm",
           "kind": "underlying reference for a sibling series",
-          "verified_by": "an earlier verification of GET /series/KXWTIREF in this session; the series record was not re-fetched on 2026-11-20 (the fetch errored), so treat the link as unconfirmed",
+          "verified_by": null,
           "checked_at": "2026-11-20",
           "http_status": null,
           "irregularity": "The EIA weekly U.S. Regular series publishes Wednesdays ~1 pm ET for the prior week; KXWTIREF asks for a daily national average, and the 2026 holiday schedule also moves one release to Monday. A daily-reference feed is therefore expected to be the EIA *daily* series or a retail survey, not this weekly page. Flagged rather than smoothed over.",
-          "see": "flagged.html"
+          "see": "flagged.html",
+          "note": "GET /series/KXWTIREF returned a fetch error on 2026-11-20 from this session, and the EIA page was not loaded either; this row is retained only as a pointer with an explicit unverified flag."
         }
       ]
     },
     "elections": {
       "label": "Elections",
-      "series": ["KXPRESNOMD"],
+      "series": [
+        "KXPRESNOMD"
+      ],
       "sources": [
         {
           "label": "Republican Party (named settlement source for KXPRESNOM* family)",
           "url": "https://gop.com/",
           "kind": "official settlement source",
-          "verified_by": "session 5ab18dc3, GET /series/KXPRESNOMD",
+          "verified_by": "session 5ab18dc3",
           "checked_at": "2026-11-20",
-          "http_status": 200
+          "http_status": 200,
+          "page_observed": "Title 'Republican National Committee | GOP'."
         },
         {
           "label": "Democratic Party (named settlement source for KXPRESNOMD)",
           "url": "https://democrats.org/",
           "kind": "official settlement source",
-          "verified_by": "session 5ab18dc3, GET /series/KXPRESNOMD",
+          "verified_by": "session 5ab18dc3",
           "checked_at": "2026-11-20",
           "http_status": 200,
           "rule_quote": "If Hunter Biden wins and accepts the nomination for the Presidency for the Democratic party, then the market resolves to Yes.",
-          "why_it_matters": "Nomination markets settle on a party's own certification or an acceptance statement, so a party press release - not a poll - is the event that should move price."
+          "why_it_matters": "Nomination markets settle on a party's own certification or an acceptance statement, so a party press release - not a poll - is the event that should move price.",
+          "page_observed": "Title 'We Are the Democratic Party. - Democrats'; press-release feed with items dated November 20, 2026."
         },
         {
           "label": "Contract terms PDF (what counts as 'wins and accepts')",
           "url": "https://assets.kalshi.com/contract_terms/PRESNOM.pdf",
           "kind": "contract terms",
-          "verified_by": "session 5ab18dc3, contract_terms_url on the KXPRESNOMD series record",
+          "verified_by": null,
           "checked_at": "2026-11-20",
-          "http_status": 200
+          "http_status": null,
+          "note": "URL copied verbatim from the series record (GET /series/..., HTTP 200 on 2026-11-20); the destination page itself was not fetched this run, so the link is unverified."
         }
       ]
     },
     "culture": {
       "label": "Culture",
-      "series": ["KXOSCARPIC"],
+      "series": [
+        "KXOSCARPIC"
+      ],
       "sources": [
         {
           "label": "Academy of Motion Picture Arts and Sciences (named settlement source for KXOSCARPIC)",
           "url": "https://www.oscars.org/oscars",
           "kind": "official settlement source",
-          "verified_by": "session 5ab18dc3, GET /series/KXOSCARPIC",
+          "verified_by": "session 5ab18dc3",
           "checked_at": "2026-11-20",
           "http_status": 200,
           "rule_quote": "If Digger has won Best Picture at the 99th Academy Awards, then the market resolves to Yes.",
           "product_note": "The series record carries an important-information block: only one Yes outcome is allowed and a tie resolves the separate 'Tie' market to Yes. Any alert near a tie announcement should be read against that clause.",
-          "why_it_matters": "Oscar markets move on nominations/winner announcements from the Academy (and, for the betting-relevant 'will be nominated' style markets, the Oscar shortlists), not on review sentiment."
+          "why_it_matters": "Oscar markets move on nominations/winner announcements from the Academy (and, for the betting-relevant 'will be nominated' style markets, the Oscar shortlists), not on review sentiment.",
+          "page_observed": "Page 'Oscars | Oscars.org'; links the 98th Oscars winners list (ceremony 2026) and the Rules & Eligibility page, i.e. the Academy itself is the record of who won - the tracked market is the 99th ceremony."
         },
         {
           "label": "Contract terms PDF (Oscars)",
           "url": "https://assets.kalshi.com/contract_terms/OSCARS.pdf",
           "kind": "contract terms",
-          "verified_by": "session 5ab18dc3, contract_terms_url on the KXOSCARPIC series record",
+          "verified_by": null,
           "checked_at": "2026-11-20",
-          "http_status": 200
+          "http_status": null,
+          "note": "URL copied verbatim from the series record (GET /series/..., HTTP 200 on 2026-11-20); the destination page itself was not fetched this run, so the link is unverified."
         }
       ]
     },
     "crypto": {
       "label": "Crypto",
-      "series": ["KXBTCY"],
+      "series": [
+        "KXBTCY"
+      ],
       "sources": [
         {
           "label": "CF Benchmarks (named settlement source for KXBTCY)",
           "url": "https://www.cfbenchmarks.com/",
           "kind": "official settlement source",
-          "verified_by": "session 5ab18dc3, GET /series/KXBTCY",
+          "verified_by": "session 5ab18dc3",
           "checked_at": "2026-11-20",
           "http_status": 200,
           "rule_quote": "If the simple average of the sixty seconds of CF Benchmarks' BRTI before 12 AM EST is between 120000.00-124999.99 at 12 AM EST on Jan 1, 2027, then the market resolves to Yes.",
-          "why_it_matters": "Settlement is the 60-second BRTI average before the timestamp, so the last minute of the reference index - not the spot print you are looking at - decides these markets. Rounding at a bucket edge (e.g. 124999.5) is where demo price and settlement can legitimately disagree."
+          "why_it_matters": "Settlement is the 60-second BRTI average before the timestamp, so the last minute of the reference index - not the spot print you are looking at - decides these markets. Rounding at a bucket edge (e.g. 124999.5) is where demo price and settlement can legitimately disagree.",
+          "page_observed": "Home page lists BRTI at 58,546.26 (-6.35%) on 2026-11-20 - far below the 100k-150k KXBTCY-27 strike ladder, which is why those markets trade near their edge prices."
         },
         {
           "label": "Contract terms PDF (Crypto)",
           "url": "https://assets.kalshi.com/contract_terms/CRYPTO.pdf",
           "kind": "contract terms",
-          "verified_by": "session 5ab18dc3, contract_terms_url on the KXBTCY series record",
+          "verified_by": "session 5ab18dc3",
           "checked_at": "2026-11-20",
-          "http_status": 200
+          "http_status": 200,
+          "page_observed": "Parsed: 60-second simple average of the CF index before the time; 'between X and Y' inclusive of both ends; incomplete data resolves affected strikes to No; minimum tick $0.001; settlement value $1.00."
         }
       ]
     },
     "golf": {
       "label": "Golf",
-      "series": ["KXPGATOUR"],
+      "series": [
+        "KXPGATOUR"
+      ],
       "sources": [
         {
           "label": "the Governing League - PGA TOUR (named settlement source for KXPGATOUR)",
           "url": "https://www.pgatour.com/",
           "kind": "official settlement source",
-          "verified_by": "session 5ab18dc3, GET /series/KXPGATOUR",
+          "verified_by": null,
           "checked_at": "2026-11-20",
-          "http_status": 200,
+          "http_status": null,
           "rule_quote": "If Taylor Moore wins the The RSM Classic, then the market resolves to Yes.",
-          "why_it_matters": "A win market settles on the final leaderboard; weather delays, a playoff, or a scorecard correction are the announcements that move it. Round-to-round leader changes move price but not the outcome."
+          "why_it_matters": "A win market settles on the final leaderboard; weather delays, a playoff, or a scorecard correction are the announcements that move it. Round-to-round leader changes move price but not the outcome.",
+          "note": "URL copied verbatim from the series record (GET /series/..., HTTP 200 on 2026-11-20); the destination page itself was not fetched this run, so the link is unverified."
         },
         {
           "label": "Fox Sports (also named as a settlement source for KXPGATOUR)",
           "url": "https://www.foxsports.com",
           "kind": "official settlement source",
-          "verified_by": "session 5ab18dc3, GET /series/KXPGATOUR",
+          "verified_by": null,
           "checked_at": "2026-11-20",
-          "http_status": 200
+          "http_status": null,
+          "note": "URL copied verbatim from the series record (GET /series/..., HTTP 200 on 2026-11-20); the destination page itself was not fetched this run, so the link is unverified."
         },
         {
           "label": "ESPN (also named as a settlement source for KXPGATOUR)",
           "url": "https://www.espn.com/",
           "kind": "official settlement source",
-          "verified_by": "session 5ab18dc3, GET /series/KXPGATOUR",
+          "verified_by": null,
           "checked_at": "2026-11-20",
-          "http_status": 200
+          "http_status": null,
+          "note": "URL copied verbatim from the series record (GET /series/..., HTTP 200 on 2026-11-20); the destination page itself was not fetched this run, so the link is unverified."
         }
       ]
     }
@@ -155,5 +177,11 @@
     "https://deadline.com/2026/11/20th-century-studios-2027-2028-release-schedule-1236932760/ - returned 404 Not Found for this session on 2026-11-20, so no Oscar-release-date claim is made anywhere on this site.",
     "https://www.ice.com/ - 403 from this session's fetcher; only the settlement-source URL above (ice.com/report/10) was read successfully.",
     "kalshi.com/event/{event_ticker} and demo.kalshi.co/event/{event_ticker} - HTML pages are not reachable from the dev sandbox (429 / connection reset), which is why the CI workflow probes them from the runner and prints 'not confirmed' when the probe fails."
-  ]
+  ],
+  "verification": {
+    "verified_links": 6,
+    "unverified_links": 6,
+    "method": "a link counts as verified only when this session fetched the destination successfully; every other row carries verified_by: null and renders as 'no verified link' in the console",
+    "checked_at": "2026-11-20T20:05:00Z"
+  }
 }
