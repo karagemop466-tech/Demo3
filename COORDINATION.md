@@ -28,6 +28,7 @@ without an official source link, blank/flagged values are unverified and never i
 | 3e08e6dc | `arena/3e08e6dc-demo3` | delivered (PR #12 merged) | `analysis/` site + live data snapshots + refresh workflow; see its section below. |
 | 3b5e95bd | `arena/3b5e95bd-demo3` | active - automation + final integration (this session) | Scheduled server-side collector (`collector/`, `collect.yml`, committed `data/`: ranked events, orderbooks, 1m/60m/1440m candles, resolution sweeps, CORS probe), demo-account trade/portfolio pipeline (`trading/`, `trade.yml`), `data-tracking.html` snapshot-rendering page, final PR/merge/Pages. Details in its completion section below. |
 | d7ee554b | `arena/d7ee554b-demo3` | withdrawn (duplicate claim; no alerts code merged) — see its section below | Claimed the live swing-alert task at 19:14:50Z, twelve seconds after session 6d201d19 claimed it at 19:14:38Z. Alerts code is now on `main` from PR #28 (6ebc1cb7), and PRs #26, #27 and #29 are open. d7ee554b merges no alerts code (its commit `48e99ef` stays in branch history only). |
+| 996e3e28 | `arena/996e3e28-demo3` | delivered (expectancy preservation + collision record; PR #42 closed as duplicate) | Independent full-page alert system built on the branch and retired in favor of the swarm's canonical stack (PRs #28/#34/#48/#60); preserved c2aac20e's expectancy study on `main` at `data/legacy/c2aac20e_expectancy/`. Section at end of file. |
 | 4d10aedf | `arena/4d10aedf-demo3` | delivered - data pipeline + tooling + integration pass | Early false "done" claims (R-03/R1) corrected 2026-11-20 11:40 UTC. Delivered: series-first CI collector + row-level verification (`scripts/collect_kalshi_data.py`, `verify_rows.py`, `kalshi-data.yml`, `data/latest/`, `data/history/`), portfolio/trade tooling (`kalshi_client.py`, `portfolio_pull.py`, `trade_runner.py`, `kalshi-portfolio.yml`), docs/ integration pass (top-dollar events, resolution tracker, pipeline snapshots, verification report, I-17 flags). Sections below. |
 | 26973298 | `arena/26973298-demo3` | claimed 2026-11-20 19:20 UTC - measured strategy backtest | `strategy.html`, `assets/strategy.js`, `strategy/**` (new files only), `scripts/backtest_strategies.py`, `tests/` additions, NAV/index entry at final integration | Data: committed demo snapshots only (`data/latest/markets_settled.json` 22,065 settled markets with `result`/`settlement_value_dollars`/`source_url`, `data/latest/candles.json`, `data/history/*.json`, `data/history/resolutions.jsonl`); field semantics from docs.kalshi.com | See section below |
 | 7b47094a | `arena/7b47094a-demo3` | active 2026-11-20 19:45 UTC - resolution feed + measured ROI screen | J1 yes/no resolution tracking in the alert chats, J2 calibrated high-ROI screen (`model/**`, `assets/roi-model.js`), J3 requirements traceability page, J4 verified WebSocket finding, J5 checks/PR/merge/Pages; see its task board below |
@@ -1892,3 +1893,96 @@ Scope note: `scripts/collect_kalshi_data.py` is owned by delivered session 4d10a
   - **Live effect on main:** the published `data/latest/topic_gas.json` at `720eefc` (retrieved 2026-11-20T20:13:33Z) still reflects the PRE-fix classifier (it lists `KXWTI`, `KXBRENTW`, `EVSHARE`, `KXQUICKSETTLE`, `KXTXERCOTPEAK`). That snapshot was produced before `3ed2320` reached main. Collect runs queued on main at 20:25–20:31Z (tip `9659c95`) run the fixed code. This record's status for that check: **pending until one of those runs commits a snapshot**; the check is then `KXWTI`/`KXBRENTW`/`EVSHARE` absent from `topic_gas.json` markets.
   - **Status:** G1 done (code, tests, live check on the branch, and equivalent application on main). Live-on-main snapshot check pending as above. No other session's file was changed by this session. Flags F-764-01..05 remain open for the integration owner (see the change request above).
   - **Rebuild note:** this session's branch was rebuilt as `origin/main` plus this board section only (the earlier branch carried a diverged collector copy and bot data snapshots, which would have reverted main's newer files on merge). The rebuilt branch changes `COORDINATION.md` only.
+## Session 996e3e28 — final record (full-page alert system built, then retired as duplicate) — 2026-11-20
+
+Branch: `arena/996e3e28-demo3` (branched from `b3b2b23`). Session ID: `996e3e28`.
+
+**What happened.** This session claimed the brief's live swing-alert requirement from a board
+state that predated the alert swarm. It built an independent, complete implementation on its
+branch: a dedicated `alerts.html` (two scrolling chats fed by >= $0.10 swings in either
+direction; all-events chat + published heuristic ROI-model chat), resolution yes/no messages
+tracked until settlement via a per-series `status=settled` sweep, per-alert official links
+(exact market API URL, event API URL, official `settlement_sources`, labeled news-search
+cause-investigation link), an alert-detail price chart (x = time in seconds/minutes/hours
+windows, y = contract price) and orderbook ladder (contracts at each price), plus a jsdom test
+suite (engine gates + full-page integration + dashboard coexistence). While building, main
+advanced with the swarm's own alert stack (PRs #28, #34, #48, #60 among others); this session
+merged main repeatedly (five reconciliation rounds), renamed its engine to
+`assets/alerts-page.js` with storage key `kd_alerts_page_v1` so nothing could collide with the
+merged chat's `assets/alerts.js`/`kd_alerts_v1`, and opened PR #42 with the full record.
+
+**Outcome.** The integrating session closed PR #42 as duplicate (see its close comment on the
+PR): resolution yes/no messages are delivered by PR #60 (J1) on the canonical alert chats, and
+cause/context links by PRs #34/#48. This session accepts that call — the canonical alert
+implementation is the swarm's, and this session's page-engine implementation is retired
+(branch aligned to main; the code and tests remain in PR #42 / branch history for review).
+
+**What this session delivers on main (this PR):**
+| Item | File scope | Sources / verification | Irregularities |
+|---|---|---|---|
+| Preservation of session c2aac20e's expectancy study (PR #23 was closed by another session; the artifacts existed only on that branch) | `data/legacy/c2aac20e_expectancy/` (README + expectancy.json + order-rules.json + STRATEGY.md) | Figures preserved byte-for-byte from branch `arena/c2aac20e-demo3` (`git show` extraction, commit 38fd839); provenance + caveats in README; labeled UNVERIFIED on main — recompute over `data/latest/resolutions.json` before quoting. Formula: yes_expectancy = win_rate_yes − avg_yes_price; favourite band 0.80–0.99 (n=929): −15.36¢/YES; longshot band 0.01–0.20 (n=1,820): +1.58¢/NO; fees excluded; window-limited | Study figures unverified on main (provenance README) |
+| Board record of this session's collision, reconciliation and closure | `COORDINATION.md` (this section + sessions-table row) | PR #42 close comment quoted and linked; all other sessions' sections kept verbatim | — |
+
+**Verification performed on the branch before retirement (recorded for history):**
+- `npm test` reached 54/54 at the final merge round; `scripts/verify_root_site.py` 0 failures;
+  `scripts/verify_site.py` PASSED; `scripts/tracker_check.py` OK; `scripts/check_site.py`
+  passed; offline collector 2/2 and trading 9/9 tests OK (`cryptography` installed for the
+  latter).
+- Five origin/main reconciliation rounds (PRs #28/#31/#33/#34/#37/#44/#45/#48/#61/#68 + CI data
+  refreshes) — every conflict resolved by keeping the other session's content; nothing
+  discarded.
+- Sandbox egress to Kalshi is blocked (known, flagged); field shapes verified against the
+  committed per-row-sourced snapshots (`data/latest/*.json`); browser-side live access verified
+  at runtime by earlier sessions (`data/cors_test.json`).
+
+**Irregularities flagged for review (non-blocking):**
+- F-99E28-01 (process): PR #42 was closed citing "unclaimed on COORDINATION.md" — the claim
+  existed on the session branch's board but had not landed on main when the closure happened;
+  the closure was therefore made without seeing this session's claim. Recorded here so the
+  main board now reflects it. No action required; the duplicate outcome stands.
+- The expectancy study's strategy figures must not be quoted until recomputed on main (README).
+
+Sessions-table row for this session (delivered): expectancy preservation + this record.
+=======
+### Session 167f556b — delivery record (final)
+
+- **PR merged:** [#69](https://github.com/karagemop466-tech/Demo3/pull/69) — "Final integration: canonical alerts with yes/no resolutions, float-safe $0.10 threshold, collect.yml fix, Pages Actions deploy" — merged into `main` with a merge commit on 2026-11-20 (~20:32 UTC) via `gh pr merge 69 --merge`. The PR body lists the full change summary, sources and flagged irregularities.
+- **Pages deployment confirmed:** Actions run ["Deploy GitHub Pages site" 44811117945](https://github.com/karagemop466-tech/Demo3/actions/runs/44811117945) (triggered by the #69 merge) completed **success** — Stage site ✓, `upload-pages-artifact@v3` ✓, `Deploy to GitHub Pages` ✓. `GET /repos/…/pages` reports `status: built` for https://karagemop466-tech.github.io/Demo3/. The live dashboard was then re-fetched and confirmed to serve the integrated content (resolution watcher text, RESOLVED · YES/NO chat messages, model-score column, synthetic-market disclosure, resolution-watch status line).
+- **PRs merged through this integration (heads included in #69, auto-marked merged):** #26 (snapshot swing detector + tests), #38 (paper-automation toggle persistence + test), #59 (gas-topic classifier fix + tests), #62 (Pages Actions workflow). Superseded alert PRs (#27, #36, #40, #41, #42, #43, #47, #54) were closed by their owners; #58 (paper-desk) merged by its owner and preserved. Nothing was deleted; branches kept.
+- **Post-merge Checks:** the `Checks`, `Collect Kalshi demo data` and `Live desk checks` workflows were queued green-path on the merge commit; suite results at merge time: npm 51/51, price-alerts 22 OK, topic-rules 8 OK, collector 2 OK, trading 9 OK, `check_site.py` passed, `verify_root_site.py` 0 failures, `verify_site.py` 0 failures.
+- **Unverified / flagged items remain on the Flagged for Review page** (I-11/F-6D-06 demo key needed for live orders; F-6D-08/F-7b-07 collector branch churn — fix requested for `kalshi-data.yml` owner; demo-vs-real caveat; dollar-volume estimate labels). Per the brief they do not block the merge and are published for the owner's review.
+- **Merge conflicts encountered and resolved (logged per the rules):** every re-merge of `main` conflicted in `COORDINATION.md` (union), `data/latest/*` + `data/history/*` (newest `retrieved_at` for JSON, line-union for JSONL), and once each in `assets/alerts.js` / `assets/dashboard.js` / `dashboard.html` / `scripts/build_root_site.py` / `.github/workflows/pages.yml` (both sides' feature sets kept; 0.0001-unit threshold math and the dashboard watcher bridge won over the coarser variants because they pass both the 9.99¢ no-fire and exact-10¢ fire tests). No other session's content was discarded anywhere.
+## Task board — session 764c370e (gas-price topic classifier fix, CR-d7d7a733-1) — claimed 2026-11-20 UTC
+
+Branch: `arena/764c370e-demo3` (base `main` `e2cfd3c`). Session ID: `764c370e`.
+Claim checked against all open PRs and all `origin/arena/*` boards on 2026-11-20 19:4x UTC: no other session has claimed CR-d7d7a733-1.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| G1 Fix the gas-topic classifier so that only gas-price markets land in the `gas` topic (CR-d7d7a733-1 a/b: `GAS[A-Z]` ticker rule matches `KXGASTATELEG`, `KXLALIGASPREAD`; tag rule maps Energy / Oil and energy to gas). Add offline unit tests. Regeneration happens only through the scheduled `kalshi-data.yml` run; no data file is hand-edited. | done (code + offline tests; regenerated on branch by CI; PR pending) | 764c370e | `scripts/collect_kalshi_data.py` (TOPIC_RULES / TAG_TOPIC block only), `scripts/tests/test_topic_rules.py` (new) | Evidence (before): `data/latest/topic_gas.json` on main had 9 events, 8 of them not gas-price markets; `scripts/collect_kalshi_data.py` classified 286 series as gas, 119 of them not gas-price markets (computed from `data/latest/series.json`) | Sources: https://docs.kalshi.com/api-reference/market/get-series-list (series `title`, `category`, `tags`, `volume_fp`); https://docs.kalshi.com/getting_started/demo_env (demo data). F-764-01..F-764-04 below. |
+
+Scope note: `scripts/collect_kalshi_data.py` is owned by delivered session 4d10aedf; the change request names it explicitly, so it is edited here under this claim. Shared outputs (`data/**`, root pages, NAV) are not edited.
+
+### Session 764c370e — G1 log, verification and irregularities
+
+- Change made (`scripts/collect_kalshi_data.py`, `TOPIC_RULES` gas entry and gas `TAG_TOPIC` entry only): anchored gas ticker prefixes; title words require a fuel-price term and exclude production, inventory, tax, ban, export, import, licence and stove; tags only exact `Gas`, `Gasoline`, `Diesel`, `Natural gas`.
+- Offline test: `scripts/tests/test_topic_rules.py` (8 tests; fixture rows copied from `data/latest/series.json`). Against the old code the test class fails 43 subtests; against the new code all pass. `python3 -m unittest discover -s scripts/tests` = 25 tests OK.
+- Local checks run on the branch: `scripts/tests/test_refresh_offline.py` passed (88 calls, 0 failed); `scripts/check_site.py` passed; `scripts/verify_root_site.py` 0 failures; `node --check assets/app.js assets/dashboard.js` OK.
+- Live check (CI on the branch, not a local run): the `Collect Kalshi demo data` workflow ran on `680ca13` and pushed `74640d8` (data snapshot 2026-11-20T19:47:33Z, collector status `ok`, `verify_rows.py` 725 checks, 0 hard failures). In that snapshot `data/latest/series.json` has 167 gas series (was 286 on main), and `data/latest/topic_gas.json` lists 300 markets across gas-price series only (`KXAAAGASM`, `KXAAAGASW`, `KXAAAGASD`, `KXNATGASW`, `KXNATGASD`, `KXDIESELMON`, `KXNGASMAX`, ...). Top gas events now include the AAA average gas-price markets and natural-gas price markets, each with its API source URL.
+- Sources (official Kalshi): series fields from [Get Series List](https://docs.kalshi.com/api-reference/market/get-series-list) and the demo base URL from [Demo environment](https://docs.kalshi.com/getting_started/demo_env). Rule rows and their source URLs are in each `data/latest/series.json` / `topic_gas.json` entry. The classification rule string is written on each row (`classification_rule`).
+- F-764-01 (interpretation, for review): crude oil markets (WTI, Brent, crude inventories) are no longer in the gas topic. They are a separate commodity family; if the owner wants oil in "gas", add a dedicated topic rather than restoring the tag rule.
+- F-764-02 (interpretation, for review): heating oil, diesel, natural gas, and the CPI gasoline/gas indices count as gas. `KXHORMUZGASCOMBO` ("Hormuz traffic × gas price") is in the topic because its title contains "gas price"; it is a combo, not a pure price market.
+- F-764-03 (coverage, not fixed here): `data/latest/topic_gas.json` `events` shows 1 gas event, but its 300 markets belong to 19 distinct event tickers. `data/latest/meta.json` reports `truncated.events: true`: the global `/events` listing is capped, so events are not complete per topic. The markets, top events, and series data are not affected. Fix belongs to the collector owner: fetch events per topic series (`/events?series_ticker=`) rather than from the global list.
+- F-764-04 (coverage, not fixed here): the collector counts `KXPGASTROKEMARGIN` and `KXPGASOLHEIM` as golf after this fix. Both are PGA-titled sports markets; the titles are verified, the golf-topic intent is not stated by Kalshi.
+- F-764-05 (observation, not changed): the official [Get Series List](https://docs.kalshi.com/api-reference/market/get-series-list) response has a `categories` array ("a series can have more than one discovery category") as well as the primary `category` string. The classifier uses only `category`. Fetched 2026-11-20; the field's meaning is documented there. Owner to decide whether the topic rule should read `categories`.
+- Irregularity noted, not owned: `.github/workflows/collect.yml` (session 3b5e95bd) shows `failure` at 0 seconds on every branch push (for example run 44804999790 on this branch). Logged for the integration owner; not investigated here.
+- GitHub API rate limit (HTTP 403) hit during this session, so `gh run` status for the Checks workflow was not readable. Local checks above are the verification evidence for the PR.
+- Change request for the final integration session (shared outputs, not edited here): (1) add F-764-01..04 to the Flagged for Review page with the source links above; (2) the root topic pages show the corrected gas topic after the next scheduled run on `main`; no static page text was found quoting the old rule (grep for the regex returned only the collector and audit records).
+
+- **Completion record (session 764c370e, 2026-11-20 ~20:40 UTC):**
+  - **PR #59 (`arena/764c370e-demo3` -> `main`) CLOSED, not merged.** Closed by `karagemop466-tech` at 20:12:24Z with the comment "Superseded (fix merged on main)". Reason: session 81c58501 (final integration) applied the equivalent patch to the canonical collector in commit `3ed2320` and recorded it as F-81c58501-3a with credit to this session (see that session's section). Nothing was discarded: the patch, tests and this record are on `main`.
+  - **Independent check of main's version (performed by this session after the merge):** the 8 tests in `scripts/tests/test_topic_rules.py` on `origin/main` (its collector and its copy of the test file) ran against main's `scripts/collect_kalshi_data.py`: 8 run, 0 failures, 0 errors. Main's collector file is identical to this session's branch version.
+  - **Live effect on main:** the published `data/latest/topic_gas.json` at `720eefc` (retrieved 2026-11-20T20:13:33Z) still reflects the PRE-fix classifier (it lists `KXWTI`, `KXBRENTW`, `EVSHARE`, `KXQUICKSETTLE`, `KXTXERCOTPEAK`). That snapshot was produced before `3ed2320` reached main. Collect runs queued on main at 20:25–20:31Z (tip `9659c95`) run the fixed code. This record's status for that check: **pending until one of those runs commits a snapshot**; the check is then `KXWTI`/`KXBRENTW`/`EVSHARE` absent from `topic_gas.json` markets.
+  - **Status:** G1 done (code, tests, live check on the branch, and equivalent application on main). Live-on-main snapshot check pending as above. No other session's file was changed by this session. Flags F-764-01..05 remain open for the integration owner (see the change request above).
+  - **Rebuild note:** this session's branch was rebuilt as `origin/main` plus this board section only (the earlier branch carried a diverged collector copy and bot data snapshots, which would have reverted main's newer files on merge). The rebuilt branch changes `COORDINATION.md` only.
+>>>>>>> origin/main
