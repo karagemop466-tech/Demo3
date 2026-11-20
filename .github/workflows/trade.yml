@@ -1,0 +1,120 @@
+name: Demo trade / portfolio
+
+# Manual execution against the Kalshi DEMO account.
+# Requires repository secrets:
+#   KALSHI_DEMO_API_KEY_ID     - demo API key id (Account & security -> API Keys)
+#   KALSHI_DEMO_PRIVATE_KEY    - demo private key as PEM text
+# Demo credentials are NOT shared with production
+# (https://docs.kalshi.com/getting_started/demo_env.md).
+# If the secrets are absent this workflow exits successfully with a clear FLAGGED
+# message and writes nothing (no guessing, no inferred values).
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "portfolio | trade | settle"
+        required: true
+        default: portfolio
+        type: choice
+        options: [portfolio, trade, settle]
+      ticker:
+        description: "Market ticker (trade mode), e.g. KXBTCD-26DEC31-T100000"
+        required: false
+      action:
+        description: "buy | sell (trade mode)"
+        required: false
+        type: choice
+        options: [buy, sell]
+      side:
+        description: "yes | no (trade mode)"
+        required: false
+        type: choice
+        options: [yes, no]
+      count:
+        description: "Contracts (trade mode)"
+        required: false
+        default: "1"
+      price:
+        description: "Dollars per contract (trade mode), e.g. 0.55"
+        required: false
+      strategy_tag:
+        description: "Strategy tag recorded with the trade"
+        required: false
+        default: directional
+      dry_run:
+        description: "Record the trade locally without sending it"
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install signing dependency
+        run: pip install cryptography
+
+      - name: Offline trading tests
+        run: python3 trading/test_trading.py -v
+
+      - name: Guard - secrets present?
+        id: guard
+        env:
+          KEY_ID: ${{ secrets.KALSHI_DEMO_API_KEY_ID }}
+          PEM: ${{ secrets.KALSHI_DEMO_PRIVATE_KEY }}
+        run: |
+          if [ -z "$KEY_ID" ] || [ -z "$PEM" ]; then
+            echo "FLAGGED: demo-account credentials are not configured as repository secrets."
+            echo "Portfolio tracking and order execution are implemented but cannot run until"
+            echo "KALSHI_DEMO_API_KEY_ID / KALSHI_DEMO_PRIVATE_KEY are added (demo environment only)."
+            echo "See https://demo.kalshi.co and https://docs.kalshi.com/getting_started/demo_env.md"
+            echo "has_secrets=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_secrets=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Execute (portfolio / trade / settle)
+        if: steps.guard.outputs.has_secrets == 'true'
+        env:
+          KALSHI_DEMO_API_KEY_ID: ${{ secrets.KALSHI_DEMO_API_KEY_ID }}
+          KALSHI_DEMO_PRIVATE_KEY: ${{ secrets.KALSHI_DEMO_PRIVATE_KEY }}
+          KALSHI_API_ROOT: https://external-api.demo.kalshi.co/trade-api/v2
+        run: |
+          ARGS="portfolio"
+          if [ "${{ inputs.mode }}" = "trade" ]; then
+            ARGS="trade --ticker '${{ inputs.ticker }}' --action ${{ inputs.action }} --side ${{ inputs.side }} --count ${{ inputs.count }} --price ${{ inputs.price }} --strategy-tag '${{ inputs.strategy_tag }}'"
+            if [ "${{ inputs.dry_run }}" = "true" ]; then ARGS="$ARGS --dry-run"; fi
+          elif [ "${{ inputs.mode }}" = "settle" ]; then
+            ARGS="settle"
+          fi
+          eval "python3 trading/kalshi_trade.py $ARGS"
+
+      - name: Record flag without secrets (writes nothing)
+        if: steps.guard.outputs.has_secrets == 'false'
+        run: |
+          echo "Unverified: demo credentials not present; no order or portfolio data written." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Commit snapshots
+        run: |
+          git config user.name "trading-bot"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git fetch origin "$GITHUB_REF_NAME" --quiet
+          git merge --ff-only "origin/$GITHUB_REF_NAME" 2>/dev/null || true
+          git add data/portfolio.json data/trades.json
+          if git diff --cached --quiet; then
+            echo "No trade/portfolio changes to commit"
+          else
+            git commit -m "trading: ${{ inputs.mode }} run $(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          fi
