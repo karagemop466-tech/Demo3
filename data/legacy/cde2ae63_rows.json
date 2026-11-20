@@ -1,0 +1,545 @@
+{
+ "note": "Table rows extracted verbatim from session cde2ae63's root pages as merged into main at 45bde12..fa07dd6, before the canonical site was generated over them at integration. Preserved here so no session content is discarded.",
+ "source_commit": "46002d2",
+ "files": {
+  "questions.html": [
+   {
+    "cells": [
+     "Q1",
+     "Which live events have the highest dollar amount in each target category?",
+     "Market volume and open interest (dollars) per event",
+     "Not yet determinable \u2014 demo API sample returned no volume for most event tickers",
+     "Page through GET /markets on the demo API; sort by volume_fp / open_interest_fp; link each row to its /events source"
+    ],
+    "hrefs": []
+   },
+   {
+    "cells": [
+     "Q2",
+     "Are there gas-price events on the demo exchange?",
+     "Energy / gas category events and markets",
+     "No \u2014 none found in sampled pages",
+     "Query GET /events and page through; try category filters; check WebSocket feed"
+    ],
+    "hrefs": []
+   },
+   {
+    "cells": [
+     "Q3",
+     "Are there golf events on the demo exchange?",
+     "Sports / golf series tickers",
+     "No \u2014 none found in sampled pages",
+     "Page through GET /events and GET /markets; search titles for golf-related series"
+    ],
+    "hrefs": []
+   },
+   {
+    "cells": [
+     "Q4",
+     "Is the demo API reachable cross-origin from GitHub Pages?",
+     "CORS headers on external-api.demo.kalshi.co",
+     "Unverified \u2014 not tested from a github.io origin",
+     "Deploy to GitHub Pages and call /markets from the browser console"
+    ],
+    "hrefs": []
+   },
+   {
+    "cells": [
+     "Q5",
+     "What is the demo account balance and P&amp;L?",
+     "Authenticated GET /portfolio with a demo API key",
+     "Unknown \u2014 no API key provided or stored",
+     "Obtain a demo API key from Kalshi; sign requests per API docs; never commit the key"
+    ],
+    "hrefs": []
+   },
+   {
+    "cells": [
+     "Q6",
+     "Can trades be executed on the demo exchange from this site?",
+     "Authenticated POST /trade and POST /order",
+     "No \u2014 not wired; credentials required",
+     "Add signed-request logic with a locally held demo API key"
+    ],
+    "hrefs": []
+   },
+   {
+    "cells": [
+     "Q7",
+     "How are events resolved (Yes/No) and which sources settle them?",
+     "Settlement sources per event (linked in tables)",
+     "Partially answered \u2014 settlement sources listed for sampled events",
+     "Read each event's settlement_sources from GET /events; confirm after the event closes"
+    ],
+    "hrefs": []
+   },
+   {
+    "cells": [
+     "Q8",
+     "Is the data current (live) or a snapshot?",
+     "updated_time / last_updated_ts on events and markets",
+     "Snapshot shown here; live feed attempted on dashboard",
+     "Compare returned updated_time against wall-clock time after enabling live feed"
+    ],
+    "hrefs": []
+   },
+   {
+    "cells": [
+     "Gas-price market volume / liquidity",
+     "Needed to rank \"highest dollar amount\" in the gas category",
+     "Page GET /markets; filter to energy/gas series; sort by volume_fp",
+     "GET /markets"
+    ],
+    "hrefs": [
+     "https://external-api.demo.kalshi.co/trade-api/v2/markets"
+    ]
+   },
+   {
+    "cells": [
+     "Golf events / markets",
+     "Requested category with no demo data found",
+     "Page GET /events and GET /markets; inspect series_ticker for golf series",
+     "GET /events"
+    ],
+    "hrefs": [
+     "https://external-api.demo.kalshi.co/trade-api/v2/events"
+    ]
+   },
+   {
+    "cells": [
+     "Demo account API key",
+     "Needed for portfolio balance and trade execution",
+     "Sign up for a Kalshi demo account; generate API key; sign requests",
+     "Kalshi API docs"
+    ],
+    "hrefs": [
+     "https://docs.kalshi.io"
+    ]
+   },
+   {
+    "cells": [
+     "CORS behavior from github.io",
+     "Determines whether live browser fetch works",
+     "Deploy to GitHub Pages; test fetch to demo.kalshi.co",
+     "Kalshi demo API"
+    ],
+    "hrefs": [
+     "https://external-api.demo.kalshi.co/trade-api/v2"
+    ]
+   }
+  ],
+  "suggestions.html": [
+   {
+    "cells": [
+     "S1",
+     "Connect the Kalshi WebSocket (wss://external-api-ws.demo.kalshi.co/trade-api/ws/v2) for real-time price and liquidity updates instead of polling.",
+     "Live dashboard",
+     "True live price movement; liquidity updates as orders arrive",
+     "Medium",
+     "Pending review"
+    ],
+    "hrefs": []
+   },
+   {
+    "cells": [
+     "S2",
+     "Add a server-side proxy (GitHub Actions / Cloudflare Worker) for /events and /markets so the browser is not blocked by CORS when calling demo.kalshi.co.",
+     "Data feed",
+     "Reliable live data from GitHub Pages hosting",
+     "Medium",
+     "Pending review"
+    ],
+    "hrefs": []
+   },
+   {
+    "cells": [
+     "S3",
+     "Add authenticated portfolio views (GET /portfolio) using a locally-stored, never-committed demo API key.",
+     "Portfolio",
+     "Real balance, P&amp;L, and trade history from the demo account",
+     "High (needs key handling)",
+     "Pending review"
+    ],
+    "hrefs": []
+   },
+   {
+    "cells": [
+     "S4",
+     "Add order placement (POST /order) with a dry-run / simulation mode first.",
+     "Trade execution",
+     "Test strategies without risking demo funds",
+     "High",
+     "Pending review"
+    ],
+    "hrefs": []
+   },
+   {
+    "cells": [
+     "S5",
+     "Persist chart history to IndexedDB so the graph keeps context across refreshes.",
+     "Charting",
+     "Longer visible price history without re-fetching",
+     "Low",
+     "Pending review"
+    ],
+    "hrefs": []
+   },
+   {
+    "cells": [
+     "S6",
+     "Add per-category \"resolved Yes/No\" badges once events settle, sourced from the settlement source linked on each row.",
+     "Event tracking",
+     "Clear yes/no outcome record per event",
+     "Medium",
+     "Pending review"
+    ],
+    "hrefs": []
+   },
+   {
+    "cells": [
+     "S7",
+     "Find gas-price and golf series in the demo API (page through /events /markets or use the WebSocket) and populate those category pages.",
+     "Category data",
+     "Complete coverage of all five requested topics",
+     "Low",
+     "Pending review"
+    ],
+    "hrefs": []
+   },
+   {
+    "cells": [
+     "S8",
+     "Add export (CSV) of verified tables and trade logs for offline analysis.",
+     "Analysis",
+     "Easy trade-result analysis outside the site",
+     "Low",
+     "Pending review"
+    ],
+    "hrefs": []
+   }
+  ],
+  "flagged.html": [
+   {
+    "cells": [
+     "F1",
+     "Gas-price events and markets (highest-dollar)",
+     "Gas prices",
+     "No gas / energy events or markets returned in sampled pages of GET /events and GET /markets",
+     "GET /events ,  GET /markets",
+     "Page through the demo API or WebSocket for energy/gas series; add with source links"
+    ],
+    "hrefs": [
+     "https://external-api.demo.kalshi.co/trade-api/v2/events",
+     "https://external-api.demo.kalshi.co/trade-api/v2/markets"
+    ]
+   },
+   {
+    "cells": [
+     "F2",
+     "Golf events and markets (highest-dollar)",
+     "Golf",
+     "No golf-category events or markets returned in sampled pages",
+     "GET /events ,  GET /markets",
+     "Page through the demo API or WebSocket for golf series; add with source links"
+    ],
+    "hrefs": [
+     "https://external-api.demo.kalshi.co/trade-api/v2/events",
+     "https://external-api.demo.kalshi.co/trade-api/v2/markets"
+    ]
+   },
+   {
+    "cells": [
+     "F3",
+     "Dollar amount (volume \u00d7 $1 notional) per event",
+     "All categories",
+     "Sampled market data returned volume for only a few cross-category markets; most event tickers had no volume",
+     "GET /markets",
+     "Full market dump; sum volume_fp per event_ticker; link each row"
+    ],
+    "hrefs": [
+     "https://external-api.demo.kalshi.co/trade-api/v2/markets"
+    ]
+   },
+   {
+    "cells": [
+     "F4",
+     "Current liquidity (contracts available at a given price)",
+     "All categories",
+     "Bid/ask sizes mostly 0.00 in the sampled snapshot",
+     "GET /markets",
+     "Live market fetch returning yes_bid_size_fp / yes_ask_size_fp"
+    ],
+    "hrefs": [
+     "https://external-api.demo.kalshi.co/trade-api/v2/markets"
+    ]
+   },
+   {
+    "cells": [
+     "F5",
+     "Event resolution outcome (Yes / No)",
+     "All categories",
+     "All sampled events are still open; none have resolved yet",
+     "GET /events  (result field empty)",
+     "Wait for events to close; read result field and linked settlement source"
+    ],
+    "hrefs": [
+     "https://external-api.demo.kalshi.co/trade-api/v2/events"
+    ]
+   },
+   {
+    "cells": [
+     "F6",
+     "Demo account portfolio balance and P&amp;L",
+     "Portfolio",
+     "Requires authenticated GET /portfolio; no API key provided or stored",
+     "Kalshi API docs \u2014 portfolio endpoint",
+     "Signed demo API key added locally (never committed)"
+    ],
+    "hrefs": [
+     "https://docs.kalshi.io"
+    ]
+   },
+   {
+    "cells": [
+     "F7",
+     "Trade execution",
+     "Trades",
+     "Requires authenticated POST /trade and POST /order; no API key provided or stored",
+     "Kalshi API docs \u2014 trade / order endpoints",
+     "Signed demo API key added locally (never committed)"
+    ],
+    "hrefs": [
+     "https://docs.kalshi.io"
+    ]
+   },
+   {
+    "cells": [
+     "F8",
+     "Live cross-origin data from GitHub Pages",
+     "Dashboard",
+     "CORS / network reachability of external-api.demo.kalshi.co from a github.io origin not yet confirmed",
+     "Kalshi demo API",
+     "Deploy to GitHub Pages; test browser fetch to /markets"
+    ],
+    "hrefs": [
+     "https://external-api.demo.kalshi.co/trade-api/v2"
+    ]
+   },
+   {
+    "cells": [
+     "I1",
+     "Repository was essentially empty",
+     "Repo root",
+     "/home/user/Demo3  contained only  README.md  with content  # Demo3 . No existing code, config, or data to preserve or conflict with.",
+     "New site built from scratch on branch  arena/cde2ae63-demo3 ; nothing deleted or moved."
+    ],
+    "hrefs": []
+   },
+   {
+    "cells": [
+     "I2",
+     "COORDINATION.md did not exist",
+     "Repo root",
+     "Required shared task board was missing.",
+     "Created COORDINATION.md with the full task board and this session's claims."
+    ],
+    "hrefs": []
+   },
+   {
+    "cells": [
+     "I3",
+     "Direct bash access to kalshi.co is blocked",
+     "Sandbox network",
+     "curl  to external-api.demo.kalshi.co returns HTTP 000 (DNS resolves, no TCP). Outbound internet is limited to github.com, npm, pypi, etc. Official data was gathered with the  fetch_page  tool instead.",
+     "All verified data links cite the official demo API URLs for manual re-verification."
+    ],
+    "hrefs": []
+   },
+   {
+    "cells": [
+     "I4",
+     "Demo API data is synthetic / dated",
+     "external-api.demo.kalshi.co",
+     "Returned markets are stamped 2026-11-20 (the sandbox \"today\") and include synthetic cross-category and eSports markets; volumes are small or zero.",
+     "Flagged F1\u2013F5; treated as demo snapshot, not production data."
+    ],
+    "hrefs": []
+   }
+  ],
+  "trades.html": [
+   {
+    "cells": [
+     "Place an order",
+     "POST /order",
+     "Signed API key",
+     "unverified \u2014 demo API key required"
+    ],
+    "hrefs": []
+   },
+   {
+    "cells": [
+     "Create / fill a trade",
+     "POST /trade",
+     "Signed API key",
+     "unverified \u2014 demo API key required"
+    ],
+    "hrefs": []
+   },
+   {
+    "cells": [
+     "Check order status",
+     "GET /order/{order_id}",
+     "Signed API key",
+     "unverified \u2014 demo API key required"
+    ],
+    "hrefs": []
+   },
+   {
+    "cells": [
+     "Cancel an order",
+     "DELETE /order/{order_id}",
+     "Signed API key",
+     "unverified \u2014 demo API key required"
+    ],
+    "hrefs": []
+   },
+   {
+    "cells": [
+     "Directional event trade",
+     "Yes on \"Next German federal election winner?\"",
+     "By event category (Elections)",
+     "Category win rate",
+     "P&amp;L per category"
+    ],
+    "hrefs": []
+   },
+   {
+    "cells": [
+     "Price strike trade",
+     "Bitcoin above strike at 10am EST",
+     "By series ticker (KXBTCD)",
+     "Strike-proximity accuracy",
+     "Win rate by strike"
+    ],
+    "hrefs": []
+   },
+   {
+    "cells": [
+     "Liquidity-based entry",
+     "Enter where ask size is largest",
+     "By bid/ask size band",
+     "Slippage vs. size",
+     "Average fill price vs. mid"
+    ],
+    "hrefs": []
+   },
+   {
+    "cells": [
+     "Time-boxed scalping",
+     "Enter/exit within minutes",
+     "By hold duration (seconds/minutes/hours)",
+     "Edge per hold-time bucket",
+     "P&amp;L per hour"
+    ],
+    "hrefs": []
+   },
+   {
+    "cells": [
+     "Hold-to-resolution",
+     "Hold until event resolves Yes/No",
+     "By resolution outcome",
+     "Resolution accuracy",
+     "Resolve-to-profit ratio"
+    ],
+    "hrefs": []
+   }
+  ],
+  "gas-prices.html": [],
+  "elections.html": [],
+  "culture.html": [],
+  "crypto.html": [],
+  "golf.html": [],
+  "portfolio.html": [
+   {
+    "cells": [
+     "Account balance",
+     "Portfolio balance, available cash",
+     "GET /portfolio",
+     "unverified \u2014 demo API key required"
+    ],
+    "hrefs": []
+   },
+   {
+    "cells": [
+     "P&amp;L summary",
+     "Realized + unrealized P&amp;L by event",
+     "GET /portfolio",
+     "unverified \u2014 demo API key required"
+    ],
+    "hrefs": []
+   },
+   {
+    "cells": [
+     "Trade history",
+     "Fills: ticker, side, price, size, timestamp",
+     "GET /portfolio (trades)",
+     "unverified \u2014 demo API key required"
+    ],
+    "hrefs": []
+   },
+   {
+    "cells": [
+     "Open positions",
+     "Current contracts held, average price",
+     "GET /portfolio",
+     "unverified \u2014 demo API key required"
+    ],
+    "hrefs": []
+   },
+   {
+    "cells": [
+     "Directional (Yes/No on an event)",
+     "Win rate by category; average hold time",
+     "P&amp;L per category"
+    ],
+    "hrefs": []
+   },
+   {
+    "cells": [
+     "Arbitrage / spread across markets",
+     "Fill rate vs. slippage; capture per trade",
+     "Net spread captured"
+    ],
+    "hrefs": []
+   },
+   {
+    "cells": [
+     "Event-expiry (held to resolution)",
+     "Resolution accuracy: Yes vs. No outcomes",
+     "Resolve-to-profit ratio"
+    ],
+    "hrefs": []
+   },
+   {
+    "cells": [
+     "Scalping (seconds/minutes)",
+     "Trades per hour; edge per tick",
+     "P&amp;L per hour"
+    ],
+    "hrefs": []
+   }
+  ]
+ },
+ "body_text": {
+  "questions.html": "Questions to answer before deciding # Question Information needed Answer / status How to discover missing information Q1 Which live events have the highest dollar amount in each target category? Market volume and open interest (dollars) per event Not yet determinable \u2014 demo API sample returned no volume for most event tickers Page through GET /markets on the demo API; sort by volume_fp / open_interest_fp; link each row to its /events source Q2 Are there gas-price events on the demo exchange? Energy / gas category events and markets No \u2014 none found in sampled pages Query GET /events and page through; try category filters; check WebSocket feed Q3 Are there golf events on the demo exchange? Sports / golf series tickers No \u2014 none found in sampled pages Page through GET /events and GET /markets; search titles for golf-related series Q4 Is the demo API reachable cross-origin from GitHub Pages? CORS headers on external-api.demo.kalshi.co Unverified \u2014 not tested from a github.io origin Deploy to GitHub Pages and call /markets from the browser console Q5 What is the demo account balance and P&amp;L? Authenticated GET /portfolio with a demo API key Unknown \u2014 no API key provided or stored Obtain a demo API key from Kalshi; sign requests per API docs; never commit the key Q6 Can trades be executed on the demo exchange from this site? Authenticated POST /trade and POST /order No \u2014 not wired; credentials required Add signed-request logic with a locally held demo API key Q7 How are events resolved (Yes/No) and which sources settle them? Settlement sources per event (linked in tables) Partially answered \u2014 settlement sources listed for sampled events Read each event's settlement_sources from GET /events; confirm after the event closes Q8 Is the data current (live) or a snapshot? updated_time / last_updated_ts on events and markets Snapshot shown here; live feed attempted on dashboard Compare returned updated_time against wall-clock time after enabling live feed Information we do not have (and how to get it) Missing information Why it matters Suggested discovery path Official source Gas-price market volume / liquidity Needed to rank \"highest dollar amount\" in the gas category Page GET /markets; filter to energy/gas series; sort by volume_fp GET /markets Golf events / markets Requested category with no demo data found Page GET /events and GET /markets; inspect series_ticker for golf series GET /events Demo account API key Needed for portfolio balance and trade execution Sign up for a Kalshi demo account; generate API key; sign requests Kalshi API docs CORS behavior from github.io Determines whether live browser fetch works Deploy to GitHub Pages; test fetch to demo.kalshi.co Kalshi demo API Official sources GET /events \u2014 Kalshi demo Trade API v2 GET /markets \u2014 Kalshi demo Trade API v2 Kalshi API documentation Flagged for Review",
+  "suggestions.html": "Suggestion register Review before implementing # Suggestion Area Expected benefit Effort Decision S1 Connect the Kalshi WebSocket (wss://external-api-ws.demo.kalshi.co/trade-api/ws/v2) for real-time price and liquidity updates instead of polling. Live dashboard True live price movement; liquidity updates as orders arrive Medium Pending review S2 Add a server-side proxy (GitHub Actions / Cloudflare Worker) for /events and /markets so the browser is not blocked by CORS when calling demo.kalshi.co. Data feed Reliable live data from GitHub Pages hosting Medium Pending review S3 Add authenticated portfolio views (GET /portfolio) using a locally-stored, never-committed demo API key. Portfolio Real balance, P&amp;L, and trade history from the demo account High (needs key handling) Pending review S4 Add order placement (POST /order) with a dry-run / simulation mode first. Trade execution Test strategies without risking demo funds High Pending review S5 Persist chart history to IndexedDB so the graph keeps context across refreshes. Charting Longer visible price history without re-fetching Low Pending review S6 Add per-category \"resolved Yes/No\" badges once events settle, sourced from the settlement source linked on each row. Event tracking Clear yes/no outcome record per event Medium Pending review S7 Find gas-price and golf series in the demo API (page through /events /markets or use the WebSocket) and populate those category pages. Category data Complete coverage of all five requested topics Low Pending review S8 Add export (CSV) of verified tables and trade logs for offline analysis. Analysis Easy trade-result analysis outside the site Low Pending review How to use this section: review each suggestion, pick the best path, then implement on a feature branch and merge through pull request. Suggestions are not implemented automatically \u2014 a reviewer must sign off before any change goes live. Official sources Kalshi demo WebSocket API v2 Kalshi demo Trade API v2 Flagged for Review",
+  "flagged.html": "Unverified items (left blank \u2014 no inferred values) # Item Category Why unverified Official source checked Needed to resolve F1 Gas-price events and markets (highest-dollar) Gas prices No gas / energy events or markets returned in sampled pages of GET /events and GET /markets GET /events , GET /markets Page through the demo API or WebSocket for energy/gas series; add with source links F2 Golf events and markets (highest-dollar) Golf No golf-category events or markets returned in sampled pages GET /events , GET /markets Page through the demo API or WebSocket for golf series; add with source links F3 Dollar amount (volume \u00d7 $1 notional) per event All categories Sampled market data returned volume for only a few cross-category markets; most event tickers had no volume GET /markets Full market dump; sum volume_fp per event_ticker; link each row F4 Current liquidity (contracts available at a given price) All categories Bid/ask sizes mostly 0.00 in the sampled snapshot GET /markets Live market fetch returning yes_bid_size_fp / yes_ask_size_fp F5 Event resolution outcome (Yes / No) All categories All sampled events are still open; none have resolved yet GET /events (result field empty) Wait for events to close; read result field and linked settlement source F6 Demo account portfolio balance and P&amp;L Portfolio Requires authenticated GET /portfolio; no API key provided or stored Kalshi API docs \u2014 portfolio endpoint Signed demo API key added locally (never committed) F7 Trade execution Trades Requires authenticated POST /trade and POST /order; no API key provided or stored Kalshi API docs \u2014 trade / order endpoints Signed demo API key added locally (never committed) F8 Live cross-origin data from GitHub Pages Dashboard CORS / network reachability of external-api.demo.kalshi.co from a github.io origin not yet confirmed Kalshi demo API Deploy to GitHub Pages; test browser fetch to /markets Irregularities found during repo review # Irregularity Location Detail Disposition I1 Repository was essentially empty Repo root /home/user/Demo3 contained only README.md with content # Demo3 . No existing code, config, or data to preserve or conflict with. New site built from scratch on branch arena/cde2ae63-demo3 ; nothing deleted or moved. I2 COORDINATION.md did not exist Repo root Required shared task board was missing. Created COORDINATION.md with the full task board and this session's claims. I3 Direct bash access to kalshi.co is blocked Sandbox network curl to external-api.demo.kalshi.co returns HTTP 000 (DNS resolves, no TCP). Outbound internet is limited to github.com, npm, pypi, etc. Official data was gathered with the fetch_page tool instead. All verified data links cite the official demo API URLs for manual re-verification. I4 Demo API data is synthetic / dated external-api.demo.kalshi.co Returned markets are stamped 2026-11-20 (the sandbox \"today\") and include synthetic cross-category and eSports markets; volumes are small or zero. Flagged F1\u2013F5; treated as demo snapshot, not production data. Official sources used for verification Kalshi demo Trade API v2 (recommended) \u2014 events and markets endpoints Kalshi demo Trade API v2 (alternate host) Kalshi demo WebSocket API v2 Kalshi demo WebSocket API v2 (alternate host) Kalshi API documentation",
+  "trades.html": "Trade execution (not live) Required authenticated endpoints Action Kalshi endpoint Auth Status Place an order POST /order Signed API key unverified \u2014 demo API key required Create / fill a trade POST /trade Signed API key unverified \u2014 demo API key required Check order status GET /order/{order_id} Signed API key unverified \u2014 demo API key required Cancel an order DELETE /order/{order_id} Signed API key unverified \u2014 demo API key required Trade categorization &amp; strategy library Framework (no live data yet) Trade category Example How to categorize Strategy to evaluate Performance signal Directional event trade Yes on \"Next German federal election winner?\" By event category (Elections) Category win rate P&amp;L per category Price strike trade Bitcoin above strike at 10am EST By series ticker (KXBTCD) Strike-proximity accuracy Win rate by strike Liquidity-based entry Enter where ask size is largest By bid/ask size band Slippage vs. size Average fill price vs. mid Time-boxed scalping Enter/exit within minutes By hold duration (seconds/minutes/hours) Edge per hold-time bucket P&amp;L per hour Hold-to-resolution Hold until event resolves Yes/No By resolution outcome Resolution accuracy Resolve-to-profit ratio Trade log (placeholder) Filled trades appear here once authenticated No trade data \u2014 the demo account is not connected. Connect your own signed Kalshi demo API key locally to populate order fills, categorize them by type, and build strategies. Official sources Kalshi Trade API documentation (order / trade endpoints) Kalshi demo Trade API v2 Flagged for Review \u2014 trade execution",
+  "gas-prices.html": "Verified gas-price events Table Official sources GET /events \u2014 Kalshi demo Trade API v2 GET /markets \u2014 Kalshi demo Trade API v2 Flagged for Review \u2014 gas prices",
+  "elections.html": "Verified election events Table Official sources GET /events \u2014 Kalshi demo Trade API v2 (event titles, categories, settlement sources) GET /markets \u2014 Kalshi demo Trade API v2 (prices, liquidity, volume)",
+  "culture.html": "Verified culture / entertainment events Table Official sources GET /events \u2014 Kalshi demo Trade API v2 (event titles, categories, settlement sources) GET /markets \u2014 Kalshi demo Trade API v2 (prices, liquidity, volume)",
+  "crypto.html": "Verified crypto events Table Official sources GET /events \u2014 Kalshi demo Trade API v2 (event titles, categories, settlement sources) GET /markets \u2014 Kalshi demo Trade API v2 (prices, liquidity, volume) CF Benchmarks BRTI (KXBTCD settlement source)",
+  "golf.html": "Verified golf events Table Official sources GET /events \u2014 Kalshi demo Trade API v2 GET /markets \u2014 Kalshi demo Trade API v2 WebSocket API \u2014 external-api-ws.demo.kalshi.co/trade-api/ws/v2 Flagged for Review \u2014 golf",
+  "portfolio.html": "Planned portfolio views What will be shown once authenticated View Data required Kalshi endpoint (auth) Status Account balance Portfolio balance, available cash GET /portfolio unverified \u2014 demo API key required P&amp;L summary Realized + unrealized P&amp;L by event GET /portfolio unverified \u2014 demo API key required Trade history Fills: ticker, side, price, size, timestamp GET /portfolio (trades) unverified \u2014 demo API key required Open positions Current contracts held, average price GET /portfolio unverified \u2014 demo API key required Trade categorization &amp; strategies Framework Once the portfolio feed is authenticated, trades can be categorized and strategies compared: Trade type / category Suggested strategy lens Performance metric Directional (Yes/No on an event) Win rate by category; average hold time P&amp;L per category Arbitrage / spread across markets Fill rate vs. slippage; capture per trade Net spread captured Event-expiry (held to resolution) Resolution accuracy: Yes vs. No outcomes Resolve-to-profit ratio Scalping (seconds/minutes) Trades per hour; edge per tick P&amp;L per hour Official sources Kalshi Trade API documentation (portfolio / trade / order endpoints require signed requests) Kalshi demo Trade API v2 Flagged for Review \u2014 portfolio / authentication"
+ }
+}

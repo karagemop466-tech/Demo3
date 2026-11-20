@@ -3,98 +3,63 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Trades — Execution &amp; Strategies — Kalshi Demo Dashboard</title>
-<link rel="stylesheet" href="assets/css/style.css">
+<title>Trades — Kalshi Demo Tracker</title>
+<link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-<a class="skip-link" href="#content">Skip to content</a>
+<header class="top"><div class="wrap"><nav class="main">
+<a class="brand" href="index.html">Kalshi Demo Tracker</a>
+<a href="index.html">Home</a><a href="dashboard.html">Live dashboard</a><a href="gas-prices.html">Gas prices</a><a href="elections.html">Elections</a><a href="culture.html">Culture</a><a href="crypto.html">Crypto</a><a href="golf.html">Golf</a><a href="portfolio.html">Portfolio</a><a href="trades.html" class="active">Trades</a><a href="questions.html">Questions</a><a href="suggestions.html">Suggestions</a><a href="flagged.html">Flagged for review</a><a href="sources.html">Sources</a><a href="repo-review.html">Repo review</a><a href="methodology.html">Methodology</a><a href="api-reference.html">API reference</a>
+</nav></div></header>
+<main class="wrap">
 
-<header>
-  <div class="header-inner">
-    <div class="brand"><div class="mark">K</div><div>Kalshi Demo Dashboard</div></div>
-    <nav>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="dashboard.html">Live Dashboard</a></li>
-        <li><a href="data-tracking.html">Data Tracking</a></li>
-        <li><a href="gas-prices.html">Gas Prices</a></li>
-        <li><a href="elections.html">Elections</a></li>
-        <li><a href="culture.html">Culture</a></li>
-        <li><a href="crypto.html">Crypto</a></li>
-        <li><a href="golf.html">Golf</a></li>
-        <li><a href="portfolio.html">Portfolio</a></li>
-        <li><a href="trades.html" class="active">Trades</a></li>
-        <li><a href="suggestions.html">Suggestions</a></li>
-        <li><a href="questions.html">Questions &amp; Answers</a></li>
-        <li><a href="flagged.html">Flagged for Review</a></li>
-      </ul>
-    </nav>
-  </div>
-</header>
-
-<section class="hero">
-  <div class="hero-inner">
-    <div>
-      <h1>Trades — Execution &amp; Strategies</h1>
-      <p>Execute trades on Kalshi events and track performance. Trades are categorized by type so strategies can be
-      compared and refined.</p>
-    </div>
-    <div class="card">
-      <div data-auth-notice></div>
-    </div>
-  </div>
-</header>
-
-<div class="container" id="content">
-  <section class="section">
-    <h2 class="section-title"><span class="kicker">Trade execution (not live)</span> Required authenticated endpoints</h2>
-    <table class="data">
-      <thead><tr><th>Action</th><th>Kalshi endpoint</th><th>Auth</th><th>Status</th></tr></thead>
-      <tbody>
-        <tr><td>Place an order</td><td>POST /order</td><td>Signed API key</td><td><span class="badge badge-unverified">unverified — demo API key required</span></td></tr>
-        <tr><td>Create / fill a trade</td><td>POST /trade</td><td>Signed API key</td><td><span class="badge badge-unverified">unverified — demo API key required</span></td></tr>
-        <tr><td>Check order status</td><td>GET /order/{order_id}</td><td>Signed API key</td><td><span class="badge badge-unverified">unverified — demo API key required</span></td></tr>
-        <tr><td>Cancel an order</td><td>DELETE /order/{order_id}</td><td>Signed API key</td><td><span class="badge badge-unverified">unverified — demo API key required</span></td></tr>
-      </tbody>
-    </table>
-  </section>
-
-  <section class="section">
-    <h2 class="section-title"><span class="kicker">Trade categorization &amp; strategy library</span> Framework (no live data yet)</h2>
-    <table class="data">
-      <thead><tr><th>Trade category</th><th>Example</th><th>How to categorize</th><th>Strategy to evaluate</th><th>Performance signal</th></tr></thead>
-      <tbody>
-        <tr><td>Directional event trade</td><td>Yes on "Next German federal election winner?"</td><td>By event category (Elections)</td><td>Category win rate</td><td>P&amp;L per category</td></tr>
-        <tr><td>Price strike trade</td><td>Bitcoin above strike at 10am EST</td><td>By series ticker (KXBTCD)</td><td>Strike-proximity accuracy</td><td>Win rate by strike</td></tr>
-        <tr><td>Liquidity-based entry</td><td>Enter where ask size is largest</td><td>By bid/ask size band</td><td>Slippage vs. size</td><td>Average fill price vs. mid</td></tr>
-        <tr><td>Time-boxed scalping</td><td>Enter/exit within minutes</td><td>By hold duration (seconds/minutes/hours)</td><td>Edge per hold-time bucket</td><td>P&amp;L per hour</td></tr>
-        <tr><td>Hold-to-resolution</td><td>Hold until event resolves Yes/No</td><td>By resolution outcome</td><td>Resolution accuracy</td><td>Resolve-to-profit ratio</td></tr>
-      </tbody>
-    </table>
-  </section>
-
-  <section class="section">
-    <h2 class="section-title"><span class="kicker">Trade log (placeholder)</span> Filled trades appear here once authenticated</h2>
-    <div class="empty">No trade data — the demo account is not connected. Connect your own signed Kalshi demo API key locally to populate order fills, categorize them by type, and build strategies.</div>
-  </section>
-
-  <section class="section sources">
-    <h4>Official sources</h4>
-    <ul>
-      <li><a href="https://docs.kalshi.com" target="_blank" rel="noopener">Kalshi Trade API documentation (order / trade endpoints)</a></li>
-      <li><a href="https://external-api.demo.kalshi.co/trade-api/v2" target="_blank" rel="noopener">Kalshi demo Trade API v2</a></li>
-      <li><a href="flagged.html">Flagged for Review — trade execution</a></li>
-    </ul>
-  </section>
+<h1>Trades — execution &amp; log</h1>
+<p>Execute trades on events against the Kalshi <strong>demo</strong> exchange (live mode with your
+demo API key) or in <strong>paper mode</strong> (default: simulated fills at the live best bid/ask,
+clearly labeled — nothing is sent to Kalshi). Every trade is journaled, categorized and analyzed on
+<a href="portfolio.html">Portfolio</a>.</p>
+<div id="banner" style="display:none"></div>
+<div class="card">
+  <h2>Execution guide</h2>
+  <table><thead><tr><th>Step</th><th>What happens</th><th>Source</th></tr></thead><tbody>
+  <tr><td>1. Pick an event on the <a href="dashboard.html">Live dashboard</a></td>
+      <td>Ranking shows the highest estimated dollar volume; Track loads chart + orderbook.</td>
+      <td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noopener">source</a></td></tr>
+  <tr><td>2. Choose side &amp; limit price</td>
+      <td>YES and NO prices are complementary (NO ≈ 1 − YES). Use the orderbook to size at each price.</td>
+      <td><a class="src" href="https://docs.kalshi.com/getting_started/orderbook_responses" target="_blank" rel="noopener">source</a></td></tr>
+  <tr><td>3. Place the order</td>
+      <td>Live: <span class="mono">POST /trade-api/v2/portfolio/events/orders</span> (RSA-PSS/Ed25519 signed). Paper: filled locally at live quote.</td>
+      <td><a class="src" href="https://docs.kalshi.com/api-reference/orders/create-order-v2" target="_blank" rel="noopener">source</a></td></tr>
+  <tr><td>4. Track to resolution</td>
+      <td>Markets settle yes/no; winners receive $1/contract. Results feed the win-rate analysis.</td>
+      <td><a class="src" href="https://docs.kalshi.com/getting_started/market_settlement" target="_blank" rel="noopener">source</a></td></tr>
+  </tbody></table>
+</div>
+<div class="card">
+  <h2>Trade ticket</h2>
+  <div id="tradeTicket"></div>
+  <div id="tradeResult"></div>
+  <p class="small muted"><span id="connStatus"><span class="pill warn">Paper mode</span></span></p>
+</div>
+<div class="card">
+  <h2>Preserved execution reference (session cde2ae63)</h2>
+  ''' + legacy_table('trades.html', 'trades.html', 'Extracted verbatim from the earlier root trades.html (data/legacy/cde2ae63_rows.json).') + '''
+</div>
+<div class="card">
+  <h2>Blotter &amp; journal</h2>
+  <div id="journalBody"></div>
+</div>
+<div class="card">
+  <h2>Categorization</h2>
+  <div id="strategyBody"></div>
 </div>
 
-<footer>
-  <div class="footer-inner">
-    <div><strong>Kalshi Demo Dashboard</strong> — Trades, execution &amp; strategies.</div>
-    <div class="disclaimer">No orders are placed and no API keys are collected by this site. Trade execution requires your own signed Kalshi demo API key; add it locally (never commit it). Demo environment only; not financial advice.</div>
-  </div>
-</footer>
-
-<script src="assets/js/app.js"></script>
+</main>
+<footer class="wrap"><p class="small muted">Kalshi Demo Tracker — built from verified sources only. Demo environment
+(mock funds): <span class="mono">https://external-api.demo.kalshi.co/trade-api/v2</span> ·
+Docs: <a href="https://docs.kalshi.com" target="_blank" rel="noopener">docs.kalshi.com</a> ·
+Every table row links its source; blank cells are flagged on <a href="flagged.html">Flagged for review</a>.</p></footer>
+<script src="assets/app.js"></script><script src="assets/trade.js"></script><script src="assets/dashboard.js"></script><script src="assets/site.js"></script>
 </body>
 </html>

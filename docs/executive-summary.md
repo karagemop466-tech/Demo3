@@ -1,8 +1,8 @@
 # Executive Summary — Kalshi Demo Dashboard
 
-**Project:** Demo3 (repo `karagemop466-tech/Demo3`, branch `arena/cde2ae63-demo3`)
+**Project:** Demo3 (repo `karagemop466-tech/Demo3`)
 **Date:** 2026-11-20
-**Status:** Site built and pending GitHub Pages publish + PR to main
+**Status:** Published — the canonical site is live at https://karagemop466-tech.github.io/Demo3/ (PR/merge log in [COORDINATION.md](../COORDINATION.md)). This file is an archive of the earlier session summary (see [Sources](../sources.html)); the current executive summary is on the site's [home page](../index.html).
 
 ## Goal
 Collect, organize, and analyze Kalshi demo exchange data, tracking the highest-dollar live events across five
