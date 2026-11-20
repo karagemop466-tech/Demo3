@@ -13,7 +13,7 @@
   "attempts": [
    {
     "body_bytes": 0,
-    "checked_at": "2026-11-20T20:40:11Z",
+    "checked_at": "2026-11-20T20:50:40Z",
     "error": "HTTP 429",
     "site_root": "https://kalshi.com",
     "status_code": 429,
@@ -23,7 +23,7 @@
    },
    {
     "body_bytes": 0,
-    "checked_at": "2026-11-20T20:40:13Z",
+    "checked_at": "2026-11-20T20:50:43Z",
     "error": "HTTP 404",
     "site_root": "https://demo.kalshi.co",
     "status_code": 404,
@@ -32,13 +32,13 @@
     "url": "https://demo.kalshi.co/event/KXBTCY-27JAN0100"
    }
   ],
-  "checked_at": "2026-11-20T20:40:13Z",
+  "checked_at": "2026-11-20T20:50:43Z",
   "status_code": 429,
   "ticker_echoed": false,
   "verified_root": null
  },
  "events_with_swings": 3,
- "generated_at": "2026-11-20T20:39:12Z",
+ "generated_at": "2026-11-20T20:49:42Z",
  "hours_1m": 48,
  "hours_60m": 168,
  "markets_scanned": 60,
@@ -62,7 +62,7 @@
    "attempts": [
     {
      "body_bytes": 0,
-     "checked_at": "2026-11-20T20:40:11Z",
+     "checked_at": "2026-11-20T20:50:40Z",
      "error": "HTTP 429",
      "site_root": "https://kalshi.com",
      "status_code": 429,
@@ -72,7 +72,7 @@
     },
     {
      "body_bytes": 0,
-     "checked_at": "2026-11-20T20:40:13Z",
+     "checked_at": "2026-11-20T20:50:43Z",
      "error": "HTTP 404",
      "site_root": "https://demo.kalshi.co",
      "status_code": 404,
@@ -81,7 +81,7 @@
      "url": "https://demo.kalshi.co/event/KXBTCY-27JAN0100"
     }
    ],
-   "checked_at": "2026-11-20T20:40:13Z",
+   "checked_at": "2026-11-20T20:50:43Z",
    "status_code": 429,
    "ticker_echoed": false,
    "verified_root": null
@@ -99,7 +99,7 @@
   "universe_units": 60,
   "warnings": []
  },
- "swings_found": 192,
+ "swings_found": 205,
  "threshold_dollars": 0.1,
  "window_minutes": 60
 }
