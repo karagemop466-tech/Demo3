@@ -1,7 +1,7 @@
 # Executive Summary — Kalshi Demo Dashboard (`Demo3`)
 
 Author: session `6908a11a` · 2026-11-20 · Companion docs: [research/kalshi-api-verified-reference.md](research/kalshi-api-verified-reference.md), [SUGGESTIONS.md](SUGGESTIONS.md), [FLAGGED.md](FLAGGED.md), [COORDINATION.md](COORDINATION.md)
-Live site: **https://karagemop466-tech.github.io/Demo3/** (GitHub Pages, built from `main`; root redirect → `docs/index.html`)
+Live site: **https://karagemop466-tech.github.io/Demo3/** (GitHub Pages from `main`: root landing page `index.html` plus root pages `dashboard.html`, `api-reference.html`, `methodology.html`, `suggestions.html`, `questions.html`, `flagged.html`; category site under `docs/`, incl. `docs/index.html`)
 
 ---
 
@@ -19,7 +19,7 @@ table row links to an official source and unconfirmed values stay blank and flag
 
 | Deliverable | State | Where |
 |---|---|---|
-| Live dashboard site (landing, 5 category pages, price charts with seconds/minutes/hours modes, order-book liquidity, market tracking to resolution, resolved-results page, flagged page, questions/suggestions pages, sources page) | **Built, merged to `main`, deployed** (PRs #2/#3/#5 by session 00a943bd; Pages build `built` at main's HEAD) | https://karagemop466-tech.github.io/Demo3/ ; repo `docs/` |
+| Live dashboard site (landing, 5 category pages, price charts with seconds/minutes/hours modes, order-book liquidity, market tracking to resolution, resolved-results page, flagged page, questions/suggestions pages, sources page) | **Built, merged to `main`, deployed** (PRs #2/#3/#5 by session 00a943bd; #4 by 7f1ef378; #6/#7 by cde2ae63; Pages `built` at main's HEAD) | https://karagemop466-tech.github.io/Demo3/ ; repo `docs/` + root pages |
 | Verified data snapshot (series + settled markets, per-row source links) | **Published** | `docs/data/verified.json` |
 | Demo-API verification study (endpoints, fields, auth, WS constraint, candlesticks path change, focus-series existence check, demo-liquidity findings) | **This session (T2)** | [research/kalshi-api-verified-reference.md](research/kalshi-api-verified-reference.md) |
 | Executive summary | **This document (T3)** | `EXECUTIVE_SUMMARY.md` |

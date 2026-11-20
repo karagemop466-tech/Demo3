@@ -17,10 +17,11 @@ without an official source link, blank/flagged values are unverified and never i
 | Session | Branch | Status (UTC) | Notes |
 |---|---|---|---|
 | 00a943bd | `arena/00a943bd-demo3` | active - integration and delivery | Built the integrated site in `docs/` (landing, category subpages gas/elections/culture/crypto/golf, dashboard, charts, liquidity, tracking, portfolio, flagged page), `scripts/build_site.py`, `scripts/verify_site.py`; verified with jsdom smoke tests; PRs #2 and #3 merged; Pages built/live; root `index.html` redirects to `docs/index.html`. |
-| 7f1ef378 | `arena/7f1ef378-demo3` | integration merged | Root-level landing/dashboard/research pages and Python CLI; PR #4 merged to `main`. |
-| 06cbd03f | `arena/06cbd03f-demo3` | post-integration source audit | Reviewed the merged site and logged follow-up requests; avoided editing integration-owned pages/data. |
-| cde2ae63 | `arena/cde2ae63-demo3` | delivered (PRs #6/#7 merged) | Merged on top of the `docs/` site; root-level duplicate files were not brought in (kept 00a943bd's integrated site). |
-| 6908a11a | `arena/6908a11a-demo3` | delivered (PR #9 merged) | Demo-API verification research, executive summary, suggestions and flagged registers; PR #9 merged; Pages built at `ed51f19`. |
+| 7f1ef378 | `arena/7f1ef378-demo3` | delivered (PR #4 merged) | Root-level landing/dashboard/research pages and Python CLI merged to main. |
+| cde2ae63 | `arena/cde2ae63-demo3` | delivered (PRs #6/#7 merged) | Merged on top of the `docs/` site; root-level duplicate files were not brought in. |
+| 6908a11a | `arena/6908a11a-demo3` | delivered (PR #9 merged) | Verified research, executive summary, suggestions/flagged registers merged to main. |
+| e2aacbd6 | `arena/e2aacbd6-demo3` | delivered (PR #8 merged) | Added standalone `docs/tracker/` with source snapshot, dashboard and review pages. |
+| 06cbd03f | `arena/06cbd03f-demo3` | audit PR #11 open | Updated only this board to record six verified follow-up findings; no site/data implementation changes. |
 
 Rule note: the brief asks for `session-<id>/<task>` branches, but the platform fixes each session to `arena/<id>-demo3` (see irregularity R-04).
 
@@ -44,7 +45,7 @@ Rule note: the brief asks for `session-<id>/<task>` branches, but the platform f
 | 3 | Live dashboard (discovery, ranking, chart, orderbook, resolutions, portfolio, trading, strategy) | done | 7f1ef378 | dashboard.html, assets/app.js, assets/dashboard.js | Same as #1; live data client-side from demo API (public endpoints need no key) | CORS unverified (F1); WS auth expected blocked in browsers (F2); live demo responses not captured at build (F6) |
 | 4 | Reference / methodology / suggestions / questions / flagged pages | done | 7f1ef378 | api-reference.html, methodology.html, suggestions.html, questions.html, flagged.html | Same as #1; unverified items left blank and flagged, never inferred | F4 estimate, F5 demo≠real disclosed |
 | 5 | Python CLI helper | done | 7f1ef378 | scripts/kalshi_demo.py | Same as #1; read-only without key; authenticated ops via env vars only | — |
-| 6 | Final integration: verify links, PR #4 to main, merge, confirm Pages deploy | done | 7f1ef378 | all files; PR #4: https://github.com/karagemop466-tech/Demo3/pull/4 | PR #4 merged 2026-11-20; Pages succeeded at `fa07dd6` | — |
+| 6 | Final integration: verify links, PR #4 to main, merge, confirm Pages deploy | done | 7f1ef378 | all files; PR #4: https://github.com/karagemop466-tech/Demo3/pull/4 | PR #4 merged 2026-11-20; Pages built at `fa07dd6` | — |
 
 ## Task board — session 6908a11a (verified reference documents, this session)
 
@@ -55,22 +56,22 @@ Rule note: the brief asks for `session-<id>/<task>` branches, but the platform f
 | T3 Executive summary | done | 6908a11a | `EXECUTIVE_SUMMARY.md` | Claims source-linked (research ref + board); links to live site | R1 takeover (justified — see handoff log) |
 | T4 Suggestions + decision questions register (Q1–Q5, backlog S-01…S-10, discovery plan) | done | 6908a11a | `SUGGESTIONS.md` | Evidence links per row; all decisions left OPEN for owner | — |
 | T5 Flagged-irregularities register | done | 6908a11a | `FLAGGED.md` | R1 + F2–F9 with replayable evidence URLs; complements the site's Flagged page (I-01…I-10 by 00a943bd, F1–F6 by 7f1ef378) | R1, F2–F9 |
-| T6 PR of root docs to main, merge, Pages check | done (PR #9 merged; Pages built) | 6908a11a | root `.md` docs + `research/` only | PR #9 merged; Pages run 44728657509 succeeded at `ed51f19` | — |
-| T7 Post-integration source audit and follow-up requests | done (requests logged; integration-owned files unchanged) | 06cbd03f | `COORDINATION.md` only | Kalshi docs reviewed; `scripts/verify_site.py` passed; current root dashboard code reviewed; details below | Live-row citations, estimate ranking, series cap, price precision, legacy `/docs` environment |
+| T6 PR of root docs to main, merge, Pages check | done (PR #9 merged; Pages built) | 6908a11a | root `.md` docs + `research/` only | PR #9 merged; workflow 44728657509 succeeded | — |
+| T7 Post-integration source audit and follow-up requests | done (requests logged for review only) | 06cbd03f | `COORDINATION.md` only | Official API docs reviewed; verifier and syntax checks passed; current root dashboard code reviewed; findings below | Live citations, ranking evidence, coverage, precision, `/docs/` environment |
 
 ## Change requests / file-ownership (non-overlapping scopes)
 
-- Root-level site files are owned by session 7f1ef378; the secondary `/docs/` site/data belongs to session 00a943bd; root Markdown research and registers belong to session 6908a11a. Session 06cbd03f did not edit these files; requests below are logged for the owners and Flagged for Review follow-up.
-- Root `index.html`: session 00a943bd's version was a redirect to `docs/index.html` (Pages source workaround, R-02). Session 7f1ef378's version is a full landing page. Both are served at different paths (`/` = root landing page; `/docs/` = secondary category site). Neither session's `docs/` content is discarded.
+- Root-level site files belong to session 7f1ef378; the original `/docs/` site/data to session 00a943bd; research/registers to session 6908a11a; the new isolated `docs/tracker/` app to session e2aacbd6. Session 06cbd03f edited only this board; follow-up requests below are for owners to review.
+- Root `index.html` is the session 7f1ef378 landing page; `/docs/` remains the original category site and `/docs/tracker/` is a separate tracker. Neither secondary site overwrites root implementation.
 
 ### 2026-11-20 post-integration source-audit requests
 
-1. **Live table row sources (high; root owner 7f1ef378):** runtime discovery and ranking tables in `assets/dashboard.js` render series/market rows without a source link per row; only a shared API-doc link appears below the table. Add direct official series/market API response links on every live row. Sources: [Get Series List](https://docs.kalshi.com/api-reference/market/get-series-list), [Get Markets](https://docs.kalshi.com/api-reference/market/get-markets).
-2. **Estimated dollar ranking (high; root owner 7f1ef378):** ranking calculates `volume_fp × last_price_dollars`. The methodology and flagged register disclose this as an estimate, but the project brief says not to infer values. Keep the dollar value blank until an approved definition is selected, or isolate it as a clearly labeled unverified proposal rather than a confirmed ranking. Sources: [Get Markets](https://docs.kalshi.com/api-reference/market/get-markets), [Get Trades](https://docs.kalshi.com/api-reference/market/get-trades).
-3. **Live coverage cap (high; root owner 7f1ef378):** `assets/dashboard.js` scans at most 15 matched series per topic and up to three market pages per series. Rankings are not proven exhaustive across all matched markets. Disclose the cap or implement verified full pagination/coverage. Sources: [Get Series List](https://docs.kalshi.com/api-reference/market/get-series-list), [Get Markets](https://docs.kalshi.com/api-reference/market/get-markets).
-4. **Displayed price precision (medium; root owner 7f1ef378):** `assets/app.js` formats prices at one decimal-cent precision; chart labels round to whole cents. Preserve API precision where practical or disclose the rounding. Source: [Get Market](https://docs.kalshi.com/api-reference/market/get-market).
-5. **Secondary `/docs/` environment and stale text (medium; docs owner 00a943bd):** `/docs/assets/app.js` uses the production API while `/docs/` is titled as a demo tracker; `/docs/executive-summary.md` also retains “pending publish/PR” text and a `docs.kalshi.io` typo. Clearly label or align the environment and update the stale link/text if that path remains published. Sources: [API environments](https://docs.kalshi.com/getting_started/api_environments), [Demo environment](https://docs.kalshi.com/getting_started/demo_env).
-6. **Integration record (low; coordination):** the inherited board still marked PR #4 open and PR #9 pending; this session records their merged/deployed state below.
+1. **Live table row sources (high; root owner 7f1ef378):** runtime discovery/ranking tables in `assets/dashboard.js` render rows without direct API source links; a shared doc link below the table is not row-level provenance. Add official series/market response links to each row. Sources: [Get Series List](https://docs.kalshi.com/api-reference/market/get-series-list), [Get Markets](https://docs.kalshi.com/api-reference/market/get-markets).
+2. **Estimated dollar ranking (high; root owner 7f1ef378):** ranking computes `volume_fp × last_price_dollars`; official API docs expose contract volume, not a verified dollar-volume field. Keep dollar ranking blank until an approved definition exists, or label it only as an unverified estimate. Sources: [Get Markets](https://docs.kalshi.com/api-reference/market/get-markets), [Get Trades](https://docs.kalshi.com/api-reference/market/get-trades).
+3. **Live coverage cap (high; root owner 7f1ef378):** `assets/dashboard.js` scans at most 15 matched series per topic and up to three market pages per series; rankings are not proven exhaustive. Disclose the cap or implement verified full pagination. Sources: [Get Series List](https://docs.kalshi.com/api-reference/market/get-series-list), [Get Markets](https://docs.kalshi.com/api-reference/market/get-markets).
+4. **Displayed price precision (medium; root owner 7f1ef378):** `assets/app.js` formats at one decimal-cent precision and chart labels round to whole cents. Preserve API precision where practical or disclose rounding. Source: [Get Market](https://docs.kalshi.com/api-reference/market/get-market).
+5. **Secondary `/docs/` environment and stale text (medium; 00a943bd owner):** `/docs/assets/app.js` uses production API while `/docs/` is framed as demo; `/docs/executive-summary.md` retains stale pending-publish copy and a `docs.kalshi.io` typo. Align or clearly label the environment and correct stale copy if that path remains published. Sources: [API environments](https://docs.kalshi.com/getting_started/api_environments), [Demo environment](https://docs.kalshi.com/getting_started/demo_env).
+6. **Integration record:** PR #4, #9, and #8 are merged; this board corrects the inherited pending/open statuses. Current Pages build is verified separately below.
 
 ## Handoff log
 
@@ -139,10 +140,48 @@ Session 00a943bd:
 - Session arena/cde2ae63-demo3: PR #6 https://github.com/karagemop466-tech/Demo3/pull/6 (`arena/cde2ae63-demo3` -> `main`) MERGED 2026-11-20 (merge commit 45bde12); PR #7 merged merge commit 799d1a7 into `main`. After conflict resolution (kept session 00a943bd's integrated `docs/` site; root-level duplicate files were not brought in), PRs #6/#7 merged cleanly. Pages rebuilt after merge: status `built` at commit 45bde12, then 799d1a7. Live site verified: https://karagemop466-tech.github.io/Demo3/ serves the landing page, category pages, dashboard, resolved results, and Flagged for review.
 
 Session 7f1ef378:
-- PR #4 `arena/7f1ef378-demo3` -> `main`: https://github.com/karagemop466-tech/Demo3/pull/4 — MERGED 2026-11-20 11:29:29 UTC. Root-level landing page, dashboard, API reference, methodology, suggestions, questions, flagged pages and Python CLI merged. Pages built successfully at `fa07dd6` (workflow run `44728027396`).
+- PR #4 `arena/7f1ef378-demo3` -> `main`: https://github.com/karagemop466-tech/Demo3/pull/4 — MERGED 2026-11-20 11:29:29 UTC; Pages built at `fa07dd6` (workflow `44728027396`).
 
 Session 6908a11a:
-- PR #9 `arena/6908a11a-demo3` -> `main`: https://github.com/karagemop466-tech/Demo3/pull/9 — MERGED 2026-11-20 11:34:02 UTC (merge commit `ed51f19`). Added verified API reference, executive summary, suggestions and flagged registers. GitHub Actions run `44728657509` completed successfully for `ed51f192130f70bf0e82087f4ea9b51014fae495`; Pages API reported `building` at the time of this audit, so final deployment completion still needs confirmation.
+- PR #9 `arena/6908a11a-demo3` -> `main`: https://github.com/karagemop466-tech/Demo3/pull/9 — MERGED 2026-11-20 11:34:02 UTC (merge commit `ed51f19`); workflow `44728657509` succeeded. The Pages API later reported `built` at `ed51f19`.
+
+Session e2aacbd6:
+- PR #8 `arena/e2aacbd6-demo3` -> `main`: merged as PR #8 (merge commit `75dac00`); separate `docs/tracker/` app added. Latest main also includes PR #10, which updates the executive summary and records PR #9's deployment.
 
 Session 06cbd03f:
-- Source audit only; no dashboard, data, or site implementation changes. Updated this coordination record against `origin/main` at `ed51f19`; six follow-up findings are recorded above for owner review. Static verifier and syntax checks passed before the latest main update; the verifier validates `/docs/` only and does not close the findings.
+- PR #11 `arena/06cbd03f-demo3` -> `main`: audit/coordination only; see six follow-up requests above. Before merging, this branch was reconciled against main through `75dac00`. GitHub Actions for PR #9 succeeded; Pages API reported `built` after PR #9. Current deployment status after PR #8 is to be confirmed after PR #11 integration.
+
+---
+
+## Session e2aacbd6 — Kalshi Demo Tracker (`docs/tracker/`) — added 2026-11-20
+
+Branch: `arena/e2aacbd6-demo3` (PR #8 → `main`). Scope is limited to `docs/tracker/**`, `scripts/tracker_build.py`, `scripts/tracker_check.py`, and `docs/tracker/README.md`. Nothing outside this scope was edited except this board (appended only).
+
+Why a separate folder: `main` already holds `docs/` (session 00a943bd) and root-level pages (session 7f1ef378). Several filenames overlap with mine (index, dashboard, flagged, questions, suggestions, sources). I did not overwrite or delete their files; the tracker lives under `docs/tracker/` instead.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|------|--------|-------|-----------|------------------------|----------------|
+| T1 Repo review (line by line) | done | e2aacbd6 | `docs/tracker/data/flags.json` | Kalshi docs + `git`/`gh` checks | F-01, F-02, F-21 |
+| T2 Kalshi API verification + demo data snapshot | done | e2aacbd6 | `docs/tracker/data/snapshot.json`, `sources.json` | Official docs (docs.kalshi.com) + demo REST responses (`source_api` on every row) | F-03…F-09, F-11, F-13…F-15, F-21 |
+| T3 Executive summary + findings | done | e2aacbd6 | `docs/tracker/index.html`, `findings.html` | Same as T2 | F-16, F-17 |
+| T4 Live dashboard (chart windows 1h–30d, orderbook liquidity) | done | e2aacbd6 | `docs/tracker/dashboard.html`, `assets/live.js` | Public demo endpoints, called from the browser; snapshot fallback | F-19, F-20 |
+| T5 Category subpages (gas, elections, culture, crypto, golf) | done | e2aacbd6 | `docs/tracker/categories/*.html` | Same as T2 | F-18 |
+| T6 Resolutions (YES/NO results) | done | e2aacbd6 | `docs/tracker/resolutions.html` | Demo API `markets?series_ticker=HOUSEAKAL`; settlement doc | F-12 |
+| T7 Portfolio, trades, strategy analysis | blocked (needs review) | e2aacbd6 | `docs/tracker/portfolio.html` | Kalshi API-key doc; no key available to session | F-22 (Q-01) |
+| T8 Suggestions decision board | done | e2aacbd6 | `docs/tracker/suggestions.html`, `data/suggestions.json` | Derived from flags; nothing implemented | — |
+| T9 Questions / gaps | done | e2aacbd6 | `docs/tracker/questions.html`, `data/questions.json` | Sources cited per question | Q-01…Q-14 |
+| T10 Build + link/source check + DOM test | done | e2aacbd6 | `scripts/tracker_build.py`, `scripts/tracker_check.py` | `tracker_check.py` OK; jsdom loaded all 14 pages, 0 errors | — |
+| T11 PR → merge → Pages check | in progress | e2aacbd6 | — | See log below | — |
+
+Change requests (logged, not edited — shared files):
+- CR-e2aacbd6-1: `README.md` (shared) should link the tracker: `docs/tracker/index.html`. Layout and checks are described in `docs/tracker/README.md`.
+- CR-e2aacbd6-2: root/landing `index.html` (shared) may link `docs/tracker/` as a new "Kalshi Demo Tracker" entry.
+- CR-e2aacbd6-3: Pages source is `main /` (legacy). Changing to `/docs` returned 403 for this session as well; the tracker works at `/docs/tracker/` without changing the setting.
+
+Verification (e2aacbd6):
+- Kalshi official docs read: demo_env, api_keys, openapi.yaml (first chunk), get-series-list, get-markets, get-market-orderbook, get-market-candlesticks, market_settlement, llms.txt, welcome.
+- Demo REST responses read (2026-11-20): `series?tags=Golf|Gas`, `series?category=Crypto|Elections|Culture`, `markets?series_ticker=…&status=open` for POLANDSEJM, PGAH2H, PGARYDER, AVAXMINY, BTC75VS100, XBANNEDGROK; `markets?series_ticker=HOUSEAKAL`; `events?series_ticker=KXPGATOP40`; one orderbook; one candlestick call (empty window).
+- Irregularities: F-01…F-22 (`docs/tracker/data/flags.json`, published on the Flagged for Review page).
+
+Log:
+- 2026-11-20 e2aacbd6 — Claimed T1–T11 on `arena/e2aacbd6-demo3`. Built the tracker, verified it, opened PR #8. The merge was blocked because `main` had moved (DIRTY, add/add on overlapping filenames). Resolved by moving the tracker into `docs/tracker/` and merging `main`; no other session's file was changed (COORDINATION kept with appended section).
