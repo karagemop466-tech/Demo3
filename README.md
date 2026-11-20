@@ -2,7 +2,7 @@
 
 Static GitHub Pages site with verified Kalshi market data, a live in-browser dashboard, category pages, resolved results, findings, questions, suggestions, and a Flagged for Review page.
 
-- Live site: https://karagemop466-tech.github.io/Demo3/ (served from `main`, folder `/docs`)
+- Live site: https://karagemop466-tech.github.io/Demo3/ (Pages serves `main` at `/`; the root `index.html` redirects to `docs/index.html`)
 - Coordination board: [COORDINATION.md](COORDINATION.md)
 
 ## Layout
