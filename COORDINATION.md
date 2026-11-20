@@ -547,7 +547,7 @@ sessions are edited. Where verification finds defects, they are flagged here and
 | V1 Live GitHub Pages page verification (renders, content, links) — the gap left by I-32F-01 | done | a613b9fd | `verification/LIVE-VERIFICATION-REPORT.md` | All 5 key pages fetched live and confirmed rendering (landing + live status widget, dashboard 6 sections incl. two ≥$0.10 alert chats, data-tracking, flagged, sources) | V-A613-03 (re-confirmed live: seeded resolution + SRC-10… rows link the production host — already I-14/R-06) |
 | V2 CI + collector health: recent Actions conclusions, committed snapshot freshness | done | a613b9fd | `verification/LIVE-VERIFICATION-REPORT.md` | `gh run list`: main workflows 0 failures (only PR #32's branch runs failed); collect.yml 31/31 OK; collector_status ok 19:28:28Z; verify_rows 725/725; CORS evidence on file | V-A613-04 (collect.yml triggers on every branch push — runner congestion; logged, not edited) |
 | V3 Live demo-API row re-verification (sample of committed rows re-fetched from their own source URLs) — the gap left by I-32F-03 | done | a613b9fd | `verification/LIVE-VERIFICATION-REPORT.md` | 3/3 resolutions match exactly (result + settlement_ts + value); 5/5 top events live-confirmed per topic; derived OI formula = Σ open_interest_fp verified to the cent; orderbook prices exact (1 size drift); candlesticks path live non-empty; exchange trading_active | V-A613-01 (gas topic includes WTI crude-oil series), V-A613-02 (two labeled dollar proxies), drift notices recorded |
-| V4 PR from this branch to `main`, merge without waiting for approval, confirm Pages deploy, record result | in progress | a613b9fd | PR `arena/a613b9fd-demo3` -> `main` | Local suite green: verify_root_site 0 failures, verify_site PASSED (28 pages), tracker_check OK, check_site passed, node --check 6/6, npm test 26/26, collector tests 2/2, trading tests 9/9 | V-A613-05 (sandbox clone history unrelated to main; reset before work) |
+| V4 PR from this branch to `main`, merge without waiting for approval, confirm Pages deploy, record result | done | a613b9fd | PR #46 `arena/a613b9fd-demo3` -> `main` | Local suite green: verify_root_site 0 failures, verify_site PASSED (28 pages), tracker_check OK, check_site passed, node --check 6/6, npm test 26/26, collector tests 2/2, trading tests 9/9. **PR #46 MERGED 2026-11-20 (merge commit `af5b106`)** after racing union-merges against fast-moving main (3 attempted merges failed on concurrent board/data conflicts; resolved by union-keeping both sides and newest snapshots; no other session's content discarded). | V-A613-05 (sandbox clone history unrelated to main; reset before work). Post-merge: duplicate copy of this board section (created while main already contained it) removed in the follow-up commit |
 
 ### Session a613b9fd claim (per protocol)
 
@@ -723,7 +723,21 @@ Verified on 2026-11-20 by fetching the official pages and the live demo API:
 Irregularities: none in the site data. The sandbox cannot reach the Kalshi API for `scripts/verify_rows.py` (outbound allowlist), so per-row API re-fetch was not run in this session. The scheduled CI workflow performs that check.
 
 No site, data, or script file was changed by this session.
+### Session a613b9fd merge + Pages record
 
+- 2026-11-20 19:45 UTC — **PR #46 (`arena/a613b9fd-demo3` -> `main`) MERGED**, merge commit
+  `af5b106` ("Merge pull request #46"). Content: `verification/LIVE-VERIFICATION-REPORT.md`
+  (V1–V3 results) + session board section. One earlier `gh pr merge 46 --merge` attempt returned a
+  misleading failure while a retry had actually succeeded; verified by reading `git log` on main.
+- Merge-race record: `main` was moving every ~30 s (concurrent sessions + automated data-refresh
+  commits). Three merge attempts hit conflicts (COORDINATION.md sections, data snapshots) and were
+  resolved by union-keeping both sides / newest snapshots; final approach was reset to `main` +
+  single clean commit. No other session's board content was discarded at any point.
+- Pages deploy confirmation for the PR #46 merge commit: see the V4 row and the live check below.
+- Duplicate-copy cleanup: main already contained the section via PR #46, so this branch's re-append
+  (`c559b44`) was removed; this follow-up commit records V4 done + this log.
+
+---
 
 ---
 
@@ -744,6 +758,19 @@ Non-overlapping scope note: I do NOT edit other sessions' archives (`docs/`, `do
 ### Session 004aa97a progress log
 
 - 2026-11-20: claim committed & pushed. Verification suite all green (verify_root_site 0 failures, verify_site PASSED, node --check OK, backtest 17/17, tracker_check OK, check_site passed). Official docs confirmed: demo_env, get-markets, get-market-candlesticks, orderbook_responses, market_settlement. `data/` aligned to refreshed `main`. Histories unified via merge of origin/main. PR #50 opened to `main`; merge in progress.
+
+---
+
+### Session f2b0808f — delivery record and incident (Pages build failures, collector workflow)
+
+- **PR #51** (`arena/f2b0808f-demo3` → `main`, COORDINATION.md only, +59 lines): **MERGED** 2026-11-20T19:42:27Z, merge commit `29c3b95`, via `gh pr merge 51 --merge`. Checks on this branch: none changed site files, so the checks below ran on the current `main`.
+- Checks run on `main` + this branch's one-line fix: `scripts/verify_root_site.py` → 0 failures; `scripts/verify_site.py` → PASSED 0 failure(s); `scripts/check_site.py` → passed; `node --check assets/*.js` → all OK.
+
+**I-F2-07 (high, OPEN, unresolved by this session): GitHub Pages legacy builds report `errored` ("Page build failed.") since PR #37.** Pages API: `04d1a4e` (19:38:05Z) = `built`; then `1e41bff` (19:39:54Z), `41c3cc2` (19:40:01Z), `e2cfd3c` (19:40:12Z), `29c3b95` (19:42:29Z) = `errored`; a newer build (`cea3561`, `cb31fa7`) was queued or cancelled by later pushes. The API gives no log beyond "Page build failed." The commits between `04d1a4e` and `main` add `audit/` (4 files) and regenerated `data/latest/*` and HTML, so the cause could be in either. Evidence links: https://api.github.com/repos/karagemop466-tech/Demo3/pages/builds (Pages API, read via `gh api`). Next step for the integrator: re-run the build on the final head and, if it still errors, bisect the content (the platform will not show the log).
+
+**I-F2-08 (high, FIXED here): `.github/workflows/collect.yml` had two `if:` keys in one step** (lines 63–64 before this fix; present since the file was created). Duplicate YAML keys are accepted by PyYAML (the last one wins) but rejected by the Actions parser: the recent `collect.yml` runs on `main` (e.g., run `44804938044`, headSha `81da556`, 19:44:26Z) show `failure` with no jobs, so the 10-minute collector stopped committing snapshots. Fix: deleted the redundant line; the effective condition is unchanged (`if: github.ref == 'refs/heads/main'`). Parsed all six `.github/workflows/*.yml` files on `main` with a duplicate-key check: no other duplicates. Owner of the file: `3b5e95bd`; this is a one-line change logged as a change request for that owner's record.
+
+**Other observations for the Flagged page (not blocking):** `data/latest/markets_settled.json` is 26 MB, `markets_open.json` 18 MB, `strategy/data/backtest.json` 17 MB; tracked bytes ≈ 91.5 MB. Each 10-minute snapshot commit grows git history (`.git` ≈ 29 MB). Under GitHub's 100 MB per-file limit, but worth watching.
 
 ## Task board — session 6d201d19 (live swing alerts + two scrolling chats, branch `arena/6d201d19-demo3`)
 
