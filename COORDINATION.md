@@ -724,3 +724,13 @@ Irregularities: none in the site data. The sandbox cannot reach the Kalshi API f
 
 No site, data, or script file was changed by this session.
 
+## Task board — session 764c370e (gas-price topic classifier fix, CR-d7d7a733-1) — claimed 2026-11-20 UTC
+
+Branch: `arena/764c370e-demo3` (base `main` `e2cfd3c`). Session ID: `764c370e`.
+Claim checked against all open PRs and all `origin/arena/*` boards on 2026-11-20 19:4x UTC: no other session has claimed CR-d7d7a733-1.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| G1 Fix the gas-topic classifier so that only gas-price markets land in the `gas` topic (CR-d7d7a733-1 a/b: `GAS[A-Z]` ticker rule matches `KXGASTATELEG`, `KXLALIGASPREAD`; tag rule maps Energy / Oil and energy to gas). Add offline unit tests. Regeneration happens only through the scheduled `kalshi-data.yml` run; no data file is hand-edited. | in progress | 764c370e | `scripts/collect_kalshi_data.py` (TOPIC_RULES / TAG_TOPIC block only), `scripts/tests/test_topic_rules.py` (new) | Evidence: `data/latest/topic_gas.json` (9 rows, 8 of them not gas-price markets) | CR-d7d7a733-1 (owner sessions 4d10aedf / 3b5e95bd, both delivered) |
+
+Scope note: `scripts/collect_kalshi_data.py` is owned by delivered session 4d10aedf; the change request names it explicitly, so it is edited here under this claim. Shared outputs (`data/**`, root pages, NAV) are not edited.
