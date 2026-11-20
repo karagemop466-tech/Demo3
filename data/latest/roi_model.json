@@ -1,9 +1,9 @@
 {
   "calibration_feasibility": {
     "candle_markets_available": 12,
-    "conclusion": "insufficient: a >= $0.10 move has to be measured BEFORE the settlement print. The settled snapshot carries only `previous_price_dollars` and `last_price_dollars`, and 340 of its 341 qualifying moves have a prior price below $0.05 - the field is not a tick-by-tick price path. Recorded candles cover 12 markets, so no threshold can be fitted or back-tested on this data. Publishing a calibrated ROI number here would be a fabrication.",
+    "conclusion": "insufficient: a >= $0.10 move has to be measured BEFORE the settlement print. The settled snapshot carries only `previous_price_dollars` and `last_price_dollars`, and 341 of its 342 qualifying moves have a prior price below $0.05 - the field is not a tick-by-tick price path. Recorded candles cover 12 markets, so no threshold can be fitted or back-tested on this data. Publishing a calibrated ROI number here would be a fabrication.",
     "min_series_for_calibration": 30,
-    "n_swing_with_prior_below_0_05": 340,
+    "n_swing_with_prior_below_0_05": 341,
     "prior_band_recount": 1
   },
   "caveats": [
@@ -126,13 +126,13 @@
   "inputs": {
     "candle_snapshot": {
       "path": "data/latest/candles.json",
-      "sha256": "c6d7ab38c0e0961d681f0341347b87bbdc7ca39b93345755f43aaa182ba03e69"
+      "sha256": "d3d29bf3f8c942427fdc24a3efab7ce7ece527399873b7601547915473efdf4b"
     },
     "settled_snapshot": {
       "official_endpoint": "https://external-api.demo.kalshi.co/trade-api/v2/markets?status=settled",
       "path": "data/latest/markets_settled.json",
-      "retrieved_at": "2026-11-20T19:32:01+00:00",
-      "sha256": "b35875b7d0eedb1d2034c765beb9c2bf7a6d7e999258113da62087a9f9968521"
+      "retrieved_at": "2026-11-20T19:39:40+00:00",
+      "sha256": "5ce78b0df3886fbf27b16fbfaf61049110db95b9f207a0dd7305ce631b0acf5b"
     }
   },
   "measured": {
@@ -144,12 +144,12 @@
     },
     "by_topic": [
       {
-        "mean_roi_buy_yes": 1.7362,
+        "mean_roi_buy_yes": 1.7318,
         "median_entry_dollars": 0.3,
-        "n": 137,
+        "n": 136,
         "n_settled": 3963,
-        "n_swing": 137,
-        "p_yes": 0.9927,
+        "n_swing": 136,
+        "p_yes": 0.9926,
         "reported": true,
         "topic": "gas"
       },
@@ -175,10 +175,10 @@
       },
       {
         "mean_roi_buy_yes": -1.0,
-        "median_entry_dollars": 0.6,
-        "n": 202,
+        "median_entry_dollars": 0.605,
+        "n": 204,
         "n_settled": 14008,
-        "n_swing": 202,
+        "n_swing": 204,
         "p_yes": 0.0,
         "reported": true,
         "topic": "crypto"
@@ -204,8 +204,8 @@
     "n_other_topic_swing": 0,
     "swing_market_counts": {
       "n_down_swing": 0,
-      "n_swing": 341,
-      "n_up_swing": 341,
+      "n_swing": 342,
+      "n_up_swing": 342,
       "share_of_settled": 0.0155,
       "swing_threshold_dollars": 0.1
     },
@@ -219,17 +219,17 @@
       }
     },
     "up_swing": {
-      "mean_roi_buy_yes": 0.0993,
-      "median_entry_dollars": 0.34,
-      "n": 341,
-      "p_yes": 0.3988
+      "mean_roi_buy_yes": 0.0863,
+      "median_entry_dollars": 0.355,
+      "n": 342,
+      "p_yes": 0.3947
     },
     "up_swing_by_prior_band": [
       {
-        "mean_roi_buy_yes": 0.1025,
-        "median_entry_dollars": 0.34,
-        "n": 340,
-        "p_yes": 0.4,
+        "mean_roi_buy_yes": 0.0895,
+        "median_entry_dollars": 0.35,
+        "n": 341,
+        "p_yes": 0.3959,
         "prior_band": [
           0.0,
           0.05
