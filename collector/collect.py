@@ -121,6 +121,34 @@ def api_get(host: str, path: str, params: dict | None = None, *, attempts: int =
     return 0, {"_transport_error": "exhausted"}
 
 
+def api_headers(host: str, path: str, origin: str) -> dict:
+    """Fetch a path with a browser-like Origin header and return the response headers.
+
+    Used to test, empirically, whether the API sends CORS headers that would let the static
+    GitHub Pages site call it directly from the browser (the docs do not state a CORS policy).
+    """
+    url = HOSTS[host] + path
+    req = urllib.request.Request(url, headers={
+        "Accept": "application/json",
+        "Origin": origin,
+        "User-Agent": "Demo3-kalshi-collector/2.0",
+    })
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            hdrs = {k.lower(): v for k, v in resp.getheaders()}
+            status = resp.status
+    except urllib.error.HTTPError as exc:
+        hdrs = {k.lower(): v for k, v in exc.headers.items()}
+        status = exc.code
+    except Exception as exc:  # noqa: BLE001
+        return {"url": url, "origin": origin, "status": 0, "error": repr(exc)[:200]}
+    keep = {k: v for k, v in hdrs.items() if k.startswith("access-control") or k == "vary"}
+    _requests.append({"url": url, "status": status, "at": _stamp(), "cors_probe": True})
+    return {"url": url, "origin": origin, "status": status,
+            "cors_headers": keep,
+            "cors_allows_browser": bool(keep.get("access-control-allow-origin"))}
+
+
 def api_paged(host: str, path: str, params: dict, list_key: str, max_pages: int = 40,
               max_items: int = 40000) -> list:
     params = dict(params)
@@ -474,6 +502,13 @@ def main() -> int:
                                "https://docs.kalshi.com/getting_started/api_keys.md; no key is "
                                "configured for this repository, so no portfolio data is published."),
         })
+
+    # 8b) empirical CORS probe: can a static GitHub Pages page call this API directly?
+    site_origin = "https://karagemop466-tech.github.io"
+    out["cors_probe"] = [api_headers(host, path, site_origin) for path in (
+        "/trade-api/v2/exchange/status",
+        "/trade-api/v2/markets?status=open&limit=1",
+    )]
 
     finished = _now()
     out["meta"] = {

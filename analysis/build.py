@@ -248,6 +248,7 @@ def main() -> int:
                 "Every row keeps the request URL it came from; blank values were absent from the API response.",
             ],
             "auth_status": demo.get("auth_probes") or [],
+            "cors_probe": demo.get("cors_probe") or [],
         },
         "topics": {t: {"label": v["label"], "rule": v.get("rule"),
                        "series_matched_total": v.get("series_matched_total"),
