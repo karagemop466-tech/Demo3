@@ -3,7 +3,7 @@
  "flags": [
   {
    "area": "Data freshness",
-   "detail": "The desk renders the last committed collector snapshot plus in-browser REST polling. As of this build the newest snapshot is 2026-11-20T19:17:43+00:00. Browser polling hits the demo API directly; if the browser or the API blocks the request the page says so instead of showing stale numbers as live.",
+   "detail": "The desk renders the last committed collector snapshot plus in-browser REST polling. As of this build the newest snapshot is 2026-11-20T19:26:46+00:00. Browser polling hits the demo API directly; if the browser or the API blocks the request the page says so instead of showing stale numbers as live.",
    "id": "L-01",
    "item": "Live snapshots are refreshed by a scheduled collector, not a streaming feed",
    "sources": [
@@ -138,7 +138,7 @@
    "status": "needs review"
   }
  ],
- "generated_at": "2026-11-20T19:31:08.107939+00:00",
+ "generated_at": "2026-11-20T19:32:05.025969+00:00",
  "verified": [
   {
    "item": "Demo REST base URL",

@@ -497,3 +497,60 @@ Log (df50b92f):
 - Duplicates still open at the time of this note (for the integration owner; not closed by this session): PR #26 (`arena/6d201d19-demo3`), PR #27 (`arena/09824fd8-demo3`), PR #30 (`arena/d7ee554b-demo3`, which withdraws its own claim). PR #32 (`arena/26973298-demo3`) is a separate backtest feature.
 - Irregularities that stay on the record: F-B13-01 (no open gas markets in the snapshot), F-B13-02 (high-ROI rules are placeholders; no model defined), F-B13-03 (news links are searches, not causes), F-B13-04 (batch `tickers` works live; one ticker absent from the reply), F-B13-05 (rate-limit numbers unconfirmed), F-B13-06 (alert history is per tab), F-B13-07 (demo prices may differ from real markets). Where the merged feature repeats them, its own flags apply (F-alert-01, F-alert-02).
 - Lesson logged for the protocol: re-read the full board and open PR list before claiming a feature; `gh pr list --state open` shows duplicate work.
+
+## Session 91a02c9d — completion record (2026-11-20 19:45 UTC)
+
+**Delivered** (branch `arena/91a02c9d-demo3`, additive scope only — no other session's files rewritten):
+
+- `live/` — Live Alert Desk, 15 static pages: `index`, `dashboard` (two scrolling chat streams:
+  all swings ≥ $0.10 / model high-ROI filter, plus topic tables and resolution panel),
+  5 topic pages (`gas`, `elections`, `culture`, `crypto`, `golf`), `graph` (x = time with 9 windows
+  from 30 s to 30 d, y = contract price in ¢, orderbook depth with contracts available at each
+  price), `tracking` (open events until resolved, then YES/NO with settlement source), `strategies`
+  (3 auto-simulated strategies + categories by topic / price band / series), `portfolio`
+  (simulated books, equity curves, unverified account rows left blank), `suggestions` (25 items),
+  `methodology`, `flagged`, `sources`.
+- Builders/verifiers: `scripts/build_live_candles.py`, `scripts/build_live_data.py`,
+  `scripts/build_live_site.py`, `scripts/verify_live_site.py`, tests in `live/tests/`
+  (`smoke.mjs`, `test_determinism.py`), CI workflow `.github/workflows/live.yml`.
+- Integration touch on shared files (logged per protocol, minimal): `scripts/build_root_site.py`
+  (one nav entry `Alert desk (live)` + one landing table row) and the regenerated root pages that
+  follow from it.
+
+**Verification performed on this branch**
+
+| Check | Result |
+|---|---|
+| `scripts/verify_live_site.py` | PASS — 15 pages, 9 data files, 48 candle files; internal links resolve, every table row has an official source link or an `unverified` marker, every data row keeps its `source_url` |
+| `node live/tests/smoke.mjs` (jsdom, offline) | 24/24 checks — both chat streams render >20 / >0 messages, 5 topic sections, resolutions render YES/NO, 9 chart windows, 3 equity curves |
+| `python3 live/tests/test_determinism.py` | PASS — rebuild reproduces 6 data files exactly, 204 alerts all ≥ $0.10, 1,472 trades all labelled `simulated` with sources |
+| `scripts/verify_root_site.py` | 0 failures |
+| `scripts/check_site.py` | passed |
+
+**Sources used** (fetched and read during this session):
+[demo environment](https://docs.kalshi.com/getting_started/demo_env) ·
+[Get Market Candlesticks](https://docs.kalshi.com/api-reference/market/get-market-candlesticks) ·
+[Get Market Orderbook](https://docs.kalshi.com/api-reference/market/get-market-orderbook) ·
+[Orderbook responses](https://docs.kalshi.com/getting_started/orderbook_responses) ·
+[Get Markets](https://docs.kalshi.com/api-reference/market/get-markets) ·
+[Market settlement](https://docs.kalshi.com/getting_started/market_settlement) ·
+[API keys](https://docs.kalshi.com/getting_started/api_keys) ·
+[Rate limits](https://docs.kalshi.com/getting_started/rate_limits) ·
+[Create Order V2](https://docs.kalshi.com/api-reference/orders/create-order-v2) ·
+[live API check](https://external-api.demo.kalshi.co/trade-api/v2/exchange/status) (trading active).
+
+**Irregularities recorded for review** (published on `live/flagged.html` with evidence links):
+R-91-01 root live-order body does not match the V2 schema (`side` bid/ask, string counts, `price`,
+`time_in_force` values) — inactive while no credentials exist; R-91-02 `scripts/kalshi_client.py`
+always signs RSA-PSS while the docs now default to Ed25519; R-91-03 root high-ROI filter is a
+disclosed placeholder; R-91-04 root alerts exist only while the tab is open; R-91-05 analysis
+archive used the production endpoint (labelled production here); R-91-06 many parallel dashboards;
+plus L-01…L-13 (snapshot vs streaming, derived dollar volume, model assumptions, zero-volume quote
+moves, unverified fees, missing credentials, news-causation limits, WS auth, coverage gaps,
+environment mixing). Full register: `REVIEW_2026-11-20.md`.
+
+**Environment note for other sessions:** this sandbox has no HTTPS egress to `external-api.demo.kalshi.co`
+(TLS handshake dropped; `fetch_page` works, `curl`/`urllib` do not). The desk is therefore built from
+official payloads already committed by the collector (`data/latest/`, `data/history/`,
+`analysis/data/live/candles.json`); `.github/workflows/live.yml` rebuilds from those artifacts in CI
+where egress exists.
