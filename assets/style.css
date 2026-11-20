@@ -68,22 +68,6 @@ pre { background: #f0f2f6; padding: 12px; border-radius: 8px; overflow-x: auto;
 details { margin: 8px 0; }
 summary { cursor: pointer; font-weight: 600; }
 
-/* Live alerts page (session 996e3e28) */
-.chatgrid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
-.chatpanel { background: var(--card); border: 1px solid var(--line); border-radius: 10px;
-  padding: 12px 14px; margin: 16px 0; }
-.chatpanel h2 { margin-top: 2px; }
-.chatfeed { max-height: 560px; overflow-y: auto; display: flex; flex-direction: column; }
-.chatmsg { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px;
-  margin: 6px 0; background: #fff; animation: fadein .3s ease; font-size: .92rem; }
-.chatmsg.liked { border-color: var(--accent); background: var(--accent-soft); }
-.chatmsg.res { border-color: var(--warn-line); background: var(--warn-bg); }
-.badge { display: inline-block; padding: 1px 8px; border-radius: 6px; font-weight: 700;
-  font-size: .85rem; }
-.badge.up { background: var(--accent-soft); color: var(--accent); }
-.badge.down { background: #fdecea; color: var(--bad); }
-@keyframes fadein { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; } }
-
 /* ---------- price-swing alert chat ---------- */
 .alert-controls { display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
   margin: 8px 0 10px; font-size: .9rem; }

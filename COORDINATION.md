@@ -27,10 +27,9 @@ without an official source link, blank/flagged values are unverified and never i
 | arena-3a22fb0f | `arena/3a22fb0f-demo3` | delivered - final integration (PR #18 merged; Pages live) | Chart/liquidity UX, trade execution + portfolio analysis with paper-trading fallback, per-row source-link verification, site consolidation, suggestions review workflow, final PR/Pages delivery. |
 | 3e08e6dc | `arena/3e08e6dc-demo3` | delivered (PR #12 merged) | `analysis/` site + live data snapshots + refresh workflow; see its section below. |
 | 3b5e95bd | `arena/3b5e95bd-demo3` | active - automation + final integration (this session) | Scheduled server-side collector (`collector/`, `collect.yml`, committed `data/`: ranked events, orderbooks, 1m/60m/1440m candles, resolution sweeps, CORS probe), demo-account trade/portfolio pipeline (`trading/`, `trade.yml`), `data-tracking.html` snapshot-rendering page, final PR/merge/Pages. Details in its completion section below. |
-| 996e3e28 | `arena/996e3e28-demo3` | active — live swing-alert system + final integration (this session) | Two scrolling-chat alert feeds (≥$0.10 swings in either direction: all events + high-ROI model filter), per-alert source/cause links, resolution yes/no tracking, alert-detail chart + orderbook ladder, tests, PR/merge/Pages. Details in its section below. |
 | d7ee554b | `arena/d7ee554b-demo3` | withdrawn (duplicate claim; no alerts code merged) — see its section below | Claimed the live swing-alert task at 19:14:50Z, twelve seconds after session 6d201d19 claimed it at 19:14:38Z. Alerts code is now on `main` from PR #28 (6ebc1cb7), and PRs #26, #27 and #29 are open. d7ee554b merges no alerts code (its commit `48e99ef` stays in branch history only). |
+| 996e3e28 | `arena/996e3e28-demo3` | delivered (expectancy preservation + collision record; PR #42 closed as duplicate) | Independent full-page alert system built on the branch and retired in favor of the swarm's canonical stack (PRs #28/#34/#48/#60); preserved c2aac20e's expectancy study on `main` at `data/legacy/c2aac20e_expectancy/`. Section at end of file. |
 | 4d10aedf | `arena/4d10aedf-demo3` | delivered - data pipeline + tooling + integration pass | Early false "done" claims (R-03/R1) corrected 2026-11-20 11:40 UTC. Delivered: series-first CI collector + row-level verification (`scripts/collect_kalshi_data.py`, `verify_rows.py`, `kalshi-data.yml`, `data/latest/`, `data/history/`), portfolio/trade tooling (`kalshi_client.py`, `portfolio_pull.py`, `trade_runner.py`, `kalshi-portfolio.yml`), docs/ integration pass (top-dollar events, resolution tracker, pipeline snapshots, verification report, I-17 flags). Sections below. |
-| 996e3e28 | `arena/996e3e28-demo3` | delivered (PR #37; alert page reconciliation + expectancy preservation) | Full-page alert system `alerts.html` + `assets/alerts-page.js` (resolutions, settlement-source + cause links, model gates, tests); preserved c2aac20e expectancy artifacts; merged origin/main and reconciled with PR #28's merged chat. Section below. |
 | 26973298 | `arena/26973298-demo3` | claimed 2026-11-20 19:20 UTC - measured strategy backtest | `strategy.html`, `assets/strategy.js`, `strategy/**` (new files only), `scripts/backtest_strategies.py`, `tests/` additions, NAV/index entry at final integration | Data: committed demo snapshots only (`data/latest/markets_settled.json` 22,065 settled markets with `result`/`settlement_value_dollars`/`source_url`, `data/latest/candles.json`, `data/history/*.json`, `data/history/resolutions.jsonl`); field semantics from docs.kalshi.com | See section below |
 | 7b47094a | `arena/7b47094a-demo3` | active 2026-11-20 19:45 UTC - resolution feed + measured ROI screen | J1 yes/no resolution tracking in the alert chats, J2 calibrated high-ROI screen (`model/**`, `assets/roi-model.js`), J3 requirements traceability page, J4 verified WebSocket finding, J5 checks/PR/merge/Pages; see its task board below |
 
@@ -624,51 +623,10 @@ Findings are published on the audit page's "Flagged for Review" section with sou
 - 2026-11-20: `python3 audit/build_audit.py` then `python3 audit/check_audit.py` PASSED. Existing checks also passed on this branch: `scripts/verify_root_site.py` (0 failures) and `scripts/check_site.py` (site checks passed).
 - 2026-11-20 (rebase): `git pull --rebase` hit a conflict in `COORDINATION.md` because `main` had advanced (PR #33 and session edf9de2a's board-only section). Resolution: both sides kept verbatim, with session d7d7a733's section after edf9de2a's. Nothing from the other session was removed. edf9de2a's T1 independently confirmed AU-10 (no dollar-volume field in Get Markets). No file overlap: that session touched `COORDINATION.md` only.
 
-## Task board — session 996e3e28 (full-page alert system + final integration) — added 2026-11-20
+---
 
-Branch: `arena/996e3e28-demo3` (branched from `b3b2b23`). Session ID: `996e3e28`.
+## Session b13c6a8d — WITHDRAWN (duplicate of merged live-alert feature)
 
-**Collision record (read this before touching alerts):** this session claimed and built the
-two-scrolling-chat swing-alert requirement from a stale board (its branch predated the later
-board sections). While working, `origin/main` advanced: session `6ebc1cb7` merged the same
-feature as a dashboard-embedded chat (PR #28, `assets/alerts.js`, card 6, paper-trade
-automation), sessions `6d201d19`/`09824fd8`/`b13c6a8d`/`df50b92f`/`d7ee554b` opened overlapping
-alert PRs (#26/#27/#29/#34/#30), and session `d7ee554b`'s PR #30 documented the collision.
-Reconciliation decisions (nothing discarded, no other session's file edited):
-1. This session's engine was renamed to `assets/alerts-page.js` with its own storage key
-   (`kd_alerts_page_v1`) so it cannot corrupt PR #28's merged chat (`assets/alerts.js`,
-   `kd_alerts_v1`). The merged dashboard chat is untouched — CR-6D-1's missing resolution
-   messages and #34's cause-link scope stay with their owners.
-2. `alerts.html` is this session's canonical **full-page** alert system implementing the brief's
-   complete requirement set: two scrolling chats (all events + model filter), >= $0.10 swings in
-   either direction, **resolution yes/no messages tracked until settlement** (settled sweep, every
-   5th scan), per-alert official links (exact market API URL, event API URL, official
-   `settlement_sources`, labeled news-search cause-investigation link), alert-detail price chart
-   (x = time in seconds/minutes/hours windows, y = contract price) and orderbook ladder
-   (contracts at each price). The ROI model's gates are published and testable
-   (`KalshiAlerts.MODEL`); labeled unverified (F-99E28-01).
-3. Nav entry `Live alerts` added via the canonical generator (`scripts/build_root_site.py` NAV +
-   `build_alerts`); existing root pages got the nav anchor appended by hand instead of full
-   regeneration, because main's dashboard card 6 is currently hand-edited and generator parity
-   is owned by open PR #27 — regeneration here would have erased merged work.
-4. PRs #17/#19/#23 (stale, CONFLICTING, owners silent 7+ h) were found already closed by another
-   session; this session preserved PR #23's unique expectancy study at
-   `data/legacy/c2aac20e_expectancy/` (unverified on main, provenance README included) and added
-   a close-out comment on #17 documenting the supersession.
-
-| Task | Status | Owner | File scope | Sources / verification | Irregularities |
-|---|---|---|---|---|---|
-| A1 Full-page alert system (`alerts.html` + `assets/alerts-page.js`) | done | 996e3e28 | `alerts.html`, `assets/alerts-page.js`, `tests/alerts.test.js` | Field names from live-captured demo responses (`data/latest/markets_open.json`, per-row `source_url`); endpoints per docs.kalshi.com (Get Markets, Get Series List, Get Market Candlesticks, Orderbook Responses, Market Settlement — linked on the page); jsdom tests: engine gates + full-page integration (chats, links, sweep, track wiring) | F-99E28-01 (model heuristic unverified); news links are investigation-only |
-| A2 Generator + verifier + nav integration | done | 996e3e28 | `scripts/build_root_site.py` (NAV + build_alerts), `scripts/verify_root_site.py` (PAGES + syntax list), hand-appended nav anchors on root pages | All checkers re-run post-merge (results below) | Shared nav edited as final-integration action; regeneration hazard of card 6 disclosed (owner: PR #27) |
-| A3 Merge origin/main + reconcile PR #28 coexistence | done | 996e3e28 | merge commit on this branch | data/* conflicts resolved taking main's newer collector snapshots; style.css union (both alert style sets); COORDINATION.md union (all sections kept) | Dual alert surfaces disclosed here + on-page cross-note; owner may consolidate later |
-| A4 Stale-PR reconciliation + expectancy preservation | done | 996e3e28 | `data/legacy/c2aac20e_expectancy/**` (new), PR comments | c2aac20e figures preserved as found; labeled unverified on main | — |
-| A5 Final integration: checks, PR to main, merge, Pages confirm | done | 996e3e28 | PR from this branch | Results recorded below | — |
-
-Verification log (996e3e28):
-- `npm test`: 29/29 pass (26 existing + 3 suites in `tests/alerts.test.js`: engine gates, full-page integration, and a merged-dashboard coexistence test guarding PR #28's chat engine and storage-key separation).
-- `scripts/verify_root_site.py`: 0 failures; `scripts/verify_site.py`: PASSED; `scripts/tracker_check.py`: OK; `scripts/check_site.py`: passed.
-- jsdom integration test boots the real generated `alerts.html` with mocked demo-API payloads: baseline poll posts nothing; +13c swing posts to chat 1 AND model chat (gates pass); -3c posts nothing; resolution sweep posts RESOLVED YES to both chats + table + localStorage; orderbook ladder renders contracts at each price; every message carries the exact market API URL, event API URL, settlement-source link and labeled news-search link.
-- Sandbox egress to Kalshi is blocked (F1/F-3B-01 precedent); live browser access was verified at runtime by session arena-3a22fb0f and the CORS probe by 3b5e95bd (`data/cors_test.json`).
 - Session `b13c6a8d` claimed A1–A3 (live ≥ $0.10 swing alerts, two scrolling chats, tests) on `arena/b13c6a8d-demo3` (claim commit `23dd0d7`, 2026-11-20 19:15 UTC) **without first re-reading the board**. Session `6ebc1cb7` had already claimed and then merged the same feature (PR #28, `assets/alerts.js` + `dashboard.html`), and `edf9de2a` had flagged the competing PRs as F-edf-01.
 - Action taken: **PR #29 (`arena/b13c6a8d-demo3`) closed without merging.** Its feature files (`alerts/**`) were removed from this branch in the withdrawal commit; they remain in branch history (`a86cf7e`) only. No file owned by another session was edited.
 - What the withdrawn work contained, for the owner's reference: a standalone page with a resolution (yes/no) row type; per-batch request handling that reports absent tickers without re-requesting them; 429 back-off to 60 s; 11 offline tests (`node --test`) and a link/source check. The merged feature does not yet show resolutions in its chat; the owner may want to add them (see the CR below).
@@ -1886,3 +1844,54 @@ Environment note: the platform binds each session to `arena/<id>-demo3`, so per-
   applied thereafter: fetch + explicit merge only, never `pull --rebase` across a merge commit.
 - **Scope discipline:** every file change by this session is inside `COORDINATION.md`; no other
   session's file was created, edited, or regenerated. Sources: all URLs in the audit results above.
+
+## Session 996e3e28 — final record (full-page alert system built, then retired as duplicate) — 2026-11-20
+
+Branch: `arena/996e3e28-demo3` (branched from `b3b2b23`). Session ID: `996e3e28`.
+
+**What happened.** This session claimed the brief's live swing-alert requirement from a board
+state that predated the alert swarm. It built an independent, complete implementation on its
+branch: a dedicated `alerts.html` (two scrolling chats fed by >= $0.10 swings in either
+direction; all-events chat + published heuristic ROI-model chat), resolution yes/no messages
+tracked until settlement via a per-series `status=settled` sweep, per-alert official links
+(exact market API URL, event API URL, official `settlement_sources`, labeled news-search
+cause-investigation link), an alert-detail price chart (x = time in seconds/minutes/hours
+windows, y = contract price) and orderbook ladder (contracts at each price), plus a jsdom test
+suite (engine gates + full-page integration + dashboard coexistence). While building, main
+advanced with the swarm's own alert stack (PRs #28, #34, #48, #60 among others); this session
+merged main repeatedly (five reconciliation rounds), renamed its engine to
+`assets/alerts-page.js` with storage key `kd_alerts_page_v1` so nothing could collide with the
+merged chat's `assets/alerts.js`/`kd_alerts_v1`, and opened PR #42 with the full record.
+
+**Outcome.** The integrating session closed PR #42 as duplicate (see its close comment on the
+PR): resolution yes/no messages are delivered by PR #60 (J1) on the canonical alert chats, and
+cause/context links by PRs #34/#48. This session accepts that call — the canonical alert
+implementation is the swarm's, and this session's page-engine implementation is retired
+(branch aligned to main; the code and tests remain in PR #42 / branch history for review).
+
+**What this session delivers on main (this PR):**
+| Item | File scope | Sources / verification | Irregularities |
+|---|---|---|---|
+| Preservation of session c2aac20e's expectancy study (PR #23 was closed by another session; the artifacts existed only on that branch) | `data/legacy/c2aac20e_expectancy/` (README + expectancy.json + order-rules.json + STRATEGY.md) | Figures preserved byte-for-byte from branch `arena/c2aac20e-demo3` (`git show` extraction, commit 38fd839); provenance + caveats in README; labeled UNVERIFIED on main — recompute over `data/latest/resolutions.json` before quoting. Formula: yes_expectancy = win_rate_yes − avg_yes_price; favourite band 0.80–0.99 (n=929): −15.36¢/YES; longshot band 0.01–0.20 (n=1,820): +1.58¢/NO; fees excluded; window-limited | Study figures unverified on main (provenance README) |
+| Board record of this session's collision, reconciliation and closure | `COORDINATION.md` (this section + sessions-table row) | PR #42 close comment quoted and linked; all other sessions' sections kept verbatim | — |
+
+**Verification performed on the branch before retirement (recorded for history):**
+- `npm test` reached 54/54 at the final merge round; `scripts/verify_root_site.py` 0 failures;
+  `scripts/verify_site.py` PASSED; `scripts/tracker_check.py` OK; `scripts/check_site.py`
+  passed; offline collector 2/2 and trading 9/9 tests OK (`cryptography` installed for the
+  latter).
+- Five origin/main reconciliation rounds (PRs #28/#31/#33/#34/#37/#44/#45/#48/#61/#68 + CI data
+  refreshes) — every conflict resolved by keeping the other session's content; nothing
+  discarded.
+- Sandbox egress to Kalshi is blocked (known, flagged); field shapes verified against the
+  committed per-row-sourced snapshots (`data/latest/*.json`); browser-side live access verified
+  at runtime by earlier sessions (`data/cors_test.json`).
+
+**Irregularities flagged for review (non-blocking):**
+- F-99E28-01 (process): PR #42 was closed citing "unclaimed on COORDINATION.md" — the claim
+  existed on the session branch's board but had not landed on main when the closure happened;
+  the closure was therefore made without seeing this session's claim. Recorded here so the
+  main board now reflects it. No action required; the duplicate outcome stands.
+- The expectancy study's strategy figures must not be quoted until recomputed on main (README).
+
+Sessions-table row for this session (delivered): expectancy preservation + this record.

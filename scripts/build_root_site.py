@@ -168,7 +168,6 @@ class Table:
 NAV = [
     ("index.html", "Home"),
     ("dashboard.html", "Live dashboard"),
-    ("alerts.html", "Live alerts"),
     ("live/index.html", "Alert desk (live)"),
     ("data-tracking.html", "Data tracking"),
     ("gas-prices.html", "Gas prices"),
@@ -1264,133 +1263,6 @@ def build_wrapped(name, title):
     write_page(name, title, name, inner, scripts=("assets/app.js", "assets/site.js"))
 
 
-def build_alerts():
-    """Live swing-alert system (session 996e3e28): two scrolling chats fed by
-    >= $0.10 contract-price swings in either direction; chat 2 filters to the
-    published heuristic ROI model's picks. Every message row carries official
-    source links. Static tables below follow the per-row source rule."""
-    body = """
-<h1>Live alerts — ≥ $0.10 swings, two scrolling chats</h1>
-<p>The alert engine polls the five tracked topics <strong>live in your browser</strong> from the
-Kalshi demo API (public market data needs no key —
-<a href="https://docs.kalshi.com/getting_started/quick_start_market_data" target="_blank" rel="noopener">Quick start: market data</a>)
-and posts a message the moment a watched contract price moves by the chosen threshold
-(default <strong>$0.10</strong>) in <strong>either direction</strong> between polls.
-<strong>Chat 1</strong> shows every swing on every watched market; <strong>chat 2</strong> filters
-to markets the published heuristic ROI model likes (high potential upside × resting
-liquidity — an <strong>unverified heuristic</strong>, flag
-<a href="flagged.html">F-99E28-01</a>, not investment advice). Markets are tracked until they
-resolve; the yes/no result is posted to both chats. Each alert links its exact official API URL,
-the event's official settlement sources, and a clearly labeled news-search link used only to
-<strong>investigate</strong> what may have caused the jump (an investigation link, never a claim
-of cause).</p>
-<div id="banner" style="display:none"></div>
-<div class="card">
-  <h2>Alert engine</h2>
-  <p>
-    <button class="btn" id="startBtn">Start alerts</button>
-    <button class="btn secondary" id="clearBtn">Clear alert messages</button>
-    <label>Swing threshold <select id="thresholdSel">
-      <option value="5">5¢</option>
-      <option value="10" selected>10¢ ($0.10 — default)</option>
-      <option value="15">15¢</option>
-      <option value="20">20¢</option>
-    </select></label>
-    <label>Poll every <select id="pollSel">
-      <option value="10">10 s</option>
-      <option value="20" selected>20 s</option>
-      <option value="30">30 s</option>
-      <option value="60">60 s</option>
-    </select></label>
-    <label>Watch top <select id="watchSel">
-      <option value="50">50 markets</option>
-      <option value="150" selected>150 markets</option>
-      <option value="300">300 markets</option>
-    </select></label>
-    <label>Series scan depth <select id="depthSel">
-      <option value="10">10 series/topic</option>
-      <option value="15" selected>15 series/topic (default)</option>
-      <option value="30">30 series/topic</option>
-    </select></label>
-  </p>
-  <p class="small muted" id="alertStatus">Paused — press Start alerts. First scan discovers
-  series (GET /series), then scans open markets (GET /markets, status=open) and ranks them by
-  estimated dollar volume (contracts × last price — an <strong>unverified estimate</strong>); the
-  top markets become the watch list. Sources:
-  <a href="https://docs.kalshi.com/api-reference/market/get-series-list" target="_blank" rel="noopener">Get Series List</a> ·
-  <a href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noopener">Get Markets</a> ·
-  <a href="https://docs.kalshi.com/getting_started/rate_limits" target="_blank" rel="noopener">Rate limits</a>.</p>
-  <div id="watchedTable"></div>
-</div>
-
-<div class="chatgrid">
-  <div class="chatpanel">
-    <h2>Chat 1 · All events <span class="muted small">every ≥ threshold swing</span></h2>
-    <div id="chatAll" class="chatfeed" aria-live="polite" aria-label="All-event swing chat"></div>
-  </div>
-  <div class="chatpanel">
-    <h2>Chat 2 · Model picks <span class="muted small" id="modelCount">high-ROI filter</span></h2>
-    <p class="small muted">Only swings that pass every gate of the model below.</p>
-    <div id="chatModel" class="chatfeed" aria-live="polite" aria-label="High-ROI model chat"></div>
-  </div>
-</div>
-
-<div class="card">
-  <h2>Alert detail — price chart &amp; liquidity</h2>
-  <p class="muted" id="detailTitle">Select a market in the watch list (Track) — the chart and
-  orderbook ladder follow it.</p>
-  <div class="seg" role="group" aria-label="Chart window">
-    <button data-window="30" aria-pressed="false">30 s</button>
-    <button data-window="120" aria-pressed="false">2 min</button>
-    <button data-window="600" aria-pressed="false">10 min</button>
-    <button data-window="1800" aria-pressed="false">30 min</button>
-    <button data-window="3600" aria-pressed="true">1 h</button>
-    <button data-window="21600" aria-pressed="false">6 h</button>
-    <button data-window="86400" aria-pressed="false">24 h</button>
-  </div>
-  <canvas id="priceChart" height="260" aria-label="Contract price over time"></canvas>
-  <p class="small muted">X axis: time (labels switch to seconds/minutes/hours with the window).
-  Y axis: current contract price (cents). Live poll samples merge with candlesticks
-  (<span class="mono">/series/{series}/markets/{ticker}/candlesticks</span> —
-  <a href="https://docs.kalshi.com/api-reference/market/get-market-candlesticks" target="_blank" rel="noopener">Get Market Candlesticks</a>).</p>
-  <h3>Orderbook depth — contracts available at each price</h3>
-  <canvas id="depthChart" height="220" aria-label="Orderbook depth"></canvas>
-  <div id="obTable"></div>
-</div>
-
-<div class="card">
-  <h2>High-ROI model — published gates (heuristic, unverified)</h2>
-  <p class="muted">Deterministic filter evaluated from fields of the official
-  <a href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noopener">Get Markets</a>
-  response. Every gate must pass for chat 2 to show the swing. The model is a
-  <strong>heuristic estimate, not a verified Kalshi metric</strong> (flag
-  <a href="flagged.html">F-99E28-01</a>); tune the gates in
-  <span class="mono">assets/alerts-page.js</span> (<span class="mono">KalshiAlerts.MODEL</span>).</p>
-  <table><thead><tr><th>Gate</th><th>Default</th><th>Field used (official response)</th><th>Rationale</th><th>Source</th></tr></thead><tbody>
-    <tr><td>liquidity</td><td>contracts at swung-side ask ≥ 100</td><td class="mono">yes_ask_size_fp / no_ask_size_fp</td><td>Entry must be executable — size resting at your price.</td><td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noopener">Get Markets</a></td></tr>
-    <tr><td>tradeable</td><td>YES bid/ask spread ≤ 20¢</td><td class="mono">yes_bid_dollars / yes_ask_dollars</td><td>Wide spreads eat the swing.</td><td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noopener">Get Markets</a></td></tr>
-    <tr><td>upside</td><td>(1 − entry)/entry ≥ 100%</td><td class="mono">yes/no ask (entry price)</td><td>Settlement pays $1/contract; high ROI needs a cheap entry — <a class="src" href="https://docs.kalshi.com/getting_started/market_settlement" target="_blank" rel="noopener">Market Settlement</a>.</td><td><a class="src" href="https://docs.kalshi.com/getting_started/market_settlement" target="_blank" rel="noopener">Market Settlement</a></td></tr>
-    <tr><td>activity</td><td>volume (24h) ≥ 1,000 contracts</td><td class="mono">volume_24h_fp</td><td>Dead books shouldn't flood picks.</td><td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noopener">Get Markets</a></td></tr>
-    <tr><td>score</td><td>ROI × log10(1 + contracts at ask)</td><td class="mono">derived</td><td>Ranks picks: bigger potential ROI × deeper book.</td><td><span class="pill warn">unverified heuristic</span></td></tr>
-  </tbody></table>
-</div>
-
-<div class="card">
-  <h2>Resolution tracking (yes / no) — until every event resolves</h2>
-  <p class="small muted">When a watched market settles, the result is posted to both chats and
-  logged here (this browser's log; the dashboard's log is shared via the same storage). The sweep
-  re-polls every watched series with <span class="mono">status=settled</span> every 5th scan and
-  reads the most recent settled markets per series (limit 200) — a settled market outside that
-  window is reported by the next sweep that sees it, never inferred. Seeded rows come from the
-  collector snapshot with their captured API URLs.
-  <button class="btn secondary" id="clearResBtn">Clear locally logged resolutions</button></p>
-  <div id="resolutionsTable"></div>
-</div>
-"""
-    write_page("alerts.html", "Live alerts", "alerts.html", body,
-               scripts=("assets/app.js", "assets/alerts-page.js"))
-
-
 # Pages whose live markup is maintained outside this generator (added by other sessions).
 # Regenerating them here would drop that work, so the generator leaves them untouched.
 EXTERNALLY_MAINTAINED = {"dashboard.html"}
@@ -1399,7 +1271,6 @@ EXTERNALLY_MAINTAINED = {"dashboard.html"}
 def main():
     build_index()
     build_dashboard()
-    build_alerts()
     build_portfolio()
     build_trades()
     for tid, label, page, desc in TOPICS:
