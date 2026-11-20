@@ -168,6 +168,7 @@ class Table:
 NAV = [
     ("index.html", "Home"),
     ("dashboard.html", "Live dashboard"),
+    ("data-tracking.html", "Data tracking"),
     ("gas-prices.html", "Gas prices"),
     ("elections.html", "Elections"),
     ("culture.html", "Culture"),

@@ -1,0 +1,1 @@
+{"ticker":"KXDEMOFUTHOURLY-26NOV20H12-UP","fetched_at":"2026-11-20T11:56:10Z","source_url":"https://external-api.demo.kalshi.co/trade-api/v2/markets/KXDEMOFUTHOURLY-26NOV20H12-UP/orderbook","yes_bids":[["0.0100","10.00"]],"no_bids":[],"best_yes_bid":{"price":"0.0100","contracts":"10.00"},"best_no_bid":null}

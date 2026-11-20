@@ -9,7 +9,7 @@
 <body>
 <header class="top"><div class="wrap"><nav class="main">
 <a class="brand" href="index.html">Kalshi Demo Tracker</a>
-<a href="index.html">Home</a><a href="dashboard.html">Live dashboard</a><a href="gas-prices.html">Gas prices</a><a href="elections.html">Elections</a><a href="culture.html">Culture</a><a href="crypto.html">Crypto</a><a href="golf.html">Golf</a><a href="portfolio.html">Portfolio</a><a href="trades.html">Trades</a><a href="questions.html">Questions</a><a href="suggestions.html" class="active">Suggestions</a><a href="flagged.html">Flagged for review</a><a href="sources.html">Sources</a><a href="repo-review.html">Repo review</a><a href="methodology.html">Methodology</a><a href="api-reference.html">API reference</a>
+<a href="index.html">Home</a><a href="dashboard.html">Live dashboard</a><a href="data-tracking.html">Data tracking</a><a href="gas-prices.html">Gas prices</a><a href="elections.html">Elections</a><a href="culture.html">Culture</a><a href="crypto.html">Crypto</a><a href="golf.html">Golf</a><a href="portfolio.html">Portfolio</a><a href="trades.html">Trades</a><a href="questions.html">Questions</a><a href="suggestions.html" class="active">Suggestions</a><a href="flagged.html">Flagged for review</a><a href="sources.html">Sources</a><a href="repo-review.html">Repo review</a><a href="methodology.html">Methodology</a><a href="api-reference.html">API reference</a>
 </nav></div></header>
 <main class="wrap">
 
@@ -133,7 +133,95 @@ implemented</strong>. Set a decision and note per row — they are saved in this
   <option>Proposed</option><option>Approved</option><option>Rejected</option>
   <option>Deferred</option><option>Implemented</option></select><br>
   <input class="decision-note" data-sid="SG-10" placeholder="reviewer note (saved locally)"></td>
-<td><span class='pill warn'>unverified</span></td></tr><tr data-sid="S-01">
+<td><span class='pill warn'>unverified</span></td></tr><tr data-sid="SG-3B-01">
+<td><span class="mono">SG-3B-01</span></td>
+<td><strong>Keep scheduled server-side snapshots committed to data/</strong><br><span class='small'>collector/ + collect.yml snapshot the demo exchange every 10 minutes (ranked events, orderbooks, candles, resolutions). Keeps decision-grade history and resolutions independent of visitors&#x27; browsers.</span>
+<ul class='small'><li>Keep 10-min cadence</li><li>Relax to 15-30 min</li></ul></td>
+<td>History and yes/no resolution records survive browser/API outages</td>
+<td>Done</td>
+<td>Repo growth from scheduled commits (see SG-3B-08)</td>
+<td><select class="decision" data-sid="SG-3B-01">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="SG-3B-01" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://github.com/karagemop466-tech/Demo3/blob/main/collector/collect.py" target="_blank" rel="noopener">source</a> · <a class="src" href="https://docs.kalshi.com/getting_started/orderbook_responses" target="_blank" rel="noopener">source</a> · <a class="src" href="https://docs.kalshi.com/getting_started/demo_env" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="SG-3B-02">
+<td><span class="mono">SG-3B-02</span></td>
+<td><strong>Collector cadence decision</strong><br><span class='small'>10-minute cadence works (133 requests, 0 errors) but 429s were observed at higher request rates during MVE floods.</span>
+<ul class='small'><li>Keep 10 min</li><li>15 min</li><li>30 min</li></ul></td>
+<td>Rate-budget safety vs freshness</td>
+<td>Trivial (one cron value)</td>
+<td>Staler snapshots if relaxed</td>
+<td><select class="decision" data-sid="SG-3B-02">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="SG-3B-02" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/getting_started/rate_limits.md" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="SG-3B-03">
+<td><span class="mono">SG-3B-03</span></td>
+<td><strong>Add demo-account API secrets to activate portfolio/trade analytics</strong><br><span class='small'>Two secrets (KALSHI_DEMO_API_KEY_ID, KALSHI_DEMO_PRIVATE_KEY) turn the implemented pipeline into live tracked demo performance with categorized strategies; without them the site shows truthful awaiting-credentials states.</span>
+<ul class='small'><li>Provide demo secrets</li><li>Keep read-only</li></ul></td>
+<td>Portfolio performance tracking + trade categorization per the brief</td>
+<td>Owner account creation + secret setup</td>
+<td>Demo credentials only work against demo endpoints; never production</td>
+<td><select class="decision" data-sid="SG-3B-03">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="SG-3B-03" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://demo.kalshi.co/" target="_blank" rel="noopener">source</a> · <a class="src" href="https://docs.kalshi.com/getting_started/demo_env.md" target="_blank" rel="noopener">source</a> · <a class="src" href="https://docs.kalshi.com/getting_started/demo_env" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="SG-3B-04">
+<td><span class="mono">SG-3B-04</span></td>
+<td><strong>Seconds-level chart granularity via demo WebSocket</strong><br><span class='small'>REST candles bottom out at 1 minute. A browser WS test against wss://external-api-ws.demo.kalshi.co would verify whether market-data channels accept credential-free connections; if yes, add live tick charting.</span>
+<ul class='small'><li>Test then implement</li><li>Keep 1-minute floor</li></ul></td>
+<td>True seconds-level price movement view</td>
+<td>Medium</td>
+<td>Unverified handshake; may require auth headers browsers cannot send</td>
+<td><select class="decision" data-sid="SG-3B-04">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="SG-3B-04" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/getting_started/quick_start_websockets.md" target="_blank" rel="noopener">source</a> · <a class="src" href="https://docs.kalshi.com/getting_started/demo_env" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="SG-3B-05">
+<td><span class="mono">SG-3B-05</span></td>
+<td><strong>Settlement-timer countdowns and close-early flags on event tables</strong><br><span class='small'>Markets expose close_time / can_close_early; showing countdowns avoids trading into imminent settlement.</span>
+<ul class='small'><li>Implement</li><li>Defer</li></ul></td>
+<td>Fewer avoidable settlement mistakes</td>
+<td>Small</td>
+<td>None</td>
+<td><select class="decision" data-sid="SG-3B-05">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="SG-3B-05" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/getting_started/market_lifecycle.md" target="_blank" rel="noopener">source</a> · <a class="src" href="https://docs.kalshi.com/getting_started/market_settlement" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="SG-3B-06">
+<td><span class="mono">SG-3B-06</span></td>
+<td><strong>Keep estimated dollar volume explicitly labeled everywhere</strong><br><span class='small'>The API reports contracts and prices, not dollar volume; ranking uses sum(volume x last price) and every occurrence is labeled &#x27;estimated&#x27;. Never rank silently on it.</span>
+<ul class='small'><li>Keep as implemented</li></ul></td>
+<td>Prevents misreading an approximation as exchange-reported</td>
+<td>Done</td>
+<td>None</td>
+<td><select class="decision" data-sid="SG-3B-06">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="SG-3B-06" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="SG-3B-07">
+<td><span class="mono">SG-3B-07</span></td>
+<td><strong>Cross-link category pages to the data-tracking market detail</strong><br><span class='small'>One-click drill-down from category view to chart + orderbook ladder + liquidity.</span>
+<ul class='small'><li>Implement</li><li>Defer</li></ul></td>
+<td>Shorter path to decision data</td>
+<td>Small</td>
+<td>None</td>
+<td><select class="decision" data-sid="SG-3B-07">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="SG-3B-07" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/getting_started/orderbook_responses" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="SG-3B-08">
+<td><span class="mono">SG-3B-08</span></td>
+<td><strong>Archive data/ snapshots monthly via git tags</strong><br><span class='small'>Bounds repo growth from scheduled commits while keeping history reachable.</span>
+<ul class='small'><li>Implement</li><li>Defer</li></ul></td>
+<td>Pages builds stay fast</td>
+<td>Small</td>
+<td>None</td>
+<td><select class="decision" data-sid="SG-3B-08">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="SG-3B-08" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.github.com/en/repositories/releasing-projects-on-github/tagging-a-release" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="S-01">
 <td><span class="mono">S-01</span></td>
 <td><strong>Discover all open series in each topic automatically, instead of a fixed list, so culture and elections are fully covered.</strong><br><span class='small'></span>
 <ul class='small'><li class='muted'>—</li></ul></td>

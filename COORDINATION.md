@@ -25,6 +25,7 @@ without an official source link, blank/flagged values are unverified and never i
 | 4ea36f44 | `arena/4ea36f44-demo3` | delivered (PR #15 merged; Pages deployed) | Added the read-only source-linked Demo Desk at `demo-desk/` without replacing the root tracker, `/docs/`, or `analysis/`; the root landing page links to the app. GitHub Pages build succeeded at `fabbe53`. |
 | arena-3a22fb0f | `arena/3a22fb0f-demo3` | delivered - final integration (PR #18 merged; Pages live) | Chart/liquidity UX, trade execution + portfolio analysis with paper-trading fallback, per-row source-link verification, site consolidation, suggestions review workflow, final PR/Pages delivery. |
 | 3e08e6dc | `arena/3e08e6dc-demo3` | delivered (PR #12 merged) | `analysis/` site + live data snapshots + refresh workflow; see its section below. |
+| 3b5e95bd | `arena/3b5e95bd-demo3` | active - automation + final integration (this session) | Scheduled server-side collector (`collector/`, `collect.yml`, committed `data/`: ranked events, orderbooks, 1m/60m/1440m candles, resolution sweeps, CORS probe), demo-account trade/portfolio pipeline (`trading/`, `trade.yml`), `data-tracking.html` snapshot-rendering page, final PR/merge/Pages. Details in its completion section below. |
 
 ## Task board — session 4ea36f44 (source-linked Demo Desk)
 
@@ -270,6 +271,37 @@ Follow-up requests from session 06cbd03f addressed at integration:
 4. Price display preserves API precision to 2 decimal cents; rounding disclosed in Methodology.
 5. `docs/executive-summary.md`: `docs.kalshi.io` typo corrected to `docs.kalshi.com`; stale pending-publish copy updated; `docs/assets/app.js` environment labeled (banner note) — flagged as R-06 rather than rewritten (archive tree).
 6. Integration records: this section + Final integration log below.
+
+## Task board — session 3b5e95bd (automation: scheduled collection + demo trading)
+
+| # | Task | Status | Owner | Files in scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|---|
+| A1 | Scheduled server-side collector: snapshot tracked live events (gas, elections, culture, crypto, golf) ranked by estimated dollar volume; orderbooks; 1m/60m/1440m candlestick history; CORS probe; commit under `data/` | done | 3b5e95bd | `collector/**`, `.github/workflows/collect.yml`, `data/**` | Offline tests (`collector/test_collect.py`, 2 tests OK) against mock shapes mirroring live demo responses captured 2026-11-20; three live Actions runs: final run 12:01:50Z = 133 requests / 0 errors / 12,000 open events / 40,508 nested markets | F-3B-02 (MVE flood, seeded volumes, no live gas/golf), F-3B-06 (status enum) |
+| A2 | Resolution tracking: tracked events re-polled until settled; outcome yes/no + winning markets + settlement sources; per-series settled sweeps with per-series quotas | done | 3b5e95bd | `collector/collect.py`, `data/tracked.json`, `data/resolutions.json` | https://docs.kalshi.com/getting_started/market_settlement.md; live settled rows carry `result: yes/no` + per-row API source URLs; by_market: KXAAAGASM 50, KXBTC 50, KXBTCD 50, KXDEMOFUTHOURLY 50, KXGTA6SONGS 13, KXCRITICSFOREIGN 7, KXGOLFMAJOR 4 | none |
+| A3 | Demo-account trade/portfolio automation: signed REST (Ed25519/RSA-PSS per docs), portfolio snapshots, order placement (manual dispatch, secrets only), trade categorization + strategy framework, PnL on settlement | done (implemented + offline-tested; UNVERIFIED live) | 3b5e95bd | `trading/**`, `.github/workflows/trade.yml`, `data/portfolio.json`, `data/trades.json` | `trading/test_trading.py` 9 tests OK incl. Ed25519 signature verification of the documented message format; docs: quick_start_authenticated_requests, quick_start_create_order, api_environments, demo_env | F-3B-03 (no demo credentials exist here; nothing inferred, awaiting-credentials states shown) |
+| A4 | Integration of A1-A3 into the site + final PR/merge/Pages | done | 3b5e95bd | `data-tracking.html`, `assets/data-tracking.js`, root-page nav (additive), register rows in `docs/tracker/data/*.json`, root `.md` docs | jsdom smoke test PASSED (renders from committed snapshots, truthful awaiting-credentials states); `node --check` OK; `scripts/verify_site.py` PASSED (14 pages); register additions via the canonical `docs/tracker/data/*.json` + regeneration | F-3B-05 (docs.kalshi.io -> docs.kalshi.com link fixes) |
+
+## Session 3b5e95bd completion record
+
+- A1: three iterations validated live — v2 (markets aggregation) fixed a 17-min runtime and an HTTP 429;
+  v3 (nested-events pagination) fixed complete coverage after discovering `/markets` newest-first flooding by
+  synthetic MVE markets (9,000 newest markets = only 445 events); final run: 133 requests, 0 errors.
+- A2: per-series quotas added after crypto series (200+ settled markets each) crowded gas/golf out of the
+  resolution cap; final `data/resolutions.json` has all topics represented.
+- A3: trading pipeline implements the official signing spec (headers KALSHI-ACCESS-KEY/-TIMESTAMP/-SIGNATURE;
+  message = timestamp + METHOD + path-without-query; Ed25519 direct, RSA-PSS-SHA256) and the official order
+  shape (POST /portfolio/events/orders, side bid/ask, dollar-string price, client_order_id dedup). Without
+  demo credentials (demo.kalshi.co sign-up requires human registration) it writes nothing rather than
+  inventing values.
+- A4 integration notes: merged main @ 645c514 (canonical generated root site by 3a22fb0f + registers by
+  e2aacbd6). Resolution: took main's generated pages wholesale; re-applied additive content through the
+  canonical pipeline (`docs/tracker/data/*.json` + NAV row in `scripts/build_root_site.py` + regeneration);
+  COORDINATION.md union-merged; no other session's content discarded. One earlier COORDINATION.md copy by
+  this session (pre-board-discovery) was discarded in favor of the integrated board (documented in handoff).
+- Incident (resolved, no data loss): `git pull --rebase origin arena/3b5e95bd-demo3` (same-branch refspec)
+  started an unintended rebase replaying main's commits; aborted cleanly at the already-pushed commit b83a7a1.
+  Subsequent integrations used explicit `git fetch origin main` + merge.
+- CORS verification (F-3B-01) resolves the open item F1 recorded by sessions 7f1ef378/4ea36f44/3a22fb0f.
 
 ## Final integration record — session arena-3a22fb0f (T7-T12)
 

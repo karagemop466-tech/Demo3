@@ -89,3 +89,38 @@ not know, and the cheapest way to find out.
 
 *Not investment advice. All point-in-time market values change continuously and were evidence of
 endpoint behavior, not quotes.*
+
+---
+
+## Automation delivery & final integration (session 3b5e95bd, 2026-11-20)
+
+Merged on top of the canonical generated root site: a **scheduled server-side collector** now snapshots
+the demo exchange every 10 minutes into committed `data/` files — live events per topic ranked by
+estimated dollar volume (labeled), top-market **orderbook ladders** (contracts at each price),
+**1-minute / 1-hour / 1-day candlestick history**, **resolution tracking** (tracked events re-polled
+until settled, then outcome YES/NO + winning markets + settlement sources; settled markets swept
+per series with quotas so gas/golf keep history), and a **CORS probe** that verified
+`Access-Control-Allow-Origin: https://karagemop466-tech.github.io` live — resolving the previously
+open browser-CORS flag (F1).
+
+A **demo-account trading/portfolio pipeline** (`trading/`, manual workflow) implements the official
+signing spec (KALSHI-ACCESS-KEY/-TIMESTAMP/-SIGNATURE; Ed25519 or RSA-PSS-SHA256), portfolio snapshots,
+order placement with `client_order_id` dedup, $1-per-winning-contract settlement PnL, and
+per-topic/per-structure performance aggregation. It is offline-tested (9 tests, including signature
+verification) but **unverified live: no demo credentials exist in this environment** (sign-up at
+demo.kalshi.co requires human registration). Until the owner adds the two secrets, the site shows
+truthful awaiting-credentials states; nothing is inferred.
+
+New page **`data-tracking.html`** renders all committed snapshots (same-origin fetch, no CORS
+dependency): collector health, ranked events, market detail with selectable time ranges (1-min/24h,
+1-hour/30d, 1-day/180d) and x-axis auto units (s/m/h/d), yes/no bid ladders with contracts at each
+price, resolution tracking, portfolio and trade tables with per-structure win-rate aggregates, and
+the strategy library. Verified via jsdom smoke test, `scripts/check_site.py` and
+`scripts/verify_root_site.py` (0 failures).
+
+Key live findings from the collector (2026-11-20): ~12,000 open events / 40,508 nested markets seen
+per pass; top ranked events include Democratic nominee 2028 (~$900M est., demo money), next
+presidential election (~$135M est.), Oscar Best Picture (~$3.5M est.); 50 resolved KXAAAGASM gas
+markets tracked (e.g. "above $4.18?" → YES); demo anomalies disclosed (flag F-3B-02: seeded volumes,
+MVE market flood on `/markets`, no live gas/golf at collection time). Sources:
+`docs/API_VERIFICATION.md`, `data/meta.json`, `COORDINATION.md` (completion records).

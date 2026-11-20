@@ -71,3 +71,17 @@ CI runs the checks and an hourly data refresh (`.github/workflows/`).
 - Dollar figures derived as *contracts × last price* are labeled **estimates**.
 - Demo-environment caveat (official): demo prices/behavior may not reflect real markets
   ([source](https://docs.kalshi.com/getting_started/demo_env)).
+
+## Scheduled collector & demo trading (session 3b5e95bd)
+
+| Path | What it is |
+|---|---|
+| `collector/` + `.github/workflows/collect.yml` | Every 10 minutes: snapshots the demo exchange into committed `data/` — live events per topic ranked by estimated dollar volume, top-market orderbooks, 1m/60m/1440m candlestick history, resolution tracking (per-event + per-series sweeps with quotas), CORS probe, run log |
+| `trading/` + `.github/workflows/trade.yml` | Demo-account signed auth (Ed25519/RSA-PSS per docs.kalshi.com), portfolio snapshots, order placement with dedup, settlement PnL, trade categorization + strategy framework; manual dispatch, secrets only — writes nothing and flags clearly when credentials are absent |
+| `data-tracking.html` + `assets/data-tracking.js` | Renders committed snapshots: charts (1m/24h, 1h/30d, 1d/180d; x-axis auto units), orderbook ladders (contracts at each price), resolutions (yes/no), portfolio/trades, strategy library |
+| `data/` | Committed JSON snapshots (single run ≈ 133 requests, 0 errors) |
+
+Offline tests: `python3 collector/test_collect.py` and `python3 trading/test_trading.py` (needs `cryptography`).
+Status: portfolio/trade rows are intentionally empty — no demo credentials exist in this environment;
+the pipeline is offline-tested and unverified live (see `flagged.html` F-3B-03). CORS to the demo API
+from GitHub Pages is verified live (`data/cors_test.json`).
