@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-20T19:24:46Z",
+ "generated_at": "2026-11-20T19:30:39Z",
  "api_root": "https://external-api.demo.kalshi.co/trade-api/v2",
  "rule": {
   "threshold_dollars": "0.10",
@@ -18,14 +18,14 @@
    "KXQUICKSETTLE"
   ]
  },
- "snapshot_samples": 132,
+ "snapshot_samples": 144,
  "snapshot_tickers": 24,
  "counts": {
-  "alerts": 3,
+  "alerts": 4,
   "up": 3,
-  "down": 0,
+  "down": 1,
   "high_roi": 0,
-  "reverted_next_reading": 0,
+  "reverted_next_reading": 1,
   "synthetic": 2,
   "watchlist": 40
  },
@@ -95,9 +95,9 @@
    "direction": "up",
    "to_bid_dollars": "0.0020",
    "to_ask_dollars": "0.8110",
-   "next_reading_dollars": "",
-   "next_reading_ts": "",
-   "reverted_next_reading": false,
+   "next_reading_dollars": "0.0030",
+   "next_reading_ts": "2026-11-20T19:25:38+00:00",
+   "reverted_next_reading": true,
    "volume_fp": "537225527.6800",
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-HBID",
    "synthetic": false,
@@ -105,6 +105,32 @@
    "roi_side": "YES",
    "roi_bought_price_dollars": "0.8110",
    "roi_multiple": "0.2330",
+   "cause_link": "",
+   "cause_status": "unverified - not inferred"
+  },
+  {
+   "ts": "2026-11-20T19:25:38+00:00",
+   "prev_ts": "2026-11-20T19:14:49+00:00",
+   "ticker": "KXPRESNOMD-28-HBID",
+   "event_ticker": "KXPRESNOMD-28",
+   "title": "Will Hunter Biden be the nominee for the Presidency for the Democratic party?",
+   "topic": "elections",
+   "from_dollars": "0.8110",
+   "to_dollars": "0.0030",
+   "delta_dollars": "-0.8080",
+   "direction": "down",
+   "to_bid_dollars": "0.0020",
+   "to_ask_dollars": "0.0030",
+   "next_reading_dollars": "",
+   "next_reading_ts": "",
+   "reverted_next_reading": false,
+   "volume_fp": "537225592.7300",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-HBID",
+   "synthetic": false,
+   "high_roi": false,
+   "roi_side": "NO",
+   "roi_bought_price_dollars": "0.9970",
+   "roi_multiple": "0.0030",
    "cause_link": "",
    "cause_status": "unverified - not inferred"
   }
