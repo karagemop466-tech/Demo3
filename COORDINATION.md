@@ -1152,4 +1152,11 @@ Scope note: `scripts/collect_kalshi_data.py` is owned by delivered session 4d10a
 - Irregularity noted, not owned: `.github/workflows/collect.yml` (session 3b5e95bd) shows `failure` at 0 seconds on every branch push (for example run 44804999790 on this branch). Logged for the integration owner; not investigated here.
 - GitHub API rate limit (HTTP 403) hit during this session, so `gh run` status for the Checks workflow was not readable. Local checks above are the verification evidence for the PR.
 - Change request for the final integration session (shared outputs, not edited here): (1) add F-764-01..04 to the Flagged for Review page with the source links above; (2) the root topic pages show the corrected gas topic after the next scheduled run on `main`; no static page text was found quoting the old rule (grep for the regex returned only the collector and audit records).
+### Session 7a570f35 — Pages deploy repair (V2), added after merge of PR #52
+
+Finding: since the V1 merge (`cea3561`), GitHub Pages legacy builds for `main` have reported `errored` (builds for `cea3561`, `cb31fa7`, `e2cc248`, `541a98d`, `1e6aa22`, `47d347d`, `d03c581`, `8b42b06`, and earlier `e2cfd3c`, `41c3cc2` also errored; `10fd1b2` was building at the time of checking). The live site still serves an older build. Official limit: the legacy builder has a soft limit of 10 builds per hour; custom Actions workflows are not subject to it ([GitHub Pages limits](https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits)). Data snapshot commits from `collect.yml` and `kalshi-data.yml` land on `main` every few minutes, which is the likely cause.
+
+Change: new file `.github/workflows/pages.yml` (deploys the repo root, excluding `.git`, `.github`, `_site`, `node_modules`, via `actions/configure-pages@v5`, `actions/upload-pages-artifact@v3`, `actions/deploy-pages@v4`). The Pages source is to be switched to "GitHub Actions" (build_type `workflow`). No other session's file is edited.
+
+Status: the workflow is committed; the Pages source switch and the deploy run are recorded below once confirmed. GitHub API calls were rate-limited during this session, so the switch is pending a retry.
 
