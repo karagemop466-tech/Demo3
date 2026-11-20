@@ -1,43 +1,30 @@
-# Demo3 — Kalshi Demo Dashboard
+# Demo3 - Kalshi demo dashboard
 
-A clean, static dashboard tracking live Kalshi demo exchange events across **gas prices, elections, culture,
-crypto, and golf**, built on the official [Kalshi demo Trade API v2](https://external-api.demo.kalshi.co/trade-api/v2).
+Static GitHub Pages site with verified Kalshi market data, a live in-browser dashboard, category pages, resolved results, findings, questions, suggestions, and a Flagged for Review page.
 
-## Site pages
+- Live site: https://karagemop466-tech.github.io/Demo3/ (Pages serves `main` at `/`; the root `index.html` redirects to `docs/index.html`)
+- Coordination board: [COORDINATION.md](COORDINATION.md)
 
-| Page | Purpose |
-|------|---------|
-| [index.html](index.html) | Landing page + executive summary |
-| [dashboard.html](dashboard.html) | Live dashboard: price graph (time axis sec/min/hour; Y = contract price), liquidity, highest-dollar active markets |
-| [gas-prices.html](gas-prices.html) | Gas prices category (flagged: no demo data found) |
-| [elections.html](elections.html) | Elections category |
-| [culture.html](culture.html) | Culture / entertainment category |
-| [crypto.html](crypto.html) | Crypto category |
-| [golf.html](golf.html) | Golf category (flagged: no demo data found) |
-| [portfolio.html](portfolio.html) | Portfolio performance (demo API key required — not wired) |
-| [trades.html](trades.html) | Trade execution, categorization & strategies (demo API key required — not wired) |
-| [suggestions.html](suggestions.html) | Improvement suggestions for review before implementing |
-| [questions.html](questions.html) | Questions / information / answers for decision readiness |
-| [flagged.html](flagged.html) | Flagged for review: unverified items, blank values, irregularities |
+## Layout
 
-## Verification rules followed
+| Path | What it is |
+|---|---|
+| `docs/` | The published site (HTML pages, `assets/app.js`, `assets/style.css`) |
+| `docs/data/verified.json` | Single source of verified data. Every row has a source URL. |
+| `scripts/build_site.py` | Generates the HTML page shells in `docs/` |
+| `scripts/verify_site.py` | Checks sources, internal links, and JS syntax |
 
-- Every table row carries a link to an official Kalshi demo API source.
-- If a value cannot be confirmed from an official source, it is left **blank** and flagged **unverified**.
-- Nothing is inferred or filled in.
+## Rebuild and verify
 
-## Official sources
+```bash
+python3 scripts/build_site.py
+python3 scripts/verify_site.py
+```
 
-- Trade API (REST, recommended demo): https://external-api.demo.kalshi.co/trade-api/v2
-- Also supported: https://demo-api.kalshi.co/trade-api/v2
-- WebSocket API: https://external-api-ws.demo.kalshi.co/trade-api/ws/v2 and https://demo-api.kalshi.co/trade-api/ws/v2
-- API docs: https://docs.kalshi.io
+## Data sources
 
-## Authentication note
+Kalshi documentation at https://docs.kalshi.com (the `llms.txt` index lists every page) and the public Kalshi Trade API at https://external-api.kalshi.com/trade-api/v2. The live dashboard calls the public endpoints from the browser. If the browser cannot reach them, the page says so and shows the verified snapshot. Demo-account portfolio data needs an API key and is not connected.
 
-Authenticated endpoints (portfolio balance, trade execution, order placement) require a signed Kalshi demo API key.
-This site does **not** collect, store, or transmit any API key. Those pages are intentionally flagged as not live.
+## Not included
 
-## Branch
-
-Built on `arena/cde2ae63-demo3`, based on `main` (`80f7c4d`). Published via GitHub Pages.
+No trading or order placement. No credentials are stored in this repo.

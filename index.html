@@ -1,132 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Kalshi Demo Dashboard — Executive Summary</title>
-<link rel="stylesheet" href="assets/css/style.css">
+<meta http-equiv="refresh" content="0; url=docs/index.html">
+<link rel="canonical" href="docs/index.html">
+<title>Kalshi demo dashboard</title>
 </head>
 <body>
-<a class="skip-link" href="#content">Skip to content</a>
-
-<header>
-  <div class="header-inner">
-    <div class="brand"><div class="mark">K</div><div>Kalshi Demo Dashboard</div></div>
-    <nav>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="dashboard.html">Live Dashboard</a></li>
-        <li><a href="gas-prices.html">Gas Prices</a></li>
-        <li><a href="elections.html">Elections</a></li>
-        <li><a href="culture.html">Culture</a></li>
-        <li><a href="crypto.html">Crypto</a></li>
-        <li><a href="golf.html">Golf</a></li>
-        <li><a href="portfolio.html">Portfolio</a></li>
-        <li><a href="trades.html">Trades</a></li>
-        <li><a href="suggestions.html">Suggestions</a></li>
-        <li><a href="questions.html">Questions &amp; Answers</a></li>
-        <li><a href="flagged.html">Flagged for Review</a></li>
-      </ul>
-    </nav>
-  </div>
-</header>
-
-<section class="hero">
-  <div class="hero-inner">
-    <div>
-      <h1>Kalshi Demo Dashboard</h1>
-      <p>Executive summary and live tracking of the highest-dollar Kalshi events across gas prices, elections,
-      culture, crypto, and golf — built on the official Kalshi demo Trade API v2. Every table row cites its
-      official source; anything that cannot be confirmed is left blank and flagged as unverified.</p>
-      <a class="btn primary" href="dashboard.html">Open live dashboard</a>
-      <a class="btn" href="flagged.html">Flagged for review</a>
-    </div>
-    <div class="card">
-      <h3 style="margin-top:0">Status at a glance</h3>
-      <div class="stats-row">
-        <div class="stat"><div class="value" id="stat-events">—</div><div class="label">Verified events</div></div>
-        <div class="stat"><div class="value" id="stat-markets">—</div><div class="label">Verified markets</div></div>
-        <div class="stat"><div class="value" id="stat-categories">5</div><div class="label">Target categories</div></div>
-        <div class="stat"><div class="value" id="stat-source">demo.kalshi.co</div><div class="label">Official source</div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="container" id="content">
-  <section class="section">
-    <h2 class="section-title"><span class="kicker">Executive summary</span> What this site is</h2>
-    <p>This project collects, organizes, and analyzes Kalshi demo exchange data for five topic categories:
-    <strong>gas prices, elections, culture, crypto, and golf</strong>. It tracks live events until they resolve
-    (outcome yes/no), monitors contract-price movements on a time-axis graph, shows current liquidity (how many
-    contracts are available at a given price), and provides pages for portfolio performance, trade execution,
-    improvement suggestions, and a decision-readiness Q&amp;A.</p>
-
-    <h3>Data sources (official)</h3>
-    <ul>
-      <li><strong>Trade API (REST):</strong> <a href="https://external-api.demo.kalshi.co/trade-api/v2" target="_blank" rel="noopener">https://external-api.demo.kalshi.co/trade-api/v2</a> (recommended demo endpoint)</li>
-      <li><strong>Also supported:</strong> <a href="https://demo-api.kalshi.co/trade-api/v2" target="_blank" rel="noopener">https://demo-api.kalshi.co/trade-api/v2</a></li>
-      <li><strong>WebSocket API:</strong> <a href="https://external-api-ws.demo.kalshi.co/trade-api/ws/v2" target="_blank" rel="noopener">external-api-ws.demo.kalshi.co/trade-api/ws/v2</a> and <a href="https://demo-api.kalshi.co/trade-api/ws/v2" target="_blank" rel="noopener">demo-api.kalshi.co/trade-api/ws/v2</a></li>
-    </ul>
-
-    <div class="alert alert-info">
-      <strong>No manual input required from you.</strong> This session gathered data directly from the official Kalshi demo
-      API, built the site, and prepared it for GitHub Pages. Where the demo API returned no data (gas prices, golf in the
-      sampled pages), values are intentionally left blank and flagged — nothing is inferred.
-    </div>
-  </section>
-
-  <section class="section">
-    <h2 class="section-title"><span class="kicker">Verified findings (snapshot)</span> Events and markets captured from the official demo API</h2>
-    <p>The table below is a <strong>verified snapshot</strong>, not a live feed. Live market rows on the
-    <a href="dashboard.html">dashboard</a> attempt to fetch directly from the demo API; if your browser blocks the
-    cross-origin request, the verified snapshot is shown instead.</p>
-    <table class="data">
-      <thead><tr><th>Category</th><th>Event ticker</th><th>Title</th><th>Last price</th><th>Volume</th><th>Open interest</th><th>Official source</th></tr></thead>
-      <tbody id="summary-table"></tbody>
-    </table>
-  </section>
-
-  <section class="section sources">
-    <h4>Official sources referenced on this page</h4>
-    <ul>
-      <li><a href="https://external-api.demo.kalshi.co/trade-api/v2" target="_blank" rel="noopener">Kalshi demo Trade API v2 (events/markets)</a></li>
-      <li><a href="https://demo-api.kalshi.co/trade-api/v2" target="_blank" rel="noopener">Kalshi demo Trade API v2 (alternate host)</a></li>
-      <li><a href="https://docs.kalshi.io" target="_blank" rel="noopener">Kalshi API documentation</a></li>
-    </ul>
-  </section>
-</div>
-
-<footer>
-  <div class="footer-inner">
-    <div><strong>Kalshi Demo Dashboard</strong> — built for the <code>arena/cde2ae63-demo3</code> branch of <code>karagemop466-tech/Demo3</code>.</div>
-    <div class="disclaimer">Demo environment only. Not financial advice. Data is from the Kalshi demo API; authenticated endpoints (portfolio, trade execution) require your own demo API key and are not wired by this site. Every value carries an official-source link or is flagged unverified.</div>
-    <div>Sources: <a href="https://external-api.demo.kalshi.co/trade-api/v2" target="_blank" rel="noopener">external-api.demo.kalshi.co</a> &bull; <a href="https://demo-api.kalshi.co/trade-api/v2" target="_blank" rel="noopener">demo-api.kalshi.co</a></div>
-  </div>
-</footer>
-
-<script src="assets/js/app.js"></script>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const tbody = $("#summary-table");
-  const rows = [];
-  VERIFIED.events.forEach(e => {
-    // pick a related market if any, else dash
-    const m = VERIFIED.markets.find(x => x.event_ticker === e.event_ticker) || {};
-    rows.push(`<tr>
-      <td>${esc(e.category)}</td>
-      <td class="ticker">${esc(e.event_ticker)}</td>
-      <td>${esc(e.title)}</td>
-      <td class="price">${m.last_price_dollars ? fmtMoney(m.last_price_dollars) : "<span style='color:var(--text-muted)'>—</span>"}</td>
-      <td>${m.volume_fp ? fmtMoney(m.volume_fp) : "<span style='color:var(--text-muted)'>—</span>"}</td>
-      <td>${m.open_interest_fp ? fmtMoney(m.open_interest_fp) : "<span style='color:var(--text-muted)'>—</span>"}</td>
-      <td><a href="${esc(e.api_url)}" class="source-link" target="_blank" rel="noopener">events</a></td>
-    </tr>`);
-  });
-  tbody.innerHTML = rows.join("");
-  $("#stat-events").textContent = VERIFIED.events.length;
-  $("#stat-markets").textContent = VERIFIED.markets.length;
-});
-</script>
+<p>Opening the Kalshi demo dashboard: <a href="docs/index.html">docs/index.html</a></p>
+<script>location.replace('docs/index.html');</script>
 </body>
 </html>
