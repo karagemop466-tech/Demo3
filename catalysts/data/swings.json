@@ -1,0 +1,689 @@
+{
+ "generated_at": "2026-11-20T20:36:46Z",
+ "api_root": "https://external-api.demo.kalshi.co/trade-api/v2",
+ "threshold_dollars": "0.10",
+ "threshold_note": ">= $0.10 (10 cents) per contract between consecutive samples, either direction; exact decimal arithmetic.",
+ "window_minutes": {
+  "pre": 180,
+  "post": 60
+ },
+ "mode": "live",
+ "swings": [
+  {
+   "id": "2e8d377ff94885a9",
+   "ticker": "KXPRESNOMD-28-BOBA",
+   "topic": "elections",
+   "event_ticker": "KXPRESNOMD-28",
+   "series_ticker": "KXPRESNOMD",
+   "direction": "up",
+   "delta_dollars": "0.8570",
+   "abs_delta_dollars": "0.8570",
+   "from": {
+    "ts": "2026-11-20T19:39:57Z",
+    "last_price_dollars": "0.0050",
+    "price_field": "last_price_dollars"
+   },
+   "to": {
+    "ts": "2026-11-20T19:47:33Z",
+    "last_price_dollars": "0.8620",
+    "price_field": "last_price_dollars"
+   },
+   "sample_gap_seconds": 456,
+   "detected_by": "price_tape",
+   "origin": "data/history/prices.jsonl",
+   "detected_at": "2026-11-20T20:26:44Z",
+   "record_source": "committed demo-API snapshot data/latest/markets_open.json (retrieved 2026-11-20T20:13:33+00:00)",
+   "status": "active",
+   "result": "",
+   "close_time": "2028-11-07T15:00:00Z",
+   "settlement_ts": "",
+   "settlement_value_dollars": "",
+   "volume_fp": "418777731.26",
+   "open_interest_fp": "137412877.49",
+   "market_url_pair": "",
+   "api_corroboration": {
+    "last_price_dollars": "0.8630",
+    "previous_price_dollars": "0.0050",
+    "yes_bid_dollars": "0.0010",
+    "yes_ask_dollars": "0.8630",
+    "previous_yes_ask_dollars": "",
+    "previous_yes_bid_dollars": "",
+    "price_level_structure": "",
+    "volume_24h_fp": "63615.71",
+    "note": "prices only: the API does not timestamp previous_price_dollars, so the interval in which the move happened stays bounded by the sample gap",
+    "status": "mismatch"
+   },
+   "title": "Will Barack Obama be the Democratic Presidential nominee in 2028? \u2014 Barack Obama / Barack Obama",
+   "resolved": false,
+   "tracking": "active",
+   "links": {
+    "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPRESNOMD-28-BOBA",
+    "fetched_via": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-BOBA",
+    "event_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/events/KXPRESNOMD-28",
+    "kalshi_market_page": "",
+    "kalshi_site_root": "https://demo.kalshi.co/",
+    "kalshi_market_page_note": "Per-event page URL not published: the demo desk's URL pattern for a single event is not documented at https://docs.kalshi.com/getting_started/demo_env and could not be confirmed from this build environment, so guessing it would be an inferred value. The canonical API records above are the verifiable sources.",
+    "series_ticker": "KXPRESNOMD"
+   },
+   "series": {
+    "series_ticker": "KXPRESNOMD",
+    "title": "Who will be the Democratic nominee in 2028?",
+    "category": "",
+    "frequency": "",
+    "settlement_sources": [
+     {
+      "name": "Democratic Party",
+      "url": "https://democrats.org/"
+     }
+    ],
+    "contract_terms_url": "",
+    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD",
+    "error": "not_fetched_offline",
+    "provenance": "committed snapshot: data/latest/topic_elections.json"
+   },
+   "title_source": "api:markets",
+   "resolution_label": "",
+   "catalysts": [],
+   "catalyst_match": {
+    "candidates": [],
+    "items_in_window": 0,
+    "match_status": "feeds_not_polled_offline",
+    "note": "The build sandbox has no egress to news hosts; the scheduled CI run performs feed matching. Nothing is inferred here."
+   },
+   "threshold_dollars": "0.1000"
+  },
+  {
+   "id": "9a01481c2eaf805b",
+   "ticker": "KXPRESNOMD-28-HBID",
+   "topic": "elections",
+   "event_ticker": "KXPRESNOMD-28",
+   "series_ticker": "KXPRESNOMD",
+   "direction": "down",
+   "delta_dollars": "-0.8080",
+   "abs_delta_dollars": "0.8080",
+   "from": {
+    "ts": "2026-11-20T19:39:57Z",
+    "last_price_dollars": "0.8110",
+    "price_field": "last_price_dollars"
+   },
+   "to": {
+    "ts": "2026-11-20T19:47:33Z",
+    "last_price_dollars": "0.0030",
+    "price_field": "last_price_dollars"
+   },
+   "sample_gap_seconds": 456,
+   "detected_by": "price_tape",
+   "origin": "data/history/prices.jsonl",
+   "detected_at": "2026-11-20T20:26:44Z",
+   "record_source": "committed demo-API snapshot data/latest/markets_open.json (retrieved 2026-11-20T20:13:33+00:00)",
+   "status": "active",
+   "result": "",
+   "close_time": "2028-11-07T15:00:00Z",
+   "settlement_ts": "",
+   "settlement_value_dollars": "",
+   "volume_fp": "537225837.42",
+   "open_interest_fp": "140195357.45",
+   "market_url_pair": "",
+   "api_corroboration": {
+    "last_price_dollars": "0.0030",
+    "previous_price_dollars": "0.0030",
+    "yes_bid_dollars": "0.0020",
+    "yes_ask_dollars": "0.8110",
+    "previous_yes_ask_dollars": "",
+    "previous_yes_bid_dollars": "",
+    "price_level_structure": "",
+    "volume_24h_fp": "8145.73",
+    "note": "prices only: the API does not timestamp previous_price_dollars, so the interval in which the move happened stays bounded by the sample gap",
+    "status": "mismatch"
+   },
+   "title": "Will Hunter Biden be the nominee for the Presidency for the Democratic party? \u2014 Hunter Biden / Hunter Biden",
+   "resolved": false,
+   "tracking": "active",
+   "links": {
+    "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPRESNOMD-28-HBID",
+    "fetched_via": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-HBID",
+    "event_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/events/KXPRESNOMD-28",
+    "kalshi_market_page": "",
+    "kalshi_site_root": "https://demo.kalshi.co/",
+    "kalshi_market_page_note": "Per-event page URL not published: the demo desk's URL pattern for a single event is not documented at https://docs.kalshi.com/getting_started/demo_env and could not be confirmed from this build environment, so guessing it would be an inferred value. The canonical API records above are the verifiable sources.",
+    "series_ticker": "KXPRESNOMD"
+   },
+   "series": {
+    "series_ticker": "KXPRESNOMD",
+    "title": "Who will be the Democratic nominee in 2028?",
+    "category": "",
+    "frequency": "",
+    "settlement_sources": [
+     {
+      "name": "Democratic Party",
+      "url": "https://democrats.org/"
+     }
+    ],
+    "contract_terms_url": "",
+    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD",
+    "error": "not_fetched_offline",
+    "provenance": "committed snapshot: data/latest/topic_elections.json"
+   },
+   "title_source": "api:markets",
+   "resolution_label": "",
+   "catalysts": [],
+   "catalyst_match": {
+    "candidates": [],
+    "items_in_window": 0,
+    "match_status": "feeds_not_polled_offline",
+    "note": "The build sandbox has no egress to news hosts; the scheduled CI run performs feed matching. Nothing is inferred here."
+   },
+   "threshold_dollars": "0.1000"
+  },
+  {
+   "id": "210a7a8347d5e7b7",
+   "ticker": "KXPRESNOMD-28-HBID",
+   "topic": "elections",
+   "event_ticker": "KXPRESNOMD-28",
+   "series_ticker": "KXPRESNOMD",
+   "direction": "up",
+   "delta_dollars": "0.8080",
+   "abs_delta_dollars": "0.8080",
+   "from": {
+    "ts": "2026-11-20T19:33:16Z",
+    "last_price_dollars": "0.0030",
+    "price_field": "last_price_dollars"
+   },
+   "to": {
+    "ts": "2026-11-20T19:39:29Z",
+    "last_price_dollars": "0.8110",
+    "price_field": "last_price_dollars"
+   },
+   "sample_gap_seconds": 373,
+   "detected_by": "price_tape",
+   "origin": "data/history/prices.jsonl",
+   "detected_at": "2026-11-20T20:26:44Z",
+   "record_source": "committed demo-API snapshot data/latest/markets_open.json (retrieved 2026-11-20T20:13:33+00:00)",
+   "status": "active",
+   "result": "",
+   "close_time": "2028-11-07T15:00:00Z",
+   "settlement_ts": "",
+   "settlement_value_dollars": "",
+   "volume_fp": "537225837.42",
+   "open_interest_fp": "140195357.45",
+   "market_url_pair": "",
+   "api_corroboration": {
+    "last_price_dollars": "0.0030",
+    "previous_price_dollars": "0.0030",
+    "yes_bid_dollars": "0.0020",
+    "yes_ask_dollars": "0.8110",
+    "previous_yes_ask_dollars": "",
+    "previous_yes_bid_dollars": "",
+    "price_level_structure": "",
+    "volume_24h_fp": "8145.73",
+    "note": "prices only: the API does not timestamp previous_price_dollars, so the interval in which the move happened stays bounded by the sample gap",
+    "status": "mismatch"
+   },
+   "title": "Will Hunter Biden be the nominee for the Presidency for the Democratic party? \u2014 Hunter Biden / Hunter Biden",
+   "resolved": false,
+   "tracking": "active",
+   "links": {
+    "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPRESNOMD-28-HBID",
+    "fetched_via": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-HBID",
+    "event_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/events/KXPRESNOMD-28",
+    "kalshi_market_page": "",
+    "kalshi_site_root": "https://demo.kalshi.co/",
+    "kalshi_market_page_note": "Per-event page URL not published: the demo desk's URL pattern for a single event is not documented at https://docs.kalshi.com/getting_started/demo_env and could not be confirmed from this build environment, so guessing it would be an inferred value. The canonical API records above are the verifiable sources.",
+    "series_ticker": "KXPRESNOMD"
+   },
+   "series": {
+    "series_ticker": "KXPRESNOMD",
+    "title": "Who will be the Democratic nominee in 2028?",
+    "category": "",
+    "frequency": "",
+    "settlement_sources": [
+     {
+      "name": "Democratic Party",
+      "url": "https://democrats.org/"
+     }
+    ],
+    "contract_terms_url": "",
+    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD",
+    "error": "not_fetched_offline",
+    "provenance": "committed snapshot: data/latest/topic_elections.json"
+   },
+   "title_source": "api:markets",
+   "resolution_label": "",
+   "catalysts": [],
+   "catalyst_match": {
+    "candidates": [],
+    "items_in_window": 0,
+    "match_status": "feeds_not_polled_offline",
+    "note": "The build sandbox has no egress to news hosts; the scheduled CI run performs feed matching. Nothing is inferred here."
+   },
+   "threshold_dollars": "0.1000"
+  },
+  {
+   "id": "4dd47ee1ec8dada9",
+   "ticker": "KXPRESNOMD-28-HBID",
+   "topic": "elections",
+   "event_ticker": "KXPRESNOMD-28",
+   "series_ticker": "KXPRESNOMD",
+   "direction": "down",
+   "delta_dollars": "-0.8080",
+   "abs_delta_dollars": "0.8080",
+   "from": {
+    "ts": "2026-11-20T19:32:01Z",
+    "last_price_dollars": "0.8110",
+    "price_field": "last_price_dollars"
+   },
+   "to": {
+    "ts": "2026-11-20T19:33:16Z",
+    "last_price_dollars": "0.0030",
+    "price_field": "last_price_dollars"
+   },
+   "sample_gap_seconds": 75,
+   "detected_by": "price_tape",
+   "origin": "data/history/prices.jsonl",
+   "detected_at": "2026-11-20T20:26:44Z",
+   "record_source": "committed demo-API snapshot data/latest/markets_open.json (retrieved 2026-11-20T20:13:33+00:00)",
+   "status": "active",
+   "result": "",
+   "close_time": "2028-11-07T15:00:00Z",
+   "settlement_ts": "",
+   "settlement_value_dollars": "",
+   "volume_fp": "537225837.42",
+   "open_interest_fp": "140195357.45",
+   "market_url_pair": "",
+   "api_corroboration": {
+    "last_price_dollars": "0.0030",
+    "previous_price_dollars": "0.0030",
+    "yes_bid_dollars": "0.0020",
+    "yes_ask_dollars": "0.8110",
+    "previous_yes_ask_dollars": "",
+    "previous_yes_bid_dollars": "",
+    "price_level_structure": "",
+    "volume_24h_fp": "8145.73",
+    "note": "prices only: the API does not timestamp previous_price_dollars, so the interval in which the move happened stays bounded by the sample gap",
+    "status": "mismatch"
+   },
+   "title": "Will Hunter Biden be the nominee for the Presidency for the Democratic party? \u2014 Hunter Biden / Hunter Biden",
+   "resolved": false,
+   "tracking": "active",
+   "links": {
+    "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPRESNOMD-28-HBID",
+    "fetched_via": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-HBID",
+    "event_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/events/KXPRESNOMD-28",
+    "kalshi_market_page": "",
+    "kalshi_site_root": "https://demo.kalshi.co/",
+    "kalshi_market_page_note": "Per-event page URL not published: the demo desk's URL pattern for a single event is not documented at https://docs.kalshi.com/getting_started/demo_env and could not be confirmed from this build environment, so guessing it would be an inferred value. The canonical API records above are the verifiable sources.",
+    "series_ticker": "KXPRESNOMD"
+   },
+   "series": {
+    "series_ticker": "KXPRESNOMD",
+    "title": "Who will be the Democratic nominee in 2028?",
+    "category": "",
+    "frequency": "",
+    "settlement_sources": [
+     {
+      "name": "Democratic Party",
+      "url": "https://democrats.org/"
+     }
+    ],
+    "contract_terms_url": "",
+    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD",
+    "error": "not_fetched_offline",
+    "provenance": "committed snapshot: data/latest/topic_elections.json"
+   },
+   "title_source": "api:markets",
+   "resolution_label": "",
+   "catalysts": [],
+   "catalyst_match": {
+    "candidates": [],
+    "items_in_window": 0,
+    "match_status": "feeds_not_polled_offline",
+    "note": "The build sandbox has no egress to news hosts; the scheduled CI run performs feed matching. Nothing is inferred here."
+   },
+   "threshold_dollars": "0.1000"
+  },
+  {
+   "id": "e8d89f6ac7f95f27",
+   "ticker": "KXPRESNOMD-28-HBID",
+   "topic": "elections",
+   "event_ticker": "KXPRESNOMD-28",
+   "series_ticker": "KXPRESNOMD",
+   "direction": "up",
+   "delta_dollars": "0.8080",
+   "abs_delta_dollars": "0.8080",
+   "from": {
+    "ts": "2026-11-20T19:27:34Z",
+    "last_price_dollars": "0.0030",
+    "price_field": "last_price_dollars"
+   },
+   "to": {
+    "ts": "2026-11-20T19:32:01Z",
+    "last_price_dollars": "0.8110",
+    "price_field": "last_price_dollars"
+   },
+   "sample_gap_seconds": 267,
+   "detected_by": "price_tape",
+   "origin": "data/history/prices.jsonl",
+   "detected_at": "2026-11-20T20:26:44Z",
+   "record_source": "committed demo-API snapshot data/latest/markets_open.json (retrieved 2026-11-20T20:13:33+00:00)",
+   "status": "active",
+   "result": "",
+   "close_time": "2028-11-07T15:00:00Z",
+   "settlement_ts": "",
+   "settlement_value_dollars": "",
+   "volume_fp": "537225837.42",
+   "open_interest_fp": "140195357.45",
+   "market_url_pair": "",
+   "api_corroboration": {
+    "last_price_dollars": "0.0030",
+    "previous_price_dollars": "0.0030",
+    "yes_bid_dollars": "0.0020",
+    "yes_ask_dollars": "0.8110",
+    "previous_yes_ask_dollars": "",
+    "previous_yes_bid_dollars": "",
+    "price_level_structure": "",
+    "volume_24h_fp": "8145.73",
+    "note": "prices only: the API does not timestamp previous_price_dollars, so the interval in which the move happened stays bounded by the sample gap",
+    "status": "mismatch"
+   },
+   "title": "Will Hunter Biden be the nominee for the Presidency for the Democratic party? \u2014 Hunter Biden / Hunter Biden",
+   "resolved": false,
+   "tracking": "active",
+   "links": {
+    "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPRESNOMD-28-HBID",
+    "fetched_via": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-HBID",
+    "event_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/events/KXPRESNOMD-28",
+    "kalshi_market_page": "",
+    "kalshi_site_root": "https://demo.kalshi.co/",
+    "kalshi_market_page_note": "Per-event page URL not published: the demo desk's URL pattern for a single event is not documented at https://docs.kalshi.com/getting_started/demo_env and could not be confirmed from this build environment, so guessing it would be an inferred value. The canonical API records above are the verifiable sources.",
+    "series_ticker": "KXPRESNOMD"
+   },
+   "series": {
+    "series_ticker": "KXPRESNOMD",
+    "title": "Who will be the Democratic nominee in 2028?",
+    "category": "",
+    "frequency": "",
+    "settlement_sources": [
+     {
+      "name": "Democratic Party",
+      "url": "https://democrats.org/"
+     }
+    ],
+    "contract_terms_url": "",
+    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD",
+    "error": "not_fetched_offline",
+    "provenance": "committed snapshot: data/latest/topic_elections.json"
+   },
+   "title_source": "api:markets",
+   "resolution_label": "",
+   "catalysts": [],
+   "catalyst_match": {
+    "candidates": [],
+    "items_in_window": 0,
+    "match_status": "feeds_not_polled_offline",
+    "note": "The build sandbox has no egress to news hosts; the scheduled CI run performs feed matching. Nothing is inferred here."
+   },
+   "threshold_dollars": "0.1000"
+  },
+  {
+   "id": "f241e876d15dcb9b",
+   "ticker": "KXPRESNOMD-28-HBID",
+   "topic": "elections",
+   "event_ticker": "KXPRESNOMD-28",
+   "series_ticker": "KXPRESNOMD",
+   "direction": "up",
+   "delta_dollars": "0.8080",
+   "abs_delta_dollars": "0.8080",
+   "from": {
+    "ts": "2026-11-20T19:26:46Z",
+    "last_price_dollars": "0.0030",
+    "price_field": "last_price_dollars"
+   },
+   "to": {
+    "ts": "2026-11-20T19:32:01Z",
+    "last_price_dollars": "0.8110",
+    "price_field": "last_price_dollars"
+   },
+   "sample_gap_seconds": 315,
+   "detected_by": "price_tape",
+   "origin": "data/history/prices.jsonl",
+   "detected_at": "2026-11-20T20:25:13Z",
+   "record_source": "committed demo-API snapshot data/latest/markets_open.json (retrieved 2026-11-20T19:39:57+00:00)",
+   "status": "active",
+   "result": "",
+   "close_time": "2028-11-07T15:00:00Z",
+   "settlement_ts": "",
+   "settlement_value_dollars": "",
+   "volume_fp": "537225680.77",
+   "open_interest_fp": "140195251.08",
+   "market_url_pair": "",
+   "api_corroboration": {
+    "last_price_dollars": "0.8110",
+    "previous_price_dollars": "0.0030",
+    "yes_bid_dollars": "0.0020",
+    "yes_ask_dollars": "0.0030",
+    "previous_yes_ask_dollars": "",
+    "previous_yes_bid_dollars": "",
+    "price_level_structure": "",
+    "volume_24h_fp": "8124.78",
+    "note": "prices only: the API does not timestamp previous_price_dollars, so the interval in which the move happened stays bounded by the sample gap",
+    "status": "exact"
+   },
+   "title": "Will Hunter Biden be the nominee for the Presidency for the Democratic party? \u2014 Hunter Biden / Hunter Biden",
+   "resolved": false,
+   "tracking": "active",
+   "links": {
+    "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPRESNOMD-28-HBID",
+    "fetched_via": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-HBID",
+    "event_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/events/KXPRESNOMD-28",
+    "kalshi_market_page": "",
+    "kalshi_site_root": "https://demo.kalshi.co/",
+    "kalshi_market_page_note": "Per-event page URL not published: the demo desk's URL pattern for a single event is not documented at https://docs.kalshi.com/getting_started/demo_env and could not be confirmed from this build environment, so guessing it would be an inferred value. The canonical API records above are the verifiable sources.",
+    "series_ticker": "KXPRESNOMD"
+   },
+   "series": {
+    "series_ticker": "KXPRESNOMD",
+    "title": "Who will be the Democratic nominee in 2028?",
+    "category": "",
+    "frequency": "",
+    "settlement_sources": [
+     {
+      "name": "Democratic Party",
+      "url": "https://democrats.org/"
+     }
+    ],
+    "contract_terms_url": "",
+    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD",
+    "error": "not_fetched_offline",
+    "provenance": "committed snapshot: data/latest/topic_elections.json"
+   },
+   "title_source": "api:markets",
+   "resolution_label": "",
+   "catalysts": [],
+   "catalyst_match": {
+    "candidates": [],
+    "items_in_window": 0,
+    "match_status": "feeds_not_polled_offline",
+    "note": "The build sandbox has no egress to news hosts; the scheduled CI run performs feed matching. Nothing is inferred here."
+   },
+   "threshold_dollars": "0.1000"
+  },
+  {
+   "id": "ea1d2ce3d678e666",
+   "ticker": "KXDEMOFUTHOURLY-26NOV20H12-UP",
+   "topic": "crypto",
+   "event_ticker": "KXDEMOFUTHOURLY-26NOV20H12",
+   "series_ticker": "KXDEMOFUTHOURLY",
+   "direction": "up",
+   "delta_dollars": "0.1000",
+   "abs_delta_dollars": "0.1000",
+   "from": {
+    "ts": "2026-11-20T11:49:21Z",
+    "last_price_dollars": "0.5500",
+    "price_field": "last_price_dollars"
+   },
+   "to": {
+    "ts": "2026-11-20T11:58:42Z",
+    "last_price_dollars": "0.6500",
+    "price_field": "last_price_dollars"
+   },
+   "sample_gap_seconds": 561,
+   "detected_by": "price_tape",
+   "origin": "data/history/prices.jsonl",
+   "detected_at": "2026-11-20T20:25:13Z",
+   "record_source": "committed demo-API snapshot data/resolutions.json (retrieved 2026-11-20T20:20:57Z)",
+   "status": "finalized",
+   "result": "no",
+   "close_time": "2026-11-20T12:00:00Z",
+   "settlement_ts": "2026-11-20T12:00:00Z",
+   "settlement_value_dollars": "",
+   "volume_fp": "",
+   "open_interest_fp": "",
+   "market_url_pair": "",
+   "api_corroboration": {
+    "last_price_dollars": 0.65,
+    "previous_price_dollars": "",
+    "yes_bid_dollars": "",
+    "yes_ask_dollars": "",
+    "previous_yes_ask_dollars": "",
+    "previous_yes_bid_dollars": "",
+    "price_level_structure": "",
+    "volume_24h_fp": "",
+    "note": "prices only: the API does not timestamp previous_price_dollars, so the interval in which the move happened stays bounded by the sample gap",
+    "status": "unverified_api_fields"
+   },
+   "title": "Demo BTC at or above 61985.83 USD",
+   "resolved": true,
+   "tracking": "stopped_resolved",
+   "links": {
+    "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXDEMOFUTHOURLY-26NOV20H12-UP",
+    "fetched_via": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXDEMOFUTHOURLY-26NOV20H12-UP",
+    "event_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/events/KXDEMOFUTHOURLY-26NOV20H12",
+    "kalshi_market_page": "",
+    "kalshi_site_root": "https://demo.kalshi.co/",
+    "kalshi_market_page_note": "Per-event page URL not published: the demo desk's URL pattern for a single event is not documented at https://docs.kalshi.com/getting_started/demo_env and could not be confirmed from this build environment, so guessing it would be an inferred value. The canonical API records above are the verifiable sources.",
+    "series_ticker": "KXDEMOFUTHOURLY"
+   },
+   "series": {
+    "series_ticker": "KXDEMOFUTHOURLY",
+    "title": "Demo BTC at or above 61985.83 USD",
+    "category": "",
+    "frequency": "",
+    "settlement_sources": [
+     {
+      "name": "Coinbase Exchange",
+      "url": "https://api.exchange.coinbase.com/products/BTC-USD/candles"
+     }
+    ],
+    "contract_terms_url": "",
+    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXDEMOFUTHOURLY",
+    "error": "not_fetched_offline",
+    "provenance": "committed snapshot: data/resolutions.json"
+   },
+   "title_source": "api:markets",
+   "resolution_label": "NO",
+   "catalysts": [],
+   "catalyst_match": {
+    "candidates": [],
+    "items_in_window": 0,
+    "match_status": "feeds_not_polled_offline",
+    "note": "The build sandbox has no egress to news hosts; the scheduled CI run performs feed matching. Nothing is inferred here."
+   },
+   "threshold_dollars": "0.1000"
+  },
+  {
+   "id": "28b120148bda8c96",
+   "ticker": "KXDEMOFUTHOURLY-26NOV20H12-UP",
+   "topic": "crypto",
+   "event_ticker": "KXDEMOFUTHOURLY-26NOV20H12",
+   "series_ticker": "KXDEMOFUTHOURLY",
+   "direction": "up",
+   "delta_dollars": "0.2000",
+   "abs_delta_dollars": "0.2000",
+   "from": {
+    "ts": "2026-11-20T11:45:09Z",
+    "last_price_dollars": "0.3500",
+    "price_field": "last_price_dollars"
+   },
+   "to": {
+    "ts": "2026-11-20T11:49:21Z",
+    "last_price_dollars": "0.5500",
+    "price_field": "last_price_dollars"
+   },
+   "sample_gap_seconds": 252,
+   "detected_by": "price_tape",
+   "origin": "data/history/prices.jsonl",
+   "detected_at": "2026-11-20T20:25:13Z",
+   "record_source": "committed demo-API snapshot data/resolutions.json (retrieved 2026-11-20T20:20:57Z)",
+   "status": "finalized",
+   "result": "no",
+   "close_time": "2026-11-20T12:00:00Z",
+   "settlement_ts": "2026-11-20T12:00:00Z",
+   "settlement_value_dollars": "",
+   "volume_fp": "",
+   "open_interest_fp": "",
+   "market_url_pair": "",
+   "api_corroboration": {
+    "last_price_dollars": 0.65,
+    "previous_price_dollars": "",
+    "yes_bid_dollars": "",
+    "yes_ask_dollars": "",
+    "previous_yes_ask_dollars": "",
+    "previous_yes_bid_dollars": "",
+    "price_level_structure": "",
+    "volume_24h_fp": "",
+    "note": "prices only: the API does not timestamp previous_price_dollars, so the interval in which the move happened stays bounded by the sample gap",
+    "status": "unverified_api_fields"
+   },
+   "title": "Demo BTC at or above 61985.83 USD",
+   "resolved": true,
+   "tracking": "stopped_resolved",
+   "links": {
+    "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXDEMOFUTHOURLY-26NOV20H12-UP",
+    "fetched_via": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXDEMOFUTHOURLY-26NOV20H12-UP",
+    "event_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/events/KXDEMOFUTHOURLY-26NOV20H12",
+    "kalshi_market_page": "",
+    "kalshi_site_root": "https://demo.kalshi.co/",
+    "kalshi_market_page_note": "Per-event page URL not published: the demo desk's URL pattern for a single event is not documented at https://docs.kalshi.com/getting_started/demo_env and could not be confirmed from this build environment, so guessing it would be an inferred value. The canonical API records above are the verifiable sources.",
+    "series_ticker": "KXDEMOFUTHOURLY"
+   },
+   "series": {
+    "series_ticker": "KXDEMOFUTHOURLY",
+    "title": "Demo BTC at or above 61985.83 USD",
+    "category": "",
+    "frequency": "",
+    "settlement_sources": [
+     {
+      "name": "Coinbase Exchange",
+      "url": "https://api.exchange.coinbase.com/products/BTC-USD/candles"
+     }
+    ],
+    "contract_terms_url": "",
+    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXDEMOFUTHOURLY",
+    "error": "not_fetched_offline",
+    "provenance": "committed snapshot: data/resolutions.json"
+   },
+   "title_source": "api:markets",
+   "resolution_label": "NO",
+   "catalysts": [],
+   "catalyst_match": {
+    "candidates": [],
+    "items_in_window": 0,
+    "match_status": "feeds_not_polled_offline",
+    "note": "The build sandbox has no egress to news hosts; the scheduled CI run performs feed matching. Nothing is inferred here."
+   },
+   "threshold_dollars": "0.1000"
+  }
+ ],
+ "link_root_note": "",
+ "docs": {
+  "demo_env": "https://docs.kalshi.com/getting_started/demo_env",
+  "environments": "https://docs.kalshi.com/getting_started/api_environments",
+  "market_data_no_auth": "https://docs.kalshi.com/getting_started/quick_start_market_data",
+  "get_markets": "https://docs.kalshi.com/api-reference/market/get-markets",
+  "get_series": "https://docs.kalshi.com/api-reference/market/get-series",
+  "get_events": "https://docs.kalshi.com/api-reference/market/get-events",
+  "market_settlement": "https://docs.kalshi.com/getting_started/market_settlement",
+  "fixed_point": "https://docs.kalshi.com/getting_started/fixed_point_migration"
+ },
+ "disclaimer": "Catalyst links are CANDIDATE explanations: a feed item inside the swing window that shares keywords with the market title. Correlation only \u2014 the API exposes no news field and nothing here proves cause. Demo prices are simulated (see docs demo_env)."
+}

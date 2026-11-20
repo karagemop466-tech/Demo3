@@ -2,13 +2,13 @@
 #
 # Why: legacy "deploy from branch" Pages builds are limited to a soft 10 builds per hour
 # (https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits).
-# The collector commits snapshots every 10 minutes and sessions merge often, so legacy
-# builds were erroring ("Page build failed.") from 19:39Z on 2026-11-20. The limit does not
-# apply to sites published by a custom GitHub Actions workflow.
+# Repository pushes from many sessions and the 10-minute collector exceeded that limit on
+# 2026-11-20 and legacy builds errored ("Page build failed.") from 19:39Z. Sites published
+# through a custom Actions workflow are not subject to that limit. Run 44811117945 (commit
+# 22d5160, 2026-11-20T20:24:42Z) completed "Enable Pages" and "Deploy to GitHub Pages" successfully.
 #
-# Deploy path: this workflow runs on pushes to main and on workflow_dispatch. Data-only
-# commits made by the collector use GITHUB_TOKEN, which does not trigger other workflows,
-# so collect.yml dispatches this workflow explicitly after each snapshot.
+# Triggers: every push to main, and workflow_dispatch. collect.yml dispatches this workflow
+# after each snapshot, because data-only commits made with GITHUB_TOKEN do not trigger push workflows.
 
 name: Deploy GitHub Pages site
 
@@ -22,7 +22,7 @@ permissions:
   pages: write
   id-token: write
 
-# Never cancel an in-flight Pages deployment (GitHub's recommendation for Pages).
+# Never cancel an in-flight Pages deployment.
 concurrency:
   group: pages-deploy
   cancel-in-progress: false
@@ -37,13 +37,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Enable Pages (workflow source)
-        uses: actions/configure-pages@v5
-        with:
-          enablement: true
+      - name: Report current Pages source (informational)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/pages" -q '"build_type=" + .build_type' || echo "build_type unavailable"
 
-      # Publish the repo root. .git and .github are not part of the site; everything else
-      # (HTML, assets, data/, docs/, analysis/, demo-desk/, .nojekyll) is kept as-is.
       - name: Stage site
         run: |
           rm -rf _site && mkdir _site

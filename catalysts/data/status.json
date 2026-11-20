@@ -1,0 +1,33 @@
+{
+ "status": "ok",
+ "finished_at": "2026-11-20T20:36:46Z",
+ "mode": "live",
+ "api_root": "https://external-api.demo.kalshi.co/trade-api/v2",
+ "requests": 23,
+ "request_errors": 4,
+ "poll_errors": [],
+ "tape_rows": 384,
+ "tape_new_samples": 120,
+ "swings_total": 8,
+ "swings_new": 0,
+ "swings_with_catalyst_links": 0,
+ "deadline_seconds": 420.0,
+ "deadline_reached": false,
+ "feeds_ok": 12,
+ "feeds_total": 17,
+ "tracked_markets": 123,
+ "tracked_resolved": 1,
+ "simulated_trades_scored": 7,
+ "strategy_categories_evaluable": 0,
+ "strategy_categories_total": 3,
+ "docs": {
+  "demo_env": "https://docs.kalshi.com/getting_started/demo_env",
+  "environments": "https://docs.kalshi.com/getting_started/api_environments",
+  "market_data_no_auth": "https://docs.kalshi.com/getting_started/quick_start_market_data",
+  "get_markets": "https://docs.kalshi.com/api-reference/market/get-markets",
+  "get_series": "https://docs.kalshi.com/api-reference/market/get-series",
+  "get_events": "https://docs.kalshi.com/api-reference/market/get-events",
+  "market_settlement": "https://docs.kalshi.com/getting_started/market_settlement",
+  "fixed_point": "https://docs.kalshi.com/getting_started/fixed_point_migration"
+ }
+}

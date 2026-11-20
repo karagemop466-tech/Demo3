@@ -71,8 +71,11 @@ if the browser blocks the request the tables fall back to the snapshot links in
 
 <div class="card">
   <h2>3 · Resolution tracking (yes / no)</h2>
-  <p class="small muted">Markets are logged here when they close or settle with a result while the
-  page is open. Seeded rows below come from the verified snapshot
+  <p class="small muted">Every market the dashboard has seen is followed until it resolves: a watcher
+  re-checks the watchlist in batches (<span class="mono">GET /markets?tickers=&hellip;</span>) and logs each
+  settlement with its yes/no result &mdash; the <code>result</code> field reported by the exchange
+  (<a href="https://docs.kalshi.com/getting_started/market_settlement" target="_blank" rel="noopener">Market Settlement</a>).
+  Resolutions are also posted to the alert chat (section 6). Seeded rows below come from the verified snapshot
   (<a href="docs/tracker/data/snapshot.json">snapshot.json</a> ·
   <a href="docs/data/verified.json">verified.json</a>).</p>
   <div id="seededResolutions"></div>
@@ -109,19 +112,24 @@ if the browser blocks the request the tables fall back to the snapshot links in
   <div id="strategyBody"></div>
 </div>
 
-<div class="card">
+<div class="card" id="alerts">
   <h2>6 · Price-swing alerts &mdash; scrolling chat (&ge; $0.10)</h2>
   <p class="small muted">Live alerts for contract price swings of <strong>&ge; $0.10 in either direction</strong>,
      detected from the dashboard's live market samples (GET /markets, demo API, no key). Two scrolling chats:
      <em>All events</em> shows every swing; <em>High ROI model</em> applies a documented, transparent score
      (0.4&middot;swing size + 0.3&middot;relative move + 0.3&middot;liquidity) shown in the score column
      &mdash; a labeled unverified heuristic (no trained model exists; flagged F-5B-02, never presented as verified ROI).
+     Tracked events are followed <strong>until they resolve</strong>: when the exchange reports a settlement
+     result the chat posts a <strong>RESOLVED &middot; YES/NO</strong> message
+     (<a href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noopener">Get Markets</a> <code>result</code> field &middot;
+     <a href="https://docs.kalshi.com/getting_started/market_settlement" target="_blank" rel="noopener">Market Settlement</a>).
      Each row links its official sources: the market API URL and, in <em>Context</em>, the event's official
      <code>settlement_sources</code> (Get Event). Those are resolution sources, not proof of cause: each row
      says "Cause not verified" (F-5B-01). Alerts persist in this browser only.
      <strong>Synthetic markets:</strong> the demo exchange runs synthetic test series (e.g. <span class="mono">KXDEMOFUTHOURLY</span>,
      <span class="mono">KXQUICKSETTLE</span>) that settle constantly and can appear here &mdash; those rows carry a
-     &ldquo;demo test market&rdquo; badge and are never real markets (flag I-15).</p>
+     &ldquo;demo test market&rdquo; badge and are never real markets (flag I-15).
+     See Flagged item I-13 for the unverified external-cause disclosure.</p>
   <div class="alert-controls">
     <label><input type="checkbox" id="alertsEnabled" checked> Alerts enabled</label>
     <label><input type="checkbox" id="autoTrade" disabled> Automated paper trades on swing (paper/SIMULATED only)</label>
@@ -147,14 +155,14 @@ if the browser blocks the request the tables fall back to the snapshot links in
   </div>
   <div class="chat-wrap" id="chatROI" style="display:none">
     <div id="alertsROI"></div>
-    <p class="small muted">High-ROI placeholder rule: swing &ge; $0.10 AND move &ge; 10% of prior price. Not a real model.</p>
+    <p class="small muted">High-ROI placeholder rule: swing &ge; $0.10, price 5&cent;&ndash;95&cent;, traded and open contracts &gt; 0. Not a real model (flagged F-alert-01).</p>
   </div>
 </div>
 
 </main>
 <footer class="wrap"><p class="small muted">Kalshi Demo Tracker — built from verified sources only. Demo environment
-(mock funds): <span class="mono">https://external-api.demo.kalshi.co/trade-api/v2</span> · Docs:
-<a href="https://docs.kalshi.com" target="_blank" rel="noopener">docs.kalshi.com</a> ·
+(mock funds): <span class="mono">https://external-api.demo.kalshi.co/trade-api/v2</span> ·
+Docs: <a href="https://docs.kalshi.com" target="_blank" rel="noopener">docs.kalshi.com</a> ·
 Every table row links its source; blank cells are flagged on <a href="flagged.html">Flagged for review</a>.</p></footer>
 <script src="assets/app.js"></script><script src="assets/trade.js"></script><script src="assets/dashboard.js"></script><script src="assets/roi-model.js"></script><script src="assets/alerts.js"></script><script src="assets/site.js"></script>
 </body>
