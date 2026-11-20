@@ -43,7 +43,8 @@ TOPICS = ("gas", "elections", "culture", "crypto", "golf")
 # this script; the underlying API fields are never altered.
 # ---------------------------------------------------------------------------
 TOPIC_RULES = [
-    # (topic, series_ticker regex, title regex)
+    # (topic, series_ticker regex, title regex) — checked BEFORE the category
+    # overlay so specific ticker/title evidence wins over generic demo categories
     ("gas", re.compile(r"(^KXGAS|GAS(W|NY|US)?$|GAS[A-Z]|NATGAS|HEATINGOIL|DIESEL|PROPANE)", re.I), re.compile(
         r"\b(gasoline|gas price|nat(?:ural)?\s?gas|heating oil|diesel|gallon|aaa gas)\b", re.I)),
     ("crypto", re.compile(r"^KX(BTC|ETH|SOL|XRP|DOGE|CRYPTO|BINANCE|COINBASE|STABLE)", re.I), re.compile(
@@ -52,7 +53,7 @@ TOPIC_RULES = [
         r"\b(golf|pga|masters|ryder cup|open championship|us open golf|liv golf)\b", re.I)),
     ("elections", re.compile(r"^KX(PRES|SENATE|HOUSE|GOV|MAYOR|PRIMARY|ELECTION|FRENCHPRES|"
                              r"NEXT[A-Z]*PRES|POLIT|PARTISAN|NOMD|NATOSECGEN|KNESS|PARL)", re.I), re.compile(
-        r"\b(election|president|senate|house|governor|mayor|primary|nominee|nomination|"
+        r"\b(election|president|senate|house|governor(?:ship)?|mayor|primary|nominee|nomination|"
         r"electoral|parliament|governm(?:ent)?|congress|secretary of state|cabinet)\b", re.I)),
     ("culture", re.compile(r"^KX(OSCAR|EMMY|GRAMMY|GOLDENGLOBE|BAFTA|FEATURE|BILLBOARD|"
                            r"BESTPICTURE|MOVIE|FILM|ALBUM|SONG|CELEB|ROYAL|METGALA|COACHELLA)", re.I), re.compile(
@@ -60,7 +61,7 @@ TOPIC_RULES = [
         r"album|billboard|celebrity|royal|tiktok|viral|culture|gta|video game|nobel|book of the year)\b", re.I)),
 ]
 
-# Category/tag overlay (series metadata from /series; rules recorded per row so
+# Category/tag overlay (fallback after ticker/title rules; recorded per row so
 # every classification is auditable on the Flagged-for-Review page).
 CATEGORY_TOPIC = {
     "crypto": "crypto",
@@ -72,18 +73,19 @@ CATEGORY_TOPIC = {
 
 
 def classify(series_ticker: str, title: str, category: str = "", tags: list | None = None) -> tuple[str, str]:
-    """Return (topic, rule_matched). 'other' means no target-topic rule matched."""
+    """Return (topic, rule_matched). 'other' means no target-topic rule matched.
+    Order: series/title regexes first (most specific), then category, then tags."""
+    for topic, sre, tre in TOPIC_RULES:
+        if sre.search(series_ticker or ""):
+            return topic, f"series_ticker~/{sre.pattern}/"
+        if tre.search(title or ""):
+            return topic, f"title~/{tre.pattern}/"
     cat = (category or "").strip().lower()
     if cat in CATEGORY_TOPIC:
         return CATEGORY_TOPIC[cat], f"category={category}"
     for tag in tags or []:
         if str(tag).strip().lower() == "golf":
             return "golf", f"tag={tag}"
-    for topic, sre, tre in TOPIC_RULES:
-        if sre.search(series_ticker or ""):
-            return topic, f"series_ticker~/{sre.pattern}/"
-        if tre.search(title or ""):
-            return topic, f"title~/{tre.pattern}/"
     return "other", ""
 
 
@@ -241,7 +243,8 @@ def main() -> int:
 
     # 1. Series catalog (used for topic metadata + verification of classification)
     print("fetching series ...")
-    series_list, series_truncated = col.paginate("/series", {"limit": 200}, "series", max_pages=20)
+    series_list, series_truncated = col.paginate(
+        "/series", {"limit": 200, "include_volume": "true"}, "series", max_pages=20)
     series_catalog: dict[str, dict] = {}
     series_meta = []
     for s in series_list:
@@ -252,6 +255,7 @@ def main() -> int:
             "title": s.get("title", ""),
             "category": s.get("category", ""),
             "tags": s.get("tags") or [],
+            "volume_fp": s.get("volume_fp", ""),
             "topic": topic,
             "classification_rule": rule,
             "contract_terms_url": s.get("contract_terms_url", ""),
@@ -296,19 +300,12 @@ def main() -> int:
     write_json(f"{REPO_DATA}/latest/events.json", {
         "retrieved_at": retrieved_at, "count": len(topic_events), "events": topic_events})
 
-    # 3. Open markets (all, then classified — no topic blind spots)
-    print("fetching open markets ...")
-    open_markets, open_truncated = col.paginate("/markets", {"limit": 1000, "status": "open"},
-                                                "markets", max_pages=60)
-    print(f"  {len(open_markets)} open markets (truncated={open_truncated})")
-
-    # 4. Recently settled markets for resolution tracking (last 30 days)
-    print("fetching settled markets ...")
-    settled_markets, settled_truncated = col.paginate(
-        "/markets", {"limit": 1000, "status": "settled", "min_close_ts": int(time.time()) - 30 * 86400},
-        "markets", max_pages=20)
-    print(f"  {len(settled_markets)} settled markets (truncated={settled_truncated})")
-
+    # 3. Markets: SERIES-FIRST, bounded per series. The /markets?status=open
+    # listing is dominated by tens of thousands of crypto strike-ladder markets,
+    # which truncates global pagination before elections/golf markets appear
+    # (observed 2026-11-20: 80k rows hit the cap). The /series catalog IS
+    # complete and carries volume_fp (include_volume=true), so we rank topic
+    # series by volume and query their markets directly.
     def classify_market(m: dict) -> tuple[str, str, str]:
         """(topic, rule, true series ticker) using event/series joins."""
         et = m.get("event_ticker", "")
@@ -320,22 +317,54 @@ def main() -> int:
                                scat, s_entry.get("tags") or [])
         return topic, rule, s_ticker
 
+    TOP_SERIES_PER_TOPIC = 25
     rows_open, rows_settled = [], []
-    other_open: list[dict] = []
     topic_counts = {t: 0 for t in list(TOPICS) + ["other"]}
-    for m in open_markets:
-        topic, rule, s_t = classify_market(m)
-        topic_counts[topic] += 1
-        row = market_row(m, topic, rule, retrieved_at, s_t)
-        (rows_open if topic in TOPICS else other_open).append(row)
-    # store a small "other" sample for context (top 50 by volume) to bound size
-    other_open.sort(key=lambda r: -(to_float(r.get("volume_fp")) or 0.0))
-    rows_open.extend(other_open[:50])
-    for m in settled_markets:
-        topic, rule, s_t = classify_market(m)
-        topic_counts[topic] += 1
-        if topic in TOPICS:  # resolutions for out-of-scope topics are not tracked
-            rows_settled.append(market_row(m, topic, rule, retrieved_at, s_t))
+    selection: dict[str, list] = {}
+    open_truncated_series, settled_truncated_series = [], []
+    for t in TOPICS:
+        sers = [s for s in series_meta if s["topic"] == t]
+        sers.sort(key=lambda s: -(to_float(s.get("volume_fp")) or 0.0))
+        chosen = [s for s in sers if to_float(s.get("volume_fp")) or 0.0][:TOP_SERIES_PER_TOPIC] or sers[:5]
+        selection[t] = chosen
+        print(f"  topic {t}: {len(sers)} series; pulling markets for top {len(chosen)} by series volume")
+        for s in chosen:
+            try:
+                mkts, tr = col.paginate("/markets", {"limit": 1000, "status": "open",
+                                                     "series_ticker": s["ticker"]},
+                                        "markets", max_pages=3)
+            except RuntimeError as e:
+                print(f"  open markets {s['ticker']}: {e}")
+                continue
+            if tr:
+                open_truncated_series.append(s["ticker"])
+            for m in mkts:
+                topic, rule, s_t = classify_market(m)
+                topic_counts[topic] += 1
+                rows_open.append(market_row(m, topic, rule, retrieved_at, s_t))
+    # resolutions: settled markets for the top 10 series per topic, last 30 days
+    for t in TOPICS:
+        for s in selection[t][:10]:
+            try:
+                mkts, tr = col.paginate("/markets", {"limit": 1000, "status": "settled",
+                                                     "series_ticker": s["ticker"],
+                                                     "min_close_ts": int(time.time()) - 30 * 86400},
+                                        "markets", max_pages=2)
+            except RuntimeError as e:
+                print(f"  settled markets {s['ticker']}: {e}")
+                continue
+            if tr:
+                settled_truncated_series.append(s["ticker"])
+            for m in mkts:
+                topic, rule, s_t = classify_market(m)
+                rows_settled.append(market_row(m, topic, rule, retrieved_at, s_t))
+    seen_t = set()
+    deduped = []
+    for r in rows_open:  # a market can appear under one series only, but be safe
+        if r["ticker"] not in seen_t:
+            seen_t.add(r["ticker"])
+            deduped.append(r)
+    rows_open = deduped
 
     rows_open.sort(key=lambda r: -(to_float(r.get("volume_fp")) or 0.0))
     rows_settled.sort(key=lambda r: -(to_float(r.get("volume_fp")) or 0.0))
@@ -535,9 +564,19 @@ def main() -> int:
             "settlement": "https://docs.kalshi.com/getting_started/market_settlement",
         },
         "topic_counts": topic_counts,
+        "collection_method": (
+            "series-first: /series catalog (complete, include_volume=true) classified into "
+            "topics; markets pulled for the top %d series per topic by series volume_fp "
+            "(open: 3 pages max per series; settled: top 10 series per topic, 30-day window, "
+            "2 pages max). Global /markets pagination is truncated by crypto strike-ladder "
+            "markets (observed 80k+ rows), so series-first selection avoids that blind spot."
+            % TOP_SERIES_PER_TOPIC),
+        "series_selection": {t: [{"ticker": s["ticker"], "volume_fp": s.get("volume_fp", "")}
+                                 for s in selection[t]] for t in TOPICS},
         "truncated": {
             "series": series_truncated, "events": events_truncated,
-            "open_markets": open_truncated, "settled_markets": settled_truncated,
+            "open_markets_series": open_truncated_series,
+            "settled_markets_series": settled_truncated_series,
         },
         "api_calls": col.call_count,
         "request_log": col.requests,
