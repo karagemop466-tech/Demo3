@@ -7,16 +7,19 @@
   "External news links are search deep-links offered as candidate catalysts; timing proximity is not evidence of causation."
  ],
  "event_page_probe": {
-  "attempted": false,
-  "error": "offline mode does not probe (no route from the dev sandbox)",
-  "status_code": null,
-  "ticker_echoed": false
+  "attempted": true,
+  "checked_at": "2026-11-20T19:37:34Z",
+  "error": null,
+  "site_root": "https://kalshi.com",
+  "status_code": 429,
+  "ticker_echoed": false,
+  "url": "https://kalshi.com/event/KXBTCY-27JAN0100"
  },
- "events_with_swings": 2,
- "generated_at": "2026-11-20T19:31:58Z",
+ "events_with_swings": 3,
+ "generated_at": "2026-11-20T19:36:22Z",
  "hours_1m": 48,
  "hours_60m": 168,
- "markets_scanned": 12,
+ "markets_scanned": 60,
  "per_topic_markets": 12,
  "rearm_band_dollars": 0.05,
  "sources": [
@@ -33,17 +36,27 @@
  "stats": {
   "errors": 0,
   "event_page_probe": {
-   "attempted": false,
-   "error": "offline mode does not probe (no route from the dev sandbox)",
-   "status_code": null,
-   "ticker_echoed": false
+   "attempted": true,
+   "checked_at": "2026-11-20T19:37:34Z",
+   "error": null,
+   "site_root": "https://kalshi.com",
+   "status_code": 429,
+   "ticker_echoed": false,
+   "url": "https://kalshi.com/event/KXBTCY-27JAN0100"
   },
-  "mode": "offline",
-  "requests": 0,
-  "universe_units": 12,
+  "mode": "live",
+  "requests": 122,
+  "universe_counts": {
+   "crypto": 12,
+   "culture": 12,
+   "elections": 12,
+   "gas": 12,
+   "golf": 12
+  },
+  "universe_units": 60,
   "warnings": []
  },
- "swings_found": 24,
+ "swings_found": 148,
  "threshold_dollars": 0.1,
  "window_minutes": 60
 }

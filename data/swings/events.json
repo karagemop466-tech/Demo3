@@ -1,10 +1,36 @@
 {
  "events": [
   {
+   "close_time": "2029-11-07T15:00:00Z",
+   "event_ticker": "KXPRESPERSON-28",
+   "first_swing_iso": "2026-11-13T22:00:00Z",
+   "last_swing_iso": "2026-11-20T19:16:00Z",
+   "markets_flagged": [
+    "KXPRESPERSON-28-VRAM"
+   ],
+   "max_abs_delta_dollars": 0.799,
+   "n_swings": 105,
+   "resolution_outcome": null,
+   "reversion_hits": 104,
+   "reversion_rate": 0.9905,
+   "series": [
+    "KXPRESPERSON"
+   ],
+   "source_urls": [
+    "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESPERSON-28-VRAM",
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESPERSON/markets/KXPRESPERSON-28-VRAM/candlesticks?start_ts=1794598612&end_ts=1795203412&period_interval=60",
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESPERSON/markets/KXPRESPERSON-28-VRAM/candlesticks?start_ts=1795030611&end_ts=1795203411&period_interval=1"
+   ],
+   "status": "active",
+   "title": "Who will win the next presidential election?",
+   "topic": "elections",
+   "topic_label": "Elections"
+  },
+  {
    "close_time": "2028-11-07T15:00:00Z",
    "event_ticker": "KXPRESNOMD-28",
-   "first_swing_iso": "2026-11-13T14:00:00Z",
-   "last_swing_iso": "2026-11-19T17:00:00Z",
+   "first_swing_iso": "2026-11-13T21:00:00Z",
+   "last_swing_iso": "2026-11-20T19:36:00Z",
    "markets_flagged": [
     "KXPRESNOMD-28-BOBA",
     "KXPRESNOMD-28-ESLO",
@@ -14,10 +40,10 @@
     "KXPRESNOMD-28-JTAL"
    ],
    "max_abs_delta_dollars": 0.851,
-   "n_swings": 21,
+   "n_swings": 33,
    "resolution_outcome": null,
-   "reversion_hits": 21,
-   "reversion_rate": 1.0,
+   "reversion_hits": 28,
+   "reversion_rate": 0.8485,
    "series": [
     "KXPRESNOMD"
    ],
@@ -27,36 +53,51 @@
     "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-GW",
     "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-HBID",
     "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-JSTE",
-    "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-JTAL"
+    "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-JTAL",
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-BOBA/candlesticks?start_ts=1794598619&end_ts=1795203419&period_interval=60",
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-ESLO/candlesticks?start_ts=1794598614&end_ts=1795203414&period_interval=60",
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-ESLO/candlesticks?start_ts=1795030613&end_ts=1795203413&period_interval=1",
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-GW/candlesticks?start_ts=1794598616&end_ts=1795203416&period_interval=60",
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-HBID/candlesticks?start_ts=1794598611&end_ts=1795203411&period_interval=60",
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-HBID/candlesticks?start_ts=1795030610&end_ts=1795203410&period_interval=1",
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-JSTE/candlesticks?start_ts=1794598625&end_ts=1795203425&period_interval=60",
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-JTAL/candlesticks?start_ts=1794598624&end_ts=1795203424&period_interval=60",
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-JTAL/candlesticks?start_ts=1795030623&end_ts=1795203423&period_interval=1"
    ],
    "status": "active",
-   "title": "Will Barack Obama be the Democratic Presidential nominee in 2028?",
+   "title": "Will Hunter Biden be the nominee for the Presidency for the Democratic party?",
    "topic": "elections",
    "topic_label": "Elections"
   },
   {
-   "close_time": "2029-11-07T15:00:00Z",
-   "event_ticker": "KXPRESPERSON-28",
-   "first_swing_iso": "2026-11-13T22:00:00Z",
-   "last_swing_iso": "2026-11-14T02:00:00Z",
+   "close_time": "2027-01-01T05:00:00Z",
+   "event_ticker": "KXBTCY-27JAN0100",
+   "first_swing_iso": "2026-11-13T21:00:00Z",
+   "last_swing_iso": "2026-11-20T19:35:00Z",
    "markets_flagged": [
-    "KXPRESPERSON-28-VRAM"
+    "KXBTCY-27JAN0100-B47500",
+    "KXBTCY-27JAN0100-B97500"
    ],
-   "max_abs_delta_dollars": 0.799,
-   "n_swings": 3,
+   "max_abs_delta_dollars": 0.96,
+   "n_swings": 10,
    "resolution_outcome": null,
-   "reversion_hits": 3,
-   "reversion_rate": 1.0,
+   "reversion_hits": 9,
+   "reversion_rate": 0.9,
    "series": [
-    "KXPRESPERSON"
+    "KXBTCY"
    ],
    "source_urls": [
-    "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESPERSON-28-VRAM"
+    "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTCY-27JAN0100-B47500",
+    "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTCY-27JAN0100-B97500",
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXBTCY/markets/KXBTCY-27JAN0100-B47500/candlesticks?start_ts=1794598592&end_ts=1795203392&period_interval=60",
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXBTCY/markets/KXBTCY-27JAN0100-B47500/candlesticks?start_ts=1795030591&end_ts=1795203391&period_interval=1",
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXBTCY/markets/KXBTCY-27JAN0100-B97500/candlesticks?start_ts=1794598595&end_ts=1795203395&period_interval=60",
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXBTCY/markets/KXBTCY-27JAN0100-B97500/candlesticks?start_ts=1795030594&end_ts=1795203394&period_interval=1"
    ],
    "status": "active",
-   "title": "Who will win the next presidential election?",
-   "topic": "elections",
-   "topic_label": "Elections"
+   "title": "BTC price  on Jan 1, 2027?",
+   "topic": "crypto",
+   "topic_label": "Crypto"
   }
  ],
  "meta": {
@@ -68,16 +109,19 @@
    "External news links are search deep-links offered as candidate catalysts; timing proximity is not evidence of causation."
   ],
   "event_page_probe": {
-   "attempted": false,
-   "error": "offline mode does not probe (no route from the dev sandbox)",
-   "status_code": null,
-   "ticker_echoed": false
+   "attempted": true,
+   "checked_at": "2026-11-20T19:37:34Z",
+   "error": null,
+   "site_root": "https://kalshi.com",
+   "status_code": 429,
+   "ticker_echoed": false,
+   "url": "https://kalshi.com/event/KXBTCY-27JAN0100"
   },
-  "events_with_swings": 2,
-  "generated_at": "2026-11-20T19:31:58Z",
+  "events_with_swings": 3,
+  "generated_at": "2026-11-20T19:36:22Z",
   "hours_1m": 48,
   "hours_60m": 168,
-  "markets_scanned": 12,
+  "markets_scanned": 60,
   "per_topic_markets": 12,
   "rearm_band_dollars": 0.05,
   "sources": [
@@ -94,17 +138,27 @@
   "stats": {
    "errors": 0,
    "event_page_probe": {
-    "attempted": false,
-    "error": "offline mode does not probe (no route from the dev sandbox)",
-    "status_code": null,
-    "ticker_echoed": false
+    "attempted": true,
+    "checked_at": "2026-11-20T19:37:34Z",
+    "error": null,
+    "site_root": "https://kalshi.com",
+    "status_code": 429,
+    "ticker_echoed": false,
+    "url": "https://kalshi.com/event/KXBTCY-27JAN0100"
    },
-   "mode": "offline",
-   "requests": 0,
-   "universe_units": 12,
+   "mode": "live",
+   "requests": 122,
+   "universe_counts": {
+    "crypto": 12,
+    "culture": 12,
+    "elections": 12,
+    "gas": 12,
+    "golf": 12
+   },
+   "universe_units": 60,
    "warnings": []
   },
-  "swings_found": 24,
+  "swings_found": 148,
   "threshold_dollars": 0.1,
   "window_minutes": 60
  }
