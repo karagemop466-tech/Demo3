@@ -48,8 +48,7 @@ MARKETS_PER_EVENT_CAP = 30   # keep the largest markets per event in the payload
 TRACKED_CAP = 150
 RESOLUTION_LOOKBACK_DAYS = 90
 CANDLE_RANGES = {1: (1, 24 * 60), 60: (60, 30 * 24 * 60), 1440: (1440, 180 * 24 * 60)}
-EVENT_PAGES = 45             # x200 = 9,000 events
-MARKET_PAGES = 45            # x200 = 9,000 markets
+EVENT_PAGES = 45             # x200 = 9,000 open events incl. nested markets
 
 # Seed series with OFFICIAL ticker evidence for the settled-resolution sweep
 # (Kalshi fee schedule https://kalshi.com/docs/kalshi-fee-schedule.pdf:
@@ -293,48 +292,53 @@ class Collector:
         )
         self.write_json("cors_test.json", result)
 
-    def load_open_markets(self) -> dict[str, list[dict]]:
-        by_event: dict[str, list[dict]] = defaultdict(list)
-        total = 0
-        for m in self.client.paginate("/markets", {"status": "open"}, "markets",
-                                      max_pages=MARKET_PAGES):
-            et = m.get("event_ticker")
-            if not et:
-                continue
-            by_event[et].append(m)
-            total += 1
-        self.warn(f"loaded {total} open markets across {len(by_event)} events via /markets?status=open")
-        return by_event
+    def load_events_nested(self) -> dict[str, dict]:
+        """One paginated pass over /events?status=open&with_nested_markets=true.
 
-    def load_event_meta(self) -> dict[str, dict]:
-        meta: dict[str, dict] = {}
-        for e in self.client.paginate("/events", {"status": "open"}, "events",
-                                      max_pages=EVENT_PAGES):
-            meta[e.get("event_ticker")] = e
-        self.warn(f"loaded {len(meta)} event metas via /events?status=open")
-        return meta
+        /markets?status=open is ordered newest-first on the demo exchange and is
+        continuously flooded by newly-created synthetic MVE (cross-category) markets,
+        which pushed established events beyond any fixed page window (observed live
+        2026-11-20: 9,000 newest markets covered only 445 events). The /events listing
+        is ordered stably, so paginating it WITH nested markets gives complete,
+        stable coverage of every open event and its markets in ~EVENT_PAGES requests.
+        """
+        events: dict[str, dict] = {}
+        market_total = 0
+        for e in self.client.paginate("/events", {"status": "open",
+                                                  "with_nested_markets": "true"},
+                                      "events", max_pages=EVENT_PAGES):
+            ticker = e.get("event_ticker")
+            if not ticker:
+                continue
+            # guard against duplicate deliveries across pages
+            markets = {m.get("ticker"): m for m in (e.get("markets") or []) if m.get("ticker")}
+            e = dict(e, markets=list(markets.values()))
+            events[ticker] = e
+            market_total += len(markets)
+        self.warn(f"loaded {len(events)} open events / {market_total} nested markets "
+                  "via /events?status=open&with_nested_markets=true")
+        return events
 
     def collect(self) -> None:
         print(f"=== collect start {utc_now_iso()} ===", flush=True)
         self.probe_cors()
 
-        by_event = self.load_open_markets()
-        event_meta = self.load_event_meta()
+        events_nested = self.load_events_nested()
 
-        # Stage 1: classify + estimate dollars from aggregated markets.
+        # Stage 1: classify + estimate dollars from nested markets.
         staged: list[tuple[str, dict, list, float, float, float]] = []
-        for ticker, markets in by_event.items():
-            e = event_meta.get(ticker)
-            if e is None:
-                # event meta beyond the pagination window: keep the market-level title
-                e = {"event_ticker": ticker, "title": (markets[0].get("title") or ticker),
-                     "series_ticker": ticker.rsplit("-", 1)[0],
-                     "category": None, "settlement_sources": []}
+        for ticker, e in events_nested.items():
+            markets = e.get("markets") or []
             cat = (e.get("category") or "").lower()
             self.category_counts[e.get("category") or "(none)"] += 1
             topic = classify_event(e, cat)
             if not topic:
                 continue
+            if not markets:
+                # event without nested markets (rare): fall back to per-event fetch
+                markets = self.load_nested_markets(ticker)
+                if markets:
+                    e = dict(e, markets=markets)
             dollars, vol24, oi = estimate_event_dollars(markets)
             staged.append((topic, e, markets, dollars, vol24, oi))
 
@@ -411,8 +415,7 @@ class Collector:
             "request_count": self.client.request_count,
             "error_count": self.client.error_count,
             "tracked_open_events": len(ranked_all),
-            "open_markets_seen": sum(len(v) for v in by_event.values()),
-            "open_events_seen": len(by_event),
+            "open_events_seen": len(events_nested),
             "top_event": ({ "title": ranked_all[0]["title"],
                             "est_dollar_volume": ranked_all[0]["est_dollar_volume"] }
                           if ranked_all else None),

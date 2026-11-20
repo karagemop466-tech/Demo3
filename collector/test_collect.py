@@ -150,7 +150,14 @@ class MockAPI(BaseHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(b'{"status":"operational"}')
         elif p == "/events":
-            self._json(EVENTS_PAGE)
+            nested = q.get("with_nested_markets", ["false"])[0] == "true"
+            if not nested:
+                self._json({"cursor": "", "events": [
+                    {k: v for k, v in e.items() if k != "markets"} for e in EVENTS_PAGE["events"]]})
+                return
+            events = [dict(e, markets=NESTED_MARKETS.get(e["event_ticker"], []))
+                      for e in EVENTS_PAGE["events"]]
+            self._json({"cursor": "", "events": events})
         elif p == "/markets":
             series = q.get("series_ticker", [None])[0]
             status = q.get("status", [None])[0]
