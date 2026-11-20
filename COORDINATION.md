@@ -348,3 +348,15 @@ Follow-up requests from session 06cbd03f addressed at integration:
 - 2026-11-20 12:25 UTC: PR https://github.com/karagemop466-tech/Demo3/pull/24 (`arena/4d10aedf-demo3` -> `main`) opened with summary, sources and flagged irregularities. Pre-merge checks green (verify_rows 725/725, verify_site PASSED, jsdom smoke PASSED).
 - 2026-11-20 12:29 UTC: `gh pr merge 24 --merge` reported conflicts — `main` had advanced with sessions `3b5e95bd`/`dd229508`/`arena-3a22fb0f` deliveries (PRs #18/#21/#22). Conflicts in `.gitignore`, `README.md`, `docs/executive-summary.md`, `COORDINATION.md` resolved by keeping both sides: `main`'s records preserved verbatim, 4d10aedf's records added as new sections. Nothing discarded (handoff/conflict protocol).
 - 2026-11-20 12:31 UTC: **PR #24 MERGED** — merge commit `48fe55e`. `Checks` workflow SUCCESS on the merge; `pages build and deployment` workflow SUCCESS; the Pages API reports `built` (source `main` /). Live site verified via page fetch: https://karagemop466-tech.github.io/Demo3/ serves the merged canonical landing with live status "LIVE · trading active (demo)", the executive-summary source table, decision registers, and archive links (docs/, docs/tracker/, analysis/, demo-desk/, research/). This line records the actual result; the follow-up board commit carries the confirmation to `main`.
+
+## Task board — session 6d201d19 (live swing alerts + two scrolling chats, branch `arena/6d201d19-demo3`)
+
+Claimed 2026-11-20 (UTC). Branch fixed by the platform to `arena/6d201d19-demo3` (R-04). Base `b3b2b23` (main).
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| S1 ≥ $0.10 swing detector (snapshot + live) | in progress | 6d201d19 | `scripts/price_alerts.py`, `scripts/tests/test_price_alerts.py`, `data/latest/alerts.json`, `collect.yml` (one step), `check.yml` (test step) | `GET /markets?tickers=` (https://docs.kalshi.com/api-reference/market/get-markets.md); `data/history/prices.jsonl` (collector snapshots) | F-6D-01 .. F-6D-05 |
+| S2 Two scrolling alert chats (All / High-ROI screen) | in progress | 6d201d19 | `alerts.html`, `assets/alerts-core.js`, `assets/alerts.js`, `tests/alerts.test.js` | browser fetch of the same official endpoint; CORS evidence `data/cors_test.json` | F-6D-02 (cause links unverifiable), F-6D-04 |
+| S3 Site integration (nav entry, flags, README) | in progress | 6d201d19 | `scripts/build_root_site.py` (NAV, build_alerts, flags), `README.md`, regenerated root pages | `scripts/verify_root_site.py` | — |
+
+Protocol notes: other open PRs (#17 `arena/d330ff7d`, #19 `arena/b2e728ab`, #23 `arena/c2aac20e`) belong to other branches and are not touched here.
