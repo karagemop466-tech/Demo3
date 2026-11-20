@@ -141,6 +141,28 @@ ok(errors.length === 0, `no script errors during render (${errors.slice(0, 3).jo
 ok(doc.getElementById("watchToggle").checked === false, "live polling is off until the user opts in");
 ok(doc.getElementById("watchState").textContent.trim() === "idle", "watch state starts idle");
 
+// exchange cross-check: an `exact` row must show the corroborating prices, other rows a flag
+{
+  const rows = snapshot.swings || [];
+  const exact = rows.find((r) => (r.api_corroboration || {}).status === "exact");
+  if (exact) {
+    const idx = rows.indexOf(exact);
+    const tr = doc.querySelectorAll("#ledger tbody tr")[idx];
+    ok(/exchange-corroborated/.test(tr.textContent),
+       "the corroborated row is labelled as confirmed by the exchange record");
+    ok(tr.textContent.includes(exact.api_corroboration.previous_price_dollars) &&
+       tr.textContent.includes(exact.api_corroboration.last_price_dollars),
+       "the corroboration quotes both API price fields, so a reader can re-check them");
+  }
+  const unchecked = rows.filter((r) => (r.api_corroboration || {}).status !== "exact");
+  ok(unchecked.every((r) => /not cross-checked|API prices differ|magnitude only/.test(
+        doc.querySelectorAll("#ledger tbody tr")[rows.indexOf(r)].textContent)),
+     "a row without a matching API record is flagged, never silently trusted");
+}
+// the unverified per-event page URL must not be rendered as if it were a source
+ok(!/demo\.kalshi\.co\/market\//.test(doc.getElementById("ledger").innerHTML),
+   "no inferred demo-desk page URL is published");
+
 ok(/recorded_at=/.test(doc.getElementById("lastRun").textContent),
    "the pipeline run note (success or failure) is published on the page itself");
 
@@ -187,10 +209,28 @@ if (fs.existsSync(stratPath)) {
 }
 
 /* ---------- browser-side alert rule: poll once against a stubbed demo API ---------- */
-// The seeded swing's last published price; +15 cents must fire, +9 cents must not.
-const seeded = snapshot.swings[0];
-const lastUnits = Math.round(Number(seeded.to.last_price_dollars) * 10000);
-const priceIn = (unitsDelta) => ((lastUnits + unitsDelta) / 10000).toFixed(4);
+// Pick a market whose latest tape price leaves room for +$0.15 inside the $0.01-$1.00 range,
+// then compare against exactly what the page sees (its last sample for that ticker).
+const tapeByTicker = {};
+for (const line of fs.readFileSync(path.join(REPO, "data", "history", "prices.jsonl"), "utf8")
+  .split("\n")) {
+  if (!line.trim()) continue;
+  let r; try { r = JSON.parse(line); } catch { continue; }
+  (tapeByTicker[r.ticker] = tapeByTicker[r.ticker] || []).push(r);
+}
+let target = null;
+for (const sw of snapshot.swings) {
+  const rows = tapeByTicker[sw.ticker] || [];
+  if (!rows.length) continue;
+  const last = Number(rows[rows.length - 1].last_price_dollars);
+  if (last >= 0.05 && last <= 0.80) { target = { ticker: sw.ticker, last, swing: sw }; break; }
+}
+if (!target) {
+  const sw = snapshot.swings[0];
+  target = { ticker: sw.ticker, last: Number(sw.to.last_price_dollars), swing: sw };
+}
+const seeded = target.swing;
+const priceIn = (unitsDelta) => (target.last + unitsDelta / 10000).toFixed(4);
 
 const answers = {
   live: { markets: [{
@@ -233,8 +273,10 @@ window.fetch = async (input) => {
 
 click(doc.getElementById("pollNow"));
 await wait(120);
-const alertText = doc.getElementById("watchAlerts").textContent;
-ok(/0\.15/.test(alertText) && /▲/.test(alertText),
+const alertBox = doc.getElementById("watchAlerts");
+const swingAlerts = () => [...alertBox.querySelectorAll(".alert.up, .alert.down")];
+const alertText = alertBox.textContent;
+ok(swingAlerts().length === 1 && /0\.15/.test(alertText) && /▲/.test(alertText),
    "a $0.15 in-browser move fires an UP alert at the same >= $0.10 rule");
 ok(/external-api\.demo\.kalshi\.co/.test(doc.getElementById("watchAlerts").innerHTML),
    "the alert links the exact market API record it came from");
@@ -247,8 +289,9 @@ mode = "below";
 doc.getElementById("watchAlerts").innerHTML = "";
 click(doc.getElementById("pollNow"));
 await wait(120);
-ok(doc.getElementById("watchAlerts").textContent.trim() === "",
-   "a $0.09 move does NOT alert (threshold is exact, not rounded)");
+ok(swingAlerts().length === 0,
+   "a $0.09 move does NOT alert (threshold is exact, not rounded) — " +
+   JSON.stringify(alertBox.textContent.slice(0, 90)));
 
 mode = "settled";
 doc.getElementById("watchAlerts").innerHTML = "";

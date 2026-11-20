@@ -33,6 +33,9 @@ SITE = os.path.abspath(os.path.join(HERE, ".."))
 REPO = os.path.abspath(os.path.join(SITE, ".."))
 DATA = os.path.join(SITE, "data")
 
+CORROBORATION_STATES = {"exact", "mismatch", "same_size_different_levels",
+                        "unverified_api_fields"}
+
 DEMO_HOSTS = {"external-api.demo.kalshi.co", "demo-api.kalshi.co"}
 ALLOWED_EXTERNAL = {
     "docs.kalshi.com", "kalshi.com", "demo.kalshi.co", "external-api.demo.kalshi.co",
@@ -118,8 +121,13 @@ def check_swings() -> dict:
             host = urllib.parse.urlparse(market_url).netloc
             if host not in DEMO_HOSTS:
                 fail(f"swing {label}: market_api_url host {host!r} is not an official demo host")
-            if f"/markets/{s.get('ticker')}" not in market_url:
-                fail(f"swing {label}: market_api_url does not point at its own ticker")
+            want = f"https://{host}/trade-api/v2/markets/{s.get('ticker')}"
+            if market_url != want:
+                fail(f"swing {label}: market_api_url must be the canonical single-market request "
+                     f"({want}), got {market_url}")
+            via = (links.get("fetched_via") or "").strip()
+            if via and s.get("ticker") not in via:
+                fail(f"swing {label}: fetched_via URL does not name this ticker")
         stats["links"] += 1
         cats = s.get("catalysts") or []
         if cats:

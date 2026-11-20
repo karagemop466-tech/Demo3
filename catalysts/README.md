@@ -18,10 +18,11 @@ every attribution auditable.
 | `feeds.json` | News-feed allowlist. Every entry is `pending_ci_probe` until a run parses items from it. |
 | `index.html`, `assets/*` | The page: run status, live watch, filters, price chart with swing markers, ledger, strategy table, feed health, endpoint probe, flags. |
 | `data/` | Artifacts written by the scan and committed so the page renders without any network access. |
-| `tests/test_scan.py` | 36 offline unit/integration tests against a mock demo API + mock feed. |
+| `tests/test_scan.py` | 42 offline unit/integration tests against a mock demo API + mock feed. |
 | `tests/check_page.py` | Publish gate: exact-decimal re-check of every published swing, link provenance, broken-local-link check, strategy arithmetic. |
-| `tests/smoke.mjs` | jsdom render test of the page, including the browser-side ≥ $0.10 rule and the "no verdict below the sample floor" rule. |
-| `../.github/workflows/catalysts.yml` | Runs tests, probes, scan every 15 min; commits `data/`; asks Pages to rebuild. |
+| `tests/smoke.mjs` | 39-check jsdom render test of the page: rows, per-row source links, filters, chart hook, the simulated-book gate, and the browser-side ≥ $0.10 rule (fires on +$0.15, silent on +$0.09, "resolved NO · tracking stopped" on settlement). |
+| `report_run.py` | Writes `data/last_run.txt` — one screen of pipeline health (artifacts present, swing/feed/endpoint counts), committed by the workflow on every run, success **or** failure, and shown on the page. |
+| `../.github/workflows/catalysts.yml` | Runs tests, probes, scan every 15 min (and on session-branch pushes, so a branch can earn live data before its PR merges); commits `data/`; asks Pages to rebuild. |
 
 ## What "may have caused" is allowed to mean here
 
@@ -37,11 +38,17 @@ every attribution auditable.
    (`items_in_window_but_no_keyword_overlap`, `no_feed_item_in_window`, `no_feed_items_available`,
    `feeds_not_polled_offline`). A feed that a run could not parse contributes nothing and is listed
    as *not usable* in the health table. Nothing is back-filled from memory or from a previous run.
-5. **Provenance per row** — each swing links its market record
+5. **Exchange cross-check** — the market record publishes `previous_price_dollars` and
+   `last_price_dollars`, so a tape-derived row can be confirmed by the exchange itself: matching
+   prices are published as `api_corroboration.status = "exact"` with both values quoted; a record
+   that disagrees is published as `mismatch` and the row is *not* upgraded; a record without those
+   fields stays `unverified_api_fields`. Because the API timestamps only `last_price_dollars`, the
+   check covers prices, never the interval (F-cat-08). `check_page.py` re-derives every claim.
+6. **Provenance per row** — each swing links its market record
    (`GET /markets/{ticker}`), its event (`GET /events/{event_ticker}`) and its series
    (`GET /series/{series_ticker}`); the series' own `settlement_sources` — the outlets Kalshi itself
    cites for that series — are shown separately from the news candidates.
-6. **Resolution** — a market is polled until the API reports `status: finalized/settled` with
+7. **Resolution** — a market is polled until the API reports `status: finalized/settled` with
    `result: yes|no`; the result and `settlement_value_dollars` are published and the market is then
    dropped from the watchlist (`data/watch_state.json`).
 
@@ -93,5 +100,11 @@ their snapshot's `source_url`, so an offline artifact is still traceable to an o
 * The feed allowlist could not be probed from the build sandbox (its egress allowlist is
   github.com / npmjs.org / pypi.org only), which is why nothing here claims a feed works — the
   scheduled probe decides, and the health table shows the truth.
+* * The demo desk's per-event page URL is **not** published (only the API records and the documented
+  host root), because the pattern is undocumented and unverifiable from here — F-cat-09.
+* A large Δ can be a single print against a wide quote: the 2026-11-20 `KXPRESNOMD-28-BOBA` row
+  ($0.0050 → $0.8630, corroborated by the exchange's own `previous_price_dollars`) carried
+  `yes_bid 0.0010 / yes_ask 0.8630` on `deci_cent` ticks with 63,615 contracts of 24 h volume against
+  418,777,737 lifetime — F-cat-10. The quote and ladder print beside every row for that reason.
 * Simulated strategy figures are gross of fees/spread and are marked *not evaluable* below 30
   trades per category.

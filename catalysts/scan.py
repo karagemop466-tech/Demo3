@@ -386,6 +386,7 @@ def poll_markets(http: Http, root: str, tickers: list[str], log) -> tuple[list[d
             got = data.get("markets") or []
             for m in got:
                 m["_source_url"] = url
+                m["_fetch_url"] = url
                 m["_single_source_url"] = market_url(root, m.get("ticker", ""))
             markets.extend(got)
             for m in got:
@@ -459,7 +460,12 @@ def snapshot_index(repo: str) -> dict:
         m["_source_kind"] = "snapshot"
         m["_snapshot_file"] = origin
         m["_snapshot_retrieved_at"] = m.get("retrieved_at") or retrieved or ""
-        m["_single_source_url"] = m.get("source_url") or market_url(DEMO_REST_ROOT, t)
+        m["_fetch_url"] = m.get("source_url") or ""
+        # `source_url` on a snapshot row is the LIST request it came from
+        # (/markets?tickers=…). The per-row link published on the site is the canonical
+        # single-record request for THIS ticker; the list request is kept alongside it so
+        # a reviewer can replay exactly what was fetched.
+        m["_single_source_url"] = market_url(DEMO_REST_ROOT, t)
         markets[t] = m
 
     for name in ("markets_open.json", "markets_settled.json"):
@@ -564,11 +570,56 @@ def market_links(root: str, market: dict, event_from_api: str = "") -> dict:
     series = market.get("series_ticker") or ""
     return {
         "market_api_url": market.get("_single_source_url") or market_url(root, ticker),
+        "fetched_via": market.get("_fetch_url") or market.get("_source_url") or "",
         "event_api_url": (f"{root}/events/{event}" if event else ""),
-        "kalshi_market_page": (f"https://demo.kalshi.co/market/{event}" if event
-                               else ("https://demo.kalshi.co/" if not event else "")),
+        # No per-event demo-desk URL is published: the path pattern for one event is not
+        # documented in the official docs and this environment cannot load the SPA to
+        # confirm it, so `demo.kalshi.co/market/<event>` would be an inferred value. The
+        # documented host root is linked instead (see flags on the page), and the verifiable
+        # source for every number stays the API record linked above.
+        "kalshi_market_page": "",
+        "kalshi_site_root": "https://demo.kalshi.co/",
+        "kalshi_market_page_note": (
+            "Per-event page URL not published: the demo desk's URL pattern for a single "
+            "event is not documented at https://docs.kalshi.com/getting_started/demo_env and "
+            "could not be confirmed from this build environment, so guessing it would be an "
+            "inferred value. The canonical API records above are the verifiable sources."),
         "series_ticker": series,
     }
+
+
+def api_corroboration(swing: dict, market: dict) -> dict:
+    """Cross-check the tape-derived swing against the exchange's own previous/last fields.
+
+    The official market record publishes `previous_price_dollars` and `last_price_dollars`
+    for the same market, so a swing detected from the tape can be confirmed by the
+    exchange itself. The demo API does not timestamp `previous_price_dollars`, so a match
+    on the *prices* is reported; the *interval* stays unverified (F-cat-01) and the
+    sample-gap length is published next to it. Mismatches are published as mismatches.
+    """
+    prev = parse_dollars(market.get("previous_price_dollars"))
+    last = parse_dollars(market.get("last_price_dollars"))
+    f = parse_dollars((swing.get("from") or {}).get("last_price_dollars"))
+    t = parse_dollars((swing.get("to") or {}).get("last_price_dollars"))
+    out = {"last_price_dollars": market.get("last_price_dollars") or "",
+           "previous_price_dollars": market.get("previous_price_dollars") or "",
+           "yes_bid_dollars": market.get("yes_bid_dollars") or "",
+           "yes_ask_dollars": market.get("yes_ask_dollars") or "",
+           "previous_yes_ask_dollars": market.get("previous_yes_ask_dollars") or "",
+           "previous_yes_bid_dollars": market.get("previous_yes_bid_dollars") or "",
+           "price_level_structure": market.get("price_level_structure") or "",
+           "volume_24h_fp": market.get("volume_24h_fp") or "",
+           "note": "prices only: the API does not timestamp previous_price_dollars, so the "
+                   "interval in which the move happened stays bounded by the sample gap"}
+    if prev is None or last is None or f is None or t is None:
+        out["status"] = "unverified_api_fields"
+    elif last == t and prev == f:
+        out["status"] = "exact"
+    elif abs(last - prev) == abs(t - f):
+        out["status"] = "same_size_different_levels"
+    else:
+        out["status"] = "mismatch"
+    return out
 
 
 # ---------------------------------------------------------------- news feed layer
@@ -726,7 +777,7 @@ def fetch_feeds(http: Http, feeds: list[dict], log) -> tuple[list[dict], list[di
 
 
 # ------------------------------------------------------------------------ enrich
-def enrich(swing: dict, market: dict | None, series_info: dict | None, root: str,
+def enrich(swing: dict, market: "dict | None", series_info: "dict | None", root: str,
            event_info: dict | None = None) -> None:
     """Attach verifiable links + resolution state to a swing record."""
     ticker = swing["ticker"]
@@ -747,7 +798,12 @@ def enrich(swing: dict, market: dict | None, series_info: dict | None, root: str
         swing["event_ticker"] = market.get("event_ticker") or swing.get("event_ticker") or ""
         swing["series_ticker"] = market.get("series_ticker") or swing.get("series_ticker") or ""
         swing["market_url_pair"] = market.get("_source_url") or ""
+        swing["api_corroboration"] = api_corroboration(swing, market)
     else:
+        swing["api_corroboration"] = {
+            "status": "unverified_api_fields",
+            "note": "no market record available to this run (no egress) — the tape row alone "
+                    "is the evidence, so the exchange cross-check is left unverified"}
         swing["status"] = ""
         swing["result"] = ""
         swing["close_time"] = ""

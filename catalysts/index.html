@@ -256,6 +256,32 @@ API record it came from; anything the API did not return is blank and flagged, n
       with <span class="mono">limit=3</span> returned the full category page set, so catalog paging here
       is cursor-based — this corroborates F9 recorded by session 6908a11a.
       <a href="https://docs.kalshi.com/api-reference/market/get-series-list" target="_blank" rel="noopener">Get Series List docs</a></li>
+    <li><strong>F-cat-08 · the exchange cross-check covers prices, not the interval.</strong> The
+    official market record publishes <span class="mono">previous_price_dollars</span> and
+    <span class="mono">last_price_dollars</span>, which lets the exchange corroborate a row's two
+    prices (the 2026-11-20 <span class="mono">KXPRESNOMD-28-BOBA</span> row is labelled
+    <em>exchange-corroborated</em> for exactly that reason: its tape prices
+    <span class="mono">0.0050 → 0.8630</span> reproduce the record's own
+    <span class="mono">previous → last</span>). It publishes <em>no</em> timestamp for
+    <span class="mono">previous_price_dollars</span>, so the time the move took remains bounded only
+    by the sample gap, and rows whose record lacks those fields are labelled
+    <em>not cross-checked</em> rather than assumed correct.</li>
+    <li><strong>F-cat-09 · no per-event page URL is published.</strong> The demo desk host is documented
+    (<a href="https://docs.kalshi.com/getting_started/demo_env">demo environment</a> →
+    <span class="mono">demo.kalshi.co</span>) but the URL <em>pattern for a single event</em> is not,
+    and this build environment cannot load the site's app to confirm one. Guessing
+    <span class="mono">/market/&lt;event&gt;</span> would be an inferred value, so each row links the
+    canonical API records (market / event / series) plus the host root instead, and
+    <span class="mono">kalshi_market_page</span> is published empty with the reason in
+    <span class="mono">kalshi_market_page_note</span>.</li>
+    <li><strong>F-cat-10 · a "jump" can be one print against a wide quote.</strong> The
+    <span class="mono">KXPRESNOMD-28-BOBA</span> sample that produced a $0.858 move reported
+    <span class="mono">yes_bid_dollars 0.0010</span> against <span class="mono">yes_ask_dollars
+    0.8630</span> and <span class="mono">price_level_structure "deci_cent"</span> (1/10-cent ticks, so
+    858 ticks in one sample); lifetime volume is <span class="mono">418,777,737</span> contracts while
+    <span class="mono">volume_24h_fp</span> is only <span class="mono">63,615</span>. Every row therefore
+    prints the quote and the ladder next to the move: a large Δ in a thin book is not a tradable signal,
+    and this page makes no claim that it is.</li>
     <li><strong>F-cat-07 · this page is not in the site navigation yet (process).</strong> Root nav
       and the root Flagged page are shared outputs owned by the integration session; change requests
       <span class="mono">CR-22661044-1/2</span> are logged in COORDINATION.md instead of editing them.</li>

@@ -1,12 +1,12 @@
-recorded_at=2026-11-20T19:59:52Z
+recorded_at=2026-11-20T20:11:42Z
 job_status=seeded
 workflow=local
 event=local
 ref=local
 sha=local
 run_url=https://github.com/local/actions/runs/n/a
-status.json: mode=offline finished_at=2026-11-20T19:57:54Z requests=0 errors=0 deadline_reached=False tape_rows=144 swings_total=2 simulated_trades=1
-swings.json: 2 swings, 0 with candidate links, 2 resolved; threshold >= $0.10 from=https://external-api.demo.kalshi.co/trade-api/v2
+status.json: mode=offline finished_at=2026-11-20T20:11:41Z requests=0 errors=0 deadline_reached=False tape_rows=156 swings_total=3 simulated_trades=1
+swings.json: 3 swings, 0 with candidate links, 2 resolved; threshold >= $0.10 from=https://external-api.demo.kalshi.co/trade-api/v2
 feed_health.json: 0 of 17 feeds usable (mode=offline, checked_at=2026-11-20T19:46:25Z)
   not usable: AP News (hub RSS is not published; homepage listed for manual review) — skipped_offline
   not usable: Reuters — skipped_offline

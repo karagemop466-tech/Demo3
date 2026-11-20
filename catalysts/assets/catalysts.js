@@ -262,7 +262,8 @@
         "<td class=\"small mono\">" + money(units(s.from && s.from.last_price_dollars)) + " \u2192 " +
           money(units(s.to && s.to.last_price_dollars)) +
           "<div class=\"muted\">" + esc(fmtTime(s.from && s.from.ts, s.sample_gap_seconds)) +
-          " \u2192 " + esc(fmtTime(s.to && s.to.ts, s.sample_gap_seconds)) + "</div></td>" +
+          " \u2192 " + esc(fmtTime(s.to && s.to.ts, s.sample_gap_seconds)) + "</div>" +
+          corroboration(s) + "</td>" +
         "<td>" + res + "</td>" +
         "<td class=\"mono\">" + (live ? money(units(live.price)) +
             (live.ts ? "<div class=\"small muted\">" + esc(fmtTime(live.ts)) + "</div>" : "")
@@ -275,8 +276,7 @@
           srcLink(s.links && s.links.event_api_url, "event") + " " +
           srcLink(series.source_url, "series") +
           (official ? "<div class=\"small muted\">official sources: " + official + "</div>" : "") +
-          (s.links && s.links.kalshi_market_page
-            ? "<div class=\"small\">" + srcLink(s.links.kalshi_market_page, "demo desk page") + "</div>" : "") +
+          srcLink(s.links && s.links.kalshi_site_root, "demo desk (host root)") +
         "</td></tr>";
     }).join("");
     Array.prototype.forEach.call(body.querySelectorAll("[data-sel]"), function (btn) {
@@ -284,6 +284,28 @@
         selectById(btn.getAttribute("data-sel"));
       });
     });
+  }
+
+  function corroboration(s) {
+    var c = s.api_corroboration || {};
+    if (c.status === "exact") {
+      return "<div class=\"small\"><span class=\"res yes\">exchange-corroborated</span> " +
+        "<span class=\"muted\">the same market record publishes previous " + esc(c.previous_price_dollars) +
+        " \u2192 last " + esc(c.last_price_dollars) + "</span></div>";
+    }
+    if (c.status === "mismatch") {
+      return "<div class=\"small\">" + flag("API prices differ",
+        "the market record says previous " + (c.previous_price_dollars || "\u2014") +
+        " \u2192 last " + (c.last_price_dollars || "\u2014") +
+        "; this row stays as the tape recorded it and is not upgraded") + "</div>";
+    }
+    if (c.status === "same_size_different_levels") {
+      return "<div class=\"small\">" + flag("magnitude only",
+        "the record's own previous \u2192 last delta equals this row's \u0394 but at different levels, " +
+        "so only the size of the move is corroborated") + "</div>";
+    }
+    return "<div class=\"small\">" + flag("not cross-checked",
+      c.note || "no market record reached this run, so the exchange cross-check is unavailable") + "</div>";
   }
 
   function fmtGap(sec) {

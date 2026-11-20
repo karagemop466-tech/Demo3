@@ -527,5 +527,39 @@ class StrategyStudyTests(unittest.TestCase):
         self.assertEqual(len(out["results"]), 1, "the category count must match the book")
 
 
+class CorroborationTests(unittest.TestCase):
+    """`previous_price_dollars`/`last_price_dollars` let the exchange confirm a row's prices."""
+
+    def swing(self, f="0.0050", t="0.8630"):
+        return {"ticker": "KXMOCK-1-A", "from": {"last_price_dollars": f},
+                "to": {"last_price_dollars": t}, "sample_gap_seconds": 1498}
+
+    def test_exact_match_is_reported_as_corroborated(self):
+        m = {"previous_price_dollars": "0.0050", "last_price_dollars": "0.8630",
+             "yes_bid_dollars": "0.0010", "yes_ask_dollars": "0.8630",
+             "price_level_structure": "deci_cent", "volume_24h_fp": "63615.71"}
+        out = scan.api_corroboration(self.swing(), m)
+        self.assertEqual(out["status"], "exact")
+        self.assertEqual(out["yes_bid_dollars"], "0.0010",
+                         "the quote at the print travels with the row")
+        self.assertIn("previous_price_dollars", out["note"], "the interval limit is disclosed")
+
+    def test_differing_prices_are_a_mismatch_not_a_silent_pass(self):
+        out = scan.api_corroboration(self.swing(), {"previous_price_dollars": "0.1000",
+                                                     "last_price_dollars": "0.9000"})
+        self.assertEqual(out["status"], "mismatch")
+
+    def test_missing_api_fields_stay_unverified(self):
+        for m in ({}, {"last_price_dollars": "0.8630"}):
+            self.assertEqual(scan.api_corroboration(self.swing(), m)["status"],
+                             "unverified_api_fields")
+
+    def test_same_delta_at_other_levels_is_only_a_magnitude_match(self):
+        out = scan.api_corroboration(self.swing(f="0.2000", t="0.3000"),
+                                     {"previous_price_dollars": "0.0050",
+                                      "last_price_dollars": "0.1050"})
+        self.assertEqual(out["status"], "same_size_different_levels")
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
