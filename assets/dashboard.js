@@ -404,7 +404,8 @@
     if (state.resolutions.find(function (r) { return r.ticker === m.ticker; })) return false;
     var res = { ticker: m.ticker, title: m.title, topic: m.topic,
       result: String(m.result).toLowerCase(), status: m.status,
-      ts: Math.floor(Date.now() / 1000) };
+      ts: Math.floor(Date.now() / 1000),
+      event_ticker: m.event_ticker || "", series_ticker: m.series_ticker || "" };
     state.resolutions.push(res);
     try { localStorage.setItem("kd_resolutions", JSON.stringify(state.resolutions)); } catch (e) {}
     renderResolutions();
@@ -412,7 +413,7 @@
       try {
         window.KD.onResolution({ ticker: res.ticker, title: res.title, topic: res.topic,
           result: res.result, status: res.status, ts: res.ts,
-          event_ticker: m.event_ticker, series: m.series_ticker,
+          event_ticker: res.event_ticker, series: res.series_ticker,
           rules_primary: m.rules_primary });
       } catch (e) { /* alert sink must not break resolution tracking */ }
     }
@@ -692,10 +693,14 @@
       var auto = $("autoTrade");
       if (auto) {
         auto.disabled = false;
+        // Restore persisted automation state on load (checkbox always reloaded
+        // unchecked before this fix).
         var st = T.automationStatus ? T.automationStatus() : {};
         auto.checked = !!st.enabled;
         auto.addEventListener("change", function () {
           T.setAutomation(auto.checked);
+          var s = T.automationStatus ? T.automationStatus() : {};
+          auto.checked = !!s.enabled;
         });
       }
       var strat = $("autoStrategy");

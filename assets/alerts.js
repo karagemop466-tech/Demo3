@@ -52,6 +52,10 @@
   var MAX_RES = 200;
   var POLL_MS = 20000;                  // one batched REST call per interval
   var CHUNK = 100;                      // Get Markets `limit` for a ticker batch
+  // Demo-exchange synthetic test series settle constantly and can appear in the
+  // chat; rows for them are badged so they are never mistaken for real markets
+  // (irregularity I-15; evidence rows in data/latest/resolutions.json).
+  var SYNTHETIC_RE = /^(KXDEMO|KXQUICKSETTLE)/;
 
   /* ---------- documented ROI heuristic (unverified model) ----------
    * No trained model exists in this repo, so this is a transparent, deterministic
@@ -429,12 +433,16 @@
       "<td class='mono small muted'>" + fmtTs(a.ts) + "</td>" +
       "<td><span class='pill topic'>" + esc(a.topic) + "</span></td>" +
       "<td class='mono'>" + esc(a.ticker) + "</td>" +
-      "<td>" + esc(a.title) + roiBadge + "</td>" +
+      "<td>" + esc(a.title) + roiBadge + syntheticBadge(a.ticker) + "</td>" +
       "<td class='num'>" + cents(a.oldPrice) + " → " + cents(a.newPrice) + "</td>" +
       "<td class='num " + esc(dirLabel) + "'>" + arrow + " " + cents(Math.abs(a.change)) + "</td>" +
       "<td class='num'>" + roiCell(a) + "</td>" +
       "<td><a class='src' href='" + esc(a.api) + "' target='_blank' rel='noopener'>market API</a></td>" +
       "<td class='ctx'>" + contextCell(a) + "<div class='small muted'>Cause not verified: a listed source is not proof that it moved the price.</div>" + rulesCell(a) + "</td></tr>";
+  }
+  function syntheticBadge(ticker) {
+    return SYNTHETIC_RE.test(ticker || "") ?
+      " <span class='pill warn' title='Demo-exchange synthetic test series (irregularity I-15)'>demo test market</span>" : "";
   }
   function resRow(r) {
     var yes = r.result === "yes";
@@ -445,7 +453,7 @@
       "<td><span class='pill topic'>" + esc(r.topic) + "</span></td>" +
       "<td class='mono'>" + esc(r.ticker) + "</td>" +
       "<td><span class='pill " + (yes ? "up" : "down") + "'>RESOLVED " + (yes ? "YES" : "NO") + "</span> " +
-      esc(r.title) + "</td>" +
+      esc(r.title) + syntheticBadge(r.ticker) + "</td>" +
       "<td class='num'>" + (yes ? "→ $1.00" : "→ $0.00") + "</td>" +
       "<td class='num'>" + esc(r.status) + "</td>" +
       "<td class='num muted'>n/a</td>" +
