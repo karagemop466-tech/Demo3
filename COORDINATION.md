@@ -32,6 +32,7 @@ without an official source link, blank/flagged values are unverified and never i
 | 26973298 | `arena/26973298-demo3` | claimed 2026-11-20 19:20 UTC - measured strategy backtest | `strategy.html`, `assets/strategy.js`, `strategy/**` (new files only), `scripts/backtest_strategies.py`, `tests/` additions, NAV/index entry at final integration | Data: committed demo snapshots only (`data/latest/markets_settled.json` 22,065 settled markets with `result`/`settlement_value_dollars`/`source_url`, `data/latest/candles.json`, `data/history/*.json`, `data/history/resolutions.jsonl`); field semantics from docs.kalshi.com | See section below |
 | 7b47094a | `arena/7b47094a-demo3` | active 2026-11-20 19:45 UTC - resolution feed + measured ROI screen | J1 yes/no resolution tracking in the alert chats, J2 calibrated high-ROI screen (`model/**`, `assets/roi-model.js`), J3 requirements traceability page, J4 verified WebSocket finding, J5 checks/PR/merge/Pages; see its task board below |
 
+| 81c58501 | `arena/81c58501-demo3` | active — final integration: live-chat resolutions + automation-restore fix + canonicalization of open alert PRs + PR/merge/Pages | `assets/alerts.js`, `assets/dashboard.js`, `tests/alerts-resolutions.test.js`, `COORDINATION.md` | Canonical alert-chat base = the implementation already merged on `main` (PR #28 `assets/alerts.js`, PR #44 settlement-source context, `dashboard.js` resolution table). Gaps found by line-by-line audit on 2026-11-20 ~19:55 UTC: (1) live chats have no yes/no resolution messages (grep `result|resolved` in `assets/alerts.js` = 0 hits; matches earlier review CR-6D-1), (2) `autoTrade` checkbox never restored from persisted state (`dashboard.js` init has a no-op placeholder). See task board section "session 81c58501" below. | Ownership note: `assets/alerts.js`/`assets/dashboard.js` were merged by sessions `6ebc1cb7`/`b13c6a8d`; those sessions show no commits after 19:42 UTC. This is the final-integration handoff; file-ownership request logged here per rules. |
 | 7a570f35 | `arena/7a570f35-demo3` | claimed 2026-11-20 UTC - live endpoint re-verification of the executive summary (board + verification record only) | `COORDINATION.md` only | No site/data/script changes; reads official docs.kalshi.com and external-api.demo.kalshi.co live | See section below |
 
 ## Task board — session d7ee554b (live ≥$0.10 swing alerts): WITHDRAWN as duplicate
@@ -1047,6 +1048,7 @@ annotations), `dashboard.html` (`#swingCaption`), `flagged.html` (F-c75-03 row),
 
 - 2026-11-20 19:52 UTC: merged latest `origin/main` PR #48 (swing-alert integration); unioned the board, rebuilt both root and `/live` pages, and repeated all local checks (all green).
 
+<<<<<<< HEAD
 ### Session 7b47094a — completion record (2026-11-20 19:40–20:00 UTC)
 
 Delivered on branch `arena/7b47094a-demo3`, published through **PR #60**
@@ -1127,3 +1129,22 @@ Coordination notes for the integrator:
 * `assets/dashboard.js` change request (S-7b-01): export the selected ticker (e.g. `KD.selectedTicker`
   or a `KD.onSelect` hook) so the price chart can mark the ≥ $0.10 jumps with the same official
   settlement-source links the chat rows already show.
+=======
+---
+
+## Task board — session 81c58501 (final integration: live-chat resolutions, automation-restore fix, canonicalization) — claimed 2026-11-20 ~19:55 UTC
+
+Branch: `arena/81c58501-demo3` (platform-fixed session branch; see irregularity R-04 for why `session-<id>/<task>` naming is not used).
+
+| # | Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|---|
+| F-81c58501-1 | Live yes/no resolution messages in both scrolling chats (All events + High ROI), persisted, deduped per ticker, with official market/event API links | in progress | 81c58501 | `assets/alerts.js`, `assets/dashboard.js` (trackResolutions hook only), `tests/alerts-resolutions.test.js` (new) | Brief requirement "track live events until the events have resolved. How the event was resolved either yes or no." Field semantics: `result` / `status` from [Get Markets](https://docs.kalshi.com/api-reference/market/get-markets); settlement sources from [Get Event](https://docs.kalshi.com/api-reference/events/get-event). | Main's merged alert chats (PR #28) never post resolutions — CR-6D-1 unfilled until this task. |
+| F-81c58501-2 | Restore `autoTrade` checkbox from persisted automation state on load (fix the no-op placeholder) | in progress | 81c58501 | `assets/dashboard.js` (init block only) | Supersedes open PR #38's finding (0b17a627); equivalent fix applied on the canonical implementation, PR #38 to be closed with credit. | Bug verified: `dashboard.js` init contains `{ /* keep checkbox in sync with persisted state */ }` — no-op; checkbox starts `disabled`/unchecked regardless of persisted state. |
+| F-81c58501-3 | Canonicalize the 12 open alert PRs: choose the merged `main` implementation as canonical, close superseded PRs with justification, log each | pending | 81c58501 | PR closures + `COORDINATION.md` log only | Board mandate in the d7ee554b collision record: "Board owners must choose one canonical implementation and close the rest." | Content already merged on `main` supersedes most open PRs; each closure comment cites what superseded it. |
+| F-81c58501-4 | Final integration delivery: verify site + tests line by line, PR to `main`, merge without waiting, confirm GitHub Pages deploy, verify live site, record PR link + merge result here | pending | 81c58501 | `COORDINATION.md` (final record), PR/Pages | `npm test`, `scripts/verify_root_site.py`, `scripts/check_site.py`, Pages build API, live-site fetch. | Do-not-merge-broken rule: Pages must show a successful build for the merged commit before this task is marked done. |
+
+### Session 81c58501 — sources for the resolution-chat work
+
+- Brief: resolutions must appear with yes/no outcome; two scrolling chats (all + model high-ROI). Rule for the ROI chat documented in code: a resolution appears in the high-ROI chat only if that ticker had a persisted high-ROI swing alert — no new unverifiable model is introduced.
+- Live resolutions are announced only when detected while the page is open (scan → `trackResolutions`), persisted to `localStorage`, never synthesized; seeded snapshot resolutions stay in the resolutions table and are labeled there.
+>>>>>>> d5a1cf6 (COORDINATION: session 81c58501 claims final-integration tasks F-81c58501-1..4 (live-chat resolutions, automation-restore fix, canonicalization, delivery))
