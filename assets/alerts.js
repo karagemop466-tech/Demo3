@@ -6,6 +6,12 @@
  *   - "High ROI model": a selective filter using a documented, transparent
  *     multi-factor score (NOT a trained model — no model exists in this repo).
  *
+ * Tracked events are followed until they resolve: when the exchange reports a
+ * settlement result ("yes" | "no", Get Markets `result` field), a RESOLVED
+ * message is posted to the chats so the feed shows how each tracked event ended.
+ * Sources: https://docs.kalshi.com/api-reference/market/get-markets
+ *          https://docs.kalshi.com/getting_started/market_settlement
+ *
  * Each alert row links official sources:
  *   - the exact market API URL (GET /markets/{ticker})
  *   - the event API URL (GET /events/{event_ticker}) and the event's official
@@ -37,6 +43,7 @@
   var KD = window.KD = window.KD || {};
   var ALERT_KEY = "kd_alerts_v1";
   var SWING = 0.10;                 // dollars = 10 cents, the alert threshold
+  var SWING_CENTS = 10;             // integer-cents threshold (float-safe at the $0.10 boundary)
   var MAX_ALERTS = 300;
 
   /* ---------- documented ROI heuristic (unverified model) ----------
@@ -53,7 +60,8 @@
   var ROI_THRESHOLD = 0.5;
   function clamp(x, lo, hi) { return Math.max(lo, Math.min(hi, x)); }
   function roiModel(oldP, newP, oi) {
-    var change = Number(newP) - Number(oldP);
+    // Integer-cents change: exact $0.10 moves read as 0.1 (0.6-0.5 = 0.0999… in IEEE-754)
+    var change = (Math.round(Number(newP) * 100) - Math.round(Number(oldP) * 100)) / 100;
     var swingC = Math.abs(change) * 100;                 // cents
     var swingNorm = clamp(swingC / 50, 0, 1);
     var pct = Number(oldP) ? Math.abs(change) / Number(oldP) : 0;
@@ -100,10 +108,11 @@
     if (cur === null || cur === undefined) return;
     var prev = state.lastPrice[m.ticker];
     if (prev && prev.price !== null && prev.price !== undefined) {
-      var change = cur - prev.price;
-      // Float-safe: an exact 10¢ move (0.60 - 0.50) is 0.0999… in binary, so
-      // compare with a tiny epsilon rather than dropping boundary swings.
-      if (Math.abs(change) >= SWING - 1e-9) {
+      // Float-safe threshold: compare in integer cents so a move of exactly
+      // $0.10 alerts reliably (0.60 - 0.50 is 0.0999… in binary). Get Markets
+      // prices are decimal dollars with up to 4 dp, so cents are exact integers.
+      var changeCents = Math.round(cur * 100) - Math.round(prev.price * 100);
+      if (Math.abs(changeCents) >= SWING_CENTS) {
         var a = pushAlert(m, prev.price, cur);
         if (a) { a.event = m.event_ticker || ""; a.rules = m.rules_primary || ""; persist(); loadEvent(a.event); }
       }
@@ -122,13 +131,15 @@
   };
 
   function pushAlert(m, oldP, newP) {
-    var change = Number(newP) - Number(oldP);
+    // Float-safe: derive the change from integer cents so exactly $0.10 reads as 0.1
+    var change = (Math.round(Number(newP) * 100) - Math.round(Number(oldP) * 100)) / 100;
     var dir = change > 0 ? "up" : change < 0 ? "down" : "flat";
     var series = m.series_ticker || "";
     var eventTicker = m.event_ticker || "";
     var model = roiModel(oldP, newP, m.oi);
     var alert = {
       id: "a" + Date.now() + Math.random().toString(36).slice(2, 6),
+      kind: "swing",
       ts: Math.floor(Date.now() / 1000),
       ticker: m.ticker,
       title: m.title || m.ticker,
@@ -206,6 +217,52 @@
       esc(a.rules) + "</div></details>";
   }
 
+  /* ---------- resolution messages (yes / no) ----------
+   * Every tracked market is followed until the exchange settles it. The
+   * dashboard's resolution watcher reports each settlement here via
+   * KD.onResolution({ticker, result, ...}); `result` is the Get Markets /
+   * Market Settlement field with values "yes" or "no" — never inferred.
+   * A resolution message appears in "All events"; it also appears in the
+   * high-ROI chat when that ticker had a prior high-ROI swing alert.
+   * Sources: https://docs.kalshi.com/api-reference/market/get-markets (result)
+   *          https://docs.kalshi.com/getting_started/market_settlement
+   */
+  KD.onResolution = function (res) {
+    if (!res || !res.ticker) return;
+    var result = String(res.result || "").toLowerCase();
+    if (result !== "yes" && result !== "no") return;
+    var dup = state.alerts.some(function (a) {
+      return (a.kind || "swing") === "resolution" && a.ticker === res.ticker &&
+        a.result === result;
+    });
+    if (dup) return; // already posted (including rows restored from localStorage)
+    var roi = state.alerts.some(function (a) {
+      return (a.kind || "swing") === "swing" && a.ticker === res.ticker && a.roiSignal;
+    });
+    var alert = {
+      id: "r" + Date.now() + Math.random().toString(36).slice(2, 6),
+      kind: "resolution",
+      ts: res.ts || Math.floor(Date.now() / 1000),
+      ticker: res.ticker,
+      title: res.title || res.ticker,
+      topic: res.topic || "",
+      series: res.series || "",
+      event: res.event_ticker || "",
+      rules: res.rules_primary || "",
+      result: result,
+      status: res.status || "settled",
+      roiSignal: roi,
+      api: apiUrl(res.ticker, res.series),
+      dir: "flat",
+      change: 0
+    };
+    state.alerts.unshift(alert);
+    if (state.alerts.length > MAX_ALERTS) state.alerts.length = MAX_ALERTS;
+    persist();
+    render();
+    if (alert.event) loadEvent(alert.event);
+  };
+
   /* ---------- chat row selection ---------- */
   KD.allRows = function () { return state.alerts; };
   KD.roiRows = function () { return state.alerts.filter(function (a) { return a.roiSignal; }); };
@@ -223,7 +280,26 @@
     var badge = a.roiSignal ? " <span class='roi'>· signal</span>" : "";
     return "<span class='mono'>" + a.roi.score.toFixed(2) + "</span>" + badge;
   }
+  function resolutionRow(a) {
+    var yes = a.result === "yes";
+    var roiBadge = a.roiSignal ? " <span class='roi'>· tracked by model screen</span>" : "";
+    return "<tr class='alert resolution'>" +
+      "<td class='mono small muted'>" + fmtTs(a.ts) + "</td>" +
+      "<td><span class='pill topic'>" + esc(a.topic) + "</span></td>" +
+      "<td class='mono'>" + esc(a.ticker) + "</td>" +
+      "<td>" + esc(a.title) + roiBadge + "</td>" +
+      "<td class='num'><span class='pill " + (yes ? "resolved-yes" : "resolved-no") +
+      "'>RESOLVED &middot; " + esc(String(a.result).toUpperCase()) + "</span></td>" +
+      "<td class='num'>&mdash;</td>" +
+      "<td class='num'>&mdash;</td>" +
+      "<td><a class='src' href='" + esc(a.api) + "' target='_blank' rel='noopener'>market API</a></td>" +
+      "<td class='ctx'>" + contextCell(a) +
+      "<div class='small muted'>Settlement result reported by the exchange" +
+      " (<a class='src' href='https://docs.kalshi.com/getting_started/market_settlement' target='_blank' rel='noopener'>Market Settlement</a>)." +
+      " Winning contracts pay $1 each.</div>" + rulesCell(a) + "</td></tr>";
+  }
   function alertRow(a) {
+    if ((a.kind || "swing") === "resolution") return resolutionRow(a);
     var cls = "alert " + (a.dir === "up" ? "up" : a.dir === "down" ? "down" : "flat");
     var arrow = a.dir === "up" ? "▲" : a.dir === "down" ? "▼" : "▶";
     var dirLabel = a.dir === "up" ? "up" : a.dir === "down" ? "down" : "flat";

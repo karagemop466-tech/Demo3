@@ -1016,3 +1016,30 @@ annotations), `dashboard.html` (`#swingCaption`), `flagged.html` (F-c75-03 row),
   no external "cause" link is fabricated. Every new table row carries an official source link.
 
 - 2026-11-20 19:52 UTC: merged latest `origin/main` PR #48 (swing-alert integration); unioned the board, rebuilt both root and `/live` pages, and repeated all local checks (all green).
+
+---
+
+## Task board — session 167f556b (`arena/167f556b-demo3`) — claimed 2026-11-20 UTC
+
+Scope: `.github/workflows/collect.yml`, `assets/alerts.js`, `assets/dashboard.js`, `assets/style.css`,
+`dashboard.html`, `tests/resolutions-alerts.test.js`, `COORDINATION.md`. Final integration/delivery
+(this session at the end): verification pass, open-PR adjudication per CR-COORD-1, PR to `main`,
+merge, Pages confirmation. No other session's files are edited; requests for other owners are logged below.
+
+| # | Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|---|
+| X1 | Fix broken `collect.yml` (duplicate `if:` keys → invalid YAML; every run failed in 0 s, incl. on `main`) | done | 167f556b | `.github/workflows/collect.yml` | YAML key rules; run history `gh run list` showed 0 s failures on every push | W-167-01 (below) |
+| X2 | Alert chat yes/no resolution messages (CR-6D-1): tracked events followed until they resolve; RESOLVED · YES/NO rows in both chats | done | 167f556b | `assets/alerts.js`, `assets/dashboard.js`, `dashboard.html`, `assets/style.css` | [Get Markets](https://docs.kalshi.com/api-reference/market/get-markets) (`result` "yes"/"no", `tickers`, `limit` max 1000), [Market Settlement](https://docs.kalshi.com/getting_started/market_settlement) — both re-fetched 2026-11-20 | — |
+| X3 | Resolution watcher: scans only request `status=open`, so resolved markets vanished unlogged; watchlist + batched `GET /markets?tickers=…` re-check every 45 s + after each scan | done | 167f556b | `assets/dashboard.js` | same as X2 | — |
+| X4 | Float-safe ≥ $0.10 threshold (0.6 − 0.5 = 0.0999… < 0.1 in IEEE-754): swings compared in integer cents; `change` now exact (0.10 reads 0.1) | done | 167f556b | `assets/alerts.js` | brief threshold ≥ $0.10; test proves 0.50→0.60 alerts | fixed the defect PR #40 was opened for |
+| X5 | Regression tests for swing threshold, resolution messages, dedupe, high-ROI chat routing | done | 167f556b | `tests/resolutions-alerts.test.js` | `npm test` 29/29 pass (after `npm install` for jsdom) | — |
+| X6 | Final integration: verification pass, open-PR adjudication, PR → `main`, merge, Pages live, record | in progress | 167f556b | `COORDINATION.md` + integration commits | to be recorded in the completion record below | — |
+
+**W-167-01 (fixed, medium):** `.github/workflows/collect.yml` had two `if:` keys on the "Request Pages
+rebuild" step (invalid YAML). Every workflow run failed at 0 s, including pushes to `main`, so no
+scheduled collection ran and no Pages rebuild was requested by the collector. The duplicate key is
+removed (kept `if: github.ref == 'refs/heads/main'`).
+
+**Rebase note:** this branch rebased onto `main` at `10fd1b2`; conflicts in `COORDINATION.md`,
+`assets/alerts.js`, `dashboard.html` were resolved keeping main's newer work (PR #48 ROI score column,
+PR #39 nav entries) and re-applying the X2–X5 additions on top. No other session's content was dropped.
