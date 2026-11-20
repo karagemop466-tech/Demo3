@@ -428,6 +428,24 @@ class CycleTests(unittest.TestCase):
         self.assertTrue(crossed, "expected the resting bid to fill once the ask crossed it")
         self.assertLessEqual(crossed[0]["price_dollars"], 0.41)
 
+    def test_run_log_carries_the_requests_it_made(self):
+        # every operational number on the index page has to be traceable to a request
+        self._write_fixtures([market(ticker="KXTEST-ELECTIONS-1-A", yes_ask="0.5000",
+                                     yes_bid="0.4900")])
+        cfg = dict(pe.DEFAULT_CONFIG)
+        cfg["events_per_topic"] = 1
+        cfg["markets_per_event"] = 2
+        pe.run_cycle(pe.FixtureClient("https://x/trade-api/v2", self.fixtures), self.tmp,
+                     cfg, reset=True, quiet=True)
+        runs = json.load(open(os.path.join(self.tmp, "paper", "runs.json")))
+        rows = runs.get("runs") or runs
+        self.assertTrue(rows)
+        for r in rows:
+            urls = r.get("source_urls")
+            self.assertTrue(urls, f"run {r.get('run')} recorded no request URLs")
+            self.assertTrue(all(u.startswith("https://") for u in urls))
+
+
 
 class BookTests(unittest.TestCase):
     class _C:

@@ -7,7 +7,12 @@
  *  - a YES-bid change of >= $0.10 since the last desk cycle is surfaced;
  *  - a failed fetch says "could not reach" and renders NO invented values.
  *
- * Run: node --test paper-desk/tests/   (skips cleanly when jsdom is not installed)
+ * Run: node --test paper-desk/tests/dom.test.mjs
+ *
+ * Locally this skips when jsdom is absent. Under CI (`process.env.CI`, which GitHub Actions
+ * always sets) a skip is turned into a hard failure: a publish gate that silently does not run
+ * is worse than one that fails. The test file path must be given explicitly — `node --test`
+ * with a directory does not resolve .mjs files the same way on every Node version.
  */
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -26,6 +31,19 @@ try {
   ({ JSDOM } = await import("jsdom"));
 } catch {
   console.log("jsdom not installed - paper-desk DOM test skipped");
+}
+
+const CI = Boolean(process.env.CI);
+const blockers = [];
+if (!JSDOM) blockers.push("jsdom is not installed (run `npm ci`; it is a devDependency)");
+if (!existsSync(htmlPath)) {
+  blockers.push(`the built page ${path.relative(repo, htmlPath)} is missing `
+    + "(run `python3 scripts/build_paper_desk.py`)");
+}
+const skipReason = blockers.length ? blockers.join("; ") : false;
+if (blockers.length && CI) {
+  test("subsite DOM gate could not run", () => assert.fail(
+    `this gate is required in CI but was blocked: ${blockers.join("; ")}`));
 }
 
 function marketPayload() {
@@ -78,7 +96,7 @@ const ok = (payload) => async (url) => ({
 });
 
 test("live panel renders one sourced row per market and flags a >= $0.10 move", {
-  skip: !JSDOM || !existsSync(htmlPath) ? "jsdom or the built page is missing" : false,
+  skip: skipReason,
 }, async () => {
   const calls = [];
   const window = await boot((url) => {
@@ -104,7 +122,7 @@ test("live panel renders one sourced row per market and flags a >= $0.10 move", 
 });
 
 test("a blocked request leaves the panel honest, never fabricated", {
-  skip: !JSDOM || !existsSync(htmlPath) ? "jsdom or the built page is missing" : false,
+  skip: skipReason,
 }, async () => {
   const window = await boot(() => Promise.reject(new Error("CORS blocked")));
   const box = window.document.getElementById("liveTable").innerHTML;

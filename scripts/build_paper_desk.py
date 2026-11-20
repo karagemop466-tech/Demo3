@@ -158,6 +158,20 @@ def doc_link(url, label: str = "official doc") -> str:
             f'rel="noopener">{label}</a>')
 
 
+def agg_links(rec) -> str:
+    """Source cell for an aggregate row: the API requests its member trades used, plus the journal."""
+    urls = [u for u in (rec.get("source_urls") or []) if u]
+    tick = rec.get("tickers") or []
+    cells = [src_link(u, f"API row {i + 1}") for i, u in enumerate(urls[:3])]
+    if not cells:
+        cells = ['<span class="pill unv">unverified</span>']
+    if tick:
+        shown = ", ".join(tick[:3]) + ("..." if len(tick) > 3 else "")
+        cells.append('<span class="mono small muted">' + esc(shown) + "</span>")
+    cells.append(file_link("data/paper/trades.json", "journal"))
+    return " ".join(cells)
+
+
 def file_link(rel: str, label: str = "ledger json") -> str:
     return f'<a class="src" href="../{esc(rel)}">{label}</a>'
 
@@ -391,6 +405,8 @@ def build_index(data: dict) -> str:
         esc(r.get("settlements")), money(r.get("equity_dollars")),
         esc(r.get("requests")), esc(r.get("errors")),
         '<span class="pill">' + esc(r.get("data_mode") or "n/a") + "</span>",
+        " ".join([src_link(u, f"req {i + 1}") for i, u in enumerate((r.get("source_urls") or [])[:2])]
+                 + [file_link("data/paper/runs.json", "run log")]),
     ]) for r in runs[-15:][::-1]]
 
     body = f"""{empty_state(data)}
@@ -411,7 +427,7 @@ No order is ever sent; no credentials are used (public market data needs none pe
         "API fields used", "source"], strat_rows)}
 <h2>Last desk cycles</h2>
 {table(["ts", "run", "universe", "markets quoted", "orders sent", "fills", "rejects",
-        "settlements", "equity", "API requests", "API errors", "mode"], run_rows)}
+        "settlements", "equity", "API requests", "API errors", "mode", "requests made"], run_rows)}
 <h2>Recent equity samples</h2>
 {table(["ts", "run", "cash", "positions value", "equity", "realized", "unrealized",
         "open", "resting", "source"], recent_rows)}
@@ -455,8 +471,9 @@ def build_trades(data: dict) -> str:
     for t in trades:
         key = f'{t.get("action")}/{t.get("status")}'
         counts[key] = counts.get(key, 0) + 1
-    summary = table(["journal record type", "count"],
-                    [row([esc(k), esc(v)]) for k, v in sorted(counts.items())])
+    summary = table(["journal record type", "count", "records"],
+                    [row([esc(k), esc(v), file_link("data/paper/trades.json", "journal json")])
+                     for k, v in sorted(counts.items())])
     body = f"""{empty_state(data)}
 <div class="flexrow small muted"><span>journal rows: <strong>{esc(len(trades))}</strong></span>
 <span>shown: newest {esc(len(shown))}</span>
@@ -593,16 +610,18 @@ def build_analysis(data: dict) -> str:
                 signed(r.get("avg_realized_pnl_dollars")),
                 money(r.get("notional_dollars")), esc(r.get("contracts")),
                 esc(r.get("rejections")),
+                agg_links(r),
             ]))
         sections.append(f"<h2>{title}</h2>" + (table(
             ["group", "records", "closed", "wins", "losses", "win rate", "realized P&amp;L",
-             "avg per closed trade", "notional", "contracts", "rejections"], rows)
+             "avg per closed trade", "notional", "contracts", "rejections",
+             "records behind this row"], rows)
             if rows else '<p class="muted small">No closed trades in this group yet.</p>'))
 
     derived = (analysis.get("derived_rule_candidates") or {})
     d_rows = [row([esc(d.get("type")), esc(d.get("closed_trades")),
                    signed(d.get("realized_pnl_dollars")), pct(d.get("win_rate")),
-                   signed(d.get("avg_realized_pnl_dollars"))])
+                   signed(d.get("avg_realized_pnl_dollars")), agg_links(d)])
               for d in derived.get("rows") or []]
     totals = analysis.get("totals") or {}
     req = analysis.get("requests") or {}
@@ -625,7 +644,8 @@ the desk&rsquo;s own simulated fills, over a small number of samples.</div>
 <h2>Trade-type ranking (auto-derived from realized results)</h2>
 <p class="small muted">{esc(derived.get("note") or "")} Minimum closed trades for a type to be
 listed: {esc(derived.get("min_closed_trades_for_a_claim"))}.</p>
-{table(["trade type", "closed trades", "realized P&amp;L", "win rate", "avg per trade"], d_rows)}
+{table(["trade type", "closed trades", "realized P&amp;L", "win rate", "avg per trade",
+        "records behind this row"], d_rows)}
 <h2>Universe coverage this cycle</h2>
 {table(["metric", "value", "source"], [
     row(["markets tracked", esc(uni.get("markets_tracked")),
