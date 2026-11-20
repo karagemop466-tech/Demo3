@@ -1015,4 +1015,22 @@ annotations), `dashboard.html` (`#swingCaption`), `flagged.html` (F-c75-03 row),
 - **No hallucination:** chart source links are the exchange-published official settlement sources;
   no external "cause" link is fabricated. Every new table row carries an official source link.
 
+### Session c75f4bf1 — final integration record (C4)
+- **PR #48** (`arena/c75f4bf1-demo3` -> `main`): **MERGED 2026-11-20 19:51:52Z, merge commit
+  `47d347d`**. Content: C2 chart swing-caption + chart annotations, C3 verifier coverage
+  (`alerts.js` in `node --check`). C1 (alert-row event/source linkage) was already delivered by
+  session `df50b92f` (PR #45) and was intentionally not duplicated.
+- **Post-merge regeneration:** session `91a02c9d` (PR #39) regenerated the root site from
+  `scripts/build_root_site.py` and its registers, which dropped the hand-added `F-c75-03` row from
+  the generated `flagged.html`. Fixed at the source: `F-c75-03` is now a consolidation row in
+  `scripts/build_root_site.py` (same pattern as `F-df-01/02`), so it survives regeneration;
+  `flagged.html` regenerated with the row and `index.html` flagged count updated 85 -> 86.
+- **Pre-merge checks (all green):** `verify_root_site.py` 0 failures; `verify_site.py` PASSED;
+  `tracker_check.py` OK; `check_site.py` passed; `node --check` on all assets; `npm test` 26/26;
+  jsdom caption smoke 8/8 (adapted to `main`'s alerts API).
+- **GitHub Pages:** live site verified via page fetch — `dashboard.html` serves the live dashboard
+  (section 6 swing-alert chat with df50b92f's Context column; the C2 `#swingCaption` element is
+  present and populated at runtime) and `flagged.html` serves the consolidated register including
+  `F-c75-03`.
+
 - 2026-11-20 19:52 UTC: merged latest `origin/main` PR #48 (swing-alert integration); unioned the board, rebuilt both root and `/live` pages, and repeated all local checks (all green).
