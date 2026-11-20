@@ -239,13 +239,21 @@ Merge record (3e08e6dc):
 
 ## Session arena/d330ff7d-demo3 — source-first monitor subsite
 
-Branch: `arena/d330ff7d-demo3` (Arena-managed branch; kept as the only working branch). The initial claim commit `54225d1` was pushed before implementation. The branch base was `80f7c4d`; final integration is rebasing on the advanced `main` rather than replacing its existing root, `docs/`, tracker, or analysis sites.
+Branch: `arena/d330ff7d-demo3` (Arena-managed branch; kept as the only working branch). The claim and implementation commits have been rebased onto `origin/main` at `780c67f` (which includes the separate Demo Desk from PRs #15/#16). This session's app remains isolated under `demo-monitor/`; the existing root Tracker, Demo Desk, `/docs/`, `/docs/tracker/`, and `/analysis/` sites are retained.
 
 | Task | Status | Owner | File scope | Sources / verification | Irregularities |
 |---|---|---|---|---|---|
-| Kalshi demo API research, five-topic dashboard, event ranking, chart/orderbook, paper portfolio, resolutions, questions/suggestions/flags | implemented under `demo-monitor/`; post-rebase verification pending | `arena/d330ff7d-demo3` | `demo-monitor/**`, `.github/workflows/site-check.yml` | Official links and research note in the subsite; static and synthetic tests passed before rebase | Local paper simulator only; no credentials or live browser test |
-| Final integration with current `main`, link from existing landing page, PR/merge, Pages verification | in progress | `arena/d330ff7d-demo3` | Append to this board; update root README and add a landing-page link only after preserving existing content | Rebase on `origin/main` at `8c69e2d`; rerun both existing and subsite checks | Pages API pre-PR status was `building`; Actions-source update previously returned HTTP 403 |
+| Kalshi demo API research, five-topic dashboard, event ranking, chart/orderbook, paper portfolio, resolutions, questions/suggestions/flags | implemented and verified after rebase | `arena/d330ff7d-demo3` | `demo-monitor/**`, `.github/workflows/site-check.yml` | 14 HTML pages; official-source verifier and synthetic API fixture pass | Local paper simulator only; no credentials or live browser test |
+| Final integration, links, PR and Pages deployment | local integration checks passed; push/PR and deployment verification pending | `arena/d330ff7d-demo3` | Append to this board; root `README.md`, `index.html`, and `dashboard.html` | Root README and landing page link to both the Demo Desk and this monitor; root and monitor checks listed below | Browser-origin CORS and live Kalshi data remain unverified; Pages source/settings unchanged |
 
 Requirements preserved: official source links on table rows; unknown values blank and flagged; the “highest dollar” proxy is explicitly provisional and limited to displayed top-of-book; the local simulator is not real demo-account trading; seconds-range points are browser-observed only; category mappings and current feed coverage remain reviewable. Full sources and checks are recorded in `demo-monitor/docs/research-notes.md` and `demo-monitor/README.md`.
 
-Pre-rebase checks (2026-11-20 UTC): subsite verifier passed for 14 pages; Node syntax checks and synthetic API fixture passed; local HTTP smoke tests returned 200 for `/demo-monitor/`, all subsite HTML pages, assets, and scripts. Browser execution/CORS and live Kalshi data remain unverified. Re-run after rebase and record the final PR, merge, and Pages result below.
+Post-rebase verification (2026-11-20 UTC):
+- `python3 scripts/check_site.py`: passed (44 sources registered, 39 cited, no broken internal links).
+- `python3 scripts/tests/test_refresh_offline.py`: passed (88 calls OK, 0 failed; 14 resolutions, 15 orderbooks, 15 candle series).
+- `python3 scripts/verify_site.py`: passed (28 HTML pages; 0 failures).
+- `npm run check`: passed; `npm test`: 26/26 passed (including mocked Demo Desk browser/runtime tests).
+- `python3 demo-monitor/scripts/verify_site.py`: passed (14 pages); `node demo-monitor/scripts/test_api.js`: passed; monitor JS syntax checks passed.
+- Local HTTP smoke test: 26 root/subsite routes returned 200, including all monitor pages, assets, and test scripts.
+
+Rebase integration preserved the upstream README, root Tracker and Demo Desk links while adding the source-first monitor links; its README/index conflicts were resolved manually. The GitHub Pages API reported the existing `main:/` site as `built` at the pre-branch main commit; the new branch has not yet been pushed or deployed. Browser-origin CORS/live feed behavior is unverified. Record the PR, merge, and post-merge Pages result here when complete.

@@ -1,11 +1,12 @@
-"use strict";
-
 // This is a synthetic API-client test fixture. Values below are test-only and are
 // never loaded by the production site or presented as Kalshi market data.
-const assert = require("node:assert/strict");
-const fs = require("node:fs");
-const vm = require("node:vm");
-const path = require("node:path");
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import vm from "node:vm";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const requests = [];
 let failingCategory = "";
