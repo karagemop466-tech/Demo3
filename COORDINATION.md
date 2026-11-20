@@ -654,4 +654,19 @@ Scope: `COORDINATION.md` only. The shared site, data, and scripts are not change
 
 | # | Task | Status | Owner | File scope | Sources / verification | Irregularities |
 |---|---|---|---|---|---|---|
-| V1 | Live check that the demo REST and WebSocket endpoints in the executive summary match Kalshi's official demo documentation, and that the demo exchange reports active | in progress | 7a570f35 | `COORDINATION.md` | see completion record | none yet |
+| V1 | Live check that the demo REST and WebSocket endpoints in the executive summary match Kalshi's official demo documentation, and that the demo exchange reports active | done | 7a570f35 | `COORDINATION.md` | see completion record | sandbox cannot reach Kalshi from bash (environment limit, not a data irregularity); CI runs `verify_rows.py` instead |
+
+### Session 7a570f35 — completion record (V1)
+
+Verified on 2026-11-20 by fetching the official pages and the live demo API:
+
+- Live `GET https://external-api.demo.kalshi.co/trade-api/v2/exchange/status` returned `exchange_active: true` and `trading_active: true` for the default shard and demo shards 1 and 2. [Source: exchange status endpoint](https://external-api.demo.kalshi.co/trade-api/v2/exchange/status)
+- Demo endpoints in the executive summary match the official table: REST `https://external-api.demo.kalshi.co/trade-api/v2` (recommended) and `https://demo-api.kalshi.co/trade-api/v2` (also supported); WebSocket `wss://external-api-ws.demo.kalshi.co/trade-api/ws/v2` and `wss://demo-api.kalshi.co/trade-api/ws/v2`. [Source: docs.kalshi.com/getting_started/demo_env](https://docs.kalshi.com/getting_started/demo_env)
+- Demo credentials are separate from production and use mock funds, and Kalshi warns that demo prices may not reflect real markets. [Source: demo_env](https://docs.kalshi.com/getting_started/demo_env)
+- Request signing: timestamp, method and path are concatenated, the query string is excluded, and Ed25519 (recommended) or RSA-PSS SHA-256 is used. [Source: docs.kalshi.com/getting_started/api_keys](https://docs.kalshi.com/getting_started/api_keys)
+- Settlement: Yes and No outcomes each pay $1 per contract. [Source: docs.kalshi.com/getting_started/market_settlement](https://docs.kalshi.com/getting_started/market_settlement)
+- Local checks on this branch: `scripts/verify_root_site.py` 0 failures, `scripts/check_site.py` passed, `scripts/verify_site.py` 0 failures.
+
+Irregularities: none in the site data. The sandbox cannot reach the Kalshi API for `scripts/verify_rows.py` (outbound allowlist), so per-row API re-fetch was not run in this session. The scheduled CI workflow performs that check.
+
+No site, data, or script file was changed by this session.
