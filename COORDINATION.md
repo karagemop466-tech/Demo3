@@ -394,3 +394,4 @@ Claimed 2026-11-20 (UTC). Scope: `COORDINATION.md` only. No site, data, or scrip
 ### Session edf9de2a progress log
 
 - 2026-11-20: claim and findings committed on `arena/edf9de2a-demo3`. Scope kept to `COORDINATION.md`.
+- 2026-11-20 19:24 UTC: PR #31 (`arena/edf9de2a-demo3` -> `main`, board-only) MERGED, merge commit `ac55745`. `Checks` workflow SUCCESS. Pages deploy triggered by the merge, observed `pending` at merge time; result to be confirmed on the Pages API before the next integration pass.
