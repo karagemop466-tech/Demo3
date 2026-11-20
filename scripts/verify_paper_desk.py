@@ -17,6 +17,7 @@ Run: python3 scripts/verify_paper_desk.py
 
 from __future__ import annotations
 
+import glob
 import json
 import os
 import re
@@ -116,11 +117,13 @@ def main() -> int:
             json.load(open(p))
         except json.JSONDecodeError as exc:
             failures.append(f"{rel}: invalid JSON ({exc})")
-    for rel in OPTIONAL_DEPS:
-        p = os.path.join(REPO, rel)
-        if not os.path.exists(p):
-            warnings.append(f"{rel}: absent (optional provenance file)")
-            continue
+    # every snapshot in data/latest/ is validated, not just the ones named above: the builder
+    # only reads a few, but a corrupted snapshot is always evidence of a broken merge, and the
+    # desk must not publish a cycle on top of one.
+    snapshot = sorted(glob.glob(os.path.join(REPO, "data", "latest", "*.json")))
+    for path in snapshot:
+        rel = os.path.relpath(path, REPO).replace(os.sep, "/")
+        p = path
         # The builder degrades these to "unverified" rows when they fail to parse, which is the
         # right publishing behaviour but the wrong CI behaviour: an unparseable snapshot (the
         # usual cause is an unresolved merge-conflict marker left in a data file, seen on
@@ -129,7 +132,10 @@ def main() -> int:
             json.load(open(p))
         except json.JSONDecodeError as exc:
             failures.append(f"{rel}: invalid JSON ({exc}) — the pages would render this file's "
-                            f"rows as unverified; check for conflict markers")
+                            f"rows as unverified; check for unresolved merge-conflict markers")
+    for rel in OPTIONAL_DEPS:
+        if not os.path.exists(os.path.join(REPO, rel)):
+            warnings.append(f"{rel}: absent (optional provenance file)")
 
     # 6: JS syntax
     js = os.path.join(SITE, "assets", "paper.js")
