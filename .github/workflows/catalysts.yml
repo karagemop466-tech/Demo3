@@ -1,0 +1,141 @@
+name: Swing + catalyst ledger refresh
+
+# Runs the swing/catalyst scan and commits its snapshots under catalysts/data/, then
+# asks Pages to rebuild. GitHub Actions runners have the network egress this repo's
+# build sandbox lacks (the sandbox allowlists github.com / npmjs.org / pypi.org only),
+# which is why the live polling and the news-feed probe live here.
+#
+# Data provenance: every value written by this job comes from the official demo API
+# (https://external-api.demo.kalshi.co/trade-api/v2 — see
+# https://docs.kalshi.com/getting_started/api_environments.md) or from a feed the run
+# actually parsed; both are recorded in catalysts/data/status.json, feed_health.json
+# and endpoints.json. Nothing is generated when a source is silent, and the last step
+# commits a run-outcome note whether this job succeeded or failed.
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  push:
+    # `arena/**` lets a session branch exercise the real (networked) run before its PR
+    # is merged; the paths filter keeps this off every other session's pushes, since
+    # only this session's scope touches catalysts/**.
+    branches: ['main', 'arena/**']
+    paths:
+      - 'catalysts/**'
+      - '.github/workflows/catalysts.yml'
+  workflow_dispatch:
+    inputs:
+      lookback_hours:
+        description: "How many hours of tape to publish swings from"
+        required: false
+        default: "168"
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: catalysts-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Offline tests (mock demo API + mock feed; needs no network)
+        run: python3 catalysts/tests/test_scan.py -v
+
+      - name: Record official endpoint statuses
+        env:
+          KALSHI_API_ROOT: https://external-api.demo.kalshi.co/trade-api/v2
+          CATALYST_TIMEOUT: '12'
+          CATALYST_RETRIES: '2'
+          CATALYST_DEADLINE_SECONDS: '180'
+        run: python3 catalysts/scan.py --probe-endpoints --quiet
+
+      - name: Probe the news-feed allowlist
+        env:
+          # One dead host must not eat the job: short timeout, no retry storms, and the
+          # scan publishes a partial, self-disclosed result if the budget is hit.
+          CATALYST_TIMEOUT: '10'
+          CATALYST_RETRIES: '1'
+          CATALYST_DEADLINE_SECONDS: '240'
+        run: python3 catalysts/scan.py --probe-feeds --quiet
+
+      - name: Detect swings >= $0.10 and attach candidate catalyst links
+        env:
+          KALSHI_API_ROOT: https://external-api.demo.kalshi.co/trade-api/v2
+          CATALYST_LOOKBACK_HOURS: ${{ github.event.inputs.lookback_hours || '168' }}
+          CATALYST_TIMEOUT: '12'
+          CATALYST_RETRIES: '2'
+          CATALYST_DEADLINE_SECONDS: '420'
+        run: python3 catalysts/scan.py --quiet
+
+      - name: Publish gate (re-derives every number from the artifacts)
+        run: python3 catalysts/tests/check_page.py
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install the dev dependency the render test needs (jsdom)
+        run: npm ci --no-audit --no-fund
+
+      - name: Headless render test of the ledger page (incl. the browser $0.10 rule)
+        run: |
+          if node -e "require.resolve('jsdom')" 2>/dev/null; then
+            node catalysts/tests/smoke.mjs
+          else
+            echo "::warning::jsdom is not installed (npm ci failed) - render test skipped"
+          fi
+
+      # Runs even when a step above failed, so the failure and the partial artifacts are
+      # visible in the branch without GitHub API access (this repo's token is rate-limited
+      # by the number of concurrent sessions).
+      - name: Write the run-outcome note
+        if: always()
+        run: python3 catalysts/report_run.py --status "${{ job.status }}"
+
+      - name: Commit snapshots and the outcome note
+        if: always()
+        run: |
+          git config user.name "catalyst-bot"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add catalysts/data || true
+          if git diff --cached --quiet; then
+            echo "Nothing changed to commit"
+          else
+            git commit -m "catalysts: ledger refresh $(date -u '+%Y-%m-%dT%H:%M:%SZ') (${{ job.status }})"
+            git pull --rebase origin "$GITHUB_REF_NAME" --autostash || \
+              echo "::warning::rebase failed; pushing on top of the local state"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          fi
+
+      - name: Dispatch the Pages deploy (pages.yml) after a data commit
+        if: github.ref == 'refs/heads/main' && job.status == 'success'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Same convention collect.yml uses: a push made with GITHUB_TOKEN does not trigger
+          # other workflows, so pages.yml (Actions-based deploy) is dispatched explicitly.
+          # The legacy `POST /pages/builds` endpoint is NOT used: branch-built Pages has a soft
+          # limit of 10 builds/hour and was failing here before the repo moved to pages.yml
+          # (https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits).
+          code=$(curl -s -o /tmp/pages_dispatch.out -w "%{http_code}" \
+            -X POST \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -d '{"ref":"main"}' \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/workflows/pages.yml/dispatches")
+          echo "pages.yml dispatch HTTP $code"
+          head -c 300 /tmp/pages_dispatch.out
+          test "$code" = "204"
