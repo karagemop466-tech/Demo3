@@ -53,8 +53,10 @@ TOPIC_RULES = [
         r"\b(golf|pga|masters|ryder cup|open championship|us open golf|liv golf)\b", re.I)),
     ("elections", re.compile(r"^KX(PRES|SENATE|HOUSE|GOV|MAYOR|PRIMARY|ELECTION|FRENCHPRES|"
                              r"NEXT[A-Z]*PRES|POLIT|PARTISAN|NOMD|NATOSECGEN|KNESS|PARL)", re.I), re.compile(
-        r"\b(election|president|senate|house|governor(?:ship)?|mayor|primary|nominee|nomination|"
-        r"electoral|parliament|governm(?:ent)?|congress|secretary of state|cabinet)\b", re.I)),
+        r"\b(election|president|senate|mayor|primary|nominee|nomination|electoral|parliament|"
+        r"governor(?:ship)?|secretary of state|cabinet|vice president|congressional|"
+        r"house (?:race|seat|election|vote|votes|majority|speaker|primary)|u\.?s\.? house|"
+        r"control of (?:the )?(?:house|senate|government))\b", re.I)),
     ("culture", re.compile(r"^KX(OSCAR|EMMY|GRAMMY|GOLDENGLOBE|BAFTA|FEATURE|BILLBOARD|"
                            r"BESTPICTURE|MOVIE|FILM|ALBUM|SONG|CELEB|ROYAL|METGALA|COACHELLA)", re.I), re.compile(
         r"\b(oscar|emmy|grammy|golden globe|bafta|best picture|box office|movie|film|"
@@ -72,20 +74,32 @@ CATEGORY_TOPIC = {
 }
 
 
+# API tag overlay (tags asserted by the API; checked before title regexes so
+# e.g. KXWTI "WTI oil election day" (tag "Oil & Gas") maps to gas, not elections).
+TAG_TOPIC = [
+    (re.compile(r"golf", re.I), "golf"),
+    (re.compile(r"oil\s*&\s*gas|natural gas|energy", re.I), "gas"),
+    (re.compile(r"election", re.I), "elections"),
+]
+
+
 def classify(series_ticker: str, title: str, category: str = "", tags: list | None = None) -> tuple[str, str]:
     """Return (topic, rule_matched). 'other' means no target-topic rule matched.
-    Order: series/title regexes first (most specific), then category, then tags."""
+    Order: series_ticker regex (most specific), then API tags, then title regex,
+    then category overlay."""
     for topic, sre, tre in TOPIC_RULES:
         if sre.search(series_ticker or ""):
             return topic, f"series_ticker~/{sre.pattern}/"
+    for tag in tags or []:
+        for tre2, topic in TAG_TOPIC:
+            if tre2.search(str(tag)):
+                return topic, f"tag={tag}"
+    for topic, sre, tre in TOPIC_RULES:
         if tre.search(title or ""):
             return topic, f"title~/{tre.pattern}/"
     cat = (category or "").strip().lower()
     if cat in CATEGORY_TOPIC:
         return CATEGORY_TOPIC[cat], f"category={category}"
-    for tag in tags or []:
-        if str(tag).strip().lower() == "golf":
-            return "golf", f"tag={tag}"
     return "other", ""
 
 
