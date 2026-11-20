@@ -214,7 +214,7 @@ def write_json(path: str, obj) -> None:
     import os
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
-        json.dump(obj, f, indent=1, sort_keys=True, ensure_ascii=False)
+        json.dump(obj, f, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
         f.write("\n")
     print(f"wrote {path}")
 
@@ -243,7 +243,11 @@ def main() -> int:
             "source_url": f"{BASE}/series?{urllib.parse.urlencode({'ticker': s.get('ticker','')})}",
         }
         series_catalog[entry["ticker"]] = entry
-        series_meta.append(entry)
+        if topic in TOPICS:
+            series_meta.append(entry)
+        else:  # keep a lean audit stub for non-topic series
+            series_meta.append({k: entry[k] for k in
+                                ("ticker", "category", "topic", "classification_rule")})
     write_json(f"{REPO_DATA}/latest/series.json", {
         "retrieved_at": retrieved_at, "count": len(series_meta), "series": series_meta})
 
@@ -298,15 +302,21 @@ def main() -> int:
         return topic, rule, s_ticker
 
     rows_open, rows_settled = [], []
+    other_open: list[dict] = []
     topic_counts = {t: 0 for t in list(TOPICS) + ["other"]}
     for m in open_markets:
         topic, rule, s_t = classify_market(m)
         topic_counts[topic] += 1
-        rows_open.append(market_row(m, topic, rule, retrieved_at, s_t))
+        row = market_row(m, topic, rule, retrieved_at, s_t)
+        (rows_open if topic in TOPICS else other_open).append(row)
+    # store a small "other" sample for context (top 50 by volume) to bound size
+    other_open.sort(key=lambda r: -(to_float(r.get("volume_fp")) or 0.0))
+    rows_open.extend(other_open[:50])
     for m in settled_markets:
         topic, rule, s_t = classify_market(m)
         topic_counts[topic] += 1
-        rows_settled.append(market_row(m, topic, rule, retrieved_at, s_t))
+        if topic in TOPICS:  # resolutions for out-of-scope topics are not tracked
+            rows_settled.append(market_row(m, topic, rule, retrieved_at, s_t))
 
     rows_open.sort(key=lambda r: -(to_float(r.get("volume_fp")) or 0.0))
     rows_settled.sort(key=lambda r: -(to_float(r.get("volume_fp")) or 0.0))
@@ -362,7 +372,7 @@ def main() -> int:
         "by_topic": top_by_topic,
     })
 
-    # 6. Resolution log: every settled/finalized market with result yes/no
+    # 6. Resolution log: every settled/finalized market with result yes/no (topic scope)
     print("building resolution log ...")
     resolutions = []
     for r in rows_settled:
@@ -379,11 +389,12 @@ def main() -> int:
                 "retrieved_at": retrieved_at,
                 "source_url": r["source_url"],
             })
+    resolutions.sort(key=lambda x: x.get("settlement_ts") or "", reverse=True)
     write_json(f"{REPO_DATA}/latest/resolutions.json", {
         "retrieved_at": retrieved_at,
         "count": len(resolutions),
         "resolution_field": "market.result (yes|no) per https://docs.kalshi.com/getting_started/market_settlement",
-        "resolutions": resolutions,
+        "resolutions": resolutions[:1000],
     })
 
     # 7. Liquidity (orderbooks) + trades + candles for the highest-dollar topic markets
