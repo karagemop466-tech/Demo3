@@ -386,7 +386,8 @@
           !state.resolutions.find(function (r) { return r.ticker === m.ticker; })) {
         state.resolutions.push({ ticker: m.ticker, title: m.title, topic: m.topic,
           result: String(m.result).toLowerCase(), status: m.status,
-          ts: Math.floor(Date.now() / 1000) });
+          ts: Math.floor(Date.now() / 1000),
+          event_ticker: m.event_ticker || "", series_ticker: m.series_ticker || "" });
         changed = true;
       }
     });
@@ -627,10 +628,14 @@
       var auto = $("autoTrade");
       if (auto) {
         auto.disabled = false;
+        // Restore persisted automation state on load (checkbox always reloaded
+        // unchecked before this fix).
         var st = T.automationStatus ? T.automationStatus() : {};
         auto.checked = !!st.enabled;
         auto.addEventListener("change", function () {
           T.setAutomation(auto.checked);
+          var s = T.automationStatus ? T.automationStatus() : {};
+          auto.checked = !!s.enabled;
         });
       }
       var strat = $("autoStrategy");
