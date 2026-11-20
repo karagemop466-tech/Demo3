@@ -49,6 +49,22 @@ class DetectSwings(unittest.TestCase):
         a = pa.detect_swings([row("T-A", "t1", "0.0040"), r2])
         self.assertEqual((a[0]["to_bid_dollars"], a[0]["to_ask_dollars"]), ("0.0020", "0.8110"))
 
+    def test_quote_midpoint_must_support_the_printed_price(self):
+        r2 = row("T-A", "t2", "0.8110"); r2["yes_bid_dollars"] = "0.0020"; r2["yes_ask_dollars"] = "0.0030"
+        a = pa.detect_swings([row("T-A", "t1", "0.0030"), r2])
+        self.assertFalse(a[0]["last_supported_by_quote"])
+        self.assertEqual(a[0]["quote_mid_dollars"], "0.0025")
+
+    def test_quote_supports_a_real_move(self):
+        r2 = row("T-A", "t2", "0.4500"); r2["yes_bid_dollars"] = "0.4400"; r2["yes_ask_dollars"] = "0.4600"
+        a = pa.detect_swings([row("T-A", "t1", "0.3000"), r2])
+        self.assertTrue(a[0]["last_supported_by_quote"])
+
+    def test_missing_quotes_are_unknown_not_inferred(self):
+        a = pa.detect_swings([row("T-A", "t1", "0.2000"), row("T-A", "t2", "0.4000")])
+        self.assertIsNone(a[0]["last_supported_by_quote"])
+        self.assertEqual(a[0]["quote_mid_dollars"], "")
+
     def test_first_sample_only_sets_baseline(self):
         self.assertEqual(pa.detect_swings([row("T-A", "t1", "0.9000")]), [])
 

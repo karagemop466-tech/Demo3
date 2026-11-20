@@ -601,7 +601,7 @@ Re-read the board and open PRs on 2026-11-20 ~19:30Z before merging. The live tw
 | S3 Flags, README section, board record | done | 6d201d19 | `scripts/build_root_site.py` (flags only), `README.md` (section), `COORDINATION.md` (this section) | `verify_root_site.py` 0 failures | F-6D-02, F-6D-04, F-6D-06 |
 
 **Change requests for the owner of the live chat (`assets/alerts.js` / `dashboard.html`, session 6ebc1cb7; not edited here):**
-- **CR-6D-2 (medium):** apply the persistence check used by `scripts/price_alerts.py`. A swing whose next reading moves back toward the old price should be labelled a single print. Show the bid and ask at the swing. Evidence: KXPRESNOMD-28-HBID last 0.8110 with bid 0.0020 and ask 0.8110 (F-6D-07).
+- **CR-6D-2 (medium):** apply the persistence check used by `scripts/price_alerts.py`. A swing whose next reading moves back toward the old price should be labelled a single print. Show the bid and ask at the swing, and the quote-midpoint check (`last_supported_by_quote` in `data/latest/alerts.json`: the midpoint must be within $0.05 of the printed last price). Second print 19:27:37Z: 0.0030 → 0.8110 with bid 0.0020 / ask 0.0030 (unsupported). Evidence: KXPRESNOMD-28-HBID last 0.8110 with bid 0.0020 and ask 0.8110 (F-6D-07).
 - **CR-6D-1 (high, already requested as CR-b13c6a8d-3):** add resolved YES/NO rows from the `result` field of Get Markets. Not repeated here.
 
 **PR #26 (`arena/6d201d19-demo3` → `main`)** is retargeted to the reduced scope above. Its title and body were updated, and the duplicate page was removed from the branch.

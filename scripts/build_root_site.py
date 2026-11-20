@@ -415,8 +415,10 @@ def consolidated_flags():
         "yes_ask 0.8110 (208 contracts offered). A later live read (about 19:25Z) showed last_price 0.0030. A "
         "last-trade price can be one print. scripts/price_alerts.py therefore marks a swing whose next reading "
         "moves back toward the old price as a single print, and shows 'no later reading yet' when there is none. "
-        "The 19:14:49Z evidence row was written on branch arena/6d201d19-demo3 (commit 7d06a79) and is absent "
-        "from main's later prices.jsonl (see F-6D-08). The live chat does not yet do this (CR-6D-2 in COORDINATION.md).",
+        "A second print on 19:27:37Z (0.0030 -> 0.8110) had bid 0.0020 and ask 0.0030, so its quote midpoint (0.0025) "
+        "does not support the printed last price. scripts/price_alerts.py now records last_supported_by_quote. The "
+        "19:14:49Z row was written on branch arena/6d201d19-demo3 (commit 7d06a79) and is absent from main's later "
+        "prices.jsonl (see F-6D-08). The live chat does not yet do this (CR-6D-2 in COORDINATION.md).",
         ["https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-HBID",
          f"{DOCS}/api-reference/market/get-markets.md"],
         "open - owner of the live chat to add the persistence check", "6d201d19")

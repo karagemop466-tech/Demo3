@@ -103,6 +103,15 @@ def detect_swings(rows, titles=None):
             # level is flagged, because a single print is not a sustained price move.
             nxt = prices[i + 1] if i + 1 < len(rs) else None
             reverted = nxt is not None and abs(nxt - prev_p) < THRESHOLD / 2
+            # Quote check: does the bid/ask midpoint at the swing reading support the printed last price?
+            bid = dec(r.get("yes_bid_dollars"))
+            ask = dec(r.get("yes_ask_dollars"))
+            if bid is not None and ask is not None and bid > 0 and ask > 0:
+                mid = ((bid + ask) / 2).quantize(Q4, rounding=ROUND_HALF_UP)
+                supported = bool(abs(mid - p) <= THRESHOLD / 2)
+                mid_s = f"{mid:.4f}"
+            else:
+                supported, mid_s = None, ""
             meta = titles.get(ticker, {})
             alerts.append({
                 "ts": r["ts"],
@@ -120,6 +129,8 @@ def detect_swings(rows, titles=None):
                 "next_reading_dollars": f"{nxt:.4f}" if nxt is not None else "",
                 "next_reading_ts": rs[i + 1]["ts"] if nxt is not None else "",
                 "reverted_next_reading": bool(reverted),
+                "quote_mid_dollars": mid_s,
+                "last_supported_by_quote": supported,
                 "volume_fp": str(vol) if vol is not None else "",
                 "source_url": f"{DEMO}/markets?tickers={ticker}",
                 "synthetic": is_synthetic(ticker),
@@ -193,6 +204,7 @@ def main():
             "comparison": "consecutive snapshots of the same ticker; |last_price_dollars change| >= 0.10",
             "input": "data/history/prices.jsonl",
             "either_direction": True,
+            "quote_check": "the bid/ask midpoint at the swing reading must be within $0.05 of the printed last price; otherwise last_supported_by_quote is false",
             "persistence_check": "a swing whose next reading moves back to within $0.05 of the old price is flagged reverted_next_reading (single print, not sustained)",
         },
         "high_roi_rule": {
@@ -210,6 +222,7 @@ def main():
             "down": sum(1 for a in alerts if a["direction"] == "down"),
             "high_roi": sum(1 for a in alerts if a["high_roi"]),
             "reverted_next_reading": sum(1 for a in alerts if a["reverted_next_reading"]),
+            "last_not_supported_by_quote": sum(1 for a in alerts if a["last_supported_by_quote"] is False),
             "synthetic": sum(1 for a in alerts if a["synthetic"]),
             "watchlist": len(watch),
         },
