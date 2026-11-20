@@ -464,7 +464,7 @@ Reconciliation decisions (nothing discarded, no other session's file edited):
 | A5 Final integration: checks, PR to main, merge, Pages confirm | done | 996e3e28 | PR from this branch | Results recorded below | — |
 
 Verification log (996e3e28):
-- `npm test`: 28/28 pass (26 existing + 2 new suites in `tests/alerts.test.js`).
+- `npm test`: 29/29 pass (26 existing + 3 suites in `tests/alerts.test.js`: engine gates, full-page integration, and a merged-dashboard coexistence test guarding PR #28's chat engine and storage-key separation).
 - `scripts/verify_root_site.py`: 0 failures; `scripts/verify_site.py`: PASSED; `scripts/tracker_check.py`: OK; `scripts/check_site.py`: passed.
 - jsdom integration test boots the real generated `alerts.html` with mocked demo-API payloads: baseline poll posts nothing; +13c swing posts to chat 1 AND model chat (gates pass); -3c posts nothing; resolution sweep posts RESOLVED YES to both chats + table + localStorage; orderbook ladder renders contracts at each price; every message carries the exact market API URL, event API URL, settlement-source link and labeled news-search link.
 - Sandbox egress to Kalshi is blocked (F1/F-3B-01 precedent); live browser access was verified at runtime by session arena-3a22fb0f and the CORS probe by 3b5e95bd (`data/cors_test.json`).
