@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Golf - Kalshi demo dashboard</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body data-root="../" data-page="golf">
+<header class="site"><div id="site-nav"></div></header>
+<main>
+
+<h1>Golf</h1>
+<p class="lead">Major championships, PGA Tour actions, birdies, course records, and US Open markets (category Sports, tag Golf).</p>
+<div id="live-status" class="banner">Loading live data...</div>
+<h2>Top open markets (live)</h2>
+<div class="card" data-live="golf" data-limit="25"></div>
+<h2>Verified snapshot</h2>
+<div class="card"><h3 style="margin-top:0">Series in the verified snapshot</h3><div data-render="series" data-cat="golf"></div></div>
+<h2>Analysis</h2><ul>
+<li>Golf series in the snapshot have high contract volume, led by KXBRYSONCOURSERECORDS and KXGOLFMAJOR. <a href="https://external-api.kalshi.com/trade-api/v2/series?category=Sports&amp;tags=Golf&amp;include_volume=true" target="_blank" rel="noopener">source</a></li>
+<li>Flagged: KXBRYSONCOURSERECORDS settles on an individual's YouTube channel (I-02). <a href="https://external-api.kalshi.com/trade-api/v2/series?category=Sports&amp;tags=Golf&amp;include_volume=true" target="_blank" rel="noopener">source</a></li>
+</ul>
+
+<h2>Price movement and liquidity</h2>
+<div class="card" id="detail">
+  <div class="controls">
+    <select id="detail-pick"><option value="">Choose a market...</option></select>
+    <div class="seg controls" style="margin:0">
+      <button data-mode="seconds">Seconds</button><button data-mode="minutes">Minutes</button><button data-mode="hours">Hours</button>
+    </div>
+    <select id="detail-len"></select>
+  </div>
+  <h3 id="detail-title">Pick a market to chart</h3>
+  <p class="note" id="chart-caption"></p>
+  <svg class="chart" id="chart" viewBox="0 0 960 320" preserveAspectRatio="xMidYMid meet"></svg>
+  <div class="grid" id="detail-stats" style="margin-top:12px"></div>
+  <h3>Liquidity: contracts available at each price</h3>
+  <div id="liquidity"><p class="muted">Pick a market to see its orderbook.</p></div>
+  <p class="note">Seconds mode records a sample every 5 seconds while this page stays open. Minutes and hours use Kalshi candlesticks (1-minute and 60-minute periods).</p>
+</div>
+
+
+</main>
+<footer>Snapshot date (UTC): <span id="snapshot-date">2026-11-20</span>. Data from the public Kalshi Trade API and Kalshi docs.
+Every table row links to its source. Blank or flagged values are unverified. Not investment advice.
+Source code: <a href="https://github.com/karagemop466-tech/Demo3">github.com/karagemop466-tech/Demo3</a>.</footer>
+<script src="../assets/app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Questions - Kalshi demo dashboard</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-root="" data-page="questions">
+<header class="site"><div id="site-nav"></div></header>
+<main>
+
+<h1>Questions, information, and answers</h1>
+<p class="lead">What must be answered before any decision can reasonably be made. For each question: what the verified data already shows, what is still missing, and the source.</p>
+<div data-render="questions"></div>
+<h2>Ways to find the missing information</h2>
+<ul>
+<li>Open the live dashboard from a browser and check the status banner to confirm CORS access. <a href="https://docs.kalshi.com/getting_started/quick_start_market_data.md" target="_blank" rel="noopener">source</a></li>
+<li>Read the fee schedule PDF and record fee amounts per category. <a href="https://kalshi.com/docs/kalshi-fee-schedule.pdf" target="_blank" rel="noopener">source</a></li>
+<li>Enumerate all gas series with a series-list query, and record each one. <a href="https://docs.kalshi.com/api-reference/market/get-series-list.md" target="_blank" rel="noopener">source</a></li>
+<li>Compare settled AAA gas markets with the AAA source page to test the timing question (I-05). <a href="https://gasprices.aaa.com/" target="_blank" rel="noopener">source</a></li>
+</ul>
+
+</main>
+<footer>Snapshot date (UTC): <span id="snapshot-date">2026-11-20</span>. Data from the public Kalshi Trade API and Kalshi docs.
+Every table row links to its source. Blank or flagged values are unverified. Not investment advice.
+Source code: <a href="https://github.com/karagemop466-tech/Demo3">github.com/karagemop466-tech/Demo3</a>.</footer>
+<script src="assets/app.js" defer></script>
+</body>
+</html>

@@ -1,35 +1,30 @@
-# Demo3 — Kalshi demo tracker
+# Demo3 - Kalshi demo dashboard
 
-Live site (GitHub Pages): https://karagemop466-tech.github.io/Demo3/
+Static GitHub Pages site with verified Kalshi market data, a live in-browser dashboard, category pages, resolved results, findings, questions, suggestions, and a Flagged for Review page.
 
-A static dashboard for Kalshi **demo** markets on five topics: gas prices, elections, culture, crypto and golf.
-Every table row links to the Kalshi API response it came from. Anything not confirmed from an official source is left blank and marked *Unverified*.
+- Live site: https://karagemop466-tech.github.io/Demo3/ (Pages serves `main` at `/`; the root `index.html` redirects to `docs/index.html`)
+- Coordination board: [COORDINATION.md](COORDINATION.md)
 
 ## Layout
 
 | Path | What it is |
-|------|------------|
-| `docs/` | The published site (GitHub Pages source: `main` / `/docs`) |
-| `docs/data/snapshot.json` | Verified series, events, markets and one orderbook from the demo API |
-| `docs/data/flags.json` | Flagged for Review: irregularities and unverified items |
-| `docs/data/questions.json` | Questions, known facts, gaps and how to close them |
-| `docs/data/suggestions.json` | Decision board: options only, nothing implemented |
-| `docs/data/sources.json` | Official Kalshi docs and API endpoints used |
-| `docs/assets/live.js` | Live dashboard: calls the public demo API from the browser, falls back to the snapshot |
-| `scripts/build_site.py` | Generates the HTML shells in `docs/` |
-| `scripts/check_site.py` | Validates JSON, source links and internal links |
-| `COORDINATION.md` | Shared task board and log |
+|---|---|
+| `docs/` | The published site (HTML pages, `assets/app.js`, `assets/style.css`) |
+| `docs/data/verified.json` | Single source of verified data. Every row has a source URL. |
+| `scripts/build_site.py` | Generates the HTML page shells in `docs/` |
+| `scripts/verify_site.py` | Checks sources, internal links, and JS syntax |
 
-## Build and check
+## Rebuild and verify
 
 ```bash
-python3 scripts/build_site.py   # regenerate HTML shells
-python3 scripts/check_site.py   # must print OK
+python3 scripts/build_site.py
+python3 scripts/verify_site.py
 ```
 
-## Limits
+## Data sources
 
-- Demo data only (mock funds). Kalshi's docs say demo prices may not reflect real markets.
-- Trading and portfolio pages are blocked until a demo API key is provided (see Questions, Q-01). No credentials are stored in this repo.
-- The API reports volume as contracts, not dollars.
-- Live calls run from the visitor's browser; cross-origin access is not verified (see Flagged, F-19).
+Kalshi documentation at https://docs.kalshi.com (the `llms.txt` index lists every page) and the public Kalshi Trade API at https://external-api.kalshi.com/trade-api/v2. The live dashboard calls the public endpoints from the browser. If the browser cannot reach them, the page says so and shows the verified snapshot. Demo-account portfolio data needs an API key and is not connected.
+
+## Not included
+
+No trading or order placement. No credentials are stored in this repo.

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Suggestions — Kalshi Demo Dashboard</title>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#content">Skip to content</a>
+
+<header>
+  <div class="header-inner">
+    <div class="brand"><div class="mark">K</div><div>Kalshi Demo Dashboard</div></div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="dashboard.html">Live Dashboard</a></li>
+        <li><a href="gas-prices.html">Gas Prices</a></li>
+        <li><a href="elections.html">Elections</a></li>
+        <li><a href="culture.html">Culture</a></li>
+        <li><a href="crypto.html">Crypto</a></li>
+        <li><a href="golf.html">Golf</a></li>
+        <li><a href="portfolio.html">Portfolio</a></li>
+        <li><a href="trades.html">Trades</a></li>
+        <li><a href="suggestions.html" class="active">Suggestions</a></li>
+        <li><a href="questions.html">Questions &amp; Answers</a></li>
+        <li><a href="flagged.html">Flagged for Review</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <h1>Suggestions for the site</h1>
+      <p>Improvement ideas are collected here so they can be reviewed and the best path chosen <strong>before</strong>
+      any change is implemented. Nothing on this page is live — it is a decision-review list.</p>
+    </div>
+  </div>
+</header>
+
+<div class="container" id="content">
+  <section class="section">
+    <h2 class="section-title"><span class="kicker">Suggestion register</span> Review before implementing</h2>
+    <table class="data">
+      <thead><tr><th>#</th><th>Suggestion</th><th>Area</th><th>Expected benefit</th><th>Effort</th><th>Decision</th></th></thead>
+      <tbody>
+        <tr>
+          <td>S1</td>
+          <td>Connect the Kalshi WebSocket (wss://external-api-ws.demo.kalshi.co/trade-api/ws/v2) for real-time price and liquidity updates instead of polling.</td>
+          <td>Live dashboard</td>
+          <td>True live price movement; liquidity updates as orders arrive</td>
+          <td>Medium</td>
+          <td>Pending review</td>
+        </tr>
+        <tr>
+          <td>S2</td>
+          <td>Add a server-side proxy (GitHub Actions / Cloudflare Worker) for /events and /markets so the browser is not blocked by CORS when calling demo.kalshi.co.</td>
+          <td>Data feed</td>
+          <td>Reliable live data from GitHub Pages hosting</td>
+          <td>Medium</td>
+          <td>Pending review</td>
+        </tr>
+        <tr>
+          <td>S3</td>
+          <td>Add authenticated portfolio views (GET /portfolio) using a locally-stored, never-committed demo API key.</td>
+          <td>Portfolio</td>
+          <td>Real balance, P&amp;L, and trade history from the demo account</td>
+          <td>High (needs key handling)</td>
+          <td>Pending review</td>
+        </tr>
+        <tr>
+          <td>S4</td>
+          <td>Add order placement (POST /order) with a dry-run / simulation mode first.</td>
+          <td>Trade execution</td>
+          <td>Test strategies without risking demo funds</td>
+          <td>High</td>
+          <td>Pending review</td>
+        </tr>
+        <tr>
+          <td>S5</td>
+          <td>Persist chart history to IndexedDB so the graph keeps context across refreshes.</td>
+          <td>Charting</td>
+          <td>Longer visible price history without re-fetching</td>
+          <td>Low</td>
+          <td>Pending review</td>
+        </tr>
+        <tr>
+          <td>S6</td>
+          <td>Add per-category "resolved Yes/No" badges once events settle, sourced from the settlement source linked on each row.</td>
+          <td>Event tracking</td>
+          <td>Clear yes/no outcome record per event</td>
+          <td>Medium</td>
+          <td>Pending review</td>
+        </tr>
+        <tr>
+          <td>S7</td>
+          <td>Find gas-price and golf series in the demo API (page through /events /markets or use the WebSocket) and populate those category pages.</td>
+          <td>Category data</td>
+          <td>Complete coverage of all five requested topics</td>
+          <td>Low</td>
+          <td>Pending review</td>
+        </tr>
+        <tr>
+          <td>S8</td>
+          <td>Add export (CSV) of verified tables and trade logs for offline analysis.</td>
+          <td>Analysis</td>
+          <td>Easy trade-result analysis outside the site</td>
+          <td>Low</td>
+          <td>Pending review</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section">
+    <div class="alert alert-info">
+      <strong>How to use this section:</strong> review each suggestion, pick the best path, then implement on a
+      feature branch and merge through pull request. Suggestions are not implemented automatically — a reviewer
+      must sign off before any change goes live.
+    </div>
+  </section>
+
+  <section class="section sources">
+    <h4>Official sources</h4>
+    <ul>
+      <li><a href="https://external-api-ws.demo.kalshi.co/trade-api/ws/v2" target="_blank" rel="noopener">Kalshi demo WebSocket API v2</a></li>
+      <li><a href="https://external-api.demo.kalshi.co/trade-api/v2" target="_blank" rel="noopener">Kalshi demo Trade API v2</a></li>
+      <li><a href="flagged.html">Flagged for Review</a></li>
+    </ul>
+  </section>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div><strong>Kalshi Demo Dashboard</strong> — Suggestions register.</div>
+    <div class="disclaimer">Decision-review list only. No changes are applied automatically.</div>
+  </div>
+</footer>
+
+<script src="assets/js/app.js"></script>
+</body>
+</html>

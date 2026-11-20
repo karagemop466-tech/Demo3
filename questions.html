@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Questions &amp; Answers — Kalshi Demo Dashboard</title>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#content">Skip to content</a>
+
+<header>
+  <div class="header-inner">
+    <div class="brand"><div class="mark">K</div><div>Kalshi Demo Dashboard</div></div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="dashboard.html">Live Dashboard</a></li>
+        <li><a href="gas-prices.html">Gas Prices</a></li>
+        <li><a href="elections.html">Elections</a></li>
+        <li><a href="culture.html">Culture</a></li>
+        <li><a href="crypto.html">Crypto</a></li>
+        <li><a href="golf.html">Golf</a></li>
+        <li><a href="portfolio.html">Portfolio</a></li>
+        <li><a href="trades.html">Trades</a></li>
+        <li><a href="suggestions.html">Suggestions</a></li>
+        <li><a href="questions.html" class="active">Questions &amp; Answers</a></li>
+        <li><a href="flagged.html">Flagged for Review</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <h1>Questions &amp; Answers — Decision Readiness</h1>
+      <p>Questions, information needed, and answers that must be addressed before any decision can reasonably be
+      made based on the data we have — and on the data we do not have. Where information is missing, suggestions
+      for discovering it are listed.</p>
+    </div>
+  </div>
+</header>
+
+<div class="container" id="content">
+  <section class="section">
+    <h2 class="section-title"><span class="kicker">Questions to answer before deciding</span></h2>
+    <table class="data">
+      <thead><tr><th>#</th><th>Question</th><th>Information needed</th><th>Answer / status</th><th>How to discover missing information</th></th></thead>
+      <tbody>
+        <tr>
+          <td>Q1</td>
+          <td>Which live events have the highest dollar amount in each target category?</td>
+          <td>Market volume and open interest (dollars) per event</td>
+          <td>Not yet determinable — demo API sample returned no volume for most event tickers</td>
+          <td>Page through GET /markets on the demo API; sort by volume_fp / open_interest_fp; link each row to its /events source</td>
+        </tr>
+        <tr>
+          <td>Q2</td>
+          <td>Are there gas-price events on the demo exchange?</td>
+          <td>Energy / gas category events and markets</td>
+          <td>No — none found in sampled pages</td>
+          <td>Query GET /events and page through; try category filters; check WebSocket feed</td>
+        </tr>
+        <tr>
+          <td>Q3</td>
+          <td>Are there golf events on the demo exchange?</td>
+          <td>Sports / golf series tickers</td>
+          <td>No — none found in sampled pages</td>
+          <td>Page through GET /events and GET /markets; search titles for golf-related series</td>
+        </tr>
+        <tr>
+          <td>Q4</td>
+          <td>Is the demo API reachable cross-origin from GitHub Pages?</td>
+          <td>CORS headers on external-api.demo.kalshi.co</td>
+          <td>Unverified — not tested from a github.io origin</td>
+          <td>Deploy to GitHub Pages and call /markets from the browser console</td>
+        </tr>
+        <tr>
+          <td>Q5</td>
+          <td>What is the demo account balance and P&amp;L?</td>
+          <td>Authenticated GET /portfolio with a demo API key</td>
+          <td>Unknown — no API key provided or stored</td>
+          <td>Obtain a demo API key from Kalshi; sign requests per API docs; never commit the key</td>
+        </tr>
+        <tr>
+          <td>Q6</td>
+          <td>Can trades be executed on the demo exchange from this site?</td>
+          <td>Authenticated POST /trade and POST /order</td>
+          <td>No — not wired; credentials required</td>
+          <td>Add signed-request logic with a locally held demo API key</td>
+        </tr>
+        <tr>
+          <td>Q7</td>
+          <td>How are events resolved (Yes/No) and which sources settle them?</td>
+          <td>Settlement sources per event (linked in tables)</td>
+          <td>Partially answered — settlement sources listed for sampled events</td>
+          <td>Read each event's settlement_sources from GET /events; confirm after the event closes</td>
+        </tr>
+        <tr>
+          <td>Q8</td>
+          <td>Is the data current (live) or a snapshot?</td>
+          <td>updated_time / last_updated_ts on events and markets</td>
+          <td>Snapshot shown here; live feed attempted on dashboard</td>
+          <td>Compare returned updated_time against wall-clock time after enabling live feed</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title"><span class="kicker">Information we do not have (and how to get it)</span></h2>
+    <table class="data">
+      <thead><tr><th>Missing information</th><th>Why it matters</th><th>Suggested discovery path</th><th>Official source</th></th></thead>
+      <tbody>
+        <tr><td>Gas-price market volume / liquidity</td><td>Needed to rank "highest dollar amount" in the gas category</td><td>Page GET /markets; filter to energy/gas series; sort by volume_fp</td><td><a href="https://external-api.demo.kalshi.co/trade-api/v2/markets" target="_blank" rel="noopener">GET /markets</a></td></tr>
+        <tr><td>Golf events / markets</td><td>Requested category with no demo data found</td><td>Page GET /events and GET /markets; inspect series_ticker for golf series</td><td><a href="https://external-api.demo.kalshi.co/trade-api/v2/events" target="_blank" rel="noopener">GET /events</a></td></tr>
+        <tr><td>Demo account API key</td><td>Needed for portfolio balance and trade execution</td><td>Sign up for a Kalshi demo account; generate API key; sign requests</td><td><a href="https://docs.kalshi.io" target="_blank" rel="noopener">Kalshi API docs</a></td></tr>
+        <tr><td>CORS behavior from github.io</td><td>Determines whether live browser fetch works</td><td>Deploy to GitHub Pages; test fetch to demo.kalshi.co</td><td><a href="https://external-api.demo.kalshi.co/trade-api/v2" target="_blank" rel="noopener">Kalshi demo API</a></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section sources">
+    <h4>Official sources</h4>
+    <ul>
+      <li><a href="https://external-api.demo.kalshi.co/trade-api/v2/events" target="_blank" rel="noopener">GET /events — Kalshi demo Trade API v2</a></li>
+      <li><a href="https://external-api.demo.kalshi.co/trade-api/v2/markets" target="_blank" rel="noopener">GET /markets — Kalshi demo Trade API v2</a></li>
+      <li><a href="https://docs.kalshi.io" target="_blank" rel="noopener">Kalshi API documentation</a></li>
+      <li><a href="flagged.html">Flagged for Review</a></li>
+    </ul>
+  </section>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div><strong>Kalshi Demo Dashboard</strong> — Questions &amp; answers.</div>
+    <div class="disclaimer">Decision-readiness register. No trading decision should be made from unverified or blank values.</div>
+  </div>
+</footer>
+
+<script src="assets/js/app.js"></script>
+</body>
+</html>
