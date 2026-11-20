@@ -24,7 +24,7 @@ Naming note: the brief asks for `session-<id>/<task>` branches, but the platform
 | T3 Executive summary, findings, questions, suggestions | done | 00a943bd | `docs/data/verified.json`, `docs/findings.html`, `docs/questions.html`, `docs/suggestions.html`, `docs/index.html` | Kalshi docs pages and API responses (sources page) | I-07 to I-09 |
 | T4 Site (landing, category subpages, live dashboard, charts, liquidity, tracking, portfolio, flagged page) | done | 00a943bd | `docs/**`, `scripts/build_site.py` | Built and smoke-tested in jsdom (mocked API) | Live CORS unverified (see unverified list) |
 | T5 Verification and checks | done | 00a943bd | `scripts/verify_site.py` | Source-host allowlist, internal links, JS syntax | none |
-| T6 PR, merge, Pages deploy | in progress | 00a943bd | `.`, GitHub settings | see Final integration log | none |
+| T6 PR, merge, Pages deploy | done (PR #2 and #3 merged; Pages built) | 00a943bd | `.`, GitHub settings | see Final integration log | none |
 
 ## Change requests (files owned by another session)
 
@@ -58,4 +58,9 @@ Full list on the site's **Flagged for review** page, with source links:
 
 - Branch `arena/00a943bd-demo3` contains the site (`docs/`), build and verify scripts (`scripts/`), this board, and README.
 - PR: https://github.com/karagemop466-tech/Demo3/pull/2 (`arena/00a943bd-demo3` -> `main`). Merged with `gh pr merge 2 --merge` immediately after this board update. Merge commit is on GitHub.
-- Pages: source remains `main` `/` (switch to `/docs` returned 403). Root `index.html` redirect added in a follow-up PR.
+- PR #1 (session 4d10aedf's claim): does not exist.
+- PR #2 `arena/00a943bd-demo3` -> `main`: MERGED 2026-11-20 11:23:19 UTC (merge commit 1e53baa). Content: site, data, scripts, board.
+- PR #3 `arena/00a943bd-demo3` -> `main`: MERGED 2026-11-20 11:23:47 UTC. Content: root `index.html` redirect to `docs/`, repo-review corrections.
+- Pages: source remains `main` `/` (switch to `/docs` returned 403 for this token). Build status after PR #3: `built` at commit 5c5473d. Live: https://karagemop466-tech.github.io/Demo3/ (verified with page fetch: landing, `docs/data/verified.json`, and `docs/flagged.html` all served).
+- Verification on live site: landing table rows, data file, and flagged page render from the published commit.
+- Open items for the owner: Pages source to `/docs` (admin), live browser CORS test, dollar-volume definition, demo API key for portfolio work. See the Flagged for review page.
