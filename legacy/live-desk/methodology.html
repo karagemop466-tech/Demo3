@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Methodology — Kalshi Demo Tracker</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top"><div class="wrap"><nav class="main">
+<a class="brand" href="index.html">Kalshi Demo Tracker</a>
+<a href="index.html">Home</a><a href="dashboard.html">Live dashboard</a><a href="data-tracking.html">Data tracking</a><a href="gas-prices.html">Gas prices</a><a href="elections.html">Elections</a><a href="culture.html">Culture</a><a href="crypto.html">Crypto</a><a href="golf.html">Golf</a><a href="portfolio.html">Portfolio</a><a href="trades.html">Trades</a><a href="questions.html">Questions</a><a href="suggestions.html">Suggestions</a><a href="flagged.html">Flagged for review</a><a href="sources.html">Sources</a><a href="repo-review.html">Repo review</a><a href="methodology.html" class="active">Methodology</a><a href="api-reference.html">API reference</a>
+</nav></div></header>
+<main class="wrap">
+
+
+
+
+
+
+
+
+
+
+<h1>Methodology</h1>
+<p class="muted">How every number on the dashboard is produced — and its limits.
+Nothing here is inferred beyond the stated formulas.</p>
+
+<section class="card">
+<h2>1 · Topic discovery</h2>
+<table>
+<thead><tr><th>Step</th><th>Detail</th><th>Source</th></tr></thead>
+<tbody>
+<tr><td>Fetch</td><td><code>GET /series</code> returns all series with title, tags, categories.</td>
+<td><a href="https://docs.kalshi.com/api-reference/market/get-series-list">Get Series List</a></td></tr>
+<tr><td>Classify</td><td>Keyword match (case-insensitive) against title + ticker + tags +
+categories + primary category. First topic with a match wins; the matched
+keyword is shown in the discovery table for audit.</td>
+<td>Dashboard code (<code>assets/app.js</code>) — transparent, editable.</td><td><a class='src' href='https://docs.kalshi.com/api-reference/market/get-series-list' target='_blank' rel='noopener'>source</a></td></tr>
+<tr><td>Why not <code>?category=</code></td><td><code>GET /series?category=</code> requires exact,
+case-sensitive category values that are not enumerated in the docs, and
+<code>GET /events</code> has no category filter (event category deprecated).
+Keyword discovery avoids guessing category strings.</td>
+<td><a href="https://docs.kalshi.com/api-reference/market/get-series-list">Get Series List</a>,
+<a href="https://docs.kalshi.com/api-reference/events/get-events">Get Events</a></td></tr>
+<tr><td>Limit</td><td>Keyword matching can miss series (e.g. a golf series whose title
+avoids “golf”) or over-match (e.g. “vote” in a non-election title). The manual
+series override on the dashboard covers gaps. See Open Questions.</td>
+<td>—</td><td><a class='src' href='https://docs.kalshi.com/api-reference/market/get-series-list' target='_blank' rel='noopener'>source</a></td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="card">
+<h2>2 · “Highest dollar amount” ranking</h2>
+<table>
+<thead><tr><th>Metric</th><th>Formula</th><th>What the API actually reports</th><th>Source</th></tr></thead>
+<tbody>
+<tr><td>Estimated $ volume</td><td><code>volume_fp × last_price_dollars</code></td>
+<td><code>volume_fp</code> = lifetime contracts traded; <code>last_price_dollars</code> = last trade price ($0–$1).</td>
+<td><a href="https://docs.kalshi.com/api-reference/market/get-markets">Get Markets</a></td></tr>
+<tr><td>Estimated $ open interest</td><td><code>open_interest_fp × last_price_dollars</code></td>
+<td><code>open_interest_fp</code> = outstanding contracts.</td>
+<td><a href="https://docs.kalshi.com/api-reference/market/get-markets">Get Markets</a></td></tr>
+<tr><td>Ranking</td><td>Sort by estimated $ volume desc, then estimated $ OI desc. Top 25 shown.</td>
+<td>Dashboard code.</td><td>—</td><td><a class='src' href='https://docs.kalshi.com/api-reference/market/get-markets' target='_blank' rel='noopener'>source</a></td></tr>
+</tbody>
+</table>
+<div class="notice"><strong>Limitation:</strong> the API does not report a dollar-volume
+field per market. Contracts × last price is an estimate — it overstates value for
+markets whose volume accumulated at higher prices and understates for the reverse.
+Treat the ranking as a screening tool, not a precise dollar figure. See
+<a href="questions.html">Open Questions</a> Q3.</div>
+</section>
+
+<section class="card">
+<h2>3 · Price chart</h2>
+<table>
+<thead><tr><th>Element</th><th>Detail</th><th>Source</th></tr></thead>
+<tbody>
+<tr><td>Live samples</td><td>Every scan (20s) records last price + yes bid/ask per market (kept ≥5s apart, max 2000 points).</td><td>Dashboard code.</td><td><a class='src' href='https://docs.kalshi.com/getting_started/quick_start_market_data' target='_blank' rel='noopener'>source</a></td></tr>
+<tr><td>History</td><td>1-minute candlesticks (<code>period_interval=1</code>); max 5000 periods/request covers all windows (≤24h).</td>
+<td><a href="https://docs.kalshi.com/api-reference/market/get-market-candlesticks">Get Market Candlesticks</a></td></tr>
+<tr><td>Axes</td><td>X = time (seconds/minutes/hours windows: 60s, 5m, 15m, 1h, 6h, 24h). Y = contract price in cents (0–100¢).</td><td>Dashboard code.</td><td><a class='src' href='https://docs.kalshi.com/api-reference/market/get-market' target='_blank' rel='noopener'>source</a></td></tr>
+<tr><td>Bid/ask lines</td><td>Yes bid/ask from market fields; order-book-implied ask = 1 − best NO bid.</td>
+<td><a href="https://docs.kalshi.com/getting_started/orderbook_responses">Orderbook Responses</a></td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="card">
+<h2>4 · Liquidity (order book)</h2>
+<table>
+<thead><tr><th>Metric</th><th>Formula</th><th>Source</th></tr></thead>
+<tbody>
+<tr><td>Contracts at a price</td><td><code>count_fp</code> per <code>[price_dollars, count_fp]</code> level.</td>
+<td><a href="https://docs.kalshi.com/getting_started/orderbook_responses">Orderbook Responses</a></td></tr>
+<tr><td>Spread</td><td><code>(1 − best NO bid) − best YES bid</code>.</td>
+<td><a href="https://docs.kalshi.com/getting_started/orderbook_responses">Orderbook Responses</a></td></tr>
+<tr><td>Resting liquidity</td><td>Σ (price × contracts) over all YES + NO bid levels.</td>
+<td>Dashboard code.</td><td><a class='src' href='https://docs.kalshi.com/getting_started/orderbook_responses' target='_blank' rel='noopener'>source</a></td></tr>
+<tr><td>Why bids only</td><td>Binary markets: YES bid X ≡ NO ask (1−X). Asks are implied, not returned.</td>
+<td><a href="https://docs.kalshi.com/getting_started/orderbook_responses">Orderbook Responses</a></td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="card">
+<h2>5 · Resolutions &amp; strategy categories</h2>
+<table>
+<thead><tr><th>Item</th><th>Detail</th><th>Source</th></tr></thead>
+<tbody>
+<tr><td>Resolution</td><td>Market <code>result</code> field: <code>yes</code> / <code>no</code> / empty while open. Logged on close/settle.</td>
+<td><a href="https://docs.kalshi.com/api-reference/market/get-markets">Get Markets</a></td></tr>
+<tr><td>Settlement value</td><td>Yes → $1/contract to YES holders; No → $1/contract to NO holders.</td>
+<td><a href="https://docs.kalshi.com/getting_started/market_settlement">Market Settlement</a></td></tr>
+<tr><td>Fill categories</td><td>Topic (from series prefix match) × <code>outcome_side</code> × price band (&lt;30¢ / 30–70¢ / &gt;70¢) × taker/maker (<code>is_taker</code>). Win rate = fills whose side equals the logged result.</td>
+<td><a href="https://docs.kalshi.com/api-reference/portfolio/get-fills">Get Fills</a></td></tr>
+<tr><td>Polling cadence</td><td>Scan 20s, order book/trades 10s, chart samples 15s. ≥400ms between requests; exponential backoff on 429.</td>
+<td><a href="https://docs.kalshi.com/getting_started/rate_limits">Rate Limits and Tiers</a></td></tr>
+</tbody>
+</table>
+</section>
+
+
+
+
+
+
+
+
+
+
+</main>
+<footer class="wrap"><p class="small muted">Kalshi Demo Tracker — built from verified sources only. Demo environment
+(mock funds): <span class="mono">https://external-api.demo.kalshi.co/trade-api/v2</span> ·
+Docs: <a href="https://docs.kalshi.com" target="_blank" rel="noopener">docs.kalshi.com</a> ·
+Every table row links its source; blank cells are flagged on <a href="flagged.html">Flagged for review</a>.</p></footer>
+<script src="app.js"></script><script src="assets/site.js"></script>
+</body>
+</html>

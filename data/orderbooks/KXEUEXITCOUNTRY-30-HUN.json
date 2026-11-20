@@ -1,0 +1,1 @@
+{"ticker":"KXEUEXITCOUNTRY-30-HUN","fetched_at":"2026-11-20T11:49:55Z","source_url":"https://external-api.demo.kalshi.co/trade-api/v2/markets/KXEUEXITCOUNTRY-30-HUN/orderbook","yes_bids":[["0.0100","1.00"],["0.0400","40.00"],["0.3000","2.00"],["0.7000","10.00"]],"no_bids":[],"best_yes_bid":{"price":"0.7000","contracts":"10.00"},"best_no_bid":null}

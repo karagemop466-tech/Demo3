@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portfolio — Kalshi Demo Tracker</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top"><div class="wrap"><nav class="main">
+<a class="brand" href="index.html">Kalshi Demo Tracker</a>
+<a href="index.html">Home</a><a href="dashboard.html">Live dashboard</a><a href="data-tracking.html">Data tracking</a><a href="gas-prices.html">Gas prices</a><a href="elections.html">Elections</a><a href="culture.html">Culture</a><a href="crypto.html">Crypto</a><a href="golf.html">Golf</a><a href="portfolio.html" class="active">Portfolio</a><a href="trades.html">Trades</a><a href="questions.html">Questions</a><a href="suggestions.html">Suggestions</a><a href="flagged.html">Flagged for review</a><a href="sources.html">Sources</a><a href="repo-review.html">Repo review</a><a href="methodology.html">Methodology</a><a href="api-reference.html">API reference</a>
+</nav></div></header>
+<main class="wrap">
+
+<h1>Portfolio performance</h1>
+<p>Track performance of trades on the Kalshi <strong>demo account</strong>, analyze results,
+categorize every trade, and derive strategies by trade type. Two modes:</p>
+<ul>
+<li><strong>Live mode</strong> — connect a demo API key (dashboard panel or the button below):
+balance, positions, fills and orders are read from the demo exchange.</li>
+<li><strong>Paper mode</strong> (default, clearly labeled) — simulated fills recorded by
+<a href="trades.html">Trades</a> against live demo prices, so the full analysis works with
+<em>no manual input and no credentials</em>. Nothing is sent to Kalshi.</li>
+</ul>
+<div id="banner" style="display:none"></div>
+<div class="card">
+  <h2>Mode &amp; connection</h2>
+  <p><label>Key ID <input id="keyId" size="24" autocomplete="off"></label>
+     <label>Private key PEM <textarea id="keyPem" rows="3" cols="52"></textarea></label>
+     <button class="btn" id="connectBtn">Connect live</button>
+     <button class="btn secondary" id="disconnectBtn">Disconnect</button>
+     <button class="btn secondary" id="refreshPortfolioBtn">Refresh</button>
+     <span id="connStatus"><span class="pill warn">Paper mode</span></span></p>
+  <p class="small muted">How to get a demo key (no manual input needed after setup):
+  1) create a demo account at <a href="https://demo.kalshi.co/" target="_blank" rel="noopener">demo.kalshi.co</a>;
+  2) Account Settings → API Keys → Create New API Key (Ed25519 or RSA);
+  3) paste Key ID + PEM above. Docs: <a href="https://docs.kalshi.com/getting_started/demo_env" target="_blank" rel="noopener">demo environment</a> ·
+  <a href="https://docs.kalshi.com/getting_started/api_keys" target="_blank" rel="noopener">API keys</a>.
+  Flagged item: <a href="flagged.html">I-11</a> (no credentials were provided to this project).</p>
+</div>
+<div class="card">
+  <h2>Performance summary</h2>
+  <div id="perfSummary"></div>
+</div>
+<div class="card">
+  <h2>Trade categorization &amp; strategies by trade type</h2>
+  <p class="small muted">Categories: topic × side (yes/no) × price band (&lt;30¢, 30–70¢, &gt;70¢) ×
+  role (taker/maker). Win rate is computed when the market's yes/no result is known.</p>
+  <div id="strategyBody"></div>
+</div>
+<div class="card">
+  <h2>Preserved portfolio notes (session cde2ae63)</h2>
+  ''' + legacy_table('portfolio.html', 'portfolio.html', 'Extracted verbatim from the earlier root portfolio.html (data/legacy/cde2ae63_rows.json).') + '''
+</div>
+<div class="card">
+  <h2>Positions &amp; fills</h2>
+  <div id="portfolioBody"><p class="muted">Live data appears here when connected. Paper fills appear
+  here in paper mode. Sources per row (API URLs) are rendered with each table.</p></div>
+</div>
+
+</main>
+<footer class="wrap"><p class="small muted">Kalshi Demo Tracker — built from verified sources only. Demo environment
+(mock funds): <span class="mono">https://external-api.demo.kalshi.co/trade-api/v2</span> ·
+Docs: <a href="https://docs.kalshi.com" target="_blank" rel="noopener">docs.kalshi.com</a> ·
+Every table row links its source; blank cells are flagged on <a href="flagged.html">Flagged for review</a>.</p></footer>
+<script src="app.js"></script><script src="assets/trade.js"></script><script src="assets/dashboard.js"></script><script src="assets/site.js"></script>
+</body>
+</html>

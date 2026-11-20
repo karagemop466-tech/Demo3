@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live dashboard — Kalshi Demo Tracker</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top"><div class="wrap"><nav class="main">
+<a class="brand" href="index.html">Kalshi Demo Tracker</a>
+<a href="index.html">Home</a><a href="dashboard.html" class="active">Live dashboard</a><a href="data-tracking.html">Data tracking</a><a href="gas-prices.html">Gas prices</a><a href="elections.html">Elections</a><a href="culture.html">Culture</a><a href="crypto.html">Crypto</a><a href="golf.html">Golf</a><a href="portfolio.html">Portfolio</a><a href="trades.html">Trades</a><a href="questions.html">Questions</a><a href="suggestions.html">Suggestions</a><a href="flagged.html">Flagged for review</a><a href="sources.html">Sources</a><a href="repo-review.html">Repo review</a><a href="methodology.html">Methodology</a><a href="api-reference.html">API reference</a>
+</nav></div></header>
+<main class="wrap">
+
+<h1>Live dashboard</h1>
+<p>Highest-dollar live events in the five tracked topics, with price chart (x = time in
+seconds/minutes/hours, y = current contract price), orderbook liquidity (contracts available at
+each price), recent trades, and yes/no resolution tracking. All data is fetched
+<strong>live in your browser</strong> from the Kalshi demo API (no key needed for market data);
+if the browser blocks the request the tables fall back to the snapshot links in
+<a href="sources.html">Sources</a>.</p>
+<div id="banner" style="display:none"></div>
+<div class="card">
+  <h2>1 · Discovery &amp; ranking</h2>
+  <p class="small muted"><span id="discoveryStatus">idle</span> · <span id="scanStatus">no scan yet</span></p>
+  <p>
+    <button class="btn" id="discoverBtn">Discover series (GET /series)</button>
+    <button class="btn secondary" id="scanBtn">Scan open markets</button>
+    <label>Scan depth <select id="scanDepth">
+      <option value="15" selected>15 series/topic (default)</option>
+      <option value="50">50 series/topic</option>
+      <option value="0">All matched series (slower)</option>
+    </select></label>
+    <label>Extra series (comma) <input id="manualSeries" size="18" placeholder="KXAAAGASW"></label>
+  </p>
+  <p class="small muted">Coverage note: the scan pages open markets for every matched series up to the
+  depth chosen above (rate-limit friendly). The dollar ranking is an <strong>unverified
+  estimate</strong> (contracts × last price). Each row links its exact API URL.</p>
+  <div id="discoveryTable"></div>
+  <h3>Highest estimated dollar volume (live)</h3>
+  <div id="rankingTable"></div>
+</div>
+
+<div class="card">
+  <h2>2 · Selected market: price chart &amp; liquidity</h2>
+  <p class="muted" id="detailTitle">Select a market above (Track).</p>
+  <p class="small muted" id="detailMeta"></p>
+  <div class="seg" role="group" aria-label="Chart window">
+    <button data-window="30" aria-pressed="false">30 s</button>
+    <button data-window="120" aria-pressed="false">2 min</button>
+    <button data-window="600" aria-pressed="false">10 min</button>
+    <button data-window="1800" aria-pressed="false">30 min</button>
+    <button data-window="3600" aria-pressed="true">1 h</button>
+    <button data-window="21600" aria-pressed="false">6 h</button>
+    <button data-window="86400" aria-pressed="false">24 h</button>
+    <button class="btn secondary" id="refreshObBtn">Refresh book</button>
+  </div>
+  <canvas id="priceChart" height="260" aria-label="Contract price over time"></canvas>
+  <p class="small muted">X axis: time (labels switch to seconds/minutes/hours with the window).
+  Y axis: current contract price (cents). Live samples merge with 1-minute candlesticks
+  (<span class="mono">/series/{series}/markets/{ticker}/candlesticks</span>).</p>
+  <h3>Orderbook depth — contracts available at each price</h3>
+  <canvas id="depthChart" height="220" aria-label="Orderbook depth"></canvas>
+  <p class="small" id="obSummary"></p>
+  <div id="obTable"></div>
+  <h3>Recent trades</h3>
+  <div id="tradesTable"></div>
+</div>
+
+<div class="card">
+  <h2>3 · Resolution tracking (yes / no)</h2>
+  <p class="small muted">Markets are logged here when they close or settle with a result while the
+  page is open. Seeded rows below come from the verified snapshot
+  (<a href="docs/tracker/data/snapshot.json">snapshot.json</a> ·
+  <a href="docs/data/verified.json">verified.json</a>).</p>
+  <div id="seededResolutions"></div>
+  <button class="btn secondary" id="clearResolutionsBtn">Clear locally logged resolutions</button>
+  <div id="resolutionsTable"></div>
+</div>
+
+<div class="card">
+  <h2>4 · Demo account (optional) &amp; trading</h2>
+  <p class="small muted">A Kalshi demo API key (from <a href="https://demo.kalshi.co/" target="_blank" rel="noopener">demo.kalshi.co</a> →
+  Account Settings → API Keys; see <a href="https://docs.kalshi.com/getting_started/api_keys" target="_blank" rel="noopener">API keys</a>)
+  enables live demo trading and portfolio reads. Without a key the ticket runs in
+  <strong>paper mode</strong> (simulated fills at the live best bid/ask — labeled everywhere; nothing is sent to Kalshi).
+  Your key never leaves this browser (localStorage).</p>
+  <p><label>Key ID <input id="keyId" size="24" autocomplete="off"></label>
+     <label>Private key PEM <textarea id="keyPem" rows="4" cols="60" placeholder="-----BEGIN PRIVATE KEY-----"></textarea></label></p>
+  <p><button class="btn" id="connectBtn">Connect (demo)</button>
+     <button class="btn secondary" id="disconnectBtn">Disconnect</button>
+     <button class="btn secondary" id="refreshPortfolioBtn">Refresh portfolio</button>
+     <span id="connStatus"><span class="pill warn">Not connected — paper mode</span></span>
+     <span id="modeStatus"></span></p>
+  <div id="portfolioBody"><p class="muted">Connect a key to load balance, positions, fills and orders
+  (sources: <a href="https://docs.kalshi.com/api-reference/portfolio/get-balance">Get Balance</a> ·
+  <a href="https://docs.kalshi.com/api-reference/portfolio/get-positions">Get Positions</a> ·
+  <a href="https://docs.kalshi.com/api-reference/portfolio/get-fills">Get Fills</a> ·
+  <a href="https://docs.kalshi.com/api-reference/orders/get-orders">Get Orders</a>).</p></div>
+  <h3>Trade ticket</h3>
+  <div id="tradeTicket"></div>
+  <div id="tradeResult"></div>
+</div>
+
+<div class="card">
+  <h2>5 · Trade categorization &amp; strategy analysis</h2>
+  <div id="strategyBody"></div>
+</div>
+
+</main>
+<footer class="wrap"><p class="small muted">Kalshi Demo Tracker — built from verified sources only. Demo environment
+(mock funds): <span class="mono">https://external-api.demo.kalshi.co/trade-api/v2</span> ·
+Docs: <a href="https://docs.kalshi.com" target="_blank" rel="noopener">docs.kalshi.com</a> ·
+Every table row links its source; blank cells are flagged on <a href="flagged.html">Flagged for review</a>.</p></footer>
+<script src="app.js"></script><script src="assets/trade.js"></script><script src="assets/dashboard.js"></script><script src="assets/site.js"></script>
+</body>
+</html>

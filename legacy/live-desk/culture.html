@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Culture — Kalshi Demo Tracker</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top"><div class="wrap"><nav class="main">
+<a class="brand" href="index.html">Kalshi Demo Tracker</a>
+<a href="index.html">Home</a><a href="dashboard.html">Live dashboard</a><a href="data-tracking.html">Data tracking</a><a href="gas-prices.html">Gas prices</a><a href="elections.html">Elections</a><a href="culture.html" class="active">Culture</a><a href="crypto.html">Crypto</a><a href="golf.html">Golf</a><a href="portfolio.html">Portfolio</a><a href="trades.html">Trades</a><a href="questions.html">Questions</a><a href="suggestions.html">Suggestions</a><a href="flagged.html">Flagged for review</a><a href="sources.html">Sources</a><a href="repo-review.html">Repo review</a><a href="methodology.html">Methodology</a><a href="api-reference.html">API reference</a>
+</nav></div></header>
+<main class="wrap">
+
+<h1>Culture</h1>
+<p>Culture &amp; entertainment: awards, film, music, media and cultural events.</p>
+<div class="card"><h2>Verified series snapshot</h2>
+<p class='muted'>Series matching this topic from the verified snapshot (2026-11-20). Each row links the exact API request URL. Live discovery runs on the dashboard.</p><div class='tablewrap'><table><thead><tr><th>Series ticker</th><th>Title</th><th>Category</th><th>Frequency</th><th>Volume (contracts)</th><th>Settlement source</th><th>Contract terms</th><th>Source</th></tr></thead><tbody><tr><td><span class="mono">KXXBANNEDGROK</span></td><td>Will Grok be banned this year</td><td>Culture</td><td>one_off</td><td>0.00</td><td>ABC, Fox News, MSNBC, WSJ, Semafor, Barchart ($INX page), Ars Technica, NYT, CBS, WaPo, Axios, CNN, Engadget, Reuters, Mashable, Bloomberg, Elon Musk (x.com/elonmusk), AP, Energy Information Administration, Politico, TechCrunch, Verge</td><td><a href="https://assets.kalshi.com/contract_terms/XBANNED.pdf" target="_blank" rel="noopener">terms</a></td><td><a class="src" href="https://external-api.demo.kalshi.co/trade-api/v2/series?category=Culture&amp;include_volume=true" target="_blank" rel="noopener">source</a></td></tr><tr><td><span class="mono">KXXBANNEDMURRAYHILLGUY1</span></td><td>Will @MurrayHillGuy1 get banned from X this year?</td><td>Culture</td><td>one_off</td><td>0.00</td><td>Same source list as the Grok series (see F-11)</td><td><a href="https://assets.kalshi.com/contract_terms/XBANNED.pdf" target="_blank" rel="noopener">terms</a></td><td><a class="src" href="https://external-api.demo.kalshi.co/trade-api/v2/series?category=Culture&amp;include_volume=true" target="_blank" rel="noopener">source</a></td></tr></tbody></table></div>
+</div>
+<div class="card"><h2>Markets — live &amp; resolved (yes/no)</h2>
+<p class='muted'>Open/active markets and settled results (result = yes/no). Settled winners pay $1/contract.</p><div class='tablewrap'><table><thead><tr><th>Market ticker</th><th>Title</th><th>Status</th><th>Result</th><th>Last price</th><th>Yes bid/ask</th><th>Volume (contracts)</th><th>Open interest</th><th>Closes / settled</th><th>Rules</th><th>Source</th></tr></thead><tbody><tr><td><span class="mono">KXAAAGASW-26NOV16-3.8100</span></td><td>Will average gas prices be above $3.8100?</td><td>finalized</td><td><span class="pill">yes</span></td><td>1.0000</td><td>—</td><td>425965.64</td><td>—</td><td>2026-11-16T13:58:49.582665Z</td><td>If average regular gas prices for United States are strictly greater than $3.8100 on Nov 16, 2026 according to AAA, then the market resolves to Yes.</td><td><a class="src" href="https://external-api.kalshi.com/trade-api/v2/markets?series_ticker=KXAAAGASW&amp;status=settled&amp;limit=3" target="_blank" rel="noopener">source</a></td></tr><tr><td><span class="mono">KXAAAGASW-26NOV16-3.7900</span></td><td>Will average gas prices be above $3.7900?</td><td>finalized</td><td><span class="pill">yes</span></td><td>1.0000</td><td>—</td><td>64168.16</td><td>—</td><td>2026-11-16T13:58:49.582665Z</td><td>If average regular gas prices for United States are strictly greater than $3.7900 on Nov 16, 2026 according to AAA, then the market resolves to Yes.</td><td><a class="src" href="https://external-api.kalshi.com/trade-api/v2/markets?series_ticker=KXAAAGASW&amp;status=settled&amp;limit=3" target="_blank" rel="noopener">source</a></td></tr><tr><td><span class="mono">KXAAAGASW-26NOV16-3.7700</span></td><td>Will average gas prices be above $3.7700?</td><td>finalized</td><td><span class="pill">yes</span></td><td>1.0000</td><td>—</td><td>6036.53</td><td>—</td><td>2026-11-16T13:58:49.582665Z</td><td>If average regular gas prices for United States are strictly greater than $3.7700 on Nov 16, 2026 according to AAA, then the market resolves to Yes.</td><td><a class="src" href="https://external-api.kalshi.com/trade-api/v2/markets?series_ticker=KXAAAGASW&amp;status=settled&amp;limit=3" target="_blank" rel="noopener">source</a></td></tr></tbody></table></div><p class='small muted'>Dollar figures shown are as returned by the API (dollars strings). Volume is contracts.</p>
+<p><a class="btn" href="dashboard.html">Track these live on the dashboard</a></p>
+</div>
+
+</main>
+<footer class="wrap"><p class="small muted">Kalshi Demo Tracker — built from verified sources only. Demo environment
+(mock funds): <span class="mono">https://external-api.demo.kalshi.co/trade-api/v2</span> ·
+Docs: <a href="https://docs.kalshi.com" target="_blank" rel="noopener">docs.kalshi.com</a> ·
+Every table row links its source; blank cells are flagged on <a href="flagged.html">Flagged for review</a>.</p></footer>
+<script src="app.js"></script><script src="assets/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Suggestions — Kalshi Demo Tracker</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top"><div class="wrap"><nav class="main">
+<a class="brand" href="index.html">Kalshi Demo Tracker</a>
+<a href="index.html">Home</a><a href="dashboard.html">Live dashboard</a><a href="data-tracking.html">Data tracking</a><a href="gas-prices.html">Gas prices</a><a href="elections.html">Elections</a><a href="culture.html">Culture</a><a href="crypto.html">Crypto</a><a href="golf.html">Golf</a><a href="portfolio.html">Portfolio</a><a href="trades.html">Trades</a><a href="questions.html">Questions</a><a href="suggestions.html" class="active">Suggestions</a><a href="flagged.html">Flagged for review</a><a href="sources.html">Sources</a><a href="repo-review.html">Repo review</a><a href="methodology.html">Methodology</a><a href="api-reference.html">API reference</a>
+</nav></div></header>
+<main class="wrap">
+
+<h1>Suggestions — review before implementing</h1>
+<p>Improvement ideas collected so a reviewer can <strong>choose the best path before any change is
+implemented</strong>. Set a decision and note per row — they are saved in this browser
+(localStorage) and exportable as JSON. This page implements nothing by itself.</p>
+<p id="decisionSummary" class="small"></p>
+<p><button class="btn secondary" id="exportDecisions">Export decisions (JSON)</button>
+   <button class="btn secondary" id="resetDecisions">Reset decisions</button></p>
+<div class="card"><div class="tablewrap"><table id="suggestionTable">
+<thead><tr><th>#</th><th>Suggestion &amp; options</th><th>Expected benefit</th><th>Effort</th>
+<th>Risk</th><th>Decision (review workflow)</th><th>Source</th></tr></thead>
+<tbody><tr data-sid="SG-01">
+<td><span class="mono">SG-01</span></td>
+<td><strong>Rank by dollar value, not contract count</strong><br><span class='small'>The API reports contracts (flag F-16). Options: keep contracts (verified); add a labelled dollar estimate from trades (needs trades endpoint reading); or defer.</span>
+<ul class='small'><li>Keep contracts (verified)</li><li>Add labelled dollar estimate from trades</li><li>Defer</li></ul></td>
+<td>Matches the brief&#x27;s wording</td>
+<td>Medium</td>
+<td>Any dollar figure is an estimate unless Kalshi publishes one</td>
+<td><select class="decision" data-sid="SG-01">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="SG-01" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://api.elections.kalshi.com/trade-api/v2/markets?series_ticker=KXXBANNEDGROK&amp;status=open&amp;limit=7" target="_blank" rel="noopener">source</a> · <a class="src" href="https://docs.kalshi.com/api-reference/market/get-trades" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="SG-02">
+<td><span class="mono">SG-02</span></td>
+<td><strong>Sub-minute price feed</strong><br><span class='small'>REST candlesticks stop at 1 minute (Q-08). Options: keep REST polling every 15 s; add a WebSocket feed for seconds-level ticks; or hours/days only.</span>
+<ul class='small'><li>Keep REST polling</li><li>Add WebSocket for seconds</li><li>Hours and days only</li></ul></td>
+<td>Better timing for trades</td>
+<td>High (WebSocket client, reconnect logic)</td>
+<td>Connection limits and rate limits (rate_limits doc, not read)</td>
+<td><select class="decision" data-sid="SG-02">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="SG-02" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-market-candlesticks" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="SG-03">
+<td><span class="mono">SG-03</span></td>
+<td><strong>Liquidity warnings</strong><br><span class='small'>Flag markets with zero volume, a spread wider than a set amount, or no bids (see F-14, F-15). Options: warning badge; hide illiquid markets; both.</span>
+<ul class='small'><li>Warning badge</li><li>Hide illiquid markets</li><li>Both</li></ul></td>
+<td>Stops decisions on thin prices</td>
+<td>Low</td>
+<td>The threshold is a judgment call</td>
+<td><select class="decision" data-sid="SG-03">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="SG-03" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-market-candlesticks.md" target="_blank" rel="noopener">source</a> · <a class="src" href="https://docs.kalshi.com/getting_started/api_keys.md" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="SG-04">
+<td><span class="mono">SG-04</span></td>
+<td><strong>Trade execution with risk caps</strong><br><span class='small'>Place demo orders only after a key is provided (Q-01), with per-order and per-day caps and a confirmation step. Options: manual confirm each order; auto within caps; defer until strategy is set.</span>
+<ul class='small'><li>Manual confirm each order</li><li>Auto within caps</li><li>Defer</li></ul></td>
+<td>Enables the trade and performance sections</td>
+<td>Medium</td>
+<td>Orders in the demo still use mock money but need correct signing and limits</td>
+<td><select class="decision" data-sid="SG-04">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="SG-04" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/getting_started/demo_env" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="SG-05">
+<td><span class="mono">SG-05</span></td>
+<td><strong>Stale-quote detection</strong><br><span class='small'>Mark markets whose last update is more than a set number of days old (e.g. the Ryder Cup markets, F-13).</span>
+<ul class='small'><li>Mark as stale (30 days)</li><li>Mark as stale (7 days)</li><li>Skip</li></ul></td>
+<td>Avoids acting on old prices</td>
+<td>Low</td>
+<td>Threshold choice</td>
+<td><select class="decision" data-sid="SG-05">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="SG-05" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-market-candlesticks.md" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="SG-06">
+<td><span class="mono">SG-06</span></td>
+<td><strong>Automatic settlement-source check</strong><br><span class='small'>Flag settlement sources whose publisher name and URL do not match, or that are search links (F-05, F-06, F-11). Options: report only; block those markets from the dashboard; both.</span>
+<ul class='small'><li>Report only</li><li>Block from dashboard</li><li>Both</li></ul></td>
+<td>Protects resolution analysis</td>
+<td>Low</td>
+<td>Some links may be legitimate aliases</td>
+<td><select class="decision" data-sid="SG-06">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="SG-06" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://api.elections.kalshi.com/trade-api/v2/series?category=Culture" target="_blank" rel="noopener">source</a> · <a class="src" href="https://api.elections.kalshi.com/trade-api/v2/markets?series_ticker=KXAAAGASM&amp;status=open&amp;limit=50" target="_blank" rel="noopener">source</a> · <a class="src" href="https://docs.kalshi.com/getting_started/market_settlement" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="SG-07">
+<td><span class="mono">SG-07</span></td>
+<td><strong>Full category pagination</strong><br><span class='small'>The snapshot covers only the first chunk of golf, crypto and elections lists (F-21). Options: page everything on a schedule; page on demand in the dashboard; keep the partial list.</span>
+<ul class='small'><li>Schedule full paging</li><li>Page on demand</li><li>Keep partial</li></ul></td>
+<td>Complete coverage</td>
+<td>Medium</td>
+<td>Large requests; rate limits</td>
+<td><select class="decision" data-sid="SG-07">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="SG-07" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-markets.md" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="SG-08">
+<td><span class="mono">SG-08</span></td>
+<td><strong>Pre-trade decision checklist</strong><br><span class='small'>Before any trade, show: settlement source (official?), liquidity, last update, fee type, and the question list item it depends on.</span>
+<ul class='small'><li>Add checklist</li><li>Skip</li></ul></td>
+<td>Makes decisions traceable</td>
+<td>Low</td>
+<td>None significant</td>
+<td><select class="decision" data-sid="SG-08">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="SG-08" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/getting_started/market_settlement" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="SG-09">
+<td><span class="mono">SG-09</span></td>
+<td><strong>Use production public data as a benchmark</strong><br><span class='small'>Demo prices may differ from real markets (F-17, Q-06). Options: read public production data for the same tickers as a read-only benchmark; stay demo-only.</span>
+<ul class='small'><li>Add production benchmark</li><li>Demo only</li></ul></td>
+<td>Tests whether demo prices are a useful guide</td>
+<td>Medium</td>
+<td>Mixing environments can mislead; label clearly</td>
+<td><select class="decision" data-sid="SG-09">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="SG-09" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-markets.md" target="_blank" rel="noopener">source</a> · <a class="src" href="https://docs.kalshi.com/getting_started/demo_env" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="SG-10">
+<td><span class="mono">SG-10</span></td>
+<td><strong>Scheduled snapshot refresh</strong><br><span class='small'>Refresh the verified snapshot on a schedule (GitHub Actions cron) and re-run the link and source check. Options: daily; weekly; manual only.</span>
+<ul class='small'><li>Daily</li><li>Weekly</li><li>Manual only</li></ul></td>
+<td>Keeps the static tables current</td>
+<td>Low</td>
+<td>Automated commits to main; needs approval</td>
+<td><select class="decision" data-sid="SG-10">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="SG-10" placeholder="reviewer note (saved locally)"></td>
+<td><span class='pill warn'>unverified</span></td></tr><tr data-sid="SG-3B-01">
+<td><span class="mono">SG-3B-01</span></td>
+<td><strong>Keep scheduled server-side snapshots committed to data/</strong><br><span class='small'>collector/ + collect.yml snapshot the demo exchange every 10 minutes (ranked events, orderbooks, candles, resolutions). Keeps decision-grade history and resolutions independent of visitors&#x27; browsers.</span>
+<ul class='small'><li>Keep 10-min cadence</li><li>Relax to 15-30 min</li></ul></td>
+<td>History and yes/no resolution records survive browser/API outages</td>
+<td>Done</td>
+<td>Repo growth from scheduled commits (see SG-3B-08)</td>
+<td><select class="decision" data-sid="SG-3B-01">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="SG-3B-01" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://github.com/karagemop466-tech/Demo3/blob/main/collector/collect.py" target="_blank" rel="noopener">source</a> · <a class="src" href="https://docs.kalshi.com/getting_started/orderbook_responses" target="_blank" rel="noopener">source</a> · <a class="src" href="https://docs.kalshi.com/getting_started/demo_env" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="SG-3B-02">
+<td><span class="mono">SG-3B-02</span></td>
+<td><strong>Collector cadence decision</strong><br><span class='small'>10-minute cadence works (133 requests, 0 errors) but 429s were observed at higher request rates during MVE floods.</span>
+<ul class='small'><li>Keep 10 min</li><li>15 min</li><li>30 min</li></ul></td>
+<td>Rate-budget safety vs freshness</td>
+<td>Trivial (one cron value)</td>
+<td>Staler snapshots if relaxed</td>
+<td><select class="decision" data-sid="SG-3B-02">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="SG-3B-02" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/getting_started/rate_limits.md" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="SG-3B-03">
+<td><span class="mono">SG-3B-03</span></td>
+<td><strong>Add demo-account API secrets to activate portfolio/trade analytics</strong><br><span class='small'>Two secrets (KALSHI_DEMO_API_KEY_ID, KALSHI_DEMO_PRIVATE_KEY) turn the implemented pipeline into live tracked demo performance with categorized strategies; without them the site shows truthful awaiting-credentials states.</span>
+<ul class='small'><li>Provide demo secrets</li><li>Keep read-only</li></ul></td>
+<td>Portfolio performance tracking + trade categorization per the brief</td>
+<td>Owner account creation + secret setup</td>
+<td>Demo credentials only work against demo endpoints; never production</td>
+<td><select class="decision" data-sid="SG-3B-03">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="SG-3B-03" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://demo.kalshi.co/" target="_blank" rel="noopener">source</a> · <a class="src" href="https://docs.kalshi.com/getting_started/demo_env.md" target="_blank" rel="noopener">source</a> · <a class="src" href="https://docs.kalshi.com/getting_started/demo_env" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="SG-3B-04">
+<td><span class="mono">SG-3B-04</span></td>
+<td><strong>Seconds-level chart granularity via demo WebSocket</strong><br><span class='small'>REST candles bottom out at 1 minute. A browser WS test against wss://external-api-ws.demo.kalshi.co would verify whether market-data channels accept credential-free connections; if yes, add live tick charting.</span>
+<ul class='small'><li>Test then implement</li><li>Keep 1-minute floor</li></ul></td>
+<td>True seconds-level price movement view</td>
+<td>Medium</td>
+<td>Unverified handshake; may require auth headers browsers cannot send</td>
+<td><select class="decision" data-sid="SG-3B-04">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="SG-3B-04" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/getting_started/quick_start_websockets.md" target="_blank" rel="noopener">source</a> · <a class="src" href="https://docs.kalshi.com/getting_started/demo_env" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="SG-3B-05">
+<td><span class="mono">SG-3B-05</span></td>
+<td><strong>Settlement-timer countdowns and close-early flags on event tables</strong><br><span class='small'>Markets expose close_time / can_close_early; showing countdowns avoids trading into imminent settlement.</span>
+<ul class='small'><li>Implement</li><li>Defer</li></ul></td>
+<td>Fewer avoidable settlement mistakes</td>
+<td>Small</td>
+<td>None</td>
+<td><select class="decision" data-sid="SG-3B-05">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="SG-3B-05" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/getting_started/market_lifecycle.md" target="_blank" rel="noopener">source</a> · <a class="src" href="https://docs.kalshi.com/getting_started/market_settlement" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="SG-3B-06">
+<td><span class="mono">SG-3B-06</span></td>
+<td><strong>Keep estimated dollar volume explicitly labeled everywhere</strong><br><span class='small'>The API reports contracts and prices, not dollar volume; ranking uses sum(volume x last price) and every occurrence is labeled &#x27;estimated&#x27;. Never rank silently on it.</span>
+<ul class='small'><li>Keep as implemented</li></ul></td>
+<td>Prevents misreading an approximation as exchange-reported</td>
+<td>Done</td>
+<td>None</td>
+<td><select class="decision" data-sid="SG-3B-06">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="SG-3B-06" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="SG-3B-07">
+<td><span class="mono">SG-3B-07</span></td>
+<td><strong>Cross-link category pages to the data-tracking market detail</strong><br><span class='small'>One-click drill-down from category view to chart + orderbook ladder + liquidity.</span>
+<ul class='small'><li>Implement</li><li>Defer</li></ul></td>
+<td>Shorter path to decision data</td>
+<td>Small</td>
+<td>None</td>
+<td><select class="decision" data-sid="SG-3B-07">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="SG-3B-07" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/getting_started/orderbook_responses" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="SG-3B-08">
+<td><span class="mono">SG-3B-08</span></td>
+<td><strong>Archive data/ snapshots monthly via git tags</strong><br><span class='small'>Bounds repo growth from scheduled commits while keeping history reachable.</span>
+<ul class='small'><li>Implement</li><li>Defer</li></ul></td>
+<td>Pages builds stay fast</td>
+<td>Small</td>
+<td>None</td>
+<td><select class="decision" data-sid="SG-3B-08">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="SG-3B-08" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.github.com/en/repositories/releasing-projects-on-github/tagging-a-release" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="S-01">
+<td><span class="mono">S-01</span></td>
+<td><strong>Discover all open series in each topic automatically, instead of a fixed list, so culture and elections are fully covered.</strong><br><span class='small'></span>
+<ul class='small'><li class='muted'>—</li></ul></td>
+<td>Fixes the culture gap (F-16) and widens elections coverage.</td>
+<td>Medium</td>
+<td>—</td>
+<td><select class="decision" data-sid="S-01">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="S-01" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://api.elections.kalshi.com/trade-api/v2/series?category=Elections" target="_blank" rel="noopener">source</a> · <a class="src" href="https://api.elections.kalshi.com/trade-api/v2/series?category=Culture" target="_blank" rel="noopener">source</a> · <a class="src" href="https://docs.kalshi.com/api-reference/market/get-markets.md" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="S-02">
+<td><span class="mono">S-02</span></td>
+<td><strong>Compute dollars traded per market from trade-level data (contracts times price), and rank by that.</strong><br><span class='small'></span>
+<ul class='small'><li class='muted'>—</li></ul></td>
+<td>Answers the &#x27;highest dollar amount&#x27; requirement directly (Q-01, F-13).</td>
+<td>Medium</td>
+<td>—</td>
+<td><select class="decision" data-sid="S-02">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="S-02" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-trades.md" target="_blank" rel="noopener">source</a> · <a class="src" href="https://docs.kalshi.com/api-reference/market/get-market-candlesticks.md" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="S-03">
+<td><span class="mono">S-03</span></td>
+<td><strong>Add liquidity measures to the Liquidity page: spread (ask minus bid), depth within 1 and 5 cents of the best price, and the average price to buy N contracts from the book.</strong><br><span class='small'></span>
+<ul class='small'><li class='muted'>—</li></ul></td>
+<td>Shows the cost to enter or exit a position, not only the quantity.</td>
+<td>Low</td>
+<td>—</td>
+<td><select class="decision" data-sid="S-03">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="S-03" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-market-orderbook.md" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="S-04">
+<td><span class="mono">S-04</span></td>
+<td><strong>Add a WebSocket feed for second-level price charts.</strong><br><span class='small'></span>
+<ul class='small'><li class='muted'>—</li></ul></td>
+<td>Meets the &#x27;seconds&#x27; chart request (F-14).</td>
+<td>High</td>
+<td>—</td>
+<td><select class="decision" data-sid="S-04">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="S-04" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/getting_started/quick_start_websockets.md" target="_blank" rel="noopener">source</a> · <a class="src" href="https://docs.kalshi.com/api-reference/market/get-market-candlesticks.md" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="S-05">
+<td><span class="mono">S-05</span></td>
+<td><strong>Automatic settlement-source health check that flags any source whose name and URL do not match.</strong><br><span class='small'></span>
+<ul class='small'><li class='muted'>—</li></ul></td>
+<td>Catches cases like F-02 to F-05 before a position depends on them.</td>
+<td>Low</td>
+<td>—</td>
+<td><select class="decision" data-sid="S-05">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="S-05" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://api.elections.kalshi.com/trade-api/v2/series?category=Elections" target="_blank" rel="noopener">source</a> · <a class="src" href="https://api.elections.kalshi.com/trade-api/v2/series?category=Culture" target="_blank" rel="noopener">source</a> · <a class="src" href="https://external-api.demo.kalshi.co/trade-api/v2/events?status=open&amp;limit=5" target="_blank" rel="noopener">source</a> · <a class="src" href="https://docs.kalshi.com/getting_started/market_settlement" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="S-06">
+<td><span class="mono">S-06</span></td>
+<td><strong>Resolution tracker: store the last price before settlement and the yes or no outcome for every resolved market, and check how well prices predicted outcomes once enough markets have resolved.</strong><br><span class='small'></span>
+<ul class='small'><li class='muted'>—</li></ul></td>
+<td>Tests whether market prices are well calibrated before any strategy is built on them.</td>
+<td>Medium</td>
+<td>—</td>
+<td><select class="decision" data-sid="S-06">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="S-06" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-markets.md" target="_blank" rel="noopener">source</a> · <a class="src" href="https://docs.kalshi.com/getting_started/market_settlement.md" target="_blank" rel="noopener">source</a> · <a class="src" href="https://docs.kalshi.com/getting_started/market_settlement" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="S-07">
+<td><span class="mono">S-07</span></td>
+<td><strong>Show the AAA national average and its daily change next to every gas strike.</strong><br><span class='small'></span>
+<ul class='small'><li class='muted'>—</li></ul></td>
+<td>Gives the settlement reference beside each price.</td>
+<td>Low</td>
+<td>—</td>
+<td><select class="decision" data-sid="S-07">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="S-07" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://gasprices.aaa.com/" target="_blank" rel="noopener">source</a> · <a class="src" href="https://api.elections.kalshi.com/trade-api/v2/markets?series_ticker=KXAAAGASD&amp;status=settled&amp;limit=7" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="S-08">
+<td><span class="mono">S-08</span></td>
+<td><strong>Show the exchange status banner (exchange_active and trading_active) on every page.</strong><br><span class='small'></span>
+<ul class='small'><li class='muted'>—</li></ul></td>
+<td>Avoids acting on prices while trading is paused.</td>
+<td>Low</td>
+<td>—</td>
+<td><select class="decision" data-sid="S-08">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="S-08" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/api-reference/exchange/get-exchange-status.md" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="S-09">
+<td><span class="mono">S-09</span></td>
+<td><strong>Connect the demo account through a demo API key pair stored as a GitHub Actions secret, never in the repository, and build a portfolio snapshot job.</strong><br><span class='small'></span>
+<ul class='small'><li class='muted'>—</li></ul></td>
+<td>Unblocks portfolio performance, trade analysis and strategy categories (T4).</td>
+<td>Medium</td>
+<td>—</td>
+<td><select class="decision" data-sid="S-09">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="S-09" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/getting_started/api_keys.md" target="_blank" rel="noopener">source</a> · <a class="src" href="https://docs.kalshi.com/getting_started/demo_env.md" target="_blank" rel="noopener">source</a> · <a class="src" href="https://docs.kalshi.com/api-reference/portfolio/get-balance" target="_blank" rel="noopener">source</a> · <a class="src" href="https://docs.kalshi.com/getting_started/api_keys" target="_blank" rel="noopener">source</a> · <a class="src" href="https://docs.kalshi.com/getting_started/demo_env" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="S-10">
+<td><span class="mono">S-10</span></td>
+<td><strong>Record every trade with its definition fields (side, outcome side, price, contract count, fees, result, realized profit or loss) so that trades can be categorized later.</strong><br><span class='small'></span>
+<ul class='small'><li class='muted'>—</li></ul></td>
+<td>Makes trade categories and strategy analysis reproducible.</td>
+<td>Medium</td>
+<td>—</td>
+<td><select class="decision" data-sid="S-10">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="S-10" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/getting_started/order_direction.md" target="_blank" rel="noopener">source</a> · <a class="src" href="https://docs.kalshi.com/api-reference/market/get-trades.md" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="S-11">
+<td><span class="mono">S-11</span></td>
+<td><strong>Pre-trade guardrails before any order: a maximum number of contracts per market, a maximum notional, a daily loss limit, and a kill switch.</strong><br><span class='small'></span>
+<ul class='small'><li class='muted'>—</li></ul></td>
+<td>Limits losses from mistakes before any trading begins.</td>
+<td>Medium</td>
+<td>—</td>
+<td><select class="decision" data-sid="S-11">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="S-11" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/getting_started/order_errors.md" target="_blank" rel="noopener">source</a> · <a class="src" href="https://docs.kalshi.com/getting_started/rate_limits.md" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="S-12">
+<td><span class="mono">S-12</span></td>
+<td><strong>Compare demo and production prices for the same tickers before any strategy is tested.</strong><br><span class='small'></span>
+<ul class='small'><li class='muted'>—</li></ul></td>
+<td>Shows whether demo results carry over to production (Q-09).</td>
+<td>Low</td>
+<td>—</td>
+<td><select class="decision" data-sid="S-12">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="S-12" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/getting_started/demo_env.md" target="_blank" rel="noopener">source</a> · <a class="src" href="https://docs.kalshi.com/getting_started/demo_env" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="S-13">
+<td><span class="mono">S-13</span></td>
+<td><strong>Net each expected return of a trade against the official fee schedule before showing it.</strong><br><span class='small'></span>
+<ul class='small'><li class='muted'>—</li></ul></td>
+<td>Stops gross edges from looking profitable when fees remove them (Q-10).</td>
+<td>Low</td>
+<td>—</td>
+<td><select class="decision" data-sid="S-13">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="S-13" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/getting_started/fee_rounding.md" target="_blank" rel="noopener">source</a> · <a class="src" href="https://api.elections.kalshi.com/trade-api/v2/series/KXAAAGASM" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="CS-S1">
+<td><span class="mono">CS-S1</span></td>
+<td><strong>Connect the Kalshi WebSocket (wss://external-api-ws.demo.kalshi.co/trade-api/ws/v2) for real-time price and liquidity updates instead of polling.</strong><br><span class='small'></span>
+<ul class='small'><li class='muted'>—</li></ul></td>
+<td>Live dashboard</td>
+<td>True live price movement; liquidity updates as orders arrive</td>
+<td>—</td>
+<td><select class="decision" data-sid="CS-S1">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="CS-S1" placeholder="reviewer note (saved locally)"></td>
+<td><span class='pill warn'>unverified</span></td></tr><tr data-sid="CS-S2">
+<td><span class="mono">CS-S2</span></td>
+<td><strong>Add a server-side proxy (GitHub Actions / Cloudflare Worker) for /events and /markets so the browser is not blocked by CORS when calling demo.kalshi.co.</strong><br><span class='small'></span>
+<ul class='small'><li class='muted'>—</li></ul></td>
+<td>Data feed</td>
+<td>Reliable live data from GitHub Pages hosting</td>
+<td>—</td>
+<td><select class="decision" data-sid="CS-S2">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="CS-S2" placeholder="reviewer note (saved locally)"></td>
+<td><span class='pill warn'>unverified</span></td></tr><tr data-sid="CS-S3">
+<td><span class="mono">CS-S3</span></td>
+<td><strong>Add authenticated portfolio views (GET /portfolio) using a locally-stored, never-committed demo API key.</strong><br><span class='small'></span>
+<ul class='small'><li class='muted'>—</li></ul></td>
+<td>Portfolio</td>
+<td>Real balance, P&amp;amp;L, and trade history from the demo account</td>
+<td>—</td>
+<td><select class="decision" data-sid="CS-S3">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="CS-S3" placeholder="reviewer note (saved locally)"></td>
+<td><span class='pill warn'>unverified</span></td></tr><tr data-sid="CS-S4">
+<td><span class="mono">CS-S4</span></td>
+<td><strong>Add order placement (POST /order) with a dry-run / simulation mode first.</strong><br><span class='small'></span>
+<ul class='small'><li class='muted'>—</li></ul></td>
+<td>Trade execution</td>
+<td>Test strategies without risking demo funds</td>
+<td>—</td>
+<td><select class="decision" data-sid="CS-S4">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="CS-S4" placeholder="reviewer note (saved locally)"></td>
+<td><span class='pill warn'>unverified</span></td></tr><tr data-sid="CS-S5">
+<td><span class="mono">CS-S5</span></td>
+<td><strong>Persist chart history to IndexedDB so the graph keeps context across refreshes.</strong><br><span class='small'></span>
+<ul class='small'><li class='muted'>—</li></ul></td>
+<td>Charting</td>
+<td>Longer visible price history without re-fetching</td>
+<td>—</td>
+<td><select class="decision" data-sid="CS-S5">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="CS-S5" placeholder="reviewer note (saved locally)"></td>
+<td><span class='pill warn'>unverified</span></td></tr><tr data-sid="CS-S6">
+<td><span class="mono">CS-S6</span></td>
+<td><strong>Add per-category &quot;resolved Yes/No&quot; badges once events settle, sourced from the settlement source linked on each row.</strong><br><span class='small'></span>
+<ul class='small'><li class='muted'>—</li></ul></td>
+<td>Event tracking</td>
+<td>Clear yes/no outcome record per event</td>
+<td>—</td>
+<td><select class="decision" data-sid="CS-S6">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="CS-S6" placeholder="reviewer note (saved locally)"></td>
+<td><span class='pill warn'>unverified</span></td></tr><tr data-sid="CS-S7">
+<td><span class="mono">CS-S7</span></td>
+<td><strong>Find gas-price and golf series in the demo API (page through /events /markets or use the WebSocket) and populate those category pages.</strong><br><span class='small'></span>
+<ul class='small'><li class='muted'>—</li></ul></td>
+<td>Category data</td>
+<td>Complete coverage of all five requested topics</td>
+<td>—</td>
+<td><select class="decision" data-sid="CS-S7">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="CS-S7" placeholder="reviewer note (saved locally)"></td>
+<td><span class='pill warn'>unverified</span></td></tr><tr data-sid="CS-S8">
+<td><span class="mono">CS-S8</span></td>
+<td><strong>Add export (CSV) of verified tables and trade logs for offline analysis.</strong><br><span class='small'></span>
+<ul class='small'><li class='muted'>—</li></ul></td>
+<td>Analysis</td>
+<td>Easy trade-result analysis outside the site</td>
+<td>—</td>
+<td><select class="decision" data-sid="CS-S8">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="CS-S8" placeholder="reviewer note (saved locally)"></td>
+<td><span class='pill warn'>unverified</span></td></tr><tr data-sid="S-01">
+<td><span class="mono">S-01</span></td>
+<td><strong>Stream prices over WebSocket for seconds-level charts</strong><br><span class='small'>REST candlesticks cannot show seconds. A WebSocket subscription can provide live price and orderbook updates.</span>
+<ul class='small'><li>A. Keep REST polling in the browser (current)</li><li>B. Add a WebSocket feed in the browser (needs CORS test)</li><li>C. Add a small server-side relay (needs hosting)</li></ul></td>
+<td></td>
+<td>—</td>
+<td>—</td>
+<td><select class="decision" data-sid="S-01">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="S-01" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/getting_started/api_environments.md" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="S-02">
+<td><span class="mono">S-02</span></td>
+<td><strong>Define the dollar ranking</strong><br><span class='small'>The API has no dollar-volume field. Pick a definition before ranking by dollars.</span>
+<ul class='small'><li>A. Rank by contracts traded (current)</li><li>B. Rank by open interest</li><li>C. Rank by estimated notional (contracts x price, labelled as an estimate)</li></ul></td>
+<td></td>
+<td>—</td>
+<td>—</td>
+<td><select class="decision" data-sid="S-02">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="S-02" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-market.md" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="S-03">
+<td><span class="mono">S-03</span></td>
+<td><strong>Schedule snapshot refreshes</strong><br><span class='small'>A scheduled GitHub Action could save verified snapshots each hour, so the static pages keep history even when browsers cannot reach the API.</span>
+<ul class='small'><li>A. Manual snapshot updates only (current)</li><li>B. Hourly scheduled snapshot</li><li>C. Snapshot on every push</li></ul></td>
+<td></td>
+<td>—</td>
+<td>—</td>
+<td><select class="decision" data-sid="S-03">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="S-03" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/getting_started/rate_limits.md" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="S-04">
+<td><span class="mono">S-04</span></td>
+<td><strong>Score settlement sources before trading</strong><br><span class='small'>Tag each market as official, non-official, or unclear, and exclude unclear markets from strategy tests.</span>
+<ul class='small'><li>A. Flag only (current)</li><li>B. Exclude flagged markets from analysis</li><li>C. Exclude and require manual review</li></ul></td>
+<td></td>
+<td>—</td>
+<td>—</td>
+<td><select class="decision" data-sid="S-04">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="S-04" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://external-api.kalshi.com/trade-api/v2/series?category=Culture&amp;include_volume=true" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="S-05">
+<td><span class="mono">S-05</span></td>
+<td><strong>Read-only portfolio before any trading</strong><br><span class='small'>Connect the demo account read-only first (balance, positions, fills), then add trading only after analysis is trusted.</span>
+<ul class='small'><li>A. Read-only now, trading later</li><li>B. Trading and reading together</li><li>C. Defer portfolio work</li></ul></td>
+<td></td>
+<td>—</td>
+<td>—</td>
+<td><select class="decision" data-sid="S-05">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="S-05" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/getting_started/quick_start_authenticated_requests.md" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="S-06">
+<td><span class="mono">S-06</span></td>
+<td><strong>Paper-test strategies before executing</strong><br><span class='small'>Replay historical candlesticks to test each trade category before any order is placed.</span>
+<ul class='small'><li>A. Backtest on historical candles first</li><li>B. Trade small on demo first</li><li>C. Skip testing</li></ul></td>
+<td></td>
+<td>—</td>
+<td>—</td>
+<td><select class="decision" data-sid="S-06">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="S-06" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-market-candlesticks.md" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="S-07">
+<td><span class="mono">S-07</span></td>
+<td><strong>Keep demo and production data separate</strong><br><span class='small'>Label every table with its environment. Use demo only for execution tests and production data for market analysis.</span>
+<ul class='small'><li>A. Separate labels (recommended)</li><li>B. Mixed data</li><li>C. Production only</li></ul></td>
+<td></td>
+<td>—</td>
+<td>—</td>
+<td><select class="decision" data-sid="S-07">
+  <option>Proposed</option><option>Approved</option><option>Rejected</option>
+  <option>Deferred</option><option>Implemented</option></select><br>
+  <input class="decision-note" data-sid="S-07" placeholder="reviewer note (saved locally)"></td>
+<td><a class="src" href="https://docs.kalshi.com/getting_started/demo_env.md" target="_blank" rel="noopener">source</a></td></tr></tbody></table></div>
+<p class="small muted">Consolidated from every session's suggestion registers; each row links its evidence.</p>
+</div>
+
+</main>
+<footer class="wrap"><p class="small muted">Kalshi Demo Tracker — built from verified sources only. Demo environment
+(mock funds): <span class="mono">https://external-api.demo.kalshi.co/trade-api/v2</span> ·
+Docs: <a href="https://docs.kalshi.com" target="_blank" rel="noopener">docs.kalshi.com</a> ·
+Every table row links its source; blank cells are flagged on <a href="flagged.html">Flagged for review</a>.</p></footer>
+<script src="app.js"></script><script src="assets/site.js"></script>
+</body>
+</html>
