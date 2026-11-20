@@ -1,8 +1,8 @@
 {
- "generated_at_utc": "2026-11-20T12:02:12+00:00",
+ "generated_at_utc": "2026-11-20T12:03:48+00:00",
  "inputs": {
-  "demo_run_id": "20261120T115918Z",
-  "prod_run_id": "20261120T120117Z"
+  "demo_run_id": null,
+  "prod_run_id": null
  },
  "definitions": {
   "contracts_traded": "Kalshi `volume_fp` \u2014 contracts exchanged on the market. Source: GET /markets.",
@@ -13,123 +13,34 @@
   "resting_liquidity_dollars": "sum over orderbook levels of price x contracts, for both YES and NO bids. Computed from GET /markets/{ticker}/orderbook.",
   "implied_asks": "Kalshi returns bids only; a YES bid at X is a NO ask at 1-X, so asks are derived. Source: https://docs.kalshi.com/getting_started/orderbook_responses.md"
  },
- "per_topic_demo": {
-  "crypto": {
-   "open_markets": 5217,
-   "sum_contracts_traded": 2223100260.09,
-   "sum_open_interest_contracts": 414526990.83,
-   "sum_traded_notional_dollars_derived": 253015378.99,
-   "sum_open_interest_dollars_derived": 49553049.79,
-   "sum_resting_liquidity_dollars": 30055.54,
-   "median_last_price": 0.0,
-   "markets_with_missing_price": 0
-  },
-  "elections": {
-   "open_markets": 267,
-   "sum_contracts_traded": 11026203134.84,
-   "sum_open_interest_contracts": 3708366895.35,
-   "sum_traded_notional_dollars_derived": 1190552459.6,
-   "sum_open_interest_dollars_derived": 321947164.53,
-   "sum_resting_liquidity_dollars": 2537118.37,
-   "median_last_price": 0.005,
-   "markets_with_missing_price": 0
-  },
-  "culture": {
-   "open_markets": 254,
-   "sum_contracts_traded": 34463746.36,
-   "sum_open_interest_contracts": 23028325.58,
-   "sum_traded_notional_dollars_derived": 3687524.81,
-   "sum_open_interest_dollars_derived": 2001295.3,
-   "sum_resting_liquidity_dollars": null,
-   "median_last_price": 0.02,
-   "markets_with_missing_price": 0
-  },
-  "golf": {
-   "open_markets": 1171,
-   "sum_contracts_traded": 18369763.98,
-   "sum_open_interest_contracts": 16907205.87,
-   "sum_traded_notional_dollars_derived": 203346.96,
-   "sum_open_interest_dollars_derived": 183906.46,
-   "sum_resting_liquidity_dollars": null,
-   "median_last_price": 0.0,
-   "markets_with_missing_price": 0
-  },
-  "gas": {
-   "open_markets": 126,
-   "sum_contracts_traded": 576633.6,
-   "sum_open_interest_contracts": 521618.44,
-   "sum_traded_notional_dollars_derived": 88413.9,
-   "sum_open_interest_dollars_derived": 70255.25,
-   "sum_resting_liquidity_dollars": null,
-   "median_last_price": 0.02,
-   "markets_with_missing_price": 0
-  }
- },
+ "per_topic_demo": {},
  "resolutions": {
   "formula": "Count of settled markets per topic by Kalshi `result` (yes/no/scalar/blank). Input: data/resolutions.json (GET /markets?status=settled).",
-  "total_rows": 12567,
-  "by_topic": {
-   "crypto": {
-    "no": 3391,
-    "yes": 1023
-   },
-   "golf": {
-    "no": 3538,
-    "yes": 332,
-    "scalar": 46
-   },
-   "elections": {
-    "yes": 73,
-    "no": 166
-   },
-   "gas": {
-    "yes": 796,
-    "no": 2595
-   },
-   "culture": {
-    "no": 383,
-    "yes": 224
-   }
-  },
-  "by_environment": {
-   "prod": 6995,
-   "demo": 5572
-  }
+  "total_rows": 0,
+  "by_topic": {},
+  "by_environment": {}
  },
  "settlement_lag_hours": {
   "formula": "(settlement_ts - close_time) in hours, for rows where both timestamps exist.",
-  "n": 12567,
-  "median": 0.13,
-  "mean": 247.35,
-  "p90": 8.36,
+  "n": 0,
+  "median": null,
+  "mean": null,
+  "p90": null,
   "negative_count": 0,
   "note": "Negative values mean the market settled before its scheduled close, which the API permits via early close (can_close_early)."
  },
  "liquidity_snapshot": {
   "formula": "Per tracked market: total resting dollars and derived YES spread from the orderbook.",
-  "markets_sampled": 34,
-  "median_resting_dollars": 1084947.76,
-  "max_resting_dollars": 4238772.37,
-  "min_resting_dollars": 0,
-  "median_yes_spread": 0.001
+  "markets_sampled": 0,
+  "median_resting_dollars": null,
+  "max_resting_dollars": null,
+  "min_resting_dollars": null,
+  "median_yes_spread": null
  },
  "data_quality": {
   "markets_with_missing_fields": 0,
-  "markets_sampled": 7035,
-  "auth_probe_statuses": [
-   {
-    "url": "https://external-api.demo.kalshi.co/trade-api/v2/portfolio/balance",
-    "status": 401
-   },
-   {
-    "url": "https://external-api.demo.kalshi.co/trade-api/v2/portfolio/positions",
-    "status": 401
-   },
-   {
-    "url": "https://external-api.demo.kalshi.co/trade-api/v2/portfolio/orders",
-    "status": 401
-   }
-  ],
+  "markets_sampled": 0,
+  "auth_probe_statuses": [],
   "note": "Blank cells in the site mean the API did not return that field, or the data requires an API key this repo does not have."
  },
  "not_available": {

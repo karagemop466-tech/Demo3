@@ -1,0 +1,136 @@
+{
+ "formula": "yes_expectancy = win_rate_yes - avg_yes_price; no_expectancy = (1 - win_rate_yes) - (1 - avg_yes_price). Both in dollars per contract, fees excluded.",
+ "input": "data/resolutions-compact.json (settled markets with a result and a last price)",
+ "rows_usable": 12521,
+ "rows_excluded": {
+  "no_result": 0,
+  "no_price": 0,
+  "scalar_result": 46
+ },
+ "buckets": [
+  {
+   "bucket": "<=0.10",
+   "n": 10467,
+   "yes": 808,
+   "no": 9659,
+   "win_rate_yes": 0.0772,
+   "avg_yes_price": 0.0039,
+   "yes_expectancy_per_contract": 0.0733,
+   "no_expectancy_per_contract": -0.0733,
+   "volume_weighted_win_rate": 0.0017,
+   "contracts_traded": 1922784727.21
+  },
+  {
+   "bucket": "0.10-0.20",
+   "n": 145,
+   "yes": 6,
+   "no": 139,
+   "win_rate_yes": 0.0414,
+   "avg_yes_price": 0.1368,
+   "yes_expectancy_per_contract": -0.0954,
+   "no_expectancy_per_contract": 0.0954,
+   "volume_weighted_win_rate": 0.0711,
+   "contracts_traded": 8431106.1
+  },
+  {
+   "bucket": "0.20-0.40",
+   "n": 78,
+   "yes": 11,
+   "no": 67,
+   "win_rate_yes": 0.141,
+   "avg_yes_price": 0.2864,
+   "yes_expectancy_per_contract": -0.1454,
+   "no_expectancy_per_contract": 0.1454,
+   "volume_weighted_win_rate": 0.084,
+   "contracts_traded": 1276982.87
+  },
+  {
+   "bucket": "0.40-0.60",
+   "n": 41,
+   "yes": 19,
+   "no": 22,
+   "win_rate_yes": 0.4634,
+   "avg_yes_price": 0.4768,
+   "yes_expectancy_per_contract": -0.0134,
+   "no_expectancy_per_contract": 0.0134,
+   "volume_weighted_win_rate": 0.7854,
+   "contracts_traded": 839347.92
+  },
+  {
+   "bucket": "0.60-0.80",
+   "n": 35,
+   "yes": 15,
+   "no": 20,
+   "win_rate_yes": 0.4286,
+   "avg_yes_price": 0.682,
+   "yes_expectancy_per_contract": -0.2534,
+   "no_expectancy_per_contract": 0.2534,
+   "volume_weighted_win_rate": 0.9373,
+   "contracts_traded": 1815189.81
+  },
+  {
+   "bucket": "0.80-0.90",
+   "n": 47,
+   "yes": 35,
+   "no": 12,
+   "win_rate_yes": 0.7447,
+   "avg_yes_price": 0.8598,
+   "yes_expectancy_per_contract": -0.1151,
+   "no_expectancy_per_contract": 0.1151,
+   "volume_weighted_win_rate": 0.8946,
+   "contracts_traded": 32339.27
+  },
+  {
+   "bucket": "0.90-0.99",
+   "n": 276,
+   "yes": 197,
+   "no": 79,
+   "win_rate_yes": 0.7138,
+   "avg_yes_price": 0.9613,
+   "yes_expectancy_per_contract": -0.2475,
+   "no_expectancy_per_contract": 0.2475,
+   "volume_weighted_win_rate": 0.2321,
+   "contracts_traded": 96238600.24
+  },
+  {
+   "bucket": ">=0.99",
+   "n": 1432,
+   "yes": 1357,
+   "no": 75,
+   "win_rate_yes": 0.9476,
+   "avg_yes_price": 0.9951,
+   "yes_expectancy_per_contract": -0.0475,
+   "no_expectancy_per_contract": 0.0475,
+   "volume_weighted_win_rate": 0.9996,
+   "contracts_traded": 673702239.68
+  }
+ ],
+ "favourite_band_0_80_to_0_99": {
+  "n": 936,
+  "win_rate_yes": 0.8226,
+  "avg_yes_price": 0.975,
+  "yes_expectancy_per_contract": -0.1523,
+  "no_expectancy_per_contract": 0.1523
+ },
+ "longshot_band_0_01_to_0_20": {
+  "n": 1817,
+  "win_rate_yes": 0.0165,
+  "avg_yes_price": 0.0323,
+  "yes_expectancy_per_contract": -0.0158,
+  "no_expectancy_per_contract": 0.0158
+ },
+ "all_rows": {
+  "n": 12521,
+  "win_rate_yes": 0.1955,
+  "avg_yes_price": 0.1483,
+  "yes_expectancy_per_contract": 0.0472,
+  "no_expectancy_per_contract": -0.0472
+ },
+ "caveats": [
+  "last_price_dollars is the last traded price, not the average price paid by holders.",
+  "Fees are excluded; Kalshi series carry fee_type (quadratic/flat) and a fee_multiplier.",
+  "Only markets that settled inside the collection window are counted.",
+  "Historical expectancy does not predict future results."
+ ],
+ "generated_at_utc": "2026-11-20T12:03:17+00:00"
+}

@@ -1,6 +1,6 @@
 # Analysis report
 
-Generated 2026-11-20T12:02:12+00:00 from demo run `20261120T115918Z` and production run `20261120T120117Z`.
+Generated 2026-11-20T12:03:48+00:00 from demo run `None` and production run `None`.
 
 Every figure below is an aggregation of API fields listed in *Definitions*;
 nothing is estimated. Where data is unavailable it says so instead of showing zero.
@@ -19,11 +19,6 @@ nothing is estimated. Where data is unavailable it says so instead of showing ze
 
 | Topic | Open markets | Contracts traded | Open interest (contracts) | Traded notional $ (derived) | Open-interest $ (derived) | Resting liquidity $ | Median price |
 |---|---|---|---|---|---|---|---|
-| crypto | 5217 | 2,223,100,260.09 | 414,526,990.83 | 253,015,378.99 | 49,553,049.79 | 30,055.54 | 0.0 |
-| elections | 267 | 11,026,203,134.84 | 3,708,366,895.35 | 1,190,552,459.60 | 321,947,164.53 | 2,537,118.37 | 0.005 |
-| culture | 254 | 34,463,746.36 | 23,028,325.58 | 3,687,524.81 | 2,001,295.30 | — | 0.02 |
-| golf | 1171 | 18,369,763.98 | 16,907,205.87 | 203,346.96 | 183,906.46 | — | 0.0 |
-| gas | 126 | 576,633.60 | 521,618.44 | 88,413.90 | 70,255.25 | — | 0.02 |
 
 ## Resolution outcomes
 
@@ -31,33 +26,28 @@ _Count of settled markets per topic by Kalshi `result` (yes/no/scalar/blank). In
 
 | Topic | yes | no | scalar | blank |
 |---|---|---|---|---|
-| crypto | 1023 | 3391 | 0 | 0 |
-| golf | 332 | 3538 | 46 | 0 |
-| elections | 73 | 166 | 0 | 0 |
-| gas | 796 | 2595 | 0 | 0 |
-| culture | 224 | 383 | 0 | 0 |
 
 ## Settlement timing
 
 _(settlement_ts - close_time) in hours, for rows where both timestamps exist._
 
-- observations: 12567
-- median: 0.13 h
-- mean: 247.35 h
-- p90: 8.36 h
+- observations: 0
+- median: None h
+- mean: None h
+- p90: None h
 - settled before scheduled close: 0
 
 ## Liquidity snapshot
 
 _Per tracked market: total resting dollars and derived YES spread from the orderbook._
 
-- markets sampled: 34
-- median resting dollars: 1084947.76
-- median derived YES spread: 0.001
+- markets sampled: 0
+- median resting dollars: None
+- median derived YES spread: None
 
 ## Data quality
 
-- markets sampled: 7035
+- markets sampled: 0
 - markets with at least one missing field: 0
 
 ## Not available (and why)

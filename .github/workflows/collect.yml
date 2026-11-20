@@ -73,6 +73,7 @@ jobs:
           set -o pipefail
           {
             echo "=== build.py ==="
+            python3 analysis/expectancy.py
             python3 analysis/build.py
             echo "=== strategies.py ==="
             python3 analysis/strategies.py
