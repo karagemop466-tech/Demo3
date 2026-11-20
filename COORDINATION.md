@@ -745,3 +745,8 @@ Non-overlapping scope note: I do NOT edit other sessions' archives (`docs/`, `do
 
 - 2026-11-20: claim committed & pushed. Verification suite all green (verify_root_site 0 failures, verify_site PASSED, node --check OK, backtest 17/17, tracker_check OK, check_site passed). Official docs confirmed: demo_env, get-markets, get-market-candlesticks, orderbook_responses, market_settlement. `data/` aligned to refreshed `main`. Histories unified via merge of origin/main. PR #50 opened to `main`; merge in progress.
 
+## Session arena/09824fd8 — task claim
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| Add live price-swing alert feeds (all events + transparent model-watch shortlist) | in progress | `arena/09824fd8-demo3` | `dashboard.html`, `assets/dashboard.js`, `assets/style.css`, `tests/alerts.test.js`, `COORDINATION.md` | Official demo market API and docs linked in UI; implementation will compare successive live REST observations | Browser WS authentication cannot be added via browser handshake; use REST polling. Shortlist is a transparent heuristic, not validated ROI/personalized advice. |
