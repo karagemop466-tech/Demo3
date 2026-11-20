@@ -34,3 +34,10 @@ jobs:
 
       - name: Canonical root site checks (links, per-row sources, syntax)
         run: python3 scripts/verify_root_site.py
+
+      - name: Strategy backtest (rebuild + tests; fails if published numbers drift)
+        run: |
+          python3 scripts/backtest_strategies.py
+          python3 scripts/build_strategy_page.py
+          git diff --exit-code -- strategy/data/backtest.json strategy.html
+          python3 -m unittest discover -s scripts/tests -p "test_backtest*.py"
