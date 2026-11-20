@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Methodology — Kalshi Live Alert Desk</title>
+<meta name="description" content="Live swing-alert desk for the Kalshi demo exchange: gas, elections, culture, crypto, golf.">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="brand" href="index.html">Kalshi <span>Live Alert Desk</span></a>
+<nav class="main"><a href="index.html">Home</a><a href="dashboard.html">Dashboard</a><a href="gas.html">Gas</a><a href="elections.html">Elections</a><a href="culture.html">Culture</a><a href="crypto.html">Crypto</a><a href="golf.html">Golf</a><a href="graph.html">Graph &amp; liquidity</a><a href="tracking.html">Resolution tracking</a><a href="strategies.html">Strategies</a><a href="portfolio.html">Simulated portfolio</a><a href="suggestions.html">Suggestions</a><a href="methodology.html" class="active">Methodology</a><a href="flagged.html">Flagged for review</a><a href="sources.html">Sources</a></nav>
+</div></header>
+<main class="wrap">
+
+<h1>Methodology &amp; verification</h1>
+<p class="muted">Every number on this site is one of four things, and each is labelled:
+<strong>published</strong> (copied from the API), <strong>derived</strong> (a published formula over
+published fields), <strong>modelled</strong> (this project's assumption) or
+<strong>simulated</strong> (paper trading). Nothing else is shown.</p>
+
+<div class="card">
+<h2>1 · Where the data comes from</h2>
+<table><tbody>
+<tr><th>Exchange</th><td>Kalshi <strong>demo</strong> — <span class="mono">https://external-api.demo.kalshi.co/trade-api/v2</span>
+(<a href="https://docs.kalshi.com/getting_started/api_environments" target="_blank" rel="noopener">environments</a> · <a href="https://docs.kalshi.com/getting_started/demo_env" target="_blank" rel="noopener">demo env</a>)</td></tr>
+<tr><th>Auth</th><td>None for market data (<a href="https://docs.kalshi.com/getting_started/quick_start_market_data" target="_blank" rel="noopener">docs</a>); no
+credentials exist in this repo, so nothing authenticated is shown (<a href="https://docs.kalshi.com/api-reference/portfolio/get-balance" target="_blank" rel="noopener">Get Balance</a>).</td></tr>
+<tr><th>Markets</th><td><a href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noopener">Get Markets</a> — snapshot from the scheduled
+collector, committed in <span class="mono">data/latest/</span>.</td></tr>
+<tr><th>Candlesticks</th><td><a href="https://docs.kalshi.com/api-reference/market/get-market-candlesticks" target="_blank" rel="noopener">Get Market Candlesticks</a> —
+<span class="mono">period_interval</span> 1, 60 or 1440 minutes. Fields used:
+<span class="mono">price.open/high/low/close_dollars</span>, <span class="mono">volume_fp</span>.</td></tr>
+<tr><th>Orderbook</th><td><a href="https://docs.kalshi.com/api-reference/market/get-market-orderbook" target="_blank" rel="noopener">Get Market Orderbook</a> —
+<span class="mono">orderbook_fp.yes_dollars / no_dollars</span> as
+<span class="mono">[price_dollars, contract_count]</span>.</td></tr>
+<tr><th>Settlement</th><td><a href="https://docs.kalshi.com/getting_started/market_settlement" target="_blank" rel="noopener">Market settlement</a> — $1 per
+winning contract; <span class="mono">result</span> ∈ {yes, no}.</td></tr>
+<tr><th>Fixed-point fields</th><td><a href="https://docs.kalshi.com/getting_started/fixed_point_migration" target="_blank" rel="noopener">Fixed-point migration</a> —
+<span class="mono">*_fp</span> fields are decimal strings; they are parsed, never rounded to cents.</td></tr>
+<tr><th>Rate limits</th><td><a href="https://docs.kalshi.com/getting_started/rate_limits" target="_blank" rel="noopener">Rate limits</a> — the dashboard spaces
+requests and backs off on 429.</td></tr>
+</tbody></table>
+</div>
+
+<div class="card">
+<h2>2 · Computed values (published formula)</h2>
+<div class="table-scroll"><table class=""><thead><tr><th class="">Value</th><th class="">Formula (this project's, published)</th><th class="">Source</th></tr></thead><tbody><tr><td class="">derived volume</td><td class=""><span class="mono small">volume_fp x notional_value_dollars (the API publishes no dollar-volume field — derived, labelled)</span></td><td class=""><a href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noopener">docs</a></td></tr><tr><td class="">mid price</td><td class=""><span class="mono small">yes_bid_dollars/yes_ask_dollars midpoint; falls back to last_price_dollars when a side is missing</span></td><td class=""><a href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noopener">docs</a></td></tr><tr><td class="">roi model</td><td class=""><span class="mono small">p_hat = clamp(mid + 0.5*momentum_1h - 0.15*spread, 0.02, 0.98); edge_yes = p_hat - yes_ask; edge_no = (1-p_hat) - (1-yes_bid); edge = max(edge_yes, edge_no); high ROI if edge &gt;= $0.03</span></td><td class=""><a href="https://docs.kalshi.com/api-reference/market/get-market-candlesticks" target="_blank" rel="noopener">docs</a></td></tr><tr><td class="">simulated trade</td><td class=""><span class="mono small">taker fills at the candle&#x27;s quoted side price; exits at +$0.10, -$0.10, or resolution; $1 payout for the winning side per market settlement docs; fees not modelled</span></td><td class=""><a href="https://docs.kalshi.com/getting_started/market_settlement" target="_blank" rel="noopener">docs</a></td></tr><tr><td class="">swing alert</td><td class=""><span class="mono small">alert when |close(i) - close(i-w)| &gt;= $0.10 (step) or (high - low) &gt;= $0.10 in one candle (intrabar)</span></td><td class=""><a href="https://docs.kalshi.com/api-reference/market/get-market-candlesticks" target="_blank" rel="noopener">docs</a></td></tr></tbody></table></div>
+</div>
+
+<div class="card" id="causation">
+<h2>3 · Alerts and the "what caused it" question</h2>
+<p class="small">An alert fires when a committed candlestick shows an absolute move of at least
+$0.10 either close-to-close over the window, or high-to-low inside a single candle. Each alert links:</p>
+<ul class="small">
+<li>the exact candlestick request that produced the numbers (official),</li>
+<li>the market record for the contract (official),</li>
+<li>a Google News search for the contract's subject around that date.</li>
+</ul>
+<p class="small">The headline link is a <strong>search</strong>, not an established cause. Proving
+that a headline caused a move would need article-level timestamps and an event study with a
+baseline; the desk does not claim that, and says so in flag L-08.</p>
+</div>
+
+<div class="card">
+<h2>4 · Simulated trading</h2>
+<p class="small">No order is ever sent. Fills are modelled at quoted prices, exits are ±$0.10 or
+resolution, and results are computed with the documented settlement arithmetic. The three
+strategies and their exact rules are on <a href="strategies.html">Strategies</a>. Fees are not
+modelled (flag L-06). The simulation is deterministic: rebuilding from the same committed data
+produces the same trades.</p>
+</div>
+
+<div class="card">
+<h2>5 · What this build does not do</h2>
+<ul class="small">
+<li>It cannot open an authenticated WebSocket from a static page (<a href="https://docs.kalshi.com/getting_started/quick_start_websockets" target="_blank" rel="noopener">WS auth</a>).</li>
+<li>It does not report a demo account balance, positions or fills — no credentials (flag L-07).</li>
+<li>It does not claim a dollar-volume field exists; the ranking is derived (flag L-03).</li>
+<li>It does not fill gaps in the candles or interpolate missing prices.</li>
+<li>It does not assert that news caused a move (flag L-08).</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>6 · Reproduce it</h2>
+<pre>python3 scripts/build_live_candles.py   # candlestick store from committed official payloads
+python3 scripts/build_live_data.py      # alerts, model, simulation, registers
+python3 scripts/build_live_site.py      # these pages
+python3 scripts/verify_live_site.py     # links, per-row sources, JSON shape, JS syntax</pre>
+<p class="small muted">The dev sandbox for this session had no HTTPS egress to the Kalshi API (TLS
+handshake refused), so candlestick payloads were reused from the repository's committed collector
+artifacts rather than re-fetched. GitHub Actions runners do have egress; the scheduled collector
+keeps refreshing <span class="mono">data/</span>.</p>
+</div>
+
+</main>
+<footer class="wrap">
+<p><strong>Kalshi Live Alert Desk</strong> — asks only about the Kalshi <em>demo</em> exchange
+(<span class="mono">https://external-api.demo.kalshi.co/trade-api/v2</span>). Every table row links its official source request; values that
+cannot be confirmed are left blank and listed on <a href="flagged.html">Flagged for review</a>.
+Simulated trades are labelled SIMULATED everywhere and are never sent to Kalshi.</p>
+<p class="small">Official docs:
+<a href="https://docs.kalshi.com/getting_started/demo_env" target="_blank" rel="noopener">demo environment</a> ·
+<a href="https://docs.kalshi.com/getting_started/quick_start_market_data" target="_blank" rel="noopener">market data without auth</a> ·
+<a href="https://docs.kalshi.com/api-reference/market/get-market-candlesticks" target="_blank" rel="noopener">candlesticks</a> ·
+<a href="https://docs.kalshi.com/api-reference/market/get-market-orderbook" target="_blank" rel="noopener">orderbook</a> ·
+<a href="https://docs.kalshi.com/getting_started/market_settlement" target="_blank" rel="noopener">settlement</a>.
+Other views in this repo: <a href="../index.html">canonical tracker</a> ·
+<a href="../docs/">docs archive</a> · <a href="../demo-desk/">demo desk</a> ·
+<a href="../analysis/">analysis</a>.</p>
+</footer>
+<script src="assets/desk.js"></script>
+</body>
+</html>

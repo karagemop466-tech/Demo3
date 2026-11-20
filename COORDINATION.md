@@ -378,6 +378,22 @@ Follow-up requests from session 06cbd03f addressed at integration:
 - 2026-11-20 12:29 UTC: `gh pr merge 24 --merge` reported conflicts — `main` had advanced with sessions `3b5e95bd`/`dd229508`/`arena-3a22fb0f` deliveries (PRs #18/#21/#22). Conflicts in `.gitignore`, `README.md`, `docs/executive-summary.md`, `COORDINATION.md` resolved by keeping both sides: `main`'s records preserved verbatim, 4d10aedf's records added as new sections. Nothing discarded (handoff/conflict protocol).
 - 2026-11-20 12:31 UTC: **PR #24 MERGED** — merge commit `48fe55e`. `Checks` workflow SUCCESS on the merge; `pages build and deployment` workflow SUCCESS; the Pages API reports `built` (source `main` /). Live site verified via page fetch: https://karagemop466-tech.github.io/Demo3/ serves the merged canonical landing with live status "LIVE · trading active (demo)", the executive-summary source table, decision registers, and archive links (docs/, docs/tracker/, analysis/, demo-desk/, research/). This line records the actual result; the follow-up board commit carries the confirmation to `main`.
 
+## Task board — session 91a02c9d (live swing-alert desk + auto simulated trading)
+
+Session ID: `91a02c9d` — branch `arena/91a02c9d-demo3` (platform-fixed; see R-04). Claimed 2026-11-20 19:20 UTC.
+Scope is additive and non-overlapping: a new self-contained module under `live/`, its data builder and
+verifier, and this board. I do **not** rewrite the canonical root site, `docs/`, `analysis/`, or `demo-desk/`.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities / notes |
+|---|---|---|---|---|---|
+| L1 Live swing-alert desk (>= $0.10 moves, two scrolling chat streams: all events + high-ROI model filter) | in progress | `91a02c9d` | `live/**` | Candlestick + orderbook + market endpoints: https://docs.kalshi.com/api-reference/market/get-market-candlesticks , https://docs.kalshi.com/api-reference/market/get-market-orderbook , https://docs.kalshi.com/api-reference/market/get-markets | Alert threshold and ROI score are documented heuristics, not exchange facts |
+| L2 Auto simulated-trade engine (no manual input) with per-strategy books, categorization, portfolio + resolution P&L | in progress | `91a02c9d` | `live/**`, `scripts/build_live_data.py` | Settlement arithmetic: https://docs.kalshi.com/getting_started/market_settlement ; demo environment: https://docs.kalshi.com/getting_started/demo_env | Paper only; no demo API credentials exist, so no live order is sent (I-12) |
+| L3 Line-by-line repo review for this session + irregularity log | in progress | `91a02c9d` | `REVIEW_2026-11-20.md` | Per-row source links; git/gh checks | Flags recorded on the site's Flagged page |
+| L4 Offline verifier + tests for the new module; integration link + PR/merge/Pages | in progress | `91a02c9d` | `scripts/verify_live_site.py`, `live/tests/**`, `scripts/build_root_site.py` (one nav line + one landing paragraph only) | `node --check`, JSON schema + source allowlist, internal-link check, engine determinism test | Small shared-file touch logged here for the integration session |
+
+Note for other sessions: `live/**`, `scripts/build_live_data.py`, `scripts/verify_live_site.py` and
+`REVIEW_2026-11-20.md` are claimed by `91a02c9d` — please log a request here instead of editing them.
+
 ---
 
 ## Task board — session 6ebc1cb7 (live alert chat + automated trades + final integration)
@@ -524,6 +540,63 @@ Findings are published on the audit page's "Flagged for Review" section with sou
 - Duplicates still open at the time of this note (for the integration owner; not closed by this session): PR #26 (`arena/6d201d19-demo3`), PR #27 (`arena/09824fd8-demo3`), PR #30 (`arena/d7ee554b-demo3`, which withdraws its own claim). PR #32 (`arena/26973298-demo3`) is a separate backtest feature.
 - Irregularities that stay on the record: F-B13-01 (no open gas markets in the snapshot), F-B13-02 (high-ROI rules are placeholders; no model defined), F-B13-03 (news links are searches, not causes), F-B13-04 (batch `tickers` works live; one ticker absent from the reply), F-B13-05 (rate-limit numbers unconfirmed), F-B13-06 (alert history is per tab), F-B13-07 (demo prices may differ from real markets). Where the merged feature repeats them, its own flags apply (F-alert-01, F-alert-02).
 - Lesson logged for the protocol: re-read the full board and open PR list before claiming a feature; `gh pr list --state open` shows duplicate work.
+
+## Session 91a02c9d — completion record (2026-11-20 19:45 UTC)
+
+**Delivered** (branch `arena/91a02c9d-demo3`, additive scope only — no other session's files rewritten):
+
+- `live/` — Live Alert Desk, 15 static pages: `index`, `dashboard` (two scrolling chat streams:
+  all swings ≥ $0.10 / model high-ROI filter, plus topic tables and resolution panel),
+  5 topic pages (`gas`, `elections`, `culture`, `crypto`, `golf`), `graph` (x = time with 9 windows
+  from 30 s to 30 d, y = contract price in ¢, orderbook depth with contracts available at each
+  price), `tracking` (open events until resolved, then YES/NO with settlement source), `strategies`
+  (3 auto-simulated strategies + categories by topic / price band / series), `portfolio`
+  (simulated books, equity curves, unverified account rows left blank), `suggestions` (25 items),
+  `methodology`, `flagged`, `sources`.
+- Builders/verifiers: `scripts/build_live_candles.py`, `scripts/build_live_data.py`,
+  `scripts/build_live_site.py`, `scripts/verify_live_site.py`, tests in `live/tests/`
+  (`smoke.mjs`, `test_determinism.py`), CI workflow `.github/workflows/live.yml`.
+- Integration touch on shared files (logged per protocol, minimal): `scripts/build_root_site.py`
+  (one nav entry `Alert desk (live)` + one landing table row) and the regenerated root pages that
+  follow from it.
+
+**Verification performed on this branch**
+
+| Check | Result |
+|---|---|
+| `scripts/verify_live_site.py` | PASS — 15 pages, 9 data files, 48 candle files; internal links resolve, every table row has an official source link or an `unverified` marker, every data row keeps its `source_url` |
+| `node live/tests/smoke.mjs` (jsdom, offline) | 24/24 checks — both chat streams render >20 / >0 messages, 5 topic sections, resolutions render YES/NO, 9 chart windows, 3 equity curves |
+| `python3 live/tests/test_determinism.py` | PASS — rebuild reproduces 6 data files exactly, 204 alerts all ≥ $0.10, 1,472 trades all labelled `simulated` with sources |
+| `scripts/verify_root_site.py` | 0 failures |
+| `scripts/check_site.py` | passed |
+
+**Sources used** (fetched and read during this session):
+[demo environment](https://docs.kalshi.com/getting_started/demo_env) ·
+[Get Market Candlesticks](https://docs.kalshi.com/api-reference/market/get-market-candlesticks) ·
+[Get Market Orderbook](https://docs.kalshi.com/api-reference/market/get-market-orderbook) ·
+[Orderbook responses](https://docs.kalshi.com/getting_started/orderbook_responses) ·
+[Get Markets](https://docs.kalshi.com/api-reference/market/get-markets) ·
+[Market settlement](https://docs.kalshi.com/getting_started/market_settlement) ·
+[API keys](https://docs.kalshi.com/getting_started/api_keys) ·
+[Rate limits](https://docs.kalshi.com/getting_started/rate_limits) ·
+[Create Order V2](https://docs.kalshi.com/api-reference/orders/create-order-v2) ·
+[live API check](https://external-api.demo.kalshi.co/trade-api/v2/exchange/status) (trading active).
+
+**Irregularities recorded for review** (published on `live/flagged.html` with evidence links):
+R-91-01 root live-order body does not match the V2 schema (`side` bid/ask, string counts, `price`,
+`time_in_force` values) — inactive while no credentials exist; R-91-02 `scripts/kalshi_client.py`
+always signs RSA-PSS while the docs now default to Ed25519; R-91-03 root high-ROI filter is a
+disclosed placeholder; R-91-04 root alerts exist only while the tab is open; R-91-05 analysis
+archive used the production endpoint (labelled production here); R-91-06 many parallel dashboards;
+plus L-01…L-13 (snapshot vs streaming, derived dollar volume, model assumptions, zero-volume quote
+moves, unverified fees, missing credentials, news-causation limits, WS auth, coverage gaps,
+environment mixing). Full register: `REVIEW_2026-11-20.md`.
+
+**Environment note for other sessions:** this sandbox has no HTTPS egress to `external-api.demo.kalshi.co`
+(TLS handshake dropped; `fetch_page` works, `curl`/`urllib` do not). The desk is therefore built from
+official payloads already committed by the collector (`data/latest/`, `data/history/`,
+`analysis/data/live/candles.json`); `.github/workflows/live.yml` rebuilds from those artifacts in CI
+where egress exists.
 
 ---
 
@@ -759,6 +832,25 @@ Non-overlapping scope note: I do NOT edit other sessions' archives (`docs/`, `do
 
 - 2026-11-20: claim committed & pushed. Verification suite all green (verify_root_site 0 failures, verify_site PASSED, node --check OK, backtest 17/17, tracker_check OK, check_site passed). Official docs confirmed: demo_env, get-markets, get-market-candlesticks, orderbook_responses, market_settlement. `data/` aligned to refreshed `main`. Histories unified via merge of origin/main. PR #50 opened to `main`; merge in progress.
 
+
+### Session 91a02c9d — final base sync after concurrent integrations (2026-11-20 19:48 UTC)
+
+- Merged latest `origin/main` through `cb31fa7` (PR #50 final integration), retaining that session's
+  shared root/strategy/audit work and board section; used its fresher official snapshots
+  (`data/latest/meta.json` generated `2026-11-20T19:39:40+00:00`) and rebuilt `/live` from them.
+- Merged the session-branch collector refresh (`be14c9e`, 19:41Z) before the main snapshot sync.
+  Both are retained in history; no external session code was discarded.
+- `git pull --rebase origin arena/91a02c9d-demo3` was attempted before push twice. Each time Git
+  tried replaying earlier independent sessions' board claims (`COORDINATION.md`), so it was aborted
+  rather than rewriting/reordering their work; both remote tips were explicitly merged, and
+  `git merge-base --is-ancestor origin/arena/91a02c9d-demo3 HEAD` passed before pushing.
+- Final local verification after the latest-main merge: `verify_live_site.py` PASS (15 pages),
+  smoke 24/24, deterministic test PASS (204 alerts, 1,472 simulated trades), `check_site.py` passed,
+  `verify_root_site.py` 0 failures, `verify_site.py` 0 failures.
+- PR #39: https://github.com/karagemop466-tech/Demo3/pull/39 (open; checks were queued at time of
+  this log update; `Live desk checks` on the preceding 19:41Z commit succeeded). Must refresh the
+  final status after the latest-base merge; do not mark Pages complete until deploy is confirmed.
+
 ---
 
 ### Session f2b0808f — delivery record and incident (Pages build failures, collector workflow)
@@ -771,6 +863,8 @@ Non-overlapping scope note: I do NOT edit other sessions' archives (`docs/`, `do
 **I-F2-08 (high, FIXED here): `.github/workflows/collect.yml` had two `if:` keys in one step** (lines 63–64 before this fix; present since the file was created). Duplicate YAML keys are accepted by PyYAML (the last one wins) but rejected by the Actions parser: the recent `collect.yml` runs on `main` (e.g., run `44804938044`, headSha `81da556`, 19:44:26Z) show `failure` with no jobs, so the 10-minute collector stopped committing snapshots. Fix: deleted the redundant line; the effective condition is unchanged (`if: github.ref == 'refs/heads/main'`). Parsed all six `.github/workflows/*.yml` files on `main` with a duplicate-key check: no other duplicates. Owner of the file: `3b5e95bd`; this is a one-line change logged as a change request for that owner's record.
 
 **Other observations for the Flagged page (not blocking):** `data/latest/markets_settled.json` is 26 MB, `markets_open.json` 18 MB, `strategy/data/backtest.json` 17 MB; tracked bytes ≈ 91.5 MB. Each 10-minute snapshot commit grows git history (`.git` ≈ 29 MB). Under GitHub's 100 MB per-file limit, but worth watching.
+
+- 2026-11-20 19:49 UTC: merged latest `origin/main` (`541a98d`, PR #53), preserved its board section, rebuilt the desk and repeated all local checks (all green).
 
 
 ## Task board — session a56b9e45 (CI health on main: `collect.yml` startup failure) — claimed 2026-11-20 ~19:47 UTC
@@ -797,6 +891,8 @@ them lists `.github/workflows/collect.yml` in its changed files, so this scope i
   for the same commits were `cancelled` by newer builds (normal pile-up under rapid merges); the
   last completed deploy (`04d1a4e78`) serves the live site correctly (verified via page fetch).
   No fix needed for Pages itself; C2 only confirms continuity after the collector fix.
+
+- 2026-11-20 19:50 UTC: merged current `origin/main` PR #56 (collector workflow fix); board conflict unioned without dropping session claims. Rebuilt and all six local site/determinism checks passed again.
 
 ---
 
@@ -842,3 +938,5 @@ annotations), `dashboard.html` (`#swingCaption`), `flagged.html` (F-c75-03 row),
   (adapted to `main`'s alerts API `KD.events`) 8/8; temp smoke scripts removed.
 - **No hallucination:** chart source links are the exchange-published official settlement sources;
   no external "cause" link is fabricated. Every new table row carries an official source link.
+
+- 2026-11-20 19:52 UTC: merged latest `origin/main` PR #48 (swing-alert integration); unioned the board, rebuilt both root and `/live` pages, and repeated all local checks (all green).
