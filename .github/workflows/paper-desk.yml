@@ -86,17 +86,50 @@ jobs:
           node --test paper-desk/tests/dom.test.mjs
 
       - name: Commit ledger + subsite
+        # Four other workflows on this repository push to `main` on their own schedules, so a
+        # push from this step is routinely rejected as non-fast-forward (that exact failure is
+        # recorded on run 44809258893: "rebase skipped; other bot commits raced this run",
+        # exit 1, cycle output lost because the runner filesystem is ephemeral). The old form
+        # also ran `git pull --rebase` with the freshly built pages unstaged, which git refuses.
+        # So: commit first, then retry push with a merge of the moved branch, rebuilding the
+        # pages deterministically after every merge so the published HTML always matches the
+        # ledger that actually landed.
         run: |
+          set -uo pipefail
           git config user.name "paper-desk-bot"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git pull --rebase origin "$GITHUB_REF_NAME" || echo "::warning::rebase skipped; other bot commits raced this run"
           git add data/paper paper-desk
           if git diff --cached --quiet; then
             echo "No desk changes this cycle"
-          else
-            git commit -m "paper desk: cycle $(date -u '+%Y-%m-%dT%H:%M:%SZ')"
-            git push origin "HEAD:$GITHUB_REF_NAME"
+            exit 0
           fi
+          git commit -q -m "paper desk: cycle $(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+          pushed=""
+          for attempt in 1 2 3 4; do
+            if git push -q origin "HEAD:$GITHUB_REF_NAME"; then pushed=yes; break; fi
+            echo "::notice title=push rejected (attempt $attempt)::main moved during this run; merging, then rebuilding the pages from the ledger that landed"
+            git fetch -q --deepen=50 origin "$GITHUB_REF_NAME"
+            pre=$(git rev-parse HEAD)
+            git merge --no-edit -X theirs -m "paper desk: merge main after a racing push" FETCH_HEAD \
+              || { git merge --abort 2>/dev/null || true; git checkout --theirs -- . 2>/dev/null || true;
+                   git add -A; git commit -q -m "paper desk: merge main (fallback)"; }
+            # shared files keep main's side (-X theirs); this desk's own paths keep THIS cycle's
+            # output, which is the newest ledger, so a race can never publish a stale table
+            git checkout "$pre" -- data/paper paper-desk 2>/dev/null || true
+            git add data/paper paper-desk
+            git diff --cached --quiet || git commit -q -m "paper desk: keep this cycle's ledger after merging main"
+            python3 scripts/build_paper_desk.py
+            python3 scripts/verify_paper_desk.py \
+              || { echo "::error title=post-merge rebuild failed verification::refusing to push unverified pages; the next cycle retries from main's head"
+                   exit 1; }
+            git add data/paper paper-desk
+            git diff --cached --quiet || git commit -q -m "paper desk: rebuild after merging main"
+          done
+          if [ -z "$pushed" ]; then
+            echo "::error title=could not push after 4 attempts::the ledger was built and verified but main kept moving; the next cycle retries"
+            exit 1
+          fi
+          echo "pushed $(git rev-parse --short HEAD) to $GITHUB_REF_NAME"
 
       - name: Request a Pages rebuild
         if: github.ref == 'refs/heads/main'
