@@ -4,7 +4,8 @@
     "branch": "arena/d7d7a733-demo3",
     "checked_on": "2026-11-20",
     "scope": "EXECUTIVE_SUMMARY.md claims (sections 2-6, incl. the automation paragraph) and the committed snapshot files data/latest/top_events.json, data/latest/resolutions.json, data/latest/markets_settled.json, data/meta.json, data/latest/portfolio.json, data/cors_test.json",
-    "method": "Official Kalshi docs (docs.kalshi.com) read in full on the checked date; live Kalshi demo API responses read via the fetch tool (URLs listed per row); committed repo files read directly and cited by path. A row is 'Verified' only when an official source or live response confirms the exact claim. Anything that could not be confirmed is marked 'Not reproduced' and left unverified; no value was inferred or filled in."
+    "method": "Official Kalshi docs (docs.kalshi.com) read in full on the checked date; live Kalshi demo API responses read via the fetch tool (URLs listed per row); committed repo files read directly and cited by path. A row is 'Verified' only when an official source or live response confirms the exact claim. Anything that could not be confirmed is marked 'Not reproduced' and left unverified; no value was inferred or filled in.",
+    "repo_pin": "Repo links are pinned to commit 7e795b2727564609b1b0b109d376e5d5c28a92c8 (main at audit time), the snapshot that was read. Later automated data refreshes do not change these links."
   },
   "results_legend": {
     "Verified": "Confirmed by an official doc page or a live official API response (exact claim).",
@@ -284,7 +285,7 @@
           "evidence": [
             {
               "label": "Committed snapshot data/latest/markets_settled.json: 32 KXAAAGASM rows, all result yes, status finalized (12:38:54 UTC)",
-              "url": "https://github.com/karagemop466-tech/Demo3/blob/main/data/latest/markets_settled.json"
+              "url": "https://github.com/karagemop466-tech/Demo3/blob/7e795b2727564609b1b0b109d376e5d5c28a92c8/data/latest/markets_settled.json"
             }
           ],
           "result": "Contradicted",
@@ -322,11 +323,11 @@
           "evidence": [
             {
               "label": "Superseded snapshot data/meta.json (12:14:51 UTC): est. $902,062,030.2 under volume x last price",
-              "url": "https://github.com/karagemop466-tech/Demo3/blob/main/data/meta.json"
+              "url": "https://github.com/karagemop466-tech/Demo3/blob/7e795b2727564609b1b0b109d376e5d5c28a92c8/data/meta.json"
             },
             {
               "label": "Current snapshot data/latest/top_events.json (12:38:54 UTC): $7,982,702,575.51 under volume x notional",
-              "url": "https://github.com/karagemop466-tech/Demo3/blob/main/data/latest/top_events.json"
+              "url": "https://github.com/karagemop466-tech/Demo3/blob/7e795b2727564609b1b0b109d376e5d5c28a92c8/data/latest/top_events.json"
             }
           ],
           "result": "Contradicted",
@@ -345,7 +346,7 @@
           "evidence": [
             {
               "label": "Current snapshot data/latest/top_events.json: KXPRESPERSON-28 $1,442,387,050.53",
-              "url": "https://github.com/karagemop466-tech/Demo3/blob/main/data/latest/top_events.json"
+              "url": "https://github.com/karagemop466-tech/Demo3/blob/7e795b2727564609b1b0b109d376e5d5c28a92c8/data/latest/top_events.json"
             }
           ],
           "result": "Contradicted",
@@ -364,7 +365,7 @@
           "evidence": [
             {
               "label": "Current snapshot data/latest/top_events.json: KXOSCARPIC-27 $31,477,067.62",
-              "url": "https://github.com/karagemop466-tech/Demo3/blob/main/data/latest/top_events.json"
+              "url": "https://github.com/karagemop466-tech/Demo3/blob/7e795b2727564609b1b0b109d376e5d5c28a92c8/data/latest/top_events.json"
             }
           ],
           "result": "Contradicted",
@@ -383,7 +384,7 @@
           "evidence": [
             {
               "label": "Collector formula: volume_dollars_derived = volume_fp x notional_value_dollars (scripts/collect_kalshi_data.py, line 221)",
-              "url": "https://github.com/karagemop466-tech/Demo3/blob/main/scripts/collect_kalshi_data.py"
+              "url": "https://github.com/karagemop466-tech/Demo3/blob/7e795b2727564609b1b0b109d376e5d5c28a92c8/scripts/collect_kalshi_data.py"
             },
             {
               "label": "Live notional_value_dollars 1.0000 on KXPRESNOMD-28-GPLA",
@@ -433,7 +434,7 @@
           "evidence": [
             {
               "label": "Collector probe record, HTTP 200, ACAO https://karagemop466-tech.github.io, 2026-11-20T12:14:51Z",
-              "url": "https://github.com/karagemop466-tech/Demo3/blob/main/data/cors_test.json"
+              "url": "https://github.com/karagemop466-tech/Demo3/blob/7e795b2727564609b1b0b109d376e5d5c28a92c8/data/cors_test.json"
             }
           ],
           "result": "Partly verified",
@@ -452,7 +453,7 @@
           "evidence": [
             {
               "label": "Committed status data/latest/portfolio.json: status credentials_missing (11:28:35 UTC)",
-              "url": "https://github.com/karagemop466-tech/Demo3/blob/main/data/latest/portfolio.json"
+              "url": "https://github.com/karagemop466-tech/Demo3/blob/7e795b2727564609b1b0b109d376e5d5c28a92c8/data/latest/portfolio.json"
             }
           ],
           "result": "Partly verified",
@@ -477,11 +478,11 @@
           "evidence": [
             {
               "label": "Ticker regex GAS[A-Z] matches 'GASP' (scripts/collect_kalshi_data.py, line 48)",
-              "url": "https://github.com/karagemop466-tech/Demo3/blob/main/scripts/collect_kalshi_data.py"
+              "url": "https://github.com/karagemop466-tech/Demo3/blob/7e795b2727564609b1b0b109d376e5d5c28a92c8/scripts/collect_kalshi_data.py"
             },
             {
               "label": "Event listed under gas in data/latest/top_events.json",
-              "url": "https://github.com/karagemop466-tech/Demo3/blob/main/data/latest/top_events.json"
+              "url": "https://github.com/karagemop466-tech/Demo3/blob/7e795b2727564609b1b0b109d376e5d5c28a92c8/data/latest/top_events.json"
             }
           ],
           "result": "Contradicted",
@@ -504,7 +505,7 @@
           "evidence": [
             {
               "label": "Tag rule maps any 'energy' or 'oil & gas' tag to gas (scripts/collect_kalshi_data.py, lines 79-84)",
-              "url": "https://github.com/karagemop466-tech/Demo3/blob/main/scripts/collect_kalshi_data.py"
+              "url": "https://github.com/karagemop466-tech/Demo3/blob/7e795b2727564609b1b0b109d376e5d5c28a92c8/scripts/collect_kalshi_data.py"
             }
           ],
           "result": "Flagged",
@@ -523,7 +524,7 @@
           "evidence": [
             {
               "label": "Committed snapshot: 250 of 300 gas rows are KXQUICKSETTLE; 30 KXWTI; 20 KXBRENTD",
-              "url": "https://github.com/karagemop466-tech/Demo3/blob/main/data/latest/resolutions.json"
+              "url": "https://github.com/karagemop466-tech/Demo3/blob/7e795b2727564609b1b0b109d376e5d5c28a92c8/data/latest/resolutions.json"
             }
           ],
           "result": "Contradicted",
@@ -542,11 +543,11 @@
           "evidence": [
             {
               "label": "Earlier run: 'sum(market volume_fp * last_price_dollars)' (data/meta.json)",
-              "url": "https://github.com/karagemop466-tech/Demo3/blob/main/data/meta.json"
+              "url": "https://github.com/karagemop466-tech/Demo3/blob/7e795b2727564609b1b0b109d376e5d5c28a92c8/data/meta.json"
             },
             {
               "label": "Later run: 'volume_fp x notional_value_dollars' (data/latest/top_events.json)",
-              "url": "https://github.com/karagemop466-tech/Demo3/blob/main/data/latest/top_events.json"
+              "url": "https://github.com/karagemop466-tech/Demo3/blob/7e795b2727564609b1b0b109d376e5d5c28a92c8/data/latest/top_events.json"
             }
           ],
           "result": "Flagged",

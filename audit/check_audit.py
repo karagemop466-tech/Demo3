@@ -5,7 +5,7 @@ Checks:
   * rows.json: unique IDs, required fields non-empty, valid result labels.
   * every row has at least one official Kalshi link (docs.kalshi.com or
     external-api.demo.kalshi.co); every URL is https and on an allowed host;
-    repo links point at the main branch of this repository.
+    repo links point at this repository at the pinned audit commit (7e795b2).
   * 'Verified' rows have an official link; 'Contradicted' rows have evidence.
   * index.html is up to date with rows.json (rebuilt in memory and compared),
     contains every row ID and every URL, and has balanced basic tags.
@@ -30,7 +30,10 @@ ALLOWED_HOSTS = {
     "gasprices.aaa.com",
 }
 OFFICIAL_HOSTS = {"docs.kalshi.com", "external-api.demo.kalshi.co"}
-REPO_PREFIX = "https://github.com/karagemop466-tech/Demo3/blob/main/"
+REPO_PREFIXES = (
+    "https://github.com/karagemop466-tech/Demo3/blob/7e795b2727564609b1b0b109d376e5d5c28a92c8/",
+    "https://github.com/karagemop466-tech/Demo3/blob/main/",
+)
 REQUIRED = ("id", "claim", "where", "official", "evidence", "result", "note")
 
 errors = []
@@ -72,8 +75,8 @@ def check_url(url, where):
         err(f"{where}: non-https URL {url}")
     if p.netloc not in ALLOWED_HOSTS:
         err(f"{where}: host not allowed: {p.netloc} ({url})")
-    if p.netloc == "github.com" and not url.startswith(REPO_PREFIX):
-        err(f"{where}: GitHub link is not a file on main in this repo: {url}")
+    if p.netloc == "github.com" and not url.startswith(REPO_PREFIXES):
+        err(f"{where}: GitHub link is not a file in this repo at the pinned commit: {url}")
 
 
 def main():
