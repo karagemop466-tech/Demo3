@@ -13,7 +13,7 @@
   "attempts": [
    {
     "body_bytes": 0,
-    "checked_at": "2026-11-20T20:55:09Z",
+    "checked_at": "2026-11-20T21:12:57Z",
     "error": "HTTP 429",
     "site_root": "https://kalshi.com",
     "status_code": 429,
@@ -23,7 +23,7 @@
    },
    {
     "body_bytes": 0,
-    "checked_at": "2026-11-20T20:55:11Z",
+    "checked_at": "2026-11-20T21:13:00Z",
     "error": "HTTP 404",
     "site_root": "https://demo.kalshi.co",
     "status_code": 404,
@@ -32,16 +32,16 @@
     "url": "https://demo.kalshi.co/event/KXBTCY-27JAN0100"
    }
   ],
-  "checked_at": "2026-11-20T20:55:11Z",
+  "checked_at": "2026-11-20T21:13:00Z",
   "status_code": 429,
   "ticker_echoed": false,
   "verified_root": null
  },
- "events_with_swings": 3,
- "generated_at": "2026-11-20T20:54:26Z",
+ "events_with_swings": 4,
+ "generated_at": "2026-11-20T21:11:34Z",
  "hours_1m": 48,
  "hours_60m": 168,
- "markets_scanned": 60,
+ "markets_scanned": 72,
  "per_topic_markets": 12,
  "rearm_band_dollars": 0.05,
  "sources": [
@@ -62,7 +62,7 @@
    "attempts": [
     {
      "body_bytes": 0,
-     "checked_at": "2026-11-20T20:55:09Z",
+     "checked_at": "2026-11-20T21:12:57Z",
      "error": "HTTP 429",
      "site_root": "https://kalshi.com",
      "status_code": 429,
@@ -72,7 +72,7 @@
     },
     {
      "body_bytes": 0,
-     "checked_at": "2026-11-20T20:55:11Z",
+     "checked_at": "2026-11-20T21:13:00Z",
      "error": "HTTP 404",
      "site_root": "https://demo.kalshi.co",
      "status_code": 404,
@@ -81,25 +81,26 @@
      "url": "https://demo.kalshi.co/event/KXBTCY-27JAN0100"
     }
    ],
-   "checked_at": "2026-11-20T20:55:11Z",
+   "checked_at": "2026-11-20T21:13:00Z",
    "status_code": 429,
    "ticker_echoed": false,
    "verified_root": null
   },
   "mode": "live",
-  "requests": 122,
+  "requests": 146,
   "series_meta_source": "fetched this run",
   "universe_counts": {
    "crypto": 12,
    "culture": 12,
    "elections": 12,
    "gas": 12,
-   "golf": 12
+   "golf": 12,
+   "other": 12
   },
-  "universe_units": 60,
+  "universe_units": 72,
   "warnings": []
  },
- "swings_found": 207,
+ "swings_found": 225,
  "threshold_dollars": 0.1,
  "window_minutes": 60
 }

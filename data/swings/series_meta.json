@@ -1,5 +1,53 @@
 {
  "by_series": {
+  "KXAAAGASM": {
+   "categories": [
+    "Economics"
+   ],
+   "category": "Economics",
+   "contract_terms_url": "https://assets.kalshi.com/contract_terms/AAAGAS.pdf",
+   "expected_volume_initial": null,
+   "fee_multiplier": 1,
+   "fee_type": "quadratic",
+   "frequency": "monthly",
+   "series_ticker": "KXAAAGASM",
+   "settlement_sources": [
+    {
+     "name": "AAA",
+     "url": "https://gasprices.aaa.com/"
+    }
+   ],
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXAAAGASM",
+   "tags": [
+    "Oil & Gas",
+    "Oil and energy"
+   ],
+   "title": "US gas price"
+  },
+  "KXAAAGASW": {
+   "categories": [
+    "Economics"
+   ],
+   "category": "Economics",
+   "contract_terms_url": "https://assets.kalshi.com/contract_terms/AAAGAS.pdf",
+   "expected_volume_initial": null,
+   "fee_multiplier": 1,
+   "fee_type": "quadratic",
+   "frequency": "weekly",
+   "series_ticker": "KXAAAGASW",
+   "settlement_sources": [
+    {
+     "name": "AAA",
+     "url": "https://gasprices.aaa.com/"
+    }
+   ],
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXAAAGASW",
+   "tags": [
+    "Econ Weekly",
+    "Oil and energy"
+   ],
+   "title": "US gas price up"
+  },
   "KXBTCY": {
    "categories": [
     "Crypto"
@@ -163,56 +211,33 @@
    ],
    "title": "Pres person"
   },
-  "KXTXERCOTPEAK": {
-   "categories": [
-    "Economics"
-   ],
-   "category": "Economics",
-   "contract_terms_url": "https://assets.kalshi.com/contract_terms/ECONSTATE.pdf",
-   "expected_volume_initial": null,
-   "fee_multiplier": 1,
-   "fee_type": "quadratic",
-   "frequency": "one_off",
-   "series_ticker": "KXTXERCOTPEAK",
-   "settlement_sources": [
-    {
-     "name": "Federal Reserve Bank of New York",
-     "url": "https://www.newyorkfed.org/markets/reference-rates/sofr"
-    }
-   ],
-   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXTXERCOTPEAK",
-   "tags": [
-    "Oil and energy"
-   ],
-   "title": "Texas ERCOT peak electricity demand"
-  },
-  "KXWTIMAX": {
+  "KXWTI": {
    "categories": [
     "Commodities"
    ],
    "category": "Commodities",
-   "contract_terms_url": "https://assets.kalshi.com/contract_terms/WTIMINMAX.pdf",
+   "contract_terms_url": "https://assets.kalshi.com/contract_terms/WTIOIL.pdf",
    "expected_volume_initial": null,
    "fee_multiplier": 1,
    "fee_type": "quadratic",
-   "frequency": "annual",
-   "series_ticker": "KXWTIMAX",
+   "frequency": "custom",
+   "series_ticker": "KXWTI",
    "settlement_sources": [
     {
      "name": "ICE",
-     "url": "https://www.ice.com/report/10"
+     "url": "https://www.theice.com/products/213/WTI-Crude-Futures"
     }
    ],
-   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXWTIMAX",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXWTI",
    "tags": [
     "Oil & Gas"
    ],
-   "title": "WTI oil high"
+   "title": "WTI oil election day"
   }
  },
  "meta": {
   "doc": "https://docs.kalshi.com/api-reference/market/get-series.md",
   "endpoint": "https://external-api.demo.kalshi.co/trade-api/v2/series/{series_ticker}",
-  "generated_at": "2026-11-20T20:54:26Z"
+  "generated_at": "2026-11-20T21:11:34Z"
  }
 }
