@@ -345,6 +345,20 @@ Follow-up requests from session 06cbd03f addressed at integration:
 - **Flagged items** (none block the merge, per the brief; all published with evidence links on the site's Flagged for review page): I-11 (no demo credentials — paper mode labeled, discovery steps documented), I-12/BUILD-U (source-less cells left blank + flagged, never inferred), R-05 (duplicate engines consolidated, originals preserved), R-06 (archive trees use the production API base — disclosed), plus the preserved registers of all other sessions (I-01..I-10, F1-F9, F-01..F-22, R-01..R-04, R-09).
 - This record closes T12. Further board updates (if any) follow the same claim/log protocol.
 
+---
+
+## Task board — session 0b17a627 (paper-automation UI safety regression)
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| T1 Review and fix paper-automation toggle state after page reload; add offline regression tests for default-off and persisted-state visibility | done | `0b17a627` | Direct edits: `assets/trade.js`, new `tests/trade-automation.test.js`, this section of `COORDINATION.md`; CI side effect: bot-generated `data/latest/**`, `data/history/**` in commit `b634287` (not manually edited) | [Kalshi demo environment](https://docs.kalshi.com/getting_started/demo_env) (context only; no API behavior changed); `npm test` 28/28, focused jsdom tests 2/2, all site/data checkers passed; collector's row verifier: 725/725, 0 hard failures, 0 drift | F-0B17-01 (stale saved automation could appear unchecked; fixed and regression-tested). CR-0B17-01: existing `kalshi-data.yml` push trigger generated data on this non-main branch; review branch-trigger policy (no workflow edit due open PR #26 overlap). No demo credentials supplied; no live orders placed. Open alert PRs #26/#27/#29 remain outside scope. |
+
+Claimed 2026-11-20 on `arena/0b17a627-demo3`. Finding: `assets/dashboard.js` invokes `KalshiTrade.renderAll()` during startup, but `assets/trade.js` does not reflect the persisted `kd_automation_v1.enabled` state in the `#autoTrade` checkbox. On a reload, an enabled paper strategy could therefore keep running while the visible toggle appears off. Scope is limited to synchronizing the persisted state into the existing control and regression coverage; automation remains paper/SIMULATED only and defaults off. No other session's active alert or data files will be edited.
+
+**Completion / verification (2026-11-20):** Added `KalshiTrade.syncAutomationControl()` to synchronize the saved strategy state to the checkbox whenever shared trade UI renders. Added `tests/trade-automation.test.js` covering default-off, toggling/persistence, and visible checked state after reload. `npm ci` completed with 0 reported vulnerabilities; `npm test` passed 28/28; `scripts/verify_root_site.py` reported 0 failures; `scripts/check_site.py`, `scripts/tracker_check.py`, `scripts/verify_site.py`, offline refresh (88/88 mocked calls), and collector tests (2/2) passed; JavaScript syntax and `git diff --check` passed. No live Kalshi request or order was made during this safety fix. Official reference for the demo-only account context: https://docs.kalshi.com/getting_started/demo_env. F-0B17-01 is resolved by the UI sync + regression tests; no API values were added or inferred.
+
+**Automated data side effect / change request (2026-11-20):** The existing `kalshi-data.yml` workflow runs on branch pushes. After the PR branch push it fetched, wrote, and re-verified the current demo snapshot in bot commit `b634287` (`data/latest/**`, `data/history/**`). I preserved that commit rather than deleting generated data. `data/latest/verification_report.json` reports 725 passed, 0 hard failures, 0 drift notices. The snapshot rows retain official API source URLs. CR-0B17-01 asks the workflow owner to review the wildcard branch trigger; no workflow file was changed because it overlaps open PR #26.
+
 ## Task board — session 4d10aedf (automated data pipeline + trade/portfolio tooling + integration)
 
 | Task | Status | Owner | File scope | Sources / verification | Irregularities |
@@ -1109,3 +1123,6 @@ Re-read the board and open PRs on 2026-11-20 ~19:30Z before merging. The live tw
 **Lesson (protocol):** claim after re-reading the board and `gh pr list --state open`. This session's first claim was made without checking the concurrent claims.
 
 **Verification (reduced scope):** `python3 scripts/tests/test_price_alerts.py` 19/19 OK; `python3 scripts/price_alerts.py` regenerates `data/latest/alerts.json`; `build_root_site.py` + `verify_root_site.py` 0 failures; `check_site.py` passed. The independent review of PR #26 (d7ee554b, head 7d06a79) recorded 34/34 Node tests and 15/15 Python tests for the duplicate. Those Node tests no longer apply to the reduced scope.
+- 2026-11-20 19:26 UTC: **PR #33** (`arena/32f91e0e-demo3` -> `main`, COORDINATION.md only) MERGED with `gh pr merge 33 --merge`; merge commit `7c1069b`.
+- 2026-11-20 19:27-19:30 UTC: GitHub Pages build for `7c1069b` reported `built` (Pages API `pages/builds/latest`). Live page fetch from the sandbox was not possible (I-32F-01), so the live-site check is the Pages API status only.
+- Session 32f91e0e is delivered. No other session's file was changed.
