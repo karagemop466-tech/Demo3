@@ -15,6 +15,9 @@
 <div id="live-status" class="banner">Loading live data...</div>
 <h2>Top open markets (live)</h2>
 <div class="card" data-live="golf" data-limit="25"></div>
+<h2>Pipeline snapshot (official demo API, collected twice hourly)</h2>
+<p class="note">Rows collected by <code>scripts/collect_kalshi_data.py</code>; each links to the exact API request that produced it. The topic label is a deterministic classification (rules on the <a href="../sources.html">Sources</a> page).</p>
+<div data-render="pipeline-markets" data-cat="golf"></div>
 <h2>Verified snapshot</h2>
 <div class="card"><h3 style="margin-top:0">Series in the verified snapshot</h3><div data-render="series" data-cat="golf"></div></div>
 <h2>Analysis</h2><ul>

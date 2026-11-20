@@ -1,0 +1,62 @@
+name: Collect Kalshi demo data
+
+on:
+  push:
+    branches: ['**']
+  schedule:
+    - cron: '17,47 * * * *'   # twice hourly, off the top of the hour
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Collect market data from official Kalshi demo API
+        run: |
+          set -o pipefail
+          python scripts/collect_kalshi_data.py 2>&1 | tee collector.log
+          status=${PIPESTATUS[0]}
+          if [ "$status" -ne 0 ]; then
+            echo "::error::collector failed — last 40 log lines:"
+            tail -40 collector.log
+            exit "$status"
+          fi
+
+      - name: Row-level re-verification against live API
+        run: python scripts/verify_rows.py
+
+      - name: Trim rolling history files (retain most recent 20000 lines)
+        run: |
+          for f in data/history/prices.jsonl data/history/resolutions.jsonl; do
+            if [ -f "$f" ]; then tail -n 20000 "$f" > "$f.tmp" && mv "$f.tmp" "$f"; fi
+          done
+
+      - name: Commit and push data
+        if: always()
+        run: |
+          set -x
+          git config user.name "kalshi-data-bot"
+          git config user.email "actions@users.noreply.github.com"
+          ls -la data/latest/ || echo "::error::data/latest missing"
+          git add -A data/
+          if git diff --cached --quiet; then
+            echo "::notice::no data changes to commit"
+          else
+            git commit -m "data: refresh snapshot $(date -u +%Y-%m-%dT%H:%MZ)" || echo "::error::git commit failed"
+            for i in 1 2 3; do
+              git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && break
+              echo "::warning::push attempt $i failed; retrying after rebase"
+              sleep $((i * 5))
+            done
+            git rev-parse HEAD | xargs echo "::notice::pushed HEAD"
+          fi
