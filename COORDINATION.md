@@ -417,3 +417,8 @@ Progress log:
 - 2026-11-20: claim committed and pushed (`fd85f0d`).
 - 2026-11-20: T1 and T2 completed as above; Pages API reported `built` at `b1f1dfd` after a build from `main`.
 - 2026-11-20: T3 PR opened and merged (see PR line below).
+## Session arena/09824fd8 — task claim
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| Add live price-swing alert feeds (all events + transparent model-watch shortlist) | in progress | `arena/09824fd8-demo3` | `dashboard.html`, `assets/dashboard.js`, `assets/style.css`, `tests/alerts.test.js`, `COORDINATION.md` | Official demo market API and docs linked in UI; implementation will compare successive live REST observations | Browser WS authentication cannot be added via browser handshake; use REST polling. Shortlist is a transparent heuristic, not validated ROI/personalized advice. |
