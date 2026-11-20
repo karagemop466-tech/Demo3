@@ -14,8 +14,368 @@
   "KXPRESNOMD-28-BOBA": {
    "topic": "elections",
    "resolved": false
+  },
+  "CONTROLH-2028-D": {
+   "topic": "other"
+  },
+  "CONTROLH-2028-R": {
+   "topic": "other"
+  },
+  "EVSHARE-30JAN-10": {
+   "topic": "other"
+  },
+  "EVSHARE-30JAN-104225F779692F43BC9753469AAC818A86": {
+   "topic": "other"
+  },
+  "EVSHARE-30JAN-1057AB9EF33E27488BBB7A96C0BA3CFBC4": {
+   "topic": "other"
+  },
+  "EVSHARE-30JAN-106B28BDCC40D146AA965AF9F57AB99090": {
+   "topic": "other"
+  },
+  "EVSHARE-30JAN-20": {
+   "topic": "other"
+  },
+  "EVSHARE-30JAN-204225F779692F43BC9753469AAC818A86": {
+   "topic": "other"
+  },
+  "EVSHARE-30JAN-2057AB9EF33E27488BBB7A96C0BA3CFBC4": {
+   "topic": "other"
+  },
+  "EVSHARE-30JAN-206B28BDCC40D146AA965AF9F57AB99090": {
+   "topic": "other"
+  },
+  "EVSHARE-30JAN-30": {
+   "topic": "other"
+  },
+  "EVSHARE-30JAN-304225F779692F43BC9753469AAC818A86": {
+   "topic": "other"
+  },
+  "EVSHARE-30JAN-3057AB9EF33E27488BBB7A96C0BA3CFBC4": {
+   "topic": "other"
+  },
+  "EVSHARE-30JAN-306B28BDCC40D146AA965AF9F57AB99090": {
+   "topic": "other"
+  },
+  "EVSHARE-30JAN-506B28BDCC40D146AA965AF9F57AB99090": {
+   "topic": "other"
+  },
+  "KXAAAGASD-28SEP16-2.5": {
+   "topic": "gas"
+  },
+  "KXAAAGASD-28SEP16-3": {
+   "topic": "gas"
+  },
+  "KXAAAGASD-28SEP16-3.5": {
+   "topic": "gas"
+  },
+  "KXAAAGASM-26DEC31-2.50": {
+   "topic": "gas"
+  },
+  "EVSHARE-30JAN-50": {
+   "topic": "other"
+  },
+  "KXAAAGASD-26NOV21-3.6550": {
+   "topic": "gas"
+  },
+  "KXAAAGASD-26NOV21-3.6600": {
+   "topic": "gas"
+  },
+  "KXAAAGASD-26NOV21-3.7200": {
+   "topic": "gas"
+  },
+  "KXAAAGASD-26NOV21-3.7250": {
+   "topic": "gas"
+  },
+  "KXAAAGASD-26NOV21-3.7300": {
+   "topic": "gas"
+  },
+  "KXAAAGASM-26DEC31-2.70": {
+   "topic": "gas"
+  },
+  "KXAAAGASM-26DEC31-2.90": {
+   "topic": "gas"
+  },
+  "KXAAAGASM-26DEC31-3.10": {
+   "topic": "gas"
+  },
+  "KXAAAGASM-26NOV30-4.40": {
+   "topic": "gas"
+  },
+  "KXAAAGASM-26NOV30-4.50": {
+   "topic": "gas"
+  },
+  "KXAAAGASM-26NOV30-4.60": {
+   "topic": "gas"
+  },
+  "KXAAAGASM-26NOV30-4.70": {
+   "topic": "gas"
+  },
+  "KXAAAGASM-26NOV30-4.80": {
+   "topic": "gas"
+  },
+  "KXAAAGASW-26NOV23-3.6000": {
+   "topic": "gas"
+  },
+  "KXAAAGASW-26NOV23-3.6200": {
+   "topic": "gas"
+  },
+  "KXAAAGASW-26NOV23-3.6600": {
+   "topic": "gas"
+  },
+  "KXAAAGASW-26NOV23-3.6800": {
+   "topic": "gas"
+  },
+  "KXBTCMAXMON-BTC-26NOV30-8500000": {
+   "topic": "crypto"
+  },
+  "KXBTCMAXMON-BTC-26NOV30-9000000": {
+   "topic": "crypto"
+  },
+  "KXBTCMAXMON-BTC-26NOV30-9250000": {
+   "topic": "crypto"
+  },
+  "KXBTCMAXMON-BTC-26NOV30-9500000": {
+   "topic": "crypto"
+  },
+  "KXBTCMAXMON-BTC-26NOV30-9750000": {
+   "topic": "crypto"
+  },
+  "KXBTCMAXY-26DEC31-109999.99": {
+   "topic": "crypto"
+  },
+  "KXBTCMAXY-26DEC31-119999.99": {
+   "topic": "crypto"
+  },
+  "KXBTCMAXY-26DEC31-139999.99": {
+   "topic": "crypto"
+  },
+  "KXBTCMAXY-26DEC31-199999.99": {
+   "topic": "crypto"
+  },
+  "KXBTCMAXY-26DEC31-99999.99": {
+   "topic": "crypto"
+  },
+  "KXBTCMINY-27JAN01-40000.00": {
+   "topic": "crypto"
+  },
+  "KXAAAGASM-26DEC31-3.30": {
+   "topic": "gas"
+  },
+  "KXAAAGASW-26NOV23-3.6400": {
+   "topic": "gas"
+  },
+  "KXBTCY-27JAN0100-B137500": {
+   "topic": "crypto"
+  },
+  "KXBTCY-27JAN0100-B142500": {
+   "topic": "crypto"
+  },
+  "KXDANCINGWITHTHESTARS-26DEC31-AGLE": {
+   "topic": "other"
+  },
+  "KXDANCINGWITHTHESTARS-26DEC31-CWOO": {
+   "topic": "other"
+  },
+  "KXDANCINGWITHTHESTARS-26DEC31-HSHU": {
+   "topic": "other"
+  },
+  "KXETHD-26NOV2017-T1619.99": {
+   "topic": "crypto"
+  },
+  "KXETHD-26NOV2017-T1659.99": {
+   "topic": "crypto"
+  },
+  "KXETHD-26NOV2017-T1739.99": {
+   "topic": "crypto"
+  },
+  "KXETHD-26NOV2017-T1779.99": {
+   "topic": "crypto"
+  },
+  "KXETHY-27JAN0100-B2875": {
+   "topic": "crypto"
+  },
+  "KXBTCMINY-27JAN01-45000.00": {
+   "topic": "crypto"
+  },
+  "KXBTCMINY-27JAN01-50000.00": {
+   "topic": "crypto"
+  },
+  "KXBTCMINY-27JAN01-55000.00": {
+   "topic": "crypto"
+  },
+  "KXBTCMINY-27JAN01-60000.00": {
+   "topic": "crypto"
+  },
+  "KXBTCY-27JAN0100-B117500": {
+   "topic": "crypto"
+  },
+  "KXBTCY-27JAN0100-B122500": {
+   "topic": "crypto"
+  },
+  "KXBTCY-27JAN0100-B42500": {
+   "topic": "crypto"
+  },
+  "KXDANCINGWITHTHESTARS-26DEC31-JSTIL": {
+   "topic": "other"
+  },
+  "KXDANCINGWITHTHESTARS-26DEC31-MHIG": {
+   "topic": "other"
+  },
+  "KXETHD-26NOV2016-T1609.99": {
+   "topic": "crypto"
+  },
+  "KXETHD-26NOV2016-T1614.99": {
+   "topic": "crypto"
+  },
+  "KXETHD-26NOV2016-T1619.99": {
+   "topic": "crypto"
+  },
+  "KXETHD-26NOV2016-T2539.99": {
+   "topic": "crypto"
+  },
+  "KXETHD-26NOV2016-T2544.99": {
+   "topic": "crypto"
+  },
+  "KXETHD-26NOV2017-T1579.99": {
+   "topic": "crypto"
+  },
+  "KXETHY-27JAN0100-B3125": {
+   "topic": "crypto"
+  },
+  "KXETHY-27JAN0100-B3875": {
+   "topic": "crypto"
+  },
+  "KXETHY-27JAN0100-B4125": {
+   "topic": "crypto"
+  },
+  "KXETHY-27JAN0100-T4999.99": {
+   "topic": "crypto"
+  },
+  "KXGOVAK-26-ACRU": {
+   "topic": "other"
+  },
+  "KXGOVAK-26-EDEV": {
+   "topic": "other"
+  },
+  "KXGOVAK-26-NDAH": {
+   "topic": "other"
+  },
+  "KXGOVAK-26-TTAY": {
+   "topic": "other"
+  },
+  "KXHORMUZNORM-26MAR17-B261201": {
+   "topic": "other"
+  },
+  "KXLPGATOUR-CMEGTC26-ALIKIM": {
+   "topic": "other"
+  },
+  "KXLPGATOUR-CMEGTC26-NELKOR": {
+   "topic": "other"
+  },
+  "KXLPGATOUR-CMEGTC26-PATTAV": {
+   "topic": "other"
+  },
+  "KXLPGATOUR-CMEGTC26-ROSZHA": {
+   "topic": "other"
+  },
+  "KXMAXSHARDINGTEST-27DEC2410-T130000": {
+   "topic": "crypto"
+  },
+  "KXGOVAK-26-TBEG": {
+   "topic": "other"
+  },
+  "KXHORMUZNORM-26MAR17-B270101": {
+   "topic": "other"
+  },
+  "KXHORMUZNORM-26MAR17-B270401": {
+   "topic": "other"
+  },
+  "KXHORMUZNORM-26MAR17-B270701": {
+   "topic": "other"
+  },
+  "KXLALIGASPREAD-26NOV20ATHESP-ATH2": {
+   "topic": "other"
+  },
+  "KXLALIGASPREAD-26NOV20ATHESP-ATH3": {
+   "topic": "other"
+  },
+  "KXLALIGASPREAD-26NOV20ATHESP-ESP2": {
+   "topic": "other"
+  },
+  "KXLALIGASPREAD-26NOV20ATHESP-ESP3": {
+   "topic": "other"
+  },
+  "KXLPGATOUR-CMEGTC26-PAJANA": {
+   "topic": "other"
+  },
+  "KXMAXSHARDINGTEST-27DEC2410-T110000": {
+   "topic": "crypto"
+  },
+  "KXMAXSHARDINGTEST-27DEC2410-T140000": {
+   "topic": "crypto"
+  },
+  "KXMAXSHARDINGTEST-27DEC2413-T90000": {
+   "topic": "crypto"
+  },
+  "KXMAXSHARDINGTEST-27DEC2414-T140000": {
+   "topic": "crypto"
+  },
+  "KXMAXSHARDINGTEST-27DEC2414-T150000": {
+   "topic": "crypto"
+  },
+  "KXMAXSHARDINGTEST-27DEC2415-T140000": {
+   "topic": "crypto"
+  },
+  "KXMAXSHARDINGTEST-27DEC2410-T170000": {
+   "topic": "crypto"
+  },
+  "KXMAXSHARDINGTEST-27DEC2410-T90000": {
+   "topic": "crypto"
+  },
+  "KXMAXSHARDINGTEST-27DEC2413-T130000": {
+   "topic": "crypto"
+  },
+  "KXMAXSHARDINGTEST-27DEC2413-T150000": {
+   "topic": "crypto"
+  },
+  "KXMAXSHARDINGTEST-27DEC2413-T160000": {
+   "topic": "crypto"
+  },
+  "KXMAXSHARDINGTEST-27DEC2413-T170000": {
+   "topic": "crypto"
+  },
+  "KXMAXSHARDINGTEST-27DEC2414-T130000": {
+   "topic": "crypto"
+  },
+  "KXMAXSHARDINGTEST-27DEC2414-T160000": {
+   "topic": "crypto"
+  },
+  "KXMAXSHARDINGTEST-27DEC2414-T170000": {
+   "topic": "crypto"
+  },
+  "KXMAXSHARDINGTEST-27DEC2415-T130000": {
+   "topic": "crypto"
+  },
+  "KXMAXSHARDINGTEST-27DEC2415-T160000": {
+   "topic": "crypto"
+  },
+  "KXMAXSHARDINGTEST-27DEC2415-T170000": {
+   "topic": "crypto"
+  },
+  "KXMAXSHARDINGTEST-27DEC2415-T90000": {
+   "topic": "crypto"
+  },
+  "KXMAXSHARDINGTEST-27DEC2417-T110000": {
+   "topic": "crypto"
+  },
+  "KXMAXSHARDINGTEST-27DEC2417-T130000": {
+   "topic": "crypto"
+  },
+  "KXMAXSHARDINGTEST-27DEC2417-T140000": {
+   "topic": "crypto"
   }
  },
- "updated_at": "2026-11-20T20:26:44Z",
+ "updated_at": "2026-11-20T20:40:37Z",
  "policy": "A market is polled until the API reports it settled/finalized with a result; then tracking stops and the yes/no outcome is kept."
 }
