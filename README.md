@@ -14,7 +14,7 @@ A GitHub Pages-friendly, read-only dashboard blueprint for Kalshi's **demo** Tra
 
 ## Run / publish
 
-Open `index.html` locally or enable GitHub Pages using **GitHub Actions**. The `executive-summary.html` page provides an on-site summary with a linked official-source index. `.github/workflows/pages.yml` builds and deploys the root site on pushes to `main` and on manual dispatch. This repository's Pages settings must allow GitHub Actions deployments.
+Open `index.html` locally. GitHub's Pages API currently reports this repository is configured to publish the root of `main` using its legacy branch build, at [karagemop466-tech.github.io/Demo3](https://karagemop466-tech.github.io/Demo3/). The dashboard and `executive-summary.html` will be served by that existing configuration after the changes reach `main`; no Actions deployment workflow is added, to avoid conflicting with the repository's current Pages mode. The `executive-summary.html` page provides an on-site summary with a linked official-source index.
 
 The live-data browser requests may be blocked by CORS, network policy, or demo service availability. If so, use the error state and consult the official API directly; no fabricated sample market rows are included.
 

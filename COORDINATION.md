@@ -4,7 +4,7 @@ Session: `arena/fb54d2f6-demo3` (current Arena branch; platform requires all wor
 
 | Task | Status | Owner / session | File scope |
 |---|---|---|---|
-| Repo review, official-source research, executive summary, dashboard and GitHub Pages integration | in progress | `arena/fb54d2f6-demo3` | `COORDINATION.md`, `README.md`, `index.html`, `executive-summary.html`, `styles.css`, `app.js`, `.github/` |
+| Repo review, official-source research, executive summary, dashboard and GitHub Pages integration | in progress | `arena/fb54d2f6-demo3` | `COORDINATION.md`, `README.md`, `index.html`, `executive-summary.html`, `styles.css`, `app.js`, `.gitignore` |
 
 ## Coordination constraints
 
@@ -16,5 +16,6 @@ This checkout is fixed to branch `arena/fb54d2f6-demo3`; no other branches/workt
 - Checked official Kalshi documentation for environment URLs, market and event schemas, orderbook response semantics, WebSocket authentication, portfolio balance/positions/fills, and demo order creation. Sources are linked in `README.md`, `executive-summary.html`, and in the applicable dashboard rows/sections.
 - Implemented a static, read-only monitor. It reports official API values only after successful fetches, links each rendered market/orderbook/resolution row to the official API record, keeps absent values blank, and labels category discovery as heuristic. Dollar-volume ranking and authenticated account/trading capabilities remain explicitly unimplemented and flagged.
 - Local checks passed: `node --check app.js`; `git diff --check`; parsed both HTML pages to check duplicate IDs and local links; served both pages locally and confirmed HTTP responses/title tags. Dynamic browser CORS/live demo responses remain unverified due the restricted external network available to this session; the UI surfaces failure rather than using fixtures.
+- The GitHub Pages API reports this repository already publishes the root of `main` using its legacy branch build at `https://karagemop466-tech.github.io/Demo3/`. No Actions deployment workflow was added, to avoid conflicting with that existing mode.
 - No other session claims were present. Claim commit was pushed after rebasing on `origin/main` because the newly created remote branch did not initially exist for the requested branch-specific pull.
-- GitHub Pages deployment and live-site URL are pending PR merge and workflow completion; keep this task in progress until confirmed.
+- PR and legacy Pages publication are pending; keep this task in progress until the merge and successful deploy are confirmed.
