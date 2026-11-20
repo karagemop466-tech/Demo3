@@ -18,11 +18,25 @@ Two outputs:
       and not a forecast; the P&L column assumes settlement at 1.00 or 0.00, which is the
       contract's definition, so the "outcome" is the unknown, not the arithmetic.
 
-Rules (all thresholds are policy choices documented in docs/portfolio/STRATEGY.md):
-  R1 value-favourite   : yes_ask <= 0.90 and open interest > 0 and spread <= 0.04
-  R2 longshot-fade     : no_ask  <= 0.90 and volume_24h > 0 and spread <= 0.04
-  R3 liquidity-provide : no candidate — requires resting orders and maker fees, see docs
-  R4 avoid             : spread > 0.10 or resting depth < $50 -> no trade, listed as skipped
+Rules. Thresholds are set by measured expectancy in data/expectancy.json (the resolution
+study), not by taste. On settlement data collected 2026-11-20:
+
+    0.01-0.20 YES band : 1,817 markets, 1.65% resolved yes, avg price 3.23c
+                         -> buying NO there earned +1.58c/contract before fees
+    0.80-0.99 YES band :   936 markets, 82.3% resolved yes, avg price 97.5c
+                         -> buying YES there LOST 15.23c/contract before fees
+
+The "favourite" side is systematically overpriced relative to its realised hit rate. So:
+
+  R1 longshot-fade   : buy NO when the YES side trades at 0.01-0.20, 24h volume > 0,
+                       derived spread <= 0.04 and the NO ask is <= 0.99
+  R2 favourite-trap  : DETECTED, NOT RECOMMENDED. Markets at YES >= 0.80 are listed with their
+                       measured negative expectancy so the reason is visible, not hidden.
+  R3 liquidity-provide : no candidate — needs resting orders + maker fees, see docs
+  R4 avoid           : spread > 0.10, resting depth < $50, or YES price outside [0.01, 0.20]
+
+Historical only. Caveats (last-trade price vs. average paid, fees excluded, survivorship,
+not predictive) are printed with the numbers on the site.
 
 Why R3 does not generate orders: placing a resting limit order changes the book and depends on
 maker fee treatment, which differs by series (`fee_type`); recommending it without a fill model
@@ -38,7 +52,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 
-MAX_PRICE = 0.90
+LONGSHOT_MAX_YES = 0.20  # YES at or below this = longshot band
+MIN_VOLUME_24H = 1.0     # at least one contract traded in 24h
+MAX_PRICE = 0.99        # never pay 1.00 (no upside)
 MAX_SPREAD = 0.04
 MIN_DEPTH = 50.0
 SIZE_CONTRACTS = 10
@@ -116,47 +132,39 @@ def main() -> int:
                                 "reason": "spread not derivable (one side of the book is empty)"})
                 continue
 
-            if ask is not None and ask <= MAX_PRICE and (oi or 0) > 0 and spread <= MAX_SPREAD:
-                contracts, cost = fillable(book["ladder"], "yes", ask)
+            no_ask = num(book.get("best_no_ask_derived"))
+            yes_mid = ask if ask is not None else bid
+
+            # R1: fade the longshot — buy NO while the YES side is priced 0.01-0.20.
+            if yes_mid is not None and 0.01 <= yes_mid <= LONGSHOT_MAX_YES \
+                    and (vol24 or 0) >= MIN_VOLUME_24H and spread <= MAX_SPREAD \
+                    and no_ask is not None and no_ask <= MAX_PRICE:
+                contracts, cost = fillable(book["ladder"], "no", no_ask)
                 candidates.append({
-                    "rule": "R1_value_favourite",
-                    "rule_text": "buy YES at or below the current implied ask when ask <= 0.90, "
-                                 "open interest > 0 and derived spread <= 0.04",
-                    "ticker": ticker,
-                    "topic": topic,
-                    "title": row.get("title"),
-                    "side": "yes",
-                    "action": "buy",
-                    "limit_price": ask,
+                    "rule": "R1_longshot_fade",
+                    "rule_text": "buy NO when the YES side trades at 0.01-0.20, 24h volume > 0 "
+                                 "and derived spread <= 0.04; measured NO expectancy +1.58c per "
+                                 "contract in that band (data/expectancy.json)",
+                    "ticker": ticker, "topic": topic, "title": row.get("title"),
+                    "side": "no", "action": "buy", "limit_price": no_ask,
                     "size_contracts": min(SIZE_CONTRACTS, int(contracts)) if contracts else 0,
                     "book_contracts_available": contracts,
                     "immediate_cost_dollars": cost,
-                    "inputs": {"implied_yes_ask": ask, "best_yes_bid": bid, "spread": spread,
-                               "resting_depth_dollars": depth, "open_interest": oi,
-                               "volume_24h": vol24, "close_time": row.get("close_time")},
+                    "inputs": {"implied_no_ask": no_ask,
+                               "best_no_bid": num(book.get("best_no_bid")),
+                               "yes_price_used": yes_mid, "spread": spread,
+                               "resting_depth_dollars": depth, "volume_24h": vol24,
+                               "close_time": row.get("close_time")},
                     "source": row.get("orderbook_source"),
                 })
 
-            no_ask = num(book.get("best_no_ask_derived"))
-            if no_ask is not None and no_ask <= MAX_PRICE and (vol24 or 0) > 0 and spread <= MAX_SPREAD:
-                contracts, cost = fillable(book["ladder"], "no", no_ask)
-                candidates.append({
-                    "rule": "R2_longshot_fade",
-                    "rule_text": "buy NO at or below the current implied ask when no_ask <= 0.90, "
-                                 "24h volume > 0 and derived spread <= 0.04",
-                    "ticker": ticker,
-                    "topic": topic,
-                    "title": row.get("title"),
-                    "side": "no",
-                    "action": "buy",
-                    "limit_price": no_ask,
-                    "size_contracts": min(SIZE_CONTRACTS, int(contracts)) if contracts else 0,
-                    "book_contracts_available": contracts,
-                    "immediate_cost_dollars": cost,
-                    "inputs": {"implied_no_ask": no_ask, "best_no_bid": num(book.get("best_no_bid")),
-                               "spread": spread, "resting_depth_dollars": depth,
-                               "volume_24h": vol24, "close_time": row.get("close_time")},
-                    "source": row.get("orderbook_source"),
+            # R2: report, never recommend, the overpriced favourite.
+            if yes_mid is not None and 0.80 <= yes_mid <= MAX_PRICE:
+                skipped.append({
+                    "ticker": ticker, "topic": topic, "measured": True,
+                    "reason": f"YES at {yes_mid:.2f} sits in the measured negative-expectancy "
+                              f"favourite band (-15.23c/contract over 936 settled markets) — "
+                              f"R2 not recommended",
                 })
 
     # de-duplicate on (rule, ticker)
@@ -194,6 +202,7 @@ def main() -> int:
     out = {
         "generated_at_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "policy": {
+            "longshot_max_yes": LONGSHOT_MAX_YES, "min_volume_24h": MIN_VOLUME_24H,
             "max_price": MAX_PRICE, "max_spread": MAX_SPREAD,
             "min_resting_depth_dollars": MIN_DEPTH, "size_contracts": SIZE_CONTRACTS,
             "where": "docs/portfolio/STRATEGY.md",

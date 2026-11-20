@@ -39,9 +39,16 @@ RESOLUTION_KEEP_DAYS = 45
 
 
 def load(path: Path, default):
+    """Load JSON, treating missing/empty/corrupt files as `default`."""
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
+        text = path.read_text(encoding="utf-8").strip()
+    except OSError:
+        return default
+    if not text:
+        return default
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
         return default
 
 
@@ -106,6 +113,13 @@ def main() -> int:
     demo = load(DATA / "live.json", {})
     prod = load(DATA / "live-prod.json", {})
     resolutions = load(DATA / "resolutions.json", {"rows": []})
+
+    # Guard: an empty input set must never overwrite good committed artifacts.
+    if not demo.get("markets") and not prod.get("markets"):
+        print("SKIP: data/live.json and data/live-prod.json are missing or empty (they are "
+              "git-ignored and only exist on a runner that just collected them). Refusing to "
+              "overwrite the committed artifacts with empty output.")
+        return 0
     meta_demo = demo.get("meta", {})
     meta_prod = prod.get("meta", {})
 
@@ -404,6 +418,27 @@ def build_report(demo, prod, rows, ladders, tables, topics_cfg) -> dict:
         "median_yes_spread": round(statistics.median(spreads), 4) if spreads else None,
     }
 
+    # measured expectancy study (computed by analysis/expectancy.py)
+    exp_path = DATA / "expectancy.json"
+    exp = load(exp_path, None)
+    if isinstance(exp, dict) and exp.get("buckets"):
+        out["resolution_study"] = {k: exp.get(k) for k in
+                                   ("formula", "input", "rows_usable", "rows_excluded", "buckets",
+                                    "favourite_band_0_80_to_0_99", "longshot_band_0_01_to_0_20",
+                                    "all_rows", "caveats")}
+
+    # strategy candidates generated from the current book (analysis/strategies.py)
+    rules = load(DATA / "order-rules.json", None)
+    if isinstance(rules, dict):
+        out["strategy_candidates"] = {
+            "policy": rules.get("policy"),
+            "count": len(rules.get("candidates") or []),
+            "simulation": (rules.get("simulation") or {}).get("summary"),
+            "skipped": len(rules.get("skipped") or []),
+            "measured_skips": sum(1 for s in (rules.get("skipped") or []) if s.get("measured")),
+            "disclaimer": (rules.get("simulation") or {}).get("disclaimer"),
+        }
+
     # data quality
     out["data_quality"] = {
         "markets_with_missing_fields": sum(1 for m in demo_markets if m.get("_missing")),
@@ -484,6 +519,42 @@ def render_md(report: dict) -> str:
     for t, c in report["resolutions"]["by_topic"].items():
         lines.append(f"| {t} | {c.get('yes', 0)} | {c.get('no', 0)} | {c.get('scalar', 0)} | {c.get('blank', 0)} |")
     lag = report["settlement_lag_hours"]
+    rs = report.get("resolution_study") or {}
+    if rs.get("buckets"):
+        lines += ["", "## Resolution study: realised outcome vs. price", "",
+                  f"_{rs['formula']}_", "",
+                  f"Input: {rs['input']} — usable rows {rs['rows_usable']:,}, excluded "
+                  f"{rs['rows_excluded']}.", "",
+                  "| YES price band | n | resolved yes | win rate | avg YES price | YES expectancy / contract | NO expectancy / contract |",
+                  "|---|---|---|---|---|---|---|"]
+        for b in rs["buckets"]:
+            if not b.get("n"):
+                lines.append(f"| {b['bucket']} | 0 | — | — | — | — | — |")
+                continue
+            lines.append(f"| {b['bucket']} | {b['n']:,} | {b['yes']:,} | {b['win_rate_yes']:.2%} | "
+                         f"{b['avg_yes_price']:.4f} | {b['yes_expectancy_per_contract']:+.4f} | "
+                         f"{b['no_expectancy_per_contract']:+.4f} |")
+        for key, label in (("favourite_band_0_80_to_0_99", "0.80-0.99 favourite band"),
+                           ("longshot_band_0_01_to_0_20", "0.01-0.20 longshot band"),
+                           ("all_rows", "all settled rows")):
+            band = rs.get(key)
+            if band:
+                lines += ["", f"**{label}**: n={band['n']:,}, win rate {band['win_rate_yes']:.2%}, "
+                              f"avg price {band['avg_yes_price']:.4f}, YES expectancy "
+                              f"{band['yes_expectancy_per_contract']:+.4f}/contract, NO expectancy "
+                              f"{band['no_expectancy_per_contract']:+.4f}/contract."]
+        lines += ["", "Caveats:"] + [f"- {c}" for c in rs.get("caveats", [])]
+
+    sc = report.get("strategy_candidates") or {}
+    if sc.get("policy"):
+        lines += ["", "## Strategy candidates from the current order book", "",
+                  f"Policy: `{json.dumps(sc['policy'])}`", "",
+                  f"- candidates that survived the rules: **{sc.get('count')}**",
+                  f"- markets skipped, including {sc.get('measured_skips')} rejected because they "
+                  f"sit in the measured negative-expectancy favourite band",
+                  f"- simulation: `{json.dumps(sc.get('simulation'))}`", "",
+                  sc.get("disclaimer") or ""]
+
     lines += ["", "## Settlement timing", "", f"_{lag['formula']}_", "",
               f"- observations: {lag['n']}", f"- median: {lag['median']} h",
               f"- mean: {lag['mean']} h", f"- p90: {lag['p90']} h",
