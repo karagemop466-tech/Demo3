@@ -1,0 +1,318 @@
+{
+  "calibration_feasibility": {
+    "candle_markets_available": 12,
+    "conclusion": "insufficient: a >= $0.10 move has to be measured BEFORE the settlement print. The settled snapshot carries only `previous_price_dollars` and `last_price_dollars`, and 341 of its 341 qualifying moves have a prior price below $0.05 - the field is not a tick-by-tick price path. Recorded candles cover 12 markets, so no threshold can be fitted or back-tested on this data. Publishing a calibrated ROI number here would be a fabrication.",
+    "min_series_for_calibration": 30,
+    "n_swing_with_prior_below_0_05": 341,
+    "prior_band_recount": 1
+  },
+  "caveats": [
+    "Demo environment only (mock funds). Kalshi warns demo prices and behaviour may not reflect real markets: https://docs.kalshi.com/getting_started/demo_env",
+    "Entry-price proxy is `last_price_dollars` on a settled market, i.e. the last trade before resolution; it is not an achievable fill for a live alert. Figures are descriptive of the snapshot, not a forecast.",
+    "ROI of a winning YES contract uses the $1.00 payout per https://docs.kalshi.com/getting_started/market_settlement; fees are not modelled because the docs do not state a demo fee schedule (board flag ST-U1).",
+    "Every rate above is a raw count on the snapshot; n < 25 in a band means that band is not reported as a rate at all (reported=false).",
+    "The screen ranks events to look at. It is not investment advice and not a verified return model."
+  ],
+  "docs": {
+    "demo_env": "https://docs.kalshi.com/getting_started/demo_env",
+    "get_candlesticks": "https://docs.kalshi.com/api-reference/market/get-market-candlesticks",
+    "get_event": "https://docs.kalshi.com/api-reference/events/get-event",
+    "get_markets": "https://docs.kalshi.com/api-reference/market/get-markets",
+    "market_settlement": "https://docs.kalshi.com/getting_started/market_settlement"
+  },
+  "examples": [
+    {
+      "change": 0.15,
+      "last": 0.15,
+      "prev": 0.0,
+      "result": "no",
+      "settlement_value_dollars": 0.0,
+      "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTCD-26NOV2007-T61899.99",
+      "ticker": "KXBTCD-26NOV2007-T61899.99",
+      "topic": "crypto"
+    },
+    {
+      "change": 0.17,
+      "last": 0.17,
+      "prev": 0.0,
+      "result": "no",
+      "settlement_value_dollars": 0.0,
+      "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTCD-26NOV2004-T61999.99",
+      "ticker": "KXBTCD-26NOV2004-T61999.99",
+      "topic": "crypto"
+    },
+    {
+      "change": 0.79,
+      "last": 0.79,
+      "prev": 0.0,
+      "result": "no",
+      "settlement_value_dollars": 0.0,
+      "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTCD-26NOV2007-T61699.99",
+      "ticker": "KXBTCD-26NOV2007-T61699.99",
+      "topic": "crypto"
+    },
+    {
+      "change": 0.65,
+      "last": 0.65,
+      "prev": 0.0,
+      "result": "no",
+      "settlement_value_dollars": 0.0,
+      "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXETHD-26NOV2012-T1634.99",
+      "ticker": "KXETHD-26NOV2012-T1634.99",
+      "topic": "crypto"
+    },
+    {
+      "change": 0.71,
+      "last": 0.71,
+      "prev": 0.0,
+      "result": "no",
+      "settlement_value_dollars": 0.0,
+      "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXETHD-26NOV2012-T1629.99",
+      "ticker": "KXETHD-26NOV2012-T1629.99",
+      "topic": "crypto"
+    },
+    {
+      "change": 0.58,
+      "last": 0.58,
+      "prev": 0.0,
+      "result": "no",
+      "settlement_value_dollars": 0.0,
+      "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXETHD-26NOV2012-T1639.99",
+      "ticker": "KXETHD-26NOV2012-T1639.99",
+      "topic": "crypto"
+    },
+    {
+      "change": 0.94,
+      "last": 0.94,
+      "prev": 0.0,
+      "result": "no",
+      "settlement_value_dollars": 0.0,
+      "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTCD-26NOV2008-T61399.99",
+      "ticker": "KXBTCD-26NOV2008-T61399.99",
+      "topic": "crypto"
+    },
+    {
+      "change": 0.15,
+      "last": 0.15,
+      "prev": 0.0,
+      "result": "no",
+      "settlement_value_dollars": 0.0,
+      "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTCD-26NOV2006-T62099.99",
+      "ticker": "KXBTCD-26NOV2006-T62099.99",
+      "topic": "crypto"
+    },
+    {
+      "change": 0.83,
+      "last": 0.83,
+      "prev": 0.0,
+      "result": "no",
+      "settlement_value_dollars": 0.0,
+      "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTCD-26NOV2010-T61199.99",
+      "ticker": "KXBTCD-26NOV2010-T61199.99",
+      "topic": "crypto"
+    },
+    {
+      "change": 0.81,
+      "last": 0.81,
+      "prev": 0.0,
+      "result": "no",
+      "settlement_value_dollars": 0.0,
+      "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTCD-26NOV2011-T59699.99",
+      "ticker": "KXBTCD-26NOV2011-T59699.99",
+      "topic": "crypto"
+    }
+  ],
+  "generated_by": "model/build_roi_model.py",
+  "inputs": {
+    "candle_snapshot": {
+      "path": "data/latest/candles.json",
+      "sha256": "240eadf8ad403bbc81b98a4ccebab5808d2fb796a6b1c3c23d5aac1672e0c49b"
+    },
+    "settled_snapshot": {
+      "official_endpoint": "https://external-api.demo.kalshi.co/trade-api/v2/markets?status=settled",
+      "path": "data/latest/markets_settled.json",
+      "retrieved_at": "2026-11-20T19:51:43+00:00",
+      "sha256": "86d401131b5bb85b6116284549aa3af22098658baad6387cbd2ab3fc1864348c"
+    }
+  },
+  "measured": {
+    "base_rate_all_settled": {
+      "mean_roi_buy_yes": 1.0694,
+      "median_entry_dollars": 0.0,
+      "n": 22052,
+      "p_yes": 0.0812
+    },
+    "by_topic": [
+      {
+        "mean_roi_buy_yes": 1.7532,
+        "median_entry_dollars": 0.3,
+        "n": 137,
+        "n_settled": 3963,
+        "n_swing": 137,
+        "p_yes": 0.9927,
+        "reported": true,
+        "topic": "gas"
+      },
+      {
+        "mean_roi_buy_yes": null,
+        "median_entry_dollars": null,
+        "n": 0,
+        "n_settled": 25,
+        "n_swing": 0,
+        "p_yes": null,
+        "reported": false,
+        "topic": "elections"
+      },
+      {
+        "mean_roi_buy_yes": null,
+        "median_entry_dollars": null,
+        "n": 0,
+        "n_settled": 166,
+        "n_swing": 0,
+        "p_yes": null,
+        "reported": false,
+        "topic": "culture"
+      },
+      {
+        "mean_roi_buy_yes": -1.0,
+        "median_entry_dollars": 0.605,
+        "n": 204,
+        "n_settled": 14008,
+        "n_swing": 204,
+        "p_yes": 0.0,
+        "reported": true,
+        "topic": "crypto"
+      },
+      {
+        "mean_roi_buy_yes": null,
+        "median_entry_dollars": null,
+        "n": 0,
+        "n_settled": 3890,
+        "n_swing": 0,
+        "p_yes": null,
+        "reported": false,
+        "topic": "golf"
+      }
+    ],
+    "down_swing": {
+      "mean_roi_buy_yes": null,
+      "median_entry_dollars": null,
+      "n": 0,
+      "p_yes": null
+    },
+    "n_other_topic_settled": 0,
+    "n_other_topic_swing": 0,
+    "swing_market_counts": {
+      "n_down_swing": 0,
+      "n_swing": 341,
+      "n_up_swing": 341,
+      "share_of_settled": 0.0155,
+      "swing_threshold_dollars": 0.1
+    },
+    "universe": {
+      "n_records_in_file": 22052,
+      "n_usable": 22052,
+      "skipped": {
+        "no_last": 0,
+        "no_previous": 0,
+        "no_result": 0
+      }
+    },
+    "up_swing": {
+      "mean_roi_buy_yes": 0.1061,
+      "median_entry_dollars": 0.34,
+      "n": 341,
+      "p_yes": 0.3988
+    },
+    "up_swing_by_prior_band": [
+      {
+        "mean_roi_buy_yes": 0.1061,
+        "median_entry_dollars": 0.34,
+        "n": 341,
+        "p_yes": 0.3988,
+        "prior_band": [
+          0.0,
+          0.05
+        ],
+        "reported": true
+      },
+      {
+        "mean_roi_buy_yes": null,
+        "median_entry_dollars": null,
+        "n": 0,
+        "p_yes": null,
+        "prior_band": [
+          0.05,
+          0.1
+        ],
+        "reported": false
+      },
+      {
+        "mean_roi_buy_yes": null,
+        "median_entry_dollars": null,
+        "n": 0,
+        "p_yes": null,
+        "prior_band": [
+          0.1,
+          0.3
+        ],
+        "reported": false
+      },
+      {
+        "mean_roi_buy_yes": null,
+        "median_entry_dollars": null,
+        "n": 0,
+        "p_yes": null,
+        "prior_band": [
+          0.3,
+          0.5
+        ],
+        "reported": false
+      },
+      {
+        "mean_roi_buy_yes": null,
+        "median_entry_dollars": null,
+        "n": 0,
+        "p_yes": null,
+        "prior_band": [
+          0.5,
+          0.7
+        ],
+        "reported": false
+      },
+      {
+        "mean_roi_buy_yes": null,
+        "median_entry_dollars": null,
+        "n": 0,
+        "p_yes": null,
+        "prior_band": [
+          0.7,
+          0.9
+        ],
+        "reported": false
+      },
+      {
+        "mean_roi_buy_yes": null,
+        "median_entry_dollars": null,
+        "n": 0,
+        "p_yes": null,
+        "prior_band": [
+          0.9,
+          1.01
+        ],
+        "reported": false
+      }
+    ]
+  },
+  "schema_version": 1,
+  "screen": {
+    "description": "Deterministic screen for the second scrolling chat. A swing alert is admitted only when the price move is at least $0.10 in either direction (the brief's threshold) AND the move is at least 10% of the prior price, so a 1c->11c jump on a longshot is not treated the same as a 45c->55c jump on a coin-flip. No edge is claimed.",
+    "id": "roi-screen-v1",
+    "params": {
+      "min_abs_swing_dollars": 0.1,
+      "min_move_pct_of_prior": 0.1
+    },
+    "status": "uncalibrated-thresholds",
+    "status_note": "The 10%-of-prior parameter is a stated choice, not a fitted value: the committed demo data cannot fit or validate it (see calibration_feasibility). The chat labels every admitted row with this status instead of implying a validated model."
+  }
+}
