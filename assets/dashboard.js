@@ -13,8 +13,8 @@
     samples: {}, candles: [], orderbook: null, trades: [],
     windowSec: 3600, scanSec: 20, obSec: 10,
     timers: [], resolutions: [], fills: [],
-    connected: false, lastScan: null, errors: 0, scanInProgress: false,
-    known: {}, resolveQueue: [], resolveChecking: false
+    watch: {},
+    connected: false, lastScan: null, errors: 0, scanInProgress: false
   };
   try { state.resolutions = JSON.parse(localStorage.getItem("kd_resolutions") || "[]"); }
   catch (e) { state.resolutions = []; }
@@ -138,12 +138,21 @@
         return (b.volDollars || 0) - (a.volDollars || 0) ||
           (b.oiDollars || 0) - (a.oiDollars || 0);
       });
+      // Watch every market we see so it is followed until it resolves (pollResolutions).
+      state.markets.forEach(function (m) {
+        if (!state.watch[m.ticker]) {
+          state.watch[m.ticker] = { ticker: m.ticker, title: m.title, topic: m.topic,
+            series: m.series_ticker, event_ticker: m.event_ticker,
+            rules_primary: m.rules_primary };
+          var keys = Object.keys(state.watch);
+          if (keys.length > 600) delete state.watch[keys[0]]; // FIFO cap
+        }
+      });
       state.lastScan = Date.now();
       renderRanking();
       recordSamples();
       trackResolutions();
-      registerKnown();
-      checkResolutions();
+      pollResolutions();
       if (window.KD && window.KD.onMarkets) { try { window.KD.onMarkets(state.markets); } catch (e) { /* alert sink must not break the scan */ } }
       var capNote = depth > 0 ? ("top " + depth + " matched series per topic") : "ALL matched series";
       $("scanStatus").textContent = "Last scan: " + new Date().toLocaleTimeString() +
@@ -385,85 +394,81 @@
     } catch (e) { showError(e); }
   }
 
-  /* ---------- 4. Resolution tracking (yes / no) ---------- */
-  function trackResolutions(extra) {
-    var changed = false;
-    state.markets.concat(extra || []).forEach(function (m) {
-      if ((m.status === "closed" || m.status === "settled" || m.status === "finalized") &&
-          m.result &&
-          !state.resolutions.find(function (r) { return r.ticker === m.ticker; })) {
-        state.resolutions.push({ ticker: m.ticker, title: m.title, topic: m.topic,
-          result: String(m.result).toLowerCase(), status: m.status,
-          ts: Math.floor(Date.now() / 1000),
-          event_ticker: m.event_ticker || "", series_ticker: m.series_ticker || "" });
-        changed = true;
-      }
-    });
-    if (changed) {
-      localStorage.setItem("kd_resolutions", JSON.stringify(state.resolutions));
-      renderResolutions();
+  /* ---------- 4. Resolution tracking (yes / no) ----------
+   * The brief: follow tracked events until they resolve and show how each one
+   * resolved (yes/no). Scans only request status=open markets (Get Markets), so
+   * a market that resolves would vanish before we could observe it. To close
+   * that gap every market ever seen goes on a watchlist and is re-checked in
+   * batches via GET /markets?tickers=A,B,C&limit=1000 (`tickers` is a
+   * comma-separated list; `limit` default 100, max 1000). The `result` field
+   * ("yes" | "no") is the settlement source of truth — never inferred.
+   * Sources: https://docs.kalshi.com/api-reference/market/get-markets
+   *          https://docs.kalshi.com/getting_started/market_settlement
+   */
+  function logResolution(m) {
+    if (state.resolutions.find(function (r) { return r.ticker === m.ticker; })) return false;
+    var res = { ticker: m.ticker, title: m.title, topic: m.topic,
+      result: String(m.result).toLowerCase(), status: m.status,
+      ts: Math.floor(Date.now() / 1000),
+      event_ticker: m.event_ticker || "", series_ticker: m.series_ticker || "" };
+    state.resolutions.push(res);
+    try { localStorage.setItem("kd_resolutions", JSON.stringify(state.resolutions)); } catch (e) {}
+    renderResolutions();
+    if (window.KD && window.KD.onResolution) {
+      try {
+        window.KD.onResolution({ ticker: res.ticker, title: res.title, topic: res.topic,
+          result: res.result, status: res.status, ts: res.ts,
+          event_ticker: res.event_ticker, series: res.series_ticker,
+          settlement_value_dollars: m.settlement_value,
+          settlement_ts: m.settlement_ts,
+          rules_primary: m.rules_primary });
+      } catch (e) { /* alert sink must not break resolution tracking */ }
     }
+    return true;
+  }
+  function notifyResolutions() {
     if (T && T.markResolutions) {
       T.markResolutions(state.resolutions.concat(seededResolutionList()));
     }
   }
-  /* ---------- 4b. Resolution watch list (feeds the alert chat) ----------
-   * Open scans never return settled markets (query status=open returns
-   * status "active" records only — verified live 2026-11-20), so a market
-   * that resolves disappears before the chat could see it. Keep every ticker
-   * this page has seen and, once per scan, batch re-check up to 50 with
-   * GET /markets?tickers=a,b,… (verified live 2026-11-20: the reply includes
-   * finalized records with result "yes"/"no", settlement_ts and
-   * settlement_value_dollars). Resolved rows go to the tracker above; the
-   * alert chats run their own 20 s resolution watch for alerted markets
-   * inside assets/alerts.js (KD.pollResolutions).
-   * Sources: https://docs.kalshi.com/api-reference/market/get-markets
-   *          https://docs.kalshi.com/getting_started/market_settlement
-   */
-  function registerKnown() {
-    var now = Date.now();
+  function trackResolutions() {
     state.markets.forEach(function (m) {
-      if (m.ticker) state.known[m.ticker] = { row: m, seen: now };
-    });
-    var keys = Object.keys(state.known);
-    if (keys.length > 800) {
-      keys.sort(function (a, b) { return state.known[a].seen - state.known[b].seen; });
-      keys.slice(0, keys.length - 800).forEach(function (k) { delete state.known[k]; });
-    }
-    state.markets.forEach(function (m) {
-      if (m.ticker && state.resolveQueue.indexOf(m.ticker) === -1 &&
-          !state.resolutions.find(function (r) { return r.ticker === m.ticker; })) {
-        state.resolveQueue.push(m.ticker);
+      if ((m.status === "closed" || m.status === "settled" || m.status === "finalized") &&
+          m.result) {
+        logResolution(m);
       }
     });
+    notifyResolutions();
   }
-  async function checkResolutions() {
-    if (state.resolveChecking || !state.resolveQueue.length) return;
-    state.resolveChecking = true;
-    var batch = state.resolveQueue.splice(0, 50);
+  var pollBusy = false;
+  async function pollResolutions() {
+    if (pollBusy) return;
+    pollBusy = true;
     try {
-      var j = await K.apiGet("/markets", { tickers: batch.join(","), limit: 100 });
-      var rows = (j && j.markets) || [];
-      var seenInBatch = {};
-      var settled = [];
-      rows.forEach(function (raw) {
-        seenInBatch[raw.ticker] = true;
-        var known = state.known[raw.ticker];
-        raw._topic = known ? known.row.topic : "";
-        var m = marketRow(raw);
-        var res = String(m.result || "").toLowerCase();
-        var isRes = (res === "yes" || res === "no") &&
-          (m.status === "finalized" || m.status === "settled" || m.status === "closed");
-        if (isRes) settled.push(m);
-        else if (state.resolveQueue.indexOf(m.ticker) === -1) state.resolveQueue.push(m.ticker);
+      var pending = Object.keys(state.watch).filter(function (t) {
+        return !state.resolutions.find(function (r) { return r.ticker === t; });
       });
-      batch.forEach(function (t) {
-        if (!seenInBatch[t] && state.resolveQueue.indexOf(t) === -1) state.resolveQueue.push(t);
-      });
-      if (settled.length) trackResolutions(settled);
-    } catch (e) {
-      batch.forEach(function (t) { if (state.resolveQueue.indexOf(t) === -1) state.resolveQueue.push(t); });
-    } finally { state.resolveChecking = false; }
+      for (var i = 0; i < pending.length; i += 100) {
+        var chunk = pending.slice(i, i + 100);
+        try {
+          var j = await K.apiGet("/markets", { tickers: chunk.join(","), limit: 1000 });
+          (j.markets || []).forEach(function (m) {
+            var row = marketRow(m);
+            var w = state.watch[row.ticker];
+            if (w) {
+              if (!row.topic) row.topic = w.topic;
+              if (!row.event_ticker) row.event_ticker = w.event_ticker;
+              if (!row.series_ticker) row.series_ticker = w.series;
+              if (!row.rules_primary) row.rules_primary = w.rules_primary;
+            }
+            if ((m.result === "yes" || m.result === "no") && logResolution(row)) {
+              delete state.watch[row.ticker];
+            }
+          });
+        } catch (e) { /* one failed batch must not stop the rest */ }
+      }
+      notifyResolutions();
+    } finally { pollBusy = false; }
   }
   var seeded = [];
   function seededResolutionList() { return seeded; }
@@ -648,7 +653,8 @@
       }, state.obSec * 1000),
       setInterval(function () {
         if (state.selected) { recordSamples(); loadCandles().then(drawChart); }
-      }, 15000)
+      }, 15000),
+      setInterval(pollResolutions, 45000) // follow watched markets to resolution
     ];
   }
   async function init() {
