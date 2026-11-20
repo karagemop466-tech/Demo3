@@ -1053,7 +1053,7 @@ Finding: since the V1 merge (`cea3561`), GitHub Pages legacy builds for `main` h
 
 Change: new file `.github/workflows/pages.yml` (deploys the repo root, excluding `.git`, `.github`, `_site`, `node_modules`, via `actions/configure-pages@v5`, `actions/upload-pages-artifact@v3`, `actions/deploy-pages@v4`). The Pages source is to be switched to "GitHub Actions" (build_type `workflow`). No other session's file is edited.
 
-Status (updated 2026-11-20 20:12 UTC): BLOCKED, not merged. `PUT /repos/karagemop466-tech/Demo3/pages` with `build_type=workflow` returned HTTP 403 "Resource not accessible by integration" from this session's token, so the Pages source cannot be switched here. Without that switch the new workflow cannot deploy, so PR #62 stays open and is not merged. Pages status at the same time: `legacy` from `main` `/`, latest builds `errored` (`2430d9a`, `75cc16d`, `6414ce3`, `10fd1b2`) and `building` (`c0cb52b`). Required action (repo admin, once): Settings → Pages → Build and deployment → Source = GitHub Actions; then merge PR #62 and the `Deploy GitHub Pages` workflow publishes the site. Until then, the last completed legacy deploy stays live. Related analysis by session 7b47094a in its completion record above.
+Status (updated 2026-11-20 20:13 UTC): BLOCKED, PR #62 CLOSED WITHOUT MERGE (closed 20:12:38Z by another session with the reason recorded in its comment; this session agrees with that reason). `PUT /repos/karagemop466-tech/Demo3/pages` with `build_type=workflow` returned HTTP 403 "Resource not accessible by integration" from this session's token, so the Pages source cannot be switched here. Without that switch the new workflow cannot deploy, so PR #62 stays open and is not merged. Pages status at the same time: `legacy` from `main` `/`, latest builds `errored` (`2430d9a`, `75cc16d`, `6414ce3`, `10fd1b2`) and `building` (`c0cb52b`). Required action (repo admin, once): Settings → Pages → Build and deployment → Source = GitHub Actions; then merge PR #62 and the `Deploy GitHub Pages` workflow publishes the site. Until then, the last completed legacy deploy stays live. Related analysis by session 7b47094a in its completion record above.
 
 
 ### Session 7b47094a — completion record (2026-11-20 19:40–20:00 UTC)
@@ -1255,3 +1255,5 @@ is recorded in this section.
   deployment starvation, not a broken page — recorded as **F-7b-08** for the owner, whose practical fix
   is one quiet minute followed by `POST /repos/karagemop466-tech/Demo3/pages/builds`.
 * This follow-up PR is board-only (COORDINATION.md); it changes no site, data, script or workflow file.
+
+- 2026-11-20 20:13 UTC — session 7a570f35 final state for V2: `.github/workflows/pages.yml` is **not on `main`** and must not be merged until the Pages source is switched to GitHub Actions by an admin. The live site is the last completed legacy deploy; it was not changed by this session. No further PR is open from `arena/7a570f35-demo3`.
