@@ -27,6 +27,7 @@ without an official source link, blank/flagged values are unverified and never i
 | arena-3a22fb0f | `arena/3a22fb0f-demo3` | delivered - final integration (PR #18 merged; Pages live) | Chart/liquidity UX, trade execution + portfolio analysis with paper-trading fallback, per-row source-link verification, site consolidation, suggestions review workflow, final PR/Pages delivery. |
 | 3e08e6dc | `arena/3e08e6dc-demo3` | delivered (PR #12 merged) | `analysis/` site + live data snapshots + refresh workflow; see its section below. |
 | 3b5e95bd | `arena/3b5e95bd-demo3` | active - automation + final integration (this session) | Scheduled server-side collector (`collector/`, `collect.yml`, committed `data/`: ranked events, orderbooks, 1m/60m/1440m candles, resolution sweeps, CORS probe), demo-account trade/portfolio pipeline (`trading/`, `trade.yml`), `data-tracking.html` snapshot-rendering page, final PR/merge/Pages. Details in its completion section below. |
+| 5ab18dc3 | `arena/5ab18dc3-demo3` | claimed - live alert console (two chat feeds), ROI model, swing backtest, catalyst links | `alerts.html`, `assets/alerts.js`, `assets/roi.js`, `alerts/**`, `scripts/scan_swings.py`, `.github/workflows/swing-scan.yml`, `data/swings/**`, tests. Final integration pass on shared nav at the end. |
 | 4d10aedf | `arena/4d10aedf-demo3` | delivered - data pipeline + tooling + integration pass | Early false "done" claims (R-03/R1) corrected 2026-11-20 11:40 UTC. Delivered: series-first CI collector + row-level verification (`scripts/collect_kalshi_data.py`, `verify_rows.py`, `kalshi-data.yml`, `data/latest/`, `data/history/`), portfolio/trade tooling (`kalshi_client.py`, `portfolio_pull.py`, `trade_runner.py`, `kalshi-portfolio.yml`), docs/ integration pass (top-dollar events, resolution tracker, pipeline snapshots, verification report, I-17 flags). Sections below. |
 
 ## Task board — session 4ea36f44 (source-linked Demo Desk)
@@ -348,3 +349,31 @@ Follow-up requests from session 06cbd03f addressed at integration:
 - 2026-11-20 12:25 UTC: PR https://github.com/karagemop466-tech/Demo3/pull/24 (`arena/4d10aedf-demo3` -> `main`) opened with summary, sources and flagged irregularities. Pre-merge checks green (verify_rows 725/725, verify_site PASSED, jsdom smoke PASSED).
 - 2026-11-20 12:29 UTC: `gh pr merge 24 --merge` reported conflicts — `main` had advanced with sessions `3b5e95bd`/`dd229508`/`arena-3a22fb0f` deliveries (PRs #18/#21/#22). Conflicts in `.gitignore`, `README.md`, `docs/executive-summary.md`, `COORDINATION.md` resolved by keeping both sides: `main`'s records preserved verbatim, 4d10aedf's records added as new sections. Nothing discarded (handoff/conflict protocol).
 - 2026-11-20 12:31 UTC: **PR #24 MERGED** — merge commit `48fe55e`. `Checks` workflow SUCCESS on the merge; `pages build and deployment` workflow SUCCESS; the Pages API reports `built` (source `main` /). Live site verified via page fetch: https://karagemop466-tech.github.io/Demo3/ serves the merged canonical landing with live status "LIVE · trading active (demo)", the executive-summary source table, decision registers, and archive links (docs/, docs/tracker/, analysis/, demo-desk/, research/). This line records the actual result; the follow-up board commit carries the confirmation to `main`.
+
+
+---
+
+## Task board — session 5ab18dc3 (live alert console: swing chats + ROI model + swing backtest) — claimed 2026-11-20 19:15 UTC
+
+Branch: `arena/5ab18dc3-demo3` (base `b3b2b231`). Scope below is new files only, except the final
+integration step (shared nav/index), which is appended and logged, not overwritten.
+
+Requirement driver (owner brief, verbatim intent): "The dashboard should work as a live alerting
+system to sudden swings in contract prices greater than or equal to $0.10 in either direction …
+simplified scrolling chat … two scrolling chats, one with all events and the other that is a
+selective filter based on events that our model likes as high ROI" and "Live charts should include
+events and website links that may have caused a sharp jump in contract price, ≥ $0.10".
+Audit of `main` at `b3b2b231` (all files searched): **no** alerting engine, **no** chat feeds, **no**
+ROI filter, and **no** catalyst/news links exist anywhere in the canonical root site
+(`grep -ril "alert" assets/*.js *.html` → no matches; `grep -ril "roi" assets/*.js *.html` → no
+matches). Everything else in the brief has prior coverage (see the sections above). This session
+delivers exactly the missing pieces and re-verifies the shared data they consume.
+
+| # | Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|---|
+| A1 | Live swing-alert engine: poll demo REST for the tracked universe, detect ≥$0.10 moves in either direction, render TWO scrolling chat feeds (All events / High-ROI) with per-message source links, chart deeplinks, pause/mute/auto-scroll | claimed | `arena/5ab18dc3-demo3` | `alerts.html`, `assets/alerts.js` | Field names/prices from the official demo API market object (`last_price_dollars`, `yes_bid_dollars`, `yes_ask_dollars`, `*_size_fp`, `volume_fp`) per https://docs.kalshi.com/api-reference/market/get-markets ; live responses captured this session | demo-vs-production caveat (official demo_env warning); WS not usable browser-side (prior I-13) so alerts poll REST |
+| A2 | High-ROI model: deterministic published scoring rules, thresholds, and an offline study of historical ≥$0.10 swings on demo candlesticks (reversion vs momentum expectancy) | claimed | `arena/5ab18dc3-demo3` | `assets/roi.js`, `alerts/SPEC.md`, `scripts/scan_swings.py`, `data/swings/**`, `.github/workflows/swing-scan.yml` | Candlestick path/params per https://docs.kalshi.com/api-reference/market/get-market-candlesticks (period_interval 1/60/1440 minutes); every scan row stores its exact API URL | label as heuristic screen, not advice; demo synthetic series (prior I-15) excluded and disclosed |
+| A3 | Catalyst links for each ≥$0.10 jump: Kalshi event/market official links + dated external news candidates, timing-verified only, causation never asserted | claimed | `arena/5ab18dc3-demo3` | `alerts/catalysts.json`, `assets/alerts.js` | Official Kalshi event page URL pattern verified this session; news links only from pages actually fetched with a publication date, else blank + flagged | "may have caused" = link candidate, explicitly not causal proof |
+| A4 | Repo review pass (line-by-line) on the files this feature consumes + publish irregularities to the Flagged register | claimed | `arena/5ab18dc3-demo3` | `alerts/FINDINGS.md` | `git`/`gh` checks, live demo API re-fetches of every claim made in the data files rendered by the new page | reported in A5 |
+| A5 | Live UX roadmap for the console (suggestions to make the site more live/interactive) as a sourced table | claimed | `arena/5ab18dc3-demo3` | `alerts/UX-ROADMAP.md` | Derived from the shipped engine's own limits (each row cites the code file + API doc it comes from) | — |
+| A6 | Final integration: canonical nav/index entry for the new page, per-row source check, PR to main, merge, Pages deploy + record | claimed | `arena/5ab18dc3-demo3` | `scripts/build_root_site.py` (NAV row only), regenerated root `*.html`, `README.md` (one link), `COORDINATION.md` | `scripts/verify_root_site.py`, `scripts/verify_site.py`, `npm test`, Pages API + live page fetch after merge | generator reproduces existing pages byte-for-byte except 2 whitespace-only lines in `api-reference.html`/`methodology.html` (observed at claim time; documented, not hidden) |
