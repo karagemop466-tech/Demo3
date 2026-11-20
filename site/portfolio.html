@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portfolio — Kalshi demo account</title>
+<meta name="description" content="Portfolio performance from the Kalshi demo account: balance, positions, fills, realised and unrealised P&L, fees, and a source for every number.">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div id="chrome"></div>
+
+<main class="wrap">
+  <div id="modebar" class="mode"></div>
+  <div id="modenote"></div>
+
+  <h1>Portfolio performance</h1>
+  <p class="lede" id="lede"></p>
+
+  <div class="grid g4" style="margin:14px 0">
+    <div class="card tight" id="k-cash"></div>
+    <div class="card tight" id="k-total"></div>
+    <div class="card tight" id="k-real"></div>
+    <div class="card tight" id="k-unreal"></div>
+  </div>
+  <div class="grid g5" style="margin-bottom:14px">
+    <div class="card tight" id="k-fees"></div>
+    <div class="card tight" id="k-pos"></div>
+    <div class="card tight" id="k-fills"></div>
+    <div class="card tight" id="k-win"></div>
+    <div class="card tight" id="k-notional"></div>
+  </div>
+
+  <div class="callout warn" id="blocker"></div>
+
+  <h2>What was executed</h2>
+  <p class="sub" id="orders-summary"></p>
+  <div id="orders"></div>
+
+  <h2>Positions</h2>
+  <div id="positions"></div>
+
+  <h2>Fills — the ledger</h2>
+  <div id="fills"></div>
+
+  <h2>Equity curve</h2>
+  <div class="chart-shell">
+    <div class="chart-head"><span class="chart-title">cumulative P&amp;L by fill time</span>
+      <span class="spacer"></span><span class="legend" id="eq-legend"></span></div>
+    <canvas id="equity" height="200"></canvas>
+    <p class="small sub" id="eq-note"></p>
+  </div>
+
+  <h2>How each number is derived</h2>
+  <div class="card">
+    <table style="font-size:13.5px">
+      <thead><tr><th>Field</th><th>Formula actually used</th><th>Source</th></tr></thead>
+      <tbody>
+        <tr><td>Buying power</td><td>API <span class="mono">balance_dollars</span>, read verbatim; never computed locally</td><td class="src"><a href="https://docs.kalshi.com/api-reference/portfolio/get-balance.md" target="_blank" rel="noopener">GET /portfolio/balance</a></td></tr>
+        <tr><td>Portfolio value</td><td>API <span class="mono">portfolio_value</span> is an <em>integer number of cents</em> and has no
+          documented dollars sibling, so this page divides by 100 and marks the cell as derived</td><td class="src"><a href="https://docs.kalshi.com/api-reference/portfolio/get-balance.md" target="_blank" rel="noopener">get-balance.md</a></td></tr>
+        <tr><td>Balance breakdown</td><td>summed over <span class="mono">balance_breakdown[]</span>, which covers <em>every</em> exchange index on every subaccount, including zeros</td><td class="src"><a href="https://docs.kalshi.com/api-reference/portfolio/get-balance.md" target="_blank" rel="noopener">get-balance.md</a></td></tr>
+        <tr><td>Realised P&amp;L</td><td><span class="mono">buy: −count × yes_price</span> · <span class="mono">sell: +count × yes_price</span> ·
+          <span class="mono">settle: +yes_qty × settlement_value_dollars</span>; never assumes a $1 payoff</td><td class="src"><a href="https://docs.kalshi.com/getting_started/market_settlement.md" target="_blank" rel="noopener">market_settlement.md</a></td></tr>
+        <tr><td>Unrealised P&amp;L</td><td><span class="mono">yes_qty × last_price − cost_basis</span>; NO treated as the complement, so a hedge nets to a marked spread rather than two separate positions</td><td class="src"><a href="https://docs.kalshi.com/api-reference/market/get-market.md" target="_blank" rel="noopener">GET /markets/{t}</a></td></tr>
+        <tr><td>Fees</td><td>only <span class="mono">fill.fee_cost</span>. No local quadratic-fee model is used, because demo may differ from production and the docs carry no gas fee</td><td class="src"><a href="https://docs.kalshi.com/getting_started/quick_start_create_order.md" target="_blank" rel="noopener">create-order quick start</a> · <a href="questions.html#q-05">Q-05</a></td></tr>
+        <tr><td>Direction of a fill</td><td>from <span class="mono">book_side</span>/<span class="mono">outcome_side</span>;
+          <span class="mono">action</span> and <span class="mono">side</span> are deprecated and are not read as authoritative</td><td class="src"><a href="https://docs.kalshi.com/api-reference/portfolio/get-fills.md" target="_blank" rel="noopener">get-fills.md</a></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid g2" style="margin-top:14px">
+    <div class="card">
+      <span class="kicker">Reproduce locally</span>
+<pre style="margin:8px 0">export KALSHI_API_KEY_ID=...
+export KALSHI_PRIVATE_KEY_PEM_PATH=./kalshi_demo_private.pem
+python3 scripts/portfolio.py refresh
+python3 scripts/analyze.py</pre>
+      <p class="small">Without credentials, <span class="mono">portfolio.py</span> falls back to the paper ledger and stamps
+        <span class="mono">source_mode="paper"</span>; it never presents paper numbers as exchange numbers.</p>
+    </div>
+    <div class="card">
+      <span class="kicker">Known data caveats</span>
+      <ul class="small" style="margin:8px 0 0;padding-left:20px;line-height:1.7">
+        <li>Fill keys arrive in two shapes (<span class="mono">fill_id / trade_id / ticker / market_ticker</span>); the loader
+          aliases them and lists any key it could not map instead of guessing
+          <a href="https://docs.kalshi.com/api-reference/portfolio/get-fills.md" target="_blank" rel="noopener">source</a>.</li>
+        <li>Fills before the API cutoff are only in <span class="mono">GET /historical/fills</span>; a gap looks like
+          “no trades”, so the summary prints the <span class="mono">min_ts</span> covered
+          <a href="https://docs.kalshi.com/api-reference/portfolio/get-fills.md" target="_blank" rel="noopener">source</a>.</li>
+        <li>Balance and position snapshots are not transactionally consistent with each other — always read
+          <span class="mono">updated_ts</span> alongside
+          <a href="https://docs.kalshi.com/api-reference/portfolio/get-balance.md" target="_blank" rel="noopener">source</a>.</li>
+        <li>Do not poll for fills; the balance doc says to drive the UI off the <span class="mono">fill</span> WebSocket event
+          <a href="https://docs.kalshi.com/api-reference/portfolio/get-balance.md" target="_blank" rel="noopener">source</a>.</li>
+      </ul>
+    </div>
+  </div>
+
+  <footer id="foot"></footer>
+</main>
+
+<script src="assets/api.js"></script>
+<script src="assets/ui.js"></script>
+<script src="assets/chart.js"></script>
+<script>
+(function () {
+  var state;
+  UI.boot({ page: "portfolio" }).then(function (st) {
+    state = st;
+    var ledger = st.ledger || {};
+    var perf = (ledger.performance) || {};
+    var tot0 = perf.totals || {};
+    var paper = ledger.source_mode !== "demo-live";
+    // the ledger is the artifact scripts/portfolio.py writes; the page never invents a fallback number
+    perf = {
+      balance: ledger.balance,
+      cash_dollars: ledger.balance ? ledger.balance.balance_dollars : null,
+      fills: ledger.fills || [],
+      positions: perf.positions || ledger.positions || [],
+      settlements: ledger.settlements || [],
+      orders_planned: (st.orders && st.orders.orders) || [],
+      orders_blocked: (st.orders && st.orders.rejected) || [],
+      totals: tot0,
+      mode: paper ? "paper" : "demo-live",
+      empty_reason: ledger.empty_reason,
+      collected_at_utc: ledger.collected_at_utc,
+      paper_source_file: ledger.paper_source_file
+    };
+
+    document.getElementById("lede").innerHTML = paper
+      ? "No demo API credentials exist in this repository, so <span class='mono'>/portfolio/*</span> has never been called. " +
+        "The figures below are a <strong>paper ledger</strong>: orders the engine would send, priced against live " +
+        "public quotes. They are labelled <span class='tag paper'>paper</span> everywhere and must not be read as " +
+        "exchange results. The same code path reads the real account the moment credentials are supplied."
+      : "Read from the demo account with <span class='mono'>GET /portfolio/balance</span>, " +
+        "<span class='mono'>/positions</span> and <span class='mono'>/fills</span>. No number on this page is estimated.";
+
+    var tot = perf.totals || {};
+    function kpi(id, label, value, sub) {
+      document.getElementById(id).innerHTML = UI.kpi(label, value, sub);
+    }
+    kpi("k-cash", "Cash", UI.fmt.money(perf.cash_dollars),
+        perf.cash_dollars === null ? "no balance read — blocked" : "API balance_dollars");
+    kpi("k-total", "Total P&L", UI.fmt.money(tot.total_pnl_dollars),
+        "realised " + UI.fmt.money(tot.realized_pnl_dollars, 4) + " + unrealised " + UI.fmt.money(tot.unrealized_pnl_dollars, 4));
+    // position value is not a ledger field; it is the visible qty x mark products summed below
+    var posValue = (perf.positions || []).reduce(function (a, p) {
+      var q = K.num(p.yes_qty), m = K.num(p.mark_dollars);
+      return (q === null || m === null) ? a : a + q * m;
+    }, 0);
+    var posUnmarked = (perf.positions || []).filter(function (p) { return K.num(p.mark_dollars) === null; }).length;
+    kpi("k-pos", "Position value at mark", UI.fmt.money(posValue, 4),
+        (perf.positions || []).length + " rows · derived: Σ qty × mark · " +
+        (posUnmarked ? '<span class="down">' + posUnmarked + " unmarked, excluded</span>" : "all marked") +
+        " · " + UI.esc(perf.mark_basis || "no marks"));
+    kpi("k-real", "Realised P&L", UI.fmt.money(tot.realized_pnl_dollars), "settled fills only");
+    kpi("k-unreal", "Unrealised P&amp;L", UI.fmt.money(tot.unrealized_pnl_dollars),
+        (perf.mark_basis || "no marks") + " · " + (perf.marks_used || 0) + " marks");
+    kpi("k-fees", "Fees paid", UI.fmt.money(tot.fees_paid_dollars), "sum of fill.fee_cost");
+    kpi("k-fills", "Fills", UI.fmt.int((perf.fills || []).length),
+        "ledger " + UI.esc(ledger.source_mode || "—") + " · collected " + UI.fmt.dt(perf.collected_at_utc || ledger.collected_at_utc));
+    var an = st.analysis || {};
+    var settledN = (an.trades || []).filter(function (t) { return t.market_result === "yes" || t.market_result === "no"; }).length;
+    var wonN = (an.trades || []).filter(function (t) {
+      return (t.market_result === "yes") === (t.direction === "buy_yes") && (t.market_result === "yes" || t.market_result === "no");
+    }).length;
+    kpi("k-win", "Hit rate", settledN ? (100 * wonN / settledN).toFixed(1) + "%" : "—",
+        settledN ? wonN + " of " + settledN + " settled fills won" : "nothing has settled yet — a blank here is correct");
+    var notional = (perf.fills || []).reduce(function (a, f) {
+      var n = K.num(f.count_fp) * K.num(f.yes_price_dollars);
+      return a + (n === null ? 0 : n);
+    }, 0);
+    kpi("k-notional", "Notional traded", UI.fmt.money(notional, 4), "Σ count × yes_price over the fills shown below");
+
+    document.getElementById("blocker").innerHTML =
+      "<strong>Why this page is thin.</strong> Requirement R4/R5 need two authenticated endpoints " +
+      "(<span class='mono'>GET /portfolio/balance</span>, <span class='mono'>GET /portfolio/fills</span>) and a signed " +
+      "<span class='mono'>POST /portfolio/events/orders</span>. Signing needs an API key created in the <em>demo</em> account " +
+      "(<a href='https://demo.kalshi.co/' target='_blank' rel='noopener'>demo.kalshi.co</a>) and a no-passphrase PEM " +
+      "(<a href='https://docs.kalshi.com/getting_started/api_keys.md' target='_blank' rel='noopener'>API keys</a>). " +
+      "Nothing in this repo carries a secret and this session cannot create an account, so the work is tracked as " +
+      "<a href='questions.html#q-04'>Q-04</a> and blocked item B1 on the coordination board. The engine, P&amp;L model, " +
+      "categoriser and this page are already wired to the real endpoints and need no code change once a key exists.";
+
+    var orders = (perf.orders_planned || []).filter(function (o) { return o.kind === "create"; });
+    var fillsByOrder = {};
+    (perf.fills || []).forEach(function (f) { if (f.order_id) fillsByOrder[f.order_id] = f; });
+    document.getElementById("orders-summary").innerHTML =
+      orders.length + " create request(s) recorded in <span class='mono'>data/orders.json</span> · " +
+      Object.keys(fillsByOrder).length + " simulated as filled · " +
+      (perf.orders_blocked ? perf.orders_blocked.length + " rejected at validation" : "0") +
+      " · mode <strong>" + (orders[0] && orders[0].mode || "—") + "</strong> · " +
+      "orders are <strong>never</strong> sent unless <span class='mono'>--execute</span> is passed with credentials";
+    UI.table("#orders", {
+      rows: orders,
+      columns: [
+        { k: "submitted_at_utc", label: "Recorded", render: function (o) { return '<span class="small">' + UI.fmt.dt(o.submitted_at_utc) + "</span>"; } },
+        { k: "mode", label: "Mode", render: function (o) { return UI.tag(o.mode, o.mode === "paper" ? "paper" : o.mode === "plan" ? "pending" : "yes"); } },
+        { k: "r.ticker", label: "Market", render: function (o) { return '<span class="mono">' + UI.esc((o.request || {}).ticker || "") + "</span>"; } },
+        { k: "r.side", label: "Side", render: function (o) {
+            var rq = o.request || {};
+            return UI.tag(rq.side === "bid" ? "bid · buy YES" : "ask · sell YES", rq.side === "bid" ? "yes" : "no"); } },
+        { k: "r.count", label: "Contracts", cls: "r", render: function (o) { return UI.fmt.qty((o.request || {}).count); } },
+        { k: "r.price", label: "Limit px", cls: "r", render: function (o) { return UI.fmt.px((o.request || {}).price); } },
+        { k: "cash", label: "Cash if filled", cls: "r", render: function (o) {
+            var rq = o.request || {}, n = K.num(rq.count) * K.num(rq.price);
+            if (n === null || !isFinite(n)) return "—";
+            return '<span class="' + (rq.side === "bid" ? "down" : "up") + '">' + (rq.side === "bid" ? "−" : "+") + UI.fmt.money(n, 4) + "</span>"; } },
+        { k: "r.tif", label: "TIF · STP", render: function (o) { var rq = o.request || {}; return '<span class="small mono">' + UI.esc(rq.time_in_force || "—") + " · " + UI.esc(rq.self_trade_prevention_type || "—") + "</span>"; } },
+        { k: "r.exchange_index", label: "Shard", cls: "r", render: function (o) { var v = (o.request || {}).exchange_index; return v === undefined || v === null ? "—" : v; } },
+        { k: "resp", label: "Engine response", render: function (o) {
+            var rs = o.response || {};
+            if (rs.PAPER === true) return (rs.filled ? UI.tag("simulated fill", "paper") : UI.tag("resting (no cross)", "paper")) +
+              '<div class="small mono">' + (rs.filled ? UI.fmt.qty(rs.filled_count) + " ct @ " + UI.fmt.px(rs.average_fill_price) : "filled 0 · remaining " + UI.fmt.qty(rs.remaining_count)) + "</div>";
+            if (rs.DRY_RUN) return UI.tag("dry run — not sent", "pending");
+            return UI.fmt.json(rs); } },
+        { k: "o_id", label: "client_order_id", render: function (o) { var v = (o.request || {}).client_order_id || ""; return '<span class="mono small">' + UI.esc(String(v).slice(0, 13)) + (v.length > 13 ? "…" : "") + "</span>"; } },
+        { k: "basis", label: "Quote basis", render: function (o) {
+            var ms = o.market_snapshot_used || {};
+            var b = ms.quote_basis === "capture" ? UI.tag("from capture", "pending") : UI.tag("live read", "yes");
+            return b + '<div class="sub small">' + UI.esc(ms.last_price_dollars !== undefined ? "market last " + ms.last_price_dollars + " · bid " + ms.yes_bid_dollars + " · ask " + ms.yes_ask_dollars : "") + "</div>"; } },
+        { k: "warn", label: "Validation", render: function (o) {
+            var w = o.validation_warnings || [];
+            return w.length ? '<span class="small">' + w.map(function (x) { return UI.tag(x.length > 60 ? x.slice(0, 60) + "…" : x, "pending"); }).join(" ") + "</span>" : UI.tag("passed", "yes"); } },
+        { k: "strategy", label: "Strategy", render: function (o) { return o.strategy ? '<span class="mono small">' + UI.esc(o.strategy) + "</span>" : '<span class="unverified">unlabelled</span>'; } },
+        { k: "src", label: "Sources", cls: "src", render: function (o) {
+            return UI.src(o.market_source, "market") + " · " + UI.src((o.market_snapshot_used || {})._captured_from, "quote"); } }
+      ],
+      empty: "no orders recorded — run <span class='mono'>python3 scripts/trade_engine.py --paper --from-snapshot data/live_snapshot.json --bulk data/scenarios/paper-first-pass.json bulk</span>"
+    });
+
+    var pos = (perf.positions || []).map(function (p) {
+      var qty = K.num(p.yes_qty);
+      var mark = K.num(p.mark_dollars);
+      return { ticker: p.ticker, state: p.state, qty: qty, cash: K.num(p.net_cash), fees: K.num(p.fees),
+               mark: mark, upnl: K.num(p.unrealized_pnl), rpl: K.num(p.realized_pnl),
+               basis: qty && mark !== null && qty !== 0 ? -(K.num(p.net_cash) || 0) : null,
+               mark_source: p.mark_source, mark_url: p.mark_quote_source, note: p.mark_note,
+               notional: qty === null ? null : Math.abs(qty) * (mark === null ? 1 : 1) };
+    });
+    UI.table("#positions", {
+      rows: pos,
+      columns: [
+        { k: "ticker", label: "Market", render: function (p) {
+            return '<span class="mono">' + UI.esc(p.ticker) + '</span> <a class="small" href="dashboard.html#' + UI.esc(p.ticker) + '">chart</a>'; } },
+        { k: "state", label: "State", render: function (p) { return UI.tag(p.state, p.state === "open" ? "open" : "settled"); } },
+        { k: "qty", label: "Net YES qty", cls: "r", render: function (p) { return UI.fmt.qty(p.qty); } },
+        { k: "mark", label: "Mark /ct", cls: "r", render: function (p) { return UI.fmt.px(p.mark); } },
+        { k: "value", label: "Position value", cls: "r", render: function (p) {
+            if (p.qty === null || p.mark === null) return "—";
+            return UI.fmt.money(p.qty * p.mark, 4); } },
+        { k: "cash", label: "Net cash", cls: "r", render: function (p) { return '<span class="' + ((p.cash || 0) < 0 ? "down" : "up") + '">' + UI.fmt.money(p.cash, 4) + "</span>"; } },
+        { k: "basis2", label: "Cost basis (implied)", cls: "r", render: function (p) { return UI.fmt.money(p.basis, 4); } },
+        { k: "upnl", label: "Unrealised", cls: "r", render: function (p) { return '<span class="' + cls(p.upnl) + '">' + UI.fmt.money(p.upnl, 4) + "</span>"; } },
+        { k: "rpl", label: "Realised", cls: "r", render: function (p) { return '<span class="' + cls(p.rpl) + '">' + UI.fmt.money(p.rpl, 4) + "</span>"; } },
+        { k: "fees", label: "Fees", cls: "r", render: function (p) { return p.fees === null ? "—" : UI.fmt.money(p.fees, 4); } },
+        { k: "mark_source", label: "Mark source", render: function (p) {
+            if (!p.mark_source) return UI.tag("no mark", "no");
+            return UI.tag(p.mark_source, p.mark_source === "capture" ? "pending" : "yes") + " " + UI.src(p.mark_url, "quote"); } },
+        { k: "note", label: "Note", render: function (p) { return '<span class="small">' + UI.esc(p.note || "") + "</span>"; } }
+      ],
+      empty: "no open positions in the ledger"
+    });
+
+    var fills = perf.fills || [];
+    UI.table("#fills", {
+      rows: fills,
+      columns: [
+        { k: "created_time", label: "Time", render: function (f) { return '<span class="small">' + UI.fmt.dt(f.created_time || f.ts) + "</span>"; } },
+        { k: "ticker", label: "Market", render: function (f) { return '<span class="mono">' + UI.esc(f.ticker || f.market_ticker || "") + "</span>"; } },
+        { k: "outcome_side", label: "Outcome", render: function (f) { return UI.tag(f.outcome_side || f.yes_no || "—"); } },
+        { k: "book_side", label: "Book side", render: function (f) { return f.book_side || "—"; } },
+        { k: "count_fp", label: "Count", cls: "r", render: function (f) { return UI.fmt.qty(f.count_fp); } },
+        { k: "yes_price_dollars", label: "YES px", cls: "r", render: function (f) { return UI.fmt.px(f.yes_price_dollars); } },
+        { k: "no_price_dollars", label: "NO px", cls: "r", render: function (f) { return UI.fmt.px(f.no_price_dollars); } },
+        { k: "cash", label: "Cash", cls: "r", render: function (f) {
+            var n = K.num(f.count_fp) * K.num(f.yes_price_dollars);
+            if (n === null) return "—";
+            var sgn = ((f.outcome_side || "") === "yes") === (f.book_side !== "ask") ? -1 : 1;
+            return '<span class="' + (sgn < 0 ? "down" : "up") + '">' + (sgn < 0 ? "−" : "+") + UI.fmt.money(n, 4) + "</span>"; } },
+        { k: "fee_cost", label: "Fee", cls: "r", render: function (f) { return f.fee_cost === undefined || f.fee_cost === null ? "—" : UI.fmt.money(f.fee_cost, 6); } },
+        { k: "order_id", label: "Order", render: function (f) { return '<span class="mono small">' + UI.esc(String(f.order_id || "").slice(0, 18)) + (f.order_id ? "…" : "") + "</span>"; } },
+        { k: "source", label: "Source", cls: "src", render: function (f) { return UI.src(f.source); } }
+      ],
+      empty: "no fills — the demo account has never been traded, which is the honest state of this project"
+    });
+
+    var el = document.getElementById("equity");
+    var ch = new Chart("#equity", { yFromData: true, height: 200, yFmt: function (v) { return "$" + v.toFixed(2); } });
+    var run = 0, pts = fills.map(function (f) {
+      var n = (K.num(f.count_fp) || 0) * (K.num(f.yes_price_dollars) || 0);
+      var sgn = ((f.outcome_side || "") === "yes") === (f.book_side !== "ask") ? -1 : 1;
+      run += sgn * n;
+      return { x: new Date(f.created_time || f.ts).getTime(), y: +run.toFixed(4) };
+    });
+    if (!pts.length) {
+      var planned = perf.orders_planned || perf.orders_sent || [];
+      run = 0;
+      pts = planned.map(function (o) {
+        var n = (K.num(o.count) || 0) * (K.num(o.price) || 0);
+        run += (o.side === "buy" ? -n : n);
+        return { x: Date.now(), y: +run.toFixed(4) };
+      });
+      if (pts.length) {
+        // spread the synthetic points so the chart is readable, and say so
+        pts.forEach(function (p, i) { p.x = Date.now() - (pts.length - i) * 60000; });
+      }
+    }
+    ch.setData([{ points: pts, type: "line", label: paper ? "cumulative cash outflow (paper)" : "cumulative cash flow", color: paper ? "#a86400" : "#0b62d6", fill: paper ? "rgba(214,138,0,.07)" : "rgba(11,98,214,.07)", dots: true }], {});
+    document.getElementById("eq-legend").innerHTML = pts.length ? '<span style="color:' + (paper ? "#a86400" : "#0b62d6") + '">●</span> ' + pts.length + " points" : "";
+    document.getElementById("eq-note").innerHTML = fills.length
+      ? "Cumulative cash flow from the demo account's fills, one point per fill, X axis = <span class='mono'>fill.created_time</span>."
+      : (pts.length
+          ? "Plotted from the <strong>planned paper orders</strong>, not fills: the API returned no fill records, so the X axis is " +
+            "<strong>synthetic 60-second spacing chosen only to make the steps readable</strong> — it is not time data. " +
+            "The Y axis is cumulative cash committed (negative = money going out), and it excludes any mark-to-market because nothing has settled."
+          : "No curve: no fills and no planned orders exist. This page deliberately draws nothing rather than drawing a plausible-looking line.");
+
+    function cls(v) { v = K.num(v); return v === null ? "" : v > 0 ? "up" : v < 0 ? "down" : "flat"; }
+  });
+})();
+</script>
+</body>
+</html>

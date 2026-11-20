@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live dashboard — Kalshi demo</title>
+<meta name="description" content="Highest-dollar live events on the Kalshi demo exchange with price charts (seconds/minutes/hours/days), order-book depth and liquidity by price level.">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div id="chrome"></div>
+
+<main class="wrap">
+  <div id="modebar" class="mode"></div>
+  <div id="modenote"></div>
+
+  <h1>Live dashboard</h1>
+  <p class="lede">Highest-dollar live events across gas prices, elections, culture, crypto and golf. Ranking is
+    <strong>derived</strong>: Kalshi publishes no dollar-volume field, so each event's dollars are the sum of
+    <span class="mono">count_fp × taker price</span> over <span class="mono">GET /markets/trades</span> in the window.
+    In snapshot mode the window is the archived capture; in live mode it is a rolling window you control.</p>
+
+  <div class="card tight" style="margin:14px 0">
+    <div class="row">
+      <span class="kicker">Window</span>
+      <select id="window">
+        <option value="5">last 5 min</option>
+        <option value="15">last 15 min</option>
+        <option value="30" selected>last 30 min</option>
+        <option value="120">last 2 h</option>
+        <option value="1440">last 24 h</option>
+      </select>
+      <span class="kicker" style="margin-left:12px">Tape pages × 1000</span>
+      <select id="pages">
+        <option>2</option><option>5</option><option selected>8</option><option>15</option><option>25</option>
+      </select>
+      <span class="kicker" style="margin-left:12px">Topic</span>
+      <span id="topic-chips" class="chips"></span>
+      <span class="spacer"></span>
+      <button class="inp primary" id="rerank">Re-rank</button>
+      <span class="small" id="rank-note"></span>
+    </div>
+  </div>
+
+  <h2 style="margin-top:18px">Leaderboard — live events ranked by dollar volume</h2>
+  <div id="board"></div>
+
+  <h2>Price chart &amp; liquidity</h2>
+  <div class="grid" style="grid-template-columns:minmax(0,2.05fr) minmax(280px,1fr)">
+    <div class="chart-shell">
+      <div class="chart-head">
+        <span class="chart-title" id="chart-title">select a market</span>
+        <span class="spacer"></span>
+        <span class="kicker">X axis</span>
+        <select id="unit">
+          <option value="sec">Seconds · client-sampled</option>
+          <option value="60">Minutes · 1m candles</option>
+          <option value="1440" selected>Hours · 1h candles</option>
+          <option value="20160">Days · 1d candles</option>
+        </select>
+        <select id="span">
+          <option value="15">15 min</option>
+          <option value="60">1 h</option>
+          <option value="360">6 h</option>
+          <option value="1440" selected>24 h</option>
+          <option value="4320">3 d</option>
+        </select>
+        <select id="style">
+          <option value="candle" selected>Candles</option>
+          <option value="line">Line</option>
+          <option value="both">Line + bid/ask</option>
+        </select>
+      </div>
+      <canvas id="chart" height="290"></canvas>
+      <div class="row" style="margin-top:8px">
+        <span class="legend" id="legend"></span>
+        <span class="spacer"></span>
+        <span class="small" id="hover-read"></span>
+      </div>
+      <p class="small sub" id="chart-note"></p>
+    </div>
+
+    <div class="card">
+      <span class="kicker">Liquidity ladder · contracts resting at each price</span>
+      <div id="ladder" style="margin-top:8px">—</div>
+      <div class="row" style="margin-top:10px">
+        <span class="kicker">Contracts at price</span>
+        <input class="inp" id="probe-price" type="number" step="0.0001" min="0" max="1" style="width:96px" placeholder="0.4200">
+        <button class="inp" id="probe">Measure</button>
+      </div>
+      <div id="probe-out" class="small" style="margin-top:6px"></div>
+      <div class="small sub" style="margin-top:10px" id="book-src"></div>
+    </div>
+  </div>
+
+  <div class="grid g4" style="margin-top:14px">
+    <div class="card tight" id="m-price"></div>
+    <div class="card tight" id="m-vol"></div>
+    <div class="card tight" id="m-oi"></div>
+    <div class="card tight" id="m-close"></div>
+  </div>
+
+  <h2>Watchlist market detail</h2>
+  <div id="markets"></div>
+
+  <div class="callout warn" style="margin-top:18px">
+    <strong>Latency and limits.</strong> Kalshi documents that REST responses are cached for a short time — “prices, sizes and
+    status can lag the exchange by several seconds; filtered listings can lag longer”
+    (<a href="https://docs.kalshi.com/api-reference/market/get-markets.md" target="_blank" rel="noopener">source</a>).
+    Unauthenticated traffic is rate-limited separately
+    (<a href="https://docs.kalshi.com/getting_started/rate_limits.md" target="_blank" rel="noopener">source</a>), so keep
+    the refresh interval at 15 s or slower. True sub-second streaming needs the signed WebSocket bridge
+    (<a href="https://docs.kalshi.com/getting_started/quick_start_websockets.md" target="_blank" rel="noopener">source</a>).
+  </div>
+
+  <footer id="foot"></footer>
+</main>
+
+<script src="assets/api.js"></script>
+<script src="assets/ui.js"></script>
+<script src="assets/chart.js"></script>
+<script>
+(function () {
+  var state, api, chart, selected = null, selTicker = null, topicFilter = null, board = [], books = {};
+
+  UI.boot({ page: "dashboard" }).then(function (st) {
+    state = st; api = st.api;
+    chart = new Chart("#chart", { yFromData: false, yMin: 0, yMax: 1, height: 290,
+      yFmt: function (v) { return "$" + v.toFixed(2); },
+      onHover: function (p) {
+        var el = document.getElementById("hover-read");
+        if (!p) { el.textContent = ""; return; }
+        var q = p.point;
+        el.innerHTML = new Date(q.x).toISOString().replace("T", " ").replace(/\.\d+Z$/, "Z") +
+          " · " + UI.esc(p.series.label) + " " + (q.y === null ? "—" : "$" + q.y.toFixed(4)) +
+          (q.hi !== undefined ? " · H " + (q.hi === null ? "—" : "$" + q.hi.toFixed(4)) + " L " + (q.lo === null ? "—" : "$" + q.lo.toFixed(4)) : "");
+      } });
+    renderChips();
+    rank();
+    document.getElementById("rerank").onclick = function () { api.tapeCache = { key: "", events: [], at: 0 }; rank(); };
+    ["window", "pages"].forEach(function (id) {
+      document.getElementById(id).onchange = function () { api.tapeCache = { key: "", events: [], at: 0 }; rank(); };
+    });
+    ["unit", "span", "style"].forEach(function (id) { document.getElementById(id).onchange = function () { if (selTicker) loadChart(selTicker); }; });
+    document.getElementById("probe").onclick = probe;
+    state.refresh = function () { api.tapeCache = { key: "", events: [], at: 0 }; rank(true); };
+    UI.schedule();
+  });
+
+  function renderChips() {
+    var host = document.getElementById("topic-chips");
+    host.innerHTML = UI.topicsOf().map(function (t) {
+      return '<span class="chip" data-t="' + t.id + '">' + UI.esc(t.label) + "</span>";
+    }).join("");
+    host.querySelectorAll(".chip").forEach(function (c) {
+      c.onclick = function () {
+        if (c.classList.contains("on")) { c.classList.remove("on"); topicFilter = null; }
+        else { host.querySelectorAll(".chip").forEach(function (x) { x.classList.remove("on"); }); c.classList.add("on"); topicFilter = c.dataset.t; }
+        paint();
+      };
+    });
+  }
+
+  function fromSnapshot() {
+    return ((state.snapshot || {}).ranked_events || []).map(function (e) {
+      return {
+        event_ticker: e.event_ticker, series: e.series_ticker, topic: e.topic,
+        dollar_volume: K.num(e.dollar_volume_window), contracts: K.num(e.contracts_window),
+        trades: K.num(e.trades_window) || 0, flow_imbalance: K.num(e.flow_imbalance),
+        last_trade_time: e.last_trade_time, window_seconds: K.num(e.tape_window_seconds),
+        title: e.title, provisional: false, source: e.tape_source || e.event_source,
+        markets: (e.markets || []).map(function (m) { return m.ticker; }),
+        _ev: e
+      };
+    }).sort(function (a, b) { return (b.dollar_volume || 0) - (a.dollar_volume || 0); });
+  }
+
+  function rank(silent) {
+    var note = document.getElementById("rank-note");
+    if (!silent) note.textContent = "ranking…";
+    var wantLive = state.mode === "live" || state.mode === "bridge";
+    var minutes = Number(document.getElementById("window").value);
+    var pages = Number(document.getElementById("pages").value);
+    var job = wantLive
+      ? api.rankEvents({ minutes: minutes, pages: pages }).then(function (r) {
+          return { rows: r.events, meta: r, live: true };
+        })
+      : Promise.resolve({ rows: fromSnapshot(), meta: (state.snapshot || {})._meta || {}, live: false });
+    return job.then(function (res) {
+      board = res.rows;
+      note.innerHTML = res.live
+        ? board.length + " events · " + UI.fmt.int(api.tapeCache.scanned || 0) + " in-topic fills scanned over " + minutes + " min"
+        : "snapshot capture · " + UI.fmt.int((state.snapshot || {}).problems ? (state.snapshot.problems.length) : 0) + " notes · live re-ranking needs the bridge";
+      paint();
+    }).catch(function (e) {
+      note.innerHTML = '<span class="down">rank failed: ' + UI.esc(String(e.message || e)) + "</span>";
+      board = fromSnapshot(); paint();
+    });
+  }
+
+  function paint() {
+    var rows = topicFilter ? board.filter(function (r) { return r.topic === topicFilter; }) : board;
+    UI.table("#board", {
+      rows: rows,
+      empty: "No events matched. In live mode this means no in-topic fills appeared in the window — widen it, add tape pages, or wait for flow.",
+      onRow: function (r) { selectEvent(r); },
+      columns: [
+        { k: "i", label: "#", render: function (r, i) { return '<span class="mono">' + (i + 1) + "</span>"; } },
+        { k: "event_ticker", label: "Event", render: function (r) {
+            return "<strong>" + UI.esc(r.title || r.event_ticker) + "</strong>" +
+              '<div class="mono sub small">' + UI.esc(r.event_ticker) + " · " + UI.esc(r.series || "") + "</div>"; } },
+        { k: "topic", label: "Topic", render: function (r) { return UI.tag(UI.topicLabel(r.topic), "open"); } },
+        { k: "dollar_volume", label: "Dollar volume", cls: "r", title: "derived: sum(count_fp × taker price) over GET /markets/trades",
+          render: function (r) { return '<span class="num">' + UI.fmt.money(r.dollar_volume) + "</span>"; } },
+        { k: "contracts", label: "Contracts", cls: "r", render: function (r) { return UI.fmt.qty(r.contracts); } },
+        { k: "trades", label: "Fills", cls: "r", render: function (r) { return UI.fmt.int(r.trades); } },
+        { k: "flow_imbalance", label: "Flow (−NO … +YES)", cls: "r", render: function (r) {
+            var v = K.num(r.flow_imbalance);
+            if (v === null) return "—";
+            var cls = v > 0.05 ? "up" : v < -0.05 ? "down" : "flat";
+            return '<span class="' + cls + '">' + (v > 0 ? "+" : "") + v.toFixed(3) + "</span>"; } },
+        { k: "markets", label: "Markets", cls: "r", render: function (r) { return (r.markets || []).length || "—"; } },
+        { k: "last_trade_time", label: "Last fill", render: function (r) { return '<span class="small">' + UI.fmt.ago(r.last_trade_time) + "</span>"; } },
+        { k: "window", label: "Window", cls: "r", render: function (r) {
+            return r.window_seconds !== null && r.window_seconds !== undefined ? r.window_seconds + "s" : "—"; } },
+        { k: "provisional", label: "Class", render: function (r) {
+            return r.provisional ? UI.tag("provisional", "pending") : UI.tag("series-verified", "yes"); } },
+        { k: "source", label: "Source", cls: "src", render: function (r) { return UI.src(r.source); } }
+      ]
+    });
+  }
+
+  function selectEvent(r) {
+    selected = r;
+    var mkts = ((r._ev || {}).markets || []);
+    var first = mkts[0] || (r.markets || [])[0];
+    if (first) loadMarket(first, mkts);
+  }
+
+  function loadMarket(ticker, marketList) {
+    selTicker = ticker;
+    var ev = (selected || {});
+    var rows = (ev._ev || {}).markets || [];
+    document.getElementById("chart-title").innerHTML = UI.esc(ticker) +
+      (rows.length ? ' <span class="sub small">· ' + UI.esc((rows[0] && rows[0].title) || ev.title || "") + "</span>" : "");
+    if (marketList && marketList.length) {
+      UI.table("#markets", {
+        rows: marketList,
+        columns: [
+          { k: "ticker", label: "Market", render: function (m) { return '<span class="mono">' + UI.esc(m.ticker) + "</span>" +
+            '<div class="small">' + UI.esc(m.yes_sub_title || m.title || "") + "</div>"; } },
+          { k: "status", label: "Status", render: function (m) { return UI.tag(m.status || "—", m.status === "finalized" ? "no" : "open"); } },
+          { k: "last_price_dollars", label: "Last", cls: "r", render: function (m) { return UI.fmt.px(m.last_price_dollars); } },
+          { k: "prev", label: "Prev", cls: "r", render: function (m) { return UI.fmt.px(m.previous_price_dollars); } },
+          { k: "chg", label: "Δ", cls: "r", render: function (m) {
+              var a = K.num(m.last_price_dollars), b = K.num(m.previous_price_dollars);
+              if (a === null || b === null) return "—";
+              var d = a - b, cls = d > 0 ? "up" : d < 0 ? "down" : "flat";
+              return '<span class="' + cls + '">' + (d > 0 ? "+" : "") + d.toFixed(4) + "</span>"; } },
+          { k: "yes_bid_dollars", label: "Bid × size", cls: "r", render: function (m) { return UI.fmt.px(m.yes_bid_dollars) + " <span class='sub'>×</span> " + UI.fmt.qty(m.yes_bid_size_fp); } },
+          { k: "yes_ask_dollars", label: "Ask × size", cls: "r", render: function (m) { return UI.fmt.px(m.yes_ask_dollars) + " <span class='sub'>×</span> " + UI.fmt.qty(m.yes_ask_size_fp); } },
+          { k: "volume_fp", label: "Vol (ct)", cls: "r", render: function (m) { return UI.fmt.qty(m.volume_fp); } },
+          { k: "volume_24h_fp", label: "24h (ct)", cls: "r", render: function (m) { return UI.fmt.qty(m.volume_24h_fp); } },
+          { k: "open_interest_fp", label: "Open int.", cls: "r", render: function (m) { return UI.fmt.qty(m.open_interest_fp); } },
+          { k: "result", label: "Result", render: function (m) { return m.result ? UI.tag(m.result, m.result === "yes" ? "yes" : "no") : UI.tag("unresolved"); } },
+          { k: "close_time", label: "Close", render: function (m) { return '<span class="small">' + UI.fmt.dt(m.close_time) + "</span>"; } },
+          { k: "source", label: "Source", cls: "src", render: function (m) { return UI.src(m.source); } }
+        ],
+        onRow: function (m) { loadMarket(m.ticker, marketList); }
+      });
+    }
+    loadChart(ticker);
+    loadBook(ticker);
+  }
+
+  function loadBook(ticker) {
+    var host = document.getElementById("ladder");
+    var snapMarket = findSnapMarket(ticker);
+    var srcEl = document.getElementById("book-src");
+    function show(book, src, derived) {
+      Ladder.render(host, book, { marketUrl: api.url("/markets/" + encodeURIComponent(ticker)) });
+      srcEl.innerHTML = "from " + UI.src(src) + (derived ? " <span class='tag pending'>snapshot</span>" : "");
+      books[ticker] = book;
+    }
+    if (state.mode === "live" || state.mode === "bridge") {
+      api.orderbook(ticker, 20).then(function (b) { show(b.orderbook_fp ? b : { orderbook_fp: {} }, api.url("/markets/" + encodeURIComponent(ticker) + "/orderbook?depth=20")); })
+        .catch(function () { if (snapMarket && snapMarket.depth) show(ladderFromSnap(snapMarket.depth), snapMarket.orderbook_source, true); });
+    } else if (snapMarket && snapMarket.depth) show(ladderFromSnap(snapMarket.depth), snapMarket.orderbook_source, true);
+    else host.innerHTML = '<div class="empty">No order book in the snapshot for this market — the capture only recorded one book (KXPGATOUR-THRC26-HLEB). Run the bridge for live depth.</div>';
+
+    var m = snapMarket || {};
+    document.getElementById("m-price").innerHTML = UI.kpi("Last price", UI.fmt.px(m.last_price_dollars),
+      "bid " + UI.fmt.px(m.yes_bid_dollars) + " / ask " + UI.fmt.px(m.yes_ask_dollars));
+    document.getElementById("m-vol").innerHTML = UI.kpi("Volume", UI.fmt.qty(m.volume_fp) + " ct",
+      "24h " + UI.fmt.qty(m.volume_24h_fp) + " ct · contracts, API field");
+    document.getElementById("m-oi").innerHTML = UI.kpi("Open interest", UI.fmt.qty(m.open_interest_fp) + " ct",
+      "notional " + UI.fmt.money(K.num(m.open_interest_fp), 2) + " at " + UI.fmt.money(m.notional_value_dollars, 2) + "/ct");
+    document.getElementById("m-close").innerHTML = UI.kpi("Closes", '<span style="font-size:15px">' + UI.fmt.dt(m.close_time) + "</span>",
+      UI.fmt.ago(m.close_time) === "—" ? "" : UI.fmt.ago(m.close_time));
+  }
+  function ladderFromSnap(d) {
+    return { orderbook_fp: { yes_dollars: (d.yes_bid_levels || []).map(function (l) { return [String(l[0]), String(l[1])]; }),
+                             no_dollars: (d.no_bid_levels || []).map(function (l) { return [String(l[0]), String(l[1])]; }) } };
+  }
+  function findSnapMarket(ticker) {
+    var ev = (selected || {})._ev || {};
+    return (ev.markets || []).filter(function (m) { return m.ticker === ticker; })[0];
+  }
+
+  function probe() {
+    var p = K.num(document.getElementById("probe-price").value);
+    var out = document.getElementById("probe-out");
+    var book = books[selTicker];
+    if (p === null || !selTicker) { out.innerHTML = "enter a price between 0 and 1, and select a market first"; return; }
+    var d = book || (findSnapMarket(selTicker) || {}).depth;
+    if (!d) { out.innerHTML = '<span class="down">no book loaded for ' + UI.esc(selTicker) + "</span>"; return; }
+    var ob = book || ladderFromSnap(d);
+    var yes = (ob.orderbook_fp.yes_dollars || []).filter(function (l) { return K.num(l[0]) >= p; });
+    var no = (ob.orderbook_fp.no_dollars || []).filter(function (l) { return K.num(l[0]) >= 1 - p; });
+    var sum = function (a) { return a.reduce(function (x, l) { return x + (K.num(l[1]) || 0); }, 0); };
+    out.innerHTML = "at or through $" + p.toFixed(4) + ": <strong>" + sum(yes).toLocaleString("en-US", { maximumFractionDigits: 2 }) +
+      " YES contracts</strong> on the bid side · <strong>" + sum(no).toLocaleString("en-US", { maximumFractionDigits: 2 }) +
+      " NO contracts</strong> at ≥ $" + (1 - p).toFixed(4) + " (= ask liquidity $1.00−bid). " +
+      "<span class='sub'>Depth is a point-in-time read; it can move before you act.</span>";
+  }
+
+  function loadChart(ticker) {
+    var unit = document.getElementById("unit").value;
+    var spanMin = Number(document.getElementById("span").value);
+    var style = document.getElementById("style").value;
+    var note = document.getElementById("chart-note");
+    var series = [];
+    var finish = function (lbl) {
+      chart.setData(series, { ticker: ticker });
+      document.getElementById("legend").innerHTML = lbl || "";
+    };
+    if (unit === "sec") {
+      note.innerHTML = "Client-sampled: Kalshi's candlestick API has no sub-minute period " +
+        "(<a href='https://docs.kalshi.com/api-reference/market/get-market-candlesticks.md' target='_blank' rel='noopener'>period_interval ∈ 1/60/1440 min</a>), " +
+        "so this series is built by polling <span class='mono'>GET /markets/{ticker}</span> in the browser. Timestamps are local sample times, not exchange history.";
+      if (state.mode === "snapshot") {
+        series = [];
+        finish("");
+        note.innerHTML += " <span class='down'>Sampling is disabled in snapshot mode — switch to the bridge to use seconds.</span>";
+        chart.setData([], {});
+        return;
+      }
+      api.startTicks([ticker], 5000, function () {
+        var pts = api.ticksFor(ticker);
+        var line = { points: pts.filter(function (p) { return p.price !== null; }).map(function (p) { return { x: p.t, y: p.price }; }),
+                     type: "line", label: "last (sampled)", color: "#0b62d6", fill: "rgba(11,98,214,.07)", dots: true };
+        series = [line];
+        if (style === "both") {
+          series.push({ points: pts.filter(function (p) { return p.bid !== null; }).map(function (p) { return { x: p.t, y: p.bid }; }), type: "step", label: "yes bid", color: "#0f7a3d" });
+          series.push({ points: pts.filter(function (p) { return p.ask !== null; }).map(function (p) { return { x: p.t, y: p.ask }; }), type: "step", label: "yes ask", color: "#a01c1c" });
+        }
+        finish('<span style="color:#0b62d6">●</span> sampled last · ' + pts.length + " points · every 5 s");
+      });
+      return;
+    }
+    note.innerHTML = "Candles from <span class='mono'>GET /series/{series}/markets/{ticker}/candlesticks</span> — " +
+      "period_interval " + unit + " min. OHLC of <em>traded</em> YES prices, plus the bid/ask offer distributions.";
+    var seriesTicker = (selected && selected.series) || String(ticker).split("-")[0];
+    var end = Math.floor(Date.now() / 1000);
+    var start = end - spanMin * 60;
+    var live = state.mode === "live" || state.mode === "bridge";
+    var job = live ? api.candles(seriesTicker, ticker, start, end, Number(unit))
+                   : Promise.resolve(((findSnapMarket(ticker) || {}).candles || []).slice());
+    job.then(function (candles) {
+      if (!candles.length) {
+        chart.setData([], {});
+        note.innerHTML += " <span class='down'>No candles" + (live ? " returned for this range." : " in the snapshot for this market (only KXPGATOUR-THRC26-HLEB had a candle capture). Run the bridge for full history.") + "</span>";
+        finish("");
+        return;
+      }
+      var pts = candles.map(function (c) {
+        var p = c.price || {};
+        return { x: c.end_period_ts * 1000, y: K.num(p.close_dollars),
+                 open: K.num(p.open_dollars), close: K.num(p.close_dollars),
+                 hi: K.num(p.high_dollars), lo: K.num(p.low_dollars), volume: K.num(c.volume_fp) };
+      });
+      series = [];
+      if (style !== "line") series.push({ points: pts, type: "candle", label: "trade price OHLC (YES)", color: "#0b62d6" });
+      if (style !== "candle") series.push({ points: pts.filter(function (p) { return p.y !== null; }), type: "line", label: "close", color: "#0b62d6", fill: "rgba(11,98,214,.07)" });
+      if (style === "both") {
+        series.push({ points: candles.map(function (c) { return { x: c.end_period_ts * 1000, y: K.num((c.yes_bid || {}).close_dollars) }; }), type: "step", label: "yes bid", color: "#0f7a3d" });
+        series.push({ points: candles.map(function (c) { return { x: c.end_period_ts * 1000, y: K.num((c.yes_ask || {}).close_dollars) }; }), type: "step", label: "yes ask", color: "#a01c1c" });
+      }
+      series.push({ points: pts.filter(function (p) { return p.volume; }), type: "bar", label: "volume (ct)", color: "#c8d6e8" });
+      finish((live ? "live · " : "snapshot · ") + pts.length + " × " + unit + "-min candles · volume bars scaled to the panel floor");
+    });
+  }
+})();
+</script>
+</body>
+</html>

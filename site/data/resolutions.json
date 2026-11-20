@@ -1,0 +1,31 @@
+{
+  "_meta": {
+    "purpose": "Resolution ledger: how each tracked market resolved (yes/no) and when.",
+    "updated_at_utc": "2026-11-20T11:34:00Z",
+    "written_by": "derived from data/live_snapshot.json (same rows scripts/collect.py --resolutions-only would append)",
+    "field_semantics": "result/settlement_ts/settlement_value_dollars are market fields; 'no' means YES holders receive $0 and NO holders $1/contract. https://docs.kalshi.com/getting_started/market_settlement.md"
+  },
+  "resolutions": [
+    {
+      "topic": "golf",
+      "series_ticker": "KXPGATOUR",
+      "event_ticker": "KXPGATOUR-AUCPBCS26",
+      "ticker": "KXPGATOUR-AUCPBCS26-WGOR",
+      "title": "Austin Championship presented by Compliance Solutions: Will Gordon wins",
+      "status": "finalized",
+      "result": "no",
+      "settlement_ts": "2026-11-16T22:33:33.370951Z",
+      "settlement_value_dollars": "0.0000",
+      "close_time": "2026-11-16T22:29:34Z",
+      "volume_fp": "13635.01",
+      "open_interest_fp": "13541.22",
+      "final_yes_bid_dollars": "0.0000",
+      "last_price_dollars": "0.0160",
+      "rules_primary": "If Will Gordon wins the Austin Championship presented by Compliance Solutions, then the market resolves to Yes.",
+      "settlement_source": "ESPN / the Governing League (https://www.pgatour.com/) \u2014 from the KXPGATOUR series row",
+      "source": "https://external-api.demo.kalshi.co/trade-api/v2/markets?series_ticker=KXPGATOUR&status=settled&limit=1",
+      "observed_at_utc": "2026-11-20T11:26:00Z",
+      "note": "the only resolved market captured in this session; YES holders received $0.0000 per contract, NO holders $1.00 per contract"
+    }
+  ]
+}

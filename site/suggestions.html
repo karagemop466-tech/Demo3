@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Suggestions — review before implementing</title>
+<meta name="description" content="Ranked suggestions for the Kalshi demo project. Nothing is applied automatically: record a decision, and see exactly what it would cost and change.">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div id="chrome"></div>
+
+<main class="wrap">
+  <div id="modebar" class="mode"></div>
+  <div id="modenote"></div>
+
+  <h1>Suggestions — for review, before implementation</h1>
+  <p class="lede">Each item states what is already built, what this change would add, what it costs, and what could go wrong.
+    <strong>Nothing here is implemented automatically.</strong> Your decision is stored in this browser only
+    (<span class="mono">localStorage</span>); no code path reads it to change behaviour, and nothing is sent anywhere.
+    Use “Copy decisions as JSON” to hand the list to the next session.</p>
+
+  <div class="card tight" style="margin:14px 0">
+    <div class="row">
+      <span class="kicker">Filter</span>
+      <span class="chips" id="chips">
+        <span class="chip on" data-f="all">all</span>
+        <span class="chip" data-f="now">do next</span>
+        <span class="chip" data-f="blocked">blocked on you</span>
+        <span class="chip" data-f="quality">quality of data</span>
+        <span class="chip" data-f="scope">scope</span>
+      </span>
+      <span class="spacer"></span>
+      <span class="small" id="decided-count"></span>
+      <button class="inp" id="copy">Copy decisions as JSON</button>
+      <button class="inp" id="clear">Clear my decisions</button>
+    </div>
+  </div>
+
+  <div id="list"></div>
+
+  <h2>Why a suggestion is not just done</h2>
+  <div class="grid g3">
+    <div class="card tight"><span class="kicker">Rule of this project</span>
+      <p class="small">A change that alters what the site <em>claims</em> (a new metric, a new topic, a live trade) needs your
+        sign-off, because an unreviewed claim becomes a wrong number on a dashboard. Improvements that only add
+        <em>evidence</em> — more tape, more markets, a second API shard read — were implemented without waiting.</p></div>
+    <div class="card tight"><span class="kicker">What was done unprompted</span>
+      <p class="small">Ranking by derived dollar volume, the tape-capture pipeline, the resolution ledger, the seconds-axis
+        sampling fallback, the offline capture mode in the trade engine, the paper ledger and this review UI: all built in
+        this session because the requirements demanded a working end-to-end path.</p></div>
+    <div class="card tight"><span class="kicker">What is waiting, and why</span>
+      <p class="small">Everything requiring a credential (Q-04), a scope decision (Q-01 culture, Q-02 gas), or a
+        production-rate change (Q-09 rate limits). Each blocked item names the exact thing needed, so unblocking is one
+        action, not a investigation.</p></div>
+  </div>
+
+  <footer id="foot"></footer>
+</main>
+
+<script src="assets/api.js"></script>
+<script src="assets/ui.js"></script>
+<script>
+(function () {
+  var KEY = "kalshi-demo-decisions-v1", filter = "all";
+  var S = [
+    { id: "s-01", title: "Add a demo API key so the portfolio and execution paths run for real",
+      cat: "blocked", effort: "10 min of your time", risk: "low — the demo account holds mock funds only",
+    state: "ready", impact: "high",
+      now: "Trade engine, portfolio ledger, P&L and categorisation all exist and run against a paper ledger.",
+      change: "Export KALSHI_API_KEY_ID and KALSHI_PRIVATE_KEY_PEM_PATH, then run scripts/portfolio.py refresh and scripts/trade_engine.py --execute.",
+      why_blocked: "This session has no credentials and cannot create a demo account. No secret may be pasted into chat: put it in the environment instead.",
+      unlock: "Q-04", do_it: "export KALSHI_API_KEY_ID=… && export KALSHI_PRIVATE_KEY_PEM_PATH=./kalshi_demo_private.pem && python3 scripts/portfolio.py refresh --marks-from-snapshot data/live_snapshot.json" },
+    { id: "s-02", title: "Confirm the “culture” definition or replace it with Entertainment",
+      cat: "scope", effort: "one decision", risk: "medium — changes which rows appear on the dashboard",
+      state: "assumed", impact: "high",
+      now: "Culture is served by Entertainment + Esports + Person-of-the-Year style series, labelled as a substitution (FLAG-03).",
+      change: "Either accept the substitution, or name the series you mean (e.g. box office, album releases, award shows, game releases) and the topic map gains that selector.",
+      why_blocked: "Kalshi publishes no Culture category — the taxonomy read is the evidence, so this is a definition question, not a search failure.",
+      unlock: "Q-01", do_it: "edit data/topics.json → topics[id=culture].selectors, then re-run collect.py + publish_snapshot.py" },
+    { id: "s-03", title: "Decide what “gas prices” means: pump price or crude/oil contract",
+      cat: "scope", effort: "one decision", risk: "medium",
+      state: "assumed", impact: "medium",
+      now: "Gas prices maps to Commodities + Oil & Gas (WTI weekly, Brent, natural gas) with Economics + Oil and energy as secondary.",
+      change: "If you meant retail pump price, the secondary selector is the only candidate and it returned no open series in this capture — we would then track oil as a proxy and label it as such, or drop the topic.",
+      why_blocked: "No retail-gasoline series was found in the demo taxonomy; asserting one exists would be a guess.",
+      unlock: "Q-02", do_it: 'python3 scripts/kalshi_api.py series Economics "Oil and energy"' },
+    { id: "s-04", title: "Turn on the WebSocket bridge for genuine sub-second updates",
+      cat: "quality", effort: "already implemented; needs a running process", risk: "low",
+      state: "ready", impact: "high",
+      now: "The browser samples REST every 5 s and labels the seconds axis client-sampled.",
+      change: "Run scripts/dev_server.py (it signs the WS handshake, which a browser cannot do) and open ?mode=bridge to receive trade/ticker/orderbook_delta pushes.",
+      why_blocked: "Nothing. This is available now; it just is not running in a static Pages deploy.",
+      unlock: null, do_it: "python3 scripts/dev_server.py --port 8081 --ws" },
+    { id: "s-05", title: "Widen the tape window so the ranking reflects 24 h instead of a capture",
+      cat: "quality", effort: "minutes of runtime", risk: "low — larger numbers, same formula",
+      state: "partial", impact: "high",
+      now: "Dollar volume is summed over 28 captured trades spanning ~53 s, and the UI says so on every figure.",
+      change: "collect.py --window-minutes 1440 --pages 25 pages /markets/trades (max 1000 per page) so the leaderboard is a daily total.",
+      why_blocked: "Blocked in this sandbox by no egress to kalshi.co; the flag exists and works where the network does.",
+      unlock: "B1", do_it: "python3 scripts/collect.py --window-minutes 1440 --pages 25 --top 60" },
+    { id: "s-06", title: "Run the resolution loop daily so strategies become measurable",
+      cat: "quality", effort: "one workflow", risk: "low",
+      state: "not started", impact: "high",
+      now: "resolutions.json holds 1 settled golf market, which proves the wiring but cannot score a strategy.",
+      change: "A scheduled collect.py --resolutions-only appends every settled market; at ~10 settled trades per bucket the scoreboard flips from 'insufficient data' to a real verdict.",
+      why_blocked: "Needs a runner with network access and a decision to spend API budget daily (Q-09).",
+      unlock: "Q-09", do_it: "add a cron/workflow calling scripts/collect.py --resolutions-only" },
+    { id: "s-07", title: "Publish a full series universe instead of a top-N sample",
+      cat: "quality", effort: "collector flag", risk: "medium — more rows, more rate-limit exposure",
+      state: "partial", impact: "medium",
+      now: "31 series rows captured through the five topic selectors; /series has no pagination, so the universe is whatever one call returns.",
+      change: "Keep the selector-driven read but add a per-category sweep and store the union, so a series that dropped a tag is still classified.",
+      why_blocked: "GET /series?category&tags has no documented limit/cursor; a sweep is many requests, and unauthenticated limits are undocumented.",
+      unlock: "Q-09", do_it: "python3 scripts/kalshi_api.py series Sports   # repeat per category" },
+    { id: "s-08", title: "Add maker-fee-aware P&L for the quadratic_with_maker_fees series",
+      cat: "quality", effort: "small code change", risk: "high if unverified — fees are money",
+      state: "not started", impact: "medium",
+      now: "Fees are taken only from fill.fee_cost; the paper engine prints an explicitly non-authoritative illustrative figure.",
+      change: "Read fee_type/fee_multiplier per series (already captured: quadratic, multiplier 1) and model maker rebates for those series.",
+      why_blocked: "The official fee schedule PDF is the authority for the curve; modelling it from the multiplier alone would invent a rate.",
+      unlock: "Q-05", do_it: "open https://kalshi.com/docs/kalshi-fee-schedule.pdf before writing the model" },
+    { id: "s-09", title: "Alert on close, not on a timer",
+      cat: "scope", effort: "workflow change", risk: "low",
+      state: "not started", impact: "medium",
+      now: "Events are polled at the interval you pick in the header.",
+      change: "Watch min_close_ts on /events to find markets approaching settlement, then poll only those, cutting read volume.",
+      why_blocked: "None — but it changes what “live” means on the dashboard, so it is listed rather than done.",
+      unlock: null, do_it: "python3 scripts/kalshi_api.py events KXPGATOUR   # then filter on min_close_ts in the response" },
+    { id: "s-10", title: "Split demo from production in the same UI",
+      cat: "scope", effort: "config + banner", risk: "high — real money",
+      state: "not recommended", impact: "high",
+      now: "Everything is hard-wired to the demo hosts; the engine refuses a non-demo base URL.",
+      change: "A production switch would let the same pages read live markets.",
+      why_blocked: "Kalshi states demo keys and production keys are never shared and demo prices “may not be reflective of those in real markets”. A single UI mixing both invites exactly the mistake that warning exists to prevent.",
+      unlock: "Q-06", do_it: "if approved: separate deploy, separate key, no shared code path for --execute" },
+    { id: "s-11", title: "Store the raw tape continuously for offline replay",
+      cat: "scope", effort: "storage + job", risk: "low",
+      state: "not started", impact: "medium",
+      now: "One 28-row capture is kept verbatim at data/raw/trades-capture.json and is the basis of every derived figure.",
+      change: "Append every /markets/trades page to a dated NDJSON file so the seconds axis can be rebuilt historically instead of only sampled live.",
+      why_blocked: "It grows without bound and repo size is a constraint; needs your approval on retention.",
+      unlock: "Q-10", do_it: "decide retention, then add --record to collect.py" },
+    { id: "s-12", title: "Add multivariate (MVE) markets to the ranking",
+      cat: "scope", effort: "one flag", risk: "medium — different collateral model",
+      state: "excluded on purpose", impact: "low",
+      now: "MVE combos are excluded: /markets returns them first with volume_fp 0.00 and is_provisional, and /events excludes multivariate events entirely.",
+      change: "Include them with a distinct banner and the DIRECNET/MECNET collateral_return_type shown per row.",
+      why_blocked: "Their settlement math differs from a plain binary; ranking them beside binaries without that column would mislead.",
+      unlock: "Q-07", do_it: "python3 scripts/kalshi_api.py markets --mve-filter include --limit 5" },
+    { id: "s-13", title: "Reconcile the demo tape against production before trusting any strategy",
+      cat: "quality", effort: "one comparison", risk: "low",
+      state: "recommended", impact: "high",
+      now: "Demo fills cluster on round sizes (5555.55, 1851.85 contracts) inside ~0.2 s bursts — a pattern more consistent with a synthetic feed than organic flow.",
+      change: "Diff tape microstructure (fill-size distribution, inter-fill gaps) between demo and production for one topic; if they diverge, publish that on the strategies page as a standing caveat.",
+      why_blocked: "Needs production read access, which no credential here provides.",
+      unlock: "Q-04", do_it: "compare /markets/trades on both hosts over the same window" },
+    { id: "s-14", title: "Add a per-market notional column so non-$1 contracts are visible",
+      cat: "quality", effort: "one column", risk: "low",
+      state: "ready", impact: "low",
+      now: "notional_value_dollars is captured per market and reads 1.0000 on everything sampled; settlement math already uses the field rather than assuming $1.",
+      change: "Show it in the market table so a future non-unit-notional series is obvious instead of silently wrong.",
+      why_blocked: "None — cosmetic, listed so you can veto the extra column.",
+      unlock: null, do_it: "already implemented in site/dashboard.html market table" }
+  ];
+
+  function decisions() { try { return JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { return {}; } }
+  function save(d) { localStorage.setItem(KEY, JSON.stringify(d)); }
+
+  function paint() {
+    var dec = decisions();
+    var rows = S.filter(function (s) {
+      if (filter === "all") return true;
+      if (filter === "blocked") return s.cat === "blocked" || !!s.unlock && s.state !== "ready";
+      if (filter === "quality") return s.cat === "quality";
+      if (filter === "scope") return s.cat === "scope";
+      return true;
+    });
+    var n = Object.keys(dec).length;
+    document.getElementById("decided-count").innerHTML = n
+      ? n + " of " + S.length + " decided"
+      : "0 of " + S.length + " decided";
+    var host = document.getElementById("list");
+    host.innerHTML = rows.map(function (s) {
+      var d = dec[s.id];
+      var rank = s.impact === "high" ? 1 : s.impact === "medium" ? 2 : 3;
+      return '<div class="card" style="margin-bottom:12px" id="' + s.id + '">' +
+        '<div class="row"><span class="kicker">' + s.id.toUpperCase() + "</span>" +
+        '<strong style="font-size:15px">' + UI.esc(s.title) + "</strong>" +
+        '<span class="spacer"></span>' +
+        UI.tag(s.cat, s.cat === "blocked" ? "no" : s.cat === "scope" ? "pending" : "open") +
+        UI.tag(s.state, s.state === "ready" ? "yes" : s.state === "not recommended" ? "no" : "pending") +
+        UI.tag("impact " + s.impact, rank === 1 ? "no" : "") +
+        UI.tag("effort " + s.effort) + "</div>" +
+        '<div class="grid g2" style="margin-top:10px">' +
+        "<div><span class='kicker'>What exists now</span><p class='small' style='margin:2px 0 10px'>" + UI.esc(s.now) + "</p>" +
+        "<span class='kicker'>What this would change</span><p class='small' style='margin:2px 0 0'>" + UI.esc(s.change) + "</p></div>" +
+        "<div><span class='kicker'>Why it is not already done</span><p class='small' style='margin:2px 0 10px'>" + UI.esc(s.why_blocked) + "</p>" +
+        "<span class='kicker'>Risk</span><p class='small' style='margin:2px 0 0'>" + UI.esc(s.risk) +
+        (s.unlock ? " · needs <a href='questions.html#" + s.unlock.toLowerCase() + "'>" + UI.esc(s.unlock) + "</a>" : " · no external dependency") + "</p></div>" +
+        "</div>" +
+        (s.do_it ? '<div class="row" style="margin-top:8px"><span class="kicker">Command</span><code class="small">' + UI.esc(s.do_it) + "</code></div>" : "") +
+        '<div class="row" style="margin-top:12px;border-top:1px solid var(--line-2);padding-top:10px">' +
+        '<span class="kicker">Your decision</span>' +
+        ["accept", "reject", "defer"].map(function (v) {
+          return '<button class="inp' + (d === v ? " primary" : "") + '" data-id="' + s.id + '" data-v="' + v + '">' + v + "</button>";
+        }).join("") +
+        '<span class="small" style="color:var(--ink-3)">' + (d ? "stored locally: " + UI.esc(d) : "no decision recorded") + "</span>" +
+        '<label class="small" style="margin-left:8px">note <input class="inp" data-note="' + s.id + '" value="' + UI.esc((dec[s.id + "_note"] || "")) + '" placeholder="optional"></label>' +
+        "</div></div>";
+    }).join("");
+    host.querySelectorAll("button[data-id]").forEach(function (b) {
+      b.onclick = function () {
+        var d = decisions();
+        d[b.dataset.id] = (d[b.dataset.id] === b.dataset.v) ? undefined : b.dataset.v;
+        if (!d[b.dataset.id]) delete d[b.dataset.id];
+        save(d); paint();
+      };
+    });
+    host.querySelectorAll("input[data-note]").forEach(function (inp) {
+      inp.onchange = function () { var d = decisions(); d[inp.dataset.note + "_note"] = inp.value; save(d); };
+    });
+  }
+
+  UI.boot({ page: "suggestions" }).then(function () {
+    paint();
+    document.getElementById("chips").querySelectorAll(".chip").forEach(function (c) {
+      c.onclick = function () {
+        document.getElementById("chips").querySelectorAll(".chip").forEach(function (x) { x.classList.remove("on"); });
+        c.classList.add("on"); filter = c.dataset.f; paint();
+      };
+    });
+    document.getElementById("copy").onclick = function () {
+      var out = { exported_at_utc: new Date().toISOString(), decisions: decisions(),
+                  note: "decisions recorded in this browser; no code consumes them" };
+      navigator.clipboard && navigator.clipboard.writeText(JSON.stringify(out, null, 2));
+      this.textContent = "Copied";
+      var b = this; setTimeout(function () { b.textContent = "Copy decisions as JSON"; }, 1500);
+    };
+    document.getElementById("clear").onclick = function () { localStorage.removeItem(KEY); paint(); };
+  });
+})();
+</script>
+</body>
+</html>

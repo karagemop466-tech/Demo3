@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live events &amp; resolutions — Kalshi demo</title>
+<meta name="description" content="Track Kalshi demo events until they resolve, and record how each market resolved: yes or no, with the settlement fields.">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div id="chrome"></div>
+
+<main class="wrap">
+  <div id="modebar" class="mode"></div>
+  <div id="modenote"></div>
+
+  <h1>Live events &amp; resolution tracking</h1>
+  <p class="lede">Every tracked market stays on this page from <span class="mono">status=open</span> until the exchange marks it
+    settled, and the outcome is recorded from the fields Kalshi actually returns — not from a guess about what “probably
+    happened”. A market that resolves to <strong>YES</strong> pays <span class="mono">notional_value_dollars</span> per contract to
+    YES holders; <strong>NO</strong> pays the same to NO holders; only net positions settle
+    (<a href="https://docs.kalshi.com/getting_started/market_settlement.md" target="_blank" rel="noopener">market settlement</a>).</p>
+
+  <div class="grid g2" style="margin:14px 0">
+    <div class="card">
+      <span class="kicker">The fields that answer “how did it resolve”</span>
+      <table style="font-size:13.5px;margin-top:6px">
+        <thead><tr><th>Field</th><th>Where</th><th>Meaning</th><th></th></tr></thead>
+        <tbody>
+          <tr><td class="mono">result</td><td class="mono">GET /markets/{t}</td><td>“yes” / “no”; empty string until settled</td><td class="src"><a href="https://docs.kalshi.com/api-reference/market/get-market.md" target="_blank" rel="noopener">doc</a></td></tr>
+          <tr><td class="mono">settlement_ts</td><td class="mono">GET /markets/{t}</td><td>when the outcome was applied</td><td class="src"><a href="https://docs.kalshi.com/api-reference/market/get-markets.md" target="_blank" rel="noopener">doc</a></td></tr>
+          <tr><td class="mono">settlement_value_dollars</td><td class="mono">GET /markets/{t}</td><td>payout per YES contract (0.0000 or 1.0000 on a plain binary)</td><td class="src"><a href="https://docs.kalshi.com/getting_started/market_settlement.md" target="_blank" rel="noopener">doc</a></td></tr>
+          <tr><td class="mono">status</td><td class="mono">GET /markets/{t}</td><td>settled markets returned <span class="mono">“finalized”</span> while the filter is <span class="mono">status=settled</span> — see FLAG-02</td><td class="src"><a href="flagged.html#flag-02">flag</a></td></tr>
+          <tr><td class="mono">close_time</td><td class="mono">GET /markets</td><td>trading stops; not the same as settlement</td><td class="src"><a href="https://docs.kalshi.com/getting_started/market_lifecycle.md" target="_blank" rel="noopener">lifecycle</a></td></tr>
+          <tr><td class="mono">rules_primary</td><td class="mono">GET /markets</td><td>the contract text that determines the outcome</td><td class="src"><a href="https://docs.kalshi.com/api-reference/market/get-market.md" target="_blank" rel="noopener">doc</a></td></tr>
+          <tr><td class="mono">settlement_sources[]</td><td class="mono">GET /events</td><td>the official publication used to decide it</td><td class="src"><a href="https://docs.kalshi.com/api-reference/events/get-events.md" target="_blank" rel="noopener">doc</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <span class="kicker">Tracking loop (what the code does)</span>
+<pre style="margin:8px 0">GET /events?status=open&amp;min_updated_ts=…   # cheap change poll
+  └─ GET /markets?event_ticker=E&amp;status=open
+       ├─ record prices, sizes, depth, volume_fp
+       ├─ when status ∉ {open, active}  → poll on
+       └─ when result ∈ {yes,no}        → append to
+                                           data/resolutions.json</pre>
+      <p class="small">The collector is <span class="mono">scripts/collect.py --resolutions-only</span>; the ledger is
+        append-only and keyed by market ticker, so a resolution can never be overwritten by a later run.
+        In the browser, tick “Track in this tab” to keep the same watchlist in
+        <span class="mono">localStorage</span> and refresh it on the interval you set above.</p>
+      <div class="row" style="margin-top:8px">
+        <button class="inp" id="track">Track these events in this tab</button>
+        <button class="inp" id="untrack">Stop tracking</button>
+        <span class="small" id="track-state"></span>
+      </div>
+    </div>
+  </div>
+
+  <h2>Open events — live state</h2>
+  <p class="sub">“Δ since prev” compares the API's own <span class="mono">last_price_dollars</span> with
+    <span class="mono">previous_price_dollars</span>. No field is carried forward from an older row.</p>
+  <div id="open-table"></div>
+
+  <h2>Resolved — outcome ledger</h2>
+  <p class="sub" id="res-summary"></p>
+  <div id="res-table"></div>
+
+  <h2>Why a “live event” can still show zero liquidity</h2>
+  <div class="grid g3">
+    <div class="card tight"><span class="kicker">Empty book ≠ dead market</span>
+      <p class="small">A brand-new strike legitimately has no resting orders: <span class="mono">KXPRESPERSON-28-ESLO</span> was
+        created 2026-11-19 and returned bid 0.0000 / ask 0.0000, volume 0.00 — real zeroes, not missing data.</p></div>
+    <div class="card tight"><span class="kicker">Empty book ≠ typo</span>
+      <p class="small">The orderbook endpoint answers <span class="mono">200</span> with empty arrays for an unknown ticker, so
+        a mistake is indistinguishable without a second call to
+        <a href="https://docs.kalshi.com/api-reference/market/get-market.md" target="_blank" rel="noopener">GET /markets/{ticker}</a>.</p></div>
+    <div class="card tight"><span class="kicker">Early close is normal</span>
+      <p class="small">Sampled markets carry <span class="mono">can_close_early=true</span> and
+        <span class="mono">early_close_condition</span>, e.g. “close and expire after a winner is declared” — so trading can
+        stop long before <span class="mono">close_time</span>.</p></div>
+  </div>
+
+  <footer id="foot"></footer>
+</main>
+
+<script src="assets/api.js"></script>
+<script src="assets/ui.js"></script>
+<script>
+(function () {
+  var state, KEY = "kalshi-demo-watch-v1", tracked = [];
+
+  UI.boot({ page: "events" }).then(function (st) {
+    state = st;
+    paintOpen();
+    paintResolutions();
+    restore();
+    document.getElementById("track").onclick = function () {
+      var evs = ((state.snapshot || {}).ranked_events || []).map(function (e) { return e.event_ticker; });
+      localStorage.setItem(KEY, JSON.stringify({ events: evs, at: Date.now() }));
+      restore();
+    };
+    document.getElementById("untrack").onclick = function () {
+      localStorage.removeItem(KEY); restore();
+      if (state.timer) { clearInterval(state.timer); state.timer = null; }
+    };
+    if (state.mode !== "snapshot") state.refresh = function () { paintOpen(true); paintResolutions(); };
+    UI.schedule();
+  });
+
+  function restore() {
+    try { tracked = (JSON.parse(localStorage.getItem(KEY) || "{}").events) || []; } catch (e) { tracked = []; }
+    document.getElementById("track-state").innerHTML = tracked.length
+      ? "tracking " + tracked.length + " events · stored locally, nothing is sent anywhere"
+      : "not tracking";
+  }
+
+  function rowsFromSnapshot() {
+    return ((state.snapshot || {}).ranked_events || []).reduce(function (acc, ev) {
+      (ev.markets || []).forEach(function (m) {
+        acc.push({
+          event_ticker: ev.event_ticker, event_title: ev.title, topic: ev.topic,
+          series: ev.series_ticker, ticker: m.ticker, sub: m.yes_sub_title, status: m.status,
+          last: K.num(m.last_price_dollars), prev: K.num(m.previous_price_dollars),
+          bid: K.num(m.yes_bid_dollars), bsz: K.num(m.yes_bid_size_fp),
+          ask: K.num(m.yes_ask_dollars), asz: K.num(m.yes_ask_size_fp),
+          vol: K.num(m.volume_fp), vol24: K.num(m.volume_24h_fp), oi: K.num(m.open_interest_fp),
+          result: m.result, sts: m.settlement_ts, sv: m.settlement_value_dollars,
+          close: m.close_time, rules: m.rules_primary, updated: m.updated_time,
+          shard: m.exchange_index, source: m.source, depth: m.depth, note: m.note,
+          open: !m.result && m.status !== "finalized"
+        });
+      });
+      return acc;
+    }, []);
+  }
+
+  function paintOpen(live) {
+    var rows = rowsFromSnapshot().filter(function (r) { return r.open; });
+    var host = document.getElementById("open-table");
+    UI.table(host, {
+      rows: rows,
+      columns: [
+        { k: "ticker", label: "Market", render: function (r) {
+            return '<span class="mono">' + UI.esc(r.ticker) + "</span>" +
+              '<div class="small">' + UI.esc(r.sub || r.event_title || "") + "</div>" +
+              (r.note ? '<div class="sub small">⚠ ' + UI.esc(String(r.note).slice(0, 150)) + "</div>" : ""); } },
+        { k: "event", label: "Event", render: function (r) {
+            return '<div class="small">' + UI.esc(r.event_title || r.event_ticker) + "</div>" +
+              '<div class="mono sub small">' + UI.esc(r.event_ticker) + "</div>"; } },
+        { k: "topic", label: "Topic", render: function (r) { return UI.tag(UI.topicLabel(r.topic), "open"); } },
+        { k: "status", label: "State", render: function (r) { return UI.tag(r.status || "—", "open"); } },
+        { k: "last", label: "Last", cls: "r", render: function (r) { return UI.fmt.px(r.last); } },
+        { k: "chg", label: "Δ vs prev", cls: "r", render: function (r) {
+            if (r.last === null || r.prev === null) return "—";
+            var d = r.last - r.prev;
+            return '<span class="' + (d > 0 ? "up" : d < 0 ? "down" : "flat") + '">' + (d > 0 ? "+" : "") + d.toFixed(4) + "</span>"; } },
+        { k: "bid", label: "Bid × size", cls: "r", render: function (r) { return UI.fmt.px(r.bid) + " <span class='sub'>×</span> " + UI.fmt.qty(r.bsz); } },
+        { k: "ask", label: "Ask × size", cls: "r", render: function (r) { return UI.fmt.px(r.ask) + " <span class='sub'>×</span> " + UI.fmt.qty(r.asz); } },
+        { k: "liquidity", label: "$ at best bid", cls: "r", render: function (r) {
+            if (r.bid === null || r.bsz === null) return "—";
+            return UI.fmt.money(r.bid * r.bsz); } },
+        { k: "vol", label: "Volume (ct)", cls: "r", render: function (r) { return UI.fmt.qty(r.vol); } },
+        { k: "vol24", label: "24h (ct)", cls: "r", render: function (r) { return UI.fmt.qty(r.vol24); } },
+        { k: "oi", label: "Open int.", cls: "r", render: function (r) { return UI.fmt.qty(r.oi); } },
+        { k: "close", label: "Closes", render: function (r) { return '<span class="small">' + UI.fmt.dt(r.close) + '<div class="sub">' + UI.fmt.ago(r.close) + "</div></span>"; } },
+        { k: "shard", label: "Shard", cls: "r", render: function (r) { return r.shard === null ? "—" : r.shard; } },
+        { k: "updated", label: "Updated", render: function (r) { return '<span class="small">' + UI.fmt.ago(r.updated) + "</span>"; } },
+        { k: "source", label: "Source", cls: "src", render: function (r) { return UI.src(r.source); } }
+      ],
+      empty: "no open markets in the capture"
+    });
+    if (live && (state.mode === "live" || state.mode === "bridge")) {
+      var events = tracked.length ? tracked : Array.from(new Set(rows.map(function (r) { return r.event_ticker; })));
+      Promise.all(events.map(function (ev) {
+        return state.api.marketsByEvent(ev, "open").then(function (ms) { return ms.map(function (m) { return { event: ev, m: m }; }); })
+          .catch(function () { return []; });
+      })).then(function (batches) {
+        var byT = {};
+        batches.flat().forEach(function (x) { byT[x.m.ticker] = x.m; });
+        rows.forEach(function (r) {
+          var m = byT[r.ticker];
+          if (!m) return;
+          r.last = K.num(m.last_price_dollars); r.prev = K.num(m.previous_price_dollars);
+          r.bid = K.num(m.yes_bid_dollars); r.bsz = K.num(m.yes_bid_size_fp);
+          r.ask = K.num(m.yes_ask_dollars); r.asz = K.num(m.yes_ask_size_fp);
+          r.vol = K.num(m.volume_fp); r.vol24 = K.num(m.volume_24h_fp); r.oi = K.num(m.open_interest_fp);
+          r.status = m.status; r.updated = m.updated_time; r.result = m.result || null;
+          r.live = true;
+        });
+        paintOpen._refreshed = new Date().toISOString();
+        host.querySelectorAll("tbody tr").forEach(function (tr) { tr.style.transition = "background .6s"; tr.style.background = "#f2fbf5"; setTimeout(function () { tr.style.background = ""; }, 700); });
+        var note = document.getElementById("open-live-note");
+        if (!note) {
+          note = document.createElement("p"); note.id = "open-live-note"; note.className = "sub small";
+          host.parentNode.insertBefore(note, host);
+        }
+        note.innerHTML = "re-read from " + UI.src(state.api.url("/markets", { event_ticker: events.slice(0, 3).join(","), status: "open" }),
+          "GET /markets?event_ticker=…") + " for " + events.length + " events · " + paintOpen._refreshed;
+      });
+    }
+  }
+
+  function paintResolutions() {
+    var res = ((state.snapshot || {}).resolutions_recent) || [];
+    var yes = res.filter(function (r) { return r.result === "yes"; }).length;
+    var no = res.filter(function (r) { return r.result === "no"; }).length;
+    document.getElementById("res-summary").innerHTML =
+      res.length + " resolved market(s) in the ledger · " + yes + " YES · " + no + " NO · " +
+      (state.mode === "live" || state.mode === "bridge" ? "checked against the exchange just now" : "from the archived capture") +
+      " · ledger file <span class='mono'>data/resolutions.json</span>";
+    UI.table("#res-table", {
+      rows: res,
+      columns: [
+        { k: "ticker", label: "Market", render: function (r) { return '<span class="mono">' + UI.esc(r.ticker) + "</span><div class='small'>" + UI.esc(r.title || "") + "</div>"; } },
+        { k: "topic", label: "Topic", render: function (r) { return UI.tag(UI.topicLabel(r.topic), "open"); } },
+        { k: "result", label: "Resolved", render: function (r) { return r.result ? UI.tag(r.result.toUpperCase(), r.result === "yes" ? "yes" : "no") : UI.tag("pending", "pending"); } },
+        { k: "settlement_value_dollars", label: "Payout / YES ct", cls: "r", render: function (r) { return UI.fmt.money(r.settlement_value_dollars, 4); } },
+        { k: "payout_no", label: "Payout / NO ct", cls: "r", render: function (r) {
+            var sv = K.num(r.settlement_value_dollars);
+            return sv === null ? "—" : UI.fmt.money(1 - sv, 4); } },
+        { k: "status", label: "Status", render: function (r) { return UI.tag(r.status || "—"); } },
+        { k: "close_time", label: "Closed", render: function (r) { return '<span class="small">' + UI.fmt.dt(r.close_time) + "</span>"; } },
+        { k: "settlement_ts", label: "Settled", render: function (r) { return '<span class="small">' + UI.fmt.dt(r.settlement_ts) + '<div class="sub">' + UI.fmt.ago(r.settlement_ts) + "</div></span>"; } },
+        { k: "lag", label: "Settle lag", cls: "r", render: function (r) {
+            if (!r.close_time || !r.settlement_ts) return "—";
+            var s = (new Date(r.settlement_ts) - new Date(r.close_time)) / 1000;
+            return s.toFixed(0) + "s"; } },
+        { k: "volume_fp", label: "Volume (ct)", cls: "r", render: function (r) { return UI.fmt.qty(r.volume_fp); } },
+        { k: "open_interest_fp", label: "Open int. (ct)", cls: "r", render: function (r) { return UI.fmt.qty(r.open_interest_fp); } },
+        { k: "final_yes_bid_dollars", label: "Final bid", cls: "r", render: function (r) { return UI.fmt.px(r.final_yes_bid_dollars); } },
+        { k: "rules_primary", label: "Contract text", render: function (r) { return '<span class="small">' + UI.esc((r.rules_primary || "").slice(0, 170)) + "</span>"; } },
+        { k: "source", label: "Source", cls: "src", render: function (r) { return UI.src(r.source); } }
+      ],
+      empty: "nothing has resolved yet inside the capture window — the collector appends here the moment <span class='mono'>result</span> is populated"
+    });
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>API surface — endpoints used, verified against the docs</title>
+<meta name="description" content="Every Kalshi endpoint this project touches, with its documented parameters, limits, auth requirement and the code that calls it.">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div id="chrome"></div>
+
+<main class="wrap">
+  <div id="modebar" class="mode"></div>
+  <div id="modenote"></div>
+
+  <h1>API surface, verified line by line</h1>
+  <p class="lede">The complete set of calls this project makes against the demo environment. Each row is checked against the
+    official reference page for that endpoint (linked), and against a live response captured in this session where one exists.
+    Endpoints that exist in the docs but are <em>not</em> used are listed too, with the reason.</p>
+
+  <div class="grid g4" style="margin:14px 0">
+    <div class="card tight" id="k-used"></div>
+    <div class="card tight" id="k-signed"></div>
+    <div class="card tight" id="k-captured"></div>
+    <div class="card tight" id="k-ws"></div>
+  </div>
+
+  <h2>Used by the collector, engine and dashboard</h2>
+  <div id="used"></div>
+
+  <h2>Documented but not used</h2>
+  <div id="unused"></div>
+
+  <h2>Field semantics that change the numbers</h2>
+  <div class="grid g2">
+    <div class="card">
+      <span class="kicker">Fixed-point strings</span>
+      <p class="small">Prices and sizes are decimal <em>strings</em>, not floats:
+        <span class="mono">"count_fp":"1851.85"</span>, <span class="mono">"yes_price_dollars":"0.0040"</span>.
+        Requests accept 0–2 decimal places for count and 2–4 for price; responses carry up to 6. Parsing with
+        <span class="mono">float()</span> then re-serialising is how this project avoids cent-rounding drift;
+        <span class="mono">scripts/kalshi_api.py:fp()</span> is the only place conversion happens.
+        <a href="https://docs.kalshi.com/api-reference/orders/create-order-v2.md" target="_blank" rel="noopener">source</a></p>
+      <span class="kicker">Money units</span>
+      <p class="small">Balance-style fields are integer <em>cents</em> (<span class="mono">balance</span>) with a
+        <span class="mono">balance_dollars</span> string sibling; <span class="mono">portfolio_value</span> has no documented
+        dollars sibling, so the dollars figure on the portfolio page is <span class="mono">cents/100</span> and labelled derived.
+        <a href="https://docs.kalshi.com/api-reference/portfolio/get-balance.md" target="_blank" rel="noopener">source</a></p>
+      <span class="kicker">Timestamps</span>
+      <p class="small">Response fields are ISO-8601 UTC strings; <em>request</em> filters
+        (<span class="mono">min_ts</span>, <span class="max_ts">max_ts</span>, <span class="mono">min_close_ts</span>,
+        <span class="mono">start_ts</span>/<span class="mono">end_ts</span>) are integer <strong>seconds</strong>.
+        Milliseconds there are a 400. <a href="https://docs.kalshi.com/api-reference/market/get-trades.md" target="_blank" rel="noopener">source</a></p>
+    </div>
+    <div class="card">
+      <span class="kicker">Pagination</span>
+      <p class="small"><span class="mono">GET /markets/trades</span> takes <span class="mono">limit</span> 1–1000 (default 100)
+        and a <span class="mono">cursor</span>; an undecodable cursor silently returns page one, so a loop must compare
+        content, not just cursor emptiness. <span class="mono">GET /series</span> has <strong>no</strong> pagination at all —
+        <span class="mono">limit</span> is accepted and ignored.
+        <a href="https://docs.kalshi.com/api-reference/market/get-series-list.md" target="_blank" rel="noopener">source</a></p>
+      <span class="kicker">Sharding</span>
+      <p class="small">Four exchange indexes exist in demo, all <span class="mono">trading_active</span>. Markets are spread
+        across them (crypto on index 2, one golf/tennis series on 3, most on 0), and writes need
+        <span class="mono">exchange_index</span> + <span class="mono">market_ticker</span> to route a cancel correctly.
+        Rate-limit write buckets are per shard. <a href="https://docs.kalshi.com/getting_started/rate_limits.md" target="_blank" rel="noopener">source</a></p>
+      <span class="kicker">Rate limits</span>
+      <p class="small">Token bucket, default 10 tokens per request, separate Read and Write budgets, 3-second burst window at
+        Basic/Advanced; 429 comes back as <span class="mono">{"error":{"code":"too_many_requests"}}</span> with
+        <strong>no Retry-After</strong>, so the client backs off from <span class="mono">X-RateLimit-*</span> instead.
+        Unauthenticated traffic has its own undocumented limits.
+        <a href="https://docs.kalshi.com/getting_started/rate_limits.md" target="_blank" rel="noopener">source</a></p>
+    </div>
+  </div>
+
+  <h2>Authentication, exactly as specified</h2>
+  <div class="card">
+    <pre>message   = f"{timestamp_ms}{METHOD}{path_including_prefix}"      # e.g. "1731234567890GET/trade-api/v2/portfolio/balance"
+signature = base64( RSA-PSS-SHA256(sign, message, salt_length=digest_length) )   # or Ed25519, which signs the raw message
+headers   = {"KALSHI-ACCESS-KEY": key_id, "KALSHI-ACCESS-TIMESTAMP": str(timestamp_ms), "KALSHI-ACCESS-SIGNATURE": signature}
+websocket = message for the handshake is f"{timestamp_ms}GET/trade-api/ws/v2"      # no query string, prefix included</pre>
+    <p class="small">Implemented in <span class="mono">scripts/kalshi_api.py:Signer</span> with an
+      <span class="mono">openssl</span> CLI fallback so the repo works without the <span class="mono">cryptography</span>
+      wheel. Query parameters are excluded from the signed string, which is why
+      <span class="mono">?limit=…</span> never appears in a signature.
+      <a href="https://docs.kalshi.com/getting_started/quick_start_authenticated_requests.md" target="_blank" rel="noopener">source</a> ·
+      <a href="https://docs.kalshi.com/getting_started/api_keys.md" target="_blank" rel="noopener">key format</a></p>
+  </div>
+
+  <h2>WebSocket channels</h2>
+  <div id="ws"></div>
+
+  <h2>Where each field in the UI comes from</h2>
+  <p class="sub">Mapping from the site's column names back to the API field and the call that produced it. This is the
+    anti-hallucination contract: a column with no row here does not exist.</p>
+  <div id="mapping"></div>
+
+  <footer id="foot"></footer>
+</main>
+
+<script src="assets/api.js"></script>
+<script src="assets/ui.js"></script>
+<script>
+(function () {
+  var USED = [
+    ["GET", "/exchange/status", "none", "—", "shard liveness before every collector run", "https://docs.kalshi.com/api-reference/exchange/get-exchange-status.md", "captured"],
+    ["GET", "/search/tags_by_categories", "none", "—", "the only way to enumerate the official taxonomy; basis of the five topic selectors", "https://docs.kalshi.com/api-reference/search/get-tags-for-series-categories.md", "captured"],
+    ["GET", "/series", "none", "category, tags, include_volume, min_updated_ts", "series universe per topic; limit is ignored, no cursor exists", "https://docs.kalshi.com/api-reference/market/get-series-list.md", "captured"],
+    ["GET", "/markets/trades", "none", "limit 1-1000, cursor, min_ts/max_ts (seconds), ticker, taker_side, is_block_trade", "the only dollar-capable source; ranking input", "https://docs.kalshi.com/api-reference/market/get-trades.md", "captured"],
+    ["GET", "/events", "none", "limit ≤200, status, tickers, series_ticker, with_nested_markets, min_close_ts/min_updated_ts (seconds)", "event membership + settlement_sources; excludes multivariate events", "https://docs.kalshi.com/api-reference/events/get-events.md", "captured"],
+    ["GET", "/markets", "none", "limit, cursor, status, event_ticker, series_ticker, tickers, mve_filter, min_updated_ts", "per-market quotes, sizes, rules, close/settle times", "https://docs.kalshi.com/api-reference/market/get-markets.md", "captured"],
+    ["GET", "/markets/{ticker}", "none", "—", "authoritative single market; disambiguates an empty book from a bad ticker", "https://docs.kalshi.com/api-reference/market/get-market.md", "captured"],
+    ["GET", "/markets/{ticker}/orderbook", "none", "depth", "liquidity ladder (bids only, best last)", "https://docs.kalshi.com/getting_started/orderbook_responses.md", "captured"],
+    ["GET", "/series/{s}/markets/{t}/candlesticks", "none", "start_ts, end_ts (seconds), period_interval ∈ {1,60,1440}, include_latest_before_start", "chart history; ≤5,000 periods per response", "https://docs.kalshi.com/api-reference/market/get-market-candlesticks.md", "captured"],
+    ["GET", "/portfolio/balance", "signed", "subaccount, exchange_index", "cash and portfolio value — code path exists, never executed here", "https://docs.kalshi.com/api-reference/portfolio/get-balance.md", "not executed"],
+    ["GET", "/portfolio/fills", "signed", "ticker (≤100), order_id, min_ts/max_ts, limit 1-1000, cursor, subaccount, exchange_index", "the ledger; deprecated action/side are not read", "https://docs.kalshi.com/api-reference/portfolio/get-fills.md", "not executed"],
+    ["GET", "/portfolio/positions", "signed", "ticker, event_ticker, min_realized_price, limit, cursor", "open exposure per market", "https://docs.kalshi.com/api-reference/portfolio/get-positions.md", "not executed"],
+    ["POST", "/portfolio/events/orders", "signed", "ticker, client_order_id, side, count, price, time_in_force, self_trade_prevention_type, post_only, exchange_index", "order creation; gated behind --execute", "https://docs.kalshi.com/api-reference/orders/create-order-v2.md", "not executed"],
+    ["DELETE", "/portfolio/events/orders/{id}", "signed", "market_ticker required for shard routing", "cancel", "https://docs.kalshi.com/api-reference/orders/cancel-order-v2.md", "not executed"],
+    ["POST", "/portfolio/events/orders/{id}/amend", "signed", "ticker, count, price, expiration_ts", "amend in place", "https://docs.kalshi.com/api-reference/orders/amend-order-v2.md", "not executed"],
+    ["POST", "/portfolio/events/orders/{id}/decrease", "signed", "ticker, reduce_by | reduce_to (exactly one)", "partial cancel", "https://docs.kalshi.com/api-reference/orders/decrease-order-v2.md", "not executed"]
+  ].map(function (r) { return { m: r[0], p: r[1], a: r[2], q: r[3], w: r[4], d: r[5], s: r[6] }; });
+
+  // Rows are led by the official page TITLE (verified in the docs index), not by a path we guessed.
+  // Only the endpoints this project actually calls are written as paths, because those responses are archived.
+  var UNUSED = [
+    ["Historical fills — GET /historical/fills", "pre-cutoff fills only; our window is live, and it needs a separate scope", "https://docs.kalshi.com/api-reference/portfolio/get-fills.md"],
+    ["Get Trades, filtered to one market", "GET /markets/trades?ticker=… returns a single market's prints; one unfiltered path keeps the ranking reproducible from one query", "https://docs.kalshi.com/api-reference/market/get-trades.md"],
+    ["Get Market Orderbook (single)", "used instead of the batch form because the ladder follows the selected market; the docs state it returns yes bids and no bids only — no asks", "https://docs.kalshi.com/api-reference/market/get-market-orderbook.md"],
+    ["Get Multiple Market Orderbooks", "many books in one request — the right call once the ladder covers more than one market, since each ladder is currently its own request", "https://docs.kalshi.com/api-reference/market/get-multiple-market-orderbooks.md"],
+    ["Batch Get Market Candlesticks", "multi-market candle fetch in one call; the dashboard charts one market at a time, so the single form is used", "https://docs.kalshi.com/api-reference/market/batch-get-market-candlesticks.md"],
+    ["Get Event Candlesticks", "candles aggregated across every market in an event; would chart an event's total activity, not just one strike", "https://docs.kalshi.com/api-reference/events/get-event-candlesticks.md"],
+    ["Get Event Live Data", "event-keyed live data: crypto price charts and commodity price timeseries — the nearest thing to an official underlying-price feed, and directly relevant to the gas/oil question", "https://docs.kalshi.com/api-reference/live-data/get-event-live-data.md"],
+    ["Get Filters for Sports", "publishes the available filters per sport; a better way to enumerate golf than guessing tags", "https://docs.kalshi.com/api-reference/search/get-filters-for-sports.md"],
+    ["Get All Subaccount Balances", "demo account has one subaccount, and the per-index breakdown already arrives inside GET /portfolio/balance", "https://docs.kalshi.com/api-reference/portfolio/get-all-subaccount-balances.md"],
+    ["Get Settlements", "settlement records still in the live data set; our resolution ledger reads the market side instead, which is where result and settlement_value_dollars live", "https://docs.kalshi.com/api-reference/portfolio/get-settlements.md"],
+    ["Get Account API Limits / List Non-Default Endpoint Costs", "the correct way to size a poll interval and a write burst instead of guessing — both need a key, so deferred with Q-09", "https://docs.kalshi.com/api-reference/account/get-account-api-limits.md"],
+    ["Get User Data Timestamp", "exists precisely because the docs state there is a short delay before exchange events are reflected in the API — a better staleness signal than our own clock", "https://docs.kalshi.com/api-reference/exchange/get-user-data-timestamp.md"],
+    ["Get Order and Get Orders", "order reads update asynchronously after a write, so a just-created order can briefly 404; the write response is the only immediate result", "https://docs.kalshi.com/api-reference/orders/get-order.md"],
+    ["Get Queue Positions for Orders", "contracts that must be matched before a partial or full fill, by price-time priority — it would show our own place in the book, but nothing rests here because no order was ever sent", "https://docs.kalshi.com/api-reference/orders/get-queue-positions-for-orders.md"],
+    ["Batch Create Orders (V2)", "would speed the paper scenario; unnecessary at 9 orders, and a batch is not atomic, which changes partial-reject semantics", "https://docs.kalshi.com/api-reference/orders/batch-create-orders-v2.md"],
+    ["Get Multivariate Events", "the documented way to reach combo events, if Q-07 ever says include them", "https://docs.kalshi.com/api-reference/events/get-multivariate-events.md"],
+    ["Private ws channels order_group_updates and communications", "need extra scopes; nothing in this UI groups orders", "https://docs.kalshi.com/getting_started/quick_start_websockets.md"]
+  ].map(function (r) { return { p: r[0], w: r[1], d: r[2] }; });
+
+  var WS = [
+    ["ticker", "public", "signed handshake", "best bid/ask and last price per market", "bridge only", "https://docs.kalshi.com/getting_started/quick_start_websockets.md"],
+    ["trade", "public", "signed handshake", "every print, the same records as GET /markets/trades", "bridge only", "https://docs.kalshi.com/getting_started/quick_start_websockets.md"],
+    ["orderbook_delta", "public", "signed handshake", "incremental book changes; would replace 15 s ladder refreshes", "bridge only", "https://docs.kalshi.com/getting_started/quick_start_websockets.md"],
+    ["market_lifecycle_v2", "public", "signed handshake", "open/pause/settle transitions — the cheap way to drive the resolution tracker", "planned", "https://docs.kalshi.com/getting_started/quick_start_websockets.md"],
+    ["fill", "private", "signed + portfolio scope", "pushes that should drive the ledger instead of polling /portfolio/fills", "needs Q-04", "https://docs.kalshi.com/api-reference/portfolio/get-balance.md"],
+    ["market_positions", "private", "signed + portfolio scope", "position deltas as they happen", "needs Q-04", "https://docs.kalshi.com/getting_started/quick_start_websockets.md"],
+    ["user_orders", "private", "signed + portfolio scope", "order status transitions", "needs Q-04", "https://docs.kalshi.com/getting_started/quick_start_websockets.md"]
+  ].map(function (r) { return { c: r[0], k: r[1], h: r[2], p: r[3], s: r[4], d: r[5] }; });
+
+  var MAPPING = [
+    ["Dollar volume", "derived: Σ count_fp × taker-side price", "GET /markets/trades", "scripts/aggregate_capture.py", "formula string stored per row"],
+    ["Contracts", "count_fp summed", "GET /markets/trades", "scripts/aggregate_capture.py", "contracts and dollars always shown side by side"],
+    ["Fills / flow imbalance", "count of records; (yes_dollars − no_dollars) / dollar_volume", "GET /markets/trades", "scripts/aggregate_capture.py", "signed −1…+1, printed with its window"],
+    ["Last / bid / ask", "last_price_dollars, yes_bid_dollars, yes_ask_dollars", "GET /markets", "collect.py", "verbatim strings, formatted only"],
+    ["Volume / open interest", "volume_fp, open_interest_fp", "GET /markets", "collect.py", "labelled contracts, never dollars"],
+    ["Liquidity at price", "orderbook_fp.yes_dollars / .no_dollars levels", "GET /markets/{t}/orderbook", "chart.js Ladder", "asks are implied as 1 − best opposite bid, labelled implied"],
+    ["Candles", "price.open/high/low/close_dollars + volume_fp per end_period_ts", "GET /series/{s}/markets/{t}/candlesticks", "api.js candles()", "1/60/1440-minute periods only"],
+    ["Seconds axis", "client samples of GET /markets/{t}", "browser poll", "api.js startTicks()", "labelled client-sampled"],
+    ["Resolution", "result, settlement_ts, settlement_value_dollars, status", "GET /markets?status=settled", "collect.py --resolutions-only", "append-only ledger keyed by ticker"],
+    ["Cash / portfolio value", "balance_dollars, portfolio_value", "GET /portfolio/balance", "portfolio.py", "portfolio_value dollars is cents/100, marked derived"],
+    ["Realised & unrealised P&L", "fills + marks + settlements", "computed", "portfolio.py compute()", "settlement uses notional_value_dollars, never an assumed $1"],
+    ["Fees", "fill.fee_cost", "GET /portfolio/fills", "portfolio.py", "no fee model is applied to real data; paper estimate is flagged not-a-quote"]
+  ].map(function (r) { return { ui: r[0], f: r[1], ep: r[2], code: r[3], n: r[4] }; });
+
+  UI.boot({ page: "api" }).then(function (st) {
+    var snap = st.snapshot || {};
+    var captured = Object.keys((snap._meta || {}).provenance || {}).length;
+    document.getElementById("k-used").innerHTML = UI.kpi("Endpoints used", USED.length,
+      USED.filter(function (u) { return u.a === "none"; }).length + " public · " +
+      USED.filter(function (u) { return u.a === "signed"; }).length + " signed");
+    document.getElementById("k-signed").innerHTML = UI.kpi("Signed, never executed",
+      '<span class="down">' + USED.filter(function (u) { return u.s === "not executed"; }).length + "</span>",
+      "gated on Q-04");
+    document.getElementById("k-captured").innerHTML = UI.kpi("Sections with provenance", captured,
+      "written by scripts/publish_snapshot.py");
+    document.getElementById("k-ws").innerHTML = UI.kpi("WS channels", WS.length,
+      "all require the signed handshake, including public ones");
+
+    UI.table("#used", {
+      rows: USED,
+      columns: [
+        { k: "m", label: "Method", render: function (r) { return '<span class="mono">' + r.m + "</span>"; } },
+        { k: "p", label: "Path", render: function (r) { return '<span class="mono">' + UI.esc(r.p) + "</span>"; } },
+        { k: "a", label: "Auth", render: function (r) { return UI.tag(r.a, r.a === "none" ? "yes" : "pending"); } },
+        { k: "q", label: "Parameters used / available", render: function (r) { return '<span class="small mono">' + UI.esc(r.q) + "</span>"; } },
+        { k: "w", label: "Why this project needs it" },
+        { k: "s", label: "Status here", render: function (r) {
+            return r.s === "captured" ? UI.tag("response captured", "yes") : UI.tag("not executed", "no"); } },
+        { k: "d", label: "Official reference", cls: "src", render: function (r) { return UI.src(r.d, "docs"); } }
+      ]
+    });
+
+    UI.table("#unused", {
+      rows: UNUSED,
+      columns: [
+        { k: "p", label: "Endpoint", render: function (r) { return '<span class="mono">' + UI.esc(r.p) + "</span>"; } },
+        { k: "w", label: "Why not used" },
+        { k: "d", label: "Reference", cls: "src", render: function (r) { return UI.src(r.d, "docs"); } }
+      ]
+    });
+
+    UI.table("#ws", {
+      rows: WS,
+      columns: [
+        { k: "c", label: "Channel", render: function (r) { return '<span class="mono">' + r.c + "</span>"; } },
+        { k: "k", label: "Class", render: function (r) { return UI.tag(r.k, r.k === "public" ? "open" : "pending"); } },
+        { k: "h", label: "Handshake", render: function (r) { return '<span class="small">' + UI.esc(r.h) + "</span>"; } },
+        { k: "p", label: "Payload this project would use" },
+        { k: "s", label: "State", render: function (r) { return UI.tag(r.s, /needs/.test(r.s) ? "no" : r.s === "planned" ? "pending" : "yes"); } },
+        { k: "d", label: "Reference", cls: "src", render: function (r) { return UI.src(r.d, "docs"); } }
+      ]
+    });
+
+    UI.table("#mapping", {
+      rows: MAPPING,
+      columns: [
+        { k: "ui", label: "UI column", render: function (r) { return "<strong>" + UI.esc(r.ui) + "</strong>"; } },
+        { k: "f", label: "API field(s)", render: function (r) { return '<span class="mono small">' + UI.esc(r.f) + "</span>"; } },
+        { k: "ep", label: "Call", render: function (r) { return '<span class="mono small">' + UI.esc(r.ep) + "</span>"; } },
+        { k: "code", label: "Produced by", render: function (r) { return '<span class="mono small">' + UI.esc(r.code) + "</span>"; } },
+        { k: "n", label: "Caveat printed with it" }
+      ]
+    });
+  });
+})();
+</script>
+</body>
+</html>

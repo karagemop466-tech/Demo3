@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sources — what each claim rests on</title>
+<meta name="description" content="Every external reference this project relies on, what it establishes, which file uses it, and whether it was verified. Third-party links are never used as verification.">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div id="chrome"></div>
+
+<main class="wrap">
+  <div id="modebar" class="mode"></div>
+  <div id="modenote"></div>
+
+  <h1>Sources</h1>
+  <p class="lede">Rendered from <span class="mono">data/sources.json</span>, the registry
+    <span class="mono">scripts/verify_site.py</span> audits. Each entry records the URL, <em>what it establishes</em>,
+    which file in this repository consumes it, and whether it was verified. Anything not verified is marked
+    <span class="tag no">unverified</span> with a reason, and no published number rests on it.</p>
+
+  <div class="grid g4" style="margin:14px 0">
+    <div class="card tight" id="k-items"></div>
+    <div class="card tight" id="k-official"></div>
+    <div class="card tight" id="k-live"></div>
+    <div class="card tight" id="k-unverified"></div>
+  </div>
+
+  <div class="card tight" style="margin-bottom:14px">
+    <div class="row">
+      <span class="kicker">Only show</span>
+      <span class="chips" id="chips">
+        <span class="chip on" data-f="all">everything</span>
+        <span class="chip" data-f="unverified">unverified only</span>
+        <span class="chip" data-f="live">with a live API read</span>
+      </span>
+      <span class="spacer"></span>
+      <span class="small" id="filter-note"></span>
+    </div>
+  </div>
+
+  <div id="groups"></div>
+
+  <h2>The verification rule, stated once</h2>
+  <div class="grid g3">
+    <div class="card tight"><span class="kicker">Official</span>
+      <p class="small">A host Kalshi controls: <span class="mono">docs.kalshi.com</span>, <span class="mono">kalshi.com</span>,
+        <span class="mono">*.kalshi.co</span>. Enough to establish how an endpoint behaves, and — for a market field — what it means.</p></div>
+    <div class="card tight"><span class="kicker">API response, archived</span>
+      <p class="small">A read this project made and stored verbatim under <span class="mono">data/</span>. Enough to establish
+        <em>what the value was at that instant</em>, and nothing more.</p></div>
+    <div class="card tight"><span class="kicker">Third-party</span>
+      <p class="small">Never verification. Either it is a source Kalshi itself names inside
+        <span class="mono">settlement_sources</span> — recorded as “what Kalshi points at” — or it does not appear at all.</p></div>
+  </div>
+
+  <div class="callout warn">
+    <strong>What could not be checked from this environment.</strong> The sandbox has no network egress to
+    <span class="mono">kalshi.co</span>, so shell <span class="mono">curl</span> against the demo API fails even though the
+    endpoints work; the docs site and the API itself were reached through the agent's fetch path, and those responses are
+    archived in <span class="mono">data/</span>. Links here open the live originals — if one is blank in your browser, that
+    is a network path difference, not a dead reference. See <a href="flagged.html#flag-12">FLAG-12</a>.
+  </div>
+
+  <footer id="foot"></footer>
+</main>
+
+<script src="assets/api.js"></script>
+<script src="assets/ui.js"></script>
+<script>
+(function () {
+  var filter = "all", GROUPS = [];
+  UI.boot({ page: "sources" }).then(function (st) {
+    return UI.json((st.dataBaseResolved || "./data") + "/sources.json");
+  }).then(function (doc) {
+    GROUPS = (doc && doc.groups) || [];
+    var items = GROUPS.reduce(function (a, g) { return a.concat(g.items || []); }, []);
+    var unv = items.filter(function (i) { return !i.verified; });
+    var live = items.filter(function (i) { return i.live_read; });
+    var official = items.filter(function (i) {
+      var h = ((i.url || "").split("/")[2] || "");
+      return /kalshi\.(com|co|io)$/.test(h);
+    });
+    document.getElementById("k-items").innerHTML = UI.kpi("Registered citations", items.length,
+      GROUPS.length + " groups · from data/sources.json");
+    document.getElementById("k-official").innerHTML = UI.kpi("On official Kalshi hosts", official.length,
+      (items.length - official.length) + " are the exchange's own named sources or explicit non-claims");
+    document.getElementById("k-live").innerHTML = UI.kpi("Backed by a live API read", live.length,
+      "raw response archived in data/");
+    document.getElementById("k-unverified").innerHTML = UI.kpi("Marked unverified", '<span class="down">' + unv.length + "</span>",
+      "each carries a reason; none supports a published number");
+    paint();
+    document.getElementById("chips").querySelectorAll(".chip").forEach(function (c) {
+      c.onclick = function () {
+        document.getElementById("chips").querySelectorAll(".chip").forEach(function (x) { x.classList.remove("on"); });
+        c.classList.add("on"); filter = c.dataset.f; paint();
+      };
+    });
+  });
+
+  function keep(i) {
+    if (filter === "all") return true;
+    if (filter === "unverified") return !i.verified;
+    if (filter === "live") return !!i.live_read;
+    return true;
+  }
+
+  function paint() {
+    var host = document.getElementById("groups"), shown = 0;
+    host.innerHTML = GROUPS.map(function (g) {
+      var rows = (g.items || []).filter(keep);
+      shown += rows.length;
+      var head = '<h2>' + UI.esc(g.title) + '</h2>' +
+        (g.note ? '<p class="sub small">' + UI.esc(g.note) + "</p>" : "");
+      if (!rows.length) return '<div class="card" style="margin-bottom:14px">' + head +
+        '<div class="empty">no items in this group match the filter</div></div>';
+      return '<div class="card" style="margin-bottom:14px">' + head +
+        '<table style="font-size:13.5px"><thead><tr>' +
+        '<th style="width:24%">URL</th><th>What it establishes</th><th style="width:16%">Used by</th>' +
+        '<th style="width:9%">Status</th><th style="width:15%">Live read / reason</th></tr></thead><tbody>' +
+        rows.map(function (i) {
+          return "<tr>" +
+            "<td>" + (i.url ? UI.src(i.url, i.url.replace(/^https:\/\/docs\.kalshi\.com\//, "docs.kalshi.com/"))
+                            : '<span class="tag unverified">no URL — an explicit non-claim</span>') + "</td>" +
+            "<td>" + UI.esc(i.establishes) + "</td>" +
+            "<td><span class='mono small'>" + (i.used_by || []).map(UI.esc).join("<br>") + "</span></td>" +
+            "<td>" + (i.verified ? UI.tag("verified", "yes") : UI.tag("unverified", "no")) + "</td>" +
+            "<td>" + (i.live_read ? UI.src(i.live_read, "open the response") : "") +
+              (i.why_unverified ? '<div class="sub small">' + UI.esc(i.why_unverified) + "</div>" : "") + "</td></tr>";
+        }).join("") + "</tbody></table></div>";
+    }).join("") || '<div class="empty">registry empty</div>';
+    document.getElementById("filter-note").textContent = shown + " of " +
+      GROUPS.reduce(function (a, g) { return a + (g.items || []).length; }, 0) + " items shown";
+  }
+})();
+</script>
+</body>
+</html>

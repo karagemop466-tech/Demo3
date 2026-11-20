@@ -1,0 +1,233 @@
+{
+  "orders": [
+    {
+      "kind": "create",
+      "submitted_at_utc": "2026-11-20T11:44:45.145Z",
+      "mode": "paper",
+      "request": {
+        "ticker": "KXBTCY-27JAN0100-T149999.99",
+        "client_order_id": "165e37ab-ba0a-4658-b936-97ca61e6bb60",
+        "side": "bid",
+        "count": "250.00",
+        "price": "0.0100",
+        "time_in_force": "immediate_or_cancel",
+        "self_trade_prevention_type": "taker_at_cross",
+        "exchange_index": 0
+      },
+      "response": {
+        "PAPER": true,
+        "filled": true,
+        "order_id": "paper-3ab7c846-54a8-4b8e-8093-2a5af1713d48",
+        "client_order_id": "165e37ab-ba0a-4658-b936-97ca61e6bb60",
+        "status": "executed",
+        "filled_count": 250.0,
+        "remaining_count": 0.0,
+        "average_fill_price": "0.0100",
+        "cash_delta_dollars": 2.5,
+        "illustrative_fee_not_a_quote": 0.1733,
+        "note": "Fill price is the best opposite-side bid/ask read from GET /markets/{ticker}/orderbook at this instant; it is a simulation, not an exchange acknowledgement. `illustrative_fee_not_a_quote` is NOT a Kalshi fee: fees come from the series fee_type/fee_multiplier and https://kalshi.com/docs/kalshi-fee-schedule.pdf and are only authoritative on a real fill's `fee_cost`. Never use this number for a decision."
+      },
+      "market_snapshot_used": {
+        "ticker": "KXBTCY-27JAN0100-T149999.99",
+        "status": "active",
+        "last_price_dollars": "0.0300",
+        "yes_bid_dollars": "0.0000",
+        "yes_ask_dollars": "0.0100",
+        "no_bid_dollars": "0.9900",
+        "volume_fp": "56105512.48",
+        "open_interest_fp": "11453252.92",
+        "close_time": "2027-01-01T05:00:00Z",
+        "notional_value_dollars": "1.0000",
+        "quote_basis": "capture",
+        "_captured_from": "https://external-api.demo.kalshi.co/trade-api/v2/markets?series_ticker=KXBTCY&status=open&limit=3"
+      },
+      "market_source": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXBTCY-27JAN0100-T149999.99",
+      "strategy": "S2-cross-the-spread"
+    },
+    {
+      "kind": "create",
+      "submitted_at_utc": "2026-11-20T11:44:45.146Z",
+      "mode": "paper",
+      "request": {
+        "ticker": "KXBTCY-27JAN0100-T20000.00",
+        "client_order_id": "2faa4e77-71fe-4447-b4c3-3f91780381ab",
+        "side": "bid",
+        "count": "1250.00",
+        "price": "0.0200",
+        "time_in_force": "immediate_or_cancel",
+        "self_trade_prevention_type": "taker_at_cross",
+        "exchange_index": 0
+      },
+      "response": {
+        "PAPER": true,
+        "filled": true,
+        "order_id": "paper-f5c13691-dd98-4a79-b570-f339b91dacc8",
+        "client_order_id": "2faa4e77-71fe-4447-b4c3-3f91780381ab",
+        "status": "executed",
+        "filled_count": 1250.0,
+        "remaining_count": 0.0,
+        "average_fill_price": "0.0200",
+        "cash_delta_dollars": 25.0,
+        "illustrative_fee_not_a_quote": 1.715,
+        "note": "Fill price is the best opposite-side bid/ask read from GET /markets/{ticker}/orderbook at this instant; it is a simulation, not an exchange acknowledgement. `illustrative_fee_not_a_quote` is NOT a Kalshi fee: fees come from the series fee_type/fee_multiplier and https://kalshi.com/docs/kalshi-fee-schedule.pdf and are only authoritative on a real fill's `fee_cost`. Never use this number for a decision."
+      },
+      "market_snapshot_used": {
+        "ticker": "KXBTCY-27JAN0100-T20000.00",
+        "status": "active",
+        "last_price_dollars": "0.0100",
+        "yes_bid_dollars": "0.0100",
+        "yes_ask_dollars": "0.0200",
+        "no_bid_dollars": "0.9800",
+        "volume_fp": "51971407.00",
+        "open_interest_fp": "9351666.83",
+        "close_time": "2027-01-01T05:00:00Z",
+        "notional_value_dollars": "1.0000",
+        "quote_basis": "capture",
+        "_captured_from": "https://external-api.demo.kalshi.co/trade-api/v2/markets?series_ticker=KXBTCY&status=open&limit=3"
+      },
+      "market_source": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXBTCY-27JAN0100-T20000.00",
+      "strategy": "S3-resolution-carry"
+    },
+    {
+      "kind": "create",
+      "submitted_at_utc": "2026-11-20T11:44:45.146Z",
+      "mode": "paper",
+      "request": {
+        "ticker": "KXPRESPERSON-28-CHOL",
+        "client_order_id": "4ff9fa7a-ae16-40a6-80a6-672b7f277200",
+        "side": "ask",
+        "count": "12.00",
+        "price": "0.0030",
+        "time_in_force": "good_till_canceled",
+        "self_trade_prevention_type": "maker",
+        "exchange_index": 0
+      },
+      "response": {
+        "PAPER": true,
+        "filled": true,
+        "order_id": "paper-588576ab-600b-4ecb-b2aa-86cbfb24a411",
+        "client_order_id": "4ff9fa7a-ae16-40a6-80a6-672b7f277200",
+        "status": "executed",
+        "filled_count": 12.0,
+        "remaining_count": 0.0,
+        "average_fill_price": "0.0030",
+        "cash_delta_dollars": 0.036,
+        "illustrative_fee_not_a_quote": 0.0025,
+        "note": "Fill price is the best opposite-side bid/ask read from GET /markets/{ticker}/orderbook at this instant; it is a simulation, not an exchange acknowledgement. `illustrative_fee_not_a_quote` is NOT a Kalshi fee: fees come from the series fee_type/fee_multiplier and https://kalshi.com/docs/kalshi-fee-schedule.pdf and are only authoritative on a real fill's `fee_cost`. Never use this number for a decision."
+      },
+      "market_snapshot_used": {
+        "ticker": "KXPRESPERSON-28-CHOL",
+        "status": "active",
+        "last_price_dollars": "0.0050",
+        "yes_bid_dollars": "0.0030",
+        "yes_ask_dollars": "0.0050",
+        "no_bid_dollars": "0.9970",
+        "volume_fp": "562511.75",
+        "open_interest_fp": "407864.64",
+        "close_time": "2029-11-07T15:00:00Z",
+        "notional_value_dollars": "1.0000",
+        "quote_basis": "capture",
+        "_captured_from": "https://external-api.demo.kalshi.co/trade-api/v2/markets?event_ticker=KXPRESPERSON-28&status=open&limit=3"
+      },
+      "market_source": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPRESPERSON-28-CHOL",
+      "strategy": "S1-limit-resting"
+    },
+    {
+      "kind": "create",
+      "submitted_at_utc": "2026-11-20T11:44:45.147Z",
+      "mode": "paper",
+      "request": {
+        "ticker": "KXPRESPERSON-28-RPAU",
+        "client_order_id": "e7a78abe-e3f2-4538-a725-2a10592da7bf",
+        "side": "bid",
+        "count": "250.00",
+        "price": "0.0030",
+        "time_in_force": "immediate_or_cancel",
+        "self_trade_prevention_type": "taker_at_cross",
+        "exchange_index": 0
+      },
+      "response": {
+        "PAPER": true,
+        "filled": true,
+        "order_id": "paper-2ab13224-0682-4ef1-a153-e61487985b68",
+        "client_order_id": "e7a78abe-e3f2-4538-a725-2a10592da7bf",
+        "status": "executed",
+        "filled_count": 250.0,
+        "remaining_count": 0.0,
+        "average_fill_price": "0.0030",
+        "cash_delta_dollars": 0.75,
+        "illustrative_fee_not_a_quote": 0.0523,
+        "note": "Fill price is the best opposite-side bid/ask read from GET /markets/{ticker}/orderbook at this instant; it is a simulation, not an exchange acknowledgement. `illustrative_fee_not_a_quote` is NOT a Kalshi fee: fees come from the series fee_type/fee_multiplier and https://kalshi.com/docs/kalshi-fee-schedule.pdf and are only authoritative on a real fill's `fee_cost`. Never use this number for a decision."
+      },
+      "market_snapshot_used": {
+        "ticker": "KXPRESPERSON-28-RPAU",
+        "status": "active",
+        "last_price_dollars": "0.0030",
+        "yes_bid_dollars": "0.0020",
+        "yes_ask_dollars": "0.0030",
+        "no_bid_dollars": "0.9980",
+        "volume_fp": "730293.35",
+        "open_interest_fp": "610355.28",
+        "close_time": "2029-11-07T15:00:00Z",
+        "notional_value_dollars": "1.0000",
+        "quote_basis": "capture",
+        "_captured_from": "https://external-api.demo.kalshi.co/trade-api/v2/markets?event_ticker=KXPRESPERSON-28&status=open&limit=3"
+      },
+      "market_source": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPRESPERSON-28-RPAU",
+      "strategy": "S2-cross-the-spread"
+    },
+    {
+      "kind": "create",
+      "submitted_at_utc": "2026-11-20T11:44:45.149Z",
+      "mode": "paper",
+      "request": {
+        "ticker": "KXTIME-26-JEN",
+        "client_order_id": "19a6f86a-7da0-4563-9ef8-ac74406459e0",
+        "side": "ask",
+        "count": "12.00",
+        "price": "0.0300",
+        "time_in_force": "good_till_canceled",
+        "self_trade_prevention_type": "maker",
+        "exchange_index": 0
+      },
+      "response": {
+        "PAPER": true,
+        "filled": true,
+        "order_id": "paper-b3f3f17b-479b-4636-be1c-0b9ac7dcc3cd",
+        "client_order_id": "19a6f86a-7da0-4563-9ef8-ac74406459e0",
+        "status": "executed",
+        "filled_count": 12.0,
+        "remaining_count": 0.0,
+        "average_fill_price": "0.0300",
+        "cash_delta_dollars": 0.36,
+        "illustrative_fee_not_a_quote": 0.0244,
+        "note": "Fill price is the best opposite-side bid/ask read from GET /markets/{ticker}/orderbook at this instant; it is a simulation, not an exchange acknowledgement. `illustrative_fee_not_a_quote` is NOT a Kalshi fee: fees come from the series fee_type/fee_multiplier and https://kalshi.com/docs/kalshi-fee-schedule.pdf and are only authoritative on a real fill's `fee_cost`. Never use this number for a decision."
+      },
+      "market_snapshot_used": {
+        "ticker": "KXTIME-26-JEN",
+        "status": "active",
+        "last_price_dollars": "0.0400",
+        "yes_bid_dollars": "0.0300",
+        "yes_ask_dollars": "0.0400",
+        "no_bid_dollars": "0.9600",
+        "volume_fp": "42856.95",
+        "open_interest_fp": "42226.57",
+        "close_time": "2027-01-01T04:59:00Z",
+        "notional_value_dollars": "1.0000",
+        "quote_basis": "capture",
+        "_captured_from": "https://external-api.demo.kalshi.co/trade-api/v2/markets?event_ticker=KXTIME-26&status=open&limit=3"
+      },
+      "market_source": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXTIME-26-JEN",
+      "strategy": "S1-limit-resting"
+    }
+  ],
+  "_meta": {
+    "updated_at_utc": "2026-11-20T11:44:45.149Z",
+    "written_by": "scripts/trade_engine.py",
+    "modes": {
+      "plan": "no request sent",
+      "paper": "public read + simulated fill",
+      "live-demo": "real POST to demo"
+    }
+  }
+}

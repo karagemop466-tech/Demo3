@@ -1,0 +1,330 @@
+{
+  "_meta": {
+    "purpose": "The information gap, as data. Every question here is referenced by id from the docs, the dashboard pages and COORDINATION.md, so the same list cannot drift in two places.",
+    "rule": "Known = verified against an official source or a live API read, with the link. Missing = not knowable from this repository without you or a credential. No item is marked resolved by inference.",
+    "generated_at_utc": "2026-11-20T12:05:00Z",
+    "owner": "arena-b2e728ab"
+  },
+  "questions": [
+    {
+      "id": "Q-01",
+      "question": "What should \u201cculture\u201d mean for this dashboard, given Kalshi publishes no Culture category?",
+      "why_it_matters": "It decides which events appear at all. A wrong choice silently drops or adds entire rows on the leaderboard.",
+      "known": [
+        "The official taxonomy from GET /search/tags_by_categories contains: AI, Business, Climate and Weather, Commodities, Companies, Crypto, Economics, Elections, Entertainment, Financials, Health, Mentions, Politics, Science and Technology, Social, Sports, World (plus Test, harrison-test and a null name). No Culture.",
+        "Entertainment, Mentions and Social are the three published buckets whose series look cultural (awards, charts, person-of-the-year, game releases).",
+        "KXTIME (Time Person of the Year) was returned by tag search, not by any category filter, and is used as the current anchor."
+      ],
+      "missing": "Which of those you consider in scope, and whether Sports-adjacent pop events (e.g. box office, video game releases) belong.",
+      "how_to_find_out": "Open the taxonomy read, pick the categories, then edit data/topics.json topics[id=culture].selectors and re-run scripts/collect.py.",
+      "suggestion": "Keep Entertainment + Mentions + Social, label the column 'Entertainment/Mentions/Social (no Culture category)' rather than renaming it Culture, and treat any series found only by prefix as provisional.",
+      "blocking": false,
+      "affects": [
+        "dashboard",
+        "topics",
+        "ranking"
+      ],
+      "sources": [
+        "https://external-api.demo.kalshi.co/trade-api/v2/search/tags_by_categories",
+        "https://docs.kalshi.com/api-reference/search/get-tags-for-series-categories.md"
+      ]
+    },
+    {
+      "id": "Q-02",
+      "question": "\u201cGas prices\u201d \u2014 retail pump price, or the oil/gas commodity contracts the exchange actually lists?",
+      "why_it_matters": "If you meant pump prices, the topic may have no live markets to track, and the leaderboard row would be permanently empty.",
+      "known": [
+        "Commodities carries the tag 'Oil & Gas'; Economics carries 'Oil and energy'. Both were read from the live taxonomy endpoint.",
+        "The selector Commodities+Oil & Gas returns crude/natural-gas series (KXWTIW weekly strikes, Brent, heating oil, TTF gas).",
+        "No series whose title references retail or pump gasoline appeared in any capture in this session.",
+        "KXWTIW weekly strikes currently have bid 0.0000 / ask 1.0000 with volume_fp 0.00 \u2014 a real empty book, not a missing read."
+      ],
+      "missing": "Whether an empty-book proxy is acceptable, or the topic should be dropped until a pump-price series exists.",
+      "how_to_find_out": "python3 scripts/kalshi_api.py series Economics \"Oil and energy\" and compare against the Commodities selector; search the demo site UI for 'gasoline'.",
+      "suggestion": "Track the energy complex (WTI/Brent/nat-gas) under the label 'Gas & energy prices', and re-check the Economics selector each run so a new retail series is picked up automatically.",
+      "blocking": false,
+      "affects": [
+        "dashboard",
+        "topics",
+        "ranking"
+      ],
+      "sources": [
+        "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Commodities&tags=Oil%20%26%20Gas&include_volume=true",
+        "https://docs.kalshi.com/api-reference/market/get-series-list.md"
+      ]
+    },
+    {
+      "id": "Q-03",
+      "question": "Which dollar definition should the leaderboard rank on?",
+      "why_it_matters": "There is no dollar-volume field, so any ranking is a modelling choice; the choice changes the order of every row.",
+      "known": [
+        "GET /markets and GET /series publish volume_fp / volume_24h_fp in CONTRACTS, and notional_value_dollars per contract (1.0000 on every market sampled).",
+        "The tape (GET /markets/trades) gives count_fp plus yes_price_dollars and no_price_dollars per fill, so dollars must be summed from fills.",
+        "Both parties in a trade pay the same price, so pricing the taker's own side is the least assumptive choice.",
+        "Current formula: sum over trades of count_fp x (yes_price_dollars if taker_outcome_side=='yes' else no_price_dollars)."
+      ],
+      "missing": "Whether you prefer (a) taker-side notional, (b) YES-leg notional only, or (c) contracts.",
+      "how_to_find_out": "Compare the two formulas on the same capture: scripts/aggregate_capture.py prints taker-side; scripts/analyze.py prints YES-leg notional. Both numbers are on the site.",
+      "suggestion": "Keep taker-side notional as the ranking key (it matches what money actually moved), and always show contracts next to it so a $1-notional assumption is visible.",
+      "blocking": false,
+      "affects": [
+        "ranking",
+        "dashboard",
+        "events"
+      ],
+      "sources": [
+        "https://docs.kalshi.com/api-reference/market/get-trades.md",
+        "https://docs.kalshi.com/api-reference/market/get-series-list.md",
+        "https://docs.kalshi.com/api-reference/market/get-markets.md"
+      ]
+    },
+    {
+      "id": "Q-04",
+      "question": "Can a demo-environment API key be provided, so the portfolio and execution paths run against the real account?",
+      "why_it_matters": "This is the single blocker on requirements (d) and (e): portfolio performance and executed trades need signed /portfolio/* calls.",
+      "known": [
+        "The code path exists and is exercised end to end in paper mode: trade_engine -> portfolio -> analyze -> site.",
+        "Signing is RSA-PSS-SHA256 (or Ed25519) over timestamp+METHOD+path-including-/trade-api/v2, with KALSHI-ACCESS-KEY / -TIMESTAMP / -SIGNATURE headers.",
+        "Demo keys are created in the demo account only and never work on production, and vice versa.",
+        "GET /portfolio/balance needs the read::portfolio_balance scope; fills/positions need their own scopes.",
+        "The engine hard-refuses to send orders to a non-demo host."
+      ],
+      "missing": "A key id and a no-passphrase private PEM, supplied via environment variables \u2014 never via chat.",
+      "how_to_find_out": "Create the key at https://demo.kalshi.co/ under API keys, then export KALSHI_API_KEY_ID and KALSHI_PRIVATE_KEY_PEM_PATH for the runner.",
+      "suggestion": "Run scripts/kalshi_api.py auth-check first: it verifies signing against a read-only endpoint before anything can mutate the account.",
+      "blocking": true,
+      "affects": [
+        "portfolio",
+        "execution",
+        "strategies"
+      ],
+      "sources": [
+        "https://docs.kalshi.com/getting_started/quick_start_authenticated_requests.md",
+        "https://docs.kalshi.com/getting_started/demo_env.md",
+        "https://docs.kalshi.com/api-reference/portfolio/get-balance.md"
+      ]
+    },
+    {
+      "id": "Q-05",
+      "question": "Which fee model should P&L use for demo \u2014 the published schedule, or only the API's own fee_cost?",
+      "why_it_matters": "A wrong fee turns a profitable ledger into a loss and vice versa.",
+      "known": [
+        "Every sampled series reports fee_type 'quadratic' with fee_multiplier 1; one variant family includes maker fees (quadratic_with_maker_fees / quadratic_with_combo_maker_fees) and some are flat.",
+        "Fills carry fee_cost directly, which is authoritative for that fill.",
+        "The official fee schedule PDF is the only published description of the quadratic curve.",
+        "Portfolio code therefore uses fill.fee_cost only, and the paper engine labels its estimate 'illustrative_fee_not_a_quote'."
+      ],
+      "missing": "Your call on whether to model fees for planning (pre-trade estimate) in addition to using actual fee_cost for reporting.",
+      "how_to_find_out": "Open the fee schedule PDF and compare its curve against fee_cost values observed on real demo fills once Q-04 is unblocked.",
+      "suggestion": "Keep reporting on actual fee_cost only; add a pre-trade estimator as a separate, clearly-labelled field, never folded into P&L.",
+      "blocking": false,
+      "affects": [
+        "portfolio",
+        "strategies"
+      ],
+      "sources": [
+        "https://docs.kalshi.com/api-reference/portfolio/get-fills.md",
+        "https://kalshi.com/docs/kalshi-fee-schedule.pdf",
+        "https://docs.kalshi.com/api-reference/market/get-series-list.md"
+      ]
+    },
+    {
+      "id": "Q-06",
+      "question": "Should this project ever touch production, or stay demo-only permanently?",
+      "why_it_matters": "Production means real money, real settlement and real orders; the repo currently hard-refuses it by design.",
+      "known": [
+        "Hosts differ (demo: external-api.demo.kalshi.co / demo-api.kalshi.co; production: external-api.kalshi.com / api.elections.kalshi.com) and keys are not interchangeable.",
+        "Kalshi warns demo prices and behaviour may not reflect real markets.",
+        "trade_engine.py raises OrderError if --execute is used against a non-demo base."
+      ],
+      "missing": "Your decision on scope. Default is demo-only, permanently.",
+      "how_to_find_out": "No research needed \u2014 this is a policy choice.",
+      "suggestion": "Keep demo-only. If production is ever wanted, use a separate deployment and a separate key, and never a shared execute path.",
+      "blocking": false,
+      "affects": [
+        "execution",
+        "site"
+      ],
+      "sources": [
+        "https://docs.kalshi.com/getting_started/api_environments.md",
+        "https://docs.kalshi.com/getting_started/demo_env.md"
+      ]
+    },
+    {
+      "id": "Q-07",
+      "question": "Include multivariate (MVE) combo markets in the ranking, or keep them excluded?",
+      "why_it_matters": "MVE combos currently sort to the top of /markets with zero volume and is_provisional set, which would corrupt a naive leaderboard.",
+      "known": [
+        "GET /markets returns provisional multivariate combos unless mve_filter=exclude is used; they carry volume_fp 0.00 and is_provisional.",
+        "GET /events documents that multivariate events are excluded from its response entirely.",
+        "Combos settle under collateral_return_type MECNET or DIRECNET, which is not the plain-binary payout model."
+      ],
+      "missing": "Whether you want combo exposure tracked as its own section.",
+      "how_to_find_out": "python3 scripts/kalshi_api.py markets --mve-filter include --limit 5 and inspect is_provisional plus collateral_return_type.",
+      "suggestion": "Keep them out of the ranking; add a separate, clearly-labelled combos page only if asked.",
+      "blocking": false,
+      "affects": [
+        "ranking",
+        "events"
+      ],
+      "sources": [
+        "https://docs.kalshi.com/api-reference/market/get-markets.md",
+        "https://docs.kalshi.com/api-reference/events/get-events.md"
+      ]
+    },
+    {
+      "id": "Q-08",
+      "question": "Is the demo REST API CORS-open, so a GitHub Pages deployment can call it directly from the browser?",
+      "why_it_matters": "It decides whether the deployed site is genuinely live or necessarily snapshot-backed.",
+      "known": [
+        "Kalshi publishes no CORS statement anywhere in the docs index; no Access-Control-Allow-Origin behaviour is documented.",
+        "The site therefore attempts a live read at load time, and falls back to the collector snapshot with a visible banner when it fails.",
+        "The local dev_server.py bridge exists for the case where the browser is blocked: it proxies same-origin and can add signatures."
+      ],
+      "missing": "A definitive answer for the demo host from a browser on the Pages origin, which this sandbox cannot test (no egress to kalshi.co).",
+      "how_to_find_out": "Open the deployed site with ?mode=live and read the banner; or run curl -i -H 'Origin: https://<pages-host>' against /exchange/status and inspect the CORS headers.",
+      "suggestion": "Assume blocked, ship the bridge, and re-test after deploy; the fallback path is already built and labelled.",
+      "blocking": false,
+      "affects": [
+        "site",
+        "live-mode"
+      ],
+      "sources": [
+        "https://docs.kalshi.com/llms.txt",
+        "https://docs.kalshi.com/getting_started/api_environments.md"
+      ]
+    },
+    {
+      "id": "Q-09",
+      "question": "What polling budget is acceptable for unauthenticated public reads?",
+      "why_it_matters": "Unauthenticated limits are documented as separate and stricter, with no published numbers; over-polling is the fastest way to 429 the dashboard.",
+      "known": [
+        "Rate limits use a token bucket: default 10 tokens per request class, separate Read and Write budgets, a 3-second burst window at Basic/Advanced read levels, and no Retry-After header on 429.",
+        "Public unauthenticated traffic has its own undocumented limits.",
+        "The docs state REST responses are cached briefly, so sub-second polling returns stale data anyway.",
+        "GET /series ignores a limit parameter and has no cursor, so a full sweep is one large response, not a paged loop."
+      ],
+      "missing": "A budget you are comfortable with for continuous collection (interval and pages per run).",
+      "how_to_find_out": "Watch X-RateLimit-* headers on responses during a test run; that is the only empirical way.",
+      "suggestion": "Default the UI to 15 s with 8 tape pages, keep any cron at 1-5 minutes, and back off on 429 without retrying immediately.",
+      "blocking": false,
+      "affects": [
+        "collector",
+        "site",
+        "live-mode"
+      ],
+      "sources": [
+        "https://docs.kalshi.com/getting_started/rate_limits.md",
+        "https://docs.kalshi.com/api-reference/market/get-series-list.md"
+      ]
+    },
+    {
+      "id": "Q-10",
+      "question": "How long should raw captures be retained in the repository?",
+      "why_it_matters": "Every published number must stay traceable to a raw response, but tape captures grow fast and this repo is served from the same branch.",
+      "known": [
+        "data/raw/trades-capture.json holds 28 verbatim trade records (6.9 KB) and is the sole input to every derived dollar figure.",
+        "site/data/ is generated at build time by scripts/publish_snapshot.py, so published artifacts are reproducible from data/.",
+        "Cumulative patchset size in this environment is capped, which argues against logging every page of tape."
+      ],
+      "missing": "Your retention preference (per-run file, daily rollup, or nothing but the last capture).",
+      "how_to_find_out": "No research needed.",
+      "suggestion": "Keep the newest capture per day plus any capture that backs a published claim; drop the rest in the same commit that publishes.",
+      "blocking": false,
+      "affects": [
+        "data",
+        "repo"
+      ],
+      "sources": [
+        "https://docs.kalshi.com/api-reference/market/get-trades.md"
+      ]
+    },
+    {
+      "id": "Q-11",
+      "question": "Which horizon should the seconds axis cover, given the API has no sub-minute history?",
+      "why_it_matters": "The requirement asks for a seconds-granular X axis, which the candlestick API cannot answer; the workaround has a hard memory bound.",
+      "known": [
+        "period_interval accepts only 1, 60 or 1440 minutes, and a response is capped at 5,000 periods.",
+        "A seconds axis therefore exists only as client-sampled data, starting when you open the page; it is labelled 'client-sampled' and never merged into candle series.",
+        "The WebSocket trade/ticker channels are the only real-time source, and every WS handshake requires a signature."
+      ],
+      "missing": "How long a sampling window to keep in the browser (currently 900 points per market at 5 s = 75 minutes).",
+      "how_to_find_out": "Judge it in use on the dashboard; the constant is one line in site/assets/api.js.",
+      "suggestion": "Keep 5 s sampling for the watchlist only, and use the bridge with WS for anything denser.",
+      "blocking": false,
+      "affects": [
+        "charts"
+      ],
+      "sources": [
+        "https://docs.kalshi.com/api-reference/market/get-market-candlesticks.md",
+        "https://docs.kalshi.com/getting_started/quick_start_websockets.md"
+      ]
+    },
+    {
+      "id": "Q-12",
+      "question": "Should the order book ladder keep showing only bids plus an implied ask, or persist derived asks as their own field?",
+      "why_it_matters": "The ask side is a derivation, not a read; presenting it as data would be a fabricated value.",
+      "known": [
+        "orderbook_fp returns yes_dollars and no_dollars as [price_dollars, count_fp] arrays, ascending, bids only, best last.",
+        "A YES bid at X is equivalent to a NO ask at 1 - X, which is how the ladder prints the ask side.",
+        "depth=N controls how many levels come back; the ladder uses the raw bids and shows the derivation inline."
+      ],
+      "missing": "Whether you want the derived ask stored in data/ at all, or shown only in the UI.",
+      "how_to_find_out": "No research needed; both options are one-line differences in collect.py.",
+      "suggestion": "Show it in the UI labelled 'implied', never write it into the published data as if it were an API field.",
+      "blocking": false,
+      "affects": [
+        "charts",
+        "liquidity"
+      ],
+      "sources": [
+        "https://docs.kalshi.com/getting_started/orderbook_responses.md"
+      ]
+    },
+    {
+      "id": "Q-13",
+      "question": "Should paper trades be counted in performance reporting at all?",
+      "why_it_matters": "A paper fill looks exactly like a real one in a table; only its label distinguishes them.",
+      "known": [
+        "The engine stamps mode on every record and portfolio.load_paper only ingests entries with mode='paper' AND a filled response.",
+        "Every affected KPI on the site carries a paper tag, and the ledger sets simulated=true.",
+        "Real reporting uses /portfolio/fills; that path is untested because no key exists."
+      ],
+      "missing": "Whether you want paper rows in the same tables with labels, or excluded entirely and shown only on a separate page.",
+      "how_to_find_out": "No research needed.",
+      "suggestion": "Keep them in the same tables, labelled, because the point of this project is exercising the full pipeline; the label plus the mode field makes mixing impossible to miss.",
+      "blocking": false,
+      "affects": [
+        "portfolio",
+        "strategies"
+      ],
+      "sources": [
+        "https://docs.kalshi.com/api-reference/portfolio/get-fills.md",
+        "https://docs.kalshi.com/getting_started/quick_start_create_order.md"
+      ]
+    },
+    {
+      "id": "Q-14",
+      "question": "Is the demo tape's synthetic character acceptable for demonstrating the ranking pipeline?",
+      "why_it_matters": "If the demo feed is synthetic, the ranking code is validated but the numbers are not market truth.",
+      "known": [
+        "Within ~0.2 s of the tape window, 120 fills printed in sizes like 5555.55 and 1851.85 contracts \u2014 round repeating fractions, not organic order flow.",
+        "Kalshi's own docs state demo prices and behaviour may not reflect real markets.",
+        "The pipeline itself is host-agnostic: pointing the collector at production changes only the base URL."
+      ],
+      "missing": "Whether you want the site to keep a permanent 'demo data, possibly synthetic' banner, or drop it once production reads are available.",
+      "how_to_find_out": "Compare one hour of /markets/trades on demo against the same window on production when a key exists.",
+      "suggestion": "Keep the banner. The dashboard's value here is the method; hiding the provenance would oversell it.",
+      "blocking": false,
+      "affects": [
+        "ranking",
+        "site",
+        "strategies"
+      ],
+      "sources": [
+        "https://docs.kalshi.com/getting_started/demo_env.md",
+        "https://docs.kalshi.com/api-reference/market/get-trades.md"
+      ]
+    }
+  ]
+}

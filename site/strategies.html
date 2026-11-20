@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Strategies — trade types and what they did</title>
+<meta name="description" content="Every fill categorised by trade type — direction, liquidity, size, price band, horizon, topic, timing — with a strategy scoreboard and the evidence each verdict needs.">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div id="chrome"></div>
+
+<main class="wrap">
+  <div id="modebar" class="mode"></div>
+  <div id="modenote"></div>
+
+  <h1>Strategies derived from trade types</h1>
+  <p class="lede">Two independent views of the same ledger. <strong>Inferred style</strong> groups each fill by observable
+    features — the API's own fields, bucketed by fixed rules. <strong>Declared strategy</strong> groups by the label the
+    operator stamped on the order. Where they disagree, or where a bucket has too few settled trades to mean anything,
+    the verdict is <span class="tag pending">insufficient data</span> — never a guess dressed as a result.</p>
+
+  <div class="grid g4" style="margin:14px 0">
+    <div class="card tight" id="k-rows"></div>
+    <div class="card tight" id="k-buckets"></div>
+    <div class="card tight" id="k-settled"></div>
+    <div class="card tight" id="k-basis"></div>
+  </div>
+
+  <h2>Inferred style — scoreboard</h2>
+  <p class="sub">A row is “confirmable” only at ≥10 settled trades
+    (<span class="mono">STRATEGY_TESTS</span> in <span class="mono">scripts/analyze.py</span>). <span class="mono">trades_observed</span>
+    counts every matching row; <span class="mono">settled</span> counts only those whose market has a
+    <span class="mono">result</span>.</p>
+  <div id="scoreboard"></div>
+
+  <h2>Declared strategy — what was actually labelled</h2>
+  <div id="declared"></div>
+
+  <h2>Categorisation by trade type</h2>
+  <div id="dims"></div>
+
+  <h2>Every fill, with its labels</h2>
+  <p class="sub">One row per fill. Nothing is aggregated here, so a bucket above can always be traced to specific rows.</p>
+  <div id="trades"></div>
+
+  <h2>Rules, verbatim</h2>
+  <div class="card">
+    <table style="font-size:13.5px">
+      <thead><tr><th>Dimension</th><th>Rule applied to the raw field</th><th>Field</th></tr></thead>
+      <tbody>
+        <tr><td>direction</td><td><span class="mono">book_side=="bid" ? buy_yes : sell_yes</span> — a sell-YES is a buy-NO, which is why the tape shows one price for both parties</td><td class="src"><a href="https://docs.kalshi.com/api-reference/portfolio/get-fills.md" target="_blank" rel="noopener">fills</a></td></tr>
+        <tr><td>liquidity</td><td><span class="mono">is_taker ? taker : maker</span></td><td class="src"><a href="https://docs.kalshi.com/api-reference/orders/create-order-v2.md" target="_blank" rel="noopener">orders</a></td></tr>
+        <tr><td>size_bucket</td><td>&lt;10 micro · 10–100 small · 100–1k medium · &gt;1k large (contracts, from <span class="mono">count_fp</span>)</td><td class="src"><a href="https://docs.kalshi.com/api-reference/market/get-trades.md" target="_blank" rel="noopener">trades</a></td></tr>
+        <tr><td>price_bucket</td><td>&lt;0.10 long-shot · 0.10–0.90 mid · &gt;0.90 favourite, using <span class="mono">yes_price_dollars</span></td><td class="src"><a href="https://docs.kalshi.com/api-reference/market/get-market.md" target="_blank" rel="noopener">market</a></td></tr>
+        <tr><td>horizon_bucket</td><td>hours to <span class="mono">close_time</span> at fill time: &lt;1h ultra · &lt;24h short · &lt;7d medium · else long</td><td class="src"><a href="https://docs.kalshi.com/api-reference/market/get-markets.md" target="_blank" rel="noopener">markets</a></td></tr>
+        <tr><td>utc_hour / weekday</td><td>from <span class="mono">fill.created_time</span>; no timezone normalisation is applied</td><td class="src"><a href="https://docs.kalshi.com/api-reference/portfolio/get-fills.md" target="_blank" rel="noopener">fills</a></td></tr>
+        <tr><td>spread_bucket</td><td><span class="mono">yes_ask − yes_bid</span> at fill time when the book was captured; blank when it was not — never back-filled from a later read</td><td class="src"><a href="https://docs.kalshi.com/getting_started/orderbook_responses.md" target="_blank" rel="noopener">order book</a></td></tr>
+        <tr><td>win / loss</td><td><span class="mono">(result=="yes") == (direction=="buy_yes")</span> — evaluated only when <span class="mono">result</span> is populated</td><td class="src"><a href="https://docs.kalshi.com/getting_started/market_settlement.md" target="_blank" rel="noopener">settlement</a></td></tr>
+        <tr><td>topic</td><td>series prefix resolved against the verified universe; unmapped rows stay <span class="mono">unmapped</span> and are counted, not hidden</td><td class="src"><a href="topics.html">topics</a></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout warn">
+    <strong>Read the sample size before believing a row.</strong> With 5 paper fills and 0 settled outcomes,
+    every hit-rate on this page is structurally undefined. That is the honest state of the project, not a bug to average
+    away: a strategy verdict needs settled trades on the same market type, and Kalshi demo markets resolve on their own
+    schedule. <a href="suggestions.html#s-06">Suggestion S-06</a> describes the collection loop that closes this gap.
+  </div>
+
+  <footer id="foot"></footer>
+</main>
+
+<script src="assets/api.js"></script>
+<script src="assets/ui.js"></script>
+<script>
+(function () {
+  UI.boot({ page: "strategies" }).then(function (st) {
+    var an = st.analysis || {};
+    var tapeAn = st.tapeAnalysis || {};
+    var trades = an.trades || [];
+    var tape = (tapeAn.trades || []);
+    var dims = an.by_category || {};
+    var all = trades.concat(tape);
+
+    document.getElementById("k-rows").innerHTML = UI.kpi("Rows categorised", UI.fmt.int(all.length),
+      UI.fmt.int(trades.length) + " ledger · " + UI.fmt.int(tape.length) + " public tape");
+    document.getElementById("k-buckets").innerHTML = UI.kpi("Bucket count", UI.fmt.int(Object.keys(dims).length * 4),
+      Object.keys(dims).length + " dimensions in the ledger view");
+    var settled = all.filter(function (t) { return t.market_result === "yes" || t.market_result === "no"; });
+    document.getElementById("k-settled").innerHTML = UI.kpi("Settled", UI.fmt.int(settled.length),
+      settled.length ? "hit rate becomes meaningful near 10" : "0 — verdicts stay open");
+    var bases = {};
+    all.forEach(function (t) { bases[t.basis || "—"] = (bases[t.basis || "—"] || 0) + 1; });
+    document.getElementById("k-basis").innerHTML = UI.kpi("Data basis",
+      '<span style="font-size:14px">' + Object.keys(bases).map(function (k) { return UI.tag(k + " × " + bases[k], "pending"); }).join(" ") + "</span>",
+      "paper/tape rows are never mixed with exchange rows");
+
+    function dimCell(v) {
+      if (v === null || v === undefined) return '<span class="unverified">— none</span>';
+      if (typeof v === "boolean") return UI.tag(v ? "yes" : "no", v ? "yes" : "no");
+      return UI.esc(String(v));
+    }
+
+    UI.table("#scoreboard", {
+      rows: an.strategies || [],
+      columns: [
+        { k: "strategy", label: "Strategy", render: function (s) { return '<span class="mono">' + UI.esc(s.strategy) + '</span><div class="small">' + UI.esc(s.hypothesis || "") + "</div>"; } },
+        { k: "filter", label: "Filter applied", render: function (s) { return '<span class="mono small">' + UI.esc(JSON.stringify(s.filter)) + "</span>"; } },
+        { k: "trades_observed", label: "Observed", cls: "r", render: function (s) { return UI.fmt.int(s.trades_observed); } },
+        { k: "settled", label: "Settled", cls: "r", render: function (s) { return UI.fmt.int(s.settled); } },
+        { k: "wins", label: "Wins", cls: "r", render: function (s) { return UI.fmt.int(s.wins); } },
+        { k: "hit_rate", label: "Hit rate", cls: "r", render: function (s) { return s.hit_rate === null || s.hit_rate === undefined ? "—" : (100 * s.hit_rate).toFixed(1) + "%"; } },
+        { k: "notional_dollars", label: "Notional", cls: "r", render: function (s) { return UI.fmt.money(s.notional_dollars); } },
+        { k: "fees_dollars", label: "Fees", cls: "r", render: function (s) { return UI.fmt.money(s.fees_dollars, 4); } },
+        { k: "data_basis", label: "Basis", render: function (s) { return UI.tag(s.data_basis || "—", s.data_basis === "demo-live" ? "yes" : "pending"); } },
+        { k: "verdict", label: "Verdict", render: function (s) { return UI.tag(s.verdict, s.verdict === "evaluable" ? "yes" : "pending"); } },
+        { k: "confirming_metric", label: "What would confirm or refute it", render: function (s) { return '<span class="small">' + UI.esc(s.confirming_metric || "") + "</span>"; } }
+      ],
+      empty: "no strategies scored"
+    });
+
+    UI.table("#declared", {
+      rows: an.declared_strategies || [],
+      columns: [
+        { k: "declared_strategy", label: "Declared id", render: function (r) { return '<span class="mono">' + UI.esc(r.declared_strategy) + "</span>"; } },
+        { k: "trades", label: "Rows", cls: "r", render: function (r) { return UI.fmt.int(r.trades); } },
+        { k: "contracts", label: "Contracts", cls: "r", render: function (r) { return UI.fmt.qty(r.contracts); } },
+        { k: "notional_dollars", label: "Notional", cls: "r", render: function (r) { return UI.fmt.money(r.notional_dollars, 4); } },
+        { k: "fees_dollars", label: "Fees", cls: "r", render: function (r) { return UI.fmt.money(r.fees_dollars, 4); } },
+        { k: "settled", label: "Settled", cls: "r", render: function (r) { return UI.fmt.int(r.settled); } },
+        { k: "hit_rate", label: "Hit rate", cls: "r", render: function (r) { return r.hit_rate == null ? '<span class="unverified">— undefined</span>' : (100 * r.hit_rate).toFixed(1) + "%"; } },
+        { k: "topics", label: "Topics", render: function (r) { return (r.topics || []).map(function (x) { return UI.tag(x, "open"); }).join(" ") || "—"; } },
+        { k: "directions", label: "Directions", render: function (r) { return (r.directions || []).map(function (x) { return '<span class="mono small">' + UI.esc(x) + "</span>"; }).join(" · ") || "—"; } },
+        { k: "labels", label: "Size / price labels", render: function (r) { return '<span class="small">' + (r.labels || []).map(UI.esc).join(" · ") + "</span>"; } },
+        { k: "tickers", label: "Markets", render: function (r) { return '<span class="mono small">' + (r.tickers || []).map(UI.esc).join("<br>") + "</span>"; } },
+        { k: "basis", label: "Basis", render: function (r) { return (r.basis || []).map(function (x) { return UI.tag(x, "pending"); }).join(" "); } }
+      ],
+      empty: "no declared strategy labels present — the ledger's fills carry none"
+    });
+
+    var dimNames = { basis: "Data basis", topic: "Topic", block: "Block trade", declared_strategy: "Declared strategy",
+                     direction: "Direction", liquidity: "Maker / taker", size_bucket: "Size (contracts)",
+                     price_bucket: "Price band", horizon_bucket: "Horizon", utc_hour: "UTC hour",
+                     spread_bucket: "Spread at fill", series_ticker: "Series" };
+    var flat = [];
+    Object.keys(dims).forEach(function (d) {
+      (dims[d] || []).forEach(function (row) {
+        flat.push({ dim: d, row: row });
+      });
+    });
+    UI.table("#dims", {
+      rows: flat,
+      columns: [
+        { k: "dim", label: "Dimension", render: function (f) { return "<strong>" + UI.esc(dimNames[f.dim] || f.dim) + "</strong>"; } },
+        { k: "value", label: "Bucket", render: function (f) { return dimCell(f.row.value); } },
+        { k: "trades", label: "Fills", cls: "r", render: function (f) { return UI.fmt.int(f.row.trades); } },
+        { k: "contracts", label: "Contracts", cls: "r", render: function (f) { return UI.fmt.qty(f.row.contracts); } },
+        { k: "notional", label: "Notional $", cls: "r", render: function (f) { return UI.fmt.money(f.row.notional_dollars, 4); } },
+        { k: "fees", label: "Fees $", cls: "r", render: function (f) { return f.row.fees_dollars === 0 ? "$0.0000" : UI.fmt.money(f.row.fees_dollars, 4); } },
+        { k: "settled", label: "Settled", cls: "r", render: function (f) { return UI.fmt.int(f.row.settled); } },
+        { k: "won", label: "W/L", cls: "r", render: function (f) { return UI.fmt.int(f.row.won) + " / " + UI.fmt.int(f.row.lost); } },
+        { k: "hit", label: "Hit rate", cls: "r", render: function (f) { return f.row.hit_rate == null ? '<span class="unverified">—</span>' : (100 * f.row.hit_rate).toFixed(1) + "%"; } },
+        { k: "avg", label: "Avg notional", cls: "r", render: function (f) { return UI.fmt.money(f.row.avg_notional_dollars, 4); } },
+        { k: "bps", label: "Fee bps of notional", cls: "r", render: function (f) {
+            var v = f.row.avg_fee_bps_of_notional;
+            return v == null ? '<span class="unverified">—</span>' : v.toFixed(1) + " bps"; } }
+      ],
+      empty: "no categories"
+    });
+
+    UI.table("#trades", {
+      rows: all,
+      columns: [
+        { k: "created_time", label: "Fill time", render: function (t) { return '<span class="small">' + UI.fmt.dt(t.created_time || t.time) + "</span>"; } },
+        { k: "ticker", label: "Market", render: function (t) { return '<span class="mono small">' + UI.esc(t.ticker) + "</span>" + (t.topic ? " " + UI.tag(t.topic, "open") : " " + UI.tag("unmapped", "no")); } },
+        { k: "basis", label: "Basis", render: function (t) { return UI.tag(t.basis || "—", t.basis === "demo-live" ? "yes" : "pending"); } },
+        { k: "direction", label: "Dir", render: function (t) { return '<span class="mono small">' + UI.esc(t.direction || "—") + "</span>"; } },
+        { k: "liquidity", label: "Liq", render: function (t) { return UI.esc(t.liquidity || "—"); } },
+        { k: "contracts", label: "Ct", cls: "r", render: function (t) { return UI.fmt.qty(t.contracts); } },
+        { k: "yes_price_dollars", label: "YES px", cls: "r", render: function (t) { return UI.fmt.px(t.yes_price_dollars); } },
+        { k: "no_price_dollars", label: "NO px", cls: "r", render: function (t) { return UI.fmt.px(t.no_price_dollars); } },
+        { k: "notional_dollars", label: "Notional", cls: "r", render: function (t) { return UI.fmt.money(t.notional_dollars, 4); } },
+        { k: "fee_cost_dollars", label: "Fee", cls: "r", render: function (t) { return t.fee_cost_dollars == null ? '<span class="unverified">— none</span>' : UI.fmt.money(t.fee_cost_dollars, 4); } },
+        { k: "size_bucket", label: "Size", render: function (t) { return '<span class="small">' + UI.esc(t.size_bucket || "—") + "</span>"; } },
+        { k: "price_bucket", label: "Band", render: function (t) { return '<span class="small">' + UI.esc(t.price_bucket || "—") + "</span>"; } },
+        { k: "horizon_bucket", label: "Horizon", render: function (t) { return '<span class="small">' + UI.esc(t.horizon_bucket || "—") + "</span>"; } },
+        { k: "spread_dollars", label: "Spread", cls: "r", render: function (t) { return t.spread_dollars == null ? '<span class="unverified">—</span>' : UI.fmt.money(t.spread_dollars, 4); } },
+        { k: "declared_strategy", label: "Declared", render: function (t) { return t.declared_strategy ? '<span class="mono small">' + UI.esc(t.declared_strategy) + "</span>" : '<span class="unverified">unlabelled</span>'; } },
+        { k: "market_result", label: "Result", render: function (t) { return t.market_result ? UI.tag(t.market_result, t.market_result === "yes" ? "yes" : "no") : '<span class="sub small">unresolved</span>'; } },
+        { k: "outcome", label: "Win?", render: function (t) {
+            if (!t.market_result) return '<span class="sub small">n/a</span>';
+            var won = (t.market_result === "yes") === (t.direction === "buy_yes");
+            return UI.tag(won ? "win" : "loss", won ? "yes" : "no"); } },
+        { k: "unresolved_fields", label: "Fields we could not map", render: function (t) {
+            var u = t.unresolved_fields || [];
+            return u.length ? '<span class="small">' + u.map(function (x) { return UI.tag(x, "no"); }).join(" ") + "</span>" : '<span class="sub small">none</span>'; } },
+        { k: "source", label: "Source", cls: "src", render: function (t) { return UI.src(t.source); } }
+      ],
+      empty: "no fills categorised"
+    });
+  });
+})();
+</script>
+</body>
+</html>

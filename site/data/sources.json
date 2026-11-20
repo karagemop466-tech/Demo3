@@ -1,0 +1,582 @@
+{
+  "_meta": {
+    "purpose": "Every external reference this project relies on, with what it was used to establish and how it was checked. site/sources.html renders this file; verify_site.py audits it. A row with verified=false must not be used to support a published number.",
+    "policy": "Official = kalshi.com, docs.kalshi.com, demo.kalshi.co or a source Kalshi itself names in a settlement field. Anything else is third-party and is only ever recorded as context, never as verification.",
+    "checked_at_utc": "2026-11-20T12:10:00Z",
+    "network_note": "Every docs.kalshi.com and demo-API read listed here was retrieved through the agent's fetch path. Direct shell egress to kalshi.co failed in this sandbox (see FLAG-12), which is why raw responses are archived under data/ instead of being re-fetchable by clicking a link on the deployed site."
+  },
+  "groups": [
+    {
+      "id": "environments",
+      "title": "Environments, hosts and access",
+      "items": [
+        {
+          "url": "https://docs.kalshi.com/getting_started/api_environments.md",
+          "establishes": "Demo REST base https://external-api.demo.kalshi.co/trade-api/v2 (alt https://demo-api.kalshi.co/trade-api/v2); production external-api.kalshi.com (alt api.elections.kalshi.com); demo WS wss://external-api-ws.demo.kalshi.co/trade-api/ws/v2.",
+          "used_by": [
+            "scripts/kalshi_api.py",
+            "site/assets/api.js",
+            "docs/api-surface.md"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/getting_started/demo_env.md",
+          "establishes": "Demo account has mock funds; keys are not shared between demo and production; demo prices and behaviour may not reflect real markets; the endpoints table this project's host list was copied from.",
+          "used_by": [
+            "site/index.html",
+            "docs/executive-summary.md",
+            "Q-06",
+            "Q-14"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/getting_started/quick_start_authenticated_requests.md",
+          "establishes": "Signature string = timestamp + METHOD + path-including-/trade-api/v2 (query excluded); RSA-PSS SHA-256 with salt length equal to digest length, or Ed25519 over the raw message; base64; headers KALSHI-ACCESS-KEY / -TIMESTAMP / -SIGNATURE.",
+          "used_by": [
+            "scripts/kalshi_api.py Signer",
+            "site/api.html"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/getting_started/api_keys.md",
+          "establishes": "API key usage and the fact that a key is created in the account's own environment; keys can be scoped, including read::portfolio_balance.",
+          "used_by": [
+            "Q-04",
+            "site/portfolio.html"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/api-reference/api-keys/create-api-key.md",
+          "establishes": "A key is registered by uploading your own RSA or Ed25519 public key in PEM; verification is RSA-PSS-SHA256 or Ed25519 accordingly.",
+          "used_by": [
+            "scripts/kalshi_api.py Signer",
+            "docs/api-surface.md"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/getting_started/quick_start_websockets.md",
+          "establishes": "Every WS connection requires the signed handshake (message timestamp + GET + /trade-api/ws/v2); public vs private channel lists; error 9 when a market-data-only key subscribes to a private channel; server pings after 10 s idle; subscribe frame shape.",
+          "used_by": [
+            "docs/api-surface.md",
+            "FLAG-10",
+            "scripts/dev_server.py"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/getting_started/rate_limits.md",
+          "establishes": "Token bucket, default 10 tokens/request, separate Read and Write budgets, 3-second burst window at Basic/Advanced, 429 body {\"error\":{\"code\":\"too_many_requests\"}} with no Retry-After, per-shard write buckets, X-RateLimit-* headers.",
+          "used_by": [
+            "docs/api-surface.md",
+            "Q-09",
+            "scripts/collect.py"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/getting_started/pagination.md",
+          "establishes": "Cursor-based pagination convention used by /markets and /markets/trades.",
+          "used_by": [
+            "scripts/collect.py",
+            "site/assets/api.js rankEvents"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/getting_started/exchange_sharding.md",
+          "establishes": "Exchange indexes and that a market lives on exactly one shard, which is why cancels need market_ticker routing.",
+          "used_by": [
+            "scripts/trade_engine.py",
+            "docs/api-surface.md"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/api-reference/exchange/get-exchange-status.md",
+          "establishes": "Shape of the status response, including trading_active and per-index status.",
+          "used_by": [
+            "scripts/collect.py (gate before publishing)",
+            "site/index.html"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/api-reference/exchange/get-user-data-timestamp.md",
+          "establishes": "Official statement that there is a short delay before exchange events are reflected in API endpoints, and the recommendation to combine writes with WS data.",
+          "used_by": [
+            "FLAG-07",
+            "site/api.html"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/getting_started/maintenance_and_pauses.md",
+          "establishes": "Scheduled maintenance and pause states a market can be in; relevant to a dashboard that claims liveness.",
+          "used_by": [
+            "docs/api-surface.md"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/api-reference/portfolio/get-all-subaccount-balances.md",
+          "establishes": "Per-subaccount balances are readable in one call and return only existing subaccount/exchange-index pairs, including zero balances \u2014 which is why the single /portfolio/balance breakdown is sufficient here and what a change to subaccounts would cost.",
+          "used_by": [
+            "site/api.html (documented but not used)"
+          ],
+          "verified": true
+        }
+      ]
+    },
+    {
+      "id": "market-data",
+      "title": "Market data endpoints the dashboard is built on",
+      "items": [
+        {
+          "url": "https://docs.kalshi.com/api-reference/search/get-tags-for-series-categories.md",
+          "establishes": "The complete official category/tag taxonomy. Read live: 17 real categories + Test, harrison-test and a null entry; no Culture; no retail-gasoline category.",
+          "used_by": [
+            "data/topics.json",
+            "site/topics.html",
+            "FLAG-03",
+            "Q-01",
+            "Q-02"
+          ],
+          "verified": true,
+          "live_read": "https://external-api.demo.kalshi.co/trade-api/v2/search/tags_by_categories"
+        },
+        {
+          "url": "https://docs.kalshi.com/api-reference/market/get-series-list.md",
+          "establishes": "category/tags filters are exact and case-sensitive; include_volume adds volume_fp; there is no limit or cursor; volume_fp is contracts; fee_type values include quadratic and the maker-fee variants.",
+          "used_by": [
+            "scripts/collect.py",
+            "site/topics.html",
+            "FLAG-05",
+            "Q-03"
+          ],
+          "verified": true,
+          "live_read": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Commodities&tags=Oil%20%26%20Gas&include_volume=true"
+        },
+        {
+          "url": "https://docs.kalshi.com/api-reference/market/get-trades.md",
+          "establishes": "limit 1-1000 default 100; min_ts/max_ts are integer seconds (milliseconds are a 400); an unknown ticker returns 200 with an empty list; block trades are included and marked is_block_trade; taker_side is deprecated in favour of taker_outcome_side/taker_book_side; both parties trade at one price.",
+          "used_by": [
+            "the entire dollar-volume ranking",
+            "scripts/aggregate_capture.py",
+            "Q-03",
+            "FLAG-08"
+          ],
+          "verified": true,
+          "live_read": "https://external-api.demo.kalshi.co/trade-api/v2/markets/trades?limit=120"
+        },
+        {
+          "url": "https://docs.kalshi.com/api-reference/market/get-markets.md",
+          "establishes": "status filter vocabulary (unopened|open|closed|settled), one status at a time, timestamp filters mutually exclusive with some status filters, the response is cached briefly, and the market object fields the tables display.",
+          "used_by": [
+            "scripts/collect.py",
+            "site/events.html",
+            "FLAG-01",
+            "FLAG-02",
+            "FLAG-07"
+          ],
+          "verified": true,
+          "live_read": "https://external-api.demo.kalshi.co/trade-api/v2/markets?series_ticker=KXPGATOUR&status=open&limit=200"
+        },
+        {
+          "url": "https://docs.kalshi.com/api-reference/market/get-market.md",
+          "establishes": "Single-market read, including result / settlement_ts / settlement_value_dollars and the note that the response is cached for a short time.",
+          "used_by": [
+            "scripts/trade_engine.py market()",
+            "site/events.html",
+            "FLAG-06"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/api-reference/events/get-events.md",
+          "establishes": "limit \u2264 200; status enum; tickers/series_ticker/with_nested_markets; min_close_ts and min_updated_ts are seconds; multivariate events excluded; collateral_return_type values MECNET|DIRECNET.",
+          "used_by": [
+            "scripts/collect.py",
+            "Q-07",
+            "S-09"
+          ],
+          "verified": true,
+          "live_read": "https://external-api.demo.kalshi.co/trade-api/v2/events?tickers=KXPGATOUR-THRC26&with_nested_markets=true"
+        },
+        {
+          "url": "https://docs.kalshi.com/getting_started/orderbook_responses.md",
+          "establishes": "orderbook_fp returns yes_dollars and no_dollars as [price_dollars, count_fp] pairs, ascending, best last, bids only; a YES bid at X is an ask at 1-X; depth=N; empty book and unknown ticker are both 200-with-empty; it is a point-in-time snapshot.",
+          "used_by": [
+            "site/assets/chart.js Ladder",
+            "scripts/kalshi_api.py depth_at_or_above()",
+            "FLAG-06",
+            "Q-12"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/api-reference/market/get-market-orderbook.md",
+          "establishes": "The endpoint's own statement that no asks are returned, which is the justification for printing an implied ask rather than a data field.",
+          "used_by": [
+            "site/dashboard.html",
+            "Q-12"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/api-reference/market/get-market-candlesticks.md",
+          "establishes": "period_interval accepts only 1, 60 or 1440 minutes; start_ts/end_ts in seconds; \u22645,000 periods per response; fields are end_period_ts, volume_fp, open_interest_fp and OHLC dollar strings; pre-cutoff history lives under /historical.",
+          "used_by": [
+            "the charts",
+            "FLAG/limitation: no sub-minute history",
+            "Q-11"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/api-reference/events/get-event-candlesticks.md",
+          "establishes": "Event-level aggregated candles exist \u2014 the reason the unused-endpoint list is honest rather than a gap.",
+          "used_by": [
+            "site/api.html (documented but not used)"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/api-reference/live-data/get-event-live-data.md",
+          "establishes": "Event-keyed live data exists for crypto price charts and commodity price timeseries \u2014 the closest official 'underlying price' feed, and the candidate answer to the gas-price instrument question.",
+          "used_by": [
+            "S-03",
+            "site/api.html (documented but not used)"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/getting_started/fixed_point_migration.md",
+          "establishes": "Prices and quantities are fixed-point decimal strings; count 0-2 dp in requests, price 2-4 dp, responses up to 6 dp.",
+          "used_by": [
+            "scripts/kalshi_api.py fp()",
+            "site/api.html"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/getting_started/historical_data.md",
+          "establishes": "What falls out of the live data set over time and where it goes (/historical/*), which bounds how far the resolution ledger can be back-filled.",
+          "used_by": [
+            "docs/api-surface.md",
+            "S-06"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/api-reference/market/get-multiple-market-orderbooks.md",
+          "establishes": "A batch order-book endpoint exists, which is how a multi-market ladder should be built once the dashboard shows more than one book.",
+          "used_by": [
+            "site/api.html (documented but not used)"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/api-reference/market/batch-get-market-candlesticks.md",
+          "establishes": "Batch candle retrieval for multiple markets in one request.",
+          "used_by": [
+            "site/api.html (documented but not used)"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/api-reference/events/get-multivariate-events.md",
+          "establishes": "GET /events excludes multivariate events and this is the documented endpoint that returns them, which is the whole basis for the Q-07 exclusion decision.",
+          "used_by": [
+            "Q-07",
+            "site/api.html"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/api-reference/search/get-filters-for-sports.md",
+          "establishes": "An official way to enumerate the filters available per sport, which is the correct way to confirm the golf selector rather than guessing tags.",
+          "used_by": [
+            "site/api.html (documented but not used)",
+            "S-07"
+          ],
+          "verified": true
+        }
+      ]
+    },
+    {
+      "id": "trading",
+      "title": "Trading, orders and settlement",
+      "items": [
+        {
+          "url": "https://docs.kalshi.com/api-reference/orders/create-order-v2.md",
+          "establishes": "V2 request shape; BookSide quotes the YES leg only (bid = buy YES, ask = sell YES = buy NO at 1\u2212price); FixedPointCount minimum 0.01; valid prices constrained by the market's price-level structure; self_trade_prevention_type \u2208 {taker_at_cross, maker}; remaining_count is the final state for IOC; average_fill_price/average_fee_paid only when fill_count > 0; default write cost 10 tokens; legacy /portfolio/orders writes are 410 Gone.",
+          "used_by": [
+            "scripts/trade_engine.py",
+            "docs/api-surface.md",
+            "FLAG-04"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/api-reference/orders/cancel-order-v2.md",
+          "establishes": "Cancel returns {order_id, client_order_id, reduced_by}; auto-routing needs market_ticker with exchange_index omitted or -1; cancelling against the wrong shard is an error.",
+          "used_by": [
+            "scripts/trade_engine.py cancel()"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/api-reference/orders/amend-order-v2.md",
+          "establishes": "Amend sets the updated total/max-fillable count (filled + desired resting); an amend that changes nothing is a 400.",
+          "used_by": [
+            "scripts/trade_engine.py amend()"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/api-reference/orders/decrease-order-v2.md",
+          "establishes": "Exactly one of reduce_by or reduce_to.",
+          "used_by": [
+            "scripts/trade_engine.py decrease()"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/getting_started/order_direction.md",
+          "establishes": "How direction is expressed on Order, Fill and Trade via outcome_side and book_side, and how to migrate off the legacy action/side fields.",
+          "used_by": [
+            "scripts/analyze.py",
+            "scripts/portfolio.py normalise_fill()",
+            "site/strategies.html"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/api-reference/portfolio/get-fills.md",
+          "establishes": "Fill field list (fill_id, exchange_index, trade_id, order_id, ticker, market_ticker, outcome_side, book_side, count_fp, yes_price_dollars, no_price_dollars, is_taker, fee_cost, created_time, subaccount_number, ts); a bid \u2261 yes; buy-YES and sell-NO both report outcome_side yes; deprecated fields stay until at least 2026-05-14; pre-cutoff fills only via /historical/fills.",
+          "used_by": [
+            "scripts/portfolio.py",
+            "site/portfolio.html",
+            "data/questions.json Q-13"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/api-reference/portfolio/get-balance.md",
+          "establishes": "balance is integer cents, balance_dollars is a string, portfolio_value has no documented dollars sibling, balance_breakdown covers every exchange index across subaccounts including zeros, scope read::portfolio_balance, one-second budget at Basic/Advanced, and the instruction to react to fills instead of polling.",
+          "used_by": [
+            "scripts/portfolio.py",
+            "site/portfolio.html derivation table"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/api-reference/portfolio/get-positions.md",
+          "establishes": "Positions returned include closed markets awaiting settlement, which may still hold non-zero quantity and cost basis \u2014 check the market's own status for trading state.",
+          "used_by": [
+            "scripts/portfolio.py",
+            "site/portfolio.html"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/getting_started/market_settlement.md",
+          "establishes": "Winner is paid notional_value_dollars per contract on net positions; settlement fee is 0 for a simple yes/no binary; payouts are rounded to cents.",
+          "used_by": [
+            "scripts/portfolio.py settlement math",
+            "site/events.html",
+            "scripts/collect.py resolution ledger"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/getting_started/market_lifecycle.md",
+          "establishes": "Creation \u2192 open \u2192 close \u2192 settlement transitions the tracker polls on, including can_close_early.",
+          "used_by": [
+            "site/events.html",
+            "scripts/collect.py"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/getting_started/fee_rounding.md",
+          "establishes": "How fees and balances are rounded \u2014 the reason this project never reconstructs a fee from a multiplier.",
+          "used_by": [
+            "Q-05",
+            "scripts/trade_engine.py illustrative fee label"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/api-reference/portfolio/get-settlements.md",
+          "establishes": "Settlement records exist in the live data set only; archived ones move to /historical/positions.",
+          "used_by": [
+            "site/api.html (documented but not used)"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/api-reference/account/list-non-default-endpoint-costs.md",
+          "establishes": "The authoritative per-endpoint token cost table for anything non-default.",
+          "used_by": [
+            "Q-09",
+            "site/api.html"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/api-reference/account/get-account-api-limits.md",
+          "establishes": "An account's tier and token-bucket budgets are readable, so a polling interval can be sized rather than guessed.",
+          "used_by": [
+            "Q-09",
+            "site/api.html"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/getting_started/quick_start_create_order.md",
+          "establishes": "The end-to-end order flow this project mirrors: find markets, place an order, check status, cancel. Also the reference for the create\u2192read\u2192cancel sequence the paper engine reproduces.",
+          "used_by": [
+            "scripts/trade_engine.py",
+            "site/portfolio.html"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/api-reference/orders/get-queue-positions-for-orders.md",
+          "establishes": "Queue position is contracts-to-be-matched before a partial or full fill, by price-time priority \u2014 the reason a resting maker order's wait is knowable and could be shown in the UI.",
+          "used_by": [
+            "site/api.html (documented but not used)"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/api-reference/orders/get-orders.md",
+          "establishes": "Order reads are restricted by status (resting|canceled|executed) and canceled/executed orders before the cutoff move to /historical/orders, while resting orders always remain readable.",
+          "used_by": [
+            "site/api.html (documented but not used)"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/api-reference/orders/get-order.md",
+          "establishes": "Order reads update asynchronously after a write, so a just-created order can briefly 404 \u2014 the documented reason to trust the write response over a follow-up read.",
+          "used_by": [
+            "docs/api-surface.md",
+            "site/api.html"
+          ],
+          "verified": true
+        },
+        {
+          "url": "https://docs.kalshi.com/api-reference/orders/batch-create-orders-v2.md",
+          "establishes": "A batch create endpoint exists, its maximum size scales with the tier's write budget, and the batch is NOT atomic (a 201 can contain per-order failures) \u2014 the documented reason this project keeps single-order writes so a partial reject cannot be misread as success.",
+          "used_by": [
+            "site/api.html (documented but not used)",
+            "Q-09"
+          ],
+          "verified": true
+        }
+      ]
+    },
+    {
+      "id": "settlement-sources",
+      "title": "Sources Kalshi itself names (from settlement_sources, not chosen by us)",
+      "note": "These URLs were not selected by this project. They appear verbatim in the API's own settlement_sources field for the series named, which is why a resolution can be traced to an authority. They are listed for completeness; nothing here is a claim about those organisations.",
+      "items": [
+        {
+          "url": "https://www.europeantour.com/dpworld-tour/schedule/",
+          "establishes": "Settlement source named by series KXDPWORLDTOUR (golf).",
+          "used_by": [
+            "context only \u2014 the source Kalshi names in settlement_sources, not a verification we performed"
+          ],
+          "verified": false,
+          "why_unverified": "third-party site; not fetched from this sandbox; cited only as 'the source Kalshi names'"
+        },
+        {
+          "url": "https://www.pgatour.com/",
+          "establishes": "Settlement source named by the PGA Tour series family (KXPGATOUR), whose settled market is this project's resolution example.",
+          "used_by": [
+            "context only \u2014 the source Kalshi names in settlement_sources, not a verification we performed"
+          ],
+          "verified": false,
+          "why_unverified": "same as above"
+        },
+        {
+          "url": "https://www.cfbenchmarks.com/data/indices/BRTI",
+          "establishes": "Index named in the rules text of the BTC and oil strike markets (KXBTCY, KXWTIW).",
+          "used_by": [
+            "context only \u2014 the source Kalshi names in settlement_sources, not a verification we performed"
+          ],
+          "verified": false,
+          "why_unverified": "the rules text is the fact; the index site itself was not fetched"
+        },
+        {
+          "url": "https://www.theice.com/products/213/WTI-Crude-Futures",
+          "establishes": "Exchange named as reference for WTI-linked markets.",
+          "used_by": [
+            "context only \u2014 the source Kalshi names in settlement_sources, not a verification we performed"
+          ],
+          "verified": false,
+          "why_unverified": "third-party; recorded as context, never as verification"
+        },
+        {
+          "url": "https://www.coingecko.com",
+          "establishes": "Named in some crypto market rules as an alternate reference.",
+          "used_by": [
+            "context only \u2014 the source Kalshi names in settlement_sources, not a verification we performed"
+          ],
+          "verified": false,
+          "why_unverified": "third-party; recorded as context"
+        }
+      ]
+    },
+    {
+      "id": "unverified-claims",
+      "title": "Claims this project deliberately does NOT make",
+      "items": [
+        {
+          "url": null,
+          "establishes": "No CORS policy is documented for any Kalshi host, so the deployed site cannot be assumed to reach the demo API from a browser. Recorded as Q-08 with a fallback, not asserted either way.",
+          "used_by": [
+            "site/index.html",
+            "site/flagged.html FLAG-09"
+          ],
+          "verified": false,
+          "why_unverified": "absence of documentation is not evidence of behaviour; needs a browser test on the deployed origin"
+        },
+        {
+          "url": null,
+          "establishes": "No rate limits are published for unauthenticated public traffic, so the collector self-limits instead of quoting a number.",
+          "used_by": [
+            "Q-09"
+          ],
+          "verified": false,
+          "why_unverified": "undocumented by Kalshi"
+        },
+        {
+          "url": "https://kalshi.com/docs/kalshi-fee-schedule.pdf",
+          "establishes": "The published fee schedule, referenced by the docs. Not fetched in this session, so no rate is taken from it and none is printed anywhere on the site.",
+          "used_by": [
+            "Q-05 (as the thing to read first)"
+          ],
+          "verified": false,
+          "why_unverified": "not retrievable from this sandbox; listed so the gap is visible rather than papered over"
+        },
+        {
+          "url": null,
+          "establishes": "No second-granularity historical price series exists for any market \u2014 stated as impossible, not as unsupported, because period_interval is an enum of 1/60/1440.",
+          "used_by": [
+            "Q-11",
+            "site/dashboard.html seconds axis label"
+          ],
+          "verified": true
+        }
+      ]
+    }
+  ]
+}

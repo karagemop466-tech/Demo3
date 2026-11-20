@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Open questions — what is known vs missing</title>
+<meta name="description" content="Every question that limits this project, with what is already verified from official sources, exactly what is missing, and how to find out.">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div id="chrome"></div>
+
+<main class="wrap">
+  <div id="modebar" class="mode"></div>
+  <div id="modenote"></div>
+
+  <h1>Questions and information needed</h1>
+  <p class="lede">Read from <span class="mono">data/questions.json</span>, the same file
+    <span class="mono">docs/questions.md</span> is generated from — the page and the docs cannot disagree.
+    “Known” means verified against an official Kalshi source or a live API read, each linked. “Missing” is what
+    this repository cannot determine on its own. Nothing is marked answered by inference.</p>
+
+  <div class="grid g4" style="margin:14px 0">
+    <div class="card tight" id="k-total"></div>
+    <div class="card tight" id="k-blocking"></div>
+    <div class="card tight" id="k-self"></div>
+    <div class="card tight" id="k-sources"></div>
+  </div>
+
+  <div class="card tight" style="margin-bottom:14px">
+    <div class="row">
+      <span class="kicker">Show</span>
+      <span class="chips" id="chips">
+        <span class="chip on" data-f="all">all</span>
+        <span class="chip" data-f="blocking">blocking only</span>
+        <span class="chip" data-f="you">needs you</span>
+        <span class="chip" data-f="us">we can resolve</span>
+      </span>
+      <span class="spacer"></span>
+      <span class="small">
+        <a href="https://github.com/karagemop466-tech/Demo3/blob/main/data/questions.json" target="_blank" rel="noopener">data/questions.json</a> ·
+        <a href="https://github.com/karagemop466-tech/Demo3/blob/main/docs/questions.md" target="_blank" rel="noopener">docs/questions.md</a>
+      </span>
+    </div>
+  </div>
+
+  <div id="list"></div>
+
+  <h2>Summary table</h2>
+  <div id="table"></div>
+
+  <div class="callout good">
+    <strong>Everything answerable without you has already been answered from the source.</strong> Twelve of these fourteen
+    items are scope or access decisions; the two that are technical (Q-08 CORS, Q-09 rate budget) have working
+    fallbacks built — the snapshot mode and the conservative 15 s default — so no page of this site depends on an
+    unanswered question to render honestly.
+  </div>
+
+  <footer id="foot"></footer>
+</main>
+
+<script src="assets/api.js"></script>
+<script src="assets/ui.js"></script>
+<script>
+(function () {
+  var all = [], filter = "all";
+
+  UI.boot({ page: "questions" }).then(function (st) {
+    return UI.json((st.dataBaseResolved || "./data") + "/questions.json").then(function (doc) {
+      all = (doc && doc.questions) || [];
+      var blocking = all.filter(function (q) { return q.blocking; });
+      var needsYou = all.filter(function (q) { return /decision|decides|preference|policy choice|one decision/i.test(q.how_to_find_out + " " + q.missing); });
+      var srcs = {};
+      all.forEach(function (q) { (q.sources || []).forEach(function (s) { srcs[s] = 1; }); });
+      document.getElementById("k-total").innerHTML = UI.kpi("Open questions", all.length,
+        "each with known / missing / how to find out / a suggestion");
+      document.getElementById("k-blocking").innerHTML = UI.kpi("Blocking a requirement", blocking.length,
+        blocking.map(function (q) { return q.id; }).join(", ") || "none");
+      document.getElementById("k-self").innerHTML = UI.kpi("Resolvable without you", all.length - needsYou.length,
+        needsYou.length + " need a human decision");
+      document.getElementById("k-sources").innerHTML = UI.kpi("Distinct sources cited", Object.keys(srcs).length,
+        "all official Kalshi hosts");
+
+      paint(st);
+    });
+  }).catch(function (e) {
+    document.getElementById("list").innerHTML = '<div class="empty">Could not load data/questions.json: ' + UI.esc(String(e && e.message || e)) + "</div>";
+  });
+
+  function needsYou(q) {
+    return /decision|decides|preference|policy choice|one decision|No research needed/i.test((q.how_to_find_out || "") + " " + (q.missing || ""));
+  }
+
+  function paint(st) {
+    var rows = all.filter(function (q) {
+      if (filter === "all") return true;
+      if (filter === "blocking") return !!q.blocking;
+      if (filter === "you") return needsYou(q);
+      if (filter === "us") return !needsYou(q);
+      return true;
+    });
+    document.getElementById("list").innerHTML = rows.map(function (q) {
+      return '<div class="card" id="' + q.id.toLowerCase() + '" style="margin-bottom:12px' + (q.blocking ? ';border-left:3px solid var(--no)' : "") + '">' +
+        '<div class="row"><span class="kicker">' + q.id + "</span>" +
+        (q.blocking ? UI.tag("blocking", "no") : UI.tag("non-blocking", "open")) +
+        (needsYou(q) ? UI.tag("needs your decision", "pending") : UI.tag("researchable", "yes")) +
+        '<span class="spacer"></span><span class="small">' + (q.affects || []).map(function (a) { return '<span class="tag">' + UI.esc(a) + "</span>"; }).join(" ") + "</span></div>" +
+        "<h3 style='margin:8px 0 4px'>" + UI.esc(q.question) + "</h3>" +
+        '<p class="small" style="margin:0 0 10px;color:var(--ink-2)"><strong>Why it matters:</strong> ' + UI.esc(q.why_it_matters) + "</p>" +
+        '<div class="grid g2">' +
+        "<div><span class='kicker'>Known · verified</span><ul class='small' style='margin:4px 0 0;padding-left:18px'>" +
+          (q.known || []).map(function (k) { return "<li>" + UI.esc(k) + "</li>"; }).join("") + "</ul></div>" +
+        "<div><span class='kicker'>Missing</span><p class='small' style='margin:4px 0 8px'>" + UI.esc(q.missing) + "</p>" +
+          "<span class='kicker'>How to find out</span><p class='small' style='margin:4px 0 8px'>" + UI.esc(q.how_to_find_out) + "</p>" +
+          "<span class='kicker'>Suggestion</span><p class='small' style='margin:4px 0 0'>" + UI.esc(q.suggestion) + "</p></div>" +
+        "</div>" +
+        '<div class="row" style="margin-top:10px;border-top:1px solid var(--line-2);padding-top:8px"><span class="kicker">Sources</span>' +
+        (q.sources || []).map(function (s) { return UI.src(s, s.replace(/^https:\/\/docs\.kalshi\.com\//, "docs/").replace(/^https:\/\/external-api\.demo\.kalshi\.co\/trade-api\/v2\/?/, "api read")); }).join(" · ") +
+        "</div></div>";
+    }).join("") || '<div class="empty">no questions in this filter</div>';
+
+    UI.table("#table", {
+      rows: all,
+      columns: [
+        { k: "id", label: "ID", render: function (q) { return '<a class="mono" href="#' + q.id.toLowerCase() + '">' + q.id + "</a>"; } },
+        { k: "question", label: "Question" },
+        { k: "blocking", label: "Blocks", render: function (q) { return q.blocking ? UI.tag("yes", "no") : UI.tag("no", "yes"); } },
+        { k: "who", label: "Owner", render: function (q) { return needsYou(q) ? "you" : "us"; } },
+        { k: "affects", label: "Affects", render: function (q) { return '<span class="small">' + (q.affects || []).join(", ") + "</span>"; } },
+        { k: "known", label: "Known items", cls: "r", render: function (q) { return UI.fmt.int((q.known || []).length); } },
+        { k: "sources", label: "Sources", cls: "r", render: function (q) { return UI.fmt.int((q.sources || []).length); } },
+        { k: "suggestion", label: "Suggestion", render: function (q) { return '<span class="small">' + UI.esc((q.suggestion || "").slice(0, 150)) + "…</span>"; } }
+      ]
+    });
+
+    document.getElementById("chips").querySelectorAll(".chip").forEach(function (c) {
+      c.onclick = function () {
+        document.getElementById("chips").querySelectorAll(".chip").forEach(function (x) { x.classList.remove("on"); });
+        c.classList.add("on"); filter = c.dataset.f; paint(st);
+      };
+    });
+  }
+})();
+</script>
+</body>
+</html>

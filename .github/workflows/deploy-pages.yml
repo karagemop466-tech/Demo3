@@ -1,0 +1,78 @@
+# Deploy site/ to GitHub Pages, and refuse to publish a site that fails the honesty gate.
+#
+# Order matters: assemble the data document, copy data into the site, verify, and only then upload.
+# verify_site.py exits non-zero if a page cites a non-official host as a source, if an internal link
+# is broken, if the published JSON would not parse in a browser, or if a derived number does not
+# match the raw capture it came from. A build that fails there must not go live, so the job fails.
+name: Deploy dashboard to Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Refresh the dataset from the Kalshi demo API (non-fatal)
+        # The committed snapshot is what ships if this fails; a collector error must never blank the
+        # site, and a failure here is reported rather than hidden.
+        continue-on-error: true
+        env:
+          KALSHI_API_KEY_ID: ${{ secrets.KALSHI_API_KEY_ID }}
+          KALSHI_PRIVATE_KEY_PEM: ${{ secrets.KALSHI_PRIVATE_KEY_PEM }}
+        run: |
+          if [ -n "${KALSHI_PRIVATE_KEY_PEM}" ]; then printf '%s\n' "${KALSHI_PRIVATE_KEY_PEM}" > /tmp/kalshi_demo.pem; fi
+          python3 scripts/collect.py --window-minutes 1440 --pages 20 --top 60 || \
+            echo "::warning::collector could not reach the demo API; publishing the archived snapshot instead"
+
+      - name: Derive dollar-volume aggregates from the tape
+        run: python3 scripts/aggregate_capture.py --write
+
+      - name: Assemble the published data document
+        run: python3 scripts/publish_snapshot.py
+
+      - name: Build the site
+        run: python3 scripts/build_site.py
+
+      - name: Verify before publishing
+        run: python3 scripts/verify_site.py
+
+      # no extra markup linting here on purpose: verify_site.py above already checks tag balance,
+      # link integrity, JS parsing and data provenance, and duplicating it invites the two to drift.
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.outcome.outputs.page_url }}
+    steps:
+      - id: outcome
+        uses: actions/deploy-pages@v4

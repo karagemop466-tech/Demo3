@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Topics — how the five categories were resolved</title>
+<meta name="description" content="How gas prices, elections, culture, crypto and golf map onto Kalshi's official category and tag taxonomy, with the live API reads that verify each mapping and what is missing.">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div id="chrome"></div>
+
+<main class="wrap">
+  <div id="modebar" class="mode"></div>
+  <div id="modenote"></div>
+
+  <h1>Topics: request vs what the exchange actually offers</h1>
+  <p class="lede">The five topics asked for are not five fields on Kalshi. The mapping below is the only defensible one:
+    each topic is bound to the exchange's own <em>category</em> and <em>tag</em> vocabulary, read from
+    <span class="mono">GET /search/tags_by_categories</span>, and each row states whether that binding
+    <strong>matched live series</strong> when used. Where a requested topic has no official counterpart
+    (gas prices, culture) we say so instead of quietly substituting.</p>
+
+  <div class="callout warn">
+    <strong>Two structural gaps, stated up front.</strong>
+    ① There is <strong>no <span class="mono">Culture</span> category</strong> in the official taxonomy — the closest published
+    buckets are <span class="mono">Entertainment</span>, <span class="mono">Mentions</span> and <span class="mono">Social</span>;
+    “Person of the Year” (<span class="mono">KXTIME</span>) was found by tag search, not category, and is used as the culture
+    anchor. ② There is <strong>no retail-gasoline category</strong>: the official taxonomy has
+    <span class="mono">Commodities</span> with the <span class="mono">Oil &amp; Gas</span> tag, and the crude-oil series
+    (<span class="mono">KXWTIW</span>, WTI weekly) is what the filter returns. Ordinary-U.S.-gasoline-price markets would be an
+    <span class="mono">Economics</span> + <span class="mono">Oil and energy</span> hit, and in this capture that secondary selector
+    returned no open series. Both facts are <a href="flagged.html#flag-03">FLAG-03</a>, not silent judgement calls.
+  </div>
+
+  <h2>Topic → selector table</h2>
+  <div id="t1"></div>
+
+  <h2>Series returned by each selector (live counts from the capture)</h2>
+  <div id="t2"></div>
+
+  <h2>The official taxonomy, verbatim</h2>
+  <p class="sub">Exactly what <span class="mono">GET /search/tags_by_categories</span> returned on 2026-11-20, with the number of
+    tags the API listed under each. Nothing was added; <span class="mono">null</span> is shown where the API itself returned a
+    null category name.</p>
+  <div id="t3"></div>
+
+  <h2>How a market gets a topic label in this project</h2>
+  <div class="card">
+    <table style="font-size:13.5px">
+      <thead><tr><th>Order</th><th>Rule</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Series ticker present in the verified universe built from
+          <span class="mono">GET /series?category=…&amp;tags=…</span> → use that topic</td>
+          <td>The selector came from the exchange's own taxonomy, so membership is authoritative. Marked <span class="tag yes">series-verified</span>.</td></tr>
+        <tr><td>2</td><td>Otherwise, a match against a topic's documented ticker prefix
+          (e.g. <span class="mono">KXPGATOUR</span>) → same topic, flagged provisional</td>
+          <td>Covers series that exist but did not answer the category query. Marked <span class="tag pending">provisional</span> everywhere it is used, including in rankings.</td></tr>
+        <tr><td>3</td><td>Otherwise → <strong>excluded</strong> from the topic tables and listed under “outside the five topics”</td>
+          <td>No keyword inference from titles. A mislabelled row is worse than a missing row.</td></tr>
+      </tbody>
+    </table>
+    <p class="small" style="margin-bottom:0">Implemented identically in
+      <span class="mono">scripts/collect.py</span>, <span class="mono">scripts/aggregate_capture.py</span> and
+      <span class="mono">site/assets/api.js</span> so the site and the collector cannot drift apart.</p>
+  </div>
+
+  <h2>Gas prices: what exists, in detail</h2>
+  <p class="sub">Read directly from the API during this session; the point is that “gas prices” resolves to
+    crude-oil and energy series, not to a pump-price series.</p>
+  <div id="t4"></div>
+
+  <h2>Golf: what exists, in detail</h2>
+  <p class="sub">The <span class="mono">Sports</span> + <span class="mono">Golf</span> selector returned these series; the one
+    market with a settled outcome in this project is a golf market, which is what makes the resolution tracker testable.</p>
+  <div id="t5"></div>
+
+  <footer id="foot"></footer>
+</main>
+
+<script src="assets/api.js"></script>
+<script src="assets/ui.js"></script>
+<script>
+(function () {
+  var state;
+  UI.boot({ page: "topics" }).then(function (st) {
+    state = st;
+    var snap = st.snapshot || {};
+    var uni = snap.series_universe || [];
+    var evs = snap.ranked_events || [];
+
+    UI.table("#t1", {
+      rows: UI.topicsOf(),
+      columns: [
+        { k: "label", label: "Topic", render: function (t) { return "<strong>" + UI.esc(t.label) + '</strong><div class="mono small sub">' + UI.esc(t.id) + "</div>"; } },
+        { k: "selectors", label: "Official selectors used", render: function (t) {
+            return (t.selectors || []).map(function (q) {
+              var bits = ['category=' + JSON.stringify(q.category)];
+              if (q.tags) bits.push('tags=' + JSON.stringify(q.tags));
+              return '<div class="mono small">' + bits.join(" · ") + "</div>";
+            }).join("") || '<span class="unverified">— no selector recorded</span>'; } },
+        { k: "match", label: "Match quality", render: function (t) {
+            var n = t.note || "";
+            if (/SUBSTITUTION|no .*category|No retail/i.test(n)) return UI.tag("substitution — see flag", "pending");
+            return UI.tag("official category exists", "yes"); } },
+        { k: "prefixes", label: "Prefix fast path", render: function (t) {
+            return '<span class="mono small">' + (t.ticker_prefixes || []).map(UI.esc).join(", ") + "</span>" +
+              (t.tags_boost ? '<div class="sub small">boost tags: ' + t.tags_boost.map(UI.esc).join(", ") + "</div>" : ""); } },
+        { k: "found", label: "Series found", cls: "r", render: function (t) {
+            var n = uni.filter(function (r) { return r.topic === t.id; }).length;
+            return n ? UI.fmt.int(n) : '<span class="unverified">0</span>'; } },
+        { k: "events", label: "Events with flow", cls: "r", render: function (t) { return UI.fmt.int(evs.filter(function (e) { return e.topic === t.id; }).length); } },
+        { k: "verification", label: "Verify by opening", cls: "src", render: function (t) { return UI.src(t.verification, "API read"); } },
+        { k: "note", label: "Caveat", render: function (t) { return '<span class="small">' + UI.esc(t.note || "") + "</span>"; } }
+      ],
+      empty: "topics.json missing"
+    });
+
+    UI.table("#t2", {
+      rows: UI.topicsOf().map(function (t) {
+        var rows = uni.filter(function (r) { return r.topic === t.id; });
+        return { t: t, rows: rows,
+                 vol: rows.reduce(function (a, r) { return a + (K.num(r.volume_fp) || 0); }, 0),
+                 anyProv: rows.some(function (r) { return r.provisional; }),
+                 shards: Array.from(new Set(rows.map(function (r) { return r.exchange_index; }).filter(function (x) { return x !== undefined && x !== null; }))) };
+      }),
+      columns: [
+        { k: "t.label", label: "Topic" },
+        { k: "rows", label: "Series (ticker · title · lifetime contracts · fee type)", render: function (r) {
+            if (!r.rows.length) return '<span class="unverified">no series returned for this selector in the capture</span>';
+            return r.rows.map(function (x) {
+              return '<div class="small"><span class="mono">' + UI.esc(x.series_ticker) + "</span> · " + UI.esc((x.title || "").slice(0, 70)) +
+                " · <span class='num'>" + UI.fmt.qty(x.volume_fp) + "</span> ct · " + UI.esc(x.fee_type || "—") +
+                (x.provisional ? " " + UI.tag("provisional", "pending") : "") + "</div>";
+            }).join(""); } },
+        { k: "vol", label: "Σ contracts", cls: "r", render: function (r) { return UI.fmt.qty(r.vol); } },
+        { k: "shards", label: "Shards", cls: "r", render: function (r) { return r.shards.length ? r.shards.join(",") : "—"; } },
+        { k: "src", label: "Source", cls: "src", render: function (r) {
+            return UI.src(r.rows.length ? (r.rows[0].source || r.t.verification) : r.t.verification, "series read"); } }
+      ]
+    });
+
+    var taxByCat = ((snap.taxonomy_detail || {}).tags_by_categories) || null;
+    var flat = (snap.taxonomy_categories || []);
+    var names = taxByCat ? Object.keys(taxByCat) : flat.map(function (x) { return typeof x === "string" ? x : x.category; });
+    var usedCats = {};
+    UI.topicsOf().forEach(function (t) { (t.selectors || []).forEach(function (q) { usedCats[q.category] = true; }); });
+    UI.table("#t3", {
+      rows: names.map(function (nm) {
+        return { category: nm, tags: taxByCat ? (taxByCat[nm] || []) : null };
+      }).sort(function (a, b) {
+        var au = usedCats[a.category] ? 0 : 1, bu = usedCats[b.category] ? 0 : 1;
+        return au - bu || String(a.category).localeCompare(String(b.category));
+      }),
+      columns: [
+        { k: "category", label: "Category (verbatim API value)", render: function (c) {
+            var name = (c.category === null || c.category === undefined)
+              ? '<span class="unverified">null — the API returned a null name</span>'
+              : '<span class="mono">' + UI.esc(c.category) + "</span>";
+            return name; } },
+        { k: "tags", label: "Tags published under it", render: function (c) {
+            if (c.tags === null) return '<span class="sub small">tags not captured for this category — see the list-only read above</span>';
+            if (!c.tags.length) return '<span class="unverified">null — category exists, publishes no tags</span>';
+            return '<span class="small">' + c.tags.map(function (x) {
+              return '<span class="tag">' + UI.esc(x === null ? "null" : x) + "</span>"; }).join(" ") + "</span>"; } },
+        { k: "n", label: "# tags", cls: "r", render: function (c) { return c.tags === null ? "—" : UI.fmt.int(c.tags.length); } },
+        { k: "in", label: "Used by this project", render: function (c) {
+            return usedCats[c.category] ? UI.tag("yes", "yes") : '<span class="sub small">no</span>'; } }
+      ],
+      empty: "no taxonomy captured"
+    });
+
+    function seriesTable(sel, host) {
+      var rows = sel === "gas"
+        ? uni.filter(function (r) { return r.topic === "gas-prices" || /OIL|GAS|WTI|BRENT|ENERG/i.test(r.series_ticker || ""); })
+        : uni.filter(function (r) { return (r.series_ticker || "").indexOf(sel) === 0; });
+      UI.table(host, {
+        rows: rows,
+        columns: [
+          { k: "series_ticker", label: "Series", render: function (r) { return '<span class="mono">' + UI.esc(r.series_ticker) + "</span>"; } },
+          { k: "title", label: "Title" },
+          { k: "category", label: "Category", render: function (r) { return r.category || "—"; } },
+          { k: "tags", label: "Tags", render: function (r) { return (r.tags || []).map(function (x) { return '<span class="tag">' + UI.esc(x) + "</span>"; }).join(" ") || "—"; } },
+          { k: "frequency", label: "Frequency", render: function (r) { return r.frequency || "—"; } },
+          { k: "volume_fp", label: "Lifetime contracts", cls: "r", render: function (r) { return UI.fmt.qty(r.volume_fp); } },
+          { k: "fee", label: "Fee", render: function (r) { return '<span class="small mono">' + UI.esc(r.fee_type || "—") + " × " + UI.esc(String(r.fee_multiplier === undefined ? "—" : r.fee_multiplier)) + "</span>"; } },
+          { k: "shard", label: "Shard", cls: "r", render: function (r) { return r.exchange_index === undefined ? "—" : r.exchange_index; } },
+          { k: "updated", label: "Series updated", render: function (r) { return '<span class="small">' + UI.fmt.dt(r.last_updated_ts) + "</span>"; } },
+          { k: "cert", label: "Contract terms", cls: "src", render: function (r) { return UI.src(r.contract_terms_url, "terms PDF"); } },
+          { k: "source", label: "Source", cls: "src", render: function (r) { return UI.src(r.source); } }
+        ],
+        empty: "the selector returned no series in this capture — recorded as an empty result, not as “no gas markets exist”"
+      });
+    }
+    seriesTable("gas", "#t4");
+    seriesTable("KXPGATOUR", "#t5");
+  });
+})();
+</script>
+</body>
+</html>

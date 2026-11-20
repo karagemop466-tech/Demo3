@@ -1,0 +1,369 @@
+{
+  "_meta": {
+    "generated_at_utc": "2026-11-20T11:36:32Z",
+    "generator": "scripts/aggregate_capture.py",
+    "formula": "dollar_volume = SUM over trades of count_fp x (yes_price_dollars if taker_outcome_side=='yes' else no_price_dollars). Fields per https://docs.kalshi.com/api-reference/market/get-trades.md ; Kalshi publishes no dollar-volume field, so this figure is derived, not read.",
+    "capture": {
+      "records": 28,
+      "files": [
+        "data/raw/trades-capture.json"
+      ],
+      "sources": [
+        "https://external-api.demo.kalshi.co/trade-api/v2/markets/trades?limit=120",
+        "https://external-api.demo.kalshi.co/trade-api/v2/markets/trades?limit=2"
+      ],
+      "first_trade_time": "2026-11-20T11:16:46.341480Z",
+      "last_trade_time": "2026-11-20T11:17:39.607926Z",
+      "span_seconds": 53.266,
+      "caveat": "Two short captures taken through the agent's HTTP fetch tool because sandbox egress to kalshi.co is blocked. The span is seconds, not minutes: this is a live-flow sample, NOT a period volume total. scripts/collect.py produces the real windowed ranking where network egress is allowed."
+    },
+    "classification": {
+      "authoritative_series_in_snapshot": 12,
+      "rule": "a trade counts toward a topic only if its series prefix is present in the verified series universe, or matches a topics.json prefix (then marked provisional)"
+    }
+  },
+  "events": [
+    {
+      "event_ticker": "KXTIME-26",
+      "series": "KXTIME",
+      "topic": "culture",
+      "classified_by": "series-universe",
+      "provisional": false,
+      "dollar_volume": 1685.1835,
+      "contracts": 1851.85,
+      "trades": 1,
+      "yes_dollars": 0.0,
+      "no_dollars": 1685.1835,
+      "taker_yes_fills": 0,
+      "taker_no_fills": 1,
+      "maker_side_fills": 0,
+      "block_trades": 0,
+      "largest_fill_dollars": 1685.1835,
+      "largest_fill_ticker": "KXTIME-26-MARK",
+      "markets": [
+        "KXTIME-26-MARK"
+      ],
+      "first_trade_time": "2026-11-20T11:17:39.561834Z",
+      "last_trade_time": "2026-11-20T11:17:39.561834Z",
+      "skipped_fields": 0,
+      "flow_imbalance": -1.0,
+      "avg_fill_notional_dollars": 1685.1835,
+      "window_seconds": 0.0
+    },
+    {
+      "event_ticker": "KXBTCY-27JAN0100",
+      "series": "KXBTCY",
+      "topic": "crypto",
+      "classified_by": "series-universe",
+      "provisional": false,
+      "dollar_volume": 880.8646,
+      "contracts": 11822.18,
+      "trades": 3,
+      "yes_dollars": 333.333,
+      "no_dollars": 547.5316,
+      "taker_yes_fills": 2,
+      "taker_no_fills": 1,
+      "maker_side_fills": 2,
+      "block_trades": 0,
+      "largest_fill_dollars": 547.5316,
+      "largest_fill_ticker": "KXBTCY-27JAN0100-B62500",
+      "markets": [
+        "KXBTCY-27JAN0100-B127500",
+        "KXBTCY-27JAN0100-B62500",
+        "KXBTCY-27JAN0100-B97500"
+      ],
+      "first_trade_time": "2026-11-20T11:17:39.586346Z",
+      "last_trade_time": "2026-11-20T11:17:39.591397Z",
+      "skipped_fields": 0,
+      "flow_imbalance": -0.2432,
+      "avg_fill_notional_dollars": 293.6215,
+      "window_seconds": 0.005
+    },
+    {
+      "event_ticker": "KXFRENCHPRES-27",
+      "series": "KXFRENCHPRES",
+      "topic": "elections",
+      "classified_by": "ticker-prefix",
+      "provisional": true,
+      "dollar_volume": 333.309,
+      "contracts": 11110.3,
+      "trades": 2,
+      "yes_dollars": 333.309,
+      "no_dollars": 0.0,
+      "taker_yes_fills": 2,
+      "taker_no_fills": 0,
+      "maker_side_fills": 2,
+      "block_trades": 0,
+      "largest_fill_dollars": 166.6665,
+      "largest_fill_ticker": "KXFRENCHPRES-27-JCAS",
+      "markets": [
+        "KXFRENCHPRES-27-JCAS",
+        "KXFRENCHPRES-27-MBOM"
+      ],
+      "first_trade_time": "2026-11-20T11:17:39.588842Z",
+      "last_trade_time": "2026-11-20T11:17:39.590343Z",
+      "skipped_fields": 0,
+      "flow_imbalance": 1.0,
+      "avg_fill_notional_dollars": 166.6545,
+      "window_seconds": 0.002
+    },
+    {
+      "event_ticker": "KXPRESNOMD-28",
+      "series": "KXPRESNOMD",
+      "topic": "elections",
+      "classified_by": "series-universe",
+      "provisional": false,
+      "dollar_volume": 166.676,
+      "contracts": 5557.48,
+      "trades": 3,
+      "yes_dollars": 166.676,
+      "no_dollars": 0.0,
+      "taker_yes_fills": 3,
+      "taker_no_fills": 0,
+      "maker_side_fills": 3,
+      "block_trades": 0,
+      "largest_fill_dollars": 166.6665,
+      "largest_fill_ticker": "KXPRESNOMD-28-CHOL",
+      "markets": [
+        "KXPRESNOMD-28-CHOL",
+        "KXPRESNOMD-28-GW",
+        "KXPRESNOMD-28-SAS"
+      ],
+      "first_trade_time": "2026-11-20T11:17:39.446069Z",
+      "last_trade_time": "2026-11-20T11:17:39.607926Z",
+      "skipped_fields": 0,
+      "flow_imbalance": 1.0,
+      "avg_fill_notional_dollars": 55.5587,
+      "window_seconds": 0.162
+    },
+    {
+      "event_ticker": "KXGTA6UNITS-01JAN27",
+      "series": "KXGTA6UNITS",
+      "topic": "culture",
+      "classified_by": "longest-prefix:KXGTA",
+      "provisional": true,
+      "dollar_volume": 0.4141,
+      "contracts": 1.01,
+      "trades": 1,
+      "yes_dollars": 0.4141,
+      "no_dollars": 0.0,
+      "taker_yes_fills": 1,
+      "taker_no_fills": 0,
+      "maker_side_fills": 1,
+      "block_trades": 0,
+      "largest_fill_dollars": 0.4141,
+      "largest_fill_ticker": "KXGTA6UNITS-01JAN27-T0",
+      "markets": [
+        "KXGTA6UNITS-01JAN27-T0"
+      ],
+      "first_trade_time": "2026-11-20T11:17:39.526992Z",
+      "last_trade_time": "2026-11-20T11:17:39.526992Z",
+      "skipped_fields": 0,
+      "flow_imbalance": 1.0,
+      "avg_fill_notional_dollars": 0.4141,
+      "window_seconds": 0.0
+    },
+    {
+      "event_ticker": "KXPRESPERSON-28",
+      "series": "KXPRESPERSON",
+      "topic": "elections",
+      "classified_by": "series-universe",
+      "provisional": false,
+      "dollar_volume": 0.1025,
+      "contracts": 3.46,
+      "trades": 5,
+      "yes_dollars": 0.1025,
+      "no_dollars": 0.0,
+      "taker_yes_fills": 5,
+      "taker_no_fills": 0,
+      "maker_side_fills": 5,
+      "block_trades": 0,
+      "largest_fill_dollars": 0.0408,
+      "largest_fill_ticker": "KXPRESPERSON-28-TCRU",
+      "markets": [
+        "KXPRESPERSON-28-ABES",
+        "KXPRESPERSON-28-AOCA",
+        "KXPRESPERSON-28-JKEN",
+        "KXPRESPERSON-28-RCOO",
+        "KXPRESPERSON-28-TCRU"
+      ],
+      "first_trade_time": "2026-11-20T11:16:46.353959Z",
+      "last_trade_time": "2026-11-20T11:17:39.514778Z",
+      "skipped_fields": 0,
+      "flow_imbalance": 1.0,
+      "avg_fill_notional_dollars": 0.0205,
+      "window_seconds": 53.161
+    },
+    {
+      "event_ticker": "KXPGATOUR-THRC26",
+      "series": "KXPGATOUR",
+      "topic": "golf",
+      "classified_by": "series-universe",
+      "provisional": false,
+      "dollar_volume": 0.0239,
+      "contracts": 6.31,
+      "trades": 5,
+      "yes_dollars": 0.0239,
+      "no_dollars": 0.0,
+      "taker_yes_fills": 5,
+      "taker_no_fills": 0,
+      "maker_side_fills": 5,
+      "block_trades": 0,
+      "largest_fill_dollars": 0.0073,
+      "largest_fill_ticker": "KXPGATOUR-THRC26-HLEB",
+      "markets": [
+        "KXPGATOUR-THRC26-BCAU",
+        "KXPGATOUR-THRC26-CDAV",
+        "KXPGATOUR-THRC26-ECOL",
+        "KXPGATOUR-THRC26-HLEB",
+        "KXPGATOUR-THRC26-JHIG"
+      ],
+      "first_trade_time": "2026-11-20T11:16:46.341480Z",
+      "last_trade_time": "2026-11-20T11:17:39.526258Z",
+      "skipped_fields": 0,
+      "flow_imbalance": 1.0,
+      "avg_fill_notional_dollars": 0.0048,
+      "window_seconds": 53.185
+    },
+    {
+      "event_ticker": "KXPRESNOMR-28",
+      "series": "KXPRESNOMR",
+      "topic": "elections",
+      "classified_by": "longest-prefix:KXPRES",
+      "provisional": true,
+      "dollar_volume": 0.0152,
+      "contracts": 0.89,
+      "trades": 2,
+      "yes_dollars": 0.0152,
+      "no_dollars": 0.0,
+      "taker_yes_fills": 2,
+      "taker_no_fills": 0,
+      "maker_side_fills": 2,
+      "block_trades": 0,
+      "largest_fill_dollars": 0.0146,
+      "largest_fill_ticker": "KXPRESNOMR-28-BK",
+      "markets": [
+        "KXPRESNOMR-28-BK",
+        "KXPRESNOMR-28-JKENT"
+      ],
+      "first_trade_time": "2026-11-20T11:17:39.443485Z",
+      "last_trade_time": "2026-11-20T11:17:39.606296Z",
+      "skipped_fields": 0,
+      "flow_imbalance": 1.0,
+      "avg_fill_notional_dollars": 0.0076,
+      "window_seconds": 0.163
+    },
+    {
+      "event_ticker": "KXSENATEDEMLEAD-28JAN01",
+      "series": "KXSENATEDEMLEAD",
+      "topic": "elections",
+      "classified_by": "longest-prefix:KXSENATE",
+      "provisional": true,
+      "dollar_volume": 0.0031,
+      "contracts": 0.31,
+      "trades": 1,
+      "yes_dollars": 0.0031,
+      "no_dollars": 0.0,
+      "taker_yes_fills": 1,
+      "taker_no_fills": 0,
+      "maker_side_fills": 1,
+      "block_trades": 0,
+      "largest_fill_dollars": 0.0031,
+      "largest_fill_ticker": "KXSENATEDEMLEAD-28JAN01-BSCH",
+      "markets": [
+        "KXSENATEDEMLEAD-28JAN01-BSCH"
+      ],
+      "first_trade_time": "2026-11-20T11:17:39.607396Z",
+      "last_trade_time": "2026-11-20T11:17:39.607396Z",
+      "skipped_fields": 0,
+      "flow_imbalance": 1.0,
+      "avg_fill_notional_dollars": 0.0031,
+      "window_seconds": 0.0
+    }
+  ],
+  "by_topic": {
+    "culture": {
+      "events": 2,
+      "dollar_volume": 1685.5976,
+      "contracts": 1852.86,
+      "trades": 2,
+      "yes_dollars": 0.4141,
+      "no_dollars": 1685.1835,
+      "series": [
+        "KXGTA6UNITS",
+        "KXTIME"
+      ],
+      "top_event": "KXTIME-26",
+      "top_event_dollars": 1685.1835,
+      "flow_imbalance": -0.9995
+    },
+    "crypto": {
+      "events": 1,
+      "dollar_volume": 880.8646,
+      "contracts": 11822.18,
+      "trades": 3,
+      "yes_dollars": 333.333,
+      "no_dollars": 547.5316,
+      "series": [
+        "KXBTCY"
+      ],
+      "top_event": "KXBTCY-27JAN0100",
+      "top_event_dollars": 880.8646,
+      "flow_imbalance": -0.2432
+    },
+    "elections": {
+      "events": 5,
+      "dollar_volume": 500.1058,
+      "contracts": 16672.44,
+      "trades": 13,
+      "yes_dollars": 500.1058,
+      "no_dollars": 0.0,
+      "series": [
+        "KXFRENCHPRES",
+        "KXPRESNOMD",
+        "KXPRESNOMR",
+        "KXPRESPERSON",
+        "KXSENATEDEMLEAD"
+      ],
+      "top_event": "KXFRENCHPRES-27",
+      "top_event_dollars": 333.309,
+      "flow_imbalance": 1.0
+    },
+    "golf": {
+      "events": 1,
+      "dollar_volume": 0.0239,
+      "contracts": 6.31,
+      "trades": 5,
+      "yes_dollars": 0.0239,
+      "no_dollars": 0.0,
+      "series": [
+        "KXPGATOUR"
+      ],
+      "top_event": "KXPGATOUR-THRC26",
+      "top_event_dollars": 0.0239,
+      "flow_imbalance": 1.0
+    }
+  },
+  "unmapped_trades": [
+    {
+      "ticker": "KXNBA-27-MIA",
+      "series": "KXNBA"
+    },
+    {
+      "ticker": "KXNFLSPREAD-26NOV22TBDET-DET8",
+      "series": "KXNFLSPREAD"
+    },
+    {
+      "ticker": "KXMARMAD-27-USC",
+      "series": "KXMARMAD"
+    },
+    {
+      "ticker": "KXATP-26FINALS-TIA",
+      "series": "KXATP"
+    },
+    {
+      "ticker": "KXNFLMVP-27-BPUR",
+      "series": "KXNFLMVP"
+    }
+  ]
+}

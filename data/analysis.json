@@ -1,0 +1,611 @@
+{
+  "_meta": {
+    "generated_at_utc": "2026-11-20T11:59:13Z",
+    "source_mode": "paper",
+    "input": "data/portfolio_ledger.json",
+    "trade_count": 5,
+    "definitions": {
+      "size_buckets": [
+        [
+          10,
+          "micro<10"
+        ],
+        [
+          100,
+          "small 10-100"
+        ],
+        [
+          1000,
+          "medium 100-1k"
+        ],
+        [
+          "infinity",
+          "large >1k"
+        ]
+      ],
+      "horizon_buckets": [
+        [
+          3600,
+          "<1h"
+        ],
+        [
+          86400,
+          "1h-1d"
+        ],
+        [
+          604800,
+          "1-7d"
+        ],
+        [
+          "infinity",
+          ">7d"
+        ]
+      ],
+      "price_buckets": [
+        "long-shot <10c",
+        "mid 10-90c",
+        "favourite >90c"
+      ],
+      "direction": "book_side bid=buy_yes, ask=sell_yes (YES-leg quoting)",
+      "notional_dollars": "count_fp x yes_price_dollars \u2014 the YES-leg premium. Not the same quantity as the leaderboard's dollar volume, which prices each fill at the taker's own side (yes price for YES, no price for NO). Both formulas are printed wherever their number appears.",
+      "win_definition": "(market.result == 'yes') == (direction == 'buy_yes')",
+      "field_source": "https://docs.kalshi.com/api-reference/portfolio/get-fills.md"
+    },
+    "caveat": "Counts here are contract counts. Kalshi reports volume in contracts, not dollars; `notional_dollars` is count x yes_price and is derived."
+  },
+  "trades": [
+    {
+      "fill_id": "paper-3ab7c846-54a8-4b8e-8093-2a5af1713d48",
+      "order_id": "paper-3ab7c846-54a8-4b8e-8093-2a5af1713d48",
+      "ticker": "KXBTCY-27JAN0100-T149999.99",
+      "series_ticker": "KXBTCY",
+      "topic": "crypto",
+      "direction": "buy_yes",
+      "outcome_side": "yes",
+      "liquidity": "taker",
+      "size_bucket": "medium 100-1k",
+      "contracts": 250.0,
+      "price_bucket": "long-shot <10c",
+      "yes_price_dollars": 0.01,
+      "no_price_dollars": 0.99,
+      "notional_dollars": 2.5,
+      "fee_cost_dollars": null,
+      "utc_hour": "11",
+      "utc_weekday": "Fri",
+      "spread_dollars": 0.01,
+      "horizon_bucket": ">7d",
+      "market_result": null,
+      "settlement_ts": null,
+      "is_paper": true,
+      "created_time": "2026-11-20T11:44:45.145Z",
+      "declared_strategy": "S2-cross-the-spread",
+      "basis": "paper",
+      "is_block_trade": null,
+      "source": "data/paper_ledger.json (simulated against the public book)",
+      "unresolved_fields": []
+    },
+    {
+      "fill_id": "paper-f5c13691-dd98-4a79-b570-f339b91dacc8",
+      "order_id": "paper-f5c13691-dd98-4a79-b570-f339b91dacc8",
+      "ticker": "KXBTCY-27JAN0100-T20000.00",
+      "series_ticker": "KXBTCY",
+      "topic": "crypto",
+      "direction": "buy_yes",
+      "outcome_side": "yes",
+      "liquidity": "taker",
+      "size_bucket": "large >1k",
+      "contracts": 1250.0,
+      "price_bucket": "long-shot <10c",
+      "yes_price_dollars": 0.02,
+      "no_price_dollars": 0.98,
+      "notional_dollars": 25.0,
+      "fee_cost_dollars": null,
+      "utc_hour": "11",
+      "utc_weekday": "Fri",
+      "spread_dollars": 0.01,
+      "horizon_bucket": ">7d",
+      "market_result": null,
+      "settlement_ts": null,
+      "is_paper": true,
+      "created_time": "2026-11-20T11:44:45.146Z",
+      "declared_strategy": "S3-resolution-carry",
+      "basis": "paper",
+      "is_block_trade": null,
+      "source": "data/paper_ledger.json (simulated against the public book)",
+      "unresolved_fields": []
+    },
+    {
+      "fill_id": "paper-588576ab-600b-4ecb-b2aa-86cbfb24a411",
+      "order_id": "paper-588576ab-600b-4ecb-b2aa-86cbfb24a411",
+      "ticker": "KXPRESPERSON-28-CHOL",
+      "series_ticker": "KXPRESPERSON",
+      "topic": "elections",
+      "direction": "sell_yes",
+      "outcome_side": "no",
+      "liquidity": "taker",
+      "size_bucket": "small 10-100",
+      "contracts": 12.0,
+      "price_bucket": "long-shot <10c",
+      "yes_price_dollars": 0.003,
+      "no_price_dollars": 0.997,
+      "notional_dollars": 0.036,
+      "fee_cost_dollars": null,
+      "utc_hour": "11",
+      "utc_weekday": "Fri",
+      "spread_dollars": 0.002,
+      "horizon_bucket": ">7d",
+      "market_result": null,
+      "settlement_ts": null,
+      "is_paper": true,
+      "created_time": "2026-11-20T11:44:45.146Z",
+      "declared_strategy": "S1-limit-resting",
+      "basis": "paper",
+      "is_block_trade": null,
+      "source": "data/paper_ledger.json (simulated against the public book)",
+      "unresolved_fields": []
+    },
+    {
+      "fill_id": "paper-2ab13224-0682-4ef1-a153-e61487985b68",
+      "order_id": "paper-2ab13224-0682-4ef1-a153-e61487985b68",
+      "ticker": "KXPRESPERSON-28-RPAU",
+      "series_ticker": "KXPRESPERSON",
+      "topic": "elections",
+      "direction": "buy_yes",
+      "outcome_side": "yes",
+      "liquidity": "taker",
+      "size_bucket": "medium 100-1k",
+      "contracts": 250.0,
+      "price_bucket": "long-shot <10c",
+      "yes_price_dollars": 0.003,
+      "no_price_dollars": 0.997,
+      "notional_dollars": 0.75,
+      "fee_cost_dollars": null,
+      "utc_hour": "11",
+      "utc_weekday": "Fri",
+      "spread_dollars": 0.001,
+      "horizon_bucket": ">7d",
+      "market_result": null,
+      "settlement_ts": null,
+      "is_paper": true,
+      "created_time": "2026-11-20T11:44:45.147Z",
+      "declared_strategy": "S2-cross-the-spread",
+      "basis": "paper",
+      "is_block_trade": null,
+      "source": "data/paper_ledger.json (simulated against the public book)",
+      "unresolved_fields": []
+    },
+    {
+      "fill_id": "paper-b3f3f17b-479b-4636-be1c-0b9ac7dcc3cd",
+      "order_id": "paper-b3f3f17b-479b-4636-be1c-0b9ac7dcc3cd",
+      "ticker": "KXTIME-26-JEN",
+      "series_ticker": "KXTIME",
+      "topic": "culture",
+      "direction": "sell_yes",
+      "outcome_side": "no",
+      "liquidity": "taker",
+      "size_bucket": "small 10-100",
+      "contracts": 12.0,
+      "price_bucket": "long-shot <10c",
+      "yes_price_dollars": 0.03,
+      "no_price_dollars": 0.97,
+      "notional_dollars": 0.36,
+      "fee_cost_dollars": null,
+      "utc_hour": "11",
+      "utc_weekday": "Fri",
+      "spread_dollars": 0.01,
+      "horizon_bucket": ">7d",
+      "market_result": null,
+      "settlement_ts": null,
+      "is_paper": true,
+      "created_time": "2026-11-20T11:44:45.149Z",
+      "declared_strategy": "S1-limit-resting",
+      "basis": "paper",
+      "is_block_trade": null,
+      "source": "data/paper_ledger.json (simulated against the public book)",
+      "unresolved_fields": []
+    }
+  ],
+  "by_category": {
+    "basis": [
+      {
+        "value": "paper",
+        "trades": 5,
+        "contracts": 1774.0,
+        "notional_dollars": 28.646,
+        "fees_dollars": 0.0,
+        "settled": 0,
+        "won": 0,
+        "lost": 0,
+        "hit_rate": null,
+        "avg_notional_dollars": 5.7292,
+        "avg_fee_bps_of_notional": 0.0
+      }
+    ],
+    "topic": [
+      {
+        "value": "crypto",
+        "trades": 2,
+        "contracts": 1500.0,
+        "notional_dollars": 27.5,
+        "fees_dollars": 0.0,
+        "settled": 0,
+        "won": 0,
+        "lost": 0,
+        "hit_rate": null,
+        "avg_notional_dollars": 13.75,
+        "avg_fee_bps_of_notional": 0.0
+      },
+      {
+        "value": "elections",
+        "trades": 2,
+        "contracts": 262.0,
+        "notional_dollars": 0.786,
+        "fees_dollars": 0.0,
+        "settled": 0,
+        "won": 0,
+        "lost": 0,
+        "hit_rate": null,
+        "avg_notional_dollars": 0.393,
+        "avg_fee_bps_of_notional": 0.0
+      },
+      {
+        "value": "culture",
+        "trades": 1,
+        "contracts": 12.0,
+        "notional_dollars": 0.36,
+        "fees_dollars": 0.0,
+        "settled": 0,
+        "won": 0,
+        "lost": 0,
+        "hit_rate": null,
+        "avg_notional_dollars": 0.36,
+        "avg_fee_bps_of_notional": 0.0
+      }
+    ],
+    "block": [
+      {
+        "value": "None",
+        "trades": 5,
+        "contracts": 1774.0,
+        "notional_dollars": 28.646,
+        "fees_dollars": 0.0,
+        "settled": 0,
+        "won": 0,
+        "lost": 0,
+        "hit_rate": null,
+        "avg_notional_dollars": 5.7292,
+        "avg_fee_bps_of_notional": 0.0
+      }
+    ],
+    "declared_strategy": [
+      {
+        "value": "S2-cross-the-spread",
+        "trades": 2,
+        "contracts": 500.0,
+        "notional_dollars": 3.25,
+        "fees_dollars": 0.0,
+        "settled": 0,
+        "won": 0,
+        "lost": 0,
+        "hit_rate": null,
+        "avg_notional_dollars": 1.625,
+        "avg_fee_bps_of_notional": 0.0
+      },
+      {
+        "value": "S1-limit-resting",
+        "trades": 2,
+        "contracts": 24.0,
+        "notional_dollars": 0.396,
+        "fees_dollars": 0.0,
+        "settled": 0,
+        "won": 0,
+        "lost": 0,
+        "hit_rate": null,
+        "avg_notional_dollars": 0.198,
+        "avg_fee_bps_of_notional": 0.0
+      },
+      {
+        "value": "S3-resolution-carry",
+        "trades": 1,
+        "contracts": 1250.0,
+        "notional_dollars": 25.0,
+        "fees_dollars": 0.0,
+        "settled": 0,
+        "won": 0,
+        "lost": 0,
+        "hit_rate": null,
+        "avg_notional_dollars": 25.0,
+        "avg_fee_bps_of_notional": 0.0
+      }
+    ],
+    "direction": [
+      {
+        "value": "buy_yes",
+        "trades": 3,
+        "contracts": 1750.0,
+        "notional_dollars": 28.25,
+        "fees_dollars": 0.0,
+        "settled": 0,
+        "won": 0,
+        "lost": 0,
+        "hit_rate": null,
+        "avg_notional_dollars": 9.4167,
+        "avg_fee_bps_of_notional": 0.0
+      },
+      {
+        "value": "sell_yes",
+        "trades": 2,
+        "contracts": 24.0,
+        "notional_dollars": 0.396,
+        "fees_dollars": 0.0,
+        "settled": 0,
+        "won": 0,
+        "lost": 0,
+        "hit_rate": null,
+        "avg_notional_dollars": 0.198,
+        "avg_fee_bps_of_notional": 0.0
+      }
+    ],
+    "liquidity": [
+      {
+        "value": "taker",
+        "trades": 5,
+        "contracts": 1774.0,
+        "notional_dollars": 28.646,
+        "fees_dollars": 0.0,
+        "settled": 0,
+        "won": 0,
+        "lost": 0,
+        "hit_rate": null,
+        "avg_notional_dollars": 5.7292,
+        "avg_fee_bps_of_notional": 0.0
+      }
+    ],
+    "size_bucket": [
+      {
+        "value": "medium 100-1k",
+        "trades": 2,
+        "contracts": 500.0,
+        "notional_dollars": 3.25,
+        "fees_dollars": 0.0,
+        "settled": 0,
+        "won": 0,
+        "lost": 0,
+        "hit_rate": null,
+        "avg_notional_dollars": 1.625,
+        "avg_fee_bps_of_notional": 0.0
+      },
+      {
+        "value": "small 10-100",
+        "trades": 2,
+        "contracts": 24.0,
+        "notional_dollars": 0.396,
+        "fees_dollars": 0.0,
+        "settled": 0,
+        "won": 0,
+        "lost": 0,
+        "hit_rate": null,
+        "avg_notional_dollars": 0.198,
+        "avg_fee_bps_of_notional": 0.0
+      },
+      {
+        "value": "large >1k",
+        "trades": 1,
+        "contracts": 1250.0,
+        "notional_dollars": 25.0,
+        "fees_dollars": 0.0,
+        "settled": 0,
+        "won": 0,
+        "lost": 0,
+        "hit_rate": null,
+        "avg_notional_dollars": 25.0,
+        "avg_fee_bps_of_notional": 0.0
+      }
+    ],
+    "price_bucket": [
+      {
+        "value": "long-shot <10c",
+        "trades": 5,
+        "contracts": 1774.0,
+        "notional_dollars": 28.646,
+        "fees_dollars": 0.0,
+        "settled": 0,
+        "won": 0,
+        "lost": 0,
+        "hit_rate": null,
+        "avg_notional_dollars": 5.7292,
+        "avg_fee_bps_of_notional": 0.0
+      }
+    ],
+    "horizon_bucket": [
+      {
+        "value": ">7d",
+        "trades": 5,
+        "contracts": 1774.0,
+        "notional_dollars": 28.646,
+        "fees_dollars": 0.0,
+        "settled": 0,
+        "won": 0,
+        "lost": 0,
+        "hit_rate": null,
+        "avg_notional_dollars": 5.7292,
+        "avg_fee_bps_of_notional": 0.0
+      }
+    ],
+    "utc_hour": [
+      {
+        "value": "11",
+        "trades": 5,
+        "contracts": 1774.0,
+        "notional_dollars": 28.646,
+        "fees_dollars": 0.0,
+        "settled": 0,
+        "won": 0,
+        "lost": 0,
+        "hit_rate": null,
+        "avg_notional_dollars": 5.7292,
+        "avg_fee_bps_of_notional": 0.0
+      }
+    ]
+  },
+  "strategies": [
+    {
+      "strategy": "S1-limit-resting",
+      "hypothesis": "maker entries pay less spread than taker entries",
+      "filter": {
+        "liquidity": "maker"
+      },
+      "trades_observed": 0,
+      "settled": 0,
+      "wins": 0,
+      "hit_rate": null,
+      "notional_dollars": 0,
+      "fees_dollars": 0,
+      "confirming_metric": "compare avg |spread| paid and net notional-per-contract between maker and taker rows",
+      "verdict": "insufficient data",
+      "data_basis": "demo-live"
+    },
+    {
+      "strategy": "S2-cross-the-spread",
+      "hypothesis": "taker entries get filled but give up the book spread",
+      "filter": {
+        "liquidity": "taker"
+      },
+      "trades_observed": 5,
+      "settled": 0,
+      "wins": 0,
+      "hit_rate": null,
+      "notional_dollars": 28.646,
+      "fees_dollars": 0,
+      "confirming_metric": "fill rate vs spread cost; win rate at the same price bucket",
+      "verdict": "insufficient data",
+      "data_basis": "paper"
+    },
+    {
+      "strategy": "S3-resolution-carry",
+      "hypothesis": "buying >90c and holding to settlement wins often but loses big when it fails",
+      "filter": {
+        "price_bucket": "favourite >90c"
+      },
+      "trades_observed": 0,
+      "settled": 0,
+      "wins": 0,
+      "hit_rate": null,
+      "notional_dollars": 0,
+      "fees_dollars": 0,
+      "confirming_metric": "hit_rate vs (avg price paid x contracts) drawdown on the losing rows",
+      "verdict": "insufficient data",
+      "data_basis": "demo-live"
+    },
+    {
+      "strategy": "S4-flow-follow",
+      "hypothesis": "tape imbalance predicts next-period price move",
+      "filter": {
+        "topic": "any"
+      },
+      "trades_observed": 5,
+      "settled": 0,
+      "wins": 0,
+      "hit_rate": null,
+      "notional_dollars": 28.646,
+      "fees_dollars": 0,
+      "confirming_metric": "need per-event flow (collect.py flow_imbalance) joined to candle close moves; not computable from fills alone \u2014 see Q-06",
+      "verdict": "insufficient data",
+      "data_basis": "paper"
+    }
+  ],
+  "declared_strategies": [
+    {
+      "declared_strategy": "S2-cross-the-spread",
+      "trades": 2,
+      "settled": 0,
+      "wins": 0,
+      "hit_rate": null,
+      "notional_dollars": 3.25,
+      "fees_dollars": 0,
+      "contracts": 500.0,
+      "topics": [
+        "crypto",
+        "elections"
+      ],
+      "directions": [
+        "buy_yes"
+      ],
+      "labels": [
+        "medium 100-1k",
+        "long-shot <10c"
+      ],
+      "tickers": [
+        "KXBTCY-27JAN0100-T149999.99",
+        "KXPRESPERSON-28-RPAU"
+      ],
+      "basis": [
+        "paper"
+      ]
+    },
+    {
+      "declared_strategy": "S1-limit-resting",
+      "trades": 2,
+      "settled": 0,
+      "wins": 0,
+      "hit_rate": null,
+      "notional_dollars": 0.396,
+      "fees_dollars": 0,
+      "contracts": 24.0,
+      "topics": [
+        "culture",
+        "elections"
+      ],
+      "directions": [
+        "sell_yes"
+      ],
+      "labels": [
+        "small 10-100",
+        "long-shot <10c"
+      ],
+      "tickers": [
+        "KXPRESPERSON-28-CHOL",
+        "KXTIME-26-JEN"
+      ],
+      "basis": [
+        "paper"
+      ]
+    },
+    {
+      "declared_strategy": "S3-resolution-carry",
+      "trades": 1,
+      "settled": 0,
+      "wins": 0,
+      "hit_rate": null,
+      "notional_dollars": 25.0,
+      "fees_dollars": 0,
+      "contracts": 1250.0,
+      "topics": [
+        "crypto"
+      ],
+      "directions": [
+        "buy_yes"
+      ],
+      "labels": [
+        "large >1k",
+        "long-shot <10c"
+      ],
+      "tickers": [
+        "KXBTCY-27JAN0100-T20000.00"
+      ],
+      "basis": [
+        "paper"
+      ]
+    }
+  ],
+  "unresolved_fields": [],
+  "totals": {
+    "realized_pnl_dollars": 0.0,
+    "unrealized_pnl_dollars": -7.644,
+    "total_pnl_dollars": -7.644,
+    "fees_paid_dollars": 0.0,
+    "settled_contract_qty": 0.0,
+    "fills": 5,
+    "notional_value_dollars_used": 1.0
+  }
+}

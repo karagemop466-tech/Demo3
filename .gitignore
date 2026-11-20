@@ -1,0 +1,15 @@
+# byte-compiled / tooling artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.DS_Store
+
+# signing material must never be committed; see the demo-environment section of the README
+*.pem
+kalshi_*private*
+.env
+
+# the generated data document under the site directory stays tracked on purpose:
+# the Pages build is reproducible either way, and the repository remains browsable

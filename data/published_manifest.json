@@ -1,0 +1,110 @@
+{
+  "_meta": {
+    "generated_at_utc": "2026-11-20T12:06:42Z",
+    "generator": "scripts/publish_snapshot.py",
+    "purpose": "section -> provenance for the published document; site/sources.html renders data/sources.json instead"
+  },
+  "sections": {
+    "taxonomy_detail": {
+      "source": "https://external-api.demo.kalshi.co/trade-api/v2/search/tags_by_categories",
+      "observed_at_utc": "2026-11-20T11:20Z",
+      "produced_by": "captured read stored in data/snapshot.json"
+    },
+    "tape_analysis": {
+      "source": "https://external-api.demo.kalshi.co/trade-api/v2/markets/trades?limit=120",
+      "observed_at_utc": "2026-11-20T11:36:32Z",
+      "produced_by": "scripts/aggregate_capture.py",
+      "note": "derived aggregates; every figure is recomputed from data/raw/trades-capture.json, never typed"
+    },
+    "ranked_events": {
+      "source": "https://external-api.demo.kalshi.co/trade-api/v2/markets/trades?limit=120",
+      "observed_at_utc": "2026-11-20T11:17:39.607926Z",
+      "produced_by": "scripts/collect.py (events, markets) + scripts/aggregate_capture.py (windows)",
+      "note": "every dollar figure is derived; the formula string is stored per event as dollar_volume_formula"
+    },
+    "topics_summary": {
+      "source": "computed from data/raw/trades-capture.json",
+      "observed_at_utc": "2026-11-20T11:36:32Z",
+      "produced_by": "scripts/aggregate_capture.py"
+    },
+    "unmapped_trades": {
+      "source": "data/raw/trades-capture.json",
+      "observed_at_utc": "2026-11-20T11:36:32Z",
+      "produced_by": "scripts/aggregate_capture.py",
+      "note": "tape rows whose series is outside the five topics; listed so the exclusion is auditable"
+    },
+    "portfolio": {
+      "source": "https://github.com/karagemop466-tech/Demo3/blob/main/data/portfolio_ledger.json",
+      "observed_at_utc": "2026-11-20T11:45:37Z",
+      "produced_by": "scripts/portfolio.py",
+      "note": "source_mode='paper' means simulated fills; 'demo-live' means read from /portfolio/*"
+    },
+    "trade_analysis": {
+      "source": "https://github.com/karagemop466-tech/Demo3/blob/main/data/analysis.json",
+      "observed_at_utc": "2026-11-20T11:59:13Z",
+      "produced_by": "scripts/analyze.py"
+    },
+    "tape_trade_analysis": {
+      "source": "https://github.com/karagemop466-tech/Demo3/blob/main/data/analysis_tape.json",
+      "observed_at_utc": "2026-11-20T11:59:13Z",
+      "produced_by": "scripts/analyze.py --from-tape",
+      "note": "categorisation of OTHER participants' tape fills \u2014 market structure, not this account's trades"
+    },
+    "resolutions": {
+      "source": "result/settlement_ts/settlement_value_dollars are market fields; 'no' means YES holders receive $0 and NO holders $1/contract. https://docs.kalshi.com/getting_started/market_settlement.md",
+      "observed_at_utc": "2026-11-20T11:34:00Z",
+      "produced_by": "scripts/collect.py --resolutions-only (append-only ledger)"
+    },
+    "order_log": {
+      "source": "https://github.com/karagemop466-tech/Demo3/blob/main/data/orders.json",
+      "observed_at_utc": "2026-11-20T11:44:45.150Z",
+      "produced_by": "scripts/trade_engine.py",
+      "note": "every create/amend/cancel recorded locally; mode='paper' entries were never sent to Kalshi"
+    },
+    "scenario": {
+      "source": "scripts/gen_scenario.py",
+      "observed_at_utc": "2026-11-20T11:34:00Z",
+      "produced_by": "scripts/gen_scenario.py",
+      "note": "which markets could not be priced from the capture is recorded, not dropped"
+    },
+    "raw_samples": {
+      "source": "https://external-api.demo.kalshi.co/trade-api/v2/",
+      "observed_at_utc": null,
+      "produced_by": "verbatim API responses copied into data/snapshot.json during the session",
+      "note": "kept so a reader can compare the shaped rows the site shows against the raw response"
+    }
+  },
+  "problems": [
+    {
+      "severity": "info",
+      "id": "collector-01",
+      "where": "collector",
+      "finding": "live capture spans 179 ms of tape because sandbox egress to kalshi.co is blocked and each response had to be read through the agent's fetch tool; run scripts/collect.py where network egress is allowed for a true 30-minute window."
+    },
+    {
+      "severity": "partial",
+      "id": "collector-02",
+      "where": "markets?event_ticker=KXTIME-26",
+      "finding": "third market row (LULA) truncated inside rules_secondary during capture; its fields after that point are null and the row is labelled do-not-trade."
+    },
+    {
+      "severity": "unverified",
+      "id": "collector-03",
+      "where": "events?tickers=KXWTIW-26NOV21",
+      "finding": "requested event ticker not returned by the API; the weekly oil event that does exist is KXWTIW-26NOV2014. No substitution was made."
+    },
+    {
+      "severity": "blocked",
+      "id": "collector-04",
+      "where": "portfolio",
+      "finding": "no demo API key in this environment: /portfolio/balance, /positions, /fills, /settlements were never called. See COORDINATION.md B1 and questions Q-04."
+    },
+    {
+      "id": "no-tape-KXWTIW-26NOV2014",
+      "severity": "info",
+      "where": "event KXWTIW-26NOV2014",
+      "finding": "listed in the verified universe but no fill appeared in the capture window",
+      "resolution": "widen --window-minutes on scripts/collect.py"
+    }
+  ]
+}

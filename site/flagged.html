@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flagged for review — irregularities and unverified items</title>
+<meta name="description" content="Every API irregularity found in this project and every value left blank because it could not be verified, with the command that reproduces each one.">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div id="chrome"></div>
+
+<main class="wrap">
+  <div id="modebar" class="mode"></div>
+  <div id="modenote"></div>
+
+  <h1>Flagged for review</h1>
+  <p class="lede">Two lists. <strong>Irregularities</strong> are things the API does that a reader could easily mistake for
+    data — each is reproduced with a command, and each has a mitigation in code. <strong>Unverified</strong> is every value
+    this site deliberately left blank because no official source confirmed it. Neither list blocks the deploy; both are
+    why the numbers elsewhere can be trusted.</p>
+
+  <div class="grid g4" style="margin:14px 0">
+    <div class="card tight" id="k-flags"></div>
+    <div class="card tight" id="k-blank"></div>
+    <div class="card tight" id="k-problems"></div>
+    <div class="card tight" id="k-excl"></div>
+  </div>
+
+  <h2>Irregularities in the API, as encountered</h2>
+  <div id="flags"></div>
+
+  <h2>Collector-reported problems (machine-generated, same run as the data)</h2>
+  <p class="sub">These come from <span class="mono">data/live_snapshot.json → problems[]</span>, written by
+    <span class="mono">scripts/collect.py</span> and <span class="mono">scripts/publish_snapshot.py</span> as they ran.
+    A <span class="tag no">blocker</span> here would stop publication of the affected row; none are present in this build.</p>
+  <div id="problems"></div>
+
+  <h2>Values left blank, and why</h2>
+  <p class="sub">Each row is a field the site shows as <span class="unverified">—</span>. The rule used everywhere:
+    if a value cannot be confirmed from an official source, it is blank and listed here, never estimated.</p>
+  <div id="blanks"></div>
+
+  <h2>Data excluded from the ranking</h2>
+  <p class="sub">Tape rows whose series is outside the five topics. Listed so the exclusion is auditable rather than silent.</p>
+  <div id="excluded"></div>
+
+  <h2>Not implemented, stated plainly</h2>
+  <div id="notdone"></div>
+
+  <footer id="foot"></footer>
+</main>
+
+<script src="assets/api.js"></script>
+<script src="assets/ui.js"></script>
+<script>
+(function () {
+  var FLAGS = [
+    { id: "flag-01", title: "GET /markets returns provisional multivariate combos first, with zero volume",
+      seen: "newest-first ordering put is_provisional MVE rows at the top of the page; volume_fp was \"0.00\"",
+      danger: "A leaderboard built by paging /markets would rank dead combo markets above real ones.",
+      repro: "curl 'https://external-api.demo.kalshi.co/trade-api/v2/markets?limit=5' | head -c 600",
+      mitigation: "Ranking is built from GET /markets/trades instead, and mve_filter=exclude is used for any /markets enumeration.",
+      doc: "https://docs.kalshi.com/api-reference/market/get-markets.md", status: "mitigated in code" },
+    { id: "flag-02", title: "Status vocabulary differs between the query and the object",
+      seen: "querying status=open returned markets whose status field is \"active\"; a settled market returned \"finalized\"",
+      danger: "A filter written as status==open on the response object drops every live row.",
+      repro: "curl '…/markets?status=open&limit=1' then grep -o '\"status\":\"[a-z]*\"'",
+      mitigation: "The UI prints the object's own value and never assumes it equals the filter that produced it; validate() accepts the union {active, open}.",
+      doc: "https://docs.kalshi.com/api-reference/market/get-markets.md", status: "mitigated in code" },
+    { id: "flag-03", title: "No Culture category and no retail-gasoline category exist",
+      seen: "the taxonomy read lists 17 real categories plus Test/harrison-test/null; Culture is absent, and no series mentioned pump gasoline",
+      danger: "Silently substituting Entertainment for Culture, or WTI for pump prices, would misrepresent what is being tracked.",
+      repro: "curl '…/search/tags_by_categories' | python3 -m json.tool | grep -i -E 'culture|gas'",
+      mitigation: "Both substitutions are labelled in the topic table, tagged provisional where only a prefix matched, and published as questions Q-01 and Q-02.",
+      doc: "https://docs.kalshi.com/api-reference/search/get-tags-for-series-categories.md", status: "surfaced, awaiting your decision" },
+    { id: "flag-04", title: "Legacy order-write paths answer 410 Gone",
+      seen: "the V2 docs quote the 410 response for the retired /portfolio/orders write surface",
+      danger: "An order posted to a legacy path fails in a way that looks like a network error if the status is not read.",
+      repro: "read the response block in the create-order doc",
+      mitigation: "Only /portfolio/events/orders is used; the client raises on 4xx with the code in the message.",
+      doc: "https://docs.kalshi.com/api-reference/orders/create-order-v2.md", status: "avoided by design" },
+    { id: "flag-05", title: "GET /series ignores limit and has no cursor",
+      seen: "passing limit=5 returned the full unpaginated list",
+      danger: "A collector that pages /series until short pages would loop forever, and a 'top 50 series' claim would be false.",
+      repro: "curl '…/series?category=Sports&tags=Golf&limit=5' | grep -o '\"series_ticker\"' | wc -l",
+      mitigation: "No pagination is attempted; the universe is stored as whatever one call returns, and the site says 'series captured', never 'all series'.",
+      doc: "https://docs.kalshi.com/api-reference/market/get-series-list.md", status: "mitigated in code" },
+    { id: "flag-06", title: "The order book endpoint returns 200 with empty arrays for an unknown ticker",
+      seen: "documented explicitly: an empty book and a typo are indistinguishable",
+      danger: "A 'no liquidity' reading could actually be 'no such market'.",
+      repro: "curl '…/markets/DOES-NOT-EXIST/orderbook' — returns 200 with empty orderbook_fp",
+      mitigation: "Every ladder in the UI links the market's own GET /markets/{ticker} URL, and the empty state says to confirm the ticker before concluding anything.",
+      doc: "https://docs.kalshi.com/getting_started/orderbook_responses.md", status: "mitigated in UI" },
+    { id: "flag-07", title: "REST reads are cached server-side for a short window",
+      seen: "docs state prices, sizes and status can lag the exchange by several seconds, and filtered listings longer",
+      danger: "A dashboard that polls at 1 s looks like a live feed but repeats cached values, which makes charts look artificially flat.",
+      repro: "curl -s '…/markets/KXBTCY-27JAN0100-B97500' and compare updated_time to now",
+      mitigation: "Default refresh is 15 s, updated_time is rendered next to every quote, and the seconds axis is labelled client-sampled rather than exchange time.",
+      doc: "https://docs.kalshi.com/api-reference/market/get-markets.md", status: "mitigated in UI" },
+    { id: "flag-08", title: "No official statement on CORS for the demo REST host",
+      seen: "the docs index contains no CORS or browser-access section for any host",
+      danger: "A Pages deployment may be unable to call the API at all, so 'live dashboard' could silently mean 'stale snapshot'.",
+      repro: "curl -i -H 'Origin: https://example.github.io' '…/exchange/status' | grep -i access-control",
+      mitigation: "The site tries a live read at load, falls back to the snapshot with a visible banner, and ships a local bridge for the blocked case. Flagged as Q-08 because it cannot be tested from this sandbox.",
+      doc: "https://docs.kalshi.com/getting_started/api_environments.md", status: "unresolved, fallback built" },
+    { id: "flag-09", title: "The demo trade tape looks synthetic",
+      seen: "120 fills inside ~179 ms, in repeating round sizes (5555.55, 1851.85 contracts)",
+      danger: "Flow-based signals measured here would not transfer to a real market; a strategy page built on them would be theatre.",
+      repro: "curl '…/markets/trades?limit=120' | python3 -c \"import sys,json,collections;t=json.load(sys.stdin)['trades'];print(collections.Counter(x['count_fp'] for x in t).most_common(6))\"",
+      mitigation: "Every dollar figure states its window; strategy verdicts stay 'insufficient data'; Q-14 records the caveat as a standing question.",
+      doc: "https://docs.kalshi.com/getting_started/demo_env.md", status: "disclosed, not fixable here" },
+    { id: "flag-10", title: "WebSocket handshake requires a signature a browser cannot make",
+      seen: "every WS channel, public ones included, requires the signed KALSHI-ACCESS-* handshake headers",
+      danger: "'Live charts' cannot be pure client-side; a page that claims otherwise is polling, not streaming.",
+      repro: "read the connection section of the WS quick start",
+      mitigation: "Seconds-axis data is explicitly REST-sampled and labelled; true streaming is only available through scripts/dev_server.py, which signs server-side.",
+      doc: "https://docs.kalshi.com/getting_started/quick_start_websockets.md", status: "architectural, documented" },
+    { id: "flag-11", title: "A fetched page can be truncated mid-record by the retrieval tool",
+      seen: "a /markets response for KXTIME-26 was cut inside a rules_secondary string, so that market's trailing fields were never seen",
+      danger: "Reconstructing a cut field from a neighbouring row would fabricate a value.",
+      repro: "compare the archived record with a fresh full read",
+      mitigation: "Truncated rows are published as null with a do-not-trade note; the site renders them blank and this page lists them.",
+      doc: "https://docs.kalshi.com/api-reference/market/get-markets.md", status: "mitigated by policy" },
+    { id: "flag-12", title: "This sandbox has no network egress to kalshi.co",
+      seen: "TLS to *.kalshi.co fails from the shell while GitHub and npm work, so collect.py and the signed client could not be executed here",
+      danger: "Any claim that the collector 'ran successfully' would be false.",
+      repro: "python3 -c \"import urllib.request as u;u.urlopen('https://external-api.demo.kalshi.co/trade-api/v2/exchange/status',timeout=10)\"",
+      mitigation: "All live reads in this build came through the agent's fetch tool and are archived verbatim in data/; the scripts are compile-checked and shipped, and are honest in their docs that they were not executed against the network here.",
+      doc: null, status: "environment limit, disclosed" }
+  ];
+
+  UI.boot({ page: "flagged" }).then(function (st) {
+    var snap = st.snapshot || {};
+    var probs = snap.problems || [];
+    var tape = st.tape || {};
+    var blanks = [];
+
+    // derive the blank list from the published document itself, so it can never drift from the data
+    (snap.ranked_events || []).forEach(function (ev) {
+      (ev.markets || []).forEach(function (m) {
+        [["last_price_dollars", "last price"], ["yes_bid_dollars", "best bid"], ["yes_ask_dollars", "best ask"],
+         ["result", "resolution"], ["settlement_value_dollars", "settlement value"], ["depth", "order book"],
+         ["candles", "candle history"]].forEach(function (pair) {
+          var v = m[pair[0]];
+          var empty = v === null || v === undefined || v === "" || (Array.isArray(v) && !v.length);
+          if (empty) blanks.push({ ticker: m.ticker, field: pair[0], what: pair[1], topic: ev.topic,
+                                   source: m.source, why: pair[0] === "result" ? "market has not resolved yet — blank is the correct value"
+                                     : pair[0] === "candles" ? "no candle history captured for this market in this session"
+                                     : pair[0] === "depth" ? "orderbook read returned an empty book (200 with empty arrays)"
+                                     : "field absent from the captured response" });
+        });
+      });
+    });
+    ((snap.scenario || {}).skipped || []).forEach(function (s) {
+      blanks.push({ ticker: s.ticker, field: "price (order)", what: "unpriceable order in the paper scenario",
+                    source: s.source, why: s.reason });
+    });
+    ((snap.portfolio || {}).fills || []).forEach(function (f) {
+      if (f.fee_cost === null || f.fee_cost === undefined) blanks.push({
+        ticker: f.ticker, field: "fee_cost", what: "fee on a paper fill",
+        source: "data/portfolio_ledger.json", why: "paper fills have no fee_cost; only a real /portfolio/fills response carries one" });
+    });
+
+    document.getElementById("k-flags").innerHTML = UI.kpi("Irregularities", FLAGS.length,
+      FLAGS.filter(function (f) { return /mitigated|avoided/.test(f.status); }).length + " mitigated in code or UI");
+    document.getElementById("k-blank").innerHTML = UI.kpi("Blank cells explained", blanks.length,
+      "each one is a field the API did not return");
+    document.getElementById("k-problems").innerHTML = UI.kpi("Collector problems",
+      '<span class="' + (probs.some(function (p) { return p.severity === "blocker"; }) ? "down" : "up") + '">' +
+      probs.filter(function (p) { return p.severity === "blocker"; }).length + " blockers</span>",
+      probs.length + " total · " + probs.filter(function (p) { return p.severity === "warning"; }).length + " warnings · " +
+      probs.filter(function (p) { return p.severity === "info"; }).length + " info");
+    var excl = (snap.unmapped_trades || []);
+    document.getElementById("k-excl").innerHTML = UI.kpi("Tape rows excluded", excl.length,
+      "outside the five topics");
+
+    UI.table("#flags", {
+      rows: FLAGS,
+      columns: [
+        { k: "id", label: "ID", render: function (f) { return '<span class="mono">' + f.id.toUpperCase() + "</span>"; } },
+        { k: "title", label: "What we found", render: function (f) { return "<strong>" + UI.esc(f.title) + '</strong><div class="small sub">' + UI.esc(f.seen) + "</div>"; } },
+        { k: "danger", label: "Why it matters", render: function (f) { return '<span class="small">' + UI.esc(f.danger) + "</span>"; } },
+        { k: "repro", label: "Reproduce", render: function (f) { return '<code class="small">' + UI.esc(f.repro) + "</code>"; } },
+        { k: "mitigation", label: "Mitigation", render: function (f) { return '<span class="small">' + UI.esc(f.mitigation) + "</span>"; } },
+        { k: "status", label: "Status", render: function (f) {
+            var cls = /unresolved|awaiting|disclosed|not fixable/.test(f.status) ? "pending" : "yes";
+            return UI.tag(f.status, cls); } },
+        { k: "doc", label: "Official reference", cls: "src", render: function (f) { return UI.src(f.doc, "docs"); } }
+      ]
+    });
+
+    UI.table("#problems", {
+      rows: probs,
+      columns: [
+        { k: "id", label: "ID", render: function (p) { return '<span class="mono small">' + UI.esc(p.id) + "</span>"; } },
+        { k: "severity", label: "Severity", render: function (p) {
+            return UI.tag(p.severity, p.severity === "blocker" ? "no" : p.severity === "warning" ? "pending" : "open"); } },
+        { k: "where", label: "Where", render: function (p) { return '<span class="small mono">' + UI.esc(p.where || "") + "</span>"; } },
+        { k: "finding", label: "Finding" },
+        { k: "resolution", label: "Resolution", render: function (p) { return '<span class="small">' + UI.esc(p.resolution || p.artifact || "—") + "</span>"; } },
+        { k: "source", label: "Source", cls: "src", render: function (p) { return UI.src(p.source); } }
+      ],
+      empty: "the collector recorded no problems in this build"
+    });
+
+    UI.table("#blanks", {
+      rows: blanks,
+      columns: [
+        { k: "ticker", label: "Market", render: function (b) { return '<span class="mono small">' + UI.esc(b.ticker) + "</span>"; } },
+        { k: "field", label: "Field left blank", render: function (b) { return '<span class="mono">' + UI.esc(b.field) + "</span>"; } },
+        { k: "what", label: "Meaning", render: function (b) { return '<span class="small">' + UI.esc(b.what) + "</span>"; } },
+        { k: "why", label: "Why no value", render: function (b) { return '<span class="small">' + UI.esc(b.why) + "</span>"; } },
+        { k: "topic", label: "Topic", render: function (b) { return b.topic ? UI.tag(b.topic, "open") : "—"; } },
+        { k: "source", label: "Where the blank came from", cls: "src", render: function (b) { return UI.src(b.source); } }
+      ],
+      empty: "no blank cells — every field was returned"
+    });
+
+    UI.table("#excluded", {
+      rows: excl,
+      columns: [
+        { k: "ticker", label: "Market ticker", render: function (e) { return '<span class="mono small">' + UI.esc(e.ticker) + "</span>"; } },
+        { k: "series", label: "Series", render: function (e) { return '<span class="mono small">' + UI.esc(e.series) + "</span>"; } },
+        { k: "why", label: "Reason", render: function () { return '<span class="small">series is not in the verified universe for gas prices, elections, culture, crypto or golf</span>'; } },
+        { k: "src", label: "Source", cls: "src", render: function () { return UI.src((st.tape || {})._meta ? (st.tape._meta.capture || {}).sources[0] : null, "tape"); } }
+      ],
+      empty: "every tape row mapped to one of the five topics"
+    });
+
+    var ledger = st.ledger || {};
+    var notDone = [
+      ["Real order execution", "not done", "Requires a demo API key (Q-04). The engine validates and simulates; --execute is unreachable without credentials, and this session was told not to ask for any.", "questions.html#q-04"],
+      ["Live portfolio balance / positions / fills", "not done", "Same gate: /portfolio/* is signed-only. Numbers shown are from the paper ledger and labelled.", "portfolio.html"],
+      ["Fee-accurate P&L", "not done", "Only fill.fee_cost is used; the quadratic curve itself is not modelled (Q-05) because the PDF schedule was not treated as a licence to derive rates.", "questions.html#q-05"],
+      ["Sub-minute historical chart", "impossible", "period_interval accepts only 1/60/1440 minutes, so history at seconds granularity does not exist in the API at all — the seconds axis is live sampling only.", "https://docs.kalshi.com/api-reference/market/get-market-candlesticks.md"],
+      ["24 h dollar-volume totals", "partial", "The formula and pipeline exist; this build ranks a 53-second capture because that is all the tape available from the sandbox.", "suggestions.html#s-05"],
+      ["Multivariate combos", "excluded", "Deliberate: they are not comparable to plain binaries without the collateral field (Q-07).", "questions.html#q-07"],
+      ["Production environment", "out of scope", "Demo-only by policy (Q-06); the engine refuses a non-demo host.", "questions.html#q-06"],
+      ["WebSocket streaming in the deployed site", "not possible client-side", "The handshake requires a signature; the bridge provides it locally.", "https://docs.kalshi.com/getting_started/quick_start_websockets.md"]
+    ].map(function (r) { return { a: r[0], b: r[1], c: r[2], d: r[3] }; });
+    UI.table("#notdone", {
+      rows: notDone,
+      columns: [
+        { k: "a", label: "Item" },
+        { k: "b", label: "State", render: function (r) { return UI.tag(r.b, /impossible|out of scope/.test(r.b) ? "no" : "pending"); } },
+        { k: "c", label: "Reason · exact" },
+        { k: "d", label: "Follow", cls: "src", render: function (r) {
+            return /^https?:/.test(r.d) ? UI.src(r.d, "doc") : '<a href="' + r.d + '">see ' + UI.esc(r.d.split("#")[0].replace(".html", "")) + "</a>"; } }
+      ]
+    });
+  });
+})();
+</script>
+</body>
+</html>

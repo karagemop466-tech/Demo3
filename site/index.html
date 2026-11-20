@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kalshi Demo — event-contract analytics, live dashboard &amp; trading</title>
+<meta name="description" content="Verified dashboard for the Kalshi demo exchange: highest-dollar live events in gas prices, elections, culture, crypto and golf, price charts, order-book depth, portfolio tracking, strategy analysis, suggestions and open questions. Every row links to its source.">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div id="chrome"></div>
+
+<main class="wrap">
+  <div id="modebar" class="mode"></div>
+  <div id="modenote"></div>
+
+  <h1>Kalshi demo — market analytics, live dashboard and trade tracking</h1>
+  <p class="lede">
+    This site reads the Kalshi <strong>demo</strong> Trade API (<span class="mono">https://external-api.demo.kalshi.co/trade-api/v2</span>)
+    and publishes only what that API actually returns. It ranks the <strong>highest-dollar live events</strong> in five topics
+    — gas prices, elections, culture, crypto, golf — tracks each one <strong>until it resolves</strong>, records the
+    <strong>yes/no outcome</strong>, charts price movement with a selectable time axis, shows <strong>contracts resting at each price</strong>,
+    and turns every fill into a categorised, strategy-tagged ledger.
+    Nothing here is estimated: a value with no source is shown as an em-dash and listed on
+    <a href="flagged.html">Flagged for Review</a>.
+  </p>
+
+  <div class="grid g4" style="margin-top:18px">
+    <div class="card tight" id="kpi-events"></div>
+    <div class="card tight" id="kpi-topics"></div>
+    <div class="card tight" id="kpi-trades"></div>
+    <div class="card tight" id="kpi-exchange"></div>
+  </div>
+
+  <div class="grid g3" style="margin-top:14px">
+    <div class="card">
+      <span class="kicker">Primary workspace</span>
+      <h3><a href="dashboard.html">Live dashboard</a></h3>
+      <p class="small">Leaderboard ranked by derived dollar volume, price chart with seconds / minutes / hours / days on the X axis,
+      and a liquidity ladder. Click any row to load it into the chart.</p>
+      <a class="small" href="dashboard.html">Open dashboard →</a>
+    </div>
+    <div class="card">
+      <span class="kicker">Track to resolution</span>
+      <h3><a href="events.html">Live events &amp; resolutions</a></h3>
+      <p class="small">Every tracked market's state, close time, settlement time and outcome, with the exact API fields that
+      produced each answer.</p>
+      <a class="small" href="events.html">Open tracker →</a>
+    </div>
+    <div class="card">
+      <span class="kicker">Decide before you change anything</span>
+      <h3><a href="suggestions.html">Suggestions</a> · <a href="questions.html">Questions</a></h3>
+      <p class="small">14 ranked improvements and 14 open questions, each with what is known, what is missing, and how to close it.
+      Choices are recorded locally, never auto-applied.</p>
+      <a class="small" href="suggestions.html">Review suggestions →</a>
+    </div>
+  </div>
+
+  <h2>What this environment is</h2>
+  <div class="grid g2">
+    <div class="card">
+      <table style="font-size:13.5px">
+        <tbody>
+          <tr><td style="width:38%"><span class="kicker">REST (recommended)</span></td><td class="mono"><a href="https://external-api.demo.kalshi.co/trade-api/v2/exchange/status" target="_blank" rel="noopener">external-api.demo.kalshi.co/trade-api/v2</a></td></tr>
+          <tr><td><span class="kicker">REST (also supported)</span></td><td class="mono"><a href="https://demo-api.kalshi.co/trade-api/v2/exchange/status" target="_blank" rel="noopener">demo-api.kalshi.co/trade-api/v2</a></td></tr>
+          <tr><td><span class="kicker">WebSocket (recommended)</span></td><td class="mono">wss://external-api-ws.demo.kalshi.co/trade-api/ws/v2</td></tr>
+          <tr><td><span class="kicker">WebSocket (also supported)</span></td><td class="mono">wss://demo-api.kalshi.co/trade-api/ws/v2</td></tr>
+          <tr><td><span class="kicker">Demo web UI</span></td><td class="mono"><a href="https://demo.kalshi.co/" target="_blank" rel="noopener">demo.kalshi.co</a> — mock funds</td></tr>
+          <tr><td><span class="kicker">Endpoints table</span></td><td class="small">matches Kalshi's published table verbatim — <a href="https://docs.kalshi.com/getting_started/demo_env.md" target="_blank" rel="noopener">demo_env.md</a></td></tr>
+          <tr><td><span class="kicker">Auth model</span></td><td class="small">public reads need no key; <code>/portfolio/*</code> <em>and every WS handshake</em> need RSA-PSS signing</td></tr>
+          <tr><td><span class="kicker">Credentials here</span></td><td class="small"><span class="tag pending">none — see Q-04</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <span class="kicker">Read this first — four constraints that shape everything</span>
+      <ol class="small" style="margin:8px 0 0;padding-left:20px;line-height:1.7">
+        <li><strong>“Dollar amount” does not exist as a field.</strong> Kalshi reports <span class="mono">volume_fp</span> in
+          <em>contracts</em>. We compute dollars from the tape and label the formula on every table.
+          <a href="https://docs.kalshi.com/api-reference/market/get-series-list.md" target="_blank" rel="noopener">source</a></li>
+        <li><strong>Second-level history does not exist.</strong> Candles start at 1 minute, so a “seconds” axis is
+          built by sampling in the browser and is labelled client-sampled.
+          <a href="https://docs.kalshi.com/api-reference/market/get-market-candlesticks.md" target="_blank" rel="noopener">source</a></li>
+        <li><strong>The order book is bids-only by design.</strong> The ask side is derived as $1.00 − best opposite bid.
+          <a href="https://docs.kalshi.com/getting_started/orderbook_responses.md" target="_blank" rel="noopener">source</a></li>
+        <li><strong>WebSocket needs a signed handshake</strong>, which a browser cannot perform — live streaming therefore
+          requires the local bridge. <a href="https://docs.kalshi.com/getting_started/quick_start_websockets.md" target="_blank" rel="noopener">source</a></li>
+      </ol>
+    </div>
+  </div>
+
+  <h2>Verified snapshot — the five topics right now</h2>
+  <p class="sub">Read live during this session (2026-11-20). Series <span class="mono">volume_fp</span> is the API's own lifetime
+    contract counter for the whole series — contracts, not dollars. Click through to the dashboard for dollar figures.</p>
+  <div id="topic-table"></div>
+
+  <h2>Project status</h2>
+  <div id="status-table"></div>
+
+  <h2>How to reproduce or extend</h2>
+  <div class="grid g2">
+    <div class="card">
+      <span class="kicker">Refresh the dataset (needs network egress to kalshi.co)</span>
+      <pre>python3 scripts/collect.py --window-minutes 30 --pages 6 --top 40
+python3 scripts/aggregate_capture.py --write   # re-derive dollar volume
+python3 scripts/verify_site.py                # blank-cell + link audit</pre>
+    </div>
+    <div class="card">
+      <span class="kicker">True live mode (bypasses CORS, adds signing)</span>
+      <pre>python3 scripts/dev_server.py --port 8081
+# then open http://localhost:8081/dashboard.html?mode=bridge</pre>
+      <p class="small">The bridge proxies public reads same-origin; with
+      <span class="mono">KALSHI_API_KEY_ID</span> + <span class="mono">KALSHI_PRIVATE_KEY_PEM_PATH</span>
+      it also signs <span class="mono">/portfolio/*</span> and the WebSocket handshake.</p>
+    </div>
+  </div>
+
+  <div class="grid g3" style="margin-top:14px">
+    <div class="card tight"><span class="kicker">Code &amp; data</span><p class="small"><a href="https://github.com/karagemop466-tech/Demo3">repository</a> ·
+      <a href="https://github.com/karagemop466-tech/Demo3/blob/main/data/live_snapshot.json">dataset</a> ·
+      <a href="https://github.com/karagemop466-tech/Demo3/blob/main/COORDINATION.md">coordination board</a></p></div>
+    <div class="card tight"><span class="kicker">Reference</span><p class="small"><a href="api.html">API surface</a> ·
+      <a href="sources.html">all sources, line by line</a> · <a href="flagged.html">flagged items</a></p></div>
+    <div class="card tight"><span class="kicker">Warnings from Kalshi</span><p class="small">“The price and behavior of markets in
+      the demo environment may not be reflective of those in real markets.”
+      <a href="https://docs.kalshi.com/getting_started/demo_env.md" target="_blank" rel="noopener">source</a></p></div>
+  </div>
+
+  <footer id="foot"></footer>
+</main>
+
+<script src="assets/api.js"></script>
+<script src="assets/ui.js"></script>
+<script>
+UI.boot({ page: "index" }).then(function (st) {
+  var snap = st.snapshot || {};
+  var evs = snap.ranked_events || [];
+  var uni = snap.series_universe || [];
+  var tape = snap._meta || {};
+
+  document.getElementById("kpi-events").innerHTML = UI.kpi("Tracked live events", UI.fmt.int(evs.length),
+    (snap.topics_summary ? snap.topics_summary.length : 0) + " topics with flow in the capture");
+  document.getElementById("kpi-topics").innerHTML = UI.kpi("Series in verified universe", UI.fmt.int(uni.length),
+    "from GET /series?category&tags&include_volume=true");
+  var usd = evs.reduce(function (a, e) { return a + (K.num(e.dollar_volume_window) || 0); }, 0);
+  document.getElementById("kpi-trades").innerHTML = UI.kpi("Derived dollar volume", UI.fmt.money(usd),
+    UI.fmt.int(tape.tape_trades_scanned) + " tape records · " + (tape.window_minutes || "53.3s") + " window");
+  var ex = (snap.exchange_status || {}).value || {};
+  document.getElementById("kpi-exchange").innerHTML = UI.kpi("Demo exchange",
+    ex.trading_active ? '<span class="up">trading active</span>' : (ex.trading_active === false ? '<span class="down">halted</span>' : "—"),
+    (ex.exchange_index_statuses ? ex.exchange_index_statuses.length + " shards · " : "") +
+    '<a href="' + ((snap.exchange_status || {}).source || "#") + '" target="_blank" rel="noopener">status</a>');
+
+  UI.table("#topic-table", {
+    rows: UI.topicsOf().map(function (t) {
+      var series = uni.filter(function (r) { return r.topic === t.id; });
+      var top = series.slice().sort(function (a, b) { return (b.volume_contracts || 0) - (a.volume_contracts || 0); })[0];
+      var evsT = evs.filter(function (e) { return e.topic === t.id; });
+      var usdT = evsT.reduce(function (a, e) { return a + (K.num(e.dollar_volume_window) || 0); }, 0);
+      return { t: t, series: series, top: top, evs: evsT, usd: usdT };
+    }),
+    empty: "no topics configured",
+    columns: [
+      { k: "t", label: "Topic", render: function (r) { return "<strong>" + UI.esc(r.t.label) + "</strong><div class='sub small'>" + UI.esc((r.t.note || "").slice(0, 110)) + "</div>"; } },
+      { k: "series", label: "Series captured", cls: "r", render: function (r) { return UI.fmt.int(r.series.length); } },
+      { k: "top", label: "Largest series (contracts, lifetime)", render: function (r) {
+          return r.top ? "<span class='mono'>" + UI.esc(r.top.series_ticker) + "</span> " + UI.fmt.qty(r.top.volume_fp) +
+            "<div class='sub small'>" + UI.esc(r.top.title || "") + "</div>" : "—"; } },
+      { k: "evs", label: "Events with live flow", cls: "r", render: function (r) { return UI.fmt.int(r.evs.length); } },
+      { k: "usd", label: "Derived $ in capture", cls: "r", render: function (r) { return UI.fmt.money(r.usd); } },
+      { k: "src", label: "Source", cls: "src", render: function (r) { return UI.src(r.t.verification, "verify"); } }
+    ]
+  });
+
+  UI.table("#status-table", {
+    rows: [
+      ["Data collection", "done", "10 public endpoints read live; 28 tape records archived verbatim", "api.html"],
+      ["Topic coverage", "done", "all five topics resolved to official categories/tags; culture is a documented substitution", "topics.html"],
+      ["Resolution tracking", "done", "result / settlement_ts / settlement_value_dollars wired; 1 settled market captured as proof", "events.html"],
+      ["Charts + depth", "done", "seconds mode is client-sampled and labelled; 1m/1h/1d from the candles endpoint", "dashboard.html"],
+      ["Trade execution", "needs credentials", "signed engine shipped and validated against public data; never sent a live order", "questions.html"],
+      ["Portfolio performance", "needs credentials", "ledger, P&amp;L and categorisation run in paper mode until a demo key exists", "portfolio.html"],
+      ["Irregularities", "8 flagged", "each reproduced with its source link", "flagged.html"]
+    ].map(function (r) { return { a: r[0], b: r[1], c: r[2], d: r[3] }; }),
+    columns: [
+      { k: "a", label: "Workstream" },
+      { k: "b", label: "Status", render: function (r) { var cls = r.b === "done" ? "yes" : "pending"; return UI.tag(r.b, cls); } },
+      { k: "c", label: "Detail" },
+      { k: "d", label: "Go to", cls: "src", render: function (r) { return '<a href="' + r.d + '">' + r.d.replace(".html", "") + "</a>"; } }
+    ]
+  });
+});
+</script>
+</body>
+</html>

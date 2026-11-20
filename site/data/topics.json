@@ -1,0 +1,64 @@
+{
+  "_meta": {
+    "purpose": "Single source of truth for how the five requested topics map onto Kalshi's published taxonomy. Read by scripts/collect.py, scripts/analyze.py and site/assets/kalshi.js so the collector and the dashboard can never disagree.",
+    "taxonomy_source": "https://external-api.demo.kalshi.co/trade-api/v2/search/tags_by_categories",
+    "taxonomy_observed_at_utc": "2026-11-20T11:20Z",
+    "matching_rule": "A topic is the union of its selectors. /series matches `category` against any entry of a series' `categories` list, and `tags` exactly and case-sensitively. Source: https://docs.kalshi.com/api-reference/market/get-series-list.md",
+    "prefix_rule": "ticker_prefixes is a fast path for classifying a market ticker from the tape when a series lookup is unavailable. Membership is always confirmed by a /series or /events read before being published; prefix-only rows are labelled 'provisional'.",
+    "unmapped": "Kalshi publishes no 'Culture' category and no retail-gasoline category. See docs/questions.md Q-02 and FLAG-03."
+  },
+  "topics": [
+    {
+      "id": "gas-prices",
+      "label": "Gas & energy prices",
+      "icon": "pump",
+      "selectors": [
+        { "category": "Commodities", "tags": ["Oil & Gas"] },
+        { "category": "Economics", "tags": ["Oil and energy"] }
+      ],
+      "ticker_prefixes": ["KXWTI", "KXBRENT", "KXNATGAS", "KXHOIL", "KXOIL"],
+      "note": "No retail/pump gasoline category exists in the published taxonomy; the official proxies are crude and natural-gas series (WTI, Brent, Henry-TTF natural gas, heating oil) plus the Economics tag 'Oil and energy'. Confirm intended instrument in Q-02.",
+      "verification": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Commodities&tags=Oil%20%26%20Gas&include_volume=true"
+    },
+    {
+      "id": "elections",
+      "label": "Elections",
+      "icon": "ballot",
+      "selectors": [{ "category": "Elections" }],
+      "tags_boost": ["US Elections", "Senate", "House", "Governor", "Presidential winner", "Primaries", "International elections"],
+      "ticker_prefixes": ["KXPRES", "KXSENATE", "KXHOUSE", "KXGOV", "KXFRENCHPRES", "KXMAIRMAYOR", "KXNYCMAYOR"],
+      "note": "Elections is a first-class Kalshi category; individual races appear as tags on it.",
+      "verification": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Elections"
+    },
+    {
+      "id": "culture",
+      "label": "Culture & entertainment",
+      "icon": "film",
+      "selectors": [
+        { "category": "Entertainment" },
+        { "category": "Sports", "tags": ["Esports"] }
+      ],
+      "ticker_prefixes": ["KXTIME", "KXGTA", "KXOSCAR", "KXGRAMMY", "KXBOXOFFICE", "KXALBUM", "KXMOVIE"],
+      "note": "SUBSTITUTION (FLAG-03): Kalshi has no 'Culture' category. 'Entertainment' is the closest official grouping and covers Person-of-the-Year, film/TV/music awards, charts and game sales.",
+      "verification": "https://external-api.demo.kalshi.co/trade-api/v2/search/tags_by_categories"
+    },
+    {
+      "id": "crypto",
+      "label": "Crypto",
+      "icon": "bitcoin",
+      "selectors": [{ "category": "Crypto" }],
+      "ticker_prefixes": ["KXBTC", "KXETH", "KXSOL", "KXXRP", "KXDOGE", "KXBNB", "KXAVAX", "KXLINK", "KXNEAR", "KXHYPE", "KXZEC"],
+      "note": "Crypto is a first-class category and carries fifteen_min / hourly cadences, which is why it dominates the raw tape.",
+      "verification": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Crypto&include_volume=true"
+    },
+    {
+      "id": "golf",
+      "label": "Golf",
+      "icon": "flag",
+      "selectors": [{ "category": "Sports", "tags": ["Golf"] }],
+      "ticker_prefixes": ["KXPGATOUR", "KXDPWORLDTOUR", "KXCHAMPTOUR", "KXMASTERS", "KXTIGER", "KXRYDER", "KXPGA"],
+      "note": "Golf is a *tag* under Sports, not a category. Query /series?category=Sports&tags=Golf.",
+      "verification": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Sports&tags=Golf&include_volume=true"
+    }
+  ]
+}

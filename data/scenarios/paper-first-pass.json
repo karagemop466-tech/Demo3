@@ -1,0 +1,198 @@
+{
+  "_meta": {
+    "purpose": "Paper-order scenario that exercises trade_engine -> portfolio -> analyze end to end without credentials.",
+    "generated_by": "scripts/gen_scenario.py from data/live_snapshot.json",
+    "generated_at_utc": "2026-11-20T11:34:00Z",
+    "not_a_trade": "Nothing in this file was sent to Kalshi. Run with --paper and fills are simulated locally against the recorded quote; they are labelled mode=paper everywhere.",
+    "semantics": {
+      "side": "bid = buy YES, ask = sell YES (= buy NO) \u2014 the V2 API quotes the YES leg only",
+      "price": "dollar string, must satisfy the market's price grid",
+      "count": "contracts, fixed-point, 0.01 granularity",
+      "time_in_force": "one of good_till_canceled, fill_or_kill, immediate_or_cancel, good_until_date"
+    },
+    "sources": [
+      "https://docs.kalshi.com/api-reference/orders/create-order-v2.md",
+      "https://docs.kalshi.com/getting_started/quick_start_create_order.md"
+    ],
+    "markets_offered": 16,
+    "priced": 9,
+    "unpriceable": 7
+  },
+  "orders": [
+    {
+      "ticker": "KXBTCY-27JAN0100-B97500",
+      "side": "ask",
+      "count": "12.00",
+      "price": "0.0300",
+      "strategy": "S1-limit-resting",
+      "time_in_force": "good_till_canceled",
+      "self_trade_prevention_type": "maker",
+      "why": "paper ask at 0.0300, the market's own recorded bid (recorded best quote was outside (0,1); used the market's own last_price_dollars)",
+      "quote_source": "https://external-api.demo.kalshi.co/trade-api/v2/markets?series_ticker=KXBTCY&status=open&limit=3",
+      "topic": "crypto",
+      "event_ticker": "KXBTCY-27JAN0100"
+    },
+    {
+      "ticker": "KXBTCY-27JAN0100-T149999.99",
+      "side": "bid",
+      "count": "250.00",
+      "price": "0.0100",
+      "strategy": "S2-cross-the-spread",
+      "time_in_force": "immediate_or_cancel",
+      "self_trade_prevention_type": "taker_at_cross",
+      "why": "paper bid at 0.0100, the market's own recorded ask",
+      "quote_source": "https://external-api.demo.kalshi.co/trade-api/v2/markets?series_ticker=KXBTCY&status=open&limit=3",
+      "topic": "crypto",
+      "event_ticker": "KXBTCY-27JAN0100"
+    },
+    {
+      "ticker": "KXBTCY-27JAN0100-T20000.00",
+      "side": "bid",
+      "count": "1250.00",
+      "price": "0.0200",
+      "strategy": "S3-resolution-carry",
+      "time_in_force": "immediate_or_cancel",
+      "self_trade_prevention_type": "taker_at_cross",
+      "why": "paper bid at 0.0200, the market's own recorded ask",
+      "quote_source": "https://external-api.demo.kalshi.co/trade-api/v2/markets?series_ticker=KXBTCY&status=open&limit=3",
+      "topic": "crypto",
+      "event_ticker": "KXBTCY-27JAN0100"
+    },
+    {
+      "ticker": "KXPRESPERSON-28-CHOL",
+      "side": "ask",
+      "count": "12.00",
+      "price": "0.0030",
+      "strategy": "S1-limit-resting",
+      "time_in_force": "good_till_canceled",
+      "self_trade_prevention_type": "maker",
+      "why": "paper ask at 0.0030, the market's own recorded bid",
+      "quote_source": "https://external-api.demo.kalshi.co/trade-api/v2/markets?event_ticker=KXPRESPERSON-28&status=open&limit=3",
+      "topic": "elections",
+      "event_ticker": "KXPRESPERSON-28"
+    },
+    {
+      "ticker": "KXPRESPERSON-28-RPAU",
+      "side": "bid",
+      "count": "250.00",
+      "price": "0.0030",
+      "strategy": "S2-cross-the-spread",
+      "time_in_force": "immediate_or_cancel",
+      "self_trade_prevention_type": "taker_at_cross",
+      "why": "paper bid at 0.0030, the market's own recorded ask",
+      "quote_source": "https://external-api.demo.kalshi.co/trade-api/v2/markets?event_ticker=KXPRESPERSON-28&status=open&limit=3",
+      "topic": "elections",
+      "event_ticker": "KXPRESPERSON-28"
+    },
+    {
+      "ticker": "KXPGATOUR-THRC26-HLEB",
+      "side": "ask",
+      "count": "12.00",
+      "price": "0.0060",
+      "strategy": "S1-limit-resting",
+      "time_in_force": "good_till_canceled",
+      "self_trade_prevention_type": "maker",
+      "why": "paper ask at 0.0060, the market's own recorded bid (recorded best quote was outside (0,1); used the market's own last_price_dollars)",
+      "quote_source": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPGATOUR/markets/KXPGATOUR-THRC26-HLEB/candlesticks?start_ts=1794568800&end_ts=1795173600&period_interval=1440",
+      "topic": "golf",
+      "event_ticker": "KXPGATOUR-THRC26"
+    },
+    {
+      "ticker": "KXTIME-26-JEN",
+      "side": "ask",
+      "count": "12.00",
+      "price": "0.0300",
+      "strategy": "S1-limit-resting",
+      "time_in_force": "good_till_canceled",
+      "self_trade_prevention_type": "maker",
+      "why": "paper ask at 0.0300, the market's own recorded bid",
+      "quote_source": "https://external-api.demo.kalshi.co/trade-api/v2/markets?event_ticker=KXTIME-26&status=open&limit=3",
+      "topic": "culture",
+      "event_ticker": "KXTIME-26"
+    },
+    {
+      "ticker": "KXTIME-26-SCO",
+      "side": "bid",
+      "count": "250.00",
+      "price": "0.2000",
+      "strategy": "S2-cross-the-spread",
+      "time_in_force": "immediate_or_cancel",
+      "self_trade_prevention_type": "taker_at_cross",
+      "why": "paper bid at 0.2000, the market's own recorded ask (recorded best quote was outside (0,1); used the market's own last_price_dollars)",
+      "quote_source": "https://external-api.demo.kalshi.co/trade-api/v2/markets?event_ticker=KXTIME-26&status=open&limit=3",
+      "topic": "culture",
+      "event_ticker": "KXTIME-26"
+    },
+    {
+      "ticker": "KXTIME-26-LUI",
+      "side": "bid",
+      "count": "1250.00",
+      "price": "0.0400",
+      "strategy": "S3-resolution-carry",
+      "time_in_force": "immediate_or_cancel",
+      "self_trade_prevention_type": "taker_at_cross",
+      "why": "paper bid at 0.0400, the market's own recorded ask (recorded best quote was outside (0,1); used the market's own last_price_dollars)",
+      "quote_source": "https://external-api.demo.kalshi.co/trade-api/v2/markets?event_ticker=KXTIME-26&status=open&limit=3",
+      "topic": "culture",
+      "event_ticker": "KXTIME-26"
+    }
+  ],
+  "skipped": [
+    {
+      "ticker": "KXPRESPERSON-28-ESLO",
+      "yes_bid_dollars": "0.0000",
+      "yes_ask_dollars": "0.0000",
+      "last_price_dollars": "0.0000",
+      "reason": "no price in (0,1) exists on this row: bid 0.0000 / ask 1.0000 with volume_fp 0.00 is an empty book, so the engine would have to invent a price",
+      "source": "https://external-api.demo.kalshi.co/trade-api/v2/markets?event_ticker=KXPRESPERSON-28&status=open&limit=3"
+    },
+    {
+      "ticker": "KXPGATOUR-THRC26-BHAA",
+      "yes_bid_dollars": "0.0000",
+      "yes_ask_dollars": "0.0000",
+      "last_price_dollars": "0.0000",
+      "reason": "no price in (0,1) exists on this row: bid 0.0000 / ask 1.0000 with volume_fp 0.00 is an empty book, so the engine would have to invent a price",
+      "source": "https://external-api.demo.kalshi.co/trade-api/v2/markets?event_ticker=KXPGATOUR-THRC26&status=open&limit=3"
+    },
+    {
+      "ticker": "KXPGATOUR-THRC26-RSTR",
+      "yes_bid_dollars": "0.0000",
+      "yes_ask_dollars": "0.0000",
+      "last_price_dollars": "0.0000",
+      "reason": "no price in (0,1) exists on this row: bid 0.0000 / ask 1.0000 with volume_fp 0.00 is an empty book, so the engine would have to invent a price",
+      "source": "https://external-api.demo.kalshi.co/trade-api/v2/markets?event_ticker=KXPGATOUR-THRC26&status=open&limit=3"
+    },
+    {
+      "ticker": "KXPGATOUR-THRC26-RBRE",
+      "yes_bid_dollars": "0.0000",
+      "yes_ask_dollars": "0.0000",
+      "last_price_dollars": "0.0000",
+      "reason": "no price in (0,1) exists on this row: bid 0.0000 / ask 1.0000 with volume_fp 0.00 is an empty book, so the engine would have to invent a price",
+      "source": "https://external-api.demo.kalshi.co/trade-api/v2/markets?event_ticker=KXPGATOUR-THRC26&status=open&limit=3"
+    },
+    {
+      "ticker": "KXWTIW-26NOV2014-T77.00",
+      "yes_bid_dollars": "0.0000",
+      "yes_ask_dollars": "1.0000",
+      "last_price_dollars": "0.0000",
+      "reason": "no price in (0,1) exists on this row: bid 0.0000 / ask 1.0000 with volume_fp 0.00 is an empty book, so the engine would have to invent a price",
+      "source": "https://external-api.demo.kalshi.co/trade-api/v2/markets?series_ticker=KXWTIW&status=open&limit=3"
+    },
+    {
+      "ticker": "KXWTIW-26NOV2014-B99.50",
+      "yes_bid_dollars": "0.0000",
+      "yes_ask_dollars": "0.0000",
+      "last_price_dollars": "0.0000",
+      "reason": "no price in (0,1) exists on this row: bid 0.0000 / ask 1.0000 with volume_fp 0.00 is an empty book, so the engine would have to invent a price",
+      "source": "https://external-api.demo.kalshi.co/trade-api/v2/markets?series_ticker=KXWTIW&status=open&limit=3"
+    },
+    {
+      "ticker": "KXWTIW-26NOV2014-T101.99",
+      "yes_bid_dollars": "0.0000",
+      "yes_ask_dollars": "0.0000",
+      "last_price_dollars": "0.0000",
+      "reason": "no price in (0,1) exists on this row: bid 0.0000 / ask 1.0000 with volume_fp 0.00 is an empty book, so the engine would have to invent a price",
+      "source": "https://external-api.demo.kalshi.co/trade-api/v2/markets?series_ticker=KXWTIW&status=open&limit=3"
+    }
+  ]
+}

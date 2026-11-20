@@ -58,9 +58,9 @@ Everything on the site is rendered from **either** a live read of the demo API *
 | Portfolio performance on demo account | **Blocked on credentials** | Needs a demo account + API key created by a human at `demo.kalshi.co` |
 | Execute trades on demo | **Blocked on credentials** | Same; plus `POST /portfolio/events/orders` is a *write* and needs a key with trading rights |
 | Trade analysis, categorisation, strategy | **Yes** | Runs on the fills ledger; also demoed in paper mode against live prices |
-| Suggestions + review-before-change | **Yes** | `site/suggestions/` — each suggestion is an option card with cost, risk and evidence |
+| Suggestions + review-before-change | **Yes** | `site/suggestions.html` — each suggestion is an option card with cost, risk and evidence |
 
-## 5. Irregularities found (all reproduced on the Flagged for Review page)
+## 5. Irregularities found (1-8 found while reading the API, 9-12 while building; all reproduced on the Flagged for Review page)
 
 | ID | Irregularity | Why it matters |
 |---|---|---|
@@ -72,6 +72,11 @@ Everything on the site is rendered from **either** a live read of the demo API *
 | FLAG-06 | Order book returns an **empty `200`** for an unknown or mistyped ticker instead of `404`. | "No liquidity" and "typo" are indistinguishable unless the market is also checked with `GET /markets/{ticker}`. |
 | FLAG-07 | REST responses are **explicitly cached** ("prices, sizes and status can lag the exchange by several seconds; filtered listings can lag longer"). | A dashboard that claims "live" must state its lag budget; our UI shows the `updated_time` of every instrument. |
 | FLAG-08 | No **CORS** statement exists in the official docs for the demo/production REST hosts, and a GitHub-Pages-hosted page cannot verify it from this sandbox. | Whether the published site can call the API **directly from the browser is unverified**. The site therefore auto-detects: live if allowed, snapshot if not, `dev_server.py` in between. |
+
+| FLAG-09 | The **demo trade tape looks synthetic**: 120 fills inside ~179 ms, in repeating round sizes (`5555.55`, `1851.85` contracts). | Flow-derived signals measured on demo will not transfer; every strategy verdict on this site therefore stays "insufficient data". |
+| FLAG-10 | The **WebSocket handshake must be signed for every channel**, public ones included, and a browser cannot set handshake headers. | "Live charts" in a static deployment can only mean polling; the site labels its seconds axis *client-sampled* instead of pretending to stream. |
+| FLAG-11 | A long API response **can be truncated mid-record** by the retrieval path used here (one `KXTIME-26` market was cut inside `rules_secondary`). | Reconstructing a cut field from a neighbouring row would fabricate a value, so truncated rows are published as `null` with a do-not-trade note. |
+| FLAG-12 | **This sandbox has no network egress to `kalshi.co`** (TLS fails from the shell while GitHub/npm work), so `collect.py`, `portfolio.py` and the signed client were never executed against the network here. | Any claim that the collector "ran successfully" would be false. Scripts are compile-checked and shipped; all published values come from archived reads under `data/`. |
 
 ## 6. Decision posture
 

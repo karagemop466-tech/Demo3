@@ -399,42 +399,164 @@ def depth_at_or_above(book: dict, side: str, price: float) -> float:
     return sum(c for p, c in book_levels(book, side) if p >= price)
 
 
+USAGE = """smoke-test CLI for the demo API. Every command prints what it fetched and the URL it fetched,
+so a reader can confirm a value against the live response before trusting the dashboard.
+
+  status                          exchange status for all shards
+  series <category> [tag]         series list for an official category/tag, lifetime contracts each
+  markets [--flag v] ...          one page of /markets with any documented filter
+  market <ticker>                 one market, verbatim JSON
+  book <ticker> [depth]           order book, verbatim JSON
+  trades [n] [ticker]             the tape, with the derived dollar notional per fill
+  events <series_ticker>          events for a series
+  auth-check                      is a usable key present, and does signing work end to end
+  signed-path-check               shows the exact string that gets signed (no network)
+
+Filters accepted by `markets`: --status open|settled|closed|unopened  --series-ticker X
+  --event-ticker X  --tickers a,b  --mve-filter include|exclude  --limit N  --depth-for TICKER
+Add `prod` as the last word of any read command to use the production base (read-only GETs; this
+tool never sends a write to production, and the trade engine refuses a non-demo host).
+"""
+
+
 def main(argv: Iterable[str]) -> int:  # tiny CLI for smoke-testing
     args = list(argv)
     if not args or args[0] in ("-h", "--help"):
-        print(__doc__)
-        print("\ncommands:\n  status | series <category> [tag] | trades <n> | market <ticker> | "
-              "book <ticker> | auth-check | signed-path-check")
+        print(USAGE)
         return 0
     cmd = args[0]
-    c = KalshiClient(DEMO_REST if len(args) < 3 or args[-1] != "prod" else PROD_REST)
-    if cmd == "status":
-        print(json.dumps(c.exchange_status(), indent=2))
-    elif cmd == "series":
-        tag = args[2] if len(args) > 2 else None
-        rows = c.series(category=args[1], tags=tag)
-        rows.sort(key=lambda r: fp(r.get("volume_fp")), reverse=True)
-        for r in rows[:25]:
-            print(f"{r['ticker']:<24} {fp(r.get('volume_fp')):>18,.2f}  {r.get('title','')}")
-        print(f"{len(rows)} series")
-    elif cmd == "trades":
-        n = int(args[1]) if len(args) > 1 else 20
-        for t in c.trades(pages=1, limit=min(n, 1000)):
-            print(f"{t['created_time']} {t['ticker']:<34} {trade_notional(t):>12,.2f}")
-    elif cmd == "market":
-        print(json.dumps(c.market(args[1]), indent=2))
-    elif cmd == "book":
-        print(json.dumps(c.orderbook(args[1]), indent=2))
-    elif cmd == "auth-check":
-        try:
-            c.signer.enabled and print(c.balance()) or print("credentials not configured")
-        except KalshiError as e:
-            print(f"{type(e).__name__}: {e}")
-    elif cmd == "signed-path-check":
-        from urllib.parse import urlparse
+    rest = args[1:]
+    prod = bool(rest) and rest[-1] == "prod"
+    if prod:
+        rest = rest[:-1]
+    c = KalshiClient(PROD_REST if prod else DEMO_REST)
 
-        url = "https://external-api.kalshi.com/trade-api/v2/portfolio/orders?limit=5"
-        print("sign:", urlparse(url).path, "| send:", url)
+    def flags(words: list[str]) -> dict[str, str]:
+        out: dict[str, str] = {}
+        k = None
+        for w in words:
+            if w.startswith("--"):
+                k = w[2:]
+                out[k] = "true"
+            elif k:
+                out[k] = w
+                k = None
+        return out
+
+    def show(url: str) -> None:
+        print(f"# GET {url}")
+
+    try:
+        if cmd == "status":
+            show(c.url_for("/exchange/status"))
+            print(json.dumps(c.exchange_status(), indent=2))
+        elif cmd == "series":
+            if not rest:
+                print("series needs <category> [tag]", file=sys.stderr)
+                return 2
+            cat, tag = rest[0], (rest[1] if len(rest) > 1 else None)
+            rows = c.series(category=cat, tags=tag)
+            rows.sort(key=lambda r: fp(r.get("volume_fp")) or 0.0, reverse=True)
+            show(c.url_for("/series", {"category": cat, "tags": tag, "include_volume": "true"}))
+            for r in rows:
+                vol = fp(r.get("volume_fp"))
+                # GET /series returns `series_ticker`; there is no `ticker` key on this object
+                print(f"{r.get('series_ticker', r.get('ticker', '?')):<26} "
+                      f"{'' if vol is None else format(vol, ',.2f'):>18}  {r.get('title', '')}")
+            print(f"{len(rows)} series returned by this one unpaginated call "
+                  f"(GET /series documents no limit/cursor, so this IS the whole filtered set)")
+        elif cmd == "markets":
+            # an explicit allow-list: a mistyped flag must fail here rather than be forwarded to the API
+            allowed = {"status", "series-ticker", "event-ticker", "tickers", "mve-filter", "limit", "depth-for"}
+            f = flags(rest)
+            unknown = sorted(set(f) - allowed)
+            if unknown:
+                print(f"unknown flag(s) {unknown}; `markets` accepts --{' --'.join(sorted(allowed))}", file=sys.stderr)
+                return 2
+            alias = {"series-ticker": "series_ticker", "event-ticker": "event_ticker",
+                     "mve-filter": "mve_filter", "limit": "limit", "status": "status", "tickers": "tickers"}
+            params = {alias[k]: v for k, v in f.items() if k in alias}
+            params.setdefault("limit", "20")
+            rows = []
+            for i, m in enumerate(c.markets(**params)):
+                rows.append(m)
+                if i + 1 >= int(params["limit"]):
+                    break
+            show(c.url_for("/markets", params))
+            for m in rows:
+                print(f"{m.get('ticker',''):<34} {m.get('status',''):<10} "
+                      f"last={m.get('last_price_dollars')!s:<8} bid={m.get('yes_bid_dollars')!s:<8} "
+                      f"ask={m.get('yes_ask_dollars')!s:<8} vol={m.get('volume_fp')!s:<14} "
+                      f"{(m.get('yes_sub_title') or m.get('title') or '')[:44]}")
+            print(f"{len(rows)} markets")
+            if f.get("depth-for"):
+                print(json.dumps(c.orderbook(f["depth-for"], depth=10), indent=2))
+        elif cmd == "market":
+            if not rest:
+                print("market needs <ticker>", file=sys.stderr)
+                return 2
+            show(c.url_for("/markets/" + rest[0]))
+            print(json.dumps(c.market(rest[0]), indent=2))
+        elif cmd == "book":
+            if not rest:
+                print("book needs <ticker> [depth]", file=sys.stderr)
+                return 2
+            depth = int(rest[1]) if len(rest) > 1 and rest[1].isdigit() else None
+            show(c.url_for("/markets/" + rest[0] + "/orderbook", {"depth": depth}))
+            book = c.orderbook(rest[0], depth=depth)
+            print(json.dumps(book, indent=2))
+            yes, no = best_bid(book, "yes"), best_bid(book, "no")
+            print(f"# best YES bid {yes} | best NO bid {no} | implied YES ask "
+                  f"{'—' if no is None else round(1 - no, 4)} (the API returns no asks by design)")
+        elif cmd == "trades":
+            n = int(rest[0]) if rest and rest[0].isdigit() else 20
+            ticker = next((w for w in rest if not w[0].isdigit()), None)
+            show(c.url_for("/markets/trades", {"limit": min(n, 1000), "ticker": ticker}))
+            rows = list(c.trades(ticker=ticker, pages=1, limit=min(n, 1000)))
+            for t in rows[:n]:
+                print(f"{t.get('created_time','')} {t.get('ticker',''):<34} "
+                      f"{t.get('count_fp')!s:>12} ct @ {t.get('yes_price_dollars')!s}/{t.get('no_price_dollars')!s} "
+                      f"= ${trade_notional(t):,.2f}")
+            print(f"{len(rows)} fills | notional is DERIVED here: count_fp x the taker's own side price")
+        elif cmd == "events":
+            if not rest:
+                print("events needs <series_ticker>", file=sys.stderr)
+                return 2
+            show(c.url_for("/events", {"series_ticker": rest[0], "with_nested_markets": "true"}))
+            for e in c.events(series_ticker=rest[0], with_nested_markets=True):
+                print(f"{e.get('event_ticker',''):<30} {e.get('title','')[:60]:<62} "
+                      f"{len(e.get('markets') or [])} markets")
+        elif cmd == "auth-check":
+            key = c.signer.enabled
+            print(f"key id configured: {bool(key)}")
+            if not key:
+                print("  set KALSHI_API_KEY_ID and KALSHI_PRIVATE_KEY_PEM_PATH (a DEMO key from "
+                      "https://demo.kalshi.co/) — see Q-04")
+                return 1
+            try:
+                b = c.balance()
+                print("signing works; balance read OK:")
+                print(json.dumps(b, indent=2)[:900])
+            except KalshiError as e:
+                print(f"signed request failed: {type(e).__name__}: {e}")
+                return 1
+        elif cmd == "signed-path-check":
+            ts, headers = c.signer.headers("GET", "/trade-api/v2/portfolio/orders") if c.signer.enabled else (None, {})
+            print("signed string shape:  <timestamp_ms>GET/trade-api/v2/portfolio/orders")
+            print("query parameters are NOT part of the signature")
+            print("headers:", list(headers) or "(no key configured, so nothing to sign)")
+            print("reference: https://docs.kalshi.com/getting_started/quick_start_authenticated_requests.md")
+        else:
+            print(f"unknown command {cmd!r}\n", file=sys.stderr)
+            print(USAGE, file=sys.stderr)
+            return 2
+    except KalshiError as e:
+        print(f"request failed: {type(e).__name__}: {e}", file=sys.stderr)
+        return 1
+    except urllib.error.URLError as e:
+        print(f"network unreachable from this environment: {e}\n"
+              f"(see FLAG-12; the demo host may be blocked here while working elsewhere)", file=sys.stderr)
+        return 1
     return 0
 
 
