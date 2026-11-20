@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home — Kalshi Live Alert Desk</title>
+<meta name="description" content="Live swing-alert desk for the Kalshi demo exchange: gas, elections, culture, crypto, golf.">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+<a class="brand" href="index.html">Kalshi <span>Live Alert Desk</span></a>
+<nav class="main"><a href="index.html" class="active">Home</a><a href="dashboard.html">Dashboard</a><a href="gas.html">Gas</a><a href="elections.html">Elections</a><a href="culture.html">Culture</a><a href="crypto.html">Crypto</a><a href="golf.html">Golf</a><a href="graph.html">Graph &amp; liquidity</a><a href="tracking.html">Resolution tracking</a><a href="strategies.html">Strategies</a><a href="portfolio.html">Simulated portfolio</a><a href="suggestions.html">Suggestions</a><a href="methodology.html">Methodology</a><a href="flagged.html">Flagged for review</a><a href="sources.html">Sources</a></nav>
+</div></header>
+<main class="wrap">
+
+<h1>Kalshi Live Alert Desk</h1>
+<p class="muted">A live desk for the Kalshi <strong>demo</strong> exchange covering five topics only —
+<strong>gas prices, elections, culture, crypto, golf</strong>. It ranks the highest-dollar live
+events, alerts on any price swing of at least $0.10 in either direction in two scrolling streams,
+tracks events until they resolve YES or NO, and runs auto-simulated trades to test strategies
+against the same official data.</p>
+<div class="banner"><span class="pulse warn"></span><span id="liveStatus">checking the demo API…</span>
+<span class="small muted"> — data snapshot built 2026-11-20T19:52:13.666305+00:00</span></div>
+<div class="grid g4" id="statGrid"></div>
+<p class="small muted" id="coverageNote"></p>
+
+<div class="card">
+<h2>What to look at first</h2>
+<div class="grid g2">
+<div>
+<h3>1 · The two alert streams</h3>
+<p class="small">Both stream every swing ≥ $0.10 with the contract, direction, both prices, the
+window, volume and links to the exact official candlestick request plus a headline search for that
+timestamp.</p>
+<ul class="small">
+<li><a href="dashboard.html#alerts">All swing alerts</a> — every alert in the five topics.</li>
+<li><a href="dashboard.html#alerts">High-ROI alerts</a> — the same events filtered by the
+documented EV model (EV ≥ $0.03 per contract and ROI ≥ 10%).</li>
+</ul>
+<h3>2 · Highest-dollar events by topic</h3>
+<p class="small">Each topic has its own page with its events grouped together (see the topic nav).
+Dollar volume is <em>derived</em> (contracts × notional) because the trade API publishes no
+dollar-volume field — flagged as L-03.</p>
+</div>
+<div>
+<h3>3 · Price graph &amp; liquidity</h3>
+<p class="small">The <a href="graph.html">graph page</a> plots contract price against time with
+windows from 30 seconds to 30 days, and shows how many contracts are available at each price from
+the orderbook.</p>
+<h3>4 · Resolution tracking</h3>
+<p class="small"><a href="tracking.html">Resolution tracking</a> keeps every event until it settles
+and records how it resolved — YES or NO — with the settlement source.</p>
+<h3>5 · Simulated strategies</h3>
+<p class="small">Three strategies trade automatically on the collected candlesticks
+(<a href="strategies.html">strategies</a>, <a href="portfolio.html">portfolio</a>). No credentials
+exist in this repo, so nothing is ever sent to Kalshi; every fill says SIMULATED.</p>
+</div>
+</div>
+</div>
+
+<div class="card">
+<h2>Live events with the highest derived dollar amount</h2>
+<p class="small muted">Top line per topic by derived dollar volume (contracts × notional value).
+Ranking is per topic so no single topic crowds out the others.</p>
+<div class="table-scroll"><table class=""><thead><tr><th class="">Topic</th><th class="">Top event / contract</th><th class="">Price</th><th class="num">Derived $ volume</th><th class="">Liquidity</th><th class="">Closes</th><th class="">Source</th></tr></thead><tbody><tr><td class=""><span class="chip t-gas">Gas prices</span></td><td class=""><span class="mono">KXWTIMAX-26DEC31-T180</span><div class="small muted">$180.01 or above</div></td><td class="">1.7¢</td><td class="num">$1.49M</td><td class="">10</td><td class="">2026-12-31 19:30</td><td class=""><a href="https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXWTIMAX-26DEC31-T180" target="_blank" rel="noopener">Get Markets</a></td></tr><tr><td class=""><span class="chip t-elections">Elections</span></td><td class=""><span class="mono">KXPRESNOMD-28-HBID</span><div class="small muted">Hunter Biden</div></td><td class="">0.2¢</td><td class="num">$537.23M</td><td class="">222,222</td><td class="">2028-11-07 15:00</td><td class=""><a href="https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-HBID" target="_blank" rel="noopener">Get Markets</a></td></tr><tr><td class=""><span class="chip t-culture">Culture</span></td><td class=""><span class="mono">KXOSCARPIC-27-DIG</span><div class="small muted">Digger</div></td><td class="">1.0¢</td><td class="num">$11.96M</td><td class="">0</td><td class="">2027-12-31 15:00</td><td class=""><a href="https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXOSCARPIC-27-DIG" target="_blank" rel="noopener">Get Markets</a></td></tr><tr><td class=""><span class="chip t-crypto">Crypto</span></td><td class=""><span class="mono">KXBTCY-27JAN0100-B122500</span><div class="small muted">120,000 to 124,999.99</div></td><td class="">1.0¢</td><td class="num">$162.21M</td><td class="">16,665</td><td class="">2027-01-01 05:00</td><td class=""><a href="https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTCY-27JAN0100-B122500" target="_blank" rel="noopener">Get Markets</a></td></tr><tr><td class=""><span class="chip t-golf">Golf</span></td><td class=""><span class="mono">KXPGATOUR-THRC26-TMOO</span><div class="small muted">Taylor Moore</div></td><td class="">0.4¢</td><td class="num">$1.16M</td><td class="">88,887</td><td class="">2026-12-06 00:00</td><td class=""><a href="https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPGATOUR-THRC26-TMOO" target="_blank" rel="noopener">Get Markets</a></td></tr></tbody></table></div><p class="small muted">Every row's source request returns that exact market from the demo exchange.</p>
+</div>
+
+<div class="card">
+<h2>Live status of this build — what is live and what is a snapshot</h2>
+<div class="grid g3">
+<div class="card tight"><div class="label">Snapshot built</div><div class="stat sm"><span class="mono small">2026-11-20T19:52:13.666305+00:00</span></div><div class="note">Built from the committed collector snapshots; the scheduler refreshes them.</div></div>
+<div class="card tight"><div class="label">Swing alerts (≥ $0.10)</div><div class="stat sm">204</div><div class="note">35 passed the high-ROI model filter</div></div>
+<div class="card tight"><div class="label">Contracts with candles</div><div class="stat sm">46</div><div class="note">crypto: 3 · culture: 5 · elections: 31 · gas: 4 · golf: 3</div></div>
+<div class="card tight"><div class="label">Resolved markets tracked</div><div class="stat sm">20,052</div><div class="note">settled markets in the five topics, YES/NO recorded</div></div>
+<div class="card tight"><div class="label">Simulated trades</div><div class="stat sm">1,472</div><div class="note">across 3 strategies · paper only, nothing sent to Kalshi</div></div>
+<div class="card tight"><div class="label">Alert threshold</div><div class="stat sm">$0.10</div><div class="note">step close-to-close or intrabar high-to-low</div></div>
+</div>
+<p class="small muted">Live polling: the dashboard calls the public demo API from your browser and
+says so when it succeeds or is blocked. The committed snapshot is always shown with its timestamp,
+never presented as live data. Reason: the browser cannot open an authenticated Kalshi WebSocket
+(flag L-10), and some networks block the API (flag L-01).</p>
+</div>
+
+<div class="card">
+<h2>How this keeps itself honest</h2>
+<ul class="small">
+<li>Every table row has a source link, or says <span class="chip warn">unverified</span>.</li>
+<li>Derived numbers are labelled <em>derived</em>; modelled numbers (ROI model, simulated fills)
+say <em>model</em> or <em>SIMULATED</em> and publish their formula on
+<a href="methodology.html">Methodology</a>.</li>
+<li>Irregularities are published with evidence links on
+<a href="flagged.html">Flagged for review</a> — currently 13 items.</li>
+<li>The scripts that rebuild every number are in this repo:
+<code>scripts/build_live_candles.py</code>, <code>scripts/build_live_data.py</code>,
+<code>scripts/verify_live_site.py</code>.</li>
+</ul>
+</div>
+
+</main>
+<footer class="wrap">
+<p><strong>Kalshi Live Alert Desk</strong> — asks only about the Kalshi <em>demo</em> exchange
+(<span class="mono">https://external-api.demo.kalshi.co/trade-api/v2</span>). Every table row links its official source request; values that
+cannot be confirmed are left blank and listed on <a href="flagged.html">Flagged for review</a>.
+Simulated trades are labelled SIMULATED everywhere and are never sent to Kalshi.</p>
+<p class="small">Official docs:
+<a href="https://docs.kalshi.com/getting_started/demo_env" target="_blank" rel="noopener">demo environment</a> ·
+<a href="https://docs.kalshi.com/getting_started/quick_start_market_data" target="_blank" rel="noopener">market data without auth</a> ·
+<a href="https://docs.kalshi.com/api-reference/market/get-market-candlesticks" target="_blank" rel="noopener">candlesticks</a> ·
+<a href="https://docs.kalshi.com/api-reference/market/get-market-orderbook" target="_blank" rel="noopener">orderbook</a> ·
+<a href="https://docs.kalshi.com/getting_started/market_settlement" target="_blank" rel="noopener">settlement</a>.
+Other views in this repo: <a href="../index.html">canonical tracker</a> ·
+<a href="../docs/">docs archive</a> · <a href="../demo-desk/">demo desk</a> ·
+<a href="../analysis/">analysis</a>.</p>
+</footer>
+<script src="assets/desk.js"></script><script src="assets/dashboard.js"></script>
+</body>
+</html>
