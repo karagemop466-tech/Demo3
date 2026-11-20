@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home - Kalshi demo dashboard</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-root="" data-page="home">
+<header class="site"><div id="site-nav"></div></header>
+<main>
+
+<h1>Kalshi demo dashboard</h1>
+<p class="lead">Live tracking, verified data, and analysis for gas prices, elections, culture, crypto, and golf markets on Kalshi.
+Every value links to an official source. Anything that could not be confirmed is marked unverified.</p>
+
+<div class="card"><h2 style="margin-top:0">Executive summary</h2>
+<ul>
+<li>Kalshi publishes a <b>production</b> Trade API (<a href="https://external-api.kalshi.com/trade-api/v2" target="_blank" rel="noopener">external-api.kalshi.com/trade-api/v2</a>) and a separate <b>demo</b> API. Credentials do not cross environments, and Kalshi warns that demo prices may not reflect real markets. <a href="https://docs.kalshi.com/getting_started/api_environments.md" target="_blank" rel="noopener">source</a> <a href="https://docs.kalshi.com/getting_started/demo_env.md" target="_blank" rel="noopener">source</a></li>
+<li>Market data (markets, events, orderbooks, candlesticks) is documented as <b>unauthenticated</b>. Portfolio and trading endpoints require an API key and a request signature. <a href="https://docs.kalshi.com/getting_started/quick_start_market_data.md" target="_blank" rel="noopener">source</a> <a href="https://docs.kalshi.com/getting_started/quick_start_authenticated_requests.md" target="_blank" rel="noopener">source</a></li>
+<li>Each contract pays <b>$1</b> to the winning side. Results are <code>yes</code>, <code>no</code>, or <code>scalar</code>. Three settled gas markets (2026-11-16) all resolved <b>YES</b>. <a href="https://docs.kalshi.com/getting_started/market_settlement.md" target="_blank" rel="noopener">source</a> <a href="https://external-api.kalshi.com/trade-api/v2/markets?series_ticker=KXAAAGASW&amp;status=settled&amp;limit=3" target="_blank" rel="noopener">source</a></li>
+<li>The API has <b>no dollar-volume field</b>. Rankings here use contracts traded, and this is an open question. <a href="https://docs.kalshi.com/api-reference/market/get-market.md" target="_blank" rel="noopener">source</a></li>
+<li>Several culture, golf, and elections series name <b>non-official settlement sources</b>. These are the highest resolution risk. See Flagged for review.</li>
+<li><b>Portfolio analysis and trade execution are not done.</b> No demo API key exists in this workspace, and nothing was traded.</li>
+<li>The live panels call the public API from your browser. Whether your browser is allowed to read it (CORS) is unverified, and the page shows a banner if it cannot.</li>
+</ul></div>
+
+<div data-render="counts"></div>
+
+<h2>Categories</h2>
+<div class="grid">
+  <a class="tile" href="categories/gas.html">Gas prices<small>AAA-settled weekly markets (Economics)</small></a>
+  <a class="tile" href="categories/elections.html">Elections<small>Presidential, state, international</small></a>
+  <a class="tile" href="categories/culture.html">Culture<small>Platform and public-figure markets</small></a>
+  <a class="tile" href="categories/crypto.html">Crypto<small>BTC, DOGE, SOL, ADA and more</small></a>
+  <a class="tile" href="categories/golf.html">Golf<small>Majors, PGA Tour, course records</small></a>
+</div>
+<div class="grid" style="margin-top:12px">
+  <a class="tile" href="dashboard.html">Live dashboard<small>Top markets by volume, price charts, liquidity, tracking</small></a>
+  <a class="tile" href="resolved.html">Resolved<small>Final yes/no results with sources</small></a>
+  <a class="tile" href="flagged.html">Flagged for review<small>Irregularities and unverified items</small></a>
+</div>
+
+<h2>Series by contracts traded (snapshot)</h2>
+<p class="note">Ranked from the verified snapshot, 2026-11-20. Volume values change continuously.</p>
+<div data-render="volume"></div>
+
+</main>
+<footer>Snapshot date (UTC): <span id="snapshot-date">2026-11-20</span>. Data from the public Kalshi Trade API and Kalshi docs.
+Every table row links to its source. Blank or flagged values are unverified. Not investment advice.
+Source code: <a href="https://github.com/karagemop466-tech/Demo3">github.com/karagemop466-tech/Demo3</a>.</footer>
+<script src="assets/app.js" defer></script>
+</body>
+</html>

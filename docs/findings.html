@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Findings - Kalshi demo dashboard</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-root="" data-page="findings">
+<header class="site"><div id="site-nav"></div></header>
+<main>
+
+<h1>Findings and analysis</h1>
+<p class="lead">Conclusions drawn only from values in the verified snapshot. Each point links to the source it came from.</p>
+<h2>Key findings</h2>
+<div data-render="findings"></div>
+<h2>Series by contracts traded (snapshot)</h2>
+<div data-render="volume"></div>
+<h2>Categories at a glance</h2>
+<div class="grid">
+  <a class="tile" href="categories/gas.html">Gas prices</a><a class="tile" href="categories/elections.html">Elections</a>
+  <a class="tile" href="categories/culture.html">Culture</a><a class="tile" href="categories/crypto.html">Crypto</a>
+  <a class="tile" href="categories/golf.html">Golf</a>
+</div>
+<h2>Strategy analysis</h2>
+<div class="card"><p>No strategies can be tested yet. Strategy analysis needs your demo trade history, which requires a demo API key (see <a href="portfolio.html">Portfolio &amp; trades</a>), or a historical backtest over candlesticks. Both are listed as open items in <a href="questions.html">Questions</a>.</p></div>
+
+</main>
+<footer>Snapshot date (UTC): <span id="snapshot-date">2026-11-20</span>. Data from the public Kalshi Trade API and Kalshi docs.
+Every table row links to its source. Blank or flagged values are unverified. Not investment advice.
+Source code: <a href="https://github.com/karagemop466-tech/Demo3">github.com/karagemop466-tech/Demo3</a>.</footer>
+<script src="assets/app.js" defer></script>
+</body>
+</html>

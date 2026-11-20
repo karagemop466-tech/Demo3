@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portfolio and trades - Kalshi demo dashboard</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body data-root="" data-page="portfolio">
+<header class="site"><div id="site-nav"></div></header>
+<main>
+
+<h1>Portfolio and trades</h1>
+<p class="lead">Performance tracking, trade categorisation, and strategy analysis for the Kalshi demo account.</p>
+<div class="banner">
+<b>Not connected.</b> Portfolio and order endpoints need a demo API key ID and private key, then a signed request for each call
+(<a href="https://docs.kalshi.com/getting_started/quick_start_authenticated_requests.md" target="_blank" rel="noopener">source</a>).
+No credentials exist in this workspace, so no balances, positions, fills, or orders were read, and no trades were placed.
+</div>
+<div class="card"><h3 style="margin-top:0">Status</h3>
+<table><tbody>
+<tr><td>Demo account connected</td><td><span class="flag unv">no</span></td></tr>
+<tr><td>Trades executed</td><td class="num">0</td></tr>
+<tr><td>Portfolio performance</td><td><span class="flag unv">unverified - no data</span></td></tr>
+<tr><td>Strategies</td><td><span class="flag unv">none - needs trade data</span></td></tr>
+</tbody></table></div>
+<h2>How trades will be categorised</h2>
+<p class="note">Fields below are defined in the Kalshi API. Each one comes from the market object, so it can be recorded for every trade once data is available.</p>
+<div data-render="schema"></div>
+<h2>Next steps</h2>
+<ul>
+<li>Create a demo API key in the demo account (a one-time step by the account owner). <a href="https://docs.kalshi.com/getting_started/quick_start_authenticated_requests.md" target="_blank" rel="noopener">source</a></li>
+<li>Connect read-only first (balance, positions, fills), then add trading only after analysis is reviewed. See <a href="suggestions.html">Suggestions</a>.</li>
+</ul>
+
+</main>
+<footer>Snapshot date (UTC): <span id="snapshot-date">2026-11-20</span>. Data from the public Kalshi Trade API and Kalshi docs.
+Every table row links to its source. Blank or flagged values are unverified. Not investment advice.
+Source code: <a href="https://github.com/karagemop466-tech/Demo3">github.com/karagemop466-tech/Demo3</a>.</footer>
+<script src="assets/app.js" defer></script>
+</body>
+</html>
