@@ -10,6 +10,12 @@ Session: `arena/fb54d2f6-demo3` (current Arena branch; platform requires all wor
 
 This checkout is fixed to branch `arena/fb54d2f6-demo3`; no other branches/worktrees may be created or switched to in this session. No other task claims existed when this board was created. The data and navigation are being treated as a single integration scope because this is the only active session and the requested deliverable is one coherent, verified site.
 
+## Change requests (files owned by another integration session)
+
+| Priority | Owner | File scope | Verified issue and request |
+|---|---|---|---|
+| High | `00a943bd` | `docs/assets/app.js`, `docs/data/verified.json`, `docs/index.html`, `docs/flagged.html` | Published dashboard is titled as demo, but `docs/assets/app.js` sets `API` to `https://external-api.kalshi.com/trade-api/v2` (production), and the snapshot metadata also records that production host. The user's requested demo base is `https://external-api.demo.kalshi.co/trade-api/v2`. Official endpoint docs state demo and production are separate environments with non-shared credentials: https://docs.kalshi.com/getting_started/api_environments. Request: switch the live monitor to demo, clearly label/exclude any production-only snapshot, add the mismatch to Flagged for review, and verify. Do not edit these owned files in this branch. Notified integration PR #3 in https://github.com/karagemop466-tech/Demo3/pull/3#issuecomment-7038340897. |
+
 ## Verification log
 
 - Reviewed the original repository contents: only a 7-byte README existed at the branched base; no source code, tests, API client, or Pages workflow was present.
