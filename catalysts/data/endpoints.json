@@ -1,6 +1,204 @@
 {
- "probed_at": "2026-11-20T19:46:25Z",
+ "probed_at": "2026-11-20T20:42:23Z",
  "api_root": "https://external-api.demo.kalshi.co/trade-api/v2",
- "endpoints": [],
- "note": "skipped: this runner has no egress to the demo API (the build sandbox allowlists github.com / npmjs / pypi only). The scheduled GitHub Actions run rewrites this file with real HTTP statuses."
+ "endpoints": [
+  {
+   "method": "GET",
+   "url": "https://external-api.demo.kalshi.co/trade-api/v2/exchange/status",
+   "purpose": "no key required",
+   "doc": "https://docs.kalshi.com/getting_started/quick_start_market_data",
+   "http_status": 200,
+   "ok": true,
+   "top_level_fields": [
+    "exchange_active",
+    "exchange_index_statuses",
+    "intra_exchange_transfers_active",
+    "trading_active"
+   ],
+   "error": "",
+   "checked_at": "2026-11-20T20:42:22Z"
+  },
+  {
+   "method": "GET",
+   "url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?limit=1&status=open",
+   "purpose": "open market page",
+   "doc": "https://docs.kalshi.com/api-reference/market/get-markets",
+   "http_status": 200,
+   "ok": true,
+   "top_level_fields": [
+    "cursor",
+    "markets"
+   ],
+   "error": "",
+   "checked_at": "2026-11-20T20:42:22Z",
+   "item_count": 1,
+   "item_fields": [
+    "can_close_early",
+    "close_time",
+    "created_time",
+    "custom_strike",
+    "event_ticker",
+    "exchange_index",
+    "expected_expiration_time",
+    "expiration_value",
+    "last_price_dollars",
+    "latest_expiration_time",
+    "market_type",
+    "mve_collection_ticker",
+    "mve_selected_legs",
+    "no_ask_dollars",
+    "no_bid_dollars",
+    "no_sub_title",
+    "notional_value_dollars",
+    "open_interest_fp",
+    "open_time",
+    "previous_price_dollars",
+    "previous_yes_ask_dollars",
+    "previous_yes_bid_dollars",
+    "price_level_structure",
+    "price_ranges",
+    "result",
+    "rules_primary",
+    "rules_secondary",
+    "settlement_bounds_type",
+    "settlement_timer_seconds",
+    "status",
+    "strike_type",
+    "ticker",
+    "title",
+    "updated_time",
+    "volume_24h_fp",
+    "volume_fp",
+    "yes_ask_dollars",
+    "yes_ask_size_fp",
+    "yes_bid_dollars",
+    "yes_bid_size_fp"
+   ]
+  },
+  {
+   "method": "GET",
+   "url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXDEMOFUTHOURLY-26NOV20H12-UP",
+   "purpose": "single market by ticker (ticker from the 2026-11-20 verified swing row)",
+   "doc": "https://docs.kalshi.com/api-reference/market/get-market",
+   "http_status": 200,
+   "ok": true,
+   "top_level_fields": [
+    "market"
+   ],
+   "error": "",
+   "checked_at": "2026-11-20T20:42:22Z"
+  },
+  {
+   "method": "GET",
+   "url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXDEMOFUTHOURLY-26NOV20H12-UP&status=settled",
+   "purpose": "settled lookup used for resolution tracking",
+   "doc": "https://docs.kalshi.com/api-reference/market/get-markets",
+   "http_status": 200,
+   "ok": true,
+   "top_level_fields": [
+    "cursor",
+    "markets"
+   ],
+   "error": "",
+   "checked_at": "2026-11-20T20:42:23Z",
+   "item_count": 1,
+   "item_fields": [
+    "can_close_early",
+    "close_time",
+    "created_time",
+    "event_ticker",
+    "exchange_index",
+    "expiration_value",
+    "last_price_dollars",
+    "latest_expiration_time",
+    "market_type",
+    "no_ask_dollars",
+    "no_bid_dollars",
+    "no_sub_title",
+    "notional_value_dollars",
+    "open_interest_fp",
+    "open_time",
+    "previous_price_dollars",
+    "previous_yes_ask_dollars",
+    "previous_yes_bid_dollars",
+    "price_level_structure",
+    "price_ranges",
+    "result",
+    "rules_primary",
+    "rules_secondary",
+    "settlement_bounds_type",
+    "settlement_timer_seconds",
+    "settlement_ts",
+    "settlement_value_dollars",
+    "status",
+    "ticker",
+    "title",
+    "updated_time",
+    "volume_24h_fp",
+    "volume_fp",
+    "yes_ask_dollars",
+    "yes_ask_size_fp",
+    "yes_bid_dollars",
+    "yes_bid_size_fp",
+    "yes_sub_title"
+   ]
+  },
+  {
+   "method": "GET",
+   "url": "https://external-api.demo.kalshi.co/trade-api/v2/events?event_tickers=KXDEMOFUTHOURLY-26NOV20H12&with_nested_markets=false",
+   "purpose": "event lookup by ticker \u2014 used only to test whether the demo deployment honours the event_tickers filter (irregularity F-cat-05)",
+   "doc": "https://docs.kalshi.com/api-reference/market/get-events",
+   "http_status": 200,
+   "ok": true,
+   "top_level_fields": [
+    "cursor",
+    "events",
+    "milestones"
+   ],
+   "error": "",
+   "checked_at": "2026-11-20T20:42:23Z",
+   "item_count": 200,
+   "item_fields": [
+    "category",
+    "collateral_return_type",
+    "event_ticker",
+    "exchange_index",
+    "last_updated_ts",
+    "mutually_exclusive",
+    "series_ticker",
+    "settlement_sources",
+    "strike_period",
+    "sub_title",
+    "title"
+   ],
+   "filter_honoured": false
+  },
+  {
+   "method": "GET",
+   "url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXDEMOFUTHOURLY?include_volume=true",
+   "purpose": "series record (settlement sources)",
+   "doc": "https://docs.kalshi.com/api-reference/market/get-series",
+   "http_status": 200,
+   "ok": true,
+   "top_level_fields": [
+    "series"
+   ],
+   "error": "",
+   "checked_at": "2026-11-20T20:42:23Z"
+  },
+  {
+   "method": "GET",
+   "url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXDEMOFUTHOURLY-26NOV20H12-UP/orderbook?depth=8",
+   "purpose": "liquidity ladder used for the contracts-per-price panel",
+   "doc": "https://docs.kalshi.com/api-reference/market/get-market-orderbook",
+   "http_status": 200,
+   "ok": true,
+   "top_level_fields": [
+    "orderbook_fp"
+   ],
+   "error": "",
+   "checked_at": "2026-11-20T20:42:23Z"
+  }
+ ],
+ "note": "status = what the runner observed on this run; blank/unverified rows stay blank on the site, they are never back-filled"
 }
