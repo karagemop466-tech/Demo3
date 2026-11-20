@@ -1214,6 +1214,17 @@ is recorded in this section.
   and never falls back to the legacy integer-cent fields; a fixture or replay file written with
   short names (`yes_ask`, `last`) silently parses to a stale quote. Anyone replaying fixtures should
   copy the field names from `test_paper_engine.py::market()`.
+- Follow-up commit after PR #58 merged (same branch, PR #65 — https://github.com/karagemop466-tech/Demo3/pull/65): a **populated-ledger** pass was run in
+  a throwaway `git worktree` (9 replayed cycles through `FixtureClient`, never committed) and it
+  found two real defects that the empty ledger could not surface — analysis aggregate rows had no
+  source cell, and `paper-desk/tests/dom.test.mjs` skipped silently when `jsdom`/a built page was
+  missing. Both fixed: `trading/paper_engine.py` now carries `source_urls` + member tickers on every
+  aggregate bucket (so "by action"/trade-type rows link the API requests behind them), the run log
+  records the exact requests of its own cycle (new test `test_run_log_carries_the_requests_it_made`
+  → **Ran 26 tests … OK**), and the DOM gate fails loudly under `CI`. The workflow now runs that
+  gate *after* the rebuild so it tests the freshly generated pages. Populated-ledger result:
+  `188/188 data rows carry a source link or an explicit unverified marker`,
+  `result: PASS (0 failures, 0 notes)`, 332 links checked.
 - Change request **CR-eb2af75b-2** (for the integration session, not done here): add a
   `series_ticker` key to `top_events.json` market rows in the collector so consumers do not need an
   extra API round-trip.

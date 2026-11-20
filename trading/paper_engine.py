@@ -300,10 +300,13 @@ def quote_from_market(market: dict) -> dict:
 
 def fetch_quotes(client, tickers: list[str], batch: int) -> tuple[dict, dict]:
     """`GET /markets?tickers=` in batches; returns ({ticker: market}, stats)."""
-    stats = {"requests": 0, "errors": 0, "markets": 0, "failed_batches": []}
+    stats = {"requests": 0, "errors": 0, "markets": 0, "failed_batches": [], "urls": []}
     out: dict[str, dict] = {}
     for i in range(0, len(tickers), batch):
         chunk = tickers[i:i + batch]
+        query = "tickers=" + ",".join(chunk)
+        if len(stats["urls"]) < 4:
+            stats["urls"].append(f"{client.root}/markets?{query}")
         try:
             data = client.get("/markets", {"tickers": ",".join(chunk)})
             stats["requests"] += 1
@@ -359,12 +362,14 @@ def fetch_books(client, tickers: list[str], batch: int, depth: int = 6) -> tuple
     that has no order book ... is returned with empty arrays."
     """
     from urllib.parse import quote
-    stats = {"requests": 0, "errors": 0, "tickers": 0, "batches": []}
+    stats = {"requests": 0, "errors": 0, "tickers": 0, "batches": [], "urls": []}
     out: dict[str, dict] = {}
     for i in range(0, len(tickers), batch):
         chunk = tickers[i:i + batch]
         query = "&".join(f"tickers={quote(t, safe='')}" for t in chunk)
         url = f"{client.root}/markets/orderbooks?{query}&depth={depth}"
+        if len(stats["urls"]) < 4:
+            stats["urls"].append(url)
         try:
             data = client.get_raw(f"/markets/orderbooks?{query}&depth={depth}")
             stats["requests"] += 1
@@ -656,7 +661,10 @@ def do_settlements(state: dict, quotes: dict, run: int, api_root: str):
 # ---------------------------------------------------------------- analysis
 def _blank_bucket() -> dict:
     return {"trades": 0, "wins": 0, "losses": 0, "realized_pnl_dollars": 0.0,
-            "notional_dollars": 0.0, "contracts": 0.0, "rejections": 0}
+            "notional_dollars": 0.0, "contracts": 0.0, "rejections": 0,
+            # every aggregate row keeps the API requests its member trades were priced on,
+            # so a summary line is as checkable as the row it came from (up to 4 distinct ones)
+            "source_urls": [], "tickers": []}
 
 
 def _add_bucket(b: dict, rec: dict) -> None:
@@ -672,6 +680,12 @@ def _add_bucket(b: dict, rec: dict) -> None:
         b["rejections"] += 1
     b["notional_dollars"] = round(b["notional_dollars"] + (rec.get("notional_dollars") or 0.0), 4)
     b["contracts"] = round(b["contracts"] + (rec.get("count") or 0.0), 2)
+    u = (rec.get("source_urls") or {}).get("markets")
+    if u and u not in b["source_urls"] and len(b["source_urls"]) < 4:
+        b["source_urls"].append(u)
+    t = rec.get("ticker")
+    if t and t not in b["tickers"]:
+        b["tickers"].append(t)
 
 
 def _finish(name: str, b: dict) -> dict:
@@ -708,7 +722,8 @@ def analyze(trades: list[dict], state: dict, equity: list[dict]) -> dict:
     for row in grouped["by_topic"]:
         derived.append({"type": f"topic={row['key']}", "closed_trades": row["closed_trades"],
                         "realized_pnl_dollars": row["realized_pnl_dollars"],
-                        "win_rate": row["win_rate"]})
+                        "win_rate": row["win_rate"], "source_urls": row["source_urls"],
+                        "tickers": row["tickers"]})
     combo: dict[str, dict] = {}
     for rec in trades:
         if rec.get("realized_pnl_dollars") is None:
@@ -723,7 +738,8 @@ def analyze(trades: list[dict], state: dict, equity: list[dict]) -> dict:
     derived = [r for r in derived if r["closed_trades"] >= min_n] + [
         {"type": r["key"], "closed_trades": r["closed_trades"],
          "realized_pnl_dollars": r["realized_pnl_dollars"], "win_rate": r["win_rate"],
-         "avg_realized_pnl_dollars": r["avg_realized_pnl_dollars"]}
+         "avg_realized_pnl_dollars": r["avg_realized_pnl_dollars"],
+         "source_urls": r["source_urls"], "tickers": r["tickers"]}
         for r in combo_rows]
     derived.sort(key=lambda r: -(r["realized_pnl_dollars"] or 0.0))
 
@@ -946,7 +962,8 @@ def run_cycle(client, data_dir: str, config: dict, reset: bool = False,
     books_by_ticker, bstats = fetch_books(client, want_books,
                                           config.get("orderbook_batch_size", 100))
     log.update({"book_requests": bstats["requests"], "book_errors": bstats["errors"],
-                "book_tickers": bstats["tickers"]})
+                "book_tickers": bstats["tickers"],
+                "source_urls": list(dict.fromkeys(qstats["urls"] + bstats["urls"]))[:6]})
     for intent, ctx, kind in candidates:
         if placed >= config["max_new_orders_per_run"]:
             log["notes"].append("max_new_orders_per_run reached; remaining intents not sent")
