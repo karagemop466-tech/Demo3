@@ -449,6 +449,8 @@ def main() -> int:
         "count": len(candles_out), "by_market": candles_out})
 
     # 8. Long-run price samples (appended by every run; trimmed by the workflow)
+    import os
+    os.makedirs(f"{REPO_DATA}/history", exist_ok=True)
     sample_lines = []
     for r in focus:
         sample_lines.append(json.dumps({
@@ -459,6 +461,21 @@ def main() -> int:
         }, sort_keys=True))
     with open(f"{REPO_DATA}/history/prices.jsonl", "a", encoding="utf-8") as f:
         f.write("\n".join(sample_lines) + "\n")
+
+    # 8b. Accumulate resolutions across runs (track events until resolved)
+    res_path = f"{REPO_DATA}/history/resolutions.jsonl"
+    seen: set[str] = set()
+    if os.path.exists(res_path):
+        with open(res_path, encoding="utf-8") as f:
+            for line in f:
+                try:
+                    seen.add(json.loads(line).get("ticker", ""))
+                except json.JSONDecodeError:
+                    pass
+    with open(res_path, "a", encoding="utf-8") as f:
+        for row in resolutions:
+            if row["ticker"] not in seen:
+                f.write(json.dumps(row, sort_keys=True) + "\n")
 
     # 9. Meta: request log + counts (the audit trail for verification)
     write_json(f"{REPO_DATA}/latest/meta.json", {
