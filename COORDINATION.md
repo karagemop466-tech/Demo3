@@ -542,3 +542,11 @@ Irregularities reported (published on `strategy.html` and in `strategy/SPEC.md` 
   generator preserves them. No other session's markup was changed.
 
 Change request for the final integration session: none.
+
+## Task board — session f54f6a07 (independent live-homepage audit, branch `arena/f54f6a07-demo3`) — claimed 2026-11-20 UTC
+
+Scope is **COORDINATION.md only**. No site, data, script, or alert files are edited. The live-alert page already has 7 open PRs from other sessions (#26, #27, #29, #36, #39, #40, #41, #42, #43); this session does not build another alert page, because that would duplicate claimed work. Final integration is claimed by `13603ac5` and `996e3e28` and is not taken here.
+
+| # | Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|---|
+| A-f5 | Fetch the live homepage and the endpoint rows of its executive summary; check each against docs.kalshi.com; check the homepage register counts (57 / 46 / 83 / 78) against the repo registers | in progress | f54f6a07 | `COORDINATION.md` | fetch_page on the live homepage and docs.kalshi.com/getting_started/demo_env | pending |
