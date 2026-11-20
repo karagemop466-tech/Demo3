@@ -17,6 +17,7 @@
       <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="dashboard.html" class="active">Live Dashboard</a></li>
+        <li><a href="demo-monitor/index.html">Source-first monitor</a></li>
         <li><a href="gas-prices.html">Gas Prices</a></li>
         <li><a href="elections.html">Elections</a></li>
         <li><a href="culture.html">Culture</a></li>
@@ -36,9 +37,7 @@
   <div class="hero-inner">
     <div>
       <h1>Live Dashboard</h1>
-      <p>Tracks the highest-dollar live Kalshi events until they resolve (yes / no). Contract price is graphed
-      against time; you can choose the X-axis length (seconds / minutes / hours). Y axis = current contract price.
-      Current liquidity (contracts available at a given price) is shown alongside.</p>
+      <p>This legacy root dashboard tracks open Kalshi markets in the five focus topics. Its estimated-dollar sorting is a derived contract-volume × last-price proxy, not an official event-level dollar total. For a source-linked top-of-book proxy with incomplete values left blank, use the <a href="demo-monitor/dashboard.html">source-first monitor</a>. Contract price is graphed against time with selectable seconds, minutes, or hours; order-book contracts are shown by price.</p>
       <div class="control-group" style="margin-top:14px">
         <label for="chart-unit" style="font-size:0.85rem;color:var(--text-muted)">X-axis length:</label>
         <select id="chart-unit">

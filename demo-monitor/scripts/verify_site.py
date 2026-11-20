@@ -102,7 +102,7 @@ class SiteParser(HTMLParser):
 
 def main() -> int:
     if not HTML_FILES:
-        print("ERROR: no root HTML pages found")
+        print(f"ERROR: no HTML pages found under {SITE_ROOT.relative_to(ROOT)}")
         return 1
 
     for page in HTML_FILES:

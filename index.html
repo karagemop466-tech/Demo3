@@ -11,6 +11,7 @@
 <a class="brand" href="index.html">Kalshi Demo Tracker</a>
 <a href="dashboard.html">Dashboard</a>
 <a href="demo-desk/index.html">Source-linked Demo Desk</a>
+<a href="demo-monitor/index.html">Source-first monitor</a>
 <a href="api-reference.html">API Reference</a>
 <a href="methodology.html">Methodology</a>
 <a href="suggestions.html">Suggestions</a>
@@ -24,6 +25,8 @@
 <strong>gas prices, elections, culture, crypto, and golf</strong>.</p>
 <p><a class="btn" href="dashboard.html">Open the live dashboard</a></p>
 <p><a class="btn" href="demo-desk/index.html">Open the source-linked Demo Desk</a> <span class="note">Five topic pages, official API links, seconds-to-hours price history, and a visible review register.</span></p>
+<p><a class="btn" href="demo-monitor/index.html">Open the source-first monitor</a> <span class="note">Displayed top-of-book proxy, event API links, and unverified values left blank.</span></p>
+<p class="muted">The source-first monitor separates contract volume from its provisional displayed top-of-book proxy and leaves incomplete quote sums blank.</p>
 
 <section class="card">
 <h2>Executive summary</h2>
@@ -81,8 +84,7 @@ $1/contract. Timing varies by market.</td>
 by keyword match on title/tags/categories. No hard-coded tickers.</td>
 <td><a href="https://docs.kalshi.com/api-reference/market/get-series-list">Get Series List</a></td></tr>
 <tr><td>Highest-dollar ranking</td>
-<td>Open markets per series (<code>GET /markets?series_ticker=&amp;status=open</code>),
-ranked by estimated $ volume = contracts × last price.</td>
+<td>The root dashboard's estimate (contract volume × last price) is a derived proxy, not an official dollar-turnover or event-level total, and remains under review. The <a href="demo-monitor/dashboard.html">source-first monitor</a> uses a separately disclosed displayed top-of-book proxy and leaves incomplete quote sums blank.</td>
 <td><a href="https://docs.kalshi.com/api-reference/market/get-markets">Get Markets</a></td></tr>
 <tr><td>Price chart</td>
 <td>X = time, Y = contract price. Windows: 60s → 24h. Live poll samples +

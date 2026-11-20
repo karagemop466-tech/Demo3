@@ -2,7 +2,7 @@
 
 A self-contained static GitHub Pages subsite for reviewing Kalshi **demo** market data across gas prices, elections, culture/entertainment, crypto, and golf. It lives under `demo-monitor/` so the existing root, `docs/`, tracker, and analysis sites remain intact. It contains no fabricated market rows, portfolio balances, or trade results.
 
-Published path: `https://karagemop466-tech.github.io/Demo3/demo-monitor/` (pending merge and build verification).
+Published path: `https://karagemop466-tech.github.io/Demo3/demo-monitor/` (the repository uses legacy GitHub Pages publishing from the root of `main`, so this folder is served at the matching subpath).
 
 ## What is included
 
@@ -44,7 +44,7 @@ python3 demo-monitor/scripts/verify_site.py
 node demo-monitor/scripts/test_api.js
 ```
 
-The verifier checks local page/asset links and requires every non-header HTML table row to include an HTTPS source link on an allowlisted official Kalshi or GitHub documentation host. The `Site checks` workflow runs this check and a synthetic API-client test on pushes to `main`/Arena branches and on pull requests. GitHub's Pages API confirms the source is `main` at `/` using legacy branch publishing; its latest pre-PR status on 2026-11-20 was `building`. The site changes are not yet merged or deployed, so check the Pages build and live URL after merge.
+The verifier checks local page/asset links and requires every non-header HTML table row to include an HTTPS source link on an allowlisted official Kalshi or GitHub documentation host. The `Site checks` workflow runs this check and a synthetic API-client test on pushes to `main`/Arena branches and on pull requests. GitHub Pages serves the root of `main` using legacy branch publishing; merging this folder triggers the configured Pages build without changing the repository's publishing source.
 
 ## Official API references
 
