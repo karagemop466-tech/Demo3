@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flagged for review · live alerts</title>
+<link rel="stylesheet" href="assets/alerts.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand">Kalshi demo · <strong>Flagged for review (live alerts)</strong></div>
+  <nav>
+    <a href="../index.html">Home</a>
+    <a href="index.html">Alerts</a>
+    <a href="flagged.html" class="on">Flagged for review</a>
+  </nav>
+</header>
+<main>
+  <h1>Flagged for review</h1>
+  <p class="note">These items are published for the owner's review. Each one states what could not be verified or what was a choice.
+    Flagged items do not block the feature; they are listed with the official sources checked.</p>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>ID</th><th>Item</th><th>Status</th><th>What was checked</th><th>Source</th></tr></thead>
+      <tbody>
+        <tr><td>F-B13-01</td>
+          <td>No open gas markets are in the committed snapshot, so the gas watchlist is empty.</td>
+          <td>Unverified (gap)</td>
+          <td>Snapshot topic counts in <code>data/events.json</code>: elections, culture, golf, crypto only.</td>
+          <td><a href="../data/events.json" target="_blank" rel="noopener noreferrer">data/events.json ↗</a></td></tr>
+        <tr><td>F-B13-02</td>
+          <td>The high-ROI screen uses placeholder rules. The owner's model was not supplied. It estimates no probability and no return, and fees are not included.</td>
+          <td>Owner decision needed</td>
+          <td>Rules are in <code>assets/model.js</code>. Gross payout is arithmetic at the ask.</td>
+          <td><a href="https://docs.kalshi.com/getting_started/market_settlement" target="_blank" rel="noopener noreferrer">Market settlement ↗</a></td></tr>
+        <tr><td>F-B13-03</td>
+          <td>"News search" links are searches, not verified causes. No source confirms what moved a price.</td>
+          <td>Unverified (cause)</td>
+          <td>The page never labels a news link as the cause of a move.</td>
+          <td><a href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noopener noreferrer">Get Markets ↗</a></td></tr>
+        <tr><td>F-B13-04</td>
+          <td>Batch lookup with a comma-separated <code>tickers</code> list works on the demo API: a live request for 3 tickers returned 2 markets. The third ticker (<code>KXNEWPOPE-70</code>) was absent from the reply; its cause is not confirmed. The page reports absent tickers and does not re-request them.</td>
+          <td>Verified (batch); cause of absence unverified</td>
+          <td>Live request on 2026-11-20 (replayable URL below). Single-ticker fallback runs only if a batch request fails.</td>
+          <td><a href="https://external-api.demo.kalshi.co/trade-api/v2/markets?limit=1000&amp;tickers=KXPRESNOMD-28-GPLA,KXPRESNOMD-28-JP,KXNEWPOPE-70" target="_blank" rel="noopener noreferrer">Replayable batch request ↗</a></td></tr>
+        <tr><td>F-B13-05</td>
+          <td>The page reads that unauthenticated public requests have separate limits, but the numeric limit for those was not on the page read. The 20-second poll is therefore unconfirmed. On HTTP 429 the page backs off to 60 seconds.</td>
+          <td>Unverified (numbers)</td>
+          <td>Request count and errors are shown in the status bar.</td>
+          <td><a href="https://docs.kalshi.com/getting_started/rate_limits" target="_blank" rel="noopener noreferrer">Rate limits ↗</a></td></tr>
+        <tr><td>F-B13-06</td>
+          <td>Feeds keep only this browser session's history. A reload clears the alert history.</td>
+          <td>Known limit</td>
+          <td>By design for now; no server-side alert log exists yet.</td>
+          <td><a href="https://docs.kalshi.com/getting_started/demo_env" target="_blank" rel="noopener noreferrer">Demo environment ↗</a></td></tr>
+        <tr><td>F-B13-07</td>
+          <td>Demo prices may not reflect real markets. Alerts are therefore demo-market moves only.</td>
+          <td>Disclosed</td>
+          <td>Official warning on the demo environment page.</td>
+          <td><a href="https://docs.kalshi.com/getting_started/demo_env" target="_blank" rel="noopener noreferrer">Demo environment ↗</a></td></tr>
+      </tbody>
+    </table>
+  </div>
+</main>
+</body>
+</html>

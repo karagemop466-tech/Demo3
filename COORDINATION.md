@@ -363,7 +363,24 @@ Not claimed (already owned / open PRs): root dashboard (#23 open), paper trading
 
 | Task | Status | Owner | File scope | Sources / verification | Irregularities |
 |---|---|---|---|---|---|
-| A1 Live ≥$0.10 move alert engine | in progress | b13c6a8d | `alerts/assets/alerts.js` | Official `get-markets` (status, `tickers`, `limit`); live market object fetched 2026-11-20 (`KXPRESNOMD-28-GPLA`) | F-B13-01 (no open gas markets in snapshot) |
-| A2 Scrolling chats + ROI stand-in + resolution feed | in progress | b13c6a8d | `alerts/index.html`, `alerts/assets/model.js` | Same as A1 | F-B13-02 (ROI rules are placeholders, not the user's model), F-B13-03 (news links are searches, not verified causes) |
-| A3 Offline tests | in progress | b13c6a8d | `alerts/tests/**` | — | — |
-| A4 PR, merge, Pages | pending | b13c6a8d | — | — | — |
+| A1 Live ≥$0.10 move alert engine (20 s polling of the official demo REST API, batch `tickers` + single-ticker fallback only if a batch fails, 429 back-off, resolution detection) | done | b13c6a8d | `alerts/assets/alerts.js` | Get Markets https://docs.kalshi.com/api-reference/market/get-markets (`tickers`, `limit` ≤ 1000, `status`); live batch request https://external-api.demo.kalshi.co/trade-api/v2/markets?limit=1000&tickers=KXPRESNOMD-28-GPLA,KXPRESNOMD-28-JP,KXNEWPOPE-70 (2 of 3 returned, 2026-11-20); live market record https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPRESNOMD-28-GPLA; rate limits https://docs.kalshi.com/getting_started/rate_limits | F-B13-01, F-B13-04, F-B13-05 |
+| A2 Scrolling chats: "All events" + "High-ROI screen" (stand-in rules) + resolution feed + topic filter + watchlist table | done | b13c6a8d | `alerts/index.html`, `alerts/assets/model.js`, `alerts/assets/alerts.css` | Demo env https://docs.kalshi.com/getting_started/demo_env (prices may not match real markets); settlement https://docs.kalshi.com/getting_started/market_settlement ($1 per winning contract); every row links its official API record | F-B13-02, F-B13-03, F-B13-06, F-B13-07 |
+| A3 Offline tests + jsdom smoke + link/source check | done | b13c6a8d | `alerts/tests/alerts.test.js`, `alerts/tests/check_alerts_site.py` | `node --test alerts/tests/alerts.test.js`: 11/11; `npm test`: 37/37 (incl. 26 existing); jsdom smoke of the real page with a mocked API: 32 watch rows, one +$0.15 alert shown in both feeds, 0 script errors, 3 polls on the 20 s schedule; `check_alerts_site.py`: 26 links OK, 0 broken, every row linked | — |
+| A4 PR, merge, Pages check | in progress | b13c6a8d | this board section | see log below | — |
+
+Irregularities / flags for review (also on `alerts/flagged.html`):
+- F-B13-01: no open gas markets in the committed snapshot (`data/events.json` topics: elections, culture, golf, crypto), so the gas watchlist is empty until the collector finds some.
+- F-B13-02: the "high-ROI" screen uses placeholder rules (`alerts/assets/model.js`). The owner's model was not supplied. It makes no probability or return estimate and ignores fees (fee schedule not verified).
+- F-B13-03: news-search links are searches, not verified causes.
+- F-B13-04: batch `tickers` works live, but a ticker can be absent from the reply (`KXNEWPOPE-70` on 2026-11-20; cause not confirmed).
+- F-B13-05: the numeric limit for unauthenticated public requests is not on the rate-limit page read; the 20 s interval is unconfirmed; 429 backs off to 60 s.
+- F-B13-06: alert history lives only in the open browser tab; a reload clears it.
+- F-B13-07: demo prices may not reflect real markets (official warning).
+
+Change request (not edited by this session; shared files):
+- CR-b13c6a8d-1 (root-site owner): add an "Alerts" entry to the root navigation/landing (`scripts/build_root_site.py` generator) linking `alerts/index.html`, and add `node --test alerts/tests/alerts.test.js` and `python3 alerts/tests/check_alerts_site.py` to the Checks workflow (`.github/workflows/checks.yml`). The page works without these changes at `alerts/index.html`.
+- CR-b13c6a8d-2: the watchlist comes from `data/events.json`, which the collector refreshes; no change needed there.
+
+Log:
+- 2026-11-20 b13c6a8d — claimed A1–A4 (commit 23dd0d7). Scope limited to `alerts/**` plus this board. Open PRs #17, #19, #23 were left untouched.
+- 2026-11-20 b13c6a8d — built A1–A3. Found and fixed in-session: a render call to a non-existent element ID (the first render threw), overlapping poll cycles (added in-flight guard), and an unnecessary single-ticker re-request for tickers absent from a successful batch.
