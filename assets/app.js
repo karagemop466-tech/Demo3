@@ -8,6 +8,13 @@
   var BASE = "https://external-api.demo.kalshi.co/trade-api/v2";
   var WS_URL = "wss://external-api-ws.demo.kalshi.co/trade-api/ws/v2";
 
+  /* Official source links per series, captured from GET /series. The API returns
+   * each series' "settlement_sources": [{name, url}] — the official sites Kalshi
+   * lists for the series (news/governing bodies/leagues). Verified field on
+   * https://docs.kalshi.com/api-reference/market/get-series-list . We never invent
+   * links; only https URLs the API actually returns are surfaced. */
+  var seriesSourceMap = {};
+
   /* ---------- tiny fetch helper with rate-limit backoff ---------- */
   var backoffMs = 0, lastReq = 0;
   function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
@@ -104,11 +111,23 @@
     var list = j.series || [];
     return list.map(function (s) {
       var c = classifySeries(s);
+      var sources = s.settlement_sources || [];
+      seriesSourceMap[s.ticker] = sources;   // official links, kept for alert rows
       return { ticker: s.ticker, title: s.title, category: s.category,
         categories: s.categories || [], tags: s.tags || [],
         frequency: s.frequency, volume_fp: s.volume_fp,
-        topic: c.topic, matched: c.matched };
+        topic: c.topic, matched: c.matched, sources: sources };
     });
+  }
+
+  /* Return only https URLs (the only external links we render). Anything else is
+   * dropped so we never render an untrusted/unsafe link. Mirrors the demo-desk
+   * safeHttpsUrl policy (tests/core.test.js). */
+  function safeHttps(u) {
+    if (typeof u !== "string") return null;
+    u = u.trim();
+    if (!/^https:\/\//i.test(u)) return null;
+    return u;
   }
 
   /* ---------- formatting ---------- */
@@ -363,7 +382,8 @@
     apiGet: apiGet, apiGetAll: apiGetAll,
     discoverSeries: discoverSeries, classifySeries: classifySeries,
     num: num, money: money, cents: cents, timeStr: timeStr, esc: esc,
-    estDollars: estDollars, srcLink: srcLink,
+    estDollars: estDollars, srcLink: srcLink, safeHttps: safeHttps,
+    seriesSources: function (ticker) { return seriesSourceMap[ticker] || []; },
     drawPriceChart: drawPriceChart, drawDepthChart: drawDepthChart,
     Auth: Auth
   };

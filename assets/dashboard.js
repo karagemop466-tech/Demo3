@@ -592,10 +592,17 @@
       var auto = $("autoTrade");
       if (auto) {
         auto.disabled = false;
+        var st = T.automationStatus ? T.automationStatus() : {};
+        auto.checked = !!st.enabled;
         auto.addEventListener("change", function () {
           T.setAutomation(auto.checked);
-          if ($("autoTrade")) { /* keep checkbox in sync with persisted state */ }
         });
+      }
+      var strat = $("autoStrategy");
+      if (strat) {
+        var cur = (T.automationStatus ? T.automationStatus().strategy : "momentum") || "momentum";
+        strat.value = cur;
+        strat.addEventListener("change", function () { T.setStrategy(strat.value); });
       }
     }
     renderResolutions();

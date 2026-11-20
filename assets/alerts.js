@@ -3,27 +3,64 @@
  * Detects live contract price swings >= $0.10 (10 cents) in either direction
  * and publishes them to two scrolling chats:
  *   - "All events": every swing alert
- *   - "High ROI model": a selective, labeled heuristic filter (NOT a real model)
+ *   - "High ROI model": a selective filter using a documented, transparent
+ *     multi-factor score (NOT a trained model — no model exists in this repo).
+ *
+ * Each alert row links official sources:
+ *   - the exact market API URL (GET /markets/{ticker})
+ *   - the event API URL (GET /events/{event_ticker})
+ *   - the series API URL (GET /series/{series_ticker})
+ *   - the series' official Kalshi "settlement_sources" website links, when the
+ *     API returns https URLs for them.
+ * These settlement sources are Kalshi's official sources for the series. They are
+ * listed for context and are NOT verified as the cause of any swing (flagged
+ * F-5B-01). Only https URLs the API actually returns are rendered — never inferred.
  *
  * Data: reuses the dashboard's live market samples (GET /markets, demo API,
- * no key needed). No extra network requests. Each alert links its exact market
- * API URL. Values the exchange does not report are left blank — never inferred.
+ * no key needed). No extra network requests. Values the exchange does not report
+ * are left blank — never inferred.
  *
- * The high-ROI rule below is a transparent placeholder heuristic. No model is
- * defined in this repo, so nothing is presented as a verified ROI signal. It is
- * flagged for review (F-alert-01) until a real model is specified.
- *
- * Source: https://docs.kalshi.com/getting_started/quick_start_market_data
- *         https://docs.kalshi.com/api-reference/market/get-markets
- *         https://docs.kalshi.com/getting_started/demo_env
+ * Sources:
+ *   https://docs.kalshi.com/getting_started/quick_start_market_data
+ *   https://docs.kalshi.com/api-reference/market/get-markets
+ *   https://docs.kalshi.com/api-reference/market/get-series-list
+ *   https://docs.kalshi.com/api-reference/market/get-events
+ *   https://docs.kalshi.com/getting_started/demo_env
  */
 (function () {
   "use strict";
 
   var KD = window.KD = window.KD || {};
+  var K = window.KalshiDemo || {};
   var ALERT_KEY = "kd_alerts_v1";
   var SWING = 0.10;                 // dollars = 10 cents, the alert threshold
   var MAX_ALERTS = 300;
+
+  /* ---------- documented ROI heuristic (unverified model) ----------
+   * No trained model exists in this repo, so this is a transparent, deterministic
+   * heuristic built only from verified API fields. It is labeled everywhere as an
+   * unverified model heuristic (F-5B-02) and is never presented as a verified ROI
+   * signal or as investment advice.
+   *   swingNorm = clamp(|Δprice| cents / 50¢, 0, 1)       bigger swings score higher
+   *   pctNorm   = clamp(|Δprice| / priorPrice / 50%, 0, 1)  bigger relative moves higher
+   *   liqNorm   = clamp(log10(1 + open_interest_fp) / 6, 0, 1)  1M contracts = 1.0
+   *   score     = 0.4*swingNorm + 0.3*pctNorm + 0.3*liqNorm
+   *   high-ROI signal when score >= 0.5
+   */
+  var ROI_THRESHOLD = 0.5;
+  function clamp(x, lo, hi) { return Math.max(lo, Math.min(hi, x)); }
+  function roiModel(oldP, newP, oi) {
+    var change = Number(newP) - Number(oldP);
+    var swingC = Math.abs(change) * 100;                 // cents
+    var swingNorm = clamp(swingC / 50, 0, 1);
+    var pct = Number(oldP) ? Math.abs(change) / Number(oldP) : 0;
+    var pctNorm = clamp(pct / 0.5, 0, 1);
+    var oiNum = Number(oi) || 0;
+    var liqNorm = clamp(Math.log10(1 + oiNum) / 6, 0, 1);
+    var score = 0.4 * swingNorm + 0.3 * pctNorm + 0.3 * liqNorm;
+    return { swingC: swingC, pct: pct, oi: oiNum, swingNorm: swingNorm,
+      pctNorm: pctNorm, liqNorm: liqNorm, score: score };
+  }
 
   var state = {
     alerts: [],                     // all swing alerts (newest first)
@@ -35,11 +72,11 @@
 
   function esc(s) {
     return String(s === null || s === undefined ? "" : s)
-      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;");
   }
   function cents(x) {
     if (x === null || x === undefined || x === "" || isNaN(Number(x))) return "—";
-    return (Number(x) * 100).toFixed(2) + "\u00a2";
+    return (Number(x) * 100).toFixed(2) + "¢";
   }
   function fmtTs(ts) {
     if (!ts) return "—";
@@ -61,8 +98,10 @@
     var prev = state.lastPrice[m.ticker];
     if (prev && prev.price !== null && prev.price !== undefined) {
       var change = cur - prev.price;
-      if (Math.abs(change) >= SWING) {
-        pushAlert(m.ticker, m.title, m.topic, m.series_ticker, prev.price, cur);
+      // Float-safe: an exact 10¢ move (0.60 - 0.50) is 0.0999… in binary, so
+      // compare with a tiny epsilon rather than dropping boundary swings.
+      if (Math.abs(change) >= SWING - 1e-9) {
+        pushAlert(m, prev.price, cur);
       }
     }
     state.lastPrice[m.ticker] = { price: cur, ts: sample.t };
@@ -78,26 +117,46 @@
     });
   };
 
-  function pushAlert(ticker, title, topic, series, oldP, newP) {
+  function pushAlert(m, oldP, newP) {
     var change = Number(newP) - Number(oldP);
     var dir = change > 0 ? "up" : change < 0 ? "down" : "flat";
+    var series = m.series_ticker || "";
+    var eventTicker = m.event_ticker || "";
+    var model = roiModel(oldP, newP, m.oi);
     var alert = {
       id: "a" + Date.now() + Math.random().toString(36).slice(2, 6),
       ts: Math.floor(Date.now() / 1000),
-      ticker: ticker,
-      title: title || ticker,
-      topic: topic || "",
-      series: series || "",
+      ticker: m.ticker,
+      title: m.title || m.ticker,
+      topic: m.topic || "",
+      series: series,
+      event: eventTicker,
       oldPrice: Number(oldP),
       newPrice: Number(newP),
       change: change,
       dir: dir,
-      api: apiUrl(ticker, series)
+      oi: model.oi,
+      api: apiUrl(m.ticker, series),
+      eventApi: eventTicker
+        ? "https://external-api.demo.kalshi.co/trade-api/v2/events/" +
+          encodeURIComponent(eventTicker)
+        : "",
+      seriesApi: series
+        ? "https://external-api.demo.kalshi.co/trade-api/v2/series/" +
+          encodeURIComponent(series)
+        : "",
+      sources: [],                  // official settlement-source website links
+      roi: model,                   // documented model output
+      roiSignal: model.score >= ROI_THRESHOLD
     };
-    // High-ROI placeholder heuristic: swing >= $0.10 AND the move is at least 10%
-    // of the prior price. NOT a real model — labeled, unverified, flagged F-alert-01.
-    var pct = Number(oldP) ? Math.abs(change) / Number(oldP) : 0;
-    alert.roiSignal = Math.abs(change) >= SWING && pct >= 0.10;
+    // Official settlement-source website links for the series (https only).
+    var raw = (K.seriesSources && K.seriesSources(series)) || [];
+    raw.forEach(function (s) {
+      if (s && s.name) {
+        var u = (K.safeHttps && K.safeHttps(s.url)) || null;
+        alert.sources.push({ name: String(s.name), url: u });
+      }
+    });
     state.alerts.unshift(alert);
     if (state.alerts.length > MAX_ALERTS) state.alerts.length = MAX_ALERTS;
     try { localStorage.setItem(ALERT_KEY, JSON.stringify(state.alerts)); } catch (e) {}
@@ -120,32 +179,59 @@
   KD.toggle = function () { state.enabled = !state.enabled; render(); };
 
   /* ---------- rendering (two scrolling chats) ---------- */
+  function srcLink(href, label) {
+    if (!href) return "";
+    return "<a class='src' href='" + esc(href) + "' target='_blank' rel='noopener'>" +
+      esc(label) + "</a>";
+  }
+  function relatedLinks(a) {
+    var parts = [];
+    if (a.eventApi) parts.push(srcLink(a.eventApi, "event API"));
+    if (a.seriesApi) parts.push(srcLink(a.seriesApi, "series API"));
+    parts.push(srcLink(a.api, "market API"));
+    var named = (a.sources || []).filter(function (s) { return s.url; }).slice(0, 3);
+    named.forEach(function (s) {
+      parts.push("<a class='src' href='" + esc(s.url) + "' target='_blank' rel='noopener'>" +
+        esc(s.name) + "</a>");
+    });
+    if (!named.length) parts.push("<span class='muted small'>no official source URLs</span>");
+    return parts.join(" · ");
+  }
+  function roiCell(a) {
+    if (!a.roi) return "—";
+    var badge = a.roiSignal ? " <span class='roi'>· signal</span>" : "";
+    return "<span class='mono'>" + a.roi.score.toFixed(2) + "</span>" + badge;
+  }
   function alertRow(a) {
     var cls = "alert " + (a.dir === "up" ? "up" : a.dir === "down" ? "down" : "flat");
-    var arrow = a.dir === "up" ? "\u25b2" : a.dir === "down" ? "\u25bc" : "\u25b6";
+    var arrow = a.dir === "up" ? "▲" : a.dir === "down" ? "▼" : "▶";
     var dirLabel = a.dir === "up" ? "up" : a.dir === "down" ? "down" : "flat";
-    var roiBadge = a.roiSignal ? " <span class='roi'>&middot; high-ROI signal (heuristic)</span>" : "";
-    return "<tr class='" + esc(cls) + "'><td class='mono small muted'>" + fmtTs(a.ts) + "</td>" +
+    var roiBadge = a.roiSignal ? " <span class='roi'>· high-ROI signal (heuristic)</span>" : "";
+    return "<tr class='" + esc(cls) + "'>" +
+      "<td class='mono small muted'>" + fmtTs(a.ts) + "</td>" +
       "<td><span class='pill topic'>" + esc(a.topic) + "</span></td>" +
       "<td class='mono'>" + esc(a.ticker) + "</td>" +
-      "<td>" + esc(a.title) + "</td>" +
-      "<td class='num'>" + cents(a.oldPrice) + " &rarr; " + cents(a.newPrice) + "</td>" +
+      "<td>" + esc(a.title) + roiBadge + "</td>" +
+      "<td class='num'>" + cents(a.oldPrice) + " → " + cents(a.newPrice) + "</td>" +
       "<td class='num " + esc(dirLabel) + "'>" + arrow + " " + cents(Math.abs(a.change)) + "</td>" +
-      "<td><a class='src' href='" + esc(a.api) + "' target='_blank' rel='noopener'>market API</a>" + esc(roiBadge) + "</td></tr>";
+      "<td class='num'>" + roiCell(a) + "</td>" +
+      "<td class='small'>" + relatedLinks(a) + "</td></tr>";
   }
   function renderPanel(el, rows, label, emptyHint) {
     if (!el) return;
     var rowsHtml = rows.map(alertRow).join("");
-    var empty = rows.length ? "" : "<tr><td colspan='7' class='muted'>No " + label + " swing alerts yet. " + emptyHint + "</td></tr>";
+    var empty = rows.length ? "" :
+      "<tr><td colspan='8' class='muted'>No " + label + " swing alerts yet. " + emptyHint + "</td></tr>";
     el.innerHTML =
       "<table class='alerts'><thead><tr><th>Time</th><th>Topic</th><th>Ticker</th><th>Event</th>" +
-      "<th>Price move</th><th>Swing</th><th>Source</th></tr></thead><tbody>" + rowsHtml + empty + "</tbody></table>";
+      "<th>Price move</th><th>Swing</th><th>ROI score</th><th>Related official links</th></tr></thead><tbody>" +
+      rowsHtml + empty + "</tbody></table>";
   }
   function render() {
     renderPanel(document.getElementById("alertsAll"), KD.allRows(), "all",
       "Swing a tracked market price by >= $0.10 to see alerts here.");
     renderPanel(document.getElementById("alertsROI"), KD.roiRows(), "high-ROI",
-      "The high-ROI chat applies a labeled placeholder rule — no real model is defined yet.");
+      "The high-ROI chat applies a labeled placeholder model — no trained model exists yet.");
   }
 
   /* public */
