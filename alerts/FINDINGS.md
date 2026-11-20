@@ -2,7 +2,8 @@
 
 Numbers below are produced by `python3 scripts/scan_swings.py` in this repository and published to
 `data/swings/*.json` + `alerts/model.json` by the `Swing scan (alert console data)` workflow.
-The live table in §3 is the run `44809090393` (2026-11-20T20:18:30Z, commit `da3ef92`); re-generate
+The live table in §3 is workflow run `44810768152` (scan at 2026-11-20T20:39:12Z, data commit
+`2a03dda`); re-generate
 anything with the commands in [SPEC.md](SPEC.md). Every row of every table on the page links the API
 request that produced it, so nothing here has to be taken on trust.
 
@@ -17,8 +18,10 @@ profitable when it is not — are fixed and pinned by tests:
 
 1. **Reversion was measured over the whole rest of the series**, not inside the stated horizon.
    A price that drifts back 9 hours later counted as a "60-minute reversion". The published figure
-   under that bug was a reversion rate of **0.952703**; with the horizon enforced it is
-   **0.873563** on the same style of data — a 7.9-point inflation that would have looked like an edge.
+   under that bug was a reversion rate of **0.952703**; with the horizon enforced the same method on
+   the newest live scan gives **0.890625** — roughly a 6-point inflation that would have looked like an
+   edge. The comparison is not apples-to-apples (different 48-hour window), so treat it as the size of
+   the distortion, not as a measurement of one.
    `measure()` now selects the forward window by timestamp (`ts <= alert_ts + horizon_minutes*60`),
    keeps the unbounded figure separately as `reversion_hit_ever`, and publishes
    `candles_in_horizon` per row (e.g. a 1-minute series gives 57 candles inside a 60-minute horizon,
@@ -55,59 +58,64 @@ hour), and the fade still loses money, because the entry price after a jump is a
 value and the taker fee is paid twice. `hit_rate` is 0.0 — no measured exit produced a positive
 net — which is exactly what the gate needs to see to refuse a pick.
 
-## 3. Live scan (GitHub runner, real demo API) — 2026-11-20T20:18:30Z
+## 3. Live scan (GitHub runner, real demo API) — 2026-11-20T20:39:12Z
 
 `mode=live` · 60 markets scanned (12 per topic × 5 topics, ranked by the labelled est. dollar volume)
-· **174 swings ≥ $0.10** in a 60-minute window across **3 events** (153 `elections`, 21 `crypto`;
+· **192 swings ≥ $0.10** in a 60-minute window across **3 events** (165 `elections`, 27 `crypto`;
 `gas`, `culture` and `golf` produced none in this window) · 122 requests · **0 errors** · 8 series
-records read for settlement sources and fee multipliers.
+records read for settlement sources and fee multipliers · `event_page_probe` still 429 on
+`kalshi.com`, so event links stay `not confirmed`.
 
-| strategy | n | quotable | unquotable | mean gross $/contract | mean net $/contract | hit rate | mean ROI on paid | total net |
-|---|---|---|---|---|---|---|---|---|
-| `fade15` | 174 | 88 | 86 | −0.248477 | **−0.252375** | 0.0 | −0.477032 | −22.209 |
-| `fade60` | 174 | 93 | 81 | −0.295516 | **−0.300043** | 0.0 | −0.525557 | −27.904 |
-| `fade_settle` | 174 | 113 | 61 | −0.193487 | **−0.196657** | 0.0 | −0.448607 | −22.2222 |
-| `momo60` | 174 | 115 | 59 | −0.486087 | **−0.492957** | 0.0 | −0.619288 | −56.6901 |
+| strategy | n | quotable | unquotable | mean gross $/contract | mean net $/contract | median net | hit rate | mean ROI on paid | total net |
+|---|---|---|---|---|---|---|---|---|---|
+| `fade15` | 192 | 100 | 92 | −0.235040 | **−0.238735** | −0.0015 | 0.0 | −0.444425 | −23.8735 |
+| `fade60` | 192 | 105 | 87 | −0.261962 | **−0.266024** | −0.0015 | 0.0 | −0.473348 | −27.9325 |
+| `fade_settle` | 192 | 125 | 67 | −0.162168 | **−0.164910** | −0.0015 | 0.0 | −0.399019 | −20.6137 |
+| `momo60` | 192 | 127 | 65 | −0.389433 | **−0.395036** | −0.0056 | 0.0 | −0.538399 | −50.1696 |
 
-Global reversion rate inside the 60-minute horizon: **0.873563**. Buckets:
+Global reversion rate inside the 60-minute horizon: **0.890625**. Buckets (evidence bar: n ≥ 8 and
+≥ 3 markets; shrinkage pseudo-count 4 toward the global rate):
 
 | bucket | n | markets | evidence | reversion | shrunk | best strategy | best mean net $/contract |
 |---|---|---|---|---|---|---|---|
-| `crypto\|0-5c\|>40c\|>14d` | 9 | 2 | insufficient | 0.888889 | 0.884173 | `momo60` | −0.9628 |
-| `crypto\|5-20c\|>40c\|>14d` | 2 | 1 | insufficient | 1.0 | 0.915709 | `fade15` | −0.0174 |
-| `crypto\|95-100c\|>40c\|>14d` | 10 | 1 | insufficient | 0.7 | 0.749589 | `fade15` | −0.0121 |
-| `elections\|0-5c\|>40c\|>14d` | 74 | 7 | **sufficient** | 0.851351 | 0.85249 | `fade_settle` | −0.12068 |
-| `elections\|80-95c\|>40c\|>14d` | 79 | 5 | **sufficient** | 0.911392 | 0.909569 | `fade15` | −0.208898 |
+| `crypto\|0-5c\|>40c\|>14d` | 11 | 2 | insufficient | 0.909091 | 0.904167 | `momo60` | −0.9628 |
+| `crypto\|5-20c\|>40c\|>14d` | 2 | 1 | insufficient | 1.0 | 0.927083 | `fade15` | −0.0174 |
+| `crypto\|95-100c\|>40c\|>14d` | 14 | 1 | insufficient | 0.857143 | 0.864583 | `fade15` | −0.0121 |
+| `elections\|0-5c\|>40c\|>14d` | 84 | 7 | **sufficient** | 0.857143 | 0.858665 | `fade_settle` | −0.021916 |
+| `elections\|80-95c\|>40c\|>14d` | 81 | 5 | **sufficient** | 0.925926 | 0.924265 | `fade15` | −0.227867 |
 
-Two buckets clear the evidence bar and both have a negative best-case expectancy; three do not clear
-it at all. So the gate rejects every alert, and the "why" line on each dimmed row says so
-(`no calibrated bucket for this setup` / the bucket's negative `best_mean_net_dollars`).
+Two buckets clear the evidence bar and both have a negative best-case expectancy; three do not clear it
+at all. The gate therefore rejects every alert, and each dimmed row in the ROI chat says why
+(`no calibrated bucket for this setup`, or the bucket's negative `best_mean_net_dollars`).
 
-(The spec sentence the model publishes — `alert_rule.definition` — is now a module constant,
-`scan_swings.py::ALERT_RULE_DEFINITION`, and `TestSpecStringsMatchCode` proves it describes what
-`detect_swings` does rather than an earlier draft; the published `alerts/model.json` from before that
-commit still carries the old wording and is refreshed by the next scan run — see irregularity 8.)
+**This is a moving target, and it is fine that the answer is still no.** The previous live scan
+(2026-11-20T20:18:30Z, 174 swings) put the best bucket at −0.12068 per contract; two hours of extra
+demo candles later it is −0.021916, an order of magnitude closer to breakeven, while the reversion rate
+for that bucket barely moved (0.851 → 0.857). A 30-minute-refreshed backtest can flip a bucket's sign,
+which is exactly why the console publishes the scan timestamp next to the table instead of a permanent
+claim, and why a bucket that is 2 cents from breakeven on 84 observations in 7 markets is not a
+strategy — it is noise with a p-value nobody asked for.
 
-The interesting rows are the near-breakeven crypto ones: at 5–20 c and 95–100 c the taker fee is only
-a fraction of a cent per contract (`0.07·P·(1−P)` is smallest at the extremes), and gross is already
+The interesting rows are the near-breakeven crypto ones: at 5–20 c and 95–100 c the taker fee is only a
+fraction of a cent per contract (`0.07·P·(1−P)` is smallest at the extremes), and gross is already
 negative — **the loss is the spread being crossed, not the commission**. That is why the console shows
 `spread_dollars` and the size at touch next to every alert instead of a profit number.
 
 ## 4. What the live run could not answer (recorded, not hidden)
 
-* **Resolutions: 0 of 174.** Every swing in this run sits on a market that is still `active` with a
+* **Resolutions: 0 of 192.** Every swing in this run sits on a market that is still `active` with a
   future close (the tracked crypto strikes close 2027-01-01T05:00Z; the election nominations later
   still), so `result`, `settlement_ts`, `settlement_value_dollars` and `resolved_after_swing` are
   legitimately empty. The register fills when the console is open at settlement (live re-poll) or from
   the collector's historical sweep (`data/latest/resolutions.json`). Nothing was back-filled to make
   the column look complete.
-* **`event_title` is empty on all 174 rows**, because the collector snapshot of
+* **`event_title` is empty on all 192 rows**, because the collector snapshot of
   `GET /markets` does not carry that field; the row links its own API request instead
   ([get-markets](https://docs.kalshi.com/api-reference/market/get-markets.md)).
 * **Event pages are `not confirmed`.** The CI probe got `https://kalshi.com/event/KXBTCY-27JAN0100` →
   **HTTP 429** and `https://demo.kalshi.co/event/…` → **404**, so no `kalshi.com/event/...` link is
   rendered as verified anywhere. That is the documented policy, not a missing feature.
-* **Half the exits are unquotable** (86/174 for `fade15`): the candle series has no bid/ask on the exit
+* **Half the exits are unquotable** (92/192 for `fade15`): the candle series has no bid/ask on the exit
   side, and those rows are published as `{"status": "not-quotable", "note": "no bid/ask in candle data
   for that side"}` rather than being priced at the close.
 
