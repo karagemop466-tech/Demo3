@@ -46,6 +46,7 @@ linked from the site's Sources page:
 - `docs/` — session 00a943bd integrated site + `docs/data/verified.json`
 - `docs/tracker/` — session e2aacbd6 tracker + `docs/tracker/data/snapshot.json` (per-row `source_api`)
 - `analysis/` — session 3e08e6dc analysis site + live captures (`analysis/data/live/*`, per-row `source_url`)
+- `demo-desk/` — session 4ea36f44 read-only source-linked Demo Desk (`npm run check` / `npm test`)
 - `research/kalshi-api-verified-reference.md` — session 6908a11a verified API reference
 - `EXECUTIVE_SUMMARY.md`, `FLAGGED.md`, `SUGGESTIONS.md` — session 6908a11a registers
 - `data/legacy/cde2ae63_rows.json` — rows preserved from session cde2ae63's root pages

@@ -536,6 +536,7 @@ questions and suggestions before making decisions.</p>
 for manual review and linked here: <a href="docs/index.html">docs/ (session 00a943bd)</a> ·
 <a href="docs/tracker/index.html">docs/tracker/ (session e2aacbd6)</a> ·
 <a href="analysis/index.html">analysis/ (session 3e08e6dc)</a> ·
+<a href="demo-desk/index.html">demo-desk/ (session 4ea36f44, read-only Demo Desk)</a> ·
 <a href="research/kalshi-api-verified-reference.md">research/ verified API reference (6908a11a)</a> ·
 <a href="EXECUTIVE_SUMMARY.md">EXECUTIVE_SUMMARY.md</a> · <a href="FLAGGED.md">FLAGGED.md</a> ·
 <a href="SUGGESTIONS.md">SUGGESTIONS.md</a> · <a href="COORDINATION.md">COORDINATION.md</a> (task board).</p>
@@ -936,6 +937,8 @@ def build_sources():
          "docs/tracker/index.html"),
         ("analysis/", "Session 3e08e6dc analysis site + live captures (per-row source_url)",
          "analysis/index.html"),
+        ("demo-desk/", "Session 4ea36f44 read-only source-linked Demo Desk (own npm tests)",
+         "demo-desk/index.html"),
         ("research/kalshi-api-verified-reference.md", "Session 6908a11a verified API reference",
          "research/kalshi-api-verified-reference.md"),
         ("EXECUTIVE_SUMMARY.md", "Session 6908a11a executive summary", "EXECUTIVE_SUMMARY.md"),
