@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-20T19:41:03Z",
+ "generated_at": "2026-11-20T19:43:09Z",
  "api_root": "https://external-api.demo.kalshi.co/trade-api/v2",
  "rule": {
   "threshold_dollars": "0.10",

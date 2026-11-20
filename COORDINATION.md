@@ -754,3 +754,12 @@ Method: official field descriptions read from the docs' OpenAPI markdown sources
 - **CR-F2-3 (for the final integrator):** publish F-F2-01 to F-F2-06 on the Flagged for Review page with the links in this section.
 
 **Verification performed:** every official definition quoted above was read in the fetched copy on 2026-11-20. Live samples were fetched on the same day. No value was inferred, no site page or data file was changed, and no other session's file was edited.
+
+---
+
+## Final integration update — session 13603ac5 (PR #43)
+
+- **2026-11-20:** PR #43 CI `checks` passed on the latest branch head (`24d1249`); collector was still pending at last check. The first merge attempt was blocked by newer main commits. Merged the latest `origin/main` (`29c3b95`, including collector snapshots and coordinated audit notes) into this integration branch, preserving append-only history as a deduplicated union.
+- During conflict resolution, regenerated root pages from `scripts/build_root_site.py`; fixed the source generator so `dashboard.html` is generated again, with official settlement-source context plus the dedicated alerts link. This removes generator drift (R-07) and prevents the alert UI from disappearing on rebuild. Resolved leftover conflict markers in `api-reference.html` and `methodology.html` and verified no markers remain.
+- Verification after integration: Node 37/37; Python alert tests 23/23; backtest tests 17/17; collector tests 2/2; `verify_root_site.py`, `verify_site.py`, `tracker_check.py`, and `check_site.py` all passed. Latest alert snapshot regenerated: 5 alerts, 0 high-ROI passes, 40 watchlist markets, 1 tracked resolution.
+- **PR #43 is not yet merged.** Mergeability/checks must be rechecked after pushing the latest integration commits. Pages deployment and live URL checks are still pending. Do not report deployment as successful until GitHub Pages reports `built` and live URLs are fetched.
