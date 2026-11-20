@@ -404,6 +404,16 @@ def consolidated_flags():
         "not verified here. On failure the UI shows 'event record unavailable' and never guesses.",
         [f"{DOCS}/getting_started/demo_env"],
         "open — fails closed", "df50b92f")
+    # session c75f4bf1: chart swing-caption depends on the alerts event cache
+    add("F-c75-03", "Chart / alerts", "Chart swing-caption depends on the alerts event cache",
+        "The caption under the price chart lists the selected market's recent >=$0.10 swings with "
+        "the related event ticker and its official settlement_sources, read from the alerts cache "
+        "(window.KD.events[evt].sources). If an event record is still loading, unavailable, or the "
+        "browser/API blocks it, the caption falls back to the market API link and shows no source — "
+        "never inferred. Complementary to F-df-01/F-df-02 (alert-row context).",
+        [f"{DOCS}/api-reference/events/get-event", f"{DOCS}/changelog",
+         "https://external-api.demo.kalshi.co/trade-api/v2/events?limit=1"],
+        "Flagged — fails closed", "c75f4bf1")
     add("I-11", "Trading", "No demo-account API credentials were provided",
         "Live order execution needs a Kalshi demo API key (created at demo.kalshi.co). Until one is "
         "supplied, the Trade pages run in clearly labeled paper-trading mode against live demo "
