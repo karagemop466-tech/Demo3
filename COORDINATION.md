@@ -4,7 +4,7 @@ Session: `arena/fb54d2f6-demo3` (current Arena branch; platform requires all wor
 
 | Task | Status | Owner / session | File scope |
 |---|---|---|---|
-| Repo review, official-source research, executive summary, dashboard and GitHub Pages integration | in progress | `arena/fb54d2f6-demo3` | `COORDINATION.md`, `README.md`, `index.html`, `executive-summary.html`, `styles.css`, `app.js`, `.gitignore` |
+| Standalone dashboard integration attempt (superseded by the already merged site on `main`) | needs review | `arena/fb54d2f6-demo3` | This branch: `README.md`, `index.html`, `executive-summary.html`, `styles.css`, `app.js`, `.gitignore` |
 
 ## Coordination constraints
 
@@ -16,6 +16,8 @@ This checkout is fixed to branch `arena/fb54d2f6-demo3`; no other branches/workt
 - Checked official Kalshi documentation for environment URLs, market and event schemas, orderbook response semantics, WebSocket authentication, portfolio balance/positions/fills, and demo order creation. Sources are linked in `README.md`, `executive-summary.html`, and in the applicable dashboard rows/sections.
 - Implemented a static, read-only monitor. It reports official API values only after successful fetches, links each rendered market/orderbook/resolution row to the official API record, keeps absent values blank, and labels category discovery as heuristic. Dollar-volume ranking and authenticated account/trading capabilities remain explicitly unimplemented and flagged.
 - Local checks passed: `node --check app.js`; `git diff --check`; parsed both HTML pages to check duplicate IDs and local links; served both pages locally and confirmed HTTP responses/title tags. Dynamic browser CORS/live demo responses remain unverified due the restricted external network available to this session; the UI surfaces failure rather than using fixtures.
-- The GitHub Pages API reports this repository already publishes the root of `main` using its legacy branch build at `https://karagemop466-tech.github.io/Demo3/`. No Actions deployment workflow was added, to avoid conflicting with that existing mode.
-- No other session claims were present. Claim commit was pushed after rebasing on `origin/main` because the newly created remote branch did not initially exist for the requested branch-specific pull.
-- PR and legacy Pages publication are pending; keep this task in progress until the merge and successful deploy are confirmed.
+- The GitHub Pages API reports this repository publishes `main` at `https://karagemop466-tech.github.io/Demo3/` using a legacy build rooted at `/`. The current `main` root redirects to `docs/index.html`; no deployment workflow was added here to avoid replacing or conflicting with that integration.
+- After this branch was created, the `main` branch advanced through merged PRs #2 and #3 from session `00a943bd`, adding a comprehensive `docs/` site, source-backed dataset, verification script, and root redirect. This is overlapping work and is already the live source of truth. The working branch's root-page replacement conflicts with that redirect and is not safe to merge as-is.
+- Open PR #1 (`https://github.com/karagemop466-tech/Demo3/pull/1`) is non-mergeable against the updated `main`. It is being closed as a duplicate rather than overwrite the integrated site. No changes from this branch were merged.
+- Inspected the live deployed home and dashboard. The site is present; the dashboard currently reports the public API fetch failed in its browser and falls back to a verified snapshot. This is an observed CORS/network limitation, not a confirmed failure of all users' browsers.
+- No other session claims were present when this board was first created. The initial claim commit was pushed after rebasing on `origin/main` because the new remote branch did not initially exist for a branch-specific pull. The later `main` update was detected before a forced merge; no other session's changes were discarded.
