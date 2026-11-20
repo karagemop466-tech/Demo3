@@ -483,6 +483,19 @@ def consolidated_flags():
         ["https://github.com/karagemop466-tech/Demo3/blob/main/.github/workflows/kalshi-data.yml",
          "https://github.com/karagemop466-tech/Demo3/blob/main/.github/workflows/collect.yml"],
         "open — request logged", "7b47094a")
+    add("F-7b-08", "Deployment", "Pages builds report 'Page build failed.' while builds queue",
+        "Observed on 2026-11-20 via the Pages API: builds for 10fd1b2 (19:56Z), 6414ce3 (19:58Z) and "
+        "75cc16d (20:00Z, the merge of PR #60) each ended `errored — Page build failed.`, while the "
+        "newest build (2430d9a, 20:03Z) stayed `building` for minutes. Meanwhile the live root site "
+        "kept serving an older artefact (its landing counter reads '83 flagged items' while main's "
+        "generated page has 91), i.e. the deployment lags `main` rather than being absent. Cause is "
+        "not proven from here; the likely driver is build churn: this repo pushes to `main` every 10 "
+        "minutes from the collector plus many concurrent session merges, and a superseded Pages build "
+        "is reported as failed. Re-running the build after the queue settles is the practical check. "
+        "Nothing in PR #60 changes the Pages configuration (build_type legacy, source main /).",
+        ["https://api.github.com/repos/karagemop466-tech/Demo3/pages/builds",
+         "https://karagemop466-tech.github.io/Demo3/"],
+        "open — monitoring note", "7b47094a")
     add("F-7b-04", "WebSocket", "Browser WS streaming is not possible (was listed as unverified)",
         "Earlier registers carried 'WS expected to be blocked in browsers' as unverified (F2/Q-20). "
         "Closed: official docs state the handshake requires the three KALSHI-ACCESS-* headers and that "

@@ -1127,3 +1127,29 @@ Coordination notes for the integrator:
 * `assets/dashboard.js` change request (S-7b-01): export the selected ticker (e.g. `KD.selectedTicker`
   or a `KD.onSelect` hook) so the price chart can mark the ≥ $0.10 jumps with the same official
   settlement-source links the chat rows already show.
+
+### Session 7b47094a — merge and deployment record
+
+* **PR #60 merged into `main`** at 2026-11-20 20:00:26 UTC, merge commit `75cc16d`
+  (https://github.com/karagemop466-tech/Demo3/pull/60). `git ls-tree origin/main` confirms the delivered
+  files: `assets/roi-model.js`, `model/build_roi_model.py`, `data/latest/roi_model.json`,
+  `requirements.html`, `model.html`, `tests/alerts_resolution.test.js`, `scripts/tests/test_roi_model.py`.
+* Merged content reconciled with session `5bc43641`'s PR #57 (the `roiModel` score + 9-column chat):
+  one chat implementation, main's architecture kept, the resolution watcher and the published screen
+  added on top; the ROI score cell now prints which rule admitted the row, and the row link uses the
+  documented `GET /markets/{ticker}` route (the previous `/series/{s}/markets/{t}` form is not a
+  documented endpoint).
+* Re-verification on the merged branch before the PR: `node --test` 39/39;
+  `python3 scripts/tests/test_roi_model.py` 8/8; `model/build_roi_model.py --check` OK against the
+  19:55Z snapshot; `verify_root_site.py` 0 failures; `verify_site.py` PASSED; `check_site.py` passed.
+* **GitHub Pages:** the API shows builds for `10fd1b2` (19:56:34Z), `6414ce3` (19:58:45Z) and this
+  merge `75cc16d` (20:00:28Z) each `errored — "Page build failed."`, while the following build
+  (`2430d9a`, 20:03:39Z) was still `building` minutes later. The live root site keeps serving the last
+  successful artefact (verified by fetching https://karagemop466-tech.github.io/Demo3/ — landing,
+  executive-summary table and topic links render), so this is deployment lag/build churn under the
+  repo's ~10-minute collector pushes plus concurrent session merges, not a missing site. Recorded as
+  **F-7b-08** on the Flagged for Review page so the owner can re-run the Pages build once the queue
+  settles; the Pages configuration itself was not touched (legacy build, `main` `/`, HTTPS enforced —
+  https://api.github.com/repos/karagemop466-tech/Demo3/pages).
+* Follow-up board-only PR from this session records the merge above; no site, data or script file is
+  changed by it.
