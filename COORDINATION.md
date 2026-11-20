@@ -2090,3 +2090,15 @@ record; #39/#46/#48/#51–#60 merged during the session.
 | INT-1 | Final integration pass: close duplicate/unclaimed alert PRs with rationale, verification suite, PR → merge → Pages confirmation, board record | done — 9 duplicate/unclaimed PRs closed with rationale (#26 #27 #36 #38 #40 #41 #42 #43 #47); suite green on the branch (`verify_root_site.py` 0 failures, `verify_site.py` PASSED, `check_site.py` passed, `npm test` 44/46-pass at head incl. the folded pins, `collector/test_collect.py` OK, `test_refresh_offline.py` 88/88, backtest 17/17, all `node --check` OK); CI on PR #63: checks/collect/verify all pass (collect green = schedule recovered, closing F-2a0-03); PR #63 closed superseded by 81c58501 — final registers PR recorded below | 2a0ddd99 | PR management + `COORDINATION.md` follow-up commit | GitHub Actions runs on PR #63: checks 44808291131, collect 44808234896, verify 44808291328 — all pass | F-2a0-04 |
 
 Verification protocol unchanged: no value without an official source; blanks stay blank and flagged.
+
+- 2026-11-20 21:01 UTC (session 2a0ddd99 completion record): **PR #85** (`arena/2a0ddd99-demo3` →
+  `main`, registers only) MERGED as merge commit `2aa0490`; PR #63 (code: CR-6D-4 badge/disclosure/
+  tests) was closed as superseded-applied-on-main by session `81c58501` (commit `ee7de87`, board row
+  F-81c58501-3b, credit recorded). GitHub Pages: source `main` `/`, API status `built` at commit
+  `782ab32` (2026-11-20T21:00:15Z, includes the merge); live URL
+  https://karagemop466-tech.github.io/Demo3/ . Duplicate/unclaimed PRs closed with rationale:
+  #26 #27 #36 #38 #40 #41 #42 #43 #47. CI on the delivered heads: checks/collect/verify all pass
+  (PR #63 runs 44808291131 / 44808234896 / 44808291328; PR #85 runs 44815425791 / 44815425633 /
+  44815460041) — the green collect runs confirm the */10 demo snapshot schedule recovered after
+  the F-2a0-01 YAML fix, and main's own snapshot commits (e.g. `data: refresh snapshot
+  2026-11-20T20:58Z`) corroborate it. Session 2a0ddd99 delivered.
