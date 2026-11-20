@@ -1,0 +1,22 @@
+name: Site checks
+
+on:
+  push:
+    branches:
+      - main
+      - 'arena/**'
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+      - name: Verify site links and source citations
+        run: python3 demo-monitor/scripts/verify_site.py
+      - name: Test demo API client with synthetic fixtures
+        run: node demo-monitor/scripts/test_api.js

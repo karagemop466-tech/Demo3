@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Kalshi demo portfolio status and local paper-trade simulator."><title>Portfolio · Kalshi Demo Monitor</title><link rel="stylesheet" href="assets/site.css"><script defer src="assets/api.js"></script><script defer src="assets/app.js"></script></head>
+<body data-page="portfolio">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header"><a class="brand" href="index.html" aria-label="Kalshi Demo Monitor home"><span class="brand-mark" aria-hidden="true">KM</span><span class="brand-copy"><strong>Market Monitor</strong><span>Kalshi demo workspace</span></span></a><nav class="primary-nav" aria-label="Primary navigation"><a href="index.html">Overview</a><a href="dashboard.html">Dashboard</a><a href="portfolio.html" aria-current="page">Portfolio</a><a href="resolved.html">Resolved</a><a href="strategies.html">Strategies</a><a href="suggestions.html">Suggestions</a></nav><div class="header-actions"><span class="header-status" data-live-status><span class="status-dot is-waiting"></span><span data-live-label>Demo feed not checked</span></span><a class="btn-secondary" href="flagged-review.html">Review flags</a></div></header>
+  <main id="main" class="page-shell">
+    <div class="page-heading"><div><p class="eyebrow">Portfolio · access status</p><h1>Portfolio & trade analysis</h1><p>Actual Kalshi demo account performance is intentionally blank until a secure, authenticated connection exists. Use the local paper simulator to review the workflow without submitting orders.</p></div><a class="btn-secondary" href="decision-questions.html">Open account questions →</a></div>
+    <div class="account-lock" role="status"><span class="lock-icon" aria-hidden="true">⌑</span><div><strong>Demo portfolio not connected · real order entry disabled</strong><p>Balance, positions, fills, and order endpoints are authenticated. No API key or signing key is present here; this GitHub Pages app will not ask for or store one.</p></div></div>
+    <p class="small-note" style="margin:10px 0 17px"><a href="https://docs.kalshi.com/api-reference/portfolio/get-balance" target="_blank" rel="noopener noreferrer">Balance API</a> · <a href="https://docs.kalshi.com/api-reference/portfolio/get-positions" target="_blank" rel="noopener noreferrer">Positions API</a> · <a href="https://docs.kalshi.com/api-reference/portfolio/get-fills" target="_blank" rel="noopener noreferrer">Fills API</a> · <a href="https://docs.kalshi.com/getting_started/api_keys" target="_blank" rel="noopener noreferrer">Signing requirements</a></p>
+
+    <section class="metric-grid" aria-label="Portfolio status">
+      <article class="metric-card"><span class="metric-label">Actual demo balance</span><strong>—</strong><small>Not fetched · authenticated access required</small></article>
+      <article class="metric-card"><span class="metric-label">Actual demo P&amp;L</span><strong>—</strong><small>No account fills or positions imported</small></article>
+      <article class="metric-card is-dark"><span class="metric-label">Local paper positions</span><strong data-paper-open-count>0</strong><small>Stored in this browser only</small></article>
+      <article class="metric-card"><span class="metric-label">Paper unrealized P&amp;L</span><strong data-paper-pnl>—</strong><small>Fees, slippage, and fills not simulated</small></article>
+    </section>
+
+    <section class="panel section">
+      <div class="panel-heading"><div><h2>Local paper-trade ticket</h2><p>Choose an open binary market. A click records a local simulation only; no request is sent to an order endpoint.</p></div><span class="tag live">PAPER ONLY</span></div>
+      <div class="panel-body">
+        <div class="paper-banner"><div><strong>Simulation rules</strong><p>Entry uses the current displayed ask; the record is not a guaranteed fill. Results exclude fees, queue position, partial fills, and slippage.</p></div><a class="source-link" href="https://docs.kalshi.com/api-reference/orders/create-order-v2" target="_blank" rel="noopener noreferrer">Official order schema</a></div>
+        <form data-paper-form style="margin-top:16px">
+          <div class="form-grid">
+            <div class="field full"><label for="paper-market">Open market</label><select id="paper-market" data-paper-market disabled><option value="">Loading official demo markets…</option></select><span class="form-hint">Market labels and quotes are loaded from the public demo API. Missing quotes are left unavailable.</span></div>
+            <div class="field"><label for="paper-side">Side</label><select id="paper-side" data-paper-side><option value="yes">Buy YES</option><option value="no">Buy NO</option></select></div>
+            <div class="field"><label for="paper-count">Contracts</label><input id="paper-count" data-paper-count type="number" min="0.01" step="0.01" value="1.00" inputmode="decimal"></div>
+            <div class="field full"><label for="paper-strategy">Strategy tag</label><select id="paper-strategy" data-paper-strategy><option value="Unassigned">Unassigned</option><option value="Event catalyst">Event catalyst</option><option value="Trend follow">Trend follow</option><option value="Mean reversion">Mean reversion</option><option value="Liquidity / spread">Liquidity / spread</option></select></div>
+            <div class="field full"><div class="notice info" style="margin:0"><span class="notice-icon" aria-hidden="true">i</span><p data-paper-preview>Waiting for a live open market quote. No value will be guessed if the quote is missing.</p></div></div>
+            <div class="field full"><button class="btn" type="submit" data-paper-submit disabled>Record paper simulation</button><span class="form-hint">This button never calls Kalshi's trade API. Records stay in this browser's local storage.</span></div>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section class="panel section">
+      <div class="panel-heading"><div><h2>Trade ledger</h2><p>Actual account records are not available. Local simulations are clearly marked and linked to the official market response.</p></div><a class="link-arrow" href="strategies.html">Review strategy categories →</a></div>
+      <div class="table-wrap"><table><thead><tr><th scope="col">Recorded</th><th scope="col">Market / topic</th><th scope="col">Strategy</th><th scope="col">Side</th><th scope="col">Contracts</th><th scope="col">Entry</th><th scope="col">Current mark</th><th scope="col">Paper P&amp;L</th><th scope="col">Mode</th><th scope="col">Source</th><th scope="col">Action</th></tr></thead><tbody data-paper-rows></tbody></table><div class="table-empty" data-paper-empty><strong>No paper simulations recorded</strong><p>The ledger stays empty until a paper ticket is submitted. No real or historical account trade is represented here.</p></div></div>
+    </section>
+    <p class="disclaimer">For a production portfolio connector, use a server-side service that keeps signing keys in a secret store and exposes only narrowly scoped routes to the site. Never put a Kalshi private key in GitHub Pages code or browser storage. See <a href="suggestions.html">Suggestions</a> and <a href="flagged-review.html">Flagged for Review</a>.</p>
+  </main>
+  <footer class="footer"><span>Actual account values are unavailable; paper mode is local and non-executable</span><nav class="footer-links" aria-label="Supporting pages"><a href="https://docs.kalshi.com/getting_started/api_keys" target="_blank" rel="noopener noreferrer">API-key docs</a><a href="decision-questions.html">Decision questions</a><a href="flagged-review.html">Flagged for Review</a><a href="README.md">README</a></nav></footer>
+</body>
+</html>

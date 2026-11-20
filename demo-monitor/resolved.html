@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Track watched Kalshi demo events through settlement and review official resolution results."><title>Resolved Events · Kalshi Demo Monitor</title><link rel="stylesheet" href="assets/site.css"><script defer src="assets/api.js"></script><script defer src="assets/app.js"></script></head>
+<body data-page="resolved">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header"><a class="brand" href="index.html" aria-label="Kalshi Demo Monitor home"><span class="brand-mark" aria-hidden="true">KM</span><span class="brand-copy"><strong>Market Monitor</strong><span>Kalshi demo workspace</span></span></a><nav class="primary-nav" aria-label="Primary navigation"><a href="index.html">Overview</a><a href="dashboard.html">Dashboard</a><a href="portfolio.html">Portfolio</a><a href="resolved.html" aria-current="page">Resolved</a><a href="strategies.html">Strategies</a><a href="suggestions.html">Suggestions</a></nav><div class="header-actions"><span class="header-status" data-live-status><span class="status-dot is-waiting"></span><span data-live-label>Demo feed not checked</span></span><a class="btn-secondary" href="flagged-review.html">Review flags</a></div></header>
+  <main id="main" class="page-shell">
+    <div class="page-heading"><div><p class="eyebrow">Lifecycle · resolution evidence</p><h1>Watched & resolved events</h1><p>Follow selected open events until their official market status and result are returned. Settled outcomes are shown as yes, no, or the raw API result—never coerced into a binary answer.</p></div><button class="btn-secondary" type="button" data-refresh>↻ Refresh watchlist</button></div>
+    <div class="notice info"><span class="notice-icon" aria-hidden="true">i</span><p><strong>Monitoring boundary:</strong> the watchlist is stored in this browser and refreshes only while the page is open. Reopening the page refreshes each saved event from the demo API; it is not an unattended background service. The official API also moves older settled markets to historical endpoints. <a href="https://docs.kalshi.com/api-reference/historical/get-historical-markets" target="_blank" rel="noopener noreferrer">Historical markets</a></p></div>
+
+    <section class="panel section">
+      <div class="panel-heading"><div><h2>My watchlist</h2><p>Use “Track event” on a dashboard row. One table row is shown per market in each watched event.</p></div><span class="tag" data-watch-count>0 tracked</span></div>
+      <div class="table-wrap"><table><thead><tr><th scope="col">Event / market</th><th scope="col">Topic</th><th scope="col">Market status</th><th scope="col">Result</th><th scope="col">Last checked</th><th scope="col">Action</th><th scope="col">Official source</th></tr></thead><tbody data-watch-rows></tbody></table><div class="table-empty" data-watch-empty><strong>No events on this browser's watchlist</strong><p>Open the <a href="dashboard.html">market dashboard</a>, inspect a live event, and choose Track event. No event is added without an explicit selection.</p></div></div>
+    </section>
+
+    <section class="panel section">
+      <div class="panel-heading"><div><h2>Settled events in the monitored topics</h2><p>Current API responses only. Historical rows may require the separate historical endpoints.</p></div><span class="status-badge"><span class="status-dot is-waiting" data-feed-dot></span><span data-feed-label>Waiting for demo API</span></span></div>
+      <div class="table-wrap"><table><thead><tr><th scope="col">Event / market</th><th scope="col">Topic / series</th><th scope="col">Settled status</th><th scope="col">Official result</th><th scope="col">Settlement time</th><th scope="col">Official source</th></tr></thead><tbody data-resolved-rows></tbody></table><div class="table-empty" data-resolved-empty><strong>No settled events loaded</strong><p>When the official API returns settled events in these categories, their result and source will appear here. No outcomes are prefilled.</p></div></div>
+    </section>
+    <p class="disclaimer">The API can report a market as closed/determined before it is finally settled. This page treats only the official settled/finalized state as resolved. See <a href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noopener noreferrer">market status and result fields</a>.</p>
+  </main>
+  <footer class="footer"><span>Resolution display follows returned Kalshi market status/result fields</span><nav class="footer-links" aria-label="Supporting pages"><a href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noopener noreferrer">Market schema</a><a href="decision-questions.html">Decision questions</a><a href="flagged-review.html">Flagged for Review</a><a href="README.md">README</a></nav></footer>
+</body>
+</html>

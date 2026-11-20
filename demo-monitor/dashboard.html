@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Live, source-linked Kalshi demo event and order-book monitor.">
+  <title>Live Dashboard · Kalshi Demo Monitor</title>
+  <link rel="stylesheet" href="assets/site.css"><script defer src="assets/api.js"></script><script defer src="assets/app.js"></script>
+</head>
+<body data-page="markets" data-topic="all">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Kalshi Demo Monitor home"><span class="brand-mark" aria-hidden="true">KM</span><span class="brand-copy"><strong>Market Monitor</strong><span>Kalshi demo workspace</span></span></a>
+    <nav class="primary-nav" aria-label="Primary navigation"><a href="index.html">Overview</a><a href="dashboard.html" aria-current="page">Dashboard</a><a href="portfolio.html">Portfolio</a><a href="resolved.html">Resolved</a><a href="strategies.html">Strategies</a><a href="suggestions.html">Suggestions</a></nav>
+    <div class="header-actions"><span class="header-status" data-live-status><span class="status-dot is-waiting"></span><span data-live-label>Demo feed not checked</span></span><a class="btn-secondary" href="flagged-review.html">Review flags</a></div>
+  </header>
+  <main id="main" class="page-shell">
+    <div class="page-heading">
+      <div><p class="eyebrow">Live monitor · demo environment</p><h1 data-page-heading>Open event dashboard</h1><p data-page-description>Events are discovered from official series metadata and open-event responses. Ranking is a site-defined top-of-book display value, not reported Kalshi event turnover.</p></div>
+      <div class="heading-actions"><button class="btn-secondary" type="button" data-refresh>↻ Refresh data</button></div>
+    </div>
+    <nav class="subnav" aria-label="Category pages"><a href="dashboard.html" aria-current="page">All topics</a><a href="gas-prices.html">Gas prices</a><a href="elections.html">Elections</a><a href="culture.html">Culture / entertainment</a><a href="crypto.html">Crypto</a><a href="golf.html">Golf</a></nav>
+
+    <div class="notice info" role="note"><span class="notice-icon" aria-hidden="true">i</span><p><strong>Ranking methodology:</strong> displayed value = for each open market in an event, YES bid price × bid contracts + YES ask price × ask contracts, summed across the event. This top quote is not full depth, traded notional, or an official event-level value. Volume and open interest are shown in contracts. <a href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noopener noreferrer">Market fields</a> · <a href="https://docs.kalshi.com/getting_started/orderbook_responses" target="_blank" rel="noopener noreferrer">Order-book mechanics</a></p></div>
+
+    <section class="metric-grid" aria-label="Current feed summary">
+      <article class="metric-card is-dark"><span class="metric-label">Open events matched</span><strong data-metric-events>—</strong><small>Only verified live API responses</small></article>
+      <article class="metric-card"><span class="metric-label">Top displayed value</span><strong data-metric-top-value>—</strong><small>Site-defined USD calculation</small></article>
+      <article class="metric-card"><span class="metric-label">Markets in view</span><strong data-metric-markets>—</strong><small>Open nested markets</small></article>
+      <article class="metric-card"><span class="metric-label">Feed updated</span><strong data-metric-updated>—</strong><small>Browser observation time</small></article>
+    </section>
+
+    <section class="panel section" aria-labelledby="events-heading">
+      <div class="panel-heading">
+        <div><h2 id="events-heading">Highest displayed top-of-book value</h2><p>One row per event · select a market to inspect price history and depth.</p><p class="small-note" data-feed-coverage>Waiting for complete category/event responses.</p></div>
+        <span class="status-badge"><span class="status-dot is-waiting" data-feed-dot></span><span data-feed-label>Waiting for demo API</span></span>
+      </div>
+      <div class="data-toolbar" style="padding: 0 22px 14px; margin: 0;">
+        <div class="field"><label for="ranking-select">Sort by</label><select id="ranking-select" data-ranking><option value="notional">Displayed top-of-book value (USD)</option><option value="volume">24h volume (contracts)</option><option value="open-interest">Open interest (contracts)</option></select></div>
+        <span class="toolbar-spacer"></span>
+        <span class="small-note">Source links open the official demo API response for each returned event.</span>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th scope="col">Rank</th><th scope="col">Event</th><th scope="col">Topic / series</th><th scope="col">Open markets</th><th scope="col">Displayed value · USD</th><th scope="col">24h volume · contracts</th><th scope="col">Nearest close</th><th scope="col">Official source</th></tr></thead>
+          <tbody data-event-rows></tbody>
+        </table>
+        <div class="table-empty" data-event-empty><strong>Waiting for official demo data</strong><p>The API is not queried until the page loads. If the browser cannot reach either Kalshi demo host, the error will appear here and no sample values will be substituted.</p></div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="inspect-heading">
+      <div class="section-heading"><div><p class="eyebrow">Market inspection</p><h2 id="inspect-heading">Price movement & available contracts</h2><p>Choose a market from the live list. Price is the returned last-traded contract price; seconds ranges are observations collected only while this page is open.</p></div></div>
+      <div class="data-toolbar">
+        <div class="field" style="min-width:min(100%,440px); flex: 1 1 320px;"><label for="market-picker">Market</label><select id="market-picker" data-market-picker disabled><option value="">Waiting for open markets…</option></select></div>
+        <a class="source-link" data-selected-market-source href="https://docs.kalshi.com/api-reference/market/get-market" target="_blank" rel="noopener noreferrer">Official market source</a>
+      </div>
+      <div class="chart-layout">
+        <article class="panel chart-card">
+          <div class="chart-top">
+            <div class="chart-market"><strong data-chart-title>No market selected</strong><span data-chart-subtitle>Time on the horizontal axis · contract price in USD on the vertical axis</span></div>
+            <div class="range-switch" role="group" aria-label="Chart time range">
+              <button type="button" data-chart-range="60s" aria-pressed="false">60 sec</button>
+              <button type="button" data-chart-range="5m" aria-pressed="false">5 min</button>
+              <button type="button" data-chart-range="15m" aria-pressed="true">15 min</button>
+              <button type="button" data-chart-range="1h" aria-pressed="false">1 hour</button>
+              <button type="button" data-chart-range="6h" aria-pressed="false">6 hours</button>
+              <button type="button" data-chart-range="24h" aria-pressed="false">24 hours</button>
+            </div>
+          </div>
+          <div class="chart-area"><canvas data-price-chart aria-label="Selected market contract price over time" role="img"></canvas></div>
+          <div class="chart-legend"><span class="legend-line" aria-hidden="true"></span><span>Last-traded YES contract price</span><span class="toolbar-spacer"></span><span data-current-price>—</span></div>
+          <p class="chart-status" data-chart-status>No price history is embedded. Select a live market to fetch candles and begin local observations.</p>
+        </article>
+        <article class="panel orderbook-card">
+          <div class="orderbook-toolbar"><div><h3>Current order book</h3><p data-orderbook-status>Choose a market to load price levels.</p></div><a class="source-link" data-orderbook-source href="https://docs.kalshi.com/getting_started/orderbook_responses" target="_blank" rel="noopener noreferrer">Book schema</a></div>
+          <div class="table-wrap">
+            <table class="orderbook-table"><thead><tr><th scope="col">Side</th><th scope="col">Price</th><th scope="col">Contracts</th><th scope="col">Value · USD</th><th scope="col">Source</th></tr></thead><tbody data-orderbook-rows></tbody></table>
+            <div class="table-empty" data-orderbook-empty><strong>No order-book levels loaded</strong><p>Each price level and contract count comes from the selected market's official order book. Implied asks are labeled explicitly.</p></div>
+          </div>
+        </article>
+      </div>
+    </section>
+    <p class="disclaimer">The public REST feed is polled in this browser. Kalshi's WebSocket connection requires an authenticated handshake; no API key is collected by this static site. See <a href="flagged-review.html">Flagged for Review</a> for the limits.</p>
+  </main>
+  <footer class="footer"><span>Kalshi Demo Monitor · values are from the demo API only</span><nav class="footer-links" aria-label="Supporting pages"><a href="decision-questions.html">Decision questions</a><a href="flagged-review.html">Flagged for Review</a><a href="sources.html">Official sources</a><a href="README.md">README</a></nav></footer>
+</body>
+</html>

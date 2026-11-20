@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102e3a">
+  <meta name="description" content="A source-linked Kalshi demo market monitor and decision workspace.">
+  <title>Executive Brief · Kalshi Demo Monitor</title>
+  <link rel="stylesheet" href="assets/site.css">
+  <script defer src="assets/api.js"></script><script defer src="assets/app.js"></script>
+</head>
+<body data-page="home">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Kalshi Demo Monitor home">
+      <span class="brand-mark" aria-hidden="true">KM</span>
+      <span class="brand-copy"><strong>Market Monitor</strong><span>Kalshi demo workspace</span></span>
+    </a>
+    <nav class="primary-nav" aria-label="Primary navigation">
+      <a href="index.html" aria-current="page">Overview</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="portfolio.html">Portfolio</a>
+      <a href="resolved.html">Resolved</a>
+      <a href="strategies.html">Strategies</a>
+      <a href="suggestions.html">Suggestions</a>
+    </nav>
+    <div class="header-actions">
+      <span class="header-status" data-live-status><span class="status-dot is-waiting"></span><span data-live-label>Demo feed not checked</span></span>
+      <a class="btn-secondary" href="flagged-review.html">Review flags</a>
+    </div>
+  </header>
+
+  <main id="main" class="page-shell">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Evidence-first · demo only · source-linked</p>
+        <h1>See the market.<br>Understand the gaps.</h1>
+        <p>A focused workspace for open Kalshi demo events in gas prices, elections, culture and entertainment, crypto, and golf—with live public data where the official feed is reachable and a clear record of what still needs a decision.</p>
+        <div class="hero-actions">
+          <a class="btn" href="dashboard.html">Open market dashboard <span aria-hidden="true">→</span></a>
+          <a class="btn-ghost" href="decision-questions.html">Read the decision questions</a>
+        </div>
+      </div>
+      <aside class="hero-card" aria-label="Trading status">
+        <span class="mini-label">Account & execution</span>
+        <strong>No account linked.<br>No orders submitted.</strong>
+        <p>Static Pages cannot safely keep a Kalshi signing key. Actual portfolio sync and demo orders remain disabled; the site includes a clearly labeled local paper simulator.</p>
+      </aside>
+    </section>
+
+    <div class="notice info" role="note">
+      <span class="notice-icon" aria-hidden="true">i</span>
+      <p><strong>Important:</strong> nothing here is a recommendation to trade. The live-event ranking is a site-defined visible top-of-book calculation—not an official Kalshi event-level dollar total. Current values remain blank until the browser retrieves official demo API data. <a href="flagged-review.html">See all flagged items</a>.</p>
+    </div>
+
+    <section class="metric-grid" aria-label="Workspace status">
+      <article class="metric-card is-dark">
+        <span class="metric-label">Open events tracked</span>
+        <strong data-summary-count>—</strong>
+        <small>Official demo feed · current session</small>
+      </article>
+      <article class="metric-card">
+        <span class="metric-label">Largest displayed top quote</span>
+        <strong data-summary-notional>—</strong>
+        <small>USD · calculated from top YES bid/ask</small>
+      </article>
+      <article class="metric-card">
+        <span class="metric-label">Demo portfolio</span>
+        <strong>Not connected</strong>
+        <small>Authentication / secure service required</small>
+      </article>
+      <article class="metric-card">
+        <span class="metric-label">Source status</span>
+        <strong data-summary-source>Not checked</strong>
+        <small data-summary-updated>Values are not preloaded</small>
+      </article>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <div><p class="eyebrow">Executive summary</p><h2>What the project can verify today</h2><p>Keep confirmed API behavior separate from account access and product decisions.</p></div>
+        <a class="link-arrow" href="docs/research-notes.md">Read the source audit <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="content-grid">
+        <article class="content-card">
+          <div class="card-icon" aria-hidden="true">↗</div>
+          <h3>Public market data can power a live monitor</h3>
+          <p>Kalshi documents public REST reads for series, events, markets, and order books. The dashboard queries demo hosts directly, shows the source link for each returned event, and leaves values empty on connection or schema errors.</p>
+          <a class="link-arrow" href="https://docs.kalshi.com/getting_started/quick_start_market_data" target="_blank" rel="noopener noreferrer">Official market-data guide <span aria-hidden="true">↗</span></a>
+        </article>
+        <article class="content-card">
+          <div class="card-icon" aria-hidden="true">⌁</div>
+          <h3>Event rankings need an agreed dollar definition</h3>
+          <p>The REST market schema exposes contract counts and top-of-book quotes. Until gross traded notional or another event-dollar metric is verified, this site labels its calculation as displayed top-of-book value and does not call it volume or total liquidity.</p>
+          <a class="link-arrow" href="decision-questions.html">See the open measurement question <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="content-card">
+          <div class="card-icon" aria-hidden="true">◷</div>
+          <h3>Price movement and resolution are observable</h3>
+          <p>The dashboard offers timestamped price charts, depth by price, and a browser watchlist. REST candles provide minute/hour/day bars; seconds-range history is collected only while a page is open. Settlement results are displayed as the API returns them.</p>
+          <a class="link-arrow" href="https://docs.kalshi.com/api-reference/market/get-market-candlesticks" target="_blank" rel="noopener noreferrer">Official candlestick schema <span aria-hidden="true">↗</span></a>
+        </article>
+        <article class="content-card">
+          <div class="card-icon" aria-hidden="true">▣</div>
+          <h3>Portfolio sync and real demo orders are intentionally gated</h3>
+          <p>Private account endpoints and order entry require signed API requests. No credentials were present in the repository, so this static site never stores a private key or sends a trade. Use the paper mode to test the UI without representing it as a Kalshi fill.</p>
+          <a class="link-arrow" href="https://docs.kalshi.com/getting_started/api_keys" target="_blank" rel="noopener noreferrer">Official API-key guide <span aria-hidden="true">↗</span></a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-heading">
+        <div><p class="eyebrow">Workspace map</p><h2>Choose a view</h2><p>Each category page uses official series metadata; a category with no matched active series stays empty rather than being guessed.</p></div>
+      </div>
+      <nav class="subnav" aria-label="Topic pages">
+        <a href="dashboard.html">All monitored topics</a>
+        <a href="gas-prices.html">Gas prices</a>
+        <a href="elections.html">Elections</a>
+        <a href="culture.html">Culture / entertainment</a>
+        <a href="crypto.html">Crypto</a>
+        <a href="golf.html">Golf</a>
+      </nav>
+      <div class="content-grid">
+        <article class="content-card">
+          <h3>Portfolio & strategies</h3>
+          <p>Review the actual-account blocker, use a local paper simulator, and classify simulated trades. No trade history or P&amp;L is fabricated.</p>
+          <a class="link-arrow" href="portfolio.html">Open portfolio workspace <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="content-card">
+          <h3>Questions, suggestions & flags</h3>
+          <p>See what can be answered from official documentation, what still needs evidence, and which suggested improvements await a product decision.</p>
+          <div class="footer-links">
+            <a href="decision-questions.html">Decision questions</a>
+            <a href="suggestions.html">Suggestions</a>
+            <a href="flagged-review.html">Flagged for Review</a>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <p class="disclaimer">Research checked 20 Nov 2026 (UTC). Live values, where available, are demo-environment responses and may change. This monitor is informational software, not financial advice or an order-entry system.</p>
+  </main>
+
+  <footer class="footer">
+    <span>Kalshi Demo Monitor · source-first research workspace</span>
+    <nav class="footer-links" aria-label="Supporting pages">
+      <a href="sources.html">Official sources</a>
+      <a href="docs/research-notes.md">Research notes</a>
+      <a href="../COORDINATION.md">Coordination</a>
+      <a href="README.md">README</a>
+    </nav>
+  </footer>
+</body>
+</html>
