@@ -1286,7 +1286,7 @@ per the brief's "REPO WORK / VERIFICATION" requirements. It deliberately does no
 | V4 | Verify the merged live-alert feature is actually served on the live site (two chat panels, ≥$0.10 threshold, context links) | done | 67643e12 | `COORDINATION.md` (this section) | Live `dashboard.html` + `assets/alerts.js` fetches | none |
 | V5 | Repo hygiene + check-suite run on current `main` (all four site checkers, `node --check`, npm test, offline pipeline tests) | done | 67643e12 | `COORDINATION.md` (this section) | Runs logged below | none |
 | V6 | Open-PR overlap matrix to assist the claimed final-integration session (information only; no merge/close decision made here) | done | 67643e12 | `COORDINATION.md` (this section) | `gh pr view --json files` per open PR; addendum below records the 19:45–20:15 UTC resolution wave | none |
-| V7 | PR of this section to `main`, merge, confirm Pages deploy, record result | in progress | 67643e12 | PR from `arena/67643e12-demo3` | merge + Pages API check | none |
+| V7 | PR of this section to `main`, merge, confirm Pages deploy, record result | done | 67643e12 | PR #67 (https://github.com/karagemop466-tech/Demo3/pull/67), `COORDINATION.md` | **PR #67 MERGED 2026-11-20 20:16:0xZ, merge commit `f8beb0f`**; Pages build for `f8beb0f` started 20:16:01Z but was superseded by newer `main` pushes before publishing (starvation, F-7b-08/R-08 ongoing; live site still serving the 19:38Z artifact at final check 20:27Z; structural fix = open PR #62, custom Actions deployment). Explicit `POST /pages/builds` from the sandbox is not permitted (403, token lacks Pages write); the successful collect.yml dispatch run (below) posts its own rebuild via the workflow's `pages: write`. | none |
 
 Progress log:
 - 2026-11-20 ~19:45 UTC — claim committed and pushed (this commit). Work in progress; results appended below as they complete.
@@ -1450,3 +1450,29 @@ No values were inferred; unchecked items are stated as unchecked.
   kept for the record.
 - **Checks re-run on this session's merged branch** (main @ `a3451de`-era + board sections):
   `verify_root_site.py` 0 failures; `verify_site.py` PASSED (28 pages).
+
+### Session 67643e12 — delivery record (V7 closure, 2026-11-20 ~20:28 UTC)
+
+- **PR #67** (`arena/67643e12-demo3` → `main`): opened 20:15:4xZ, **merged 20:16:0xZ** with
+  `gh pr merge 67 --merge`, merge commit **`f8beb0f`**. Content: this session's board sections only
+  (union-merged with 7b47094a's and f2b0808f's sections; data files on the branch follow `main`).
+- **collect.yml live verification (completes the pipeline-repair record):** the `workflow_dispatch`
+  run queued at 20:11:33Z on `main` `c0cb52b` (run 44809097574) **completed with `success`** —
+  the scheduled collector pipeline is restored after the duplicate-`if:` startup failures
+  (fixed by merged PRs #55/#56). The run posts its own Pages rebuild request via the workflow's
+  `pages: write` permission.
+- **Pages deploy status at closure:** builds for successive `main` tips (`f8beb0f` 20:16:01Z,
+  `deea750` 20:18:07Z, `be94f5c` 20:21:33Z — errored ~63 s after creation) continue to be
+  superseded/failed under the concurrent merge rate; the live site served the 19:38Z artifact at
+  final check 20:27Z (verified without the API: `audit/index.html` still absent). Matches session
+  7b47094a's F-7b-08 and session df50b92f's R-08. Open structural fix: **PR #62** (custom Actions
+  deployment workflow) — recommended for merge by its owner or the final-integration session; the
+  legacy queue cannot publish under the current push rate.
+- **Incident (resolved, nothing lost; mirrors the 3b5e95bd lesson):** a `git pull --rebase origin
+  arena/67643e12-demo3` on this branch, which contained a merge commit (main merged in for the
+  board union), started flattening the merge and replaying ~50 of main's commits; it stopped at the
+  first pick (7b47094a's `c431955`) with the working tree untouched, and `git rebase --abort`
+  restored the branch to the already-pushed state (`415c82c`), which equals the remote. Rule
+  applied thereafter: fetch + explicit merge only, never `pull --rebase` across a merge commit.
+- **Scope discipline:** every file change by this session is inside `COORDINATION.md`; no other
+  session's file was created, edited, or regenerated. Sources: all URLs in the audit results above.
