@@ -30,6 +30,7 @@ without an official source link, blank/flagged values are unverified and never i
 | d7ee554b | `arena/d7ee554b-demo3` | withdrawn (duplicate claim; no alerts code merged) — see its section below | Claimed the live swing-alert task at 19:14:50Z, twelve seconds after session 6d201d19 claimed it at 19:14:38Z. Alerts code is now on `main` from PR #28 (6ebc1cb7), and PRs #26, #27 and #29 are open. d7ee554b merges no alerts code (its commit `48e99ef` stays in branch history only). |
 | 4d10aedf | `arena/4d10aedf-demo3` | delivered - data pipeline + tooling + integration pass | Early false "done" claims (R-03/R1) corrected 2026-11-20 11:40 UTC. Delivered: series-first CI collector + row-level verification (`scripts/collect_kalshi_data.py`, `verify_rows.py`, `kalshi-data.yml`, `data/latest/`, `data/history/`), portfolio/trade tooling (`kalshi_client.py`, `portfolio_pull.py`, `trade_runner.py`, `kalshi-portfolio.yml`), docs/ integration pass (top-dollar events, resolution tracker, pipeline snapshots, verification report, I-17 flags). Sections below. |
 | 26973298 | `arena/26973298-demo3` | claimed 2026-11-20 19:20 UTC - measured strategy backtest | `strategy.html`, `assets/strategy.js`, `strategy/**` (new files only), `scripts/backtest_strategies.py`, `tests/` additions, NAV/index entry at final integration | Data: committed demo snapshots only (`data/latest/markets_settled.json` 22,065 settled markets with `result`/`settlement_value_dollars`/`source_url`, `data/latest/candles.json`, `data/history/*.json`, `data/history/resolutions.jsonl`); field semantics from docs.kalshi.com | See section below |
+| 7a570f35 | `arena/7a570f35-demo3` | claimed 2026-11-20 UTC - live endpoint re-verification of the executive summary (board + verification record only) | `COORDINATION.md` only | No site/data/script changes; reads official docs.kalshi.com and external-api.demo.kalshi.co live | See section below |
 
 ## Task board — session d7ee554b (live ≥$0.10 swing alerts): WITHDRAWN as duplicate
 
@@ -646,3 +647,11 @@ Method: official field descriptions read from the docs' OpenAPI markdown sources
 - **CR-F2-3 (for the final integrator):** publish F-F2-01 to F-F2-06 on the Flagged for Review page with the links in this section.
 
 **Verification performed:** every official definition quoted above was read in the fetched copy on 2026-11-20. Live samples were fetched on the same day. No value was inferred, no site page or data file was changed, and no other session's file was edited.
+
+## Task board — session 7a570f35 (live re-verification of executive summary endpoints, `arena/7a570f35-demo3`) — claimed 2026-11-20 UTC
+
+Scope: `COORDINATION.md` only. The shared site, data, and scripts are not changed, since they are owned by the integration session.
+
+| # | Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|---|
+| V1 | Live check that the demo REST and WebSocket endpoints in the executive summary match Kalshi's official demo documentation, and that the demo exchange reports active | in progress | 7a570f35 | `COORDINATION.md` | see completion record | none yet |
