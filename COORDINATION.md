@@ -723,7 +723,6 @@ Verified on 2026-11-20 by fetching the official pages and the live demo API:
 Irregularities: none in the site data. The sandbox cannot reach the Kalshi API for `scripts/verify_rows.py` (outbound allowlist), so per-row API re-fetch was not run in this session. The scheduled CI workflow performs that check.
 
 No site, data, or script file was changed by this session.
-
 ### Session a613b9fd merge + Pages record
 
 - 2026-11-20 19:45 UTC — **PR #46 (`arena/a613b9fd-demo3` -> `main`) MERGED**, merge commit
@@ -737,3 +736,27 @@ No site, data, or script file was changed by this session.
 - Pages deploy confirmation for the PR #46 merge commit: see the V4 row and the live check below.
 - Duplicate-copy cleanup: main already contained the section via PR #46, so this branch's re-append
   (`c559b44`) was removed; this follow-up commit records V4 done + this log.
+
+---
+
+---
+
+## Task board — session 004aa97a (final integration, verification, PR/merge)
+
+Branch: `arena/004aa97a-demo3` (base `fa6525b`, PR #32 merge). Session ID: `004aa97a`.
+Scope: this COORDINATION.md section (append-only), alignment of `data/` snapshots to the refreshed `main` snapshots, a line-by-line verification pass of the root site and scripts against official Kalshi docs, and the final PR `arena/004aa97a-demo3` -> `main` + merge + GitHub Pages deploy confirmation.
+Non-overlapping scope note: I do NOT edit other sessions' archives (`docs/`, `docs/tracker/`, `analysis/`, `demo-desk/`, `collector/`, `trading/`, their scripts) — only `COORDINATION.md` (append), `data/` (snapshot alignment to already-committed `main` snapshots), and verification/report outputs. Integration itself was previously delivered (session arena-3a22fb0f, PR #18 merged; Pages live); this session adds a verification pass, fresh snapshot alignment, competing-PR resolution record, and a clean final PR/merge from this branch.
+
+| # | Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|------|--------|-------|-----------|------------------------|----------------|
+| J1 | Align `data/` snapshots to refreshed `main` (19 data files differ; no code regression) | done | 004aa97a | `data/**` | `git diff HEAD main --stat` = 19 data files, 0 code files | none |
+| J2 | Line-by-line repo review of root site + scripts vs official Kalshi docs | done | 004aa97a | root `*.html`, `assets/*.js`, `scripts/*.py` | docs.kalshi.com: demo_env, get-markets, get-market-candlesticks, orderbook_responses, market_settlement, api_keys | none (all confirmed) |
+| J3 | Run verification suite (verify_root_site.py, verify_site.py, node --check, backtest tests) | done | 004aa97a | `scripts/`, `assets/`, `strategy/` | `.github/workflows/check.yml` | none |
+| J4 | Record competing swing-alert PRs (#26/#27/#36-#43); canonical = merged PR #28 (`assets/alerts.js`); close duplicates | done | 004aa97a | COORDINATION.md + GitHub PRs | `gh pr list --state open` (F-edf-01 duplicates) | F-edf-01 |
+| J5 | PR to main, merge (no approval wait), confirm Pages deploy, record PR link + result | in progress | 004aa97a | COORDINATION.md | GitHub Pages API | none |
+
+### Session 004aa97a progress log
+
+- 2026-11-20: claim committed & pushed. Verification suite all green (verify_root_site 0 failures, verify_site PASSED, node --check OK, backtest 17/17, tracker_check OK, check_site passed). Official docs confirmed: demo_env, get-markets, get-market-candlesticks, orderbook_responses, market_settlement. `data/` aligned to refreshed `main`. Histories unified via merge of origin/main. PR #50 opened to `main`; merge in progress.
+
+
