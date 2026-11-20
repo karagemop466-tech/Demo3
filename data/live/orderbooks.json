@@ -1,0 +1,195 @@
+{
+  "generated_at": "2026-11-20 ~11:30 UTC (manual re-fetch)",
+  "api_base": "https://api.elections.kalshi.com/trade-api/v2",
+  "method": "Kalshi returns YES bids and NO bids only (levels ascending; best bid last). A NO bid at price P is the same as a YES ask at 1 − P. The 'implied YES ask' column is that conversion, not a separate quote. Contract counts are the API's *_fp values.",
+  "books": {
+    "KXPGATOUR-THRC26-ZBAU": {
+      "ticker": "KXPGATOUR-THRC26-ZBAU",
+      "topic": "golf",
+      "title": "The RSM Classic: Zachary Bauchou wins",
+      "source_url": "https://api.elections.kalshi.com/trade-api/v2/markets/KXPGATOUR-THRC26-ZBAU/orderbook",
+      "fetched_at": "2026-11-20 ~11:30 UTC (manual re-fetch)",
+      "yes_bids": [
+        {
+          "price": 0.001,
+          "contracts": 60548.0
+        },
+        {
+          "price": 0.002,
+          "contracts": 450.0
+        }
+      ],
+      "no_bids": [
+        {
+          "price": 0.001,
+          "contracts": 1000000.0
+        },
+        {
+          "price": 0.002,
+          "contracts": 50000.0
+        },
+        {
+          "price": 0.01,
+          "contracts": 35.0
+        },
+        {
+          "price": 0.02,
+          "contracts": 500.0
+        },
+        {
+          "price": 0.03,
+          "contracts": 11.0
+        },
+        {
+          "price": 0.04,
+          "contracts": 150.0
+        },
+        {
+          "price": 0.041,
+          "contracts": 456.0
+        },
+        {
+          "price": 0.05,
+          "contracts": 7.0
+        },
+        {
+          "price": 0.06,
+          "contracts": 33.0
+        },
+        {
+          "price": 0.35,
+          "contracts": 857.0
+        },
+        {
+          "price": 0.4,
+          "contracts": 750.0
+        },
+        {
+          "price": 0.45,
+          "contracts": 666.0
+        },
+        {
+          "price": 0.47,
+          "contracts": 70.0
+        },
+        {
+          "price": 0.5,
+          "contracts": 600.0
+        },
+        {
+          "price": 0.55,
+          "contracts": 545.0
+        },
+        {
+          "price": 0.6,
+          "contracts": 500.0
+        },
+        {
+          "price": 0.63,
+          "contracts": 60.0
+        },
+        {
+          "price": 0.65,
+          "contracts": 461.0
+        },
+        {
+          "price": 0.7,
+          "contracts": 428.0
+        },
+        {
+          "price": 0.75,
+          "contracts": 400.0
+        },
+        {
+          "price": 0.77,
+          "contracts": 40.0
+        },
+        {
+          "price": 0.78,
+          "contracts": 384.0
+        },
+        {
+          "price": 0.79,
+          "contracts": 5.0
+        },
+        {
+          "price": 0.85,
+          "contracts": 1.0
+        },
+        {
+          "price": 0.87,
+          "contracts": 1.0
+        },
+        {
+          "price": 0.91,
+          "contracts": 30.0
+        },
+        {
+          "price": 0.95,
+          "contracts": 93.0
+        },
+        {
+          "price": 0.96,
+          "contracts": 35.0
+        },
+        {
+          "price": 0.962,
+          "contracts": 4688.0
+        },
+        {
+          "price": 0.97,
+          "contracts": 190.0
+        },
+        {
+          "price": 0.971,
+          "contracts": 11250.0
+        },
+        {
+          "price": 0.972,
+          "contracts": 3750.0
+        },
+        {
+          "price": 0.973,
+          "contracts": 693.5
+        },
+        {
+          "price": 0.98,
+          "contracts": 167.0
+        },
+        {
+          "price": 0.981,
+          "contracts": 7500.0
+        },
+        {
+          "price": 0.982,
+          "contracts": 3000.0
+        },
+        {
+          "price": 0.983,
+          "contracts": 16450.0
+        },
+        {
+          "price": 0.991,
+          "contracts": 11787.0
+        },
+        {
+          "price": 0.994,
+          "contracts": 47.0
+        },
+        {
+          "price": 0.995,
+          "contracts": 12229.0
+        },
+        {
+          "price": 0.996,
+          "contracts": 46559.0
+        },
+        {
+          "price": 0.997,
+          "contracts": 32273.62
+        }
+      ],
+      "depth_note": "Full book as returned by the API at depth default. Empty books are shown as not stored."
+    }
+  }
+}

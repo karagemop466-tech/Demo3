@@ -1,0 +1,1236 @@
+{
+  "generated": "2026-11-20",
+  "generated_note": "Hand-verified against the official sources listed in `sources`. Re-fetched on 2026-11-20 for the values in data/live. Each row cites source IDs (SRC-xx). Items that could not be confirmed are marked UNVERIFIED and left blank, not estimated.",
+  "sources": {
+    "title": "Source registry (official sources only, plus one third-party item flagged as such)",
+    "rows": [
+      {
+        "id": "SRC-01",
+        "label": "Kalshi API docs index (llms.txt)",
+        "url": "https://docs.kalshi.com/llms.txt",
+        "status": "opened",
+        "supports": "List of Kalshi API pages and quick starts (market data needs no authentication)."
+      },
+      {
+        "id": "SRC-02",
+        "label": "Kalshi: Test in the Demo Environment",
+        "url": "https://docs.kalshi.com/getting_started/demo_env.md",
+        "status": "opened",
+        "supports": "Demo uses mock funds; 'price and behavior of markets in the demo environment may not be reflective of those in real markets'; demo REST and WebSocket hosts."
+      },
+      {
+        "id": "SRC-03",
+        "label": "Kalshi: Get Market Orderbook",
+        "url": "https://docs.kalshi.com/api-reference/market/get-market-orderbook.md",
+        "status": "opened",
+        "supports": "Orderbook returns YES bids and NO bids only; a YES bid at X equals a NO ask at 100-X; levels sorted ascending; best bid is last; depth parameter 0-100."
+      },
+      {
+        "id": "SRC-04",
+        "label": "Kalshi: Get Market Candlesticks",
+        "url": "https://docs.kalshi.com/api-reference/market/get-market-candlesticks.md",
+        "status": "opened",
+        "supports": "period_interval must be 1, 60 or 1440 minutes; max 5,000 periods per request; start_ts and end_ts in seconds; volume_fp is the number of contracts bought."
+      },
+      {
+        "id": "SRC-05",
+        "label": "Kalshi: Get Markets",
+        "url": "https://docs.kalshi.com/api-reference/market/get-markets.md",
+        "status": "opened",
+        "supports": "Status filters (unopened, open, closed, settled); cursor paging; ordering; responses cached briefly so prices can lag; servers list (production and demo hosts)."
+      },
+      {
+        "id": "SRC-06",
+        "label": "Kalshi: Get Events",
+        "url": "https://docs.kalshi.com/api-reference/events/get-events.md",
+        "status": "opened",
+        "supports": "with_nested_markets parameter; limit maximum 200; event category field is marked deprecated."
+      },
+      {
+        "id": "SRC-07",
+        "label": "Kalshi: Market Settlement",
+        "url": "https://docs.kalshi.com/getting_started/market_settlement.md",
+        "status": "opened",
+        "supports": "Yes holders receive $1 per contract on a Yes outcome; No holders receive $1 per contract on a No outcome; settlement timing can vary."
+      },
+      {
+        "id": "SRC-08",
+        "label": "Kalshi: Rate Limits and Tiers",
+        "url": "https://docs.kalshi.com/getting_started/rate_limits.md",
+        "status": "opened",
+        "supports": "Unauthenticated public requests have separate limits; back off on HTTP 429."
+      },
+      {
+        "id": "SRC-09",
+        "label": "Kalshi: Get Exchange Status",
+        "url": "https://docs.kalshi.com/api-reference/exchange/get-exchange-status.md",
+        "status": "opened",
+        "supports": "exchange_active and trading_active flags; trading_active is true during trading hours."
+      },
+      {
+        "id": "SRC-10",
+        "label": "Kalshi API: series KXAAAGASM (gas)",
+        "url": "https://api.elections.kalshi.com/trade-api/v2/series/KXAAAGASM",
+        "status": "opened",
+        "supports": "Category Economics; settlement source AAA (https://gasprices.aaa.com/); fee_type quadratic_with_maker_fees; frequency monthly; contract terms PDF link."
+      },
+      {
+        "id": "SRC-11",
+        "label": "Kalshi API: open gas markets (KXAAAGASM, first page)",
+        "url": "https://api.elections.kalshi.com/trade-api/v2/markets?series_ticker=KXAAAGASM&status=open&limit=50",
+        "status": "opened",
+        "supports": "Captured 2026-11-20: 26NOV30 strikes 3.45, 3.55, 3.65, 4.90, 5.00 (prices, sizes, volume_fp, open interest, rules). The 11-17 snapshot also showed 2.50 (not in this capture; not re-verified)."
+      },
+      {
+        "id": "SRC-12",
+        "label": "Kalshi API: settled daily gas markets (KXAAAGASD)",
+        "url": "https://api.elections.kalshi.com/trade-api/v2/markets?series_ticker=KXAAAGASD&status=settled&limit=7",
+        "status": "opened",
+        "supports": "Captured 2026-11-20: five KXAAAGASD-26NOV19 markets (3.7700, 3.7750, 3.7800, 3.7850, 3.7900), all status finalized, result 'no', expiration_value 3.7212, settlement_ts 2026-11-19T12:05:24Z."
+      },
+      {
+        "id": "SRC-13",
+        "label": "AAA Fuel Prices (national average)",
+        "url": "https://gasprices.aaa.com/",
+        "status": "opened",
+        "supports": "Today's AAA national average regular $3.6898 (price as of 11/20/26); yesterday's average $3.7212 (matches the Nov 19 expiration_value in SRC-12)."
+      },
+      {
+        "id": "SRC-14",
+        "label": "Kalshi API: open golf events (KXPGATOUR)",
+        "url": "https://api.elections.kalshi.com/trade-api/v2/events?series_ticker=KXPGATOUR&status=open&with_nested_markets=true&limit=50",
+        "status": "opened",
+        "supports": "RSM Classic winner markets (THRC26): prices, volumes, open interest; finalized LABE and DBER markets with result 'no'."
+      },
+      {
+        "id": "SRC-15",
+        "label": "Kalshi API: open golf markets (KXPGATOUR, first page)",
+        "url": "https://api.elections.kalshi.com/trade-api/v2/markets?series_ticker=KXPGATOUR&status=open&limit=7",
+        "status": "opened",
+        "supports": "Captured 2026-11-20: open RSM Classic winner markets BHAA, RSTR, MJOH, RBRE with prices, sizes, volume_fp and open interest."
+      },
+      {
+        "id": "SRC-16",
+        "label": "Kalshi API: settled golf markets (KXPGATOUR, pages 1-2)",
+        "url": "https://api.elections.kalshi.com/trade-api/v2/markets?series_ticker=KXPGATOUR&status=settled&limit=7",
+        "status": "opened",
+        "supports": "Settled golf winner markets with result 'no', captured 2026-11-20: Cameron Champ, Camilo Villegas, William Mouw, Sudarshan Yellamaraju (page 1 and cursor page 2 read). Earlier captures also show Erik van Rooyen, Emilio Gonzalez and Austin Championship markets."
+      },
+      {
+        "id": "SRC-17",
+        "label": "Kalshi API: BTC hourly events (KXBTCD)",
+        "url": "https://api.elections.kalshi.com/trade-api/v2/events?series_ticker=KXBTCD&status=open&with_nested_markets=true&limit=2",
+        "status": "opened",
+        "supports": "Bitcoin price on Nov 20, 2026 strikes; rules: simple average of 60 seconds of CF Benchmarks BRTI before 7 AM EST at 7 AM EST."
+      },
+      {
+        "id": "SRC-18",
+        "label": "Kalshi API: open BTC markets (KXBTCD, first page)",
+        "url": "https://api.elections.kalshi.com/trade-api/v2/markets?series_ticker=KXBTCD&status=open&limit=7",
+        "status": "opened",
+        "supports": "Captured 2026-11-20: strikes $72,500 to $72,800 with volume_fp 0, open interest 0, yes_ask 0.01 with yes_ask_size 36,777 and yes_bid_size 0."
+      },
+      {
+        "id": "SRC-19",
+        "label": "Kalshi API: open 'Next Pope' markets (KXNEWPOPE)",
+        "url": "https://api.elections.kalshi.com/trade-api/v2/markets?series_ticker=KXNEWPOPE&status=open&limit=7",
+        "status": "opened",
+        "supports": "Captured 2026-11-20: five KXNEWPOPE-70 markets (PPAR, PERD, MZUP, LANT, FAMB) with prices, sizes, volume_fp and open interest; updated_time 2026-10-23 (stale). Rule: first person elected Pope before Jan 1, 2070."
+      },
+      {
+        "id": "SRC-20",
+        "label": "Kalshi API: orderbook KXPGATOUR-THRC26-ZBAU",
+        "url": "https://api.elections.kalshi.com/trade-api/v2/markets/KXPGATOUR-THRC26-ZBAU/orderbook",
+        "status": "opened",
+        "supports": "Captured 2026-11-20: YES bids 0.0010 x 60,548 and 0.0020 x 450. NO bids include 0.9970 x 32,273.62 (equivalent to a YES ask of 0.0030). Full NO-bid list stored in data/live/orderbooks.json."
+      },
+      {
+        "id": "SRC-21",
+        "label": "Kalshi API: daily candlesticks KXPGATOUR-THRC26-ZBAU",
+        "url": "https://api.elections.kalshi.com/trade-api/v2/series/KXPGATOUR/markets/KXPGATOUR-THRC26-ZBAU/candlesticks?start_ts=1793491200&end_ts=1795176000&period_interval=1440",
+        "status": "opened",
+        "supports": "Captured 2026-11-20: five daily candles, 2026-11-16 to 2026-11-20 (05:00 UTC), with OHLC, volume_fp and open_interest_fp."
+      },
+      {
+        "id": "SRC-22",
+        "label": "Kalshi API: series list, Elections",
+        "url": "https://api.elections.kalshi.com/trade-api/v2/series?category=Elections",
+        "status": "opened",
+        "supports": "Elections series (for example KXGOVSENSPLIT, KXRECALLZIMMER, KXBRPRES1MOV) and their settlement_sources."
+      },
+      {
+        "id": "SRC-23",
+        "label": "Kalshi API: series list, Culture",
+        "url": "https://api.elections.kalshi.com/trade-api/v2/series?category=Culture",
+        "status": "opened",
+        "supports": "Culture series KXXBANNEDGROK and KXXBANNEDMURRAYHILLGUY1 and their settlement_sources."
+      },
+      {
+        "id": "SRC-24",
+        "label": "Kalshi API: series list, Crypto",
+        "url": "https://api.elections.kalshi.com/trade-api/v2/series?category=Crypto",
+        "status": "opened",
+        "supports": "Crypto series KXBTCD, KXSOLABOVE110BY, KXETHMAXY, KXXRPMAXMON; settlement sources CF Benchmarks."
+      },
+      {
+        "id": "SRC-25",
+        "label": "Kalshi DEMO API: events (open, limit 5)",
+        "url": "https://external-api.demo.kalshi.co/trade-api/v2/events?status=open&limit=5",
+        "status": "opened",
+        "supports": "Demo host event metadata, for example KXNEWPOPE-70 settlement source 'The Washington Post' with URL https://abc.com/, and KXELONMARS category 'World'."
+      },
+      {
+        "id": "SRC-26",
+        "label": "Kalshi API: events (open, nested markets, limit 5)",
+        "url": "https://api.elections.kalshi.com/trade-api/v2/events?status=open&with_nested_markets=true&limit=5",
+        "status": "opened",
+        "supports": "Production host: KXELONMARS-99 category 'Science and Technology'."
+      },
+      {
+        "id": "SRC-27",
+        "label": "Kalshi: Golf predictions (official site)",
+        "url": "https://kalshi.com/golf/predictions",
+        "status": "opened",
+        "supports": "Latest winners by tour, including PGA Tour: Austin Championship presented by Compliance Solutions, winner Chad Ramey."
+      },
+      {
+        "id": "SRC-28",
+        "label": "Kalshi API: open Culture markets (KXXBANNEDGROK)",
+        "url": "https://api.elections.kalshi.com/trade-api/v2/markets?series_ticker=KXXBANNEDGROK&status=open&limit=7",
+        "status": "opened",
+        "supports": "Returned zero open markets at retrieval time."
+      },
+      {
+        "id": "SRC-29",
+        "label": "Kalshi API: open daily gas markets (KXAAAGASD)",
+        "url": "https://api.elections.kalshi.com/trade-api/v2/markets?series_ticker=KXAAAGASD&status=open&limit=7",
+        "status": "opened",
+        "supports": "Returned zero open markets at retrieval time (all KXAAAGASD markets were settled)."
+      },
+      {
+        "id": "SRC-30",
+        "label": "CF Benchmarks",
+        "url": "https://www.cfbenchmarks.com/",
+        "status": "listed only",
+        "supports": "Settlement index provider named in the Kalshi crypto series metadata (SRC-24). Index content not opened."
+      },
+      {
+        "id": "SRC-31",
+        "label": "Kalshi: Order direction (outcome_side and book_side)",
+        "url": "https://docs.kalshi.com/getting_started/order_direction.md",
+        "status": "listed only",
+        "supports": "Definition of order direction fields (for trade analysis). Content not opened."
+      },
+      {
+        "id": "SRC-32",
+        "label": "Kalshi: Get Balance (portfolio)",
+        "url": "https://docs.kalshi.com/api-reference/portfolio/get-balance",
+        "status": "listed only",
+        "supports": "Balance endpoint (authenticated). Content not opened; link appears in SRC-08."
+      },
+      {
+        "id": "SRC-33",
+        "label": "Kalshi: API Keys",
+        "url": "https://docs.kalshi.com/getting_started/api_keys.md",
+        "status": "listed only",
+        "supports": "Authenticated access for portfolio and trading. Content not opened."
+      },
+      {
+        "id": "SRC-34",
+        "label": "Kalshi: Quick Start: WebSockets",
+        "url": "https://docs.kalshi.com/getting_started/quick_start_websockets.md",
+        "status": "listed only",
+        "supports": "Real-time streaming (needed for second-level data). Authentication requirements not verified."
+      },
+      {
+        "id": "SRC-35",
+        "label": "Kalshi: Order Errors",
+        "url": "https://docs.kalshi.com/getting_started/order_errors.md",
+        "status": "listed only",
+        "supports": "HTTP statuses and error codes for order endpoints (relevant to guardrails). Content not opened."
+      },
+      {
+        "id": "SRC-36",
+        "label": "Kalshi: Fee Rounding",
+        "url": "https://docs.kalshi.com/getting_started/fee_rounding.md",
+        "status": "listed only",
+        "supports": "How trade fees and balances are rounded. Fee amounts not verified in this session."
+      },
+      {
+        "id": "SRC-37",
+        "label": "Kalshi: Get Trades",
+        "url": "https://docs.kalshi.com/api-reference/market/get-trades.md",
+        "status": "listed only",
+        "supports": "Trade-level data (price, quantity, timestamp) for dollar-volume analysis. Content not opened."
+      },
+      {
+        "id": "SRC-38",
+        "label": "Kalshi: Glossary",
+        "url": "https://docs.kalshi.com/getting_started/terms.md",
+        "status": "listed only",
+        "supports": "Definitions of Kalshi terms. Content not opened."
+      },
+      {
+        "id": "SRC-39",
+        "label": "GitHub API: repository",
+        "url": "https://api.github.com/repos/karagemop466-tech/Demo3",
+        "status": "opened",
+        "supports": "Public repository; default branch main."
+      },
+      {
+        "id": "SRC-40",
+        "label": "GitHub API: Pages settings",
+        "url": "https://api.github.com/repos/karagemop466-tech/Demo3/pages",
+        "status": "opened",
+        "supports": "Pages built (legacy), source main branch path /, html_url https://karagemop466-tech.github.io/Demo3/, https_enforced true (read before this work; status after merge is recorded in COORDINATION.md)."
+      },
+      {
+        "id": "SRC-41",
+        "label": "Base commit 80f7c4d (Initial commit)",
+        "url": "https://github.com/karagemop466-tech/Demo3/commit/80f7c4dcdbfe1e8821ebb6b5f319c5cfa3eb38f2",
+        "status": "opened",
+        "supports": "Only file at base: README.md (7 bytes, '# Demo3'). No LICENSE, .gitignore or COORDINATION.md."
+      },
+      {
+        "id": "SRC-42",
+        "label": "Benzinga market note (third-party; flagged)",
+        "url": "https://www.benzinga.com/opinion/26/11/63425374/anthropic-debut-new-i-bonds-pay-5-51-intuit-ross-stores-and-gap-after-hours-earnings",
+        "status": "search result only",
+        "supports": "Third-party report of a national average of $3.75 on Nov 19, 2026. Not used as a data value; it disagrees with AAA (SRC-13)."
+      },
+      {
+        "id": "SRC-43",
+        "label": "Kalshi: Quick Start: Market Data",
+        "url": "https://docs.kalshi.com/getting_started/quick_start_market_data.md",
+        "status": "listed only",
+        "supports": "Real-time market data without authentication (listed in SRC-01)."
+      },
+      {
+        "id": "SRC-44",
+        "label": "Kalshi API: market KXPGATOUR-THRC26-ZBAU",
+        "url": "https://api.elections.kalshi.com/trade-api/v2/markets/KXPGATOUR-THRC26-ZBAU",
+        "status": "opened",
+        "supports": "Captured 2026-11-20: title 'The RSM Classic: Zachary Bauchou wins'; last 0.0030; yes_bid 0.0020 (size 450); yes_ask 0.0030 (size 32,273.62); volume_fp 174,280.04; volume_24h_fp 58,439.56; open interest 169,689.49."
+      }
+    ]
+  },
+  "repo_review": {
+    "title": "Repository review (line by line)",
+    "intro": "Checked on 2026-11-20 with git and the GitHub API. Status: OK, Note, or Irregular. Irregular items go to Flagged for Review.",
+    "rows": [
+      {
+        "id": "R-01",
+        "item": "Repository visibility",
+        "finding": "Public repository (private = false).",
+        "status": "OK",
+        "src": [
+          "SRC-39"
+        ]
+      },
+      {
+        "id": "R-02",
+        "item": "Branches",
+        "finding": "Default branch is main. Working branch arena/3e08e6dc-demo3 was created from base commit 80f7c4d (no other branches created).",
+        "status": "OK",
+        "src": [
+          "SRC-41"
+        ]
+      },
+      {
+        "id": "R-03",
+        "item": "Commit history",
+        "finding": "One commit at base: 'Initial commit' by karagemop466-tech, dated 2026-11-20 03:08:20 -0800.",
+        "status": "Note",
+        "src": [
+          "SRC-41"
+        ]
+      },
+      {
+        "id": "R-04",
+        "item": "Repository content at base",
+        "finding": "Only README.md, containing the text '# Demo3' (7 bytes). No application code, data or tests.",
+        "status": "Note",
+        "src": [
+          "SRC-41"
+        ]
+      },
+      {
+        "id": "R-05",
+        "item": "GitHub Pages configuration",
+        "finding": "Pages is enabled: build_type legacy, source branch main, path '/', status built, HTTPS enforced.",
+        "status": "OK",
+        "src": [
+          "SRC-40"
+        ]
+      },
+      {
+        "id": "R-06",
+        "item": "Pages site content before this work",
+        "finding": "Pages was built from main, but the base commit contained no index.html, so the site had no page to serve. This branch adds index.html and category/review pages (see F-12).",
+        "status": "Irregular",
+        "src": [
+          "SRC-40",
+          "SRC-41"
+        ]
+      },
+      {
+        "id": "R-07",
+        "item": "License and ignore rules",
+        "finding": "No LICENSE file and no .gitignore at base.",
+        "status": "Irregular",
+        "src": [
+          "SRC-41"
+        ]
+      },
+      {
+        "id": "R-08",
+        "item": "Coordination file",
+        "finding": "COORDINATION.md did not exist at base. Created by this session with the task claims, as the brief requires.",
+        "status": "Note",
+        "src": [
+          "SRC-41"
+        ]
+      },
+      {
+        "id": "R-09",
+        "item": "Branch naming rule conflict",
+        "finding": "The brief asks for per-task branches named session-<id>/<task>. The session rules for this run bind all work to the single branch arena/3e08e6dc-demo3 (the branch note), so no per-task branches are created. The rest of the protocol is followed: claims on COORDINATION.md, small commits, git pull --rebase before each push, and integration by this session only.",
+        "status": "Irregular",
+        "src": [
+          "SRC-41"
+        ]
+      },
+      {
+        "id": "R-10",
+        "item": "Demo REST host in the brief",
+        "finding": "Brief: https://external-api.demo.kalshi.co/trade-api/v2. Kalshi docs list the same host as the recommended demo REST endpoint.",
+        "status": "OK",
+        "src": [
+          "SRC-02"
+        ]
+      },
+      {
+        "id": "R-11",
+        "item": "Demo WebSocket hosts in the brief",
+        "finding": "Brief: wss://external-api-ws.demo.kalshi.co/trade-api/ws/v2 and wss://demo-api.kalshi.co/trade-api/ws/v2. Kalshi docs list both as the demo WebSocket endpoints.",
+        "status": "OK",
+        "src": [
+          "SRC-02"
+        ]
+      },
+      {
+        "id": "R-12",
+        "item": "Brief text formatting",
+        "finding": "Brief contains HTML-escaped placeholders ('session-&amp;lt;id&amp;gt;') and a malformed link label for the WebSocket URL. The intended values are taken from the context above.",
+        "status": "Irregular",
+        "src": [
+          "SRC-02"
+        ]
+      },
+      {
+        "id": "R-13",
+        "item": "Production versus demo data for analysis",
+        "finding": "Kalshi documents separate production and demo hosts with separate credentials. The dashboard reads public production market data; trading and portfolio would use the demo host.",
+        "status": "Note",
+        "src": [
+          "SRC-02",
+          "SRC-05"
+        ]
+      },
+      {
+        "id": "R-14",
+        "item": "Demo market data accuracy",
+        "finding": "Kalshi warns that demo market prices and behavior may not reflect real markets. Analysis uses production data; see F-01.",
+        "status": "Irregular",
+        "src": [
+          "SRC-02"
+        ]
+      },
+      {
+        "id": "R-15",
+        "item": "Event category field",
+        "finding": "The events endpoint marks its category field as deprecated. Category is taken from the series endpoint instead.",
+        "status": "Note",
+        "src": [
+          "SRC-06",
+          "SRC-10"
+        ]
+      },
+      {
+        "id": "R-16",
+        "item": "Tests and automation",
+        "finding": "No tests or CI at base. Added on this branch: an offline test for the refresh job (scripts/tests/test_refresh_offline.py); a site and data checker (scripts/check_site.py); .github/workflows/check.yml (tests, checker, JS syntax on push and PR); .github/workflows/refresh.yml (hourly refresh of data/live, which runs after the workflow exists on main). Whether GitHub runners can reach the Kalshi API is UNVERIFIED (see Q-20).",
+        "status": "Note",
+        "src": [
+          "SRC-41"
+        ]
+      }
+    ]
+  },
+  "flagged": {
+    "title": "Flagged for Review",
+    "intro": "Irregularities and unverified items for your review. None of these blocks the merge, as instructed. Each row lists its sources. Action asks what the reviewer needs to decide.",
+    "rows": [
+      {
+        "id": "F-01",
+        "type": "Data reliability",
+        "item": "Demo prices may not represent real markets",
+        "detail": "Kalshi states that demo market prices and behavior may not reflect real markets. Demo events also differ from production (see F-03).",
+        "action": "Confirm that analysis should use production public data and demo only for trading tests.",
+        "src": [
+          "SRC-02",
+          "SRC-25",
+          "SRC-26"
+        ]
+      },
+      {
+        "id": "F-02",
+        "type": "Settlement-source metadata",
+        "item": "KXNEWPOPE settlement source name and URL do not match",
+        "detail": "On the demo host, the KXNEWPOPE-70 event lists 'The Washington Post' with URL https://abc.com/ (metadata mismatch).",
+        "action": "Review whether the source metadata is wrong before relying on it for resolution checks.",
+        "src": [
+          "SRC-25"
+        ]
+      },
+      {
+        "id": "F-03",
+        "type": "Metadata inconsistency",
+        "item": "KXELONMARS category and source URL differ between hosts",
+        "detail": "Demo host: category 'World' and 'The Washington Post' linked to https://www.wsj.com/. Production host: category 'Science and Technology'.",
+        "action": "Confirm which host is authoritative for categories.",
+        "src": [
+          "SRC-25",
+          "SRC-26"
+        ]
+      },
+      {
+        "id": "F-04",
+        "type": "Settlement-source metadata",
+        "item": "KXGOVSENSPLIT (Elections) lists an energy source",
+        "detail": "The series 'Senate-Governor split results' (category Elections) lists 'the Statistical Review of World Energy' as its settlement source, linked to https://kalshi.com/.",
+        "action": "Review the settlement source for this political series.",
+        "src": [
+          "SRC-22"
+        ]
+      },
+      {
+        "id": "F-05",
+        "type": "Settlement-source metadata",
+        "item": "Culture series list unrelated sources and search-page URLs",
+        "detail": "Culture series KXXBANNEDGROK and KXXBANNEDMURRAYHILLGUY1 list 'Energy Information Administration' and several Google search URLs (for example 'account holder of' linked to google.com search) as settlement sources.",
+        "action": "Review settlement sources for culture markets before tracking outcomes.",
+        "src": [
+          "SRC-23"
+        ]
+      },
+      {
+        "id": "F-06",
+        "type": "Rule clarity",
+        "item": "Which AAA reading settles the monthly gas markets",
+        "detail": "KXAAAGASM-26NOV30-2.50 has close_time 2026-11-30T04:59:00Z and expected_expiration_time 2026-11-30T15:00:00Z. Its rule refers to AAA on Nov 30, 2026.",
+        "action": "Confirm the exact AAA reading and time used for settlement.",
+        "src": [
+          "SRC-11",
+          "SRC-07"
+        ]
+      },
+      {
+        "id": "F-07",
+        "type": "Third-party disagreement",
+        "item": "Third-party national average differs from AAA",
+        "detail": "A Benzinga note dated Nov 19, 2026 cites a national average of $3.75. AAA's page shows $3.7212 for Nov 19 (yesterday's average on 11/20/26). This dashboard uses AAA only.",
+        "action": "No action needed unless you want third-party gas prices used anywhere.",
+        "src": [
+          "SRC-42",
+          "SRC-13"
+        ]
+      },
+      {
+        "id": "F-08",
+        "type": "Field semantics",
+        "item": "expiration_value is inconsistent across golf events",
+        "detail": "RSM Classic markets show expiration_value 'The RSM Classic' (tournament name). Austin Championship markets show 'Chad Ramey' (winner name). The field does not mean the same thing in both.",
+        "action": "Do not use expiration_value for golf until its meaning is confirmed.",
+        "src": [
+          "SRC-16"
+        ]
+      },
+      {
+        "id": "F-09",
+        "type": "Unverified outcome",
+        "item": "Austin Championship winner market not captured",
+        "detail": "The official Kalshi golf page reports Chad Ramey as the winner of the Austin Championship. The settled markets captured here show 'no' for the other players. The Ramey market is not in the captured pages, so its yes result is UNVERIFIED.",
+        "action": "The refresh job will capture YES outcomes; confirm the Ramey market result after the next run.",
+        "src": [
+          "SRC-27",
+          "SRC-16"
+        ]
+      },
+      {
+        "id": "F-10",
+        "type": "Quote reliability",
+        "item": "BTC hourly strikes are quoted with zero trades",
+        "detail": "In the 2026-11-20 capture, the KXBTCD-26NOV2007 strikes ($72,500 to $72,800) show volume_fp 0 and open interest 0. Each shows yes_ask 0.01 with yes_ask_size 36,777 and yes_bid_size 0. An earlier capture in this session showed large yes_bid sizes (30k to 50k), which the current capture does not. These values are not confirmed.",
+        "action": "Treat these quotes as indicative only. Check the orderbook before using them for any decision.",
+        "src": [
+          "SRC-17",
+          "SRC-18"
+        ]
+      },
+      {
+        "id": "F-11",
+        "type": "Data check",
+        "item": "Gas 2.50 volume equals open interest",
+        "detail": "In the 11-17 snapshot, KXAAAGASM-26NOV30-2.50 showed volume_fp 28,786.99 and open_interest_fp 28,786.99, exactly equal. The 2.50 strike is not in the 11-20 capture, so this value is not re-verified.",
+        "action": "Re-fetch the 2.50 market, then verify against trade-level data before using either field.",
+        "src": [
+          "SRC-11"
+        ]
+      },
+      {
+        "id": "F-12",
+        "type": "Repository",
+        "item": "Pages site had no index.html at base",
+        "detail": "GitHub Pages was enabled from main, but the base repository contained only README.md. This branch adds the site; see R-06. The live URL is checked after merge and recorded in COORDINATION.md.",
+        "action": "Confirm the live site after the Pages deploy.",
+        "src": [
+          "SRC-40",
+          "SRC-41"
+        ]
+      },
+      {
+        "id": "F-13",
+        "type": "Requirement gap",
+        "item": "'Highest dollar amount' cannot be read directly",
+        "detail": "The API ranks by contract count (volume_fp). The docs define volume_fp as contracts bought. Dollars traded need trade-level data. The dashboard shows contracts and labels 'max payout' (contracts x $1) as derived.",
+        "action": "Choose the ranking metric: contracts (current) or dollars traded (needs trade data, see S-02).",
+        "src": [
+          "SRC-04",
+          "SRC-37"
+        ]
+      },
+      {
+        "id": "F-14",
+        "type": "Requirement gap",
+        "item": "Second-level price charts not available through REST candlesticks",
+        "detail": "Candlesticks support only 1-minute, 1-hour and 1-day periods. Second-level charts would need the WebSocket feed, whose authentication requirements are UNVERIFIED in this session.",
+        "action": "Choose: minute-level charts now, or add a WebSocket feed (see S-04).",
+        "src": [
+          "SRC-04",
+          "SRC-34"
+        ]
+      },
+      {
+        "id": "F-15",
+        "type": "Blocked",
+        "item": "Portfolio, trades and demo account results are not available",
+        "detail": "No demo API credentials are available in this sandbox. Portfolio balances, positions, fills and P&L are UNVERIFIED and blank. No trades were placed.",
+        "action": "Provide a demo API key pair through a secret store (see S-09), or confirm the alternative in the questions list.",
+        "src": [
+          "SRC-33",
+          "SRC-02"
+        ]
+      },
+      {
+        "id": "F-16",
+        "type": "Coverage gap",
+        "item": "No open Culture markets at retrieval",
+        "detail": "The sampled Culture series returned zero open markets. Culture coverage is therefore empty in this snapshot.",
+        "action": "Confirm the culture topics of interest so the series list can be extended (see S-01).",
+        "src": [
+          "SRC-28",
+          "SRC-23"
+        ]
+      },
+      {
+        "id": "F-17",
+        "type": "Coverage gap",
+        "item": "Seed is a sample, not the full exchange",
+        "detail": "The seed uses the first page(s) of each series. Full ranking by volume is produced by the scheduled refresh job; its first run is pending.",
+        "action": "Review the first refresh run output after merge.",
+        "src": [
+          "SRC-05"
+        ]
+      },
+      {
+        "id": "F-18",
+        "type": "Coverage gap",
+        "item": "Only NO resolutions captured in the seed",
+        "detail": "The captured settled markets are all 'no'. YES outcomes are not in the captured pages, so yes/no coverage is incomplete.",
+        "action": "Confirm after the next refresh run that both outcomes appear.",
+        "src": [
+          "SRC-12",
+          "SRC-16"
+        ]
+      },
+      {
+        "id": "F-19",
+        "type": "Unverified cost",
+        "item": "Trading fees not verified",
+        "detail": "Series metadata lists fee_type (quadratic or quadratic_with_maker_fees), but the fee amounts and formulas were not opened in this session. No fee is shown anywhere in this dashboard.",
+        "action": "Open the fee docs and confirm fee amounts before any net-return calculation.",
+        "src": [
+          "SRC-10",
+          "SRC-36"
+        ]
+      },
+      {
+        "id": "F-20",
+        "type": "Data semantics",
+        "item": "Orderbook is bids only",
+        "detail": "Kalshi returns YES bids and NO bids only. YES asks shown on the Liquidity page are derived from NO bids (1 - price), as the docs describe. They are labelled 'implied'.",
+        "action": "None; reviewer may confirm the derived-ask convention.",
+        "src": [
+          "SRC-03"
+        ]
+      },
+      {
+        "id": "F-21",
+        "type": "Unverified runtime",
+        "item": "Scheduled refresh not yet run against the live API",
+        "detail": "refresh.yml runs hourly on main. Its first live run is not yet observed. The offline test passes against a mock that follows the documented field shapes, which does not prove parsing of real responses.",
+        "action": "After merge, check the first Actions run and data/live/meta.json. Report any error.",
+        "src": [
+          "SRC-05",
+          "SRC-08"
+        ]
+      }
+    ]
+  },
+  "questions": {
+    "title": "Questions, information and answers",
+    "intro": "What is answered, what is partly answered, what is not, and how to find the missing pieces. Status: Answered, Partial, or Unanswered.",
+    "rows": [
+      {
+        "id": "Q-01",
+        "question": "Which live events have the most trading volume in gas, elections, culture, crypto and golf?",
+        "status": "Partial",
+        "answer": "Largest in the 2026-11-20 captures (first page of each query; volume_fp, unit not confirmed). Golf: 'The RSM Classic: Zachary Bauchou wins' 174,280.04 (ZBAU); next open golf market Robert Streb 16,578.83. Gas (open, 26NOV30): 3.55 strike 58,065.22 is the largest captured, then 3.65 at 52,393.73. Elections: Pietro Parolin 26,231.02. Culture: none captured. Crypto: captured KXBTCD strikes show 0.",
+        "missing": "Full universe ranking; dollar amounts (not a field, see Q-02); culture; the 2.50 gas strike (not in the current capture).",
+        "how": "S-01 (expand series), S-02 (dollars from trades).",
+        "src": [
+          "SRC-44",
+          "SRC-11",
+          "SRC-19",
+          "SRC-18",
+          "SRC-15"
+        ]
+      },
+      {
+        "id": "Q-02",
+        "question": "Is 'volume' in dollars?",
+        "status": "Answered",
+        "answer": "The candlestick docs define volume_fp as the number of contracts bought. The unit of the market-object volume_fp fields was not confirmed in the docs read, so they are shown as 'contracts (unit not confirmed)'. No dollar volume field was found.",
+        "missing": "Dollars traded (requires trades).",
+        "how": "S-02.",
+        "src": [
+          "SRC-04",
+          "SRC-05"
+        ]
+      },
+      {
+        "id": "Q-03",
+        "question": "How are markets resolved as yes or no?",
+        "status": "Answered",
+        "answer": "Each market's rules_primary text states the condition. Example: KXAAAGASD-26NOV19-3.7900 resolves Yes only if the AAA average is strictly greater than $3.79 on Nov 19, 2026. Result: no. Kalshi recorded expiration_value 3.7212, which matches AAA's Nov 19 average on the AAA page.",
+        "missing": "None for these markets.",
+        "how": "Not needed.",
+        "src": [
+          "SRC-12",
+          "SRC-13",
+          "SRC-07"
+        ]
+      },
+      {
+        "id": "Q-04",
+        "question": "What happens to a golf winner market if the golfer withdraws?",
+        "status": "Answered",
+        "answer": "Per rules_secondary: tournament winner and end-of-round leader markets resolve to No; finishing position, make-the-cut, head-to-head and 3-ball markets resolve to Fair Market Value.",
+        "missing": "None.",
+        "how": "Not needed.",
+        "src": [
+          "SRC-14"
+        ]
+      },
+      {
+        "id": "Q-05",
+        "question": "How are BTC hourly markets settled?",
+        "status": "Answered",
+        "answer": "The simple average of the sixty seconds of the CF Benchmarks Bitcoin Real-Time Index before 7 AM EST, taken at 7 AM EST on the stated date.",
+        "missing": "None for the rule text.",
+        "how": "Not needed.",
+        "src": [
+          "SRC-17"
+        ]
+      },
+      {
+        "id": "Q-06",
+        "question": "What price-history granularity is available?",
+        "status": "Partial",
+        "answer": "REST candlesticks offer 1-minute, 1-hour and 1-day periods, at most 5,000 periods per request.",
+        "missing": "Second-level history over REST.",
+        "how": "S-04 (WebSocket feed; authentication UNVERIFIED).",
+        "src": [
+          "SRC-04",
+          "SRC-34"
+        ]
+      },
+      {
+        "id": "Q-07",
+        "question": "How many contracts are available at a given price?",
+        "status": "Answered",
+        "answer": "The orderbook gives the resting quantity at each price level. Example, KXPGATOUR-THRC26-ZBAU (2026-11-20 capture): 60,548 contracts bid to buy YES at $0.001; 450 at $0.002. NO bids at $0.997 total 32,273.62 contracts, which equals 32,273.62 contracts available to buy YES at $0.003 (yes_ask_size on the market object).",
+        "missing": "Order counts (not returned by the API).",
+        "how": "Not needed.",
+        "src": [
+          "SRC-03",
+          "SRC-20",
+          "SRC-14"
+        ]
+      },
+      {
+        "id": "Q-08",
+        "question": "What does the demo account hold (balance, positions, P&L)?",
+        "status": "Unanswered",
+        "answer": "UNVERIFIED. No demo API credentials are available in this sandbox, so no portfolio data was retrieved.",
+        "missing": "Demo API key pair; portfolio data.",
+        "how": "S-09 (store keys as a GitHub secret). User decision needed.",
+        "src": [
+          "SRC-33",
+          "SRC-02"
+        ]
+      },
+      {
+        "id": "Q-09",
+        "question": "Do demo prices match production?",
+        "status": "Answered",
+        "answer": "Not guaranteed. Kalshi says demo prices and behavior 'may not be reflective' of real markets.",
+        "missing": "A side-by-side comparison.",
+        "how": "S-12 (compare demo and production for the same tickers).",
+        "src": [
+          "SRC-02"
+        ]
+      },
+      {
+        "id": "Q-10",
+        "question": "What are the trading fees?",
+        "status": "Unanswered",
+        "answer": "UNVERIFIED. Series metadata lists fee_type only; the fee schedule was not opened.",
+        "missing": "Fee amounts and formulas.",
+        "how": "Open SRC-36 and confirm before any net-return calculation (S-13).",
+        "src": [
+          "SRC-10",
+          "SRC-36"
+        ]
+      },
+      {
+        "id": "Q-11",
+        "question": "Is the exchange open for trading now?",
+        "status": "Partial",
+        "answer": "The refresh job calls GET /exchange/status on every run. The seed did not capture it, so the current state is UNVERIFIED in this snapshot.",
+        "missing": "Current status value in the seed.",
+        "how": "The first refresh run fills this in (see S-08).",
+        "src": [
+          "SRC-09"
+        ]
+      },
+      {
+        "id": "Q-12",
+        "question": "How often can the public data be requested?",
+        "status": "Partial",
+        "answer": "Unauthenticated public requests have separate limits; the docs say to back off on HTTP 429. The numeric public limit is not stated on the page opened.",
+        "missing": "Numeric public limit.",
+        "how": "The refresh job backs off on 429 and spaces requests.",
+        "src": [
+          "SRC-08"
+        ]
+      },
+      {
+        "id": "Q-13",
+        "question": "Are settlement sources correct and consistent?",
+        "status": "Partial",
+        "answer": "Several metadata mismatches were found (F-02 to F-05). Gas (AAA) and crypto (CF Benchmarks) sources match their rule text.",
+        "missing": "Review of the remaining series.",
+        "how": "S-05 (automatic source health check).",
+        "src": [
+          "SRC-22",
+          "SRC-23",
+          "SRC-25"
+        ]
+      },
+      {
+        "id": "Q-14",
+        "question": "Which of the five topics currently have open markets?",
+        "status": "Partial",
+        "answer": "Gas (KXAAAGASM), elections (KXNEWPOPE), crypto (KXBTCD) and golf (KXPGATOUR) have open markets in the sample. Culture had none for the series checked.",
+        "missing": "Open culture series.",
+        "how": "S-01.",
+        "src": [
+          "SRC-11",
+          "SRC-19",
+          "SRC-18",
+          "SRC-14",
+          "SRC-28"
+        ]
+      },
+      {
+        "id": "Q-15",
+        "question": "Who is prohibited from trading each contract?",
+        "status": "Unanswered",
+        "answer": "Not checked in this session. Series metadata may list additional prohibitions; check the series page before trading.",
+        "missing": "Per-market checks on your own eligibility.",
+        "how": "Check the series metadata for each market before any trade (no trades exist yet).",
+        "src": [
+          "SRC-17",
+          "SRC-24"
+        ]
+      },
+      {
+        "id": "Q-16",
+        "question": "What trades and strategies has the account made?",
+        "status": "Unanswered",
+        "answer": "None. No trades were placed and no trade history is available.",
+        "missing": "Demo account and trades.",
+        "how": "S-09 and S-10.",
+        "src": [
+          "SRC-33"
+        ]
+      },
+      {
+        "id": "Q-17",
+        "question": "What are your risk limits, bankroll and decision rules?",
+        "status": "Unanswered",
+        "answer": "Not provided in the brief.",
+        "missing": "Limits (maximum contracts, notional, daily loss) and what 'best path' means for you.",
+        "how": "Ask the user; see S-11 for guardrails.",
+        "src": [
+          "SRC-41"
+        ]
+      },
+      {
+        "id": "Q-18",
+        "question": "Should the dashboard use production data or demo data?",
+        "status": "Unanswered",
+        "answer": "Production public data is used for market tracking. The brief names the demo endpoint, but Kalshi says demo prices may not reflect real markets.",
+        "missing": "Your choice.",
+        "how": "Decision for the user (see F-01).",
+        "src": [
+          "SRC-02"
+        ]
+      },
+      {
+        "id": "Q-19",
+        "question": "Do AAA and third-party gas reports agree?",
+        "status": "Partial",
+        "answer": "No, not always. AAA's Nov 19 average is $3.7212 (matches Kalshi's expiration_value). A third-party note cites $3.75. The dashboard uses AAA.",
+        "missing": "None needed for AAA-settled markets.",
+        "how": "Not needed.",
+        "src": [
+          "SRC-13",
+          "SRC-12",
+          "SRC-42"
+        ]
+      },
+      {
+        "id": "Q-20",
+        "question": "Can the scheduled refresh (GitHub Actions) reach the Kalshi public API?",
+        "status": "Unanswered",
+        "answer": "UNVERIFIED. The sandbox cannot reach the Kalshi hosts (curl returns 000), so the refresh job has run only against a local mock. GitHub runners are not tested from here.",
+        "missing": "A live run from GitHub Actions and its meta.json (calls_ok, calls_failed, errors).",
+        "how": "After merge, run the Refresh Kalshi data workflow manually and read data/live/meta.json. If it fails, the site keeps the 2026-11-20 snapshot and the refresh does not overwrite data (the script stops when no API call succeeds).",
+        "src": [
+          "SRC-08",
+          "SRC-41"
+        ]
+      }
+    ]
+  },
+  "suggestions": {
+    "title": "Suggestions for better decisions (for your choice; none implemented without approval)",
+    "intro": "Choose, per ID, one of: Approve, Defer, or Reject. Reply with the IDs and your choice. Until you decide, every suggestion stays 'Pending', and nothing here is applied to the site, data or trading.",
+    "rows": [
+      {
+        "id": "S-01",
+        "suggestion": "Discover all open series in each topic automatically, instead of a fixed list, so culture and elections are fully covered.",
+        "benefit": "Fixes the culture gap (F-16) and widens elections coverage.",
+        "information_needed": "Full series list per category; paging cost.",
+        "effort": "Medium",
+        "decision": "Pending",
+        "src": [
+          "SRC-22",
+          "SRC-23",
+          "SRC-05"
+        ]
+      },
+      {
+        "id": "S-02",
+        "suggestion": "Compute dollars traded per market from trade-level data (contracts times price), and rank by that.",
+        "benefit": "Answers the 'highest dollar amount' requirement directly (Q-01, F-13).",
+        "information_needed": "Paged trades per market.",
+        "effort": "Medium",
+        "decision": "Pending",
+        "src": [
+          "SRC-37",
+          "SRC-04"
+        ]
+      },
+      {
+        "id": "S-03",
+        "suggestion": "Add liquidity measures to the Liquidity page: spread (ask minus bid), depth within 1 and 5 cents of the best price, and the average price to buy N contracts from the book.",
+        "benefit": "Shows the cost to enter or exit a position, not only the quantity.",
+        "information_needed": "Orderbook levels (already fetched).",
+        "effort": "Low",
+        "decision": "Pending",
+        "src": [
+          "SRC-03"
+        ]
+      },
+      {
+        "id": "S-04",
+        "suggestion": "Add a WebSocket feed for second-level price charts.",
+        "benefit": "Meets the 'seconds' chart request (F-14).",
+        "information_needed": "Whether the public WebSocket needs authentication (UNVERIFIED).",
+        "effort": "High",
+        "decision": "Pending",
+        "src": [
+          "SRC-34",
+          "SRC-04"
+        ]
+      },
+      {
+        "id": "S-05",
+        "suggestion": "Automatic settlement-source health check that flags any source whose name and URL do not match.",
+        "benefit": "Catches cases like F-02 to F-05 before a position depends on them.",
+        "information_needed": "Series and event metadata (already fetched).",
+        "effort": "Low",
+        "decision": "Pending",
+        "src": [
+          "SRC-22",
+          "SRC-23",
+          "SRC-25"
+        ]
+      },
+      {
+        "id": "S-06",
+        "suggestion": "Resolution tracker: store the last price before settlement and the yes or no outcome for every resolved market, and check how well prices predicted outcomes once enough markets have resolved.",
+        "benefit": "Tests whether market prices are well calibrated before any strategy is built on them.",
+        "information_needed": "Settled markets (refresh job collects these).",
+        "effort": "Medium",
+        "decision": "Pending",
+        "src": [
+          "SRC-05",
+          "SRC-07"
+        ]
+      },
+      {
+        "id": "S-07",
+        "suggestion": "Show the AAA national average and its daily change next to every gas strike.",
+        "benefit": "Gives the settlement reference beside each price.",
+        "information_needed": "AAA national average (official page, SRC-13).",
+        "effort": "Low",
+        "decision": "Pending",
+        "src": [
+          "SRC-13",
+          "SRC-12"
+        ]
+      },
+      {
+        "id": "S-08",
+        "suggestion": "Show the exchange status banner (exchange_active and trading_active) on every page.",
+        "benefit": "Avoids acting on prices while trading is paused.",
+        "information_needed": "GET /exchange/status (called by the refresh job).",
+        "effort": "Low",
+        "decision": "Pending",
+        "src": [
+          "SRC-09"
+        ]
+      },
+      {
+        "id": "S-09",
+        "suggestion": "Connect the demo account through a demo API key pair stored as a GitHub Actions secret, never in the repository, and build a portfolio snapshot job.",
+        "benefit": "Unblocks portfolio performance, trade analysis and strategy categories (T4).",
+        "information_needed": "A demo API key pair supplied by you through the secret store. This is a manual step on your side, and I cannot create it.",
+        "effort": "Medium",
+        "decision": "Pending",
+        "src": [
+          "SRC-33",
+          "SRC-02",
+          "SRC-32"
+        ]
+      },
+      {
+        "id": "S-10",
+        "suggestion": "Record every trade with its definition fields (side, outcome side, price, contract count, fees, result, realized profit or loss) so that trades can be categorized later.",
+        "benefit": "Makes trade categories and strategy analysis reproducible.",
+        "information_needed": "Field definitions from the order and trade docs.",
+        "effort": "Medium",
+        "decision": "Pending",
+        "src": [
+          "SRC-31",
+          "SRC-37"
+        ]
+      },
+      {
+        "id": "S-11",
+        "suggestion": "Pre-trade guardrails before any order: a maximum number of contracts per market, a maximum notional, a daily loss limit, and a kill switch.",
+        "benefit": "Limits losses from mistakes before any trading begins.",
+        "information_needed": "Your limit values (decision for you) and the order error codes.",
+        "effort": "Medium",
+        "decision": "Pending",
+        "src": [
+          "SRC-35",
+          "SRC-08"
+        ]
+      },
+      {
+        "id": "S-12",
+        "suggestion": "Compare demo and production prices for the same tickers before any strategy is tested.",
+        "benefit": "Shows whether demo results carry over to production (Q-09).",
+        "information_needed": "Both hosts' market data.",
+        "effort": "Low",
+        "decision": "Pending",
+        "src": [
+          "SRC-02"
+        ]
+      },
+      {
+        "id": "S-13",
+        "suggestion": "Net each expected return of a trade against the official fee schedule before showing it.",
+        "benefit": "Stops gross edges from looking profitable when fees remove them (Q-10).",
+        "information_needed": "Fee amounts and formulas (UNVERIFIED).",
+        "effort": "Low",
+        "decision": "Pending",
+        "src": [
+          "SRC-36",
+          "SRC-10"
+        ]
+      }
+    ]
+  },
+  "portfolio": {
+    "title": "Demo account portfolio and trades",
+    "status": "BLOCKED",
+    "reason": "No demo API credentials are available in this sandbox. Authenticated endpoints cannot be called. No trades were placed and no values were estimated.",
+    "rows": [
+      {
+        "metric": "Demo cash balance",
+        "value": "",
+        "status": "UNVERIFIED",
+        "src": [
+          "SRC-32",
+          "SRC-33"
+        ]
+      },
+      {
+        "metric": "Open positions",
+        "value": "",
+        "status": "UNVERIFIED",
+        "src": [
+          "SRC-33",
+          "SRC-02"
+        ]
+      },
+      {
+        "metric": "Fills (trades placed)",
+        "value": "",
+        "status": "UNVERIFIED",
+        "src": [
+          "SRC-31",
+          "SRC-37"
+        ]
+      },
+      {
+        "metric": "Realized profit or loss",
+        "value": "",
+        "status": "UNVERIFIED",
+        "src": [
+          "SRC-07",
+          "SRC-33"
+        ]
+      },
+      {
+        "metric": "Unrealized profit or loss",
+        "value": "",
+        "status": "UNVERIFIED",
+        "src": [
+          "SRC-07",
+          "SRC-33"
+        ]
+      },
+      {
+        "metric": "Fees paid",
+        "value": "",
+        "status": "UNVERIFIED",
+        "src": [
+          "SRC-36"
+        ]
+      },
+      {
+        "metric": "Trades executed by this agent",
+        "value": "0",
+        "status": "Verified: none placed (no credentials)",
+        "src": [
+          "SRC-33"
+        ]
+      }
+    ]
+  },
+  "strategies": {
+    "title": "Trade categorization and strategy analysis (framework; no trades yet)",
+    "intro": "No trades exist, so no strategy results can be reported. This table lists the fields each trade record needs, with the official definitions they depend on. Results stay blank until trades exist.",
+    "rows": [
+      {
+        "field": "Market ticker and event",
+        "definition": "Unique identifier of the contract and its event.",
+        "value": "",
+        "src": [
+          "SRC-38",
+          "SRC-05"
+        ]
+      },
+      {
+        "field": "Outcome side (Yes or No)",
+        "definition": "Direction of the order; see Kalshi order direction fields.",
+        "value": "",
+        "src": [
+          "SRC-31"
+        ]
+      },
+      {
+        "field": "Price and contract count",
+        "definition": "Price per contract in dollars and number of contracts; a Yes contract pays $1 on a Yes result.",
+        "value": "",
+        "src": [
+          "SRC-07",
+          "SRC-37"
+        ]
+      },
+      {
+        "field": "Fees",
+        "definition": "Trade fees, rounded per Kalshi's fee rounding rules.",
+        "value": "",
+        "src": [
+          "SRC-36"
+        ]
+      },
+      {
+        "field": "Settlement result",
+        "definition": "The recorded yes or no result of the market.",
+        "value": "",
+        "src": [
+          "SRC-12",
+          "SRC-07"
+        ]
+      },
+      {
+        "field": "Category of trade (proposed)",
+        "definition": "Categories will be defined only after trades exist (see S-10). No category is applied yet.",
+        "value": "",
+        "src": [
+          "SRC-31"
+        ]
+      }
+    ]
+  }
+}

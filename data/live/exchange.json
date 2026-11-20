@@ -1,0 +1,6 @@
+{
+  "fetched_at": "2026-11-20 (seed)",
+  "source_url": null,
+  "response": null,
+  "note": "Not captured in the seed. The refresh job calls GET /exchange/status (docs: https://docs.kalshi.com/api-reference/exchange/get-exchange-status) on every run."
+}
