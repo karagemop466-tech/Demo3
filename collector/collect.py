@@ -48,7 +48,7 @@ MARKETS_PER_EVENT_CAP = 30   # keep the largest markets per event in the payload
 TRACKED_CAP = 150
 RESOLUTION_LOOKBACK_DAYS = 90
 CANDLE_RANGES = {1: (1, 24 * 60), 60: (60, 30 * 24 * 60), 1440: (1440, 180 * 24 * 60)}
-EVENT_PAGES = 45             # x200 = 9,000 open events incl. nested markets
+EVENT_PAGES = 60             # x200 = 12,000 open events incl. nested markets
 
 # Seed series with OFFICIAL ticker evidence for the settled-resolution sweep
 # (Kalshi fee schedule https://kalshi.com/docs/kalshi-fee-schedule.pdf:
@@ -659,10 +659,19 @@ class Collector:
                 # 'all' pages only 200 markets; keep it best-effort and note truncation
                 self.warn(f"series sweep {series}: used status=all (status=settled unavailable); "
                           "results limited to the first page")
-        # keep the newest 400 by-market resolutions
-        items = sorted(by_market.items(),
-                       key=lambda kv: (kv[1].get("settled_time") or ""), reverse=True)
-        resolutions["by_market"] = dict(items[:400])
+        # Keep per-series quotas (newest first) so no topic's history crowds out
+        # another's - crypto series (thousands of settled markets) would otherwise
+        # fill the whole cap and evict gas/golf resolutions (observed live run 3).
+        by_series: dict[str, list] = defaultdict(list)
+        for ticker, rec in by_market.items():
+            by_series[rec.get("series_ticker") or "(none)"].append((ticker, rec))
+        per_series_cap = 50
+        kept: dict[str, dict] = {}
+        for series, rows in sorted(by_series.items()):
+            rows.sort(key=lambda kv: (kv[1].get("settled_time") or ""), reverse=True)
+            for ticker, rec in rows[:per_series_cap]:
+                kept[ticker] = rec
+        resolutions["by_market"] = kept
         resolutions["updated_at"] = utc_now_iso()
         self.write_json("resolutions.json", resolutions)
         self.warn(f"series resolution sweep: checked {checked_series} series, "
