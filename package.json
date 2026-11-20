@@ -1,0 +1,11 @@
+{
+  "name": "kalshi-demo-desk",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Source-linked, read-only GitHub Pages dashboard for Kalshi demo market data.",
+  "scripts": {
+    "check": "node --check src/api.js && node --check src/chart.js && node --check src/content.js && node --check src/main.js && node --check src/metrics.js && node --check src/renderers.js && node --check src/shell.js && node --check src/topics.js && node --check src/utils.js",
+    "test": "node --test"
+  }
+}

@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101d2b">
+  <meta name="description" content="A source-linked, read-only dashboard for Kalshi demo markets in gas prices, elections, culture, crypto, and golf.">
+  <title>Market dashboard · Kalshi Demo Desk</title>
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body data-page="home" data-root="">
+  <div class="app-shell">
+    <aside id="site-sidebar" class="sidebar"></aside>
+    <div class="content-column">
+      <header id="site-topbar" class="topbar"></header>
+      <main id="page-main" class="page-main">
+        <section class="page-heading dashboard-heading">
+          <div>
+            <p class="eyebrow">Live markets · Kalshi demo</p>
+            <h1>Make the market legible.</h1>
+            <p class="page-lede">A focused watch across gas prices, elections, culture, crypto, and golf—anchored to contract rules and official source data.</p>
+          </div>
+          <div class="heading-meta"><span class="live-indicator"><span></span> DEMO REST FEED</span><span id="last-updated">Waiting for first response</span></div>
+        </section>
+
+        <section class="callout callout-warning" aria-label="Important data limitation">
+          <span class="callout-icon" aria-hidden="true">!</span>
+          <div><strong>Dollar ranking is not verified yet.</strong><span>Public REST volume is reported in contracts. Exact dollar-volume fields are documented on an authenticated WebSocket. This dashboard will not relabel contract counts as dollars; see <a href="pages/review.html">Flagged for Review</a>.</span></div>
+        </section>
+
+        <section class="metric-grid" aria-label="Market overview">
+          <article class="metric-card"><div class="metric-top"><span>Open topic events</span><span class="metric-icon icon-green">◈</span></div><strong id="stat-events">—</strong><small>From currently loaded demo events</small></article>
+          <article class="metric-card"><div class="metric-top"><span>Active markets</span><span class="metric-icon icon-blue">↗</span></div><strong id="stat-markets">—</strong><small>REST status <code>active</code></small></article>
+          <article class="metric-card metric-muted"><div class="metric-top"><span>Dollar-volume rank</span><span class="metric-icon icon-amber">$</span></div><strong>—</strong><small>Not available in this public mode</small></article>
+          <article class="metric-card metric-muted"><div class="metric-top"><span>Demo portfolio</span><span class="metric-icon icon-purple">▦</span></div><strong>Not connected</strong><small>No credentials or account values loaded</small></article>
+        </section>
+
+        <section class="topic-strip" aria-labelledby="topic-title">
+          <div class="section-heading compact-heading"><div><p class="eyebrow">Your scope</p><h2 id="topic-title">Five focused topics</h2></div><a class="text-link" href="pages/questions.html">Review the open questions <span aria-hidden="true">→</span></a></div>
+          <div class="topic-card-grid">
+            <a class="topic-card topic-card-gas" href="pages/gas-prices.html"><span class="topic-card-symbol">01</span><span><strong>Gas prices</strong><small id="topic-count-gas">— events</small></span><span class="topic-arrow">↗</span></a>
+            <a class="topic-card topic-card-elections" href="pages/elections.html"><span class="topic-card-symbol">02</span><span><strong>Elections</strong><small id="topic-count-elections">— events</small></span><span class="topic-arrow">↗</span></a>
+            <a class="topic-card topic-card-culture" href="pages/culture.html"><span class="topic-card-symbol">03</span><span><strong>Culture</strong><small id="topic-count-culture">— events</small></span><span class="topic-arrow">↗</span></a>
+            <a class="topic-card topic-card-crypto" href="pages/crypto.html"><span class="topic-card-symbol">04</span><span><strong>Crypto</strong><small id="topic-count-crypto">— events</small></span><span class="topic-arrow">↗</span></a>
+            <a class="topic-card topic-card-golf" href="pages/golf.html"><span class="topic-card-symbol">05</span><span><strong>Golf</strong><small id="topic-count-golf">— events</small></span><span class="topic-arrow">↗</span></a>
+          </div>
+        </section>
+
+        <section class="panel market-panel" aria-labelledby="live-markets-heading">
+          <div class="panel-heading">
+            <div><p class="eyebrow">Public demo market data</p><h2 id="live-markets-heading">Live topic events</h2><p>Event rows aggregate values across active child markets only. Sort is by contract count—not dollar amount.</p></div>
+            <div class="panel-controls">
+              <label class="control-label" for="event-sort">Sort by
+                <select id="event-sort" class="select-control"><option value="volume">24h volume · contracts</option><option value="openInterest">Open interest · contracts</option></select>
+              </label>
+              <label class="search-control"><span class="sr-only">Search events and markets</span><span aria-hidden="true">⌕</span><input id="event-search" type="search" placeholder="Search events" autocomplete="off"></label>
+            </div>
+          </div>
+          <div class="table-context"><span id="coverage-status">Awaiting demo API response</span><span>Each event row has an official Kalshi API source link.</span></div>
+          <div id="market-table-container" class="table-container" aria-live="polite"><div class="loading-state"><span class="spinner" aria-hidden="true"></span>Connecting to Kalshi demo market data…</div></div>
+        </section>
+
+        <section class="analysis-grid">
+          <article class="panel chart-panel" aria-labelledby="chart-heading">
+            <div class="panel-heading chart-panel-heading">
+              <div><p class="eyebrow">Price history</p><h2 id="chart-heading">Contract price movement</h2><p>YES last-trade price in dollars. Time is the x-axis; price is the y-axis.</p></div>
+              <div class="chart-controls">
+                <label class="control-label" for="event-market-picker">Market
+                  <select id="event-market-picker" class="select-control"><option value="">Select an event above</option></select>
+                </label>
+                <label class="control-label" for="chart-window">Window
+                  <select id="chart-window" class="select-control"><option value="15000">15 seconds</option><option value="30000">30 seconds</option><option value="60000">1 minute</option><option value="120000">2 minutes</option><option value="300000">5 minutes</option><option value="900000" selected>15 minutes</option><option value="1800000">30 minutes</option><option value="3600000">1 hour</option><option value="21600000">6 hours</option><option value="43200000">12 hours</option><option value="86400000">24 hours</option></select>
+                </label>
+              </div>
+            </div>
+            <div id="selected-market-summary" class="selected-market-summary"><div class="empty-state compact"><strong>Select an event above</strong><span>The chart will use official candlesticks when available and clearly labeled local REST observations for the latest sample.</span></div></div>
+            <div id="chart-container" class="chart-container"><div class="empty-state chart-empty"><strong>Price chart waiting for a market</strong><span>Short windows use REST-observation timestamps; official candles are 1m, 1h, or 1d.</span></div></div>
+            <div class="chart-footnote"><span id="chart-source-note">No chart data loaded.</span><span>Refresh cadence: 15 seconds while this page is visible.</span></div>
+          </article>
+
+          <article class="panel orderbook-panel" aria-labelledby="orderbook-heading">
+            <div class="panel-heading"><div><p class="eyebrow">Current displayed depth</p><h2 id="orderbook-heading">Liquidity by price</h2><p>Available contract counts at each public bid price level.</p></div><span class="depth-chip">DEMO</span></div>
+            <div id="orderbook-container" class="table-container"><div class="empty-state compact"><strong>Select a market</strong><span>Order-book price levels will load from Kalshi's public demo endpoint.</span></div></div>
+          </article>
+        </section>
+
+        <section class="panel settlement-panel">
+          <div class="panel-heading"><div><p class="eyebrow">Contract-specific evidence</p><h2>Settlement sources</h2><p>Source names are shown only when returned by the selected event's official API record.</p></div></div>
+          <div id="settlement-source-container" class="table-container"><div class="empty-state compact"><strong>Select an event above</strong><span>Market rules and settlement-source fields are contract-specific.</span></div></div>
+        </section>
+
+        <section class="bottom-grid">
+          <article class="info-card info-card-blue"><span class="info-kicker">Portfolio &amp; trades</span><h3>No account data is being simulated.</h3><p>Balance, fills, performance, and order entry need signed demo access behind secure server-side infrastructure.</p><a class="text-link" href="pages/portfolio.html">See the safe connection boundary <span aria-hidden="true">→</span></a></article>
+          <article class="info-card info-card-green"><span class="info-kicker">Before any decision</span><h3>Separate knowns from missing facts.</h3><p>Review the dollar metric, settlement rules, topic mapping, and risk controls before interpreting a ranking.</p><a class="text-link" href="pages/questions.html">Open questions &amp; answers <span aria-hidden="true">→</span></a></article>
+        </section>
+
+        <noscript><div class="callout callout-warning"><strong>JavaScript is required for live market data.</strong> No market or account values are embedded in this site.</div></noscript>
+      </main>
+      <footer id="site-footer" class="site-footer"></footer>
+    </div>
+  </div>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
