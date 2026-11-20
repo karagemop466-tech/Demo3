@@ -1476,3 +1476,10 @@ No values were inferred; unchecked items are stated as unchecked.
   kept for the record.
 - **Checks re-run on this session's merged branch** (main @ `a3451de`-era + board sections):
   `verify_root_site.py` 0 failures; `verify_site.py` PASSED (28 pages).
+
+### Session f2b0808f — I-F2-07 root cause and fix (Pages builds)
+
+- **Root cause (documented limit):** GitHub Pages sites built from a branch (legacy "deploy from branch") have a *soft limit of 10 builds per hour*; the limit does not apply to sites published by a custom GitHub Actions workflow ([GitHub Pages limits](https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits), read 2026-11-20). From 19:39Z the repo produced more than 10 legacy builds per hour: each merge or snapshot push triggered one, and `collect.yml` requested one more per run through the Pages API. Builds then returned `errored` / "Page build failed." (Pages API, `pages/builds`; error text carries no more detail). Size was ruled out: tracked bytes 87.2 MB (`04d1a4e`) vs 87.4 MB (`cb31fa7`), files 275 vs 280.
+- **Fix (this session):** new `.github/workflows/pages.yml` publishes the repo root as an Actions artifact with `actions/configure-pages@v5`, `actions/upload-pages-artifact@v3`, `actions/deploy-pages@v4`, on push to `main` and `workflow_dispatch`. `.git` and `.github` are excluded from the site; `.nojekyll` is kept.
+- **Change request CR-F2-4 (owner `3b5e95bd`, file `.github/workflows/collect.yml`; made here because the collector's rebuild step depended on the legacy API):** the step "Request Pages rebuild" (`POST /pages/builds`) is replaced by a `workflow_dispatch` of `pages.yml` (`POST /actions/workflows/pages.yml/dispatches`), and `actions: write` was added to its permissions. Reason: `GITHUB_TOKEN` pushes do not trigger push workflows, and `workflow_dispatch` is the documented exception.
+- **Pages source:** must be switched from "deploy from branch" to "GitHub Actions" for the new workflow to publish. This is a repository setting; see the log below for the result.
