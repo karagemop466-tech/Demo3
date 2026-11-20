@@ -6,6 +6,12 @@
  *   - "High ROI model": a selective filter using a documented, transparent
  *     multi-factor score (NOT a trained model — no model exists in this repo).
  *
+ * Tracked events are followed until they resolve: when the exchange reports a
+ * settlement result ("yes" | "no", Get Markets `result` field), a RESOLVED
+ * message is posted to the chats so the feed shows how each tracked event ended.
+ * Sources: https://docs.kalshi.com/api-reference/market/get-markets
+ *          https://docs.kalshi.com/getting_started/market_settlement
+ *
  * Each alert row links official sources:
  *   - the exact market API URL (GET /markets/{ticker})
  *   - the event API URL (GET /events/{event_ticker}) and the event's official
@@ -37,6 +43,9 @@
   var KD = window.KD = window.KD || {};
   var ALERT_KEY = "kd_alerts_v1";
   var SWING = 0.10;                 // dollars = 10 cents, the alert threshold
+  var SWING_UNITS = 1000;           // $0.10 in 0.0001 units — prices carry up to 4 dp (deci-cent)
+                                    // per Get Markets; integer math is float-safe at the boundary
+                                    // and does not round 9.99c moves up to 10c
   var MAX_ALERTS = 300;
   var API_BASE = "https://external-api.demo.kalshi.co/trade-api/v2";   // demo REST root (docs: demo_env)
   var RES_KEY = "kd_resolutions_v1";    // resolutions logged for alerted markets
@@ -62,7 +71,8 @@
   var ROI_THRESHOLD = 0.5;
   function clamp(x, lo, hi) { return Math.max(lo, Math.min(hi, x)); }
   function roiModel(oldP, newP, oi) {
-    var change = (Math.round(Number(newP) * 100) - Math.round(Number(oldP) * 100)) / 100;
+    // Integer-cents change: exact $0.10 moves read as 0.1 (0.6-0.5 = 0.0999… in IEEE-754)
+    var change = (Math.round(Number(newP) * 10000) - Math.round(Number(oldP) * 10000)) / 10000;
     var swingC = Math.abs(change) * 100;                 // cents
     var swingNorm = clamp(swingC / 50, 0, 1);
     var pct = Number(oldP) ? Math.abs(change) / Number(oldP) : 0;
@@ -111,10 +121,11 @@
     if (cur === null || cur === undefined) return;
     var prev = state.lastPrice[m.ticker];
     if (prev && prev.price !== null && prev.price !== undefined) {
-      var change = cur - prev.price;
-      // Float-safe: an exact 10¢ move (0.60 - 0.50) is 0.0999… in binary, so
-      // compare with a tiny epsilon rather than dropping boundary swings.
-      if (Math.abs(change) >= SWING - 1e-9) {
+      // Float-safe threshold: compare integer 0.0001 units so a move of exactly
+      // $0.10 alerts reliably (0.60 - 0.50 is 0.0999… in binary) while a 9.99c
+      // move does not (deci-cent prices like 0.5499 must not round up to 10c).
+      var changeUnits = Math.round(cur * 10000) - Math.round(prev.price * 10000);
+      if (Math.abs(changeUnits) >= SWING_UNITS) {
         var a = pushAlert(m, prev.price, cur);
         if (a) { a.event = m.event_ticker || ""; a.rules = m.rules_primary || ""; persist(); loadEvent(a.event); }
       }
@@ -133,16 +144,15 @@
   };
 
   function pushAlert(m, oldP, newP) {
-    // change in integer cents (float-safe: 0.60 - 0.50 = 0.0999… in binary float,
-    // which would display 9.99¢ for an exact 10¢ move). Detection already uses
-    // an epsilon above; this makes the recorded/displayed move exact as well.
-    var change = (Math.round(Number(newP) * 100) - Math.round(Number(oldP) * 100)) / 100;
+    // Float-safe: derive the change from integer 0.0001 units so exactly $0.10 reads as 0.1
+    var change = (Math.round(Number(newP) * 10000) - Math.round(Number(oldP) * 10000)) / 10000;
     var dir = change > 0 ? "up" : change < 0 ? "down" : "flat";
     var series = m.series_ticker || "";
     var eventTicker = m.event_ticker || "";
     var model = roiModel(oldP, newP, m.oi);
     var alert = {
       id: "a" + Date.now() + Math.random().toString(36).slice(2, 6),
+      kind: "swing",
       ts: Math.floor(Date.now() / 1000),
       ticker: m.ticker,
       title: m.title || m.ticker,
@@ -346,6 +356,29 @@
     if (a && a.ticker) watchTicker(a.ticker, { series: a.series, title: a.title, topic: a.topic });
   });
 
+
+  /* ---------- dashboard watcher bridge ----------
+   * assets/dashboard.js follows EVERY market the dashboard has seen (not only
+   * alerted ones) until it resolves, and reports each settlement through
+   * KD.onResolution. One canonical record: KD.noteResolution stores it once and
+   * the chat feeds render RESOLVED · YES/NO rows from it. Values are the Get
+   * Markets `result` / settlement fields — never inferred.
+   * Sources: https://docs.kalshi.com/api-reference/market/get-markets
+   *          https://docs.kalshi.com/getting_started/market_settlement
+   */
+  KD.onResolution = function (res) {
+    if (!res || !res.ticker) return false;
+    return KD.noteResolution({
+      ticker: res.ticker, title: res.title, topic: res.topic,
+      series: res.series, result: res.result, status: res.status,
+      settlement_value_dollars: (res.settlement_value_dollars === undefined ||
+        res.settlement_value_dollars === null) ? "" : res.settlement_value_dollars,
+      settlement_ts: res.settlement_ts || "",
+      event_ticker: res.event_ticker || "",
+      source: "dashboard resolution watcher (GET /markets?tickers=\u2026)"
+    });
+  };
+
   /* ---------- chat row selection ---------- */
   KD.allRows = function () { return state.alerts; };
   KD.roiRows = function () { return state.alerts.filter(function (a) { return a.roiSignal; }); };
@@ -357,11 +390,9 @@
     return items.concat((resolutions || []).map(function (r) { return { kind: "resolution", ts: r.ts, row: r }; }))
       .sort(function (x, y) { return (y.ts || 0) - (x.ts || 0); });
   }
-  /** All-events chat: every swing alert plus the resolution of each alerted market. */
+  /** All-events chat: every swing alert and every tracked market's resolution. */
   KD.allFeed = function () {
-    var rows = KD.allRows(), keep = {};
-    rows.forEach(function (a) { keep[a.ticker] = 1; });
-    return feed(rows, resFor(keep));
+    return feed(KD.allRows(), state.resolutions);
   };
   /** High-ROI chat: screened swings plus those same markets' resolutions. */
   KD.roiFeed = function () {

@@ -71,8 +71,11 @@ if the browser blocks the request the tables fall back to the snapshot links in
 
 <div class="card">
   <h2>3 · Resolution tracking (yes / no)</h2>
-  <p class="small muted">Markets are logged here when they close or settle with a result while the
-  page is open. Seeded rows below come from the verified snapshot
+  <p class="small muted">Every market the dashboard has seen is followed until it resolves: a watcher
+  re-checks the watchlist in batches (<span class="mono">GET /markets?tickers=&hellip;</span>) and logs each
+  settlement with its yes/no result &mdash; the <code>result</code> field reported by the exchange
+  (<a href="https://docs.kalshi.com/getting_started/market_settlement" target="_blank" rel="noopener">Market Settlement</a>).
+  Resolutions are also posted to the alert chat (section 6). Seeded rows below come from the verified snapshot
   (<a href="docs/tracker/data/snapshot.json">snapshot.json</a> ·
   <a href="docs/data/verified.json">verified.json</a>).</p>
   <div id="seededResolutions"></div>
@@ -116,6 +119,10 @@ if the browser blocks the request the tables fall back to the snapshot links in
      <em>All events</em> shows every swing; <em>High ROI model</em> applies a documented, transparent score
      (0.4&middot;swing size + 0.3&middot;relative move + 0.3&middot;liquidity) shown in the score column
      &mdash; a labeled unverified heuristic (no trained model exists; flagged F-5B-02, never presented as verified ROI).
+     Tracked events are followed <strong>until they resolve</strong>: when the exchange reports a settlement
+     result the chat posts a <strong>RESOLVED &middot; YES/NO</strong> message
+     (<a href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noopener">Get Markets</a> <code>result</code> field &middot;
+     <a href="https://docs.kalshi.com/getting_started/market_settlement" target="_blank" rel="noopener">Market Settlement</a>).
      Each row links its official sources: the market API URL and, in <em>Context</em>, the event's official
      <code>settlement_sources</code> (Get Event). Those are resolution sources, not proof of cause: each row
      says "Cause not verified" (F-5B-01). Alerts persist in this browser only.
