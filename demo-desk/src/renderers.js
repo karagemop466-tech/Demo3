@@ -142,7 +142,7 @@ export function renderSelectedMarket(container, event, market) {
   const links = [
     source ? `<a href="${escapeHTML(source)}" target="_blank" rel="noopener noreferrer">Market API ↗</a>` : "",
     event?.event_ticker ? `<a href="${escapeHTML(eventSourceURL(event))}" target="_blank" rel="noopener noreferrer">Event API ↗</a>` : "",
-  ].filter(Boolean).join("<span aria-hidden="true">·</span>");
+  ].filter(Boolean).join('<span aria-hidden="true">·</span>');
   container.innerHTML = `
     <div class="selected-market-heading">
       <div><span class="eyebrow">Selected contract</span><h3>${escapeHTML(market?.title || market?.yes_sub_title || market?.ticker || "Market")}</h3><code>${escapeHTML(market?.ticker || "")}</code></div>
