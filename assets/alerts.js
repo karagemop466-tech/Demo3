@@ -62,7 +62,8 @@
     if (prev && prev.price !== null && prev.price !== undefined) {
       var change = cur - prev.price;
       if (Math.abs(change) >= SWING) {
-        pushAlert(m.ticker, m.title, m.topic, m.series_ticker, prev.price, cur);
+        var a = pushAlert(m.ticker, m.title, m.topic, m.series_ticker, prev.price, cur);
+        if (a) { a.event = m.event_ticker || ""; a.rules = m.rules_primary || ""; persist(); loadEvent(a.event); }
       }
     }
     state.lastPrice[m.ticker] = { price: cur, ts: sample.t };
@@ -100,12 +101,64 @@
     alert.roiSignal = Math.abs(change) >= SWING && pct >= 0.10;
     state.alerts.unshift(alert);
     if (state.alerts.length > MAX_ALERTS) state.alerts.length = MAX_ALERTS;
-    try { localStorage.setItem(ALERT_KEY, JSON.stringify(state.alerts)); } catch (e) {}
+    persist();
     render();
     if (window.KalshiTrade && window.KalshiTrade.onSwingAlert) {
       try { window.KalshiTrade.onSwingAlert(alert); } catch (e) { /* automation must not break alerts */ }
     }
     return alert;
+  }
+
+  function persist() {
+    try { localStorage.setItem(ALERT_KEY, JSON.stringify(state.alerts)); } catch (e) {}
+  }
+
+  /* ---------- sharp-jump context: official event record ----------
+   * GET /events/{event_ticker} (Get Event) returns settlement_sources[{name,url}]:
+   * the sources the exchange uses to resolve the event. These are shown as
+   * context links only. They do NOT prove what caused a price move.
+   * Source: https://docs.kalshi.com/api-reference/events/get-event
+   */
+  KD.events = {};                   // event_ticker -> {status, sources, title, api}
+  function loadEvent(evt) {
+    if (!evt || KD.events[evt]) return;
+    KD.events[evt] = { status: "loading", sources: [], title: "", api: eventUrl(evt) };
+    fetch(eventUrl(evt), { headers: { Accept: "application/json" } })
+      .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+      .then(function (j) {
+        var ev = j.event || {};
+        KD.events[evt] = {
+          status: "ok", title: ev.title || "", api: eventUrl(evt),
+          sources: (ev.settlement_sources || []).filter(function (s) {
+            return s && typeof s.url === "string" && /^https:\/\//.test(s.url);
+          })
+        };
+        render();
+      })
+      .catch(function () {
+        KD.events[evt] = { status: "error", sources: [], title: "", api: eventUrl(evt) };
+        render();
+      });
+  }
+  function eventUrl(evt) {
+    return "https://external-api.demo.kalshi.co/trade-api/v2/events/" + encodeURIComponent(evt);
+  }
+  function contextCell(a) {
+    if (!a.event) return "<span class='muted small'>event not recorded (older alert)</span>";
+    var ev = KD.events[a.event];
+    var out = "<a class='src' href='" + esc(eventUrl(a.event)) + "' target='_blank' rel='noopener'>event API</a>";
+    if (!ev || ev.status === "loading") return out + " <span class='muted small'>loading settlement sources&hellip;</span>";
+    if (ev.status === "error") return out + " <span class='muted small'>event record unavailable (browser/API blocked) &mdash; not inferred</span>";
+    if (!ev.sources.length) return out + " <span class='muted small'>API lists no settlement sources</span>";
+    out += ev.sources.map(function (s) {
+      return " <a class='src' href='" + esc(s.url) + "' target='_blank' rel='noopener'>" + esc(s.name || s.url) + "</a>";
+    }).join("");
+    return out;
+  }
+  function rulesCell(a) {
+    if (!a.rules) return "";
+    return "<details class='rules'><summary class='small'>rules (Get Market rules_primary)</summary><div class='small'>" +
+      esc(a.rules) + "</div></details>";
   }
 
   /* ---------- chat row selection ---------- */
@@ -131,15 +184,16 @@
       "<td>" + esc(a.title) + "</td>" +
       "<td class='num'>" + cents(a.oldPrice) + " &rarr; " + cents(a.newPrice) + "</td>" +
       "<td class='num " + esc(dirLabel) + "'>" + arrow + " " + cents(Math.abs(a.change)) + "</td>" +
-      "<td><a class='src' href='" + esc(a.api) + "' target='_blank' rel='noopener'>market API</a>" + esc(roiBadge) + "</td></tr>";
+      "<td><a class='src' href='" + esc(a.api) + "' target='_blank' rel='noopener'>market API</a>" + esc(roiBadge) + "</td>" +
+      "<td class='ctx'>" + contextCell(a) + "<div class='small muted'>Cause not verified: a listed source is not proof that it moved the price.</div>" + rulesCell(a) + "</td></tr>";
   }
   function renderPanel(el, rows, label, emptyHint) {
     if (!el) return;
     var rowsHtml = rows.map(alertRow).join("");
-    var empty = rows.length ? "" : "<tr><td colspan='7' class='muted'>No " + label + " swing alerts yet. " + emptyHint + "</td></tr>";
+    var empty = rows.length ? "" : "<tr><td colspan='8' class='muted'>No " + label + " swing alerts yet. " + emptyHint + "</td></tr>";
     el.innerHTML =
       "<table class='alerts'><thead><tr><th>Time</th><th>Topic</th><th>Ticker</th><th>Event</th>" +
-      "<th>Price move</th><th>Swing</th><th>Source</th></tr></thead><tbody>" + rowsHtml + empty + "</tbody></table>";
+      "<th>Price move</th><th>Swing</th><th>Source</th><th>Context (official links)</th></tr></thead><tbody>" + rowsHtml + empty + "</tbody></table>";
   }
   function render() {
     renderPanel(document.getElementById("alertsAll"), KD.allRows(), "all",
