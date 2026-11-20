@@ -15,7 +15,10 @@ on:
   schedule:
     - cron: '*/15 * * * *'
   push:
-    branches: ['main']
+    # `arena/**` lets a session branch exercise the real (networked) run before its PR
+    # is merged; the paths filter keeps it off every other session's pushes, since only
+    # this session's scope touches catalysts/**.
+    branches: ['main', 'arena/**']
     paths:
       - 'catalysts/**'
       - '.github/workflows/catalysts.yml'
