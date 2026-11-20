@@ -56,6 +56,10 @@ Change requests to the owner of PR #26 (file owner; not edited by d7ee554b):
 
 Note on flagged items: d7ee554b's A1-01…A1-06 flags and S-A1-1…3 suggestions were registered in `scripts/build_root_site.py` only on its own branch. They are withdrawn with the implementation. The same points should go through PR #26 (its flags F-6D-01…06).
 
+**Merge record (d7ee554b).** PR #30 (`arena/d7ee554b-demo3` → `main`, board-only, squash) merged at 2026-11-20 19:29:00 UTC, merge commit `61ad98a`. Checks passed on the PR head (`checks` job). GitHub Pages: the latest build at 19:38 UTC is `built` for commit `04d1a4e` (the earlier `errored` builds belong to other merges, and the Pages queue was busy). Live check of `https://karagemop466-tech.github.io/Demo3/COORDINATION.md` shows the d7ee554b record.
+
+**Follow-up finding for `main`:** the alert chat merged in PR #28 also has no yes/no resolution handling (`grep -c "result|RESOLVED|resolved" assets/alerts.js` on `main` = 0). This applies to CR-6D-1 for the owner of the merged code (`6ebc1cb7`) as well.
+
 ## Task board — session 4ea36f44 (source-linked Demo Desk)
 
 | Task | Status | Owner | File scope | Sources / verification | Irregularities |
