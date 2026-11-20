@@ -234,3 +234,18 @@ Log:
 Merge record (3e08e6dc):
 - PR: _see the merge record below_
 - Pages: _pending_
+
+---
+
+## Session arena/d330ff7d-demo3 — source-first monitor subsite
+
+Branch: `arena/d330ff7d-demo3` (Arena-managed branch; kept as the only working branch). The initial claim commit `54225d1` was pushed before implementation. The branch base was `80f7c4d`; final integration is rebasing on the advanced `main` rather than replacing its existing root, `docs/`, tracker, or analysis sites.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| Kalshi demo API research, five-topic dashboard, event ranking, chart/orderbook, paper portfolio, resolutions, questions/suggestions/flags | implemented under `demo-monitor/`; post-rebase verification pending | `arena/d330ff7d-demo3` | `demo-monitor/**`, `.github/workflows/site-check.yml` | Official links and research note in the subsite; static and synthetic tests passed before rebase | Local paper simulator only; no credentials or live browser test |
+| Final integration with current `main`, link from existing landing page, PR/merge, Pages verification | in progress | `arena/d330ff7d-demo3` | Append to this board; update root README and add a landing-page link only after preserving existing content | Rebase on `origin/main` at `8c69e2d`; rerun both existing and subsite checks | Pages API pre-PR status was `building`; Actions-source update previously returned HTTP 403 |
+
+Requirements preserved: official source links on table rows; unknown values blank and flagged; the “highest dollar” proxy is explicitly provisional and limited to displayed top-of-book; the local simulator is not real demo-account trading; seconds-range points are browser-observed only; category mappings and current feed coverage remain reviewable. Full sources and checks are recorded in `demo-monitor/docs/research-notes.md` and `demo-monitor/README.md`.
+
+Pre-rebase checks (2026-11-20 UTC): subsite verifier passed for 14 pages; Node syntax checks and synthetic API fixture passed; local HTTP smoke tests returned 200 for `/demo-monitor/`, all subsite HTML pages, assets, and scripts. Browser execution/CORS and live Kalshi data remain unverified. Re-run after rebase and record the final PR, merge, and Pages result below.
