@@ -3502,7 +3502,7 @@
   },
   {
    "check": "orderbook KXPRESNOMD-28-BS structure",
-   "detail": "{\"no_dollars\": [[\"0.0300\", \"10.00\"], [\"0.9930\", \"47619.04\"], [\"0.9940\", \"55555.54\"], [\"0.9950\", \"66225.17\"]], \"yes_dolla",
+   "detail": "{\"no_dollars\": [[\"0.0300\", \"10.00\"], [\"0.9930\", \"47619.04\"], [\"0.9940\", \"55555.54\"], [\"0.9950\", \"66193.57\"]], \"yes_dolla",
    "ok": true
   },
   {
@@ -3512,7 +3512,7 @@
   },
   {
    "check": "orderbook KXPRESNOMD-28-EWAR structure",
-   "detail": "{\"no_dollars\": [[\"0.9700\", \"5555.55\"], [\"0.9800\", \"8333.33\"], [\"0.9900\", \"16645.41\"]], \"yes_dollars\": []}",
+   "detail": "{\"no_dollars\": [], \"yes_dollars\": []}",
    "ok": true
   },
   {
@@ -3523,16 +3523,6 @@
   {
    "check": "orderbook KXPRESNOMD-28-GW structure",
    "detail": "{\"no_dollars\": [[\"0.1200\", \"1589.00\"], [\"0.1210\", \"1665.00\"], [\"0.1220\", \"1688.00\"], [\"0.1230\", \"1699.00\"], [\"0.1240\", \"",
-   "ok": true
-  },
-  {
-   "check": "event KXMIDTERMVOTETURN-TX31 exists+title",
-   "detail": "title live='Texas 31 House General Election: voter turnout'",
-   "ok": true
-  },
-  {
-   "check": "event KXSTATELEGME-28NOV07MEH080 exists+title",
-   "detail": "title live='Maine House District 80 winner? (2028)'",
    "ok": true
   },
   {
@@ -3624,6 +3614,16 @@
    "check": "event KXSTATELEGMO-28NOV07MOS025 exists+title",
    "detail": "title live='Missouri Senate District 25 winner? (2028)'",
    "ok": true
+  },
+  {
+   "check": "event KXSTATELEGNM-28NOV07NMH052 exists+title",
+   "detail": "title live='New Mexico House District 52 winner? (2028)'",
+   "ok": true
+  },
+  {
+   "check": "event KXBTCD-28JAN1222 exists+title",
+   "detail": "title live='Bitcoin price on Jan 12, 2028 at 10pm EST?'",
+   "ok": true
   }
  ],
  "drift_notices": [],
@@ -3640,5 +3640,5 @@
   "passed": 725
  },
  "tool": "scripts/verify_rows.py v1",
- "verified_at": "2026-11-20T20:56:35+00:00"
+ "verified_at": "2026-11-20T21:02:04+00:00"
 }
