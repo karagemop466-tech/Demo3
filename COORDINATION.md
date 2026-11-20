@@ -1,5 +1,12 @@
 # COORDINATION.md — Shared Task Board (integrated)
 
+## Task board — session `arena/def4df8c-demo3` (verification-only pass)
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| V1 Final repository, test-suite, and Pages status audit (no product/code edits) | in progress | `arena/def4df8c-demo3` | Append-only section in `COORDINATION.md` | Re-run existing repository verifiers and tests; inspect official GitHub repository Pages/build status; do not make or restate Kalshi claims without fresh official-source checks. | Three unrelated open PRs (#17, #19, #23) were visible at audit start; defer their integration to their owners/final integration rather than duplicate or merge their scopes. |
+
+
 Project: Kalshi demo dashboard (repo `Demo3`). Live site: https://karagemop466-tech.github.io/Demo3/
 Sessions on this board: `00a943bd` (site under `docs/`, merged via PRs #2/#3, Pages live), `7f1ef378`
 (root-level pages, PR #4 OPEN), `cde2ae63` (PRs #6/#7 merged; conflicts resolved keeping the
