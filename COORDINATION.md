@@ -11,6 +11,7 @@ Rules: claim a task before work (write session ID + file scope, commit & push im
 |---|---|---|---|
 | 00a943bd | `arena/00a943bd-demo3` | active - integration and delivery | Built the integrated site in `docs/` (landing, category subpages gas/elections/culture/crypto/golf, dashboard, charts, liquidity, tracking, portfolio, flagged page), `scripts/build_site.py`, `scripts/verify_site.py`; verified with jsdom smoke tests; PRs #2 and #3 merged; Pages built/live at 5c5473d; root `index.html` redirects to `docs/index.html`. |
 | 7f1ef378 | `arena/7f1ef378-demo3` | active - integration (this session) | Root-level `index.html` landing + executive summary, `dashboard.html` live client-side dashboard, `api-reference.html`, `methodology.html`, `suggestions.html`, `questions.html`, `flagged.html`, `assets/style.css`, `assets/app.js`, `assets/dashboard.js`, `scripts/kalshi_demo.py`; PR #4 (`arena/7f1ef378-demo3` -> `main`) adds root-level pages on top of the `docs/` site. |
+| 3b5e95bd | `arena/3b5e95bd-demo3` | active - automation delivery | Scheduled server-side collector (`collector/`, `.github/workflows/collect.yml`, committed `data/` snapshots: tracked live events ranked by estimated dollar volume, orderbooks, 1m/60m/1440m candlestick history, resolution tracking until settled), demo-account trade/portfolio automation (`trading/`, `.github/workflows/trade.yml`), offline pipeline tests. See task board below. |
 
 Rule note: the brief asks for `session-<id>/<task>` branches, but the platform fixes each session to `arena/<id>-demo3` (see irregularity R-04).
 
@@ -36,7 +37,20 @@ Rule note: the brief asks for `session-<id>/<task>` branches, but the platform f
 | 5 | Python CLI helper | done | 7f1ef378 | scripts/kalshi_demo.py | Same as #1; read-only without key; authenticated ops via env vars only | — |
 | 6 | Final integration: verify links, PR #4 to main, merge, confirm Pages deploy | in progress | 7f1ef378 | all files; PR #4: https://github.com/karagemop466-tech/Demo3/pull/4 | Static site; link check 0 broken (see log) | — |
 
-## Change requests / file-ownership (non-overlapping scopes)
+## Task board — session 3b5e95bd (automation: scheduled collection + demo trading)
+
+| # | Task | Status | Owner | Files touched | Sources / verification | Irregularities |
+|---|------|--------|-------|---------------|------------------------|----------------|
+| A1 | Scheduled server-side collector: snapshot tracked live events (gas, elections, culture, crypto, golf) ranked by estimated dollar volume; orderbooks; 1m/60m/1440m candlestick history; CORS probe; commit under `data/` | done | 3b5e95bd | `collector/kalshi_api.py`, `collector/collect.py`, `collector/test_collect.py`, `.github/workflows/collect.yml`, `data/**` | Offline pipeline tests against mock shapes mirroring live demo responses captured 2026-11-20 (`/events?status=open`, `/markets?limit=2&status=open` via page fetch); docs.kalshi.com quick_start_market_data, api_environments, get-market-candlesticks, pagination | F7 (sandbox egress), F8 (status enum active/open), F4-style dollar-volume estimate reused, labeled `est_` |
+| A2 | Resolution tracking: tracked events re-polled until settled; outcome (yes/no), winning markets, settlement sources persisted to `data/resolutions.json` + `data/tracked.json` | done | 3b5e95bd | `collector/collect.py` (sweep), `data/tracked.json`, `data/resolutions.json` | docs.kalshi.com market_settlement; demo settled-market shape (`result` yes/no) verified via live capture; sweep capped 40/run, 15-min fresh-skip for rate budget | none |
+| A3 | Demo-account trade/portfolio automation: signed REST (Ed25519/RSA-PSS per docs), portfolio snapshots, order placement workflow (manual dispatch, secrets only), trade categorization + strategy framework | done | 3b5e95bd | `trading/kalshi_trade.py`, `trading/strategies.py`, `trading/test_trading.py`, `.github/workflows/trade.yml`, `data/portfolio.json`, `data/trades.json` | docs.kalshi.com quick_start_authenticated_requests (header names, message format, PSS salt), api_environments (sign path rule); NO demo credentials exist in this environment — account sign-up at https://demo.kalshi.co requires human registration | F9: trading unverified against a live demo account (no credentials); published on Flagged for Review |
+| A4 | Integration of A1-A3 outputs into the site + final PR/merge/Pages | done | 3b5e95bd | `data-tracking.html` (new page), nav/index touch-ups on pages owned by A1-A4 scope only, final PR | Data page renders committed `data/` snapshots (same-origin fetch, no CORS dependency); link check; PR -> main -> Pages verify | logged below in handoff |
+
+## Handoff log
+
+- 2026-11-20 11:22 UTC - Session 00a943bd took over site and data delivery (other sessions' claims had no artifacts; not a timeout takeover). See their log below.
+- 2026-11-20 ~11:21 UTC - Session 3b5e95bd created a standalone COORDINATION.md and claimed T1-T7 before discovering this integrated board (its work began in parallel and its first push predated main's board). On discovering the conflict it discarded its own board copy in favor of this one (merge commit 5bf2bf7 kept main's version), re-registered here, and narrowed its scope to the tasks above, which no other session had claimed (no scheduled collector, no resolution tracking, no demo-account trade automation exist on main). No other session's files were modified.
+- 2026-11-20 - Session 7f1ef378 claimed tasks 1–5; pushed claim (commit 2c751f3); built all root-level pages and CLI; opened PR #4; rebased onto `main` (this document) to integrate with session 00a943bd's `docs/` site.
 
 - Session 7f1ef378 adds root-level files only: `index.html`, `dashboard.html`, `api-reference.html`, `methodology.html`, `suggestions.html`, `questions.html`, `flagged.html`, `assets/`, `scripts/kalshi_demo.py`.
 - Session 00a943bd's files are NOT touched: `docs/**`, `scripts/build_site.py`, `scripts/verify_site.py`.
