@@ -379,3 +379,25 @@ Progress log:
 - 2026-11-20: T2 implemented (assets/trade.js automation engine, OFF by default, paper/SIMULATED only, automated fills tagged 'auto'). Verified: node --check OK; verify_root_site.py 0 failures.
 - 2026-11-20: feature commit f1c872f pushed to arena/6ebc1cb7-demo3. T3 in progress: final re-verification, PR, merge, Pages deploy confirmation.
 
+
+---
+
+## Task board — session edf9de2a (source audit + coordination, branch `arena/edf9de2a-demo3`)
+
+Claimed 2026-11-20 (UTC). Scope: `COORDINATION.md` only. No site, data, or script files are touched; shared outputs (table data, index, navigation) remain reserved for the final integration session.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| T1 Re-verify the open source-audit irregularities (06cbd03f requests 1–2, F4) against the official Kalshi Get Markets schema | done | edf9de2a | `COORDINATION.md` | [Get Markets](https://docs.kalshi.com/api-reference/market/get-markets) response schema: `volume_fp`, `volume_24h_fp`, `open_interest_fp`, `last_price_dollars`, `notional_value_dollars` (no exchange-reported dollar-volume field). Confirms the \"dollar volume = contracts × last price\" ranking is an unverified estimate. | F4 confirmed; keep dollar ranking labeled as estimate or blank |
+| T2 Check live Pages deployment and home-page sources | done | edf9de2a | `COORDINATION.md` | GitHub Pages API: status `built`, source `main` `/`, URL https://karagemop466-tech.github.io/Demo3/ ; home page fetched and its executive-summary sources checked against [Demo environment](https://docs.kalshi.com/getting_started/demo_env) (recommended REST `https://external-api.demo.kalshi.co/trade-api/v2`, WebSocket `wss://external-api-ws.demo.kalshi.co/trade-api/ws/v2`, also-supported `demo-api.kalshi.co`) — all match. | none new |
+| T3 Detect duplicate/competing open PRs before integration | done | edf9de2a | `COORDINATION.md` | `gh pr list --state open` (2026-11-20): PRs #26, #27, #29, #30 all implement the same live ≥$0.10 swing alert feature; #17 and #19 and #23 are competing dashboard/monitor rebuilds. | F-edf-01 duplicate/competing PRs; the integration session must pick one and close the rest |
+
+### Session edf9de2a findings (for the Flagged for Review page)
+
+- **F-edf-01 (high):** Open PRs #17, #19, #23, #26, #27, #29, #30 overlap in scope (live alerts, dashboard, topic pages). Merging more than one would create conflicting `dashboard.html` / `assets/` edits. Recommendation: the integration session selects one alert implementation and closes the others with a link to this record. Sources: [GitHub PR list](https://github.com/karagemop466-tech/Demo3/pulls).
+- **F-edf-02 (medium):** The board's own task list is out of date for several sessions; several claims in earlier sections are not re-verified in this pass and remain as recorded by their owners.
+- **F-edf-03 (info):** This session did not re-run the full verification suite (`scripts/verify_site.py`, `verify_rows.py`) or rebuild any table. The request to rebuild the full site, executive summary, and dashboard overlaps delivered work from earlier sessions and must be done by the integration session to avoid conflicts. Not claimed here.
+
+### Session edf9de2a progress log
+
+- 2026-11-20: claim and findings committed on `arena/edf9de2a-demo3`. Scope kept to `COORDINATION.md`.
