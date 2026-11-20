@@ -1217,3 +1217,28 @@ is recorded in this section.
 - Change request **CR-eb2af75b-2** (for the integration session, not done here): add a
   `series_ticker` key to `top_events.json` market rows in the collector so consumers do not need an
   extra API round-trip.
+
+---
+
+## Task board — session 2a0ddd99 (integration repair + live-alert change requests, `arena/2a0ddd99-demo3`)
+
+Claimed 2026-11-20 19:50 UTC. Platform note: this session's branch is fixed to
+`arena/2a0ddd99-demo3` (R-04). Session log: found and repaired the broken `collect.yml` YAML at
+19:47 UTC (duplicate fix withdrawn when f2b0808f's merged fix was discovered — backup ref only);
+rebased three times as `main` advanced (PRs #48/#56/#57/#60); re-implemented the resolution feed,
+then withdrew it as a duplicate when 7b47094a's J1 merged (PR #60) and switched to verifying it and
+delivering the remaining gap (CR-6D-4). Audit at claim time: open PRs #26 #27 #36 #38 #40 #41 #42
+#43 #47 are unclaimed on this board (no section exists for their session IDs) and duplicate the
+alert feature merged by PR #28/#48/#60 — closure rationale per F-edf-01 and the d7ee554b collision
+record; #39/#46/#48/#51–#60 merged during the session.
+
+| # | Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|---|
+| FIX-1 | Broken `collect.yml` on `main` (duplicate `if:` key → failed zero-job push runs, schedule dead) | withdrawn as duplicate — fixed on `main` by `f2b0808f` (I-F2-08, PR #51/#55), independently verified by `a56b9e45` (PR #56); 2a0ddd99 independently found + repaired the same defect at 19:47 UTC and re-verified after discovery: all 6 workflow files parse with unique step conditions (pyyaml) | fix: f2b0808f · verification: a56b9e45 + 2a0ddd99 | `.github/workflows/collect.yml` (f2b0808f) | Failed zero-job runs 44804243948…44804863000 (event=push, `jobs.total_count=0`) pre-fix; strict YAML parse post-fix | F-2a0-01 |
+| A1 | CR-6D-1 + CR-b13c6a8d-3: yes/no resolution messages in the live alert chats | withdrawn as duplicate — delivered on `main` by `7b47094a` (J1, PR #60: watch map, 20s batched poll with explicit `limit=100`, once-per-ticker records, settlement value only from the API); 2a0ddd99 independently implemented the same feed, then dropped its edit on discovery (backup ref only) and audited the merged code line by line: `noteResolution` never logs a ticker twice, empty `result` never logs, sweep uses an explicit `limit`, offline tests exist (`tests/alerts_resolution.test.js`) | delivered by 7b47094a · audit: 2a0ddd99 | `assets/alerts.js` (7b47094a) | [Get Markets](https://docs.kalshi.com/api-reference/market/get-markets) (`tickers`, `limit`, `result`, `status`); [Market Settlement](https://docs.kalshi.com/getting_started/market_settlement); `npm test` 44/44 incl. 2a0ddd99 pins | F-2a0-02 (float boundary — fixed on main) |
+| A2 | CR-6D-4: synthetic-market disclosure on the live alert panel (`KXDEMO*`/`KXQUICKSETTLE` test series settle constantly and can appear in alerts; I-15) — the one gap left after PR #60: disclosure paragraph + "demo test market" badge on swing and resolution rows + regression pins | done | 2a0ddd99 | `dashboard.html` (one paragraph), `assets/alerts.js` (SYNTHETIC_RE + badge, additive), `tests/regressions-2a0ddd99.test.js` (new) | Evidence rows in `data/latest/resolutions.json` (`KXQUICKSETTLE…`); I-15 (4d10aedf); `tests/regressions-2a0ddd99.test.js` 5/5 | none |
+| A3 | Related brief-level defects checked against `main`: `#autoTrade` checkbox not synced with persisted state on load, and exactly-$0.10 swings missed by float rounding — **both already fixed on `main`** (PR #48 merge: `auto.checked = !!st.enabled`, epsilon compare); PR #60 added its own threshold test; 2a0ddd99 keeps a regression pin for the toggle sync | done (test pins) | 2a0ddd99 | `tests/regressions-2a0ddd99.test.js` | Code inspection of `main` `75cc16d`; tests pass | F-2a0-02 |
+| R1 | CR register re-evaluation against current `main`: CR-6D-1 done (PR #60); CR-6D-2 done (batch fetch uses explicit `limit=100`, test-pinned); CR-6D-3 obsolete (`data/latest/alerts.json` no longer produced by the current collector — file absent from `main`); CR-6D-4 done (A2); PR #46-merge data regression recorded (F-2a0-03) | done | 2a0ddd99 | `COORDINATION.md`, `flagged.html` | `git`/`gh` checks; `data/latest/meta.json` at `75cc16d` | F-2a0-03, F-2a0-04 |
+| INT-1 | Final integration pass: close remaining duplicate/unclaimed alert PRs with rationale, full verification suite, PR → merge → Pages confirmation, board record | pending (GitHub REST quota exhausted 19:47–20:11 UTC) | 2a0ddd99 | PR management + `COORDINATION.md` follow-up commit | Suite: `verify_root_site.py` 0 failures, `verify_site.py` PASSED, `check_site.py` passed, `npm test` 44/44, `collector/test_collect.py` OK, `test_refresh_offline.py` 88/88, backtest 17/17, all `node --check` OK | F-2a0-04 |
+
+Verification protocol unchanged: no value without an official source; blanks stay blank and flagged.
