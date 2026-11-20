@@ -29,3 +29,12 @@ jobs:
             python3 -m compileall -q collector analysis
       - name: Site link + citation check
         run: python3 tools/check_site.py --ci
+      - name: Publish artifacts next to the site
+        run: |
+          mkdir -p docs/data
+          cp data/*.json docs/data/
+      - name: Render every page in jsdom
+        run: |
+          npm init -y >/dev/null 2>&1 || true
+          npm install --no-audit --no-fund jsdom@25 >/dev/null
+          node tools/render_test.js

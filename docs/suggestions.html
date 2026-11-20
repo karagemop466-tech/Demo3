@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Suggestions — Kalshi demo dashboard</title>
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<header class="top"></header>
+
+<main class="wrap">
+  <h1>Suggestions for review</h1>
+  <p class="lede">Proposals to improve decision-making, nothing more. Each one carries its cost, its dependency and
+  whether it can be undone. Choose the paths you want before anything is implemented — the selections stay in your
+  browser and can be exported as a JSON brief.</p>
+
+  <div class="banner"><span class="t">How to use this page:</span> accept, defer or reject each suggestion, add an
+    optional note, then <strong>Export my decisions</strong>. Nothing is transmitted anywhere; the file is produced
+    locally from your choices.</div>
+
+  <div class="grid c4" id="kpis"></div>
+
+  <div class="grid c2" id="tier1"></div>
+  <h2>Tier 2 — high value, needs a decision or a credential</h2>
+  <div class="grid c2" id="tier2"></div>
+  <h2>Tier 3 — polish and trust</h2>
+  <div class="grid c2" id="tier3"></div>
+
+  <h2>Deliberately not proposed</h2>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Idea</th><th>Why not</th></tr></thead>
+      <tbody>
+        <tr><td>Scraping kalshi.com's UI for a "total dollars" figure</td>
+          <td>Not an official API field; unverifiable and fragile. Use <code>volume_fp</code>, <code>open_interest_fp</code>
+            and the order book instead.</td></tr>
+        <tr><td>Calling the demo WebSocket from the browser</td>
+          <td>The handshake needs the private key; shipping it to a static page would leak it.</td></tr>
+        <tr><td>One "expected profit" number per strategy</td>
+          <td>Requires a probability model the data does not support. Expectancy is published with its caveats instead.</td></tr>
+        <tr><td>Auto-trading on a schedule from day one</td>
+          <td>No accountable owner for automated order entry (D12) and no agreed P&amp;L definition (D13).</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Suggested decision order</h2>
+  <ol class="tight">
+    <li><strong>S5</strong> — add demo keys, which unlocks the portfolio half of the brief.</li>
+    <li><strong>S6 + D13</strong> — define P&amp;L so any performance figure is trustworthy.</li>
+    <li><strong>S8</strong> — deepen history before anyone trades on the expectancy study.</li>
+    <li><strong>S10</strong> — one canonical landing page so reviewers look at the right site.</li>
+    <li><strong>S9 / S13</strong> — streaming and resolution alerts, only if sub-minute data is genuinely needed.</li>
+  </ol>
+</main>
+
+<footer class="foot"></footer>
+<script src="assets/app.js"></script>
+<script>
+(function () {
+  KD.renderChrome("suggestions.html");
+  const KEY = "kd-suggestions-v1";
+
+  const S = [
+    { id: "S1", tier: 1, title: "Publish four size metrics instead of one 'dollar amount'", status: "implemented",
+      problem: "Kalshi returns no dollar-notional field. Ranking by traded contracts points at 1–5¢ longshots with empty books; ranking by resting liquidity points elsewhere.",
+      proposal: "Show contracts traded, 24h volume, open interest, derived notional and resting liquidity as separate labelled columns.",
+      effort: "done", reversible: "yes", depends: "D1" },
+    { id: "S2", tier: 1, title: "Show measured expectancy next to every price", status: "implemented",
+      problem: "Price is not a calibrated probability: the 0.80–0.99 band won 82.26% at a 97.5¢ average cost (−15.23¢/contract).",
+      proposal: "A 'what this price has historically been worth' panel per category, with sample size and caveats.",
+      effort: "done", reversible: "yes", depends: "D9" },
+    { id: "S3", tier: 1, title: "Liquidity reality-check before any trade suggestion", status: "implemented",
+      problem: "The book is bids-only and many headline markets are 0.00/1.00 shells; a suggestion that ignores the book is fiction.",
+      proposal: "Every suggested order states the contracts actually available at or better than its price.",
+      effort: "done", reversible: "yes", depends: "none" },
+    { id: "S4", tier: 1, title: "Publish the 'why we did NOT suggest a trade' list", status: "implemented",
+      problem: "Silent filters look like agreement.",
+      proposal: "List every skipped market with its reason, including the measured-expectancy rejections.",
+      effort: "done", reversible: "yes", depends: "none" },
+    { id: "S5", tier: 2, title: "Turn on the demo portfolio panels", status: "needs you",
+      problem: "No demo key exists, so portfolio, fills and P&L stay blank by design.",
+      proposal: "Add KALSHI_DEMO_KEY_ID and KALSHI_DEMO_PRIVATE_KEY as repository secrets, run the portfolio workflow.",
+      effort: "~10 min, no code", reversible: "yes (delete secrets)", depends: "D12" },
+    { id: "S6", tier: 2, title: "Decide the P&L definition before publishing a headline number", status: "needs you",
+      problem: "Merging realised P&L, settlement revenue and fees into one figure encodes an unagreed accounting assumption.",
+      proposal: "Publish three separate lines until D13 is answered in writing.",
+      effort: "2 h", reversible: "yes", depends: "D13" },
+    { id: "S7", tier: 2, title: "Scheduled strategy re-evaluation with a written changelog", status: "proposed",
+      problem: "Thresholds chosen today will rot; the sample is dominated by short-dated contracts from one month.",
+      proposal: "Re-run analysis/expectancy.py on a schedule; every threshold change lands as a commit quoting the measured numbers.",
+      effort: "3 h", reversible: "yes", depends: "D9" },
+    { id: "S8", tier: 2, title: "Deepen history via the historical endpoints", status: "proposed",
+      problem: "12,004 of 12,567 settled rows come from one month, so any expectancy is regime-specific.",
+      proposal: "Page /historical/markets and /historical/trades, keep monthly rollups, re-run the study by quarter.",
+      effort: "6 h", reversible: "yes", depends: "none" },
+    { id: "S9", tier: 2, title: "Stream prices with a signed WebSocket worker", status: "needs credentials",
+      problem: "REST polling cannot show sub-minute movement, and the socket handshake is signed even for public channels.",
+      proposal: "A small worker holds a signed socket for tracked tickers and appends ticks to data/history/.",
+      effort: "8 h", reversible: "yes", depends: "S5" },
+    { id: "S10", tier: 3, title: "Resolve the duplicate landing page", status: "needs you",
+      problem: "Parallel sessions published several landing pages (/, /docs/, /demo-desk/, /analysis/) with different feature descriptions.",
+      proposal: "One canonical landing page; everything else reachable only from it and marked as secondary.",
+      effort: "1 h", reversible: "yes", depends: "F2" },
+    { id: "S11", tier: 3, title: "Public 'data freshness' banner on every view", status: "implemented",
+      problem: "A reader cannot tell whether a chart is 4 minutes or 4 hours old.",
+      proposal: "Print the capture timestamp and its age, highlighted when older than the cron interval.",
+      effort: "done", reversible: "yes", depends: "none" },
+    { id: "S12", tier: 3, title: "Machine-readable sources.json for every row", status: "proposed",
+      problem: "Manual re-verification is the slowest part of every review.",
+      proposal: "Emit row-keyed citations (URL, HTTP status, capture time) so a reviewer can re-check in bulk.",
+      effort: "2 h", reversible: "yes", depends: "none" },
+    { id: "S13", tier: 3, title: "Alert when a tracked market is about to resolve", status: "proposed",
+      problem: "The brief asks for tracking until resolution; hourly polling can miss a close.",
+      proposal: "Compare close_time to the next run and subscribe those tickers to a shorter-interval job; log every state transition.",
+      effort: "3 h", reversible: "yes", depends: "D7" },
+    { id: "S14", tier: 3, title: "Explain why each market is in scope", status: "implemented",
+      problem: "A topic label without its rule cannot be audited.",
+      proposal: "Every series row carries matched_by (category / tag / ticker prefix / title fragment).",
+      effort: "done", reversible: "yes", depends: "none" },
+  ];
+
+  function load() {
+    try { return JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { return {}; }
+  }
+  function save(state) {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+  }
+
+  function card(s, state) {
+    const cur = state[s.id] || {};
+    const statusPill = s.status === "implemented" ? "<span class='pill yes'>implemented</span>" :
+      s.status === "needs you" ? "<span class='pill blank'>needs your decision</span>" :
+      s.status === "needs credentials" ? "<span class='pill blank'>needs credentials</span>" :
+      "<span class='pill'>proposed</span>";
+    const opts = [["accept", "Accept"], ["defer", "Defer"], ["reject", "Reject"]];
+    return "<div class='card' data-id='" + s.id + "'>" +
+      "<div style='display:flex;justify-content:space-between;gap:8px;align-items:start'>" +
+      "<h3 style='margin:0'>" + s.id + " — " + KD.esc(s.title) + "</h3>" + statusPill + "</div>" +
+      "<p class='small' style='margin:8px 0 4px'><strong>Problem:</strong> " + KD.esc(s.problem) + "</p>" +
+      "<p class='small' style='margin:4px 0'><strong>Proposal:</strong> " + KD.esc(s.proposal) + "</p>" +
+      "<p class='small dim'>Effort " + KD.esc(s.effort) + " · reversible: " + KD.esc(s.reversible) +
+      " · depends on " + KD.esc(s.depends) + "</p>" +
+      "<div class='controls' role='group' aria-label='Decision for " + s.id + "'>" +
+      opts.map(function (o) {
+        return "<button data-choice='" + o[0] + "' aria-pressed='" + (cur.choice === o[0]) + "'>" + o[1] + "</button>";
+      }).join("") + "</div>" +
+      "<input type='text' placeholder='optional note for " + s.id + "' value='" + KD.esc(cur.note || "") +
+      "' style='width:100%' data-note>" +
+      "</div>";
+  }
+
+  function render() {
+    const state = load();
+    [1, 2, 3].forEach(function (tier) {
+      const el = document.getElementById("tier" + tier);
+      el.innerHTML = S.filter(function (s) { return s.tier === tier; }).map(function (s) { return card(s, state); }).join("");
+    });
+    wire();
+    const counts = { accept: 0, defer: 0, reject: 0 };
+    S.forEach(function (s) { const c = (state[s.id] || {}).choice; if (counts[c] != null) counts[c]++; });
+    document.getElementById("kpis").innerHTML = [
+      kpi("Suggestions", S.length, "in this register"),
+      kpi("Accepted", counts.accept, "your choices"),
+      kpi("Deferred", counts.defer, "revisit later"),
+      kpi("Rejected", counts.reject, "not now"),
+    ].join("") + "<div class='card' style='grid-column:1/-1'><div class='controls'>" +
+      "<button class='primary' id='export'>Export my decisions (JSON)</button>" +
+      "<button id='reset'>Reset</button><span class='small dim' id='exported'></span></div></div>";
+    document.getElementById("export").addEventListener("click", function () {
+      const payload = {
+        exported_at_utc: new Date().toISOString(),
+        note: "Produced locally from choices stored in this browser. No decision is sent anywhere by this page.",
+        decisions: S.map(function (s) {
+          const c = state[s.id] || {};
+          return { id: s.id, title: s.title, choice: c.choice || "undecided", note: c.note || "" };
+        }),
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "kalshi-demo-suggestions-" + new Date().toISOString().slice(0, 10) + ".json";
+      a.click();
+      document.getElementById("exported").textContent = "exported";
+    });
+    document.getElementById("reset").addEventListener("click", function () {
+      save({});
+      render();
+    });
+  }
+
+  function wire() {
+    document.querySelectorAll("#tier1 .card, #tier2 .card, #tier3 .card").forEach(function (cardEl) {
+      const id = cardEl.dataset.id;
+      cardEl.querySelectorAll("button[data-choice]").forEach(function (b) {
+        b.addEventListener("click", function () {
+          const state = load();
+          state[id] = state[id] || {};
+          state[id].choice = b.dataset.choice;
+          save(state);
+          render();
+        });
+      });
+      const note = cardEl.querySelector("input[data-note]");
+      if (note) {
+        note.addEventListener("change", function () {
+          const state = load();
+          state[id] = state[id] || {};
+          state[id].note = note.value;
+          save(state);
+        });
+      }
+    });
+  }
+
+  function kpi(label, value, sub) {
+    return "<div class='kpi'><div class='label'>" + KD.esc(label) + "</div><div class='value'>" +
+      KD.num(value) + "</div><div class='sub'>" + KD.esc(sub) + "</div></div>";
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>

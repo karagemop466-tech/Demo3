@@ -1,0 +1,353 @@
+{
+ "generated_at_utc": "2026-11-20T12:04:59+00:00",
+ "policy": {
+  "longshot_max_yes": 0.2,
+  "min_volume_24h": 1.0,
+  "max_price": 0.99,
+  "max_spread": 0.04,
+  "min_resting_depth_dollars": 50.0,
+  "size_contracts": 10,
+  "where": "docs/portfolio/STRATEGY.md"
+ },
+ "candidates": [
+  {
+   "rule": "R1_longshot_fade",
+   "rule_text": "buy NO when the YES side trades at 0.01-0.20, 24h volume > 0 and derived spread <= 0.04; measured NO expectancy +1.58c per contract in that band (data/expectancy.json)",
+   "ticker": "KXPRESNOMD-28-JTAL",
+   "topic": "elections",
+   "title": "Will James Talarico be the Democratic Presidential nominee in 2028?",
+   "side": "no",
+   "action": "buy",
+   "limit_price": 0.983,
+   "price_grid_validated": false,
+   "price_ranges": null,
+   "size_contracts": 10,
+   "book_contracts_available": 3622.02,
+   "immediate_cost_dollars": 3560.45,
+   "inputs": {
+    "implied_no_ask": 0.983,
+    "best_no_bid": 0.982,
+    "yes_price_used": 0.018,
+    "spread": 0.001,
+    "resting_depth_dollars": 1704252.95,
+    "volume_24h": 7616.09,
+    "close_time": "2028-11-07T15:00:00Z"
+   },
+   "source": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPRESNOMD-28-JTAL/orderbook"
+  },
+  {
+   "rule": "R1_longshot_fade",
+   "rule_text": "buy NO when the YES side trades at 0.01-0.20, 24h volume > 0 and derived spread <= 0.04; measured NO expectancy +1.58c per contract in that band (data/expectancy.json)",
+   "ticker": "KXPRESNOMD-28-RW",
+   "topic": "elections",
+   "title": "Will Raphael Warnock be the Democratic Presidential nominee in 2028?",
+   "side": "no",
+   "action": "buy",
+   "limit_price": 0.969,
+   "price_grid_validated": false,
+   "price_ranges": null,
+   "size_contracts": 10,
+   "book_contracts_available": 21505.36,
+   "immediate_cost_dollars": 20838.69,
+   "inputs": {
+    "implied_no_ask": 0.969,
+    "best_no_bid": 0.967,
+    "yes_price_used": 0.033,
+    "spread": 0.002,
+    "resting_depth_dollars": 99120.86,
+    "volume_24h": 7578.63,
+    "close_time": "2028-11-07T15:00:00Z"
+   },
+   "source": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPRESNOMD-28-RW/orderbook"
+  }
+ ],
+ "skipped": [
+  {
+   "ticker": "KXBTCY-27JAN0100-B122500",
+   "topic": "crypto",
+   "reason": "spread not derivable (one side of the book is empty)"
+  },
+  {
+   "ticker": "KXBTCY-27JAN0100-B142500",
+   "topic": "crypto",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXBTCY-27JAN0100-B117500",
+   "topic": "crypto",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXBTCY-27JAN0100-B137500",
+   "topic": "crypto",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXBTCY-27JAN0100-B42500",
+   "topic": "crypto",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXBTCY-27JAN0100-B127500",
+   "topic": "crypto",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXBTCY-27JAN0100-B22500",
+   "topic": "crypto",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXBTCY-27JAN0100-B47500",
+   "topic": "crypto",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXBTCY-27JAN0100-B102500",
+   "topic": "crypto",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXBTCY-27JAN0100-B97500",
+   "topic": "crypto",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXBTCY-27JAN0100-B27500",
+   "topic": "crypto",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXBTCY-27JAN0100-B92500",
+   "topic": "crypto",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXPRESNOMD-28-GPLA",
+   "topic": "elections",
+   "reason": "resting depth $0.00 < $50 \u2014 R4 avoid"
+  },
+  {
+   "ticker": "KXPRESNOMD-28-EWAR",
+   "topic": "elections",
+   "reason": "spread not derivable (one side of the book is empty)"
+  },
+  {
+   "ticker": "KXOSCARPIC-27-DIG",
+   "topic": "culture",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXOSCARPIC-27-JOS",
+   "topic": "culture",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXOSCARPIC-27-WIL",
+   "topic": "culture",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXOSCARPIC-27-DEB",
+   "topic": "culture",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXOSCARPIC-27-BLA",
+   "topic": "culture",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXOSCARPIC-27-DUN",
+   "topic": "culture",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXOSCARPIC-27-ODY",
+   "topic": "culture",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXOSCARPIC-27-YOU",
+   "topic": "culture",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXOSCARPIC-27-PRO",
+   "topic": "culture",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXOSCARPIC-27-ELS",
+   "topic": "culture",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXOSCARPIC-27-FJO",
+   "topic": "culture",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXOSCARPIC-27-ART",
+   "topic": "culture",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXPGATOUR-THRC26-TMOO",
+   "topic": "golf",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXPGATOUR-MAST27-MFIT",
+   "topic": "golf",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXPGATOUR-THRC26-SSTR",
+   "topic": "golf",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXPGATOUR-THRC26-KROY",
+   "topic": "golf",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXPGATOUR-THRC26-MMEI",
+   "topic": "golf",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXPGATOUR-THRC26-MPEN",
+   "topic": "golf",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXPGATOUR-THRC26-MPAV",
+   "topic": "golf",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXPGATOUR-THRC26-SSTE",
+   "topic": "golf",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXPGATOUR-THRC26-CBLA",
+   "topic": "golf",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXPGATOUR-MAST27-RGER",
+   "topic": "golf",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXPGATOUR-THRC26-JVAN",
+   "topic": "golf",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXPGATOUR-THRC26-AECK",
+   "topic": "golf",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXAAAGASM-26NOV30-4.70",
+   "topic": "gas",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXAAAGASM-26NOV30-4.50",
+   "topic": "gas",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXAAAGASM-26NOV30-4.80",
+   "topic": "gas",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXAAAGASM-26NOV30-4.40",
+   "topic": "gas",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXAAAGASM-26NOV30-4.60",
+   "topic": "gas",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXAAAGASW-26NOV23-3.6400",
+   "topic": "gas",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXAAAGASM-26NOV30-4.00",
+   "topic": "gas",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXAAAGASW-26NOV23-3.6600",
+   "topic": "gas",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXAAAGASM-26NOV30-3.90",
+   "topic": "gas",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXAAAGASM-26NOV30-4.30",
+   "topic": "gas",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXAAAGASM-26NOV30-3.80",
+   "topic": "gas",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  },
+  {
+   "ticker": "KXAAAGASM-26NOV30-4.10",
+   "topic": "gas",
+   "reason": "no orderbook snapshot for this market (only the top markets by volume are sampled)"
+  }
+ ],
+ "simulation": {
+  "rows": [
+   {
+    "rule": "R1_longshot_fade",
+    "ticker": "KXPRESNOMD-28-JTAL",
+    "side": "no",
+    "contracts": 10,
+    "entry_price": 0.983,
+    "cost_dollars": 9.83,
+    "payout_if_win_dollars": 10.0,
+    "profit_if_win_dollars": 0.17,
+    "loss_if_lose_dollars": -9.83,
+    "breakeven_probability": 0.983,
+    "note": "Arithmetic only. Kalshi contracts pay 1.00 if the side resolves YES, else 0. Fees are excluded because fee treatment depends on the series `fee_type` and must be computed per the official fee schedule before trading."
+   },
+   {
+    "rule": "R1_longshot_fade",
+    "ticker": "KXPRESNOMD-28-RW",
+    "side": "no",
+    "contracts": 10,
+    "entry_price": 0.969,
+    "cost_dollars": 9.69,
+    "payout_if_win_dollars": 10.0,
+    "profit_if_win_dollars": 0.31,
+    "loss_if_lose_dollars": -9.69,
+    "breakeven_probability": 0.969,
+    "note": "Arithmetic only. Kalshi contracts pay 1.00 if the side resolves YES, else 0. Fees are excluded because fee treatment depends on the series `fee_type` and must be computed per the official fee schedule before trading."
+   }
+  ],
+  "summary": {
+   "candidates": 2,
+   "simulated": 2,
+   "total_cost_dollars": 19.52,
+   "median_breakeven_probability": 0.976
+  },
+  "disclaimer": "Simulation, not a forecast or backtest. It answers 'what would these orders cost right now given the visible book' and nothing more. The probability that the market resolves in your favour is not knowable from this dataset."
+ }
+}

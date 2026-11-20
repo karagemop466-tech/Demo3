@@ -1,0 +1,262 @@
+{
+ "meta": {
+  "built_at_utc": "2026-11-20T12:04:23+00:00",
+  "rows": 12567,
+  "sources": {
+   "settled_markets": "GET https://external-api.kalshi.com/trade-api/v2/markets?status=settled&series_ticker=...",
+   "settlement_rules": "https://docs.kalshi.com/getting_started/market_settlement.md",
+   "result_field": "`result` on the Market object: yes | no | scalar | ''"
+  },
+  "note": "Counts of Kalshi's own `result` field per topic. `blank` means the API returned an empty result (typically a scalar or voided market); it is never guessed into yes/no."
+ },
+ "by_topic": {
+  "crypto": {
+   "label": "Crypto",
+   "no": 3391,
+   "yes": 1023
+  },
+  "golf": {
+   "label": "Golf",
+   "no": 3538,
+   "yes": 332,
+   "scalar": 46
+  },
+  "elections": {
+   "label": "Elections",
+   "yes": 73,
+   "no": 166
+  },
+  "gas": {
+   "label": "Gas prices",
+   "yes": 796,
+   "no": 2595
+  },
+  "culture": {
+   "label": "Culture",
+   "no": 383,
+   "yes": 224
+  }
+ },
+ "totals": {
+  "no": 10073,
+  "yes": 2448,
+  "scalar": 46
+ },
+ "by_month": {
+  "2026-10": {
+   "yes": 163,
+   "no": 400
+  },
+  "2026-11": {
+   "no": 9673,
+   "yes": 2285,
+   "scalar": 46
+  }
+ },
+ "top_series": [
+  {
+   "series_ticker": "KXBTCD",
+   "counts": {
+    "no": 321,
+    "yes": 79
+   },
+   "settled": 400
+  },
+  {
+   "series_ticker": "KXETH",
+   "counts": {
+    "no": 399,
+    "yes": 1
+   },
+   "settled": 400
+  },
+  {
+   "series_ticker": "KXETHD",
+   "counts": {
+    "no": 358,
+    "yes": 42
+   },
+   "settled": 400
+  },
+  {
+   "series_ticker": "KXBTC",
+   "counts": {
+    "no": 399,
+    "yes": 1
+   },
+   "settled": 400
+  },
+  {
+   "series_ticker": "KXPGATOP10",
+   "counts": {
+    "no": 342,
+    "scalar": 14,
+    "yes": 44
+   },
+   "settled": 400
+  },
+  {
+   "series_ticker": "KXPGATOP5",
+   "counts": {
+    "no": 365,
+    "yes": 21,
+    "scalar": 14
+   },
+   "settled": 400
+  },
+  {
+   "series_ticker": "KXPGATOP20",
+   "counts": {
+    "no": 313,
+    "yes": 73,
+    "scalar": 14
+   },
+   "settled": 400
+  },
+  {
+   "series_ticker": "KXPGAR2LEAD",
+   "counts": {
+    "no": 398,
+    "yes": 2
+   },
+   "settled": 400
+  },
+  {
+   "series_ticker": "KXPGATOUR",
+   "counts": {
+    "no": 398,
+    "yes": 2
+   },
+   "settled": 400
+  },
+  {
+   "series_ticker": "KXPGAR3LEAD",
+   "counts": {
+    "no": 398,
+    "yes": 2
+   },
+   "settled": 400
+  },
+  {
+   "series_ticker": "KXPGAR1LEAD",
+   "counts": {
+    "no": 396,
+    "yes": 4
+   },
+   "settled": 400
+  },
+  {
+   "series_ticker": "KXAAAGASD",
+   "counts": {
+    "yes": 80,
+    "no": 320
+   },
+   "settled": 400
+  },
+  {
+   "series_ticker": "KXDPWORLDTOUR",
+   "counts": {
+    "no": 394,
+    "yes": 6
+   },
+   "settled": 400
+  },
+  {
+   "series_ticker": "KXAAAGASDMI",
+   "counts": {
+    "no": 358,
+    "yes": 42
+   },
+   "settled": 400
+  },
+  {
+   "series_ticker": "KXAAAGASDGA",
+   "counts": {
+    "no": 306,
+    "yes": 94
+   },
+   "settled": 400
+  },
+  {
+   "series_ticker": "KXAAAGASDOH",
+   "counts": {
+    "no": 349,
+    "yes": 51
+   },
+   "settled": 400
+  },
+  {
+   "series_ticker": "KXRT",
+   "counts": {
+    "no": 211,
+    "yes": 144
+   },
+   "settled": 355
+  },
+  {
+   "series_ticker": "KXNETFLIXRANKSHOW",
+   "counts": {
+    "no": 172,
+    "yes": 80
+   },
+   "settled": 252
+  },
+  {
+   "series_ticker": "KXAAAGASW",
+   "counts": {
+    "no": 169,
+    "yes": 54
+   },
+   "settled": 223
+  },
+  {
+   "series_ticker": "KXETH15M",
+   "counts": {
+    "no": 105,
+    "yes": 95
+   },
+   "settled": 200
+  },
+  {
+   "series_ticker": "KXNEAR15M",
+   "counts": {
+    "no": 116,
+    "yes": 84
+   },
+   "settled": 200
+  },
+  {
+   "series_ticker": "KXZEC15M",
+   "counts": {
+    "yes": 91,
+    "no": 109
+   },
+   "settled": 200
+  },
+  {
+   "series_ticker": "KXHYPE15M",
+   "counts": {
+    "no": 107,
+    "yes": 93
+   },
+   "settled": 200
+  },
+  {
+   "series_ticker": "KXXRP15M",
+   "counts": {
+    "no": 111,
+    "yes": 89
+   },
+   "settled": 200
+  },
+  {
+   "series_ticker": "KXBTC15M",
+   "counts": {
+    "yes": 85,
+    "no": 115
+   },
+   "settled": 200
+  }
+ ],
+ "executed_orders_reconciled": []
+}

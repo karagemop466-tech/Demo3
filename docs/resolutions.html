@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resolutions — Kalshi demo dashboard</title>
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<header class="top"></header>
+
+<main class="wrap">
+  <h1>Resolutions — how each tracked event ended</h1>
+  <p class="lede">Every tracked market is followed until it settles. The outcome shown is Kalshi's own
+  <code>result</code> field: <span class="pill yes">YES</span>, <span class="pill no">NO</span>, or
+  <span class="pill blank">scalar</span> for markets that pay a settlement value instead of $1/$0.</p>
+  <div id="fresh"></div>
+
+  <div class="grid c4" id="kpis"></div>
+
+  <div class="card">
+    <div class="controls">
+      <label for="topic">Topic</label>
+      <select id="topic">
+        <option value="">All topics</option>
+        <option value="gas">Gas prices</option>
+        <option value="elections">Elections</option>
+        <option value="culture">Culture</option>
+        <option value="crypto">Crypto</option>
+        <option value="golf">Golf</option>
+      </select>
+      <label for="result">Result</label>
+      <select id="result">
+        <option value="">Any</option>
+        <option value="yes">YES</option>
+        <option value="no">NO</option>
+        <option value="scalar">scalar</option>
+        <option value="blank">blank</option>
+      </select>
+      <label for="search">Search</label>
+      <input type="text" id="search" placeholder="ticker or title" style="min-width:240px">
+      <span id="count" class="small dim"></span>
+    </div>
+    <div class="tablewrap">
+      <table id="rows">
+        <thead><tr>
+          <th>Resolved</th><th>Market</th><th>Topic</th><th>Result</th>
+          <th class="num">Settlement value</th><th class="num">Last price</th>
+          <th class="num">Volume</th><th>Expiration value</th><th>Source</th>
+        </tr></thead>
+        <tbody><tr><td colspan="9" class="loading">Loading…</td></tr></tbody>
+      </table>
+    </div>
+    <p class="small dim" id="paging"></p>
+  </div>
+
+  <h2>Outcome by topic</h2>
+  <div class="tablewrap">
+    <table id="by-topic">
+      <thead><tr><th>Topic</th><th class="num">YES</th><th class="num">NO</th><th class="num">Scalar</th>
+        <th class="num">Total</th><th class="num">YES share</th></tr></thead>
+      <tbody><tr><td colspan="6" class="loading">Loading…</td></tr></tbody>
+    </table>
+  </div>
+
+  <h2>Outcome by month</h2>
+  <p class="small dim">Marks the collection window. Anything before it is only present because a market settled
+  while this project was running, so older months are thin — that thinness is real, not a bug.</p>
+  <div class="tablewrap">
+    <table id="by-month">
+      <thead><tr><th>Month (settlement)</th><th class="num">YES</th><th class="num">NO</th><th class="num">Scalar</th>
+        <th class="num">Total</th></tr></thead>
+      <tbody><tr><td colspan="5" class="loading">Loading…</td></tr></tbody>
+    </table>
+  </div>
+
+  <div class="banner">
+    <span class="t">What "resolved" means, per Kalshi:</span> a YES outcome pays YES holders $1 per contract; a NO
+    outcome pays NO holders $1. Some markets settle to a value between the extremes (scalar) and are counted
+    separately here rather than being forced into yes/no.
+    <a href="https://docs.kalshi.com/getting_started/market_settlement.md" target="_blank" rel="noopener">Market Settlement</a>.
+  </div>
+</main>
+
+<footer class="foot"></footer>
+<script src="assets/app.js"></script>
+<script>
+(function () {
+  KD.renderChrome("resolutions.html");
+  let rows = [];
+  const PAGE = 120;
+  let shown = PAGE;
+
+  KD.loadJSON("dashboard.json").then(function (d) { KD.freshBanner(document.getElementById("fresh"), d.meta || {}); })
+    .catch(function () {});
+
+  KD.loadJSON("resolutions-summary.json").then(function (s) {
+    const t = s.totals || {};
+    const total = (t.yes || 0) + (t.no || 0) + (t.scalar || 0);
+    document.getElementById("kpis").innerHTML = [
+      kpi("Settled tracked", total, "rows accumulated"),
+      kpi("Resolved YES", t.yes, KD.pct((t.yes || 0) / (total || 1), 1) + " of all"),
+      kpi("Resolved NO", t.no, KD.pct((t.no || 0) / (total || 1), 1) + " of all"),
+      kpi("Scalar", t.scalar, "paid a settlement value"),
+    ].join("");
+
+    const byTopic = s.by_topic || {};
+    document.querySelector("#by-topic tbody").innerHTML = Object.keys(byTopic).map(function (k) {
+      const c = byTopic[k];
+      const tot = (c.yes || 0) + (c.no || 0) + (c.scalar || 0);
+      return "<tr><td>" + KD.esc(c.label || k) + "</td>" +
+        "<td class='num'>" + KD.num(c.yes) + "</td><td class='num'>" + KD.num(c.no) + "</td>" +
+        "<td class='num'>" + KD.num(c.scalar) + "</td><td class='num'>" + KD.num(tot) + "</td>" +
+        "<td class='num'>" + KD.pct((c.yes || 0) / (tot || 1), 2) + "</td></tr>";
+    }).join("");
+
+    const byMonth = s.by_month || {};
+    document.querySelector("#by-month tbody").innerHTML = Object.keys(byMonth).sort().reverse().map(function (m) {
+      const c = byMonth[m];
+      return "<tr><td>" + KD.esc(m) + "</td><td class='num'>" + KD.num(c.yes) + "</td>" +
+        "<td class='num'>" + KD.num(c.no) + "</td><td class='num'>" + KD.num(c.scalar) + "</td>" +
+        "<td class='num'>" + KD.num((c.yes || 0) + (c.no || 0) + (c.scalar || 0)) + "</td></tr>";
+    }).join("");
+    document.getElementById("kpis").insertAdjacentHTML("afterend",
+      "<p class='small dim'>" + KD.esc((s.meta && s.meta.note) || "") + " " + KD.src(s.meta && s.meta.sources && s.meta.sources.settled_markets) + "</p>");
+  }).catch(function (e) {
+    document.getElementById("kpis").innerHTML = "<div class='card error'>resolutions-summary.json: " + KD.esc(e.message) + "</div>";
+  });
+
+  KD.loadJSON("resolutions-compact.json").then(function (r) {
+    rows = r.rows || [];
+    render();
+    ["topic", "result", "search"].forEach(function (id) {
+      document.getElementById(id).addEventListener("input", function () { shown = PAGE; render(); });
+      document.getElementById(id).addEventListener("change", function () { shown = PAGE; render(); });
+    });
+    document.getElementById("paging").addEventListener("click", function (e) {
+      if (e.target.id === "more") { shown += PAGE; render(); }
+    });
+  }).catch(function (e) {
+    document.querySelector("#rows tbody").innerHTML =
+      "<tr><td colspan='9' class='error'>resolutions-compact.json: " + KD.esc(e.message) + "</td></tr>";
+  });
+
+  function render() {
+    const topic = document.getElementById("topic").value;
+    const result = document.getElementById("result").value;
+    const q = document.getElementById("search").value.trim().toLowerCase();
+    const filtered = rows.filter(function (r) {
+      if (topic && !(r.topics || []).includes(topic)) return false;
+      const res = r.result || "blank";
+      if (result && res !== result) return false;
+      if (q && !((r.ticker || "").toLowerCase().includes(q) || (r.title || "").toLowerCase().includes(q))) return false;
+      return true;
+    });
+    document.getElementById("count").textContent =
+      KD.num(filtered.length) + " of " + KD.num(rows.length) + " settled rows";
+    document.querySelector("#rows tbody").innerHTML = filtered.slice(0, shown).map(function (r) {
+      return "<tr><td class='nowrap small'>" + KD.esc((r.settlement_ts || "—").replace("T", " ").slice(0, 16)) + "</td>" +
+        "<td><div>" + KD.esc(r.title || "—") + "</div><div class='dim mono'>" + KD.esc(r.ticker) + "</div></td>" +
+        "<td>" + (r.topics || []).map(function (t) { return "<span class='pill'>" + KD.esc(KD.topicLabel(t)) + "</span>"; }).join(" ") + "</td>" +
+        "<td>" + KD.resultPill(r.result) + "</td>" +
+        "<td class='num'>" + KD.money(r.settlement_value_dollars, 4) + "</td>" +
+        "<td class='num'>" + KD.cents(r.last_price_dollars) + "</td>" +
+        "<td class='num'>" + KD.num(r.volume_fp) + "</td>" +
+        "<td class='small'>" + KD.esc(r.expiration_value || "—") + "</td>" +
+        "<td>" + KD.src(r.source) + "</td></tr>";
+    }).join("") || "<tr><td colspan='9' class='dim'>No rows match these filters.</td></tr>";
+    document.getElementById("paging").innerHTML = filtered.length > shown
+      ? "<button id='more'>Show " + (filtered.length - shown) + " more</button> (showing " + KD.num(shown) + ")"
+      : "";
+  }
+
+  function kpi(label, value, sub) {
+    return "<div class='kpi'><div class='label'>" + KD.esc(label) + "</div><div class='value'>" +
+      (value == null ? KD.dash() : KD.num(value)) + "</div><div class='sub'>" + KD.esc(sub) + "</div></div>";
+  }
+})();
+</script>
+</body>
+</html>

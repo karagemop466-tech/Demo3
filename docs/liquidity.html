@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Liquidity &amp; price charts — Kalshi demo dashboard</title>
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<header class="top"></header>
+
+<main class="wrap">
+  <h1>Liquidity &amp; price movement</h1>
+  <p class="lede">X axis = time, Y axis = contract price in dollars. Choose a window from seconds to
+  days. The depth panel answers "how many contracts are available at a given price" straight from the
+  order book the API returned.</p>
+  <div id="fresh"></div>
+
+  <div class="card">
+    <div class="controls">
+      <label for="market">Market</label>
+      <select id="market" style="min-width:420px"></select>
+      <label for="window">Window</label>
+      <select id="window">
+        <option value="60">60 seconds</option>
+        <option value="300">5 minutes</option>
+        <option value="900">15 minutes</option>
+        <option value="3600">1 hour</option>
+        <option value="14400">4 hours</option>
+        <option value="86400" selected>24 hours</option>
+        <option value="604800">7 days</option>
+        <option value="2592000">30 days</option>
+      </select>
+      <label for="yaxis">Y axis</label>
+      <select id="yaxis">
+        <option value="close" selected>Last trade price</option>
+        <option value="bid">YES bid (close)</option>
+        <option value="ask">YES ask (close)</option>
+      </select>
+      <button id="reload" title="Re-read data/dashboard.json">Reload data</button>
+    </div>
+    <div id="chart-meta" class="small dim"></div>
+    <div class="chartbox" style="margin-top:8px">
+      <canvas id="chart" height="320" aria-label="Contract price over time"></canvas>
+    </div>
+    <div id="chart-src" class="small" style="margin-top:8px"></div>
+  </div>
+
+  <div class="grid c2">
+    <div class="card">
+      <h3 style="margin-top:0">Order book — contracts available per price</h3>
+      <div id="book-summary" class="small muted"></div>
+      <div class="tablewrap" style="margin-top:8px">
+        <table id="book">
+          <thead><tr><th>Side</th><th class="num">Price</th><th class="num">Contracts</th><th class="num">Value</th></tr></thead>
+          <tbody><tr><td colspan="4" class="loading">Loading…</td></tr></tbody>
+        </table>
+      </div>
+      <p class="small dim">Kalshi returns <strong>bids only</strong>. A YES bid at X is a NO ask at 1−X, so the
+        implied asks below are labelled as derived
+        (<a href="https://docs.kalshi.com/getting_started/orderbook_responses.md" target="_blank" rel="noopener">Orderbook Responses</a>).</p>
+    </div>
+
+    <div class="card">
+      <h3 style="margin-top:0">Market facts</h3>
+      <table id="facts"><tbody><tr><td class="loading">Loading…</td></tr></tbody></table>
+      <h3>Observed snapshots</h3>
+      <p class="small dim">Every collection run appends one line per tracked market to
+        <code>data/history/&lt;date&gt;.jsonl</code>. Those points are what make second-to-minute
+        resolution possible without a WebSocket.</p>
+      <div id="history-state" class="small"></div>
+    </div>
+  </div>
+
+  <h2>Why charts cannot be truly tick-by-tick here</h2>
+  <div class="banner warn">
+    <span class="t">The WebSocket handshake is signed even for public market-data channels</span>
+    (<a href="https://docs.kalshi.com/getting_started/quick_start_websockets.md" target="_blank" rel="noopener">Quick Start: WebSockets</a>).
+    A static GitHub Pages site cannot hold a private key, so it cannot stream. The chart therefore draws the
+    API's own candlesticks (1, 60 and 1440-minute periods) plus the hourly observation log. Short windows can
+    legitimately show very few points — the caption always states how many the API returned rather than
+    interpolating.
+  </div>
+</main>
+
+<footer class="foot"></footer>
+<script src="assets/app.js"></script>
+<script>
+(function () {
+  KD.renderChrome("liquidity.html");
+  let D = null;
+  let tickers = [];
+
+  function qs(name) {
+    return new URLSearchParams(location.search).get(name);
+  }
+
+  function populate() {
+    const sel = document.getElementById("market");
+    const candles = D.candles || {};
+    tickers = Object.keys(candles);
+    // Prefer markets that also have a book, then sort by traded contracts desc.
+    const traded = {};
+    Object.keys(D.tables || {}).forEach(function (t) {
+      ["by_contracts_traded"].forEach(function (g) {
+        (D.tables[t][g] || []).forEach(function (r) {
+          traded[r.ticker] = { title: r.title, topics: r.topics, v: (r.metrics || {}).contracts_traded || 0 };
+        });
+      });
+    });
+    tickers.sort(function (a, b) { return (traded[b] || {}).v - (traded[a] || {}).v; });
+    const want = qs("ticker");
+    sel.innerHTML = tickers.map(function (t) {
+      const info = traded[t] || {};
+      const label = (info.title || t) + " — " + t;
+      return "<option value='" + KD.esc(t) + "'" + (t === want ? " selected" : "") + ">" + KD.esc(label) + "</option>";
+    }).join("");
+    if (!tickers.length) {
+      sel.innerHTML = "<option>No tracked markets with candlesticks</option>";
+    }
+  }
+
+  function draw() {
+    if (!D) return;
+    const ticker = document.getElementById("market").value;
+    const win = Number(document.getElementById("window").value);
+    const field = document.getElementById("yaxis").value;
+    const sets = (D.candles || {})[ticker] || {};
+
+    // choose the finest candlestick period that can cover the window without lying
+    // (period is in minutes; pick the smallest period whose span still fits, else coarsest)
+    const now = Math.floor(Date.now() / 1000);
+    const from = now - win;
+    const order = ["1", "60", "1440"];
+    let chosen = null;
+    for (let i = 0; i < order.length; i++) {
+      const s = sets[order[i]];
+      if (!s || !(s.points || []).length) continue;
+      const pts = s.points;
+      if (pts[0].t <= from + (Number(order[i]) * 60)) { chosen = { period: order[i], s: s }; break; }
+      chosen = chosen || { period: order[i], s: s };
+    }
+    if (!chosen) {
+      document.querySelector("#chart-meta").textContent = "No candlestick data was returned for this market.";
+      document.querySelector("#book tbody").innerHTML = "<tr><td colspan='4' class='dim'>No data.</td></tr>";
+      return;
+    }
+    const filtered = (chosen.s.points || []).filter(function (p) { return p.t >= from; });
+    const series = [{
+      label: ({ close: "Last trade", bid: "YES bid", ask: "YES ask" })[field],
+      color: field === "bid" ? "#3fb950" : field === "ask" ? "#f85149" : "#58a6ff",
+      value: function (p) { return p[field]; },
+      points: filtered,
+    }];
+    KD.drawPriceChart(document.getElementById("chart"), series, {
+      timeFormat: function (t) {
+        const d = new Date(t);
+        if (win <= 3600) return d.toISOString().slice(11, 19);
+        if (win <= 86400) return d.toISOString().slice(11, 16);
+        return d.toISOString().slice(5, 10);
+      },
+    });
+
+    const total = (chosen.s.points || []).length;
+    document.getElementById("chart-meta").innerHTML =
+      "Candlestick period: <strong>" + chosen.period + " minute</strong> · points returned by the API: <strong>" +
+      total + "</strong> · points inside this window: <strong>" + filtered.length + "</strong>" +
+      (filtered.length < 2 ? " · <span class='blankcell'>too few points for a line — nothing is interpolated</span>" : "");
+    document.getElementById("chart-src").innerHTML = KD.src(chosen.s.source);
+
+    renderBook(ticker);
+    renderFacts(ticker);
+  }
+
+  function renderBook(ticker) {
+    const b = (D.ladders || {})[ticker];
+    if (!b) {
+      document.getElementById("book-summary").innerHTML =
+        "<span class='blankcell'>No order book was captured for this market</span> — books are sampled for the " +
+        "highest-volume markets only, so this is an absence of data, not an empty book.";
+      document.querySelector("#book tbody").innerHTML = "<tr><td colspan='4' class='dim'>—</td></tr>";
+      return;
+    }
+    document.getElementById("book-summary").innerHTML =
+      "Best YES bid <strong>" + KD.cents(b.best_yes_bid) + "</strong> · derived YES ask <strong>" +
+      KD.cents(b.best_yes_ask_derived) + "</strong> · derived spread <strong>" +
+      (b.spread_yes_derived == null ? "—" : (b.spread_yes_derived * 100).toFixed(1) + "¢") + "</strong>" +
+      "<br>Resting value: YES " + KD.money(b.yes_resting_dollars) + " · NO " + KD.money(b.no_resting_dollars) +
+      " · total <strong>" + KD.money(b.total_resting_dollars) + "</strong> across " +
+      (b.yes_levels || 0) + "+" + (b.no_levels || 0) + " price levels. " + KD.src(b.source);
+    const rows = (b.ladder || []).map(function (l) {
+      return "<tr><td>" + (l.side === "yes" ? "<span class='pill yes'>YES bid</span>" :
+          "<span class='pill no'>NO bid</span>") + "</td>" +
+        "<td class='num'>" + KD.money(l.price, 4) + "</td>" +
+        "<td class='num'>" + KD.num(l.contracts) + "</td>" +
+        "<td class='num'>" + KD.money(l.price * l.contracts) + "</td></tr>";
+    }).join("");
+    document.querySelector("#book tbody").innerHTML = rows ||
+      "<tr><td colspan='4' class='dim'>The API returned an empty book for this market.</td></tr>";
+  }
+
+  function renderFacts(ticker) {
+    let row = null;
+    Object.keys(D.tables || {}).forEach(function (t) {
+      (D.tables[t].by_contracts_traded || []).forEach(function (r) { if (r.ticker === ticker) row = r; });
+    });
+    if (!row) { document.querySelector("#facts tbody").innerHTML = "<tr><td class='dim'>No row for this market.</td></tr>"; return; }
+    const m = row.metrics || {};
+    const facts = [
+      ["Ticker", "<span class='mono'>" + KD.esc(row.ticker) + "</span>"],
+      ["Title", KD.esc(row.title)],
+      ["Topic", (row.topics || []).map(function (t) { return "<span class='pill'>" + KD.esc(KD.topicLabel(t)) + "</span>"; }).join(" ")],
+      ["Status", KD.esc(row.status || "—")],
+      ["Closes", KD.esc((row.close_time || "—").replace("T", " ").replace("Z", " UTC"))],
+      ["Last YES price", KD.cents(row.last_price_dollars)],
+      ["YES bid / ask", KD.cents(row.yes_bid_dollars) + " / " + KD.cents(row.yes_ask_dollars)],
+      ["Contracts traded", KD.num(m.contracts_traded)],
+      ["24h contracts", KD.num(m.contracts_traded_24h)],
+      ["Open interest", KD.num(m.open_interest_contracts)],
+      ["Traded notional (derived)", KD.money(m.traded_notional_dollars_derived) +
+        " <span class='dim'>(price basis: " + KD.esc(m.price_basis || "none") + ")</span>"],
+      ["Resting liquidity", KD.money(m.resting_liquidity_dollars)],
+      ["Price grid", KD.esc(row.price_level_structure || "—")],
+      ["Rules (excerpt)", "<span class='small'>" + KD.esc((row.rules_primary || "—").slice(0, 260)) + "</span>"],
+      ["Environment", "<span class='pill " + (row.env === "prod" ? "info" : "") + "'>" + KD.esc(row.env || "—") + "</span>"],
+      ["Source", KD.src(row.source)],
+    ];
+    document.querySelector("#facts tbody").innerHTML = facts.map(function (f) {
+      return "<tr><th style='width:44%'>" + f[0] + "</th><td>" + f[1] + "</td></tr>";
+    }).join("");
+  }
+
+  function historyState() {
+    // The observation log is published as JSONL; fetch it lazily and count points for this market.
+    const ticker = document.getElementById("market").value;
+    const d = new Date();
+    const name = "history/" + d.toISOString().slice(0, 10) + ".jsonl";
+    fetch("data/" + name, { cache: "no-store" }).then(function (r) {
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.text();
+    }).then(function (txt) {
+      const pts = txt.split("\n").filter(Boolean).map(function (line) {
+        try { return JSON.parse(line); } catch (e) { return null; }
+      }).filter(function (p) { return p && p.ticker === ticker; });
+      document.getElementById("history-state").innerHTML = pts.length
+        ? "<strong>" + pts.length + "</strong> observation lines for this market today. " +
+          "This file is appended by every collection run; more points accumulate as the schedule runs. " +
+          KD.src("data/" + name)
+        : "No observation lines for this market yet today. The file grows with each hourly run.";
+    }).catch(function (e) {
+      document.getElementById("history-state").innerHTML =
+        "<span class='dim'>Observation log for today is not published yet (" + KD.esc(e.message) + ").</span>";
+    });
+  }
+
+  KD.loadJSON("dashboard.json").then(function (d) {
+    D = d;
+    KD.freshBanner(document.getElementById("fresh"), d.meta || {});
+    populate();
+    draw();
+    historyState();
+    ["market", "window", "yaxis"].forEach(function (id) {
+      document.getElementById(id).addEventListener("change", function () {
+        draw();
+        if (id === "market") historyState();
+      });
+    });
+    document.getElementById("reload").addEventListener("click", function () {
+      location.reload();
+    });
+    window.addEventListener("resize", function () { draw(); });
+  }).catch(function (e) {
+    document.getElementById("chart-meta").innerHTML =
+      "<span class='error'>Could not load data/dashboard.json — " + KD.esc(e.message) + "</span>";
+  });
+})();
+</script>
+</body>
+</html>

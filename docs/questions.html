@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Decision log — Kalshi demo dashboard</title>
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<header class="top"></header>
+
+<main class="wrap">
+  <h1>Decision log — questions, knowns, gaps</h1>
+  <p class="lede">Fourteen questions that have to be answered before a decision is safe, each with what the data
+  already establishes, what is genuinely missing, and what would close it. Status: <span class="pill yes">closed</span>
+  <span class="pill blank">open</span> <span class="pill info">researchable</span>.</p>
+
+  <div class="grid c4" id="kpis"></div>
+
+  <div class="card">
+    <div class="controls">
+      <label for="f-status">Status</label>
+      <select id="f-status"><option value="">All</option><option value="closed">Closed</option>
+        <option value="open">Open</option><option value="researchable">Researchable</option></select>
+      <label for="f-block">Blocks a decision?</label>
+      <select id="f-block"><option value="">All</option><option value="yes">Yes</option><option value="no">No</option></select>
+      <span class="small dim" id="count"></span>
+    </div>
+  </div>
+
+  <div id="list"></div>
+
+  <h2>Summary</h2>
+  <div class="tablewrap">
+    <table id="summary">
+      <thead><tr><th>ID</th><th>Question</th><th>Status</th><th>Blocks a decision?</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</main>
+
+<footer class="foot"></footer>
+<script src="assets/app.js"></script>
+<script>
+(function () {
+  KD.renderChrome("questions.html");
+
+  const Q = [
+    { id: "D1", group: "Scope", q: "What does 'highest dollar amount' mean?", status: "open", blocks: "yes",
+      known: "Kalshi returns volume_fp, volume_24h_fp, open_interest_fp, last price and the order book. It does not return a dollar notional.",
+      unknown: "Which metric the business means. They rank markets very differently: the top markets by contracts traded are 1–5¢ longshots with no resting bids, while the deepest book sampled holds $4.24 M.",
+      close: "A one-line business definition. Until then the site publishes four labelled metrics.",
+      src: "https://docs.kalshi.com/api-reference/market/get-markets.md" },
+    { id: "D2", group: "Scope", q: "Which environment is the source of truth?", status: "closed", blocks: "no",
+      known: "Demo roots are external-api.demo.kalshi.co and demo-api.kalshi.co; credentials are not shared with production; demo prices may not reflect real markets.",
+      unknown: "Nothing material.",
+      close: "Resolved: demo is primary (it is what the brief names and where the demo portfolio lives), with a labelled production snapshot beside it.",
+      src: "https://docs.kalshi.com/getting_started/api_environments.md" },
+    { id: "D3", group: "Scope", q: "Where is the boundary of 'culture'?", status: "open", blocks: "yes",
+      known: "Kalshi publishes an Entertainment category (music charts, film, TV, awards); it is the only category matching 'culture'. 2,674 series matched and 14 are tracked.",
+      unknown: "Whether celebrity, 'mentions' or sports-adjacent entertainment belongs in scope.",
+      close: "An included/excluded series list for review. Every matched series is already listed on the Culture page.",
+      src: "https://docs.kalshi.com/api-reference/market/get-series-list.md" },
+    { id: "D4", group: "Scope", q: "Is 'gas prices' only the AAA national average?", status: "open", blocks: "no",
+      known: "KXAAAGASW ('US gas price up', weekly) settles from AAA gas prices, verified live.",
+      unknown: "Whether regional gas, diesel or crude series should count.",
+      close: "Decided narrow on purpose: the broad Economics category is excluded because ~900 unrelated series share it; matching is ticker-prefix/tag/title only.",
+      src: "https://demo-api.kalshi.co/trade-api/v2/series/KXAAAGASW" },
+    { id: "D5", group: "Scope", q: "What counts as 'resolved'?", status: "closed", blocks: "no",
+      known: "Settlement sets result to yes, no or scalar and pays $1/contract to the winning side.",
+      unknown: "Nothing material.",
+      close: "Resolved: 46 of 12,567 settled rows are scalar and are counted separately, never coerced to yes/no.",
+      src: "https://docs.kalshi.com/getting_started/market_settlement.md" },
+    { id: "D6", group: "Data", q: "Can the browser call the Kalshi API directly from GitHub Pages?", status: "researchable", blocks: "no",
+      known: "The docs do not state a CORS policy. The collector performs an empirical probe with the site origin and records the access-control-* headers each run.",
+      unknown: "Whether an allow-origin header is returned.",
+      close: "Read the probe result in the latest data/meta.json. Either way nothing breaks: the site already reads committed snapshots.",
+      src: "https://docs.kalshi.com/getting_started/quick_start_market_data.md" },
+    { id: "D7", group: "Data", q: "How live can an unauthenticated static site be?", status: "closed", blocks: "no",
+      known: "The WebSocket handshake requires signed headers even for public market-data channels, and a static page cannot hold a private key.",
+      unknown: "Nothing material.",
+      close: "Resolved: 'live' means hourly REST snapshots plus candlesticks plus an append-only observation log, each labelled with capture time.",
+      src: "https://docs.kalshi.com/getting_started/quick_start_websockets.md" },
+    { id: "D8", group: "Data", q: "How stale is 'current price'?", status: "closed", blocks: "no",
+      known: "Kalshi documents short-lived response caching (prices and status can lag by seconds, filtered listings longer) and candlesticks a few seconds behind trades.",
+      unknown: "The exact cache duration at any moment.",
+      close: "The site shows capture timestamps and never claims sub-second freshness.",
+      src: "https://docs.kalshi.com/api-reference/market/get-market-candlesticks.md" },
+    { id: "D9", group: "Data", q: "Is the settlement sample deep enough for reliable expectancy?", status: "open", blocks: "yes",
+      known: "12,567 settled rows, but 12,004 are from Nov 2026 and are dominated by short-dated crypto and golf contracts.",
+      unknown: "Whether the measured expectancy holds across regimes, seasons and market types.",
+      close: "Deeper history via /historical/markets and /historical/trades, then a rolling comparison. Any strategy recommendation stays provisional until then.",
+      src: "https://docs.kalshi.com/getting_started/historical_data.md" },
+    { id: "D10", group: "Portfolio", q: "How do we authenticate to the demo account?", status: "closed", blocks: "no",
+      known: "Ed25519 (default) or RSA-2048; sign timestamp+METHOD+path without the query string; the timestamp must be within 30 s of Kalshi's clock.",
+      unknown: "Nothing material.",
+      close: "Implemented in collector/portfolio.py exactly as documented; every response is recorded.",
+      src: "https://docs.kalshi.com/getting_started/api_keys.md" },
+    { id: "D11", group: "Portfolio", q: "Which order endpoint is current?", status: "closed", blocks: "no",
+      known: "Legacy /portfolio/orders writes were removed and return 410 Gone (deprecated_v1_order_endpoint). Orders use POST /portfolio/events/orders with side bid|ask and a required price; prices must sit on the market's price_ranges grid.",
+      unknown: "Nothing material.",
+      close: "Corrected in this repo before shipping; candidate prices are snapped to the grid.",
+      src: "https://docs.kalshi.com/api-reference/orders/create-order-v2.md" },
+    { id: "D12", group: "Portfolio", q: "Should the dashboard place trades automatically?", status: "open", blocks: "yes",
+      known: "The account can place demo orders with mock funds; the brief asks to execute and track performance.",
+      unknown: "Who is accountable for automated order entry, at what size, under what stop conditions.",
+      close: "A named owner and a size limit. Meantime placement is double-gated (workflow input plus an explicit confirm string) and production is refused.",
+      src: "https://docs.kalshi.com/api-reference/orders/create-order-v2.md" },
+    { id: "D13", group: "Portfolio", q: "How will P&L be defined when the data arrives?", status: "open", blocks: "yes",
+      known: "The API exposes market_positions[].realized_pnl, settlements[].revenue and fills[].fee_cost; fees are quadratic or flat with a per-series multiplier.",
+      unknown: "Net-of-fees mark-to-market, realised only, or both; and how to treat the live/historical partition.",
+      close: "A written definition. Until then the portfolio page reports the three underlying fields separately.",
+      src: "https://docs.kalshi.com/getting_started/historical_data.md" },
+    { id: "D14", group: "Publishing", q: "What is published when a value cannot be verified?", status: "closed", blocks: "no",
+      known: "Rule applied everywhere: blank cell, explicit unverified flag, link to the register.",
+      unknown: "Nothing material.",
+      close: "Enforced mechanically by tools/check_site.py and the offline test suite.",
+      src: "https://github.com/karagemop466-tech/Demo3/blob/main/tools/check_site.py" },
+  ];
+
+  function pill(status) {
+    if (status === "closed") return "<span class='pill yes'>closed</span>";
+    if (status === "open") return "<span class='pill blank'>open</span>";
+    return "<span class='pill info'>researchable</span>";
+  }
+
+  function render() {
+    const fs = document.getElementById("f-status").value;
+    const fb = document.getElementById("f-block").value;
+    const rows = Q.filter(function (q) {
+      if (fs && q.status !== fs) return false;
+      if (fb && q.blocks !== fb) return false;
+      return true;
+    });
+    document.getElementById("count").textContent = rows.length + " of " + Q.length + " questions";
+    document.getElementById("list").innerHTML = rows.map(function (q) {
+      return "<details" + (q.blocks === "yes" && q.status !== "closed" ? " open" : "") + ">" +
+        "<summary>" + q.id + " — " + KD.esc(q.q) + " <span style='float:right'>" + pill(q.status) +
+        (q.blocks === "yes" ? " <span class='pill no'>blocks a decision</span>" : "") + "</span></summary>" +
+        "<table class='small'><tbody>" +
+        "<tr><th style='width:160px'>Known</th><td>" + KD.esc(q.known) + "</td></tr>" +
+        "<tr><th>Missing</th><td>" + KD.esc(q.unknown) + "</td></tr>" +
+        "<tr><th>What closes it</th><td>" + KD.esc(q.close) + "</td></tr>" +
+        "<tr><th>Source</th><td>" + KD.src(q.src) + "</td></tr>" +
+        "</tbody></table></details>";
+    }).join("");
+    document.querySelector("#summary tbody").innerHTML = Q.map(function (q) {
+      return "<tr><td class='mono'>" + q.id + "</td><td>" + KD.esc(q.q) + "</td><td>" + pill(q.status) + "</td>" +
+        "<td>" + (q.blocks === "yes" ? "<span class='pill no'>yes</span>" : "<span class='pill'>no</span>") + "</td></tr>";
+    }).join("");
+  }
+
+  const closed = Q.filter(function (q) { return q.status === "closed"; }).length;
+  const open = Q.filter(function (q) { return q.status === "open"; }).length;
+  const res = Q.filter(function (q) { return q.status === "researchable"; }).length;
+  const blocking = Q.filter(function (q) { return q.blocks === "yes" && q.status !== "closed"; }).length;
+  document.getElementById("kpis").innerHTML = [
+    kpi("Questions", Q.length, "in the register"),
+    kpi("Closed", closed, "answered with evidence"),
+    kpi("Open", open, "+ " + res + " researchable", "need an owner decision"),
+    kpi("Blocking", blocking, "unsafe to decide without"),
+  ].join("");
+
+  ["f-status", "f-block"].forEach(function (id) {
+    document.getElementById(id).addEventListener("change", render);
+  });
+  render();
+
+  function kpi(label, value, sub2, sub2b) {
+    return "<div class='kpi'><div class='label'>" + KD.esc(label) + "</div><div class='value'>" + KD.num(value) +
+      "</div><div class='sub'>" + KD.esc(sub2 || "") + (sub2b ? " · " + KD.esc(sub2b) : "") + "</div></div>";
+  }
+})();
+</script>
+</body>
+</html>

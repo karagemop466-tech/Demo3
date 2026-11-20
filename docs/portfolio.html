@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portfolio — Kalshi demo dashboard</title>
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<header class="top"></header>
+
+<main class="wrap">
+  <h1>Demo portfolio, fills and P&amp;L</h1>
+  <p class="lede">Everything on this page comes from signed <code>/portfolio/*</code> responses for the Kalshi
+  <strong>demo</strong> account. When no demo API key is configured, every panel stays blank and says so — this
+  project never invents an account figure.</p>
+  <div id="fresh"></div>
+
+  <div id="state"></div>
+
+  <div id="content" hidden>
+    <div class="grid c4" id="kpis"></div>
+
+    <h2>Performance components (fields named, never merged)</h2>
+    <div class="tablewrap">
+      <table id="perf">
+        <thead><tr><th>Measure</th><th>API field</th><th class="num">Values found</th><th class="num">Sum</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p class="small dim">Three separate lines instead of one net number is deliberate: merging realised P&amp;L,
+      settlement revenue and fees would encode an accounting assumption nobody has agreed to. See
+      <a href="questions.html">D13</a>.</p>
+
+    <h2>Positions</h2>
+    <div class="tablewrap">
+      <table id="positions">
+        <thead><tr><th>Market</th><th>Topic</th><th class="num">Position</th><th class="num">Cost basis</th>
+          <th class="num">Realised P&amp;L</th><th class="num">Market value</th><th>Source</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <h2>Fills and categorisation</h2>
+    <div class="grid c2">
+      <div class="card"><h3 style="margin-top:0">By topic</h3><table id="by-topic"></table></div>
+      <div class="card"><h3 style="margin-top:0">By side</h3><table id="by-side"></table></div>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">Strategy buckets</h3>
+      <p class="small dim" id="bucket-rule"></p>
+      <table id="buckets"></table>
+    </div>
+
+    <h2>Orders</h2>
+    <div class="tablewrap">
+      <table id="orders">
+        <thead><tr><th>Placed</th><th>Market</th><th>Side</th><th class="num">Count</th>
+          <th class="num">Filled</th><th>Status</th><th>Type</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <h2>Trade execution</h2>
+  <div class="card">
+    <p>Order placement is implemented against the <strong>current</strong> endpoint — the legacy
+    <code>/portfolio/orders</code> writes were removed by Kalshi and return <code>410 Gone</code>
+    (<a href="https://docs.kalshi.com/api-reference/orders/create-order-v2.md" target="_blank" rel="noopener">Create Order (V2)</a>).</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Step</th><th>What happens</th></tr></thead>
+        <tbody>
+          <tr><td>1. Gate</td><td>Workflow input <code>place_orders = true</code> <strong>and</strong> every order spec carries
+            <code>"confirm": "I_ACCEPT_DEMO_MONEY_IS_FAKE"</code>.</td></tr>
+          <tr><td>2. Environment</td><td>Demo host only. Production orders are refused by the script.</td></tr>
+          <tr><td>3. Endpoint</td><td><code>POST /trade-api/v2/portfolio/events/orders</code> with
+            <code>side: bid|ask</code>, <code>count</code>, <code>price</code>, <code>time_in_force</code>,
+            <code>self_trade_prevention_type</code>.</td></tr>
+          <tr><td>4. Price grid</td><td>Prices are snapped onto the market's own <code>price_ranges</code>; off-grid prices are
+            rejected with <code>invalid_price</code>.</td></tr>
+          <tr><td>5. Log</td><td>Every request, response and HTTP status is appended to <code>data/trade-log.jsonl</code> so
+            performance can be recomputed from the log alone.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="small dim" id="orders-pending"></p>
+  </div>
+</main>
+
+<footer class="foot"></footer>
+<script src="assets/app.js"></script>
+<script>
+(function () {
+  KD.renderChrome("portfolio.html");
+
+  KD.loadJSON("portfolio.json").then(function (p) {
+    const m = p.meta || {};
+    const el = document.getElementById("state");
+    if (!m.configured) {
+      el.innerHTML = "<div class='banner bad'><span class='t'>Not configured — deliberately blank.</span> " +
+        KD.esc(m.reason || "No demo API key.") + "</div>" +
+        "<div class='card'><h3 style='margin-top:0'>Enable it in three steps</h3><ol class='tight'>" +
+        "<li>Create a <strong>demo</strong> API key — <a href='https://docs.kalshi.com/getting_started/api_keys.md' target='_blank' rel='noopener'>API Keys</a>.</li>" +
+        "<li>Add repository secrets <code class='mono'>KALSHI_DEMO_KEY_ID</code> and <code class='mono'>KALSHI_DEMO_PRIVATE_KEY</code>.</li>" +
+        "<li>Actions → <strong>portfolio</strong> → Run workflow.</li></ol>" +
+        "<p class='small'>Full detail, including the order API change and the P&amp;L caveats: " +
+        "<a href='https://github.com/karagemop466-tech/Demo3/blob/main/docs/portfolio/STRATEGY.md'>docs/portfolio/STRATEGY.md</a>.</p></div>";
+      return;
+    }
+
+    document.getElementById("content").hidden = false;
+    const perf = p.performance || {};
+    const counts = perf.counts || {};
+    const bal = (p.balance && (p.balance.body || p.balance)) || {};
+    document.getElementById("kpis").innerHTML = [
+      kpi("Balance", KD.money(bal.balance), "GET /portfolio/balance"),
+      kpi("Positions", KD.num(counts.positions), "portfolio/positions"),
+      kpi("Fills", KD.num(counts.fills), "portfolio/fills"),
+      kpi("Settlements", KD.num(counts.settlements), "portfolio/settlements"),
+    ].join("");
+
+    const comps = [
+      ["Realised P&L (positions)", "market_positions[].realized_pnl", perf.realized_pnl_components],
+      ["Settlement revenue (cents)", "settlements[].revenue", perf.settlement_revenue_cents],
+      ["Fees paid (dollars)", "fills[].fee_cost", perf.fees_dollars],
+    ];
+    document.querySelector("#perf tbody").innerHTML = comps.map(function (c) {
+      const v = c[2] || {};
+      return "<tr><td>" + c[0] + "</td><td class='mono small'>" + c[1] + "</td>" +
+        "<td class='num'>" + KD.num(v.values_found) + "</td>" +
+        "<td class='num'>" + (v.sum == null ? KD.dash("no values returned") : KD.num(v.sum, 4)) + "</td></tr>";
+    }).join("");
+
+    document.querySelector("#positions tbody").innerHTML = (p.positions || []).map(function (x) {
+      return "<tr><td class='mono small'>" + KD.esc(x.ticker || x.market_ticker) + "</td>" +
+        "<td>" + KD.esc(((x.topics || [])[0] && KD.topicLabel(x.topics[0])) || "—") + "</td>" +
+        "<td class='num'>" + KD.num(x.position || x.position_fp) + "</td>" +
+        "<td class='num'>" + KD.money(x.total_cost || x.market_exposure) + "</td>" +
+        "<td class='num'>" + KD.num(x.realized_pnl, 4) + "</td>" +
+        "<td class='num'>" + KD.money(x.market_value) + "</td>" +
+        "<td>" + KD.src(x.source || "https://docs.kalshi.com/api-reference/portfolio/get-positions.md") + "</td></tr>";
+    }).join("") || "<tr><td colspan='7' class='dim'>The API returned no open positions.</td></tr>";
+
+    document.getElementById("by-topic").innerHTML = table2(perf.by_topic, "Topic", ["fills", "contracts", "fees"]);
+    document.getElementById("by-side").innerHTML = table2(perf.by_side, "Side", []);
+    const buckets = (perf.strategy_buckets || {}).counts || {};
+    document.getElementById("bucket-rule").textContent = (perf.strategy_buckets || {}).rule || "";
+    document.getElementById("buckets").innerHTML = "<tr><th>Bucket</th><th class='num'>Fills</th></tr>" +
+      Object.keys(buckets).map(function (k) {
+        return "<tr><td>" + KD.esc(k) + "</td><td class='num'>" + KD.num(buckets[k]) + "</td></tr>";
+      }).join("");
+
+    document.querySelector("#orders tbody").innerHTML = (p.orders || []).map(function (o) {
+      return "<tr><td class='small nowrap'>" + KD.esc((o.created_time || "—").slice(0, 16).replace("T", " ")) + "</td>" +
+        "<td class='mono small'>" + KD.esc(o.ticker) + "</td><td>" + KD.esc(o.side) + "</td>" +
+        "<td class='num'>" + KD.num(o.count_fp || o.count) + "</td>" +
+        "<td class='num'>" + KD.num(o.fill_count_fp || o.fill_count) + "</td>" +
+        "<td>" + KD.esc(o.status) + "</td><td>" + KD.esc(o.type) + "</td></tr>";
+    }).join("") || "<tr><td colspan='7' class='dim'>No orders returned.</td></tr>";
+  }).catch(function (e) {
+    document.getElementById("state").innerHTML =
+      "<div class='banner warn'><span class='t'>No portfolio artifact yet.</span> It is written by the " +
+      "<code>portfolio</code> workflow. (" + KD.esc(e.message) + ")</div>";
+  });
+
+  KD.loadJSON("order-rules.json").then(function (r) {
+    const n = (r.candidates || []).length;
+    document.getElementById("orders-pending").innerHTML =
+      "Rule engine currently produces <strong>" + n + "</strong> demo-sized order candidates " +
+      "(see <a href='strategy.html'>Strategy</a>). Nothing is sent until the two gates above are satisfied.";
+  }).catch(function () {});
+
+  function table2(obj, label, cols) {
+    obj = obj || {};
+    const keys = Object.keys(obj);
+    if (!keys.length) return "<tr><td class='dim'>No data.</td></tr>";
+    const head = "<tr><th>" + label + "</th>" + cols.map(function (c) { return "<th class='num'>" + c + "</th>"; }).join("") + "</tr>";
+    return head + keys.map(function (k) {
+      const v = obj[k];
+      return "<tr><td>" + KD.esc(k) + "</td>" + cols.map(function (c) {
+        return "<td class='num'>" + (v && typeof v === "object" ? KD.num(v[c], 2) : KD.num(v)) + "</td>";
+      }).join("") + "</tr>";
+    }).join("");
+  }
+  function kpi(label, value, sub) {
+    return "<div class='kpi'><div class='label'>" + KD.esc(label) + "</div><div class='value'>" +
+      (value == null ? KD.dash() : value) + "</div><div class='sub'>" + KD.esc(sub) + "</div></div>";
+  }
+})();
+</script>
+</body>
+</html>

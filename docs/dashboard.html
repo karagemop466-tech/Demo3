@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard — all five topics — Kalshi demo dashboard</title>
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<header class="top"></header>
+
+<main class="wrap">
+  <h1>All five topics in one table</h1>
+  <p class="lede">The same data as the category pages, merged and sortable. Use the selector to choose which of the
+  four size metrics does the ranking — they disagree, and that disagreement is the point (see
+  <a href="questions.html">D1</a>).</p>
+  <div id="fresh"></div>
+
+  <div class="card">
+    <div class="controls">
+      <label for="metric">Rank by</label>
+      <select id="metric">
+        <option value="contracts_traded" selected>Contracts traded</option>
+        <option value="contracts_traded_24h">Contracts traded (24h)</option>
+        <option value="open_interest_contracts">Open interest (contracts)</option>
+        <option value="open_interest_dollars_derived">Open interest ($, derived)</option>
+        <option value="traded_notional_dollars_derived">Traded notional ($, derived)</option>
+        <option value="resting_liquidity_dollars">Resting liquidity ($)</option>
+      </select>
+      <label for="topic">Topic</label>
+      <select id="topic">
+        <option value="">All five</option>
+        <option value="gas">Gas prices</option>
+        <option value="elections">Elections</option>
+        <option value="culture">Culture</option>
+        <option value="crypto">Crypto</option>
+        <option value="golf">Golf</option>
+      </select>
+      <label for="env">Environment</label>
+      <select id="env">
+        <option value="demo" selected>Demo</option>
+        <option value="prod">Production (labelled comparison)</option>
+      </select>
+      <span class="small dim" id="count"></span>
+    </div>
+    <div class="tablewrap">
+      <table id="all">
+        <thead><tr>
+          <th>#</th><th>Market</th><th>Topic</th><th class="num">Last YES</th><th class="num">Bid</th>
+          <th class="num">Ask</th><th class="num">24h contracts</th><th class="num">Open interest</th>
+          <th class="num">Resting $</th><th>Closes</th><th>Source</th>
+        </tr></thead>
+        <tbody><tr><td colspan="11" class="loading">Loading…</td></tr></tbody>
+      </table>
+    </div>
+    <p class="small dim" id="note"></p>
+  </div>
+
+  <h2>Coverage at a glance</h2>
+  <div class="tablewrap">
+    <table id="coverage">
+      <thead><tr><th>Topic</th><th class="num">Series matched</th><th class="num">Series tracked</th>
+        <th class="num">Open markets</th><th class="num">Contracts traded</th><th class="num">Open interest ($, derived)</th>
+        <th class="num">Resting $</th></tr></thead>
+      <tbody><tr><td colspan="7" class="loading">Loading…</td></tr></tbody>
+    </table>
+  </div>
+</main>
+
+<footer class="foot"></footer>
+<script src="assets/app.js"></script>
+<script>
+(function () {
+  KD.renderChrome("dashboard.html");
+  let D = null;
+
+  const NOTES = {
+    contracts_traded: "Kalshi `volume_fp` — contracts exchanged. Exchanges do not publish a dollars-traded figure.",
+    contracts_traded_24h: "Kalshi `volume_24h_fp` — fresher than cumulative volume, which never resets.",
+    open_interest_contracts: "Kalshi `open_interest_fp` — contracts currently held.",
+    open_interest_dollars_derived: "Derived: open interest × price (last trade, else mid). Kalshi returns contracts, not dollars.",
+    traded_notional_dollars_derived: "Derived: contracts traded × price. Labelled derived because Kalshi does not return it.",
+    resting_liquidity_dollars: "Sum of price × contracts across both YES and NO bids in the captured order book.",
+  };
+
+  KD.loadJSON("dashboard.json").then(function (d) {
+    D = d;
+    KD.freshBanner(document.getElementById("fresh"), d.meta || {});
+    ["metric", "topic", "env"].forEach(function (id) {
+      document.getElementById(id).addEventListener("change", render);
+    });
+    renderCoverage();
+    render();
+  }).catch(function (e) {
+    document.querySelector("#all tbody").innerHTML =
+      "<tr><td colspan='11' class='error'>" + KD.esc(e.message) + "</td></tr>";
+  });
+
+  function renderCoverage() {
+    const rows = Object.keys(D.tables || {}).map(function (t) {
+      const topic = (D.topics || {})[t] || {};
+      const groups = D.tables[t] || {};
+      const all = groups.by_contracts_traded || [];
+      return { t: t, topic: topic, all: all };
+    });
+    const agg = (D.analysis || {}).per_topic_demo || {};
+    document.querySelector("#coverage tbody").innerHTML = rows.map(function (r) {
+      const a = agg[r.t] || {};
+      return "<tr><td><a href='categories/" + r.t + ".html'>" + KD.esc(r.topic.label || r.t) + "</a></td>" +
+        "<td class='num'>" + KD.num(r.topic.series_matched_total) + "</td>" +
+        "<td class='num'>" + KD.num((r.topic.series_selected || []).length) + "</td>" +
+        "<td class='num'>" + KD.num(a.open_markets) + "</td>" +
+        "<td class='num'>" + KD.num(a.sum_contracts_traded) + "</td>" +
+        "<td class='num'>" + KD.money(a.sum_open_interest_dollars_derived) + "</td>" +
+        "<td class='num'>" + KD.money(a.sum_resting_liquidity_dollars) + "</td></tr>";
+    }).join("");
+  }
+
+  function render() {
+    const metric = document.getElementById("metric").value;
+    const topic = document.getElementById("topic").value;
+    const env = document.getElementById("env").value;
+    if (!D) return;
+
+    let rows = [];
+    if (env === "prod") {
+      Object.keys(D.tables || {}).forEach(function (t) {
+        if (topic && t !== topic) return;
+        (D.tables[t].production_top_by_contracts || []).forEach(function (r) { rows.push(r); });
+      });
+      rows.sort(function (a, b) {
+        return ((b.metrics || {}).contracts_traded || 0) - ((a.metrics || {}).contracts_traded || 0);
+      });
+    } else {
+      const seen = new Set();
+      Object.keys(D.tables || {}).forEach(function (t) {
+        if (topic && t !== topic) return;
+        (D.tables[t].by_contracts_traded || []).forEach(function (r) {
+          if (seen.has(r.ticker)) return;
+          seen.add(r.ticker);
+          rows.push(r);
+        });
+      });
+      rows.sort(function (a, b) {
+        return (((b.metrics || {})[metric]) || -1) - (((a.metrics || {})[metric]) || -1);
+      });
+    }
+
+    document.getElementById("count").textContent = KD.num(rows.length) + " markets";
+    document.getElementById("note").textContent = env === "prod"
+      ? "Production environment, ranked by contracts traded. Kalshi states demo prices may not reflect real markets, so this is a comparison, not the dashboard's source of truth."
+      : (NOTES[metric] || "");
+
+    document.querySelector("#all tbody").innerHTML = rows.map(function (r, i) {
+      const m = r.metrics || {};
+      return "<tr><td class='num dim'>" + (i + 1) + "</td>" +
+        "<td>" + (env === "prod" ? "<span class='pill info'>prod</span> " : "") +
+          "<a href='liquidity.html?ticker=" + encodeURIComponent(r.ticker) + "'>" + KD.esc(r.title) + "</a>" +
+          "<div class='dim mono'>" + KD.esc(r.ticker) + "</div></td>" +
+        "<td>" + (r.topics || []).map(function (t) { return "<span class='pill'>" + KD.esc(KD.topicLabel(t)) + "</span>"; }).join(" ") + "</td>" +
+        "<td class='num'>" + KD.cents(r.last_price_dollars) + "</td>" +
+        "<td class='num'>" + KD.cents(r.yes_bid_dollars) + "</td>" +
+        "<td class='num'>" + KD.cents(r.yes_ask_dollars) + "</td>" +
+        "<td class='num'>" + KD.num(m.contracts_traded_24h) + "</td>" +
+        "<td class='num'>" + KD.num(m.open_interest_contracts) + "</td>" +
+        "<td class='num'>" + KD.money(m.resting_liquidity_dollars) + "</td>" +
+        "<td class='small nowrap'>" + KD.esc((r.close_time || "—").slice(0, 16).replace("T", " ")) + "</td>" +
+        "<td>" + KD.src(r.source) + "</td></tr>";
+    }).join("") || "<tr><td colspan='11' class='dim'>No markets for this filter.</td></tr>";
+  }
+})();
+</script>
+</body>
+</html>

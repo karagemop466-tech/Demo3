@@ -1,0 +1,14 @@
+{
+  "name": "kalshi-demo-dashboard",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Source-linked Kalshi demo market dashboard. Dev dependencies exist only for the offline render test (tools/render_test.js).",
+  "scripts": {
+    "test:render": "node tools/render_test.js",
+    "test:python": "python3 -m unittest discover -s collector/tests -v",
+    "check:site": "python3 tools/check_site.py"
+  },
+  "devDependencies": {
+    "jsdom": "^25.0.1"
+  }
+}

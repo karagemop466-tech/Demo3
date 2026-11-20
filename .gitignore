@@ -4,3 +4,7 @@
 data/live.json
 data/live-prod.json
 data/resolutions.json
+
+# Node (used only for the offline render test)
+node_modules/
+package-lock.json

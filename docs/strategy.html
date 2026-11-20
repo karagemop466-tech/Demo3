@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Strategy — Kalshi demo dashboard</title>
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<header class="top"></header>
+
+<main class="wrap">
+  <h1>Strategy — rules, evidence, and what was rejected</h1>
+  <p class="lede">Every rule here is set by a measured number from the settlement data, not by preference. The
+  evidence is printed next to the rule so it can be argued with.</p>
+  <div id="fresh"></div>
+
+  <div class="banner bad">
+    <span class="t">The obvious strategy was rejected.</span> Buying the market's favourite (YES ≥ $0.80) won
+    <strong id="fav-win">…</strong> of the time in this sample but cost <strong id="fav-px">…</strong> on average — a
+    <strong id="fav-exp">…</strong> expectancy per contract before fees. It is still <em>detected</em> and shown,
+    because hiding it would hide the reason.
+  </div>
+
+  <h2>Measured expectancy by price band</h2>
+  <div class="tablewrap">
+    <table id="exp">
+      <thead><tr><th>YES price band</th><th class="num">n</th><th class="num">YES</th><th class="num">NO</th>
+        <th class="num">Win rate</th><th class="num">Avg price</th><th class="num">YES exp. / contract</th>
+        <th class="num">NO exp. / contract</th></tr></thead>
+      <tbody><tr><td colspan="8" class="loading">Loading…</td></tr></tbody>
+    </table>
+  </div>
+  <p class="small dim" id="exp-note"></p>
+
+  <h2>Rules in force</h2>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Rule</th><th>Condition</th><th>Why it survives</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><strong>R1 longshot-fade</strong></td>
+          <td>Buy NO when YES trades $0.01–0.20, 24h volume &gt; 0, derived spread ≤ $0.04, NO ask ≤ $0.99</td>
+          <td>Measured <span id="r1-exp">…</span> per NO contract in that band</td>
+          <td><span class="pill yes">candidate</span></td></tr>
+        <tr><td><strong>R2 favourite-trap</strong></td>
+          <td>YES ≥ $0.80</td>
+          <td>Measured <span id="r2-exp">…</span> per YES contract — negative, so it is reported and not recommended</td>
+          <td><span class="pill no">rejected</span></td></tr>
+        <tr><td><strong>R3 liquidity-provide</strong></td>
+          <td>Rest a limit order inside the spread</td>
+          <td>Needs a fill model and per-series maker-fee treatment (<code>fee_type</code>); guessing either would be fiction</td>
+          <td><span class="pill">documented only</span></td></tr>
+        <tr><td><strong>R4 avoid</strong></td>
+          <td>Spread &gt; $0.10, resting depth &lt; $50, or price outside $0.01–0.20</td>
+          <td>Book too thin to enter at size — every skip is listed with its reason</td>
+          <td><span class="pill">enforced</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Current candidates <span class="pill info" id="cand-count">…</span></h2>
+  <p class="small dim">Generated from the latest order books. <strong>This is arithmetic on the book you can see
+  now</strong> — how many contracts exist at or better than the price, what they cost, and what they pay if the side
+  resolves YES. It is not a backtest and not a forecast.</p>
+  <div class="tablewrap">
+    <table id="cands">
+      <thead><tr><th>Rule</th><th>Market</th><th>Side</th><th class="num">Limit</th><th class="num">Size</th>
+        <th class="num">Available in book</th><th class="num">Cost</th><th class="num">Breakeven</th><th>Source</th></tr></thead>
+      <tbody><tr><td colspan="9" class="loading">Loading…</td></tr></tbody>
+    </table>
+  </div>
+
+  <h2>Rejected and skipped — with the reason</h2>
+  <p class="small dim">Silent filters look like agreement. Every market the rules declined is listed.</p>
+  <div class="tablewrap">
+    <table id="skips">
+      <thead><tr><th>Market</th><th>Topic</th><th>Reason</th></tr></thead>
+      <tbody><tr><td colspan="3" class="loading">Loading…</td></tr></tbody>
+    </table>
+  </div>
+
+  <h2>Prerequisites before anyone trades on this</h2>
+  <ol class="tight">
+    <li><strong>D13</strong> — agree the P&amp;L definition (realised vs. settlement revenue vs. fees).</li>
+    <li><strong>D9</strong> — widen the settlement sample beyond the current window via the historical endpoints.</li>
+    <li><strong>D12</strong> — name who is accountable for automated order entry, and the size limit.</li>
+    <li>Compute fees. A 1.58¢ edge is smaller than many fee schedules; series carry <code>fee_type</code> and
+      <code>fee_multiplier</code>.</li>
+    <li>Do not assume demo results transfer — Kalshi states demo prices may not reflect real markets
+      (<a href="https://docs.kalshi.com/getting_started/demo_env.md" target="_blank" rel="noopener">Demo Environment</a>).</li>
+  </ol>
+
+  <p class="small"><a href="https://github.com/karagemop466-tech/Demo3/blob/main/docs/portfolio/STRATEGY.md">
+    Full framework, including authentication and the order API change →</a></p>
+</main>
+
+<footer class="foot"></footer>
+<script src="assets/app.js"></script>
+<script>
+(function () {
+  KD.renderChrome("strategy.html");
+
+  function signed(v) {
+    if (v == null) return KD.dash();
+    return (v >= 0 ? "+" : "") + (v * 100).toFixed(2) + "¢";
+  }
+
+  KD.loadJSON("dashboard.json").then(function (d) {
+    KD.freshBanner(document.getElementById("fresh"), d.meta || {});
+    const study = (d.analysis || {}).resolution_study;
+    if (!study || !study.buckets) {
+      document.querySelector("#exp tbody").innerHTML =
+        "<tr><td colspan='8' class='dim'>Expectancy study not built yet (runs as analysis/expectancy.py).</td></tr>";
+      return;
+    }
+    document.querySelector("#exp tbody").innerHTML = study.buckets.map(function (b) {
+      if (!b.n) return "<tr><td>" + KD.esc(b.bucket) + "</td><td class='num'>0</td><td colspan='6' class='dim'>no markets</td></tr>";
+      return "<tr><td>" + KD.esc(b.bucket) + "</td><td class='num'>" + KD.num(b.n) + "</td>" +
+        "<td class='num'>" + KD.num(b.yes) + "</td><td class='num'>" + KD.num(b.no) + "</td>" +
+        "<td class='num'>" + KD.pct(b.win_rate_yes, 2) + "</td>" +
+        "<td class='num'>" + KD.money(b.avg_yes_price, 4) + "</td>" +
+        "<td class='num'>" + signed(b.yes_expectancy_per_contract) + "</td>" +
+        "<td class='num'>" + signed(b.no_expectancy_per_contract) + "</td></tr>";
+    }).join("");
+    document.getElementById("exp-note").innerHTML = KD.esc(study.formula) + " Usable rows: " +
+      KD.num(study.rows_usable) + "; excluded: " + KD.esc(JSON.stringify(study.rows_excluded)) + ". " +
+      (study.caveats || []).map(KD.esc).join(" · ");
+
+    const fav = study.favourite_band_0_80_to_0_99 || {};
+    const lng = study.longshot_band_0_01_to_0_20 || {};
+    document.getElementById("fav-win").textContent = KD.pct(fav.win_rate_yes, 2);
+    document.getElementById("fav-px").textContent = KD.money(fav.avg_yes_price, 4);
+    document.getElementById("fav-exp").textContent = signed(fav.yes_expectancy_per_contract);
+    document.getElementById("r1-exp").textContent = signed(lng.no_expectancy_per_contract);
+    document.getElementById("r2-exp").textContent = signed(fav.yes_expectancy_per_contract);
+  }).catch(function (e) {
+    document.querySelector("#exp tbody").innerHTML = "<tr><td colspan='8' class='error'>" + KD.esc(e.message) + "</td></tr>";
+  });
+
+  KD.loadJSON("order-rules.json").then(function (r) {
+    const cands = r.candidates || [];
+    document.getElementById("cand-count").textContent = cands.length + " candidates";
+    document.querySelector("#cands tbody").innerHTML = cands.map(function (c) {
+      const size = c.size_contracts || 0;
+      const cost = (c.limit_price || 0) * size;
+      const be = size ? (cost / size) : null; // payout is $1/contract, so breakeven = price
+      return "<tr><td>" + KD.esc(c.rule) + "</td>" +
+        "<td><a href='liquidity.html?ticker=" + encodeURIComponent(c.ticker) + "'>" + KD.esc((c.title || "").slice(0, 60)) +
+          "</a><div class='dim mono'>" + KD.esc(c.ticker) + "</div></td>" +
+        "<td><span class='pill " + (c.side === "yes" ? "yes" : "no") + "'>" + KD.esc(c.side) + "</span></td>" +
+        "<td class='num'>" + KD.money(c.limit_price, 4) + (c.price_grid_validated ? "" : " <span class='blankcell' title='price grid not available in this snapshot'>*</span>") + "</td>" +
+        "<td class='num'>" + KD.num(size) + "</td>" +
+        "<td class='num'>" + KD.num(c.book_contracts_available) + "</td>" +
+        "<td class='num'>" + KD.money(cost) + "</td>" +
+        "<td class='num'>" + KD.pct(be, 2) + "</td>" +
+        "<td>" + KD.src(c.source) + "</td></tr>";
+    }).join("") || "<tr><td colspan='9' class='dim'>No candidate passed all four rules in this snapshot. " +
+      "That is a legitimate result, not a bug.</td></tr>";
+
+    const skips = r.skipped || [];
+    document.querySelector("#skips tbody").innerHTML = skips.map(function (s) {
+      return "<tr><td class='mono small'>" + KD.esc(s.ticker) + "</td>" +
+        "<td>" + KD.esc(KD.topicLabel(s.topic)) + "</td>" +
+        "<td class='small'>" + (s.measured ? "<span class='pill no'>measured</span> " : "") + KD.esc(s.reason) + "</td></tr>";
+    }).join("") || "<tr><td colspan='3' class='dim'>Nothing was skipped in this snapshot.</td></tr>";
+  }).catch(function (e) {
+    document.querySelector("#cands tbody").innerHTML =
+      "<tr><td colspan='9' class='dim'>order-rules.json not built yet (" + KD.esc(e.message) + ").</td></tr>";
+  });
+})();
+</script>
+</body>
+</html>
