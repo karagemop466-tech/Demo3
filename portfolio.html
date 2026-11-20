@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portfolio Performance — Kalshi Demo Dashboard</title>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#content">Skip to content</a>
+
+<header>
+  <div class="header-inner">
+    <div class="brand"><div class="mark">K</div><div>Kalshi Demo Dashboard</div></div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="dashboard.html">Live Dashboard</a></li>
+        <li><a href="gas-prices.html">Gas Prices</a></li>
+        <li><a href="elections.html">Elections</a></li>
+        <li><a href="culture.html">Culture</a></li>
+        <li><a href="crypto.html">Crypto</a></li>
+        <li><a href="golf.html">Golf</a></li>
+        <li><a href="portfolio.html" class="active">Portfolio</a></li>
+        <li><a href="trades.html">Trades</a></li>
+        <li><a href="suggestions.html">Suggestions</a></li>
+        <li><a href="questions.html">Questions &amp; Answers</a></li>
+        <li><a href="flagged.html">Flagged for Review</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <h1>Portfolio Performance</h1>
+      <p>Track the Kalshi demo account portfolio: balance, realized/unrealized P&L, and trade history. Results can
+      be analyzed, trades categorized, and strategies built by trade type.</p>
+    </div>
+    <div class="card">
+      <div data-auth-notice></div>
+    </div>
+  </div>
+</header>
+
+<div class="container" id="content">
+  <section class="section">
+    <h2 class="section-title"><span class="kicker">Planned portfolio views</span> What will be shown once authenticated</h2>
+    <table class="data">
+      <thead><tr><th>View</th><th>Data required</th><th>Kalshi endpoint (auth)</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>Account balance</td><td>Portfolio balance, available cash</td><td>GET /portfolio</td><td><span class="badge badge-unverified">unverified — demo API key required</span></td></tr>
+        <tr><td>P&amp;L summary</td><td>Realized + unrealized P&amp;L by event</td><td>GET /portfolio</td><td><span class="badge badge-unverified">unverified — demo API key required</span></td></tr>
+        <tr><td>Trade history</td><td>Fills: ticker, side, price, size, timestamp</td><td>GET /portfolio (trades)</td><td><span class="badge badge-unverified">unverified — demo API key required</span></td></tr>
+        <tr><td>Open positions</td><td>Current contracts held, average price</td><td>GET /portfolio</td><td><span class="badge badge-unverified">unverified — demo API key required</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title"><span class="kicker">Trade categorization &amp; strategies</span> Framework</h2>
+    <p>Once the portfolio feed is authenticated, trades can be categorized and strategies compared:</p>
+    <table class="data">
+      <thead><tr><th>Trade type / category</th><th>Suggested strategy lens</th><th>Performance metric</th></tr></thead>
+      <tbody>
+        <tr><td>Directional (Yes/No on an event)</td><td>Win rate by category; average hold time</td><td>P&amp;L per category</td></tr>
+        <tr><td>Arbitrage / spread across markets</td><td>Fill rate vs. slippage; capture per trade</td><td>Net spread captured</td></tr>
+        <tr><td>Event-expiry (held to resolution)</td><td>Resolution accuracy: Yes vs. No outcomes</td><td>Resolve-to-profit ratio</td></tr>
+        <tr><td>Scalping (seconds/minutes)</td><td>Trades per hour; edge per tick</td><td>P&amp;L per hour</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section sources">
+    <h4>Official sources</h4>
+    <ul>
+      <li><a href="https://docs.kalshi.io" target="_blank" rel="noopener">Kalshi Trade API documentation (portfolio / trade / order endpoints require signed requests)</a></li>
+      <li><a href="https://external-api.demo.kalshi.co/trade-api/v2" target="_blank" rel="noopener">Kalshi demo Trade API v2</a></li>
+      <li><a href="flagged.html">Flagged for Review — portfolio / authentication</a></li>
+    </ul>
+  </section>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div><strong>Kalshi Demo Dashboard</strong> — Portfolio performance.</div>
+    <div class="disclaimer">No API keys are collected or stored by this site. Portfolio and trade execution require your own signed Kalshi demo API key; add it locally (never commit it). Demo environment only; not financial advice.</div>
+  </div>
+</footer>
+
+<script src="assets/js/app.js"></script>
+</body>
+</html>
