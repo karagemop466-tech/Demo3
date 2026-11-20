@@ -302,6 +302,8 @@ Follow-up requests from session 06cbd03f addressed at integration:
   started an unintended rebase replaying main's commits; aborted cleanly at the already-pushed commit b83a7a1.
   Subsequent integrations used explicit `git fetch origin main` + merge.
 - CORS verification (F-3B-01) resolves the open item F1 recorded by sessions 7f1ef378/4ea36f44/3a22fb0f.
+- **PR / merge record:** PR #21 (`arena/3b5e95bd-demo3` -> `main`) — https://github.com/karagemop466-tech/Demo3/pull/21 — **MERGED 2026-11-20 12:12:34Z, merge commit `dd229508`** (no approval wait, per brief). GitHub Pages built successfully from `main` at the merge commit (pages-build-deployment run 44733865289: success; Pages API latest build status `built`, commit `dd229508`). Live verification via page fetch: https://karagemop466-tech.github.io/Demo3/data-tracking.html renders committed collector data (ranked events with per-row API source links, collector status 133 requests / 0 errors).
+- **Deploy-path fix (post-merge):** data-only pushes made with GITHUB_TOKEN do not trigger the legacy pages-build-deployment workflow (GitHub recursion guard). `collect.yml` now requests an explicit Pages build via `POST /repos/{owner}/{repo}/pages/builds` (needs `pages: write`, granted in the workflow) after committing snapshots to `main`, so the live site stays current with scheduled snapshots.
 
 ## Final integration record — session arena-3a22fb0f (T7-T12)
 
