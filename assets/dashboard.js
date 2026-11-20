@@ -13,7 +13,8 @@
     samples: {}, candles: [], orderbook: null, trades: [],
     windowSec: 3600, scanSec: 20, obSec: 10,
     timers: [], resolutions: [], fills: [],
-    connected: false, lastScan: null, errors: 0, scanInProgress: false
+    connected: false, lastScan: null, errors: 0, scanInProgress: false,
+    known: {}, resolveQueue: [], resolveChecking: false
   };
   try { state.resolutions = JSON.parse(localStorage.getItem("kd_resolutions") || "[]"); }
   catch (e) { state.resolutions = []; }
@@ -53,6 +54,8 @@
     return {
       ticker: m.ticker, event_ticker: m.event_ticker, title: m.title || m.ticker,
       status: m.status, result: m.result || "",
+      settlement_ts: m.settlement_ts || "",
+      settlement_value: m.settlement_value_dollars || "",
       last: last, yb: yb, ya: ya, vol: vol, oi: oi,
       volDollars: K.estDollars(vol, last), oiDollars: K.estDollars(oi, last),
       close_time: m.close_time, series_ticker: m.series_ticker || "",
@@ -139,6 +142,8 @@
       renderRanking();
       recordSamples();
       trackResolutions();
+      registerKnown();
+      checkResolutions();
       if (window.KD && window.KD.onMarkets) { try { window.KD.onMarkets(state.markets); } catch (e) { /* alert sink must not break the scan */ } }
       var capNote = depth > 0 ? ("top " + depth + " matched series per topic") : "ALL matched series";
       $("scanStatus").textContent = "Last scan: " + new Date().toLocaleTimeString() +
@@ -381,9 +386,9 @@
   }
 
   /* ---------- 4. Resolution tracking (yes / no) ---------- */
-  function trackResolutions() {
+  function trackResolutions(extra) {
     var changed = false;
-    state.markets.forEach(function (m) {
+    state.markets.concat(extra || []).forEach(function (m) {
       if ((m.status === "closed" || m.status === "settled" || m.status === "finalized") &&
           m.result &&
           !state.resolutions.find(function (r) { return r.ticker === m.ticker; })) {
@@ -400,6 +405,68 @@
     if (T && T.markResolutions) {
       T.markResolutions(state.resolutions.concat(seededResolutionList()));
     }
+  }
+  /* ---------- 4b. Resolution watch list (feeds the alert chat) ----------
+   * Open scans never return settled markets (query status=open returns
+   * status "active" records only — verified live 2026-11-20), so a market
+   * that resolves disappears before the chat could see it. Keep every ticker
+   * this page has seen and, once per scan, batch re-check up to 50 with
+   * GET /markets?tickers=a,b,… (verified live 2026-11-20: the reply includes
+   * finalized records with result "yes"/"no", settlement_ts and
+   * settlement_value_dollars). Resolved rows go to the alert chat
+   * (KD.onSettled -> RESOLVED yes/no message) and to the tracker above.
+   * Sources: https://docs.kalshi.com/api-reference/market/get-markets
+   *          https://docs.kalshi.com/getting_started/market_settlement
+   */
+  function registerKnown() {
+    var now = Date.now();
+    state.markets.forEach(function (m) {
+      if (m.ticker) state.known[m.ticker] = { row: m, seen: now };
+    });
+    var keys = Object.keys(state.known);
+    if (keys.length > 800) {
+      keys.sort(function (a, b) { return state.known[a].seen - state.known[b].seen; });
+      keys.slice(0, keys.length - 800).forEach(function (k) { delete state.known[k]; });
+    }
+    state.markets.forEach(function (m) {
+      if (m.ticker && state.resolveQueue.indexOf(m.ticker) === -1 &&
+          !state.resolutions.find(function (r) { return r.ticker === m.ticker; })) {
+        state.resolveQueue.push(m.ticker);
+      }
+    });
+  }
+  async function checkResolutions() {
+    if (state.resolveChecking || !state.resolveQueue.length) return;
+    state.resolveChecking = true;
+    var batch = state.resolveQueue.splice(0, 50);
+    try {
+      var j = await K.apiGet("/markets", { tickers: batch.join(","), limit: 100 });
+      var rows = (j && j.markets) || [];
+      var seenInBatch = {};
+      var settled = [];
+      rows.forEach(function (raw) {
+        seenInBatch[raw.ticker] = true;
+        var known = state.known[raw.ticker];
+        raw._topic = known ? known.row.topic : "";
+        var m = marketRow(raw);
+        var res = String(m.result || "").toLowerCase();
+        var isRes = (res === "yes" || res === "no") &&
+          (m.status === "finalized" || m.status === "settled" || m.status === "closed");
+        if (isRes) settled.push(m);
+        else if (state.resolveQueue.indexOf(m.ticker) === -1) state.resolveQueue.push(m.ticker);
+      });
+      batch.forEach(function (t) {
+        if (!seenInBatch[t] && state.resolveQueue.indexOf(t) === -1) state.resolveQueue.push(t);
+      });
+      if (settled.length) {
+        trackResolutions(settled);
+        if (window.KD && window.KD.onSettled) {
+          try { window.KD.onSettled(settled); } catch (e) { /* chat must not break tracking */ }
+        }
+      }
+    } catch (e) {
+      batch.forEach(function (t) { if (state.resolveQueue.indexOf(t) === -1) state.resolveQueue.push(t); });
+    } finally { state.resolveChecking = false; }
   }
   var seeded = [];
   function seededResolutionList() { return seeded; }

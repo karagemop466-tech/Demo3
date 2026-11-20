@@ -2,7 +2,8 @@
  *
  * Detects live contract price swings >= $0.10 (10 cents) in either direction
  * and publishes them to two scrolling chats:
- *   - "All events": every swing alert
+ *   - "All events": every swing alert, plus RESOLVED yes/no messages when a
+ *     tracked market settles (status "finalized", result "yes" | "no")
  *   - "High ROI model": a selective, labeled heuristic filter (NOT a real model)
  *
  * Data: reuses the dashboard's live market samples (GET /markets, demo API,
@@ -133,7 +134,15 @@
   function loadEvent(evt) {
     if (!evt || KD.events[evt]) return;
     KD.events[evt] = { status: "loading", sources: [], title: "", api: eventUrl(evt) };
-    fetch(eventUrl(evt), { headers: { Accept: "application/json" } })
+    var req;
+    try {
+      req = fetch(eventUrl(evt), { headers: { Accept: "application/json" } });
+    } catch (e) {
+      KD.events[evt] = { status: "error", sources: [], title: "", api: eventUrl(evt) };
+      render();
+      return;
+    }
+    Promise.resolve(req)
       .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
       .then(function (j) {
         var ev = j.event || {};
@@ -171,6 +180,61 @@
       esc(a.rules) + "</div></details>";
   }
 
+  /* ---------- resolutions (yes / no) ----------
+   * A market that settles returns status "finalized" with result "yes" or "no"
+   * (plus settlement_ts, settlement_value_dollars) — verified live on the demo
+   * API 2026-11-20 (e.g. GET /markets?series_ticker=KXAAAGASW&status=settled).
+   * The dashboard's scan feeds settled rows here; each resolution is posted
+   * once to the All-events chat so a tracked event can be followed until it
+   * resolves. Source: https://docs.kalshi.com/getting_started/market_settlement
+   */
+  function isResolved(m) {
+    if (!m) return false;
+    var st = String(m.status || "").toLowerCase();
+    var r = String(m.result || "").toLowerCase();
+    return (r === "yes" || r === "no") &&
+      (st === "finalized" || st === "settled" || st === "closed");
+  }
+  function pushResolution(m) {
+    var t = m.ticker;
+    var dup = state.alerts.some(function (a) {
+      return a.kind === "resolution" && a.ticker === t;
+    });
+    if (dup) return null;
+    var alert = {
+      id: "r" + Date.now() + Math.random().toString(36).slice(2, 6),
+      ts: Math.floor(Date.now() / 1000),
+      kind: "resolution",
+      ticker: t,
+      title: m.title || t,
+      topic: m.topic || "",
+      series: m.series_ticker || "",
+      result: String(m.result || "").toLowerCase(),
+      settlementTs: m.settlement_ts || "",
+      settlementValue: m.settlement_value || "",
+      api: apiUrl(t)
+    };
+    state.alerts.unshift(alert);
+    if (state.alerts.length > MAX_ALERTS) state.alerts.length = MAX_ALERTS;
+    persist();
+    render();
+    return alert;
+  }
+  KD.onSettled = function (rows) {
+    if (!state.enabled) return;
+    (rows || []).forEach(function (m) {
+      if (!m || !m.ticker || !isResolved(m)) return;
+      var a = pushResolution(m);
+      if (a && m.event_ticker) {
+        a.event = m.event_ticker;
+        a.rules = m.rules_primary || "";
+        persist();
+        if (KD.events[a.event]) render();
+        loadEvent(a.event);
+      }
+    });
+  };
+
   /* ---------- chat row selection ---------- */
   KD.allRows = function () { return state.alerts; };
   KD.roiRows = function () { return state.alerts.filter(function (a) { return a.roiSignal; }); };
@@ -183,7 +247,22 @@
   KD.toggle = function () { state.enabled = !state.enabled; render(); };
 
   /* ---------- rendering (two scrolling chats) ---------- */
+  function resolutionRow(a) {
+    var settle = a.settlementTs ? " <span class='small muted'>settled " + esc(a.settlementTs) + "</span>" : "";
+    var value = a.settlementValue ? " &middot; settlement value " + esc(a.settlementValue) : "";
+    return "<tr class='alert resolved'><td class='mono small muted'>" + fmtTs(a.ts) + "</td>" +
+      "<td><span class='pill topic'>" + esc(a.topic) + "</span></td>" +
+      "<td class='mono'>" + esc(a.ticker) + "</td>" +
+      "<td>" + esc(a.title) + "</td>" +
+      "<td class='num'>RESOLVED</td>" +
+      "<td class='num'><strong>" + esc(a.result.toUpperCase()) + "</strong></td>" +
+      "<td><a class='src' href='" + esc(a.api) + "' target='_blank' rel='noopener'>market API</a></td>" +
+      "<td class='ctx'>" + contextCell(a) + settle + value +
+      "<div class='small muted'>Official result from the settlement record — how the event resolved.</div>" +
+      rulesCell(a) + "</td></tr>";
+  }
   function alertRow(a) {
+    if (a.kind === "resolution") return resolutionRow(a);
     var cls = "alert " + (a.dir === "up" ? "up" : a.dir === "down" ? "down" : "flat");
     var arrow = a.dir === "up" ? "\u25b2" : a.dir === "down" ? "\u25bc" : "\u25b6";
     var dirLabel = a.dir === "up" ? "up" : a.dir === "down" ? "down" : "flat";

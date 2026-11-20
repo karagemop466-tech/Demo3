@@ -120,3 +120,45 @@ test("chat tabs switch between the all-events and high-ROI panels", () => {
   assert.equal(d.getElementById("chatAll").style.display, "");
   assert.match(d.getElementById("alertCount").textContent, /1 alert/);
 });
+
+// --- resolution (yes/no) messages, ported from session 13603ac5's feature set (integration a7ce6f14) ---
+// Settled records verified live 2026-11-20: GET /markets?series_ticker=KXAAAGASW&status=settled
+// returns status "finalized" with result "yes"/"no", settlement_ts, settlement_value_dollars.
+const settledRow = (extra = {}) => ({
+  ticker: "KXAAAGASW-26NOV16-4.2000", title: "Will average gas prices be above $4.2000?",
+  topic: "gas", series_ticker: "KXAAAGASW", event_ticker: "KXAAAGASW-26NOV16",
+  status: "finalized", result: "no",
+  settlement_ts: "2026-11-16T14:32:51.060078Z", settlement_value: "0.0000",
+  ...extra,
+});
+
+test("a settled market posts a RESOLVED no message exactly once", () => {
+  const { KD, dom } = load();
+  KD.onSettled([settledRow()]);
+  KD.onSettled([settledRow()]);           // second scan must not duplicate
+  const rows = KD.allRows().filter((r) => r.kind === "resolution");
+  assert.equal(rows.length, 1, "resolution announced once (deduped by ticker)");
+  assert.equal(rows[0].result, "no");
+  const text = dom.window.document.getElementById("alertsAll").textContent;
+  assert.match(text, /RESOLVED/);
+  assert.match(text, /NO/);
+  assert.equal(KD.roiRows().length, 0, "resolutions are events, not ROI signals");
+});
+
+test("an open market with an empty result does not post a resolution", () => {
+  const { KD } = load();
+  KD.onSettled([settledRow({ status: "active", result: "" })]);
+  KD.onSettled([settledRow({ status: "active", result: "yes" })]); // not finalized yet
+  assert.equal(KD.allRows().length, 0);
+});
+
+test("a yes resolution renders with its official market API link", () => {
+  const { KD, dom } = load();
+  KD.onSettled([settledRow({ ticker: "KXDEMO-YES", result: "yes" })]);
+  const d = dom.window.document;
+  const text = d.getElementById("alertsAll").textContent;
+  assert.match(text, /RESOLVED/);
+  assert.match(text, /YES/);
+  const link = d.querySelector("#alertsAll a.src");
+  assert.match(link.getAttribute("href"), /\/markets\/KXDEMO-YES$/);
+});
