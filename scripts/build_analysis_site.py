@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
-"""Generate the static GitHub Pages shell (index.html and pages/*.html).
+"""Generate the static analysis site under analysis/ (index.html and pages/*.html).
 
-Data is NOT baked into the HTML. Each page loads data/live/*.json and
-data/findings.json at run time through assets/app.js, so re-running the
+Data is NOT baked into the HTML. Each page loads analysis/data/live/*.json and
+analysis/data/findings.json at run time through assets/app.js, so re-running the
 refresh job updates the tables without rebuilding the pages.
 
-Usage:  python3 scripts/build_site.py      (run from the repository root)
+Usage:  python3 scripts/build_analysis_site.py      (run from the repository root)
 """
 import pathlib, html
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
+SITE = ROOT / "analysis"   # all generated pages live here (other sessions own the root and docs/)
 
 def esc(t):
     return html.escape(t, quote=True)
@@ -43,7 +44,7 @@ def page(path, title, h1, lead, page_id, topic=None, intro=""):
 </body>
 </html>
 """
-    out = ROOT / path
+    out = SITE / path
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(doc, encoding="utf-8")
     return str(out.relative_to(ROOT))
@@ -99,6 +100,5 @@ written.append(page("pages/repo-review.html", "Repo review", "Repository review"
 written.append(page("pages/flagged.html", "Flagged for Review", "Flagged for Review", "Irregularities and unverified items. Flagged items do not block the merge.", "flagged"))
 written.append(page("pages/sources.html", "Sources", "Sources", "Every source the findings cite, with what it was used to support and whether it was read in this session.", "sources"))
 
-(ROOT / ".nojekyll").write_text("", encoding="utf-8")
 for w in written:
     print("wrote", w)

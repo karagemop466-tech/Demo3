@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Refresh the Kalshi dashboard data in data/live/.
+"""Refresh the Kalshi dashboard data in analysis/data/live/.
 
 Only PUBLIC, unauthenticated read endpoints of the Kalshi Trade API are used
 (see https://docs.kalshi.com/llms.txt -> "Quick Start: Market Data").
@@ -10,17 +10,17 @@ produced the value, plus `fetched_at`. Nothing is estimated or back-filled.
 No derived or estimated values are stored; every field is copied from the API response.
 
 Outputs
-  data/live/meta.json         run metadata, call counts, errors
-  data/live/markets.json      top open markets by contract volume, per topic
-  data/live/resolutions.json  settled markets with their recorded result (yes/no)
-  data/live/orderbooks.json   top-of-book depth for top markets
-  data/live/candles.json      price history (1-hour and 1-day candlesticks)
-  data/live/exchange.json     exchange status from GET /exchange/status
+  analysis/data/live/meta.json         run metadata, call counts, errors
+  analysis/data/live/markets.json      top open markets by contract volume, per topic
+  analysis/data/live/resolutions.json  settled markets with their recorded result (yes/no)
+  analysis/data/live/orderbooks.json   top-of-book depth for top markets
+  analysis/data/live/candles.json      price history (1-hour and 1-day candlesticks)
+  analysis/data/live/exchange.json     exchange status from GET /exchange/status
 
 Environment overrides
   KALSHI_BASE   API base URL (used by the offline test harness)
   KALSHI_SLEEP  seconds between requests (default 0.25)
-  KALSHI_OUT    output directory (default data/live; used by the offline test)
+  KALSHI_OUT    output directory (default analysis/data/live; used by the offline test)
 """
 import datetime as dt
 import json
@@ -37,7 +37,7 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 CONFIG = json.loads((ROOT / "scripts" / "config.json").read_text(encoding="utf-8"))
 BASE = os.environ.get("KALSHI_BASE", CONFIG["api_base"]).rstrip("/")
 SLEEP = float(os.environ.get("KALSHI_SLEEP", "0.25"))
-OUT = pathlib.Path(os.environ.get("KALSHI_OUT", ROOT / "data" / "live"))
+OUT = pathlib.Path(os.environ.get("KALSHI_OUT", ROOT / "analysis" / "data" / "live"))
 NOW = dt.datetime.now(dt.timezone.utc).replace(microsecond=0)
 NOW_ISO = NOW.isoformat().replace("+00:00", "Z")
 

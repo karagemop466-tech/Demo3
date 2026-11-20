@@ -1,6 +1,6 @@
 {
   "generated": "2026-11-20",
-  "generated_note": "Hand-verified against the official sources listed in `sources`. Re-fetched on 2026-11-20 for the values in data/live. Each row cites source IDs (SRC-xx). Items that could not be confirmed are marked UNVERIFIED and left blank, not estimated.",
+  "generated_note": "Hand-verified against the official sources listed in `sources`. Re-fetched on 2026-11-20 for the values in analysis/data/live. Each row cites source IDs (SRC-xx). Items that could not be confirmed are marked UNVERIFIED and left blank, not estimated.",
   "sources": {
     "title": "Source registry (official sources only, plus one third-party item flagged as such)",
     "rows": [
@@ -142,7 +142,7 @@
         "label": "Kalshi API: orderbook KXPGATOUR-THRC26-ZBAU",
         "url": "https://api.elections.kalshi.com/trade-api/v2/markets/KXPGATOUR-THRC26-ZBAU/orderbook",
         "status": "opened",
-        "supports": "Captured 2026-11-20: YES bids 0.0010 x 60,548 and 0.0020 x 450. NO bids include 0.9970 x 32,273.62 (equivalent to a YES ask of 0.0030). Full NO-bid list stored in data/live/orderbooks.json."
+        "supports": "Captured 2026-11-20: YES bids 0.0010 x 60,548 and 0.0020 x 450. NO bids include 0.9970 x 32,273.62 (equivalent to a YES ask of 0.0030). Full NO-bid list stored in analysis/data/live/orderbooks.json."
       },
       {
         "id": "SRC-21",
@@ -459,7 +459,7 @@
       {
         "id": "R-16",
         "item": "Tests and automation",
-        "finding": "No tests or CI at base. Added on this branch: an offline test for the refresh job (scripts/tests/test_refresh_offline.py); a site and data checker (scripts/check_site.py); .github/workflows/check.yml (tests, checker, JS syntax on push and PR); .github/workflows/refresh.yml (hourly refresh of data/live, which runs after the workflow exists on main). Whether GitHub runners can reach the Kalshi API is UNVERIFIED (see Q-20).",
+        "finding": "No tests or CI at base. Added on this branch: an offline test for the refresh job (scripts/tests/test_refresh_offline.py); a site and data checker (scripts/check_site.py); .github/workflows/check.yml (tests, checker, JS syntax on push and PR); .github/workflows/refresh.yml (hourly refresh of analysis/data/live, which runs after the workflow exists on main). Whether GitHub runners can reach the Kalshi API is UNVERIFIED (see Q-20).",
         "status": "Note",
         "src": [
           "SRC-41"
@@ -690,7 +690,7 @@
         "type": "Unverified runtime",
         "item": "Scheduled refresh not yet run against the live API",
         "detail": "refresh.yml runs hourly on main. Its first live run is not yet observed. The offline test passes against a mock that follows the documented field shapes, which does not prove parsing of real responses.",
-        "action": "After merge, check the first Actions run and data/live/meta.json. Report any error.",
+        "action": "After merge, check the first Actions run and analysis/data/live/meta.json. Report any error.",
         "src": [
           "SRC-05",
           "SRC-08"
@@ -938,7 +938,7 @@
         "status": "Unanswered",
         "answer": "UNVERIFIED. The sandbox cannot reach the Kalshi hosts (curl returns 000), so the refresh job has run only against a local mock. GitHub runners are not tested from here.",
         "missing": "A live run from GitHub Actions and its meta.json (calls_ok, calls_failed, errors).",
-        "how": "After merge, run the Refresh Kalshi data workflow manually and read data/live/meta.json. If it fails, the site keeps the 2026-11-20 snapshot and the refresh does not overwrite data (the script stops when no API call succeeds).",
+        "how": "After merge, run the Refresh Kalshi data workflow manually and read analysis/data/live/meta.json. If it fails, the site keeps the 2026-11-20 snapshot and the refresh does not overwrite data (the script stops when no API call succeeds).",
         "src": [
           "SRC-08",
           "SRC-41"

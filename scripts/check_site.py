@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Static checks for the dashboard. Exit code 1 on any error (used by CI and before merge).
+"""Static checks for the analysis site (analysis/). Exit code 1 on any error (used by CI and before merge).
 
 1. Every data/live and data/findings JSON file parses.
 2. Every data row has a non-empty https source_url (Kalshi API or a registered source).
@@ -25,7 +25,7 @@ def load(path):
 
 # 1 + 2: data files and row sources
 for name in ["meta", "markets", "resolutions", "orderbooks", "candles", "exchange"]:
-    data = load(f"data/live/{name}.json")
+    data = load(f"analysis/data/live/{name}.json")
     if data is None:
         continue
     rows = []
@@ -46,12 +46,12 @@ for name in ["meta", "markets", "resolutions", "orderbooks", "candles", "exchang
             continue
         url = r.get("source_url") or ""
         if not url.startswith(ALLOWED_DATA_HOSTS):
-            err(f"data/live/{name}.json: row {r.get('ticker', '?')} has no official source_url ({url!r})")
+            err(f"analysis/data/live/{name}.json: row {r.get('ticker', '?')} has no official source_url ({url!r})")
         for forbidden in ("max_payout_usd",):
             if forbidden in r:
-                err(f"data/live/{name}.json: derived field {forbidden} present")
+                err(f"analysis/data/live/{name}.json: derived field {forbidden} present")
 
-findings = load("data/findings.json")
+findings = load("analysis/data/findings.json")
 if findings:
     sources = {r["id"]: r for r in findings["sources"]["rows"]}
     for sid, r in sources.items():
@@ -88,7 +88,7 @@ class Links(HTMLParser):
                 self.refs.append((tag, v))
 
 externals = set()
-for html_file in [ROOT / "index.html"] + sorted((ROOT / "pages").glob("*.html")):
+for html_file in [ROOT / "analysis/index.html"] + sorted((ROOT / "analysis/pages").glob("*.html")):
     p = Links(); p.feed(html_file.read_text(encoding="utf-8"))
     base = html_file.parent
     for tag, ref in p.refs:
@@ -99,8 +99,8 @@ for html_file in [ROOT / "index.html"] + sorted((ROOT / "pages").glob("*.html"))
         target = (base / ref.split("#")[0]).resolve()
         if not target.exists():
             err(f"{html_file.relative_to(ROOT)}: broken internal {tag} -> {ref}")
-    if "<script" in html_file.read_text(encoding="utf-8") and not (ROOT / "assets/app.js").exists():
-        err("assets/app.js missing")
+    if "<script" in html_file.read_text(encoding="utf-8") and not (ROOT / "analysis/assets/app.js").exists():
+        err("analysis/assets/app.js missing")
 
 NOTES.append(f"external links listed (not fetched): {len(externals)}")
 for n in NOTES: print("note:", n)
