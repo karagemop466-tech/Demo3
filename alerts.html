@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live swing alerts — Kalshi Demo Tracker</title>
+<meta name="description" content="Live Kalshi demo alerting dashboard: every contract-price move of $0.10 or more in gas, elections, culture, crypto and golf, with two scrolling feeds, price charts, liquidity and yes/no resolutions.">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/alerts.css">
+</head>
+<body>
+<header class="top"><div class="wrap"><nav class="main">
+<a class="brand" href="index.html">Kalshi Demo Tracker</a>
+<a href="index.html">Home</a>
+<a href="dashboard.html">Live dashboard</a>
+<a href="alerts.html" class="active">Live alerts</a>
+<a href="data-tracking.html">Data tracking</a>
+<a href="portfolio.html">Strategy simulation</a>
+<a href="gas-prices.html">Gas prices</a>
+<a href="elections.html">Elections</a>
+<a href="culture.html">Culture</a>
+<a href="crypto.html">Crypto</a>
+<a href="golf.html">Golf</a>
+<a href="portfolio.html">Portfolio</a>
+<a href="trades.html">Trades</a>
+<a href="questions.html">Questions</a>
+<a href="suggestions.html">Suggestions</a>
+<a href="flagged.html">Flagged for review</a>
+<a href="sources.html">Sources</a>
+<a href="repo-review.html">Repo review</a>
+<a href="methodology.html">Methodology</a>
+<a href="api-reference.html">API reference</a>
+</nav></div></header>
+
+<main class="wrap">
+<h1>Live swing alerts <span class="pill live" id="livePill">connecting…</span></h1>
+<p class="lead">Every move of <strong>$0.10 or more</strong> in a tracked contract price, as a
+scrolling chat. Two feeds: <strong>all events</strong> and <strong>high-ROI only</strong>
+(our model's screen). Topics: gas prices, elections, culture, crypto, golf — nothing else.
+Every alert row links the exact Kalshi demo API request whose two observations produced the
+delta, so you can re-fetch and check the number yourself.</p>
+
+<div id="banner" class="banner" hidden></div>
+
+<section class="statbar" aria-label="Live status">
+  <div class="stat"><span class="k">Poll</span><span class="v" id="statPoll">—</span></div>
+  <div class="stat"><span class="k">Markets watched</span><span class="v" id="statMarkets">—</span></div>
+  <div class="stat"><span class="k">Alerts (24h)</span><span class="v" id="statAlerts">—</span></div>
+  <div class="stat"><span class="k">≥$0.10 moves now</span><span class="v" id="statNow">—</span></div>
+  <div class="stat"><span class="k">Pipeline run</span><span class="v" id="statRun">—</span></div>
+  <div class="stat"><span class="k">Sim P&amp;L</span><span class="v" id="statPnl">—</span></div>
+</section>
+
+<div class="controls card">
+  <label>Window
+    <select id="winSec">
+      <option value="60">1 minute</option>
+      <option value="300">5 minutes</option>
+      <option value="900" selected>15 minutes</option>
+      <option value="3600">1 hour</option>
+    </select>
+  </label>
+  <label>Chart range
+    <select id="chartSec">
+      <option value="60">1 minute</option>
+      <option value="300">5 minutes</option>
+      <option value="900" selected>15 minutes</option>
+      <option value="3600">1 hour</option>
+      <option value="21600">6 hours</option>
+      <option value="86400">24 hours</option>
+    </select>
+  </label>
+  <label>Topic <select id="topicFilter"><option value="">All five topics</option></select></label>
+  <label class="chk"><input type="checkbox" id="pauseChk"> Pause feed</label>
+  <label class="chk"><input type="checkbox" id="soundChk"> Beep on alert</label>
+  <button class="btn secondary" id="refreshBtn" type="button">Refresh now</button>
+  <span class="small muted" id="pollNote">Polling the demo REST API in your browser (public data, no key).</span>
+</div>
+
+<h2 id="feeds">The two live feeds</h2>
+<p class="small muted">Independently scrolling. <strong>All events</strong> = every tracked
+&gt;= $0.10 move. <strong>High ROI</strong> = the same alerts that pass the published
+screen on <a href="portfolio.html">Strategy simulation</a> (swing ≥ $0.20 and ≥ 25% gross
+return per $1 at the post-swing price). Newest at the top; nothing is hidden, the filter
+only decides which of the two feeds a row appears in.</p>
+<div class="chatgrid">
+  <div class="chat" id="chatAll" aria-live="polite" aria-label="All events feed">
+    <div class="chathead"><strong>All events</strong><span class="small muted" id="countAll">0</span>
+      <button class="mini" data-clear="all" type="button">clear</button></div>
+    <div class="chatbody" id="bodyAll"><p class="muted pad">Waiting for the first poll…</p></div>
+  </div>
+  <div class="chat" id="chatRoi" aria-live="polite" aria-label="High ROI feed">
+    <div class="chathead"><strong>High ROI only</strong><span class="small muted" id="countRoi">0</span>
+      <button class="mini" data-clear="roi" type="button">clear</button></div>
+    <div class="chatbody" id="bodyRoi"><p class="muted pad">Waiting for the first poll…</p></div>
+  </div>
+</div>
+
+<h2 id="topic-chat">Chats by topic</h2>
+<p class="small muted">The brief asks for topics kept separate while events inside a topic stay
+together: each topic gets its own scrolling chat, fed by the same alert stream.</p>
+<div class="topicgrid" id="topicChats"></div>
+
+<h2 id="movers">Contracts moving ≥ $0.10 in the selected window</h2>
+<p class="small muted">Computed live from your browser's own observations of
+<code>/markets?tickers=…</code>. This is the roll-up behind the feeds above; a row appears here
+the moment its price differs by $0.10 from an observation <em>winSec</em> ago.</p>
+<div class="tablewrap"><table id="moversTable">
+<thead><tr><th>Topic</th><th>Contract</th><th>Price</th><th>Δ</th><th>24h vol</th><th>Observed</th><th>Source</th></tr></thead>
+<tbody><tr><td colspan="7" class="muted">No ≥ $0.10 moves yet — the demo book is thin; keep this tab open.</td></tr></tbody>
+</table></div>
+
+<h2 id="chart">Price chart</h2>
+<div class="card">
+  <div class="charthead">
+    <strong id="chartTitle">Select a contract from a feed</strong>
+    <span class="small muted" id="chartMeta"></span>
+  </div>
+  <div class="seg" role="group" aria-label="Chart range">
+    <button data-range="60" type="button">1m</button>
+    <button data-range="300" type="button">5m</button>
+    <button data-range="900" type="button" aria-pressed="true">15m</button>
+    <button data-range="3600" type="button">1h</button>
+    <button data-range="21600" type="button">6h</button>
+    <button data-range="86400" type="button">24h</button>
+  </div>
+  <canvas id="priceChart" height="280" aria-label="Contract price over time (x = time, y = price)"></canvas>
+  <p class="small muted">X axis: time, in seconds / minutes / hours depending on the range.
+  Y axis: contract price in cents (0–100¢). Green line = recorded observations; the shaded
+  band marks the two observations of each ≥ $0.10 swing.</p>
+  <h3>Liquidity — contracts available at each price</h3>
+  <p class="small" id="depthSummary"></p>
+  <canvas id="depthChart" height="200" aria-label="Orderbook depth by price level"></canvas>
+  <div class="tablewrap"><table id="depthTable">
+    <thead><tr><th>Side</th><th>Price</th><th>Contracts available</th><th>Notional at level</th></tr></thead>
+    <tbody><tr><td colspan="4" class="muted">Select a contract with a recorded orderbook.</td></tr></tbody>
+  </table></div>
+  <p class="small muted" id="depthNote">Levels come from
+  <code>orderbook_fp.yes_dollars</code> / <code>no_dollars</code>; each level is
+  [price in dollars, contracts]. A contract on one side is the mirror of a bid on the other,
+  so "contracts available" is shown exactly as the exchange reports it — no netting invented here.</p>
+</div>
+
+<h2 id="news">Website links that may explain a sharp jump</h2>
+<p class="small muted">From the official Kalshi API only: every event carries
+<code>settlement_sources</code> (the sites that determine the outcome) and every series
+carries tags/categories. When an alert fires we link those official sites for that event,
+so a jump can be checked against the site that actually settles it. These are
+<strong>candidate</strong> causes, not verified explanations — nothing is asserted as the
+cause of a move.</p>
+<div class="tablewrap"><table id="newsTable">
+<thead><tr><th>Alert</th><th>Official source sites for this event</th><th>API record</th></tr></thead>
+<tbody><tr><td colspan="3" class="muted">No alerts yet.</td></tr></tbody>
+</table></div>
+
+<h2 id="resolutions">Resolutions — how each event finished (yes / no)</h2>
+<p class="small muted">A market is listed here only when Kalshi reports
+<code>status=settled</code> with <code>result</code> of exactly <code>yes</code> or
+<code>no</code> (<a href="https://docs.kalshi.com/getting_started/market_settlement" target="_blank" rel="noopener">settlement docs</a>).
+Settlement value is the API's own <code>settlement_value_dollars</code>. Blank cells are
+unverified, never filled in.</p>
+<div class="filters">
+  <label>Topic <select id="resTopic"><option value="">All</option></select></label>
+  <label>Result <select id="resResult"><option value="">All</option><option value="yes">YES</option><option value="no">NO</option></select></label>
+</div>
+<div class="tablewrap"><table id="resTable">
+<thead><tr><th>Topic</th><th>Market</th><th>Result</th><th>Settled</th><th>Close</th><th>Value</th><th>Source</th></tr></thead>
+<tbody><tr><td colspan="7" class="muted">Loading recorded resolutions…</td></tr></tbody>
+</table></div>
+
+<h2 id="how">How this page is verified</h2>
+<div class="tablewrap"><table>
+<thead><tr><th>Fact used here</th><th>Official source</th></tr></thead>
+<tbody>
+<tr><td>Demo REST base URL</td><td><a class="src" href="https://docs.kalshi.com/getting_started/api_environments" target="_blank" rel="noopener">docs.kalshi.com/getting_started/api_environments</a></td></tr>
+<tr><td>Public market data needs no API key</td><td><a class="src" href="https://docs.kalshi.com/getting_started/quick_start_market_data" target="_blank" rel="noopener">quick_start_market_data</a></td></tr>
+<tr><td><code>last_price_dollars</code>, <code>volume_fp</code>, <code>open_interest_fp</code>, <code>result</code> fields</td><td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noopener">get-markets</a></td></tr>
+<tr><td>Candlestick path and <code>period_interval</code> 1/60/1440</td><td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-market-candlesticks" target="_blank" rel="noopener">get-market-candlesticks</a></td></tr>
+<tr><td>Orderbook level shape <code>[price, contracts]</code></td><td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-market-orderbook" target="_blank" rel="noopener">get-market-orderbook</a></td></tr>
+<tr><td>Yes/No settlement pays $1 per winning contract</td><td><a class="src" href="https://docs.kalshi.com/getting_started/market_settlement" target="_blank" rel="noopener">market_settlement</a></td></tr>
+<tr><td>Back off on HTTP 429</td><td><a class="src" href="https://docs.kalshi.com/getting_started/rate_limits" target="_blank" rel="noopener">rate_limits</a></td></tr>
+<tr><td><code>settlement_sources</code> per event</td><td><a class="src" href="https://docs.kalshi.com/api-reference/events/get-events" target="_blank" rel="noopener">get-events</a></td></tr>
+</tbody></table></div>
+<p class="small muted">Limits stated plainly: the demo exchange's books are thin, so
+$0.10 moves can be rare and the feeds are honest about being empty. This page is read-only;
+no orders are sent from it. Simulated trades are produced by the scheduled pipeline and are
+labelled SIMULATED on <a href="portfolio.html">Strategy simulation</a>.</p>
+
+<footer class="wrap"><p class="small muted">Kalshi Demo Tracker — demo environment
+(<span class="mono">https://external-api.demo.kalshi.co/trade-api/v2</span>) · every row links
+its source · blank means unverified, never guessed · see
+<a href="flagged.html">Flagged for review</a>.</p></footer>
+</main>
+<script src="assets/alerts.js"></script>
+</body>
+</html>
