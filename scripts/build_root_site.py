@@ -435,6 +435,14 @@ def consolidated_flags():
         "CI runs only verify_root_site.py, so nothing breaks today. Owner: the integration session. Fix: move the alert "
         "cards into build_dashboard() before any future regeneration.",
         [f"{DOCS}/getting_started/demo_env"], "open - integration owner", "6d201d19")
+    add("F-6D-10", "CI / collector", "collect.yml failed at workflow level on main (duplicate 'if' key)",
+        "The 'Request Pages rebuild' step in .github/workflows/collect.yml had two 'if:' keys after a merge. The "
+        "collector runs on main (44804291212, 44804259549, 44804243948) ended with 0 jobs and no log. The duplicate key "
+        "is the likely cause, but this is not confirmed by an error message. Fixed on session 6d201d19 by keeping the "
+        "single 'refs/heads/main' condition. All workflow files were checked for duplicate keys (none others). "
+        "Confirm with the next scheduled run.",
+        ["https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions"],
+        "fixed in this branch - verify the next scheduled run", "6d201d19")
     add("F-6D-06", "Trading / portfolio", "Demo account portfolio and live trades still blocked",
         "Portfolio, fills and order placement need a Kalshi demo API key. The demo key is created by a "
         "person at demo.kalshi.co; this agent cannot create one. Until a key is provided, trade rows stay "
