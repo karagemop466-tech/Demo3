@@ -91,6 +91,16 @@ npm ci && node catalysts/tests/smoke.mjs     # headless render test
 the committed demo-API snapshots (`data/latest/topic_*.json`, `data/resolutions.json`). Rows keep
 their snapshot's `source_url`, so an offline artifact is still traceable to an official request.
 
+## Relationship to the paper desk (`trading/`, `data/paper/`, `paper-desk/`)
+
+Both exist on purpose. `trading/paper_engine.py` is the site's simulated **account**: five strategies,
+simulated fills against live quotes capped by resting size, cash, rejections with reasons, marked to
+settlement. `catalysts/scan.py`'s study is the **alert-rule test**: it opens a position only on a
+≥ $0.10 alert, closes it by one of two explicit rules, and reports what the exchange had published at
+that moment. Numbers are not comparable — different universes, different exits — so the page links
+`../paper-desk/index.html`, `../trades.html` and `../portfolio.html` instead of duplicating them, and
+no order is sent from either.
+
 ## Limits a reviewer must know (see the page's Flagged section, F-cat-01…07)
 
 * Detection is bounded by the sampling gap; the WebSocket channel would close it but its handshake

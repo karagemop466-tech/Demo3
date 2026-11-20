@@ -149,13 +149,17 @@ API record it came from; anything the API did not return is blank and flagged, n
     </table>
   </div>
   <p class="small muted" id="strategyNote"></p>
-  <h3>Simulated demo-account book (no order is ever sent)</h3>
-  <p class="small muted">Automated paper positions fired by the same &ge; $0.10 alert, sized in
-  contracts and settled by the rules in the table above — this is the paper-trading ledger for the
-  <a href="../portfolio.html">Portfolio</a> and <a href="../trades.html">Trades</a> pages, persisted
-  in the repository instead of one browser's storage, so it survives a refresh and can be audited
-  row by row. Cells below the evaluation floor are shown for transparency and are <em>not</em> a
-  result.</p>
+  <h3>Alert-rule study: what the &ge; $0.10 alert would have done (no order is ever sent)</h3>
+  <p class="small muted">Automated paper positions fired by the same &ge; $0.10 alert and closed by
+  the rules in the table above. This is <strong>not</strong> the site's account ledger — that is the
+  paper desk (<a href="../paper-desk/index.html">Simulated Paper Desk</a>, written by
+  <span class="mono">trading/paper_engine.py</span> into <span class="mono">data/paper/</span>, with
+  <a href="../trades.html">Trades</a> and <a href="../portfolio.html">Portfolio</a>), which simulates
+  fills against live quotes and resting size for five strategies. This table answers the narrower
+  question the brief pairs with the alert rule: <em>does acting on a $0.10 jump pay, and what was
+  published when it fired</em>. It is persisted in the repository rather than one browser's storage, so
+  it survives a refresh and is auditable row by row; cells below the evaluation floor are shown for
+  transparency and are <em>not</em> a result.</p>
   <div class="tablewrap">
     <table id="books">
       <thead><tr><th>Book</th><th>Positions</th><th>Bankroll → equity</th><th>Realized $</th>

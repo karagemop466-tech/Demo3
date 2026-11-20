@@ -366,7 +366,8 @@
     var body = $("books").tBodies[0];
     if (!ids.length) {
       body.innerHTML = "<tr><td colspan=\"8\" class=\"muted\">Nothing scoreable yet — every alert " +
-        "was skipped because its exit field was not published by the API. No position is invented.</td></tr>";
+        "was skipped because its exit field was not published by the API. No position is invented. " +
+        "For the account ledger see <a href=\"../paper-desk/index.html\">the paper desk</a>.</td></tr>";
       $("equityNote").textContent = pf.note || "";
       drawEquity([], "");
       return;

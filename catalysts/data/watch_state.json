@@ -12,6 +12,6 @@
    "tracking": "stopped_resolved"
   }
  },
- "updated_at": "2026-11-20T20:14:47Z",
+ "updated_at": "2026-11-20T20:24:00Z",
  "policy": "A market is polled until the API reports it settled/finalized with a result; then tracking stops and the yes/no outcome is kept."
 }
