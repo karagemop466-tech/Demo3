@@ -169,6 +169,36 @@ class TestParityWithBrowser(unittest.TestCase):
             self.assertEqual(data["live"], expect, "JS live tracker diverged from Python")
 
 
+class TestSpecStringsMatchCode(unittest.TestCase):
+    """The published spec sentence must describe the implemented rule, not an old draft."""
+
+    def test_alert_rule_definition_matches_the_detector(self):
+        d = S.ALERT_RULE_DEFINITION
+        up_clause = d.split(";")[0]
+        down_clause = d.split(";")[1]
+        self.assertIn("min(close over the previous window)", up_clause)
+        self.assertIn("max(close over the previous window)", down_clause)
+        self.assertNotIn("max(close over the previous window) >= threshold (up)", d)
+        # and the detector really does measure the up leg off the window LOW: a monotonic climb
+        # from a low anchor fires once, with the anchor equal to that low.
+        rows = [{"ts": 60 * k, "close": 5000 + 400 * k, "open": 5000 + 400 * k,
+                 "high": 5000 + 400 * k, "low": 5000 + 400 * k,
+                 "yes_bid_close": 4900 + 400 * k, "yes_bid_open": 4900 + 400 * k,
+                 "yes_ask_close": 5100 + 400 * k, "yes_ask_open": 5100 + 400 * k,
+                 "volume_fp": 1.0, "open_interest_fp": 1.0} for k in range(0, 8)]
+        out = S.detect_swings(rows, window_seconds=60 * 60, threshold_bits=1000, rearm=500)
+        self.assertEqual(len(out), 1)
+        self.assertEqual(out[0]["direction"], "up")
+        self.assertEqual(out[0]["anchor"], rows[0]["close"])   # the window low, not a prior extreme
+
+    def test_model_json_is_not_written_outside_the_published_root(self):
+        # guards the two clobber incidents: --offline must not overwrite the live feed
+        out = subprocess.run([sys.executable, os.path.join(ROOT, "scripts", "scan_swings.py"),
+                              "--offline"], capture_output=True, text=True, cwd=ROOT, timeout=300)
+        self.assertEqual(out.returncode, 4, out.stdout + out.stderr)
+        self.assertIn("--out /tmp/", out.stdout + out.stderr)
+
+
 class TestOfflineEndToEnd(unittest.TestCase):
     def test_reversion_is_horizon_bounded(self):
         """A later drift must not count as a 60-minute reversion (that bug inflated the rate)."""

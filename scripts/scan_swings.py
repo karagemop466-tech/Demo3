@@ -738,6 +738,19 @@ def live_units(args) -> tuple[list[dict], dict]:
 
 
 # ------------------------------------------------------------------ main
+ALERT_RULE_DEFINITION = (
+    "up_move = close[i] - min(close over the previous window) (the leg is measured OFF THE WINDOW "
+    "LOW); down_move = max(close over the previous window) - close[i] (measured off the window "
+    "HIGH). Fire 'up' when up_move >= max(down_move, threshold); otherwise fire 'down' when "
+    "down_move >= max(up_move, threshold) - the stronger leg of the two wins, so one run in one "
+    "direction prints one alert. Re-arm once |close[i] - anchor| <= the re-arm band. The window is "
+    "measured in MINUTES and converted to candles per candle interval, and windows that start at or "
+    "after index i are skipped. (An earlier copy of this string described a breakout off the prior "
+    "extreme, which is not what the code does; both runtimes are pinned by the same reference "
+    "vectors.)"
+)
+
+
 def run(args) -> int:
     started = datetime.now(timezone.utc)
     client = None
@@ -1026,17 +1039,7 @@ def run(args) -> int:
             "window_minutes_default": args.window_minutes,
             "window_minutes_options": [5, 10, 30, 60, 180, 360, 1440],
             "directions": ["up", "down"],
-            "definition": "up_move = close[i] - min(close over the previous window) (the leg is "
-                          "measured OFF THE WINDOW LOW); down_move = max(close over the previous "
-                          "window) - close[i] (measured off the window HIGH). Fire 'up' when "
-                          "up_move >= max(down_move, threshold); otherwise fire 'down' when "
-                          "down_move >= max(up_move, threshold) - the stronger leg of the two wins, "
-                          "so one run in one direction prints one alert. Re-arm once "
-                          "|close[i] - anchor| <= the re-arm band. The window is measured in MINUTES "
-                          "and converted to candles per candle interval, and windows that start at "
-                          "or after index i are skipped. (An earlier copy of this string described a "
-                          "breakout off the prior extreme, which is not what the code does; both "
-                          "runtimes are pinned by the same reference vectors.)",
+            "definition": ALERT_RULE_DEFINITION,
             "source_of_truth": "scripts/scan_swings.py::detect_swings mirrored by "
                                "assets/swing-core.js::detectSwings",
             "live_price_field": "last_price_dollars (with yes_bid_dollars/yes_ask_dollars for "

@@ -83,6 +83,11 @@ Two buckets clear the evidence bar and both have a negative best-case expectancy
 it at all. So the gate rejects every alert, and the "why" line on each dimmed row says so
 (`no calibrated bucket for this setup` / the bucket's negative `best_mean_net_dollars`).
 
+(The spec sentence the model publishes — `alert_rule.definition` — is now a module constant,
+`scan_swings.py::ALERT_RULE_DEFINITION`, and `TestSpecStringsMatchCode` proves it describes what
+`detect_swings` does rather than an earlier draft; the published `alerts/model.json` from before that
+commit still carries the old wording and is refreshed by the next scan run — see irregularity 8.)
+
 The interesting rows are the near-breakeven crypto ones: at 5–20 c and 95–100 c the taker fee is only
 a fraction of a cent per contract (`0.07·P·(1−P)` is smallest at the extremes), and gross is already
 negative — **the loss is the spread being crossed, not the commission**. That is why the console shows
@@ -147,7 +152,8 @@ negative — **the loss is the spread being crossed, not the commission**. That 
 | 5 | `gh api`/`gh run` returned HTTP 403 ("API rate limit exceeded for user ID 309443653") for ~15 minutes; the corrected scan had to be dispatched in a retry loop, and two push-triggered runs were cancelled by `cancel-in-progress` before it. Data published here comes from the run that completed. | this session, `gh run list` |
 | 6 | The platform forces the branch name `arena/5ab18dc3-demo3` instead of the coordination protocol's `session-<id>/<task>`; recorded as prior sessions did. | `COORDINATION.md` |
 | 7 | A `git stash -u` of my own untracked work (before pulling a CI data commit) temporarily removed `assets/alerts.js`/`alerts.css`; recovered from `stash@{0}^3`, re-verified with `node --check` + the jsdom smoke test. Lesson recorded in `COORDINATION.md`: commit WIP before stashing/pulling on this branch. | `git stash list` at the time |
-| 8 | `alerts/model.json` currently carries an `alert_rule.definition` string from an earlier revision ("max … for up"), which does not describe the implemented rule (up is measured off the window **low**). The code is corrected; the published string updates on the next scan run, and both runtimes' behaviour was always pinned by the shared reference vectors, not by that sentence. | `git log -p scripts/scan_swings.py`, `tests/swing_core.test.js` |
+| 8 | `alerts/model.json` currently carries an `alert_rule.definition` string from an earlier revision ("max … for up"), which does not describe the implemented rule (up is measured off the window **low**). The code is corrected and pinned by a test (`TestSpecStringsMatchCode`); the published string
+updates on the next scan run, and both runtimes' behaviour was always pinned by the shared reference vectors, not by that sentence. | `git log -p scripts/scan_swings.py`, `tests/swing_core.test.js` |
 | 9 | Another session's collector bot pushed `data: refresh snapshot 2026-11-20T20:04Z` to this branch mid-work; merged without discarding it (`86d9f67`), and my restored live scan data sits alongside it. | `git log` on this branch |
 
 ## 7. Review trail
