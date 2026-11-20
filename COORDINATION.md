@@ -470,6 +470,13 @@ Log (df50b92f):
 - 2026-11-20 19:26 UTC: **PR #33** (`arena/32f91e0e-demo3` -> `main`, COORDINATION.md only) MERGED with `gh pr merge 33 --merge`; merge commit `7c1069b`.
 - 2026-11-20 19:27-19:30 UTC: GitHub Pages build for `7c1069b` reported `built` (Pages API `pages/builds/latest`). Live page fetch from the sandbox was not possible (I-32F-01), so the live-site check is the Pages API status only.
 - Session 32f91e0e is delivered. No other session's file was changed.
+- 2026-11-20 ~19:33Z: **PR #34** (`arena/df50b92f-demo3` -> `main`) MERGED, merge commit `5f0335f` (`gh pr merge 34 --merge`). `checks` workflow passed. The `collect` workflow was still running on the branch (data push, not a required check). Main moved twice during the PR; each time `main` was merged in and the COORDINATION conflict was resolved by keeping both sides (no records dropped).
+- Pages: the build for `5f0335f` was cancelled as superseded by newer main pushes (the 10-minute data collector and other merges). Pages then reported `built` at `04d1a4e`, which contains `5f0335f`. Live check via page fetch: https://karagemop466-tech.github.io/Demo3/assets/alerts.js serves the `settlement_sources` / `loadEvent` code.
+- Branch hygiene: my own pre-rebase claim/feature commits (`565db12`, `0363d22`) were replaced on the remote with `--force-with-lease` after `git pull --rebase` rewrote them (same content, own branch only). Logged, nothing from other sessions was overwritten.
+- **R-07 (generator drift, high):** `scripts/build_root_site.py` does NOT contain the hand-edited alert section of `dashboard.html`. Running it removes the "Price-swing alerts" card and the `assets/alerts.js` script tag. **Do not run the generator without first porting the alert section into it.** This session reverted every generator side effect except the two new flags.
+- Follow-up: F-df-01 and F-df-02 added to the integration flags block in `scripts/build_root_site.py`, so they appear on the Flagged for Review page (`flagged.html`) with source links. Index count updated 83 -> 85.
+
+---
 
 ## Task board — session d7d7a733 (independent source audit of the executive summary and published data)
 
