@@ -22,7 +22,15 @@ jobs:
           python-version: '3.12'
 
       - name: Collect market data from official Kalshi demo API
-        run: python scripts/collect_kalshi_data.py
+        run: |
+          set -o pipefail
+          python scripts/collect_kalshi_data.py 2>&1 | tee collector.log
+          status=${PIPESTATUS[0]}
+          if [ "$status" -ne 0 ]; then
+            echo "::error::collector failed — last 40 log lines:"
+            tail -40 collector.log
+            exit "$status"
+          fi
 
       - name: Trim rolling history files (retain most recent 20000 lines)
         run: |

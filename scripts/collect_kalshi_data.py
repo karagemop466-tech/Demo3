@@ -44,9 +44,9 @@ TOPICS = ("gas", "elections", "culture", "crypto", "golf")
 # ---------------------------------------------------------------------------
 TOPIC_RULES = [
     # (topic, series_ticker regex, title regex)
-    ("gas", re.compile(r"^KXGAS", re.I), re.compile(
-        r"\b(gasoline|gas price|nat(?:ural)?\s?gas|heating oil|diesel|gallon)\b", re.I)),
-    ("crypto", re.compile(r"^KX(BTC|ETH|SOL|XRP|DOGE|CRYPTO|BINANCE|COINBASE)", re.I), re.compile(
+    ("gas", re.compile(r"(^KXGAS|GAS(W|NY|US)?$|GAS[A-Z]|NATGAS|HEATINGOIL|DIESEL|PROPANE)", re.I), re.compile(
+        r"\b(gasoline|gas price|nat(?:ural)?\s?gas|heating oil|diesel|gallon|aaa gas)\b", re.I)),
+    ("crypto", re.compile(r"^KX(BTC|ETH|SOL|XRP|DOGE|CRYPTO|BINANCE|COINBASE|STABLE)", re.I), re.compile(
         r"\b(bitcoin|btc|ethereum|eth\b|solana|crypto|xrp|dogecoin|coinbase|stablecoin)\b", re.I)),
     ("golf", re.compile(r"^KX(GOLF|PGA|LIV|MASTERS|OPEN|USOPEN|RYDER|DPWT)", re.I), re.compile(
         r"\b(golf|pga|masters|ryder cup|open championship|us open golf|liv golf)\b", re.I)),
@@ -60,9 +60,24 @@ TOPIC_RULES = [
         r"album|billboard|celebrity|royal|tiktok|viral|culture|gta|video game|nobel|book of the year)\b", re.I)),
 ]
 
+# Category/tag overlay (series metadata from /series; rules recorded per row so
+# every classification is auditable on the Flagged-for-Review page).
+CATEGORY_TOPIC = {
+    "crypto": "crypto",
+    "elections": "elections",
+    "politics": "elections",   # taxonomy question Q-3 on the Questions page
+    "entertainment": "culture",
+}
 
-def classify(series_ticker: str, title: str) -> tuple[str, str]:
+
+def classify(series_ticker: str, title: str, category: str = "", tags: list | None = None) -> tuple[str, str]:
     """Return (topic, rule_matched). 'other' means no target-topic rule matched."""
+    cat = (category or "").strip().lower()
+    if cat in CATEGORY_TOPIC:
+        return CATEGORY_TOPIC[cat], f"category={category}"
+    for tag in tags or []:
+        if str(tag).strip().lower() == "golf":
+            return "golf", f"tag={tag}"
     for topic, sre, tre in TOPIC_RULES:
         if sre.search(series_ticker or ""):
             return topic, f"series_ticker~/{sre.pattern}/"
@@ -110,11 +125,20 @@ class Collector:
     def paginate(self, path: str, params: dict, key: str, max_pages: int = 20) -> list[dict]:
         out: list[dict] = []
         cursor = None
+        limit = int(params.get("limit", 200))
         for _ in range(max_pages):
             p = dict(params)
+            p["limit"] = limit
             if cursor:
                 p["cursor"] = cursor
-            body = self.get(path, p)
+            try:
+                body = self.get(path, p)
+            except RuntimeError as e:
+                if "HTTP 400" in str(e) and limit > 50:  # limit cap varies per endpoint
+                    limit = limit // 2
+                    print(f"  400 on {path} — retrying with limit={limit}")
+                    continue
+                raise
             out.extend(body.get(key, []))
             cursor = body.get("cursor")
             if not cursor:
@@ -136,13 +160,13 @@ def to_float(s) -> float | None:
         return None
 
 
-def market_row(m: dict, topic: str, rule: str, retrieved_at: str) -> dict:
+def market_row(m: dict, topic: str, rule: str, retrieved_at: str, series_ticker: str = "") -> dict:
     """One output row: verbatim API fields + classification + source URL."""
     ticker = m.get("ticker", "")
     row = {
         "ticker": ticker,
         "event_ticker": m.get("event_ticker", ""),
-        "series_ticker": series_of(ticker),
+        "series_ticker": series_ticker or series_of(ticker),
         "title": m.get("title", ""),
         "yes_sub_title": m.get("yes_sub_title", ""),
         "no_sub_title": m.get("no_sub_title", ""),
@@ -199,10 +223,12 @@ def main() -> int:
     # 1. Series catalog (used for topic metadata + verification of classification)
     print("fetching series ...")
     series_list = col.paginate("/series", {"limit": 200}, "series", max_pages=10)
+    series_catalog: dict[str, dict] = {}
     series_meta = []
     for s in series_list:
-        topic, rule = classify(s.get("ticker", ""), s.get("title", ""))
-        series_meta.append({
+        topic, rule = classify(s.get("ticker", ""), s.get("title", ""),
+                               s.get("category", ""), s.get("tags") or [])
+        entry = {
             "ticker": s.get("ticker", ""),
             "title": s.get("title", ""),
             "category": s.get("category", ""),
@@ -212,30 +238,72 @@ def main() -> int:
             "contract_terms_url": s.get("contract_terms_url", ""),
             "retrieved_at": retrieved_at,
             "source_url": f"{BASE}/series?{urllib.parse.urlencode({'ticker': s.get('ticker','')})}",
-        })
+        }
+        series_catalog[entry["ticker"]] = entry
+        series_meta.append(entry)
     write_json(f"{REPO_DATA}/latest/series.json", {
         "retrieved_at": retrieved_at, "count": len(series_meta), "series": series_meta})
 
-    # 2. Open markets (all, then classified — no topic blind spots)
+    # 2. Events (all pages; needed to join market -> event -> series)
+    print("fetching events ...")
+    events = col.paginate("/events", {"limit": 200}, "events", max_pages=15)
+    ev_by_ticker: dict[str, dict] = {}
+    for e in events:
+        et = e.get("event_ticker", "")
+        scat = e.get("category", "")
+        s_ticker = e.get("series_ticker", "")
+        s_entry = series_catalog.get(s_ticker, {})
+        topic, rule = classify(s_ticker, e.get("title", ""),
+                               scat or s_entry.get("category", ""),
+                               s_entry.get("tags") or [])
+        ev_by_ticker[et] = {
+            "event_ticker": et,
+            "series_ticker": s_ticker,
+            "title": e.get("title", ""),
+            "sub_title": e.get("sub_title", ""),
+            "category": scat,
+            "topic": topic,
+            "classification_rule": rule,
+            "settlement_sources": e.get("settlement_sources", []),
+            "retrieved_at": retrieved_at,
+            "source_url": f"{BASE}/events?{urllib.parse.urlencode({'series_ticker': s_ticker})}",
+        }
+    topic_events = [v for v in ev_by_ticker.values() if v["topic"] in TOPICS]
+    topic_events.sort(key=lambda e: e["title"])
+    write_json(f"{REPO_DATA}/latest/events.json", {
+        "retrieved_at": retrieved_at, "count": len(topic_events), "events": topic_events})
+
+    # 3. Open markets (all, then classified — no topic blind spots)
     print("fetching open markets ...")
     open_markets = col.paginate("/markets", {"limit": 1000, "status": "open"}, "markets", max_pages=15)
     print(f"  {len(open_markets)} open markets")
 
-    # 3. Recently settled/closed markets for resolution tracking
+    # 4. Recently settled/closed markets for resolution tracking
     print("fetching settled markets ...")
     settled_markets = col.paginate("/markets", {"limit": 1000, "status": "settled"}, "markets", max_pages=5)
     print(f"  {len(settled_markets)} settled markets")
 
+    def classify_market(m: dict) -> tuple[str, str, str]:
+        """(topic, rule, true series ticker) using event/series joins."""
+        et = m.get("event_ticker", "")
+        ev = ev_by_ticker.get(et, {})
+        s_ticker = ev.get("series_ticker") or series_of(m.get("ticker", ""))
+        s_entry = series_catalog.get(s_ticker, {})
+        scat = ev.get("category") or s_entry.get("category", "")
+        topic, rule = classify(s_ticker, m.get("title", ""),
+                               scat, s_entry.get("tags") or [])
+        return topic, rule, s_ticker
+
     rows_open, rows_settled = [], []
     topic_counts = {t: 0 for t in list(TOPICS) + ["other"]}
     for m in open_markets:
-        topic, rule = classify(m.get("ticker", ""), m.get("title", ""))
+        topic, rule, s_t = classify_market(m)
         topic_counts[topic] += 1
-        rows_open.append(market_row(m, topic, rule, retrieved_at))
+        rows_open.append(market_row(m, topic, rule, retrieved_at, s_t))
     for m in settled_markets:
-        topic, rule = classify(m.get("ticker", ""), m.get("title", ""))
+        topic, rule, s_t = classify_market(m)
         topic_counts[topic] += 1
-        rows_settled.append(market_row(m, topic, rule, retrieved_at))
+        rows_settled.append(market_row(m, topic, rule, retrieved_at, s_t))
 
     rows_open.sort(key=lambda r: -(to_float(r.get("volume_fp")) or 0.0))
     rows_settled.sort(key=lambda r: -(to_float(r.get("volume_fp")) or 0.0))
@@ -244,29 +312,6 @@ def main() -> int:
         "retrieved_at": retrieved_at, "count": len(rows_open), "markets": rows_open})
     write_json(f"{REPO_DATA}/latest/markets_settled.json", {
         "retrieved_at": retrieved_at, "count": len(rows_settled), "markets": rows_settled})
-
-    # 4. Events for open markets (titles, categories, settlement sources)
-    print("fetching events ...")
-    events = col.paginate("/events", {"limit": 500}, "events", max_pages=10)
-    ev_by_ticker = {}
-    for e in events:
-        topic, rule = classify(e.get("series_ticker", ""), e.get("title", ""))
-        ev_by_ticker[e.get("event_ticker", "")] = {
-            "event_ticker": e.get("event_ticker", ""),
-            "series_ticker": e.get("series_ticker", ""),
-            "title": e.get("title", ""),
-            "sub_title": e.get("sub_title", ""),
-            "category": e.get("category", ""),
-            "topic": topic,
-            "classification_rule": rule,
-            "settlement_sources": e.get("settlement_sources", []),
-            "retrieved_at": retrieved_at,
-            "source_url": f"{BASE}/events?{urllib.parse.urlencode({'series_ticker': e.get('series_ticker','')})}",
-        }
-    topic_events = [v for v in ev_by_ticker.values() if v["topic"] in TOPICS]
-    topic_events.sort(key=lambda e: e["title"])
-    write_json(f"{REPO_DATA}/latest/events.json", {
-        "retrieved_at": retrieved_at, "count": len(topic_events), "events": topic_events})
 
     # 5. Top events by dollar volume (derived arithmetic on API fields only)
     print("ranking events by dollar volume ...")
