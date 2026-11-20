@@ -28,6 +28,7 @@ without an official source link, blank/flagged values are unverified and never i
 | 3e08e6dc | `arena/3e08e6dc-demo3` | delivered (PR #12 merged) | `analysis/` site + live data snapshots + refresh workflow; see its section below. |
 | 3b5e95bd | `arena/3b5e95bd-demo3` | active - automation + final integration (this session) | Scheduled server-side collector (`collector/`, `collect.yml`, committed `data/`: ranked events, orderbooks, 1m/60m/1440m candles, resolution sweeps, CORS probe), demo-account trade/portfolio pipeline (`trading/`, `trade.yml`), `data-tracking.html` snapshot-rendering page, final PR/merge/Pages. Details in its completion section below. |
 | 4d10aedf | `arena/4d10aedf-demo3` | delivered - data pipeline + tooling + integration pass | Early false "done" claims (R-03/R1) corrected 2026-11-20 11:40 UTC. Delivered: series-first CI collector + row-level verification (`scripts/collect_kalshi_data.py`, `verify_rows.py`, `kalshi-data.yml`, `data/latest/`, `data/history/`), portfolio/trade tooling (`kalshi_client.py`, `portfolio_pull.py`, `trade_runner.py`, `kalshi-portfolio.yml`), docs/ integration pass (top-dollar events, resolution tracker, pipeline snapshots, verification report, I-17 flags). Sections below. |
+| 60e9b5ec | `arena/60e9b5ec-demo3` | active - swing-alerting + simulated strategy bots (this session) | Adds the missing live-alerting layer (two scrolling chat feeds: all events + high-ROI model picks, threshold >= $0.10 either direction), jump-linked news candidate sources on the chart, and automated simulated strategy trading with results/categorization. New files only + additive nav. Scope below. |
 
 ## Task board — session 4ea36f44 (source-linked Demo Desk)
 
@@ -348,3 +349,31 @@ Follow-up requests from session 06cbd03f addressed at integration:
 - 2026-11-20 12:25 UTC: PR https://github.com/karagemop466-tech/Demo3/pull/24 (`arena/4d10aedf-demo3` -> `main`) opened with summary, sources and flagged irregularities. Pre-merge checks green (verify_rows 725/725, verify_site PASSED, jsdom smoke PASSED).
 - 2026-11-20 12:29 UTC: `gh pr merge 24 --merge` reported conflicts — `main` had advanced with sessions `3b5e95bd`/`dd229508`/`arena-3a22fb0f` deliveries (PRs #18/#21/#22). Conflicts in `.gitignore`, `README.md`, `docs/executive-summary.md`, `COORDINATION.md` resolved by keeping both sides: `main`'s records preserved verbatim, 4d10aedf's records added as new sections. Nothing discarded (handoff/conflict protocol).
 - 2026-11-20 12:31 UTC: **PR #24 MERGED** — merge commit `48fe55e`. `Checks` workflow SUCCESS on the merge; `pages build and deployment` workflow SUCCESS; the Pages API reports `built` (source `main` /). Live site verified via page fetch: https://karagemop466-tech.github.io/Demo3/ serves the merged canonical landing with live status "LIVE · trading active (demo)", the executive-summary source table, decision registers, and archive links (docs/, docs/tracker/, analysis/, demo-desk/, research/). This line records the actual result; the follow-up board commit carries the confirmation to `main`.
+
+## Task board — session 60e9b5ec (live swing alerts + simulated strategy bots)
+
+Branch: `arena/60e9b5ec-demo3` (base `b3b2b23`, the current `main` tip at claim time). Protocol note: the
+brief's `session-<id>/<task>` branch convention is not available — the platform binds this session to the
+branch above (same irregularity R-04 recorded by earlier sessions).
+
+**Gap this session closes.** The brief requires a live alerting system ("sudden swings in contract prices
+greater than or equal to $0.10 in either direction", "two scrolling chats", one selective high-ROI feed) and
+automated simulated trades. Verified by grep of `dashboard.html`, `assets/app.js`, `assets/dashboard.js`,
+`assets/trade.js` at `b3b2b23`: zero matches for `alert`, `swing`, `chat`, `roi`, `0.10` — the feature did
+not exist on the live site. Everything else in the brief already had an implementation (see the sections of
+previous sessions above).
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| A1 Repo + board review, open-PR audit, gap analysis | done | `60e9b5ec` | `COORDINATION.md` | `git log`, `gh pr list/view --json`, grep of root site assets; live demo API probes via the page-fetch tool 2026-11-20 | A-01, A-02 |
+| A2 Alert engine (swing detection >= $0.10, high-ROI model, candidate news links) — server/CI side | in progress | `60e9b5ec` | `scripts/alert_engine.py`, `scripts/collect_alerts.py`, `scripts/test_alert_engine.py`, `data/alerts/**`, `.github/workflows/alerts.yml` | Market/candlestick/orderbook field names verified against `https://docs.kalshi.com/api-reference/market/get-markets.md` (Market schema, `*_dollars` / `*_fp` fields, `result` enum) and live demo responses re-fetched 2026-11-20; seeds computed only from committed collector snapshots (`data/latest/candles.json`, `top_events.json`), each row keeps its API `source_url` | — |
+| A3 Simulated strategy bots (automated paper trades, PnL, categorization) | in progress | `60e9b5ec` | `sim/**`, `data/sim/**` | Order/position semantics from `https://docs.kalshi.com/api-reference/orders/create-order-v2`, `https://docs.kalshi.com/getting_started/market_settlement` ; no demo credentials exist in this repo (I-12 of 4d10aedf) so all bot trades are labeled SIMULATED and never claim exchange execution | — |
+| A4 Site: `alerts.html` (two scrolling chat feeds, live), `strategies.html` (bot results), jump chart with news links | in progress | `60e9b5ec` | `alerts.html`, `strategies.html`, `assets/alerts.js`, `assets/strategies.js` | Browser access to the demo REST API was verified at runtime by session arena-3a22fb0f (F1) and re-checked this session; page shells regenerated by the canonical `scripts/build_root_site.py` | — |
+| A5 Shared-output edits (nav + registers + docs) | in progress | `60e9b5ec` | `scripts/build_root_site.py` (NAV entries only), `scripts/verify_root_site.py` (PAGES/JS lists), `docs/tracker/data/{flags,questions,suggestions,sources}.json` (append rows), `README.md` (append) | Additive only; every register row cites an official docs page or a replayable demo-API URL | — |
+| A6 Final integration: checks, PR, merge, Pages verification, board record | pending | `60e9b5ec` | `COORDINATION.md`, GitHub PR | `scripts/verify_root_site.py`, `scripts/verify_site.py`, `scripts/tracker_check.py`, `scripts/check_site.py`, `npm test`, offline engine tests, live Pages fetch | — |
+
+Claim written and pushed at 2026-11-20 (this commit). Other sessions' in-flight PRs (#17, #19, #23) touch
+`assets/dashboard.js`, `assets/trade.js`, `assets/data-tracking.js`, `collector/**`, `data/portfolio.json`,
+`data/resolutions.json`, `docs/executive-summary.md`, `demo-monitor/**` — none of those files are edited by
+this session; this session writes only new files plus the additive shared edits listed above.
+
