@@ -1,0 +1,6 @@
+# Regenerable raw API snapshots (large; rebuilt by .github/workflows/collect.yml).
+# The compact, committed artifacts used by the site are data/dashboard.json and
+# data/resolutions-compact.json.
+data/live.json
+data/live-prod.json
+data/resolutions.json

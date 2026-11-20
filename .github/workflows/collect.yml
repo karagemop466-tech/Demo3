@@ -63,6 +63,12 @@ jobs:
           echo "--- prod artifacts ---"
           ls -la data | head -30
 
+      - name: Build compact, committed artifacts
+        run: |
+          python3 analysis/build.py
+          echo "--- committed artifacts ---"
+          ls -la data/*.json | head -20
+
       - name: Validate artifacts are parseable JSON
         run: |
           python3 - <<'PY'
@@ -89,7 +95,7 @@ jobs:
         run: |
           git config user.name "kalshi-collector-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add data
+          git add data analysis
           if git diff --cached --quiet; then
             echo "no data changes"
             exit 0
