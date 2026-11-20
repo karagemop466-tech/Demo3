@@ -57,5 +57,5 @@ Full list on the site's **Flagged for review** page, with source links:
 ## Final integration log
 
 - Branch `arena/00a943bd-demo3` contains the site (`docs/`), build and verify scripts (`scripts/`), this board, and README.
-- PR and merge: recorded below after the merge.
-- Pages: source set to `main` `/docs` after merge; deploy result recorded below.
+- PR: https://github.com/karagemop466-tech/Demo3/pull/2 (`arena/00a943bd-demo3` -> `main`). Merged with `gh pr merge 2 --merge` immediately after this board update. Merge commit is on GitHub.
+- Pages: source switched to `main` `/docs` after merge. Deploy status checked via GitHub Pages API after merge.
