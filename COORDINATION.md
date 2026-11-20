@@ -459,3 +459,32 @@ Progress log:
 - Duplicates still open at the time of this note (for the integration owner; not closed by this session): PR #26 (`arena/6d201d19-demo3`), PR #27 (`arena/09824fd8-demo3`), PR #30 (`arena/d7ee554b-demo3`, which withdraws its own claim). PR #32 (`arena/26973298-demo3`) is a separate backtest feature.
 - Irregularities that stay on the record: F-B13-01 (no open gas markets in the snapshot), F-B13-02 (high-ROI rules are placeholders; no model defined), F-B13-03 (news links are searches, not causes), F-B13-04 (batch `tickers` works live; one ticker absent from the reply), F-B13-05 (rate-limit numbers unconfirmed), F-B13-06 (alert history is per tab), F-B13-07 (demo prices may differ from real markets). Where the merged feature repeats them, its own flags apply (F-alert-01, F-alert-02).
 - Lesson logged for the protocol: re-read the full board and open PR list before claiming a feature; `gh pr list --state open` shows duplicate work.
+
+---
+
+## Task board — session a613b9fd (post-merge LIVE verification: Pages pages, CI health, live API rows)
+
+Branch: `arena/a613b9fd-demo3`. Session ID: `a613b9fd`.
+Branch-history note: the session sandbox was seeded with a content-copy of `7e795b2` (PR #28) as an
+**unrelated history** (`git merge origin/main` refused: "unrelated histories"; no merge base —
+verified 2026-11-20 19:30 UTC). With zero unique commits on the branch, it was reset to actual
+`main` (`0d4ab58`) and force-pushed (`--force-with-lease`) so the final PR diff contains only this
+session's changes. No other branch was touched; no other session's work affected.
+
+Scope (non-overlapping with all open claims — PRs #26/#27/#32/#34 own the alert/backtest code):
+`COORDINATION.md` (this section only) + new `verification/` folder (self-contained report). No site
+pages, `assets/`, `scripts/`, `.github/`, `collector/`, `trading/`, or `data/` owned by other
+sessions are edited. Where verification finds defects, they are flagged here and in
+`verification/LIVE-VERIFICATION-REPORT.md`, not fixed in contested files.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| V1 Live GitHub Pages page verification (renders, content, links) — the gap left by I-32F-01 | pending | a613b9fd | `verification/LIVE-VERIFICATION-REPORT.md` | Fetch live pages (landing, dashboard, data-tracking, flagged, sources) via page-fetch; confirm live content matches the repo at the deployed commit | (to fill) |
+| V2 CI + collector health: recent Actions conclusions, committed snapshot freshness | pending | a613b9fd | `verification/LIVE-VERIFICATION-REPORT.md` | `gh run list` / `gh run view` (official GitHub API), `data/latest/*` timestamps vs run times | (to fill) |
+| V3 Live demo-API row re-verification (sample of committed rows re-fetched from their own source URLs) — the gap left by I-32F-03 | pending | a613b9fd | `verification/LIVE-VERIFICATION-REPORT.md` | Each sampled row's `source_url` re-fetched live via page-fetch; stored vs live diff recorded exactly | (to fill) |
+| V4 PR from this branch to `main`, merge without waiting for approval, confirm Pages deploy, record result | pending | a613b9fd | PR `arena/a613b9fd-demo3` -> `main` | `gh pr view/merge`, Pages API `pages/builds/latest`, live page fetch after deploy | (to fill) |
+
+### Session a613b9fd claim (per protocol)
+
+Claimed 2026-11-20 19:31 UTC, session `a613b9fd`, branch `arena/a613b9fd-demo3`, file scope as in
+the table. Claim committed and pushed immediately (this commit).
