@@ -1,6 +1,6 @@
 {
  "alert_rule": {
-  "definition": "close[i] - max(close over the previous window) >= threshold (up), or min(...) - close[i] >= threshold (down); re-arm once the price returns within the re-arm band of the anchor. Window is measured in MINUTES and converted to candles per candle interval.",
+  "definition": "up_move = close[i] - min(close over the previous window) (the leg is measured OFF THE WINDOW LOW); down_move = max(close over the previous window) - close[i] (measured off the window HIGH). Fire 'up' when up_move >= max(down_move, threshold); otherwise fire 'down' when down_move >= max(up_move, threshold) - the stronger leg of the two wins, so one run in one direction prints one alert. Re-arm once |close[i] - anchor| <= the re-arm band. The window is measured in MINUTES and converted to candles per candle interval, and windows that start at or after index i are skipped. (An earlier copy of this string described a breakout off the prior extreme, which is not what the code does; both runtimes are pinned by the same reference vectors.)",
   "directions": [
    "up",
    "down"
@@ -22,7 +22,7 @@
   ]
  },
  "api_root": "https://external-api.demo.kalshi.co/trade-api/v2",
- "generated_at": "2026-11-20T20:18:30Z",
+ "generated_at": "2026-11-20T20:39:12Z",
  "link_rules": {
   "api_record": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers={ticker}",
   "event_page_linked_only_if_probe_200_and_echoed": true,
@@ -31,7 +31,7 @@
    "attempts": [
     {
      "body_bytes": 0,
-     "checked_at": "2026-11-20T20:19:19Z",
+     "checked_at": "2026-11-20T20:40:11Z",
      "error": "HTTP 429",
      "site_root": "https://kalshi.com",
      "status_code": 429,
@@ -41,7 +41,7 @@
     },
     {
      "body_bytes": 0,
-     "checked_at": "2026-11-20T20:19:22Z",
+     "checked_at": "2026-11-20T20:40:13Z",
      "error": "HTTP 404",
      "site_root": "https://demo.kalshi.co",
      "status_code": 404,
@@ -50,7 +50,7 @@
      "url": "https://demo.kalshi.co/event/KXBTCY-27JAN0100"
     }
    ],
-   "checked_at": "2026-11-20T20:19:22Z",
+   "checked_at": "2026-11-20T20:40:13Z",
    "status_code": 429,
    "ticker_echoed": false,
    "verified_root": null
@@ -70,12 +70,12 @@
     "fade_mean_net_dollars": null,
     "fade_n_quotable": null,
     "n_markets": 2,
-    "n_swings": 9,
+    "n_swings": 11,
     "resolved_no": 0,
     "resolved_yes": 0,
-    "reversion_rate": 0.888889,
+    "reversion_rate": 0.909091,
     "reversion_rate_ever": 1.0,
-    "reversion_rate_shrunk": 0.884173,
+    "reversion_rate_shrunk": 0.904167,
     "reversion_rate_within_horizon_minutes": 60,
     "strategies": {
      "momo60": {
@@ -86,7 +86,7 @@
       "n_quotable": 1
      }
     },
-    "unresolved": 9
+    "unresolved": 11
    },
    "crypto|5-20c|>40c|>14d": {
     "best_mean_net_dollars": -0.0174,
@@ -103,7 +103,7 @@
     "resolved_yes": 0,
     "reversion_rate": 1.0,
     "reversion_rate_ever": 1.0,
-    "reversion_rate_shrunk": 0.915709,
+    "reversion_rate_shrunk": 0.927083,
     "reversion_rate_within_horizon_minutes": 60,
     "strategies": {
      "fade15": {
@@ -147,12 +147,12 @@
     "fade_mean_net_dollars": -0.0121,
     "fade_n_quotable": 1,
     "n_markets": 1,
-    "n_swings": 10,
+    "n_swings": 14,
     "resolved_no": 0,
     "resolved_yes": 0,
-    "reversion_rate": 0.7,
-    "reversion_rate_ever": 0.9,
-    "reversion_rate_shrunk": 0.749589,
+    "reversion_rate": 0.857143,
+    "reversion_rate_ever": 1.0,
+    "reversion_rate_shrunk": 0.864583,
     "reversion_rate_within_horizon_minutes": 60,
     "strategies": {
      "fade15": {
@@ -177,105 +177,105 @@
       "n_quotable": 1
      }
     },
-    "unresolved": 10
+    "unresolved": 14
    },
    "elections|0-5c|>40c|>14d": {
-    "best_mean_net_dollars": -0.12068,
+    "best_mean_net_dollars": -0.021916,
     "best_strategy": "fade_settle",
     "evidence": "sufficient",
     "evidence_rule": "n_swings >= 8 and n_markets >= 3",
     "fade_hit_rate": 0.0,
-    "fade_hit_rate_shrunk": 0.051282,
-    "fade_mean_net_dollars": -0.399246,
-    "fade_n_quotable": 35,
+    "fade_hit_rate_shrunk": 0.041667,
+    "fade_mean_net_dollars": -0.280707,
+    "fade_n_quotable": 44,
     "n_markets": 7,
-    "n_swings": 74,
+    "n_swings": 84,
     "resolved_no": 0,
     "resolved_yes": 0,
-    "reversion_rate": 0.851351,
-    "reversion_rate_ever": 0.972973,
-    "reversion_rate_shrunk": 0.85249,
+    "reversion_rate": 0.857143,
+    "reversion_rate_ever": 0.964286,
+    "reversion_rate_shrunk": 0.858665,
     "reversion_rate_within_horizon_minutes": 60,
     "strategies": {
      "fade15": {
       "hit_rate": 0.0,
-      "hit_rate_shrunk": 0.051282,
-      "mean_gross_dollars": -0.324571,
-      "mean_net_dollars": -0.329306,
-      "n_quotable": 35
+      "hit_rate_shrunk": 0.041667,
+      "mean_gross_dollars": -0.258386,
+      "mean_net_dollars": -0.262255,
+      "n_quotable": 44
      },
      "fade60": {
       "hit_rate": 0.0,
-      "hit_rate_shrunk": 0.051282,
-      "mean_gross_dollars": -0.3936,
-      "mean_net_dollars": -0.399246,
-      "n_quotable": 35
+      "hit_rate_shrunk": 0.041667,
+      "mean_gross_dollars": -0.276591,
+      "mean_net_dollars": -0.280707,
+      "n_quotable": 44
      },
      "fade_settle": {
       "hit_rate": 0.0,
-      "hit_rate_shrunk": 0.051282,
-      "mean_gross_dollars": -0.118629,
-      "mean_net_dollars": -0.12068,
-      "n_quotable": 35
+      "hit_rate_shrunk": 0.041667,
+      "mean_gross_dollars": -0.021136,
+      "mean_net_dollars": -0.021916,
+      "n_quotable": 44
      },
      "momo60": {
       "hit_rate": 0.0,
-      "hit_rate_shrunk": 0.035088,
-      "mean_gross_dollars": -0.547509,
-      "mean_net_dollars": -0.555242,
-      "n_quotable": 53
+      "hit_rate_shrunk": 0.029851,
+      "mean_gross_dollars": -0.499397,
+      "mean_net_dollars": -0.506473,
+      "n_quotable": 63
      }
     },
-    "unresolved": 74
+    "unresolved": 84
    },
    "elections|80-95c|>40c|>14d": {
-    "best_mean_net_dollars": -0.208898,
+    "best_mean_net_dollars": -0.227867,
     "best_strategy": "fade15",
     "evidence": "sufficient",
     "evidence_rule": "n_swings >= 8 and n_markets >= 3",
     "fade_hit_rate": 0.0,
-    "fade_hit_rate_shrunk": 0.033333,
-    "fade_mean_net_dollars": -0.24823,
-    "fade_n_quotable": 56,
+    "fade_hit_rate_shrunk": 0.031746,
+    "fade_mean_net_dollars": -0.263592,
+    "fade_n_quotable": 59,
     "n_markets": 5,
-    "n_swings": 79,
+    "n_swings": 81,
     "resolved_no": 0,
     "resolved_yes": 0,
-    "reversion_rate": 0.911392,
-    "reversion_rate_ever": 0.936709,
-    "reversion_rate_shrunk": 0.909569,
+    "reversion_rate": 0.925926,
+    "reversion_rate_ever": 0.950617,
+    "reversion_rate_shrunk": 0.924265,
     "reversion_rate_within_horizon_minutes": 60,
     "strategies": {
      "fade15": {
       "hit_rate": 0.0,
-      "hit_rate_shrunk": 0.036364,
-      "mean_gross_dollars": -0.205608,
-      "mean_net_dollars": -0.208898,
-      "n_quotable": 51
+      "hit_rate_shrunk": 0.034483,
+      "mean_gross_dollars": -0.224352,
+      "mean_net_dollars": -0.227867,
+      "n_quotable": 54
      },
      "fade60": {
       "hit_rate": 0.0,
-      "hit_rate_shrunk": 0.033333,
-      "mean_gross_dollars": -0.244411,
-      "mean_net_dollars": -0.24823,
-      "n_quotable": 56
+      "hit_rate_shrunk": 0.031746,
+      "mean_gross_dollars": -0.259593,
+      "mean_net_dollars": -0.263592,
+      "n_quotable": 59
      },
      "fade_settle": {
       "hit_rate": 0.0,
-      "hit_rate_shrunk": 0.024691,
-      "mean_gross_dollars": -0.229896,
-      "mean_net_dollars": -0.233519,
-      "n_quotable": 77
+      "hit_rate_shrunk": 0.02381,
+      "mean_gross_dollars": -0.241638,
+      "mean_net_dollars": -0.2454,
+      "n_quotable": 80
      },
      "momo60": {
       "hit_rate": 0.0,
-      "hit_rate_shrunk": 0.032258,
-      "mean_gross_dollars": -0.430552,
-      "mean_net_dollars": -0.436814,
-      "n_quotable": 58
+      "hit_rate_shrunk": 0.03125,
+      "mean_gross_dollars": -0.2681,
+      "mean_net_dollars": -0.272245,
+      "n_quotable": 60
      }
     },
-    "unresolved": 79
+    "unresolved": 81
    }
   },
   "edge_definition": "max over the measured strategies of the bucket's mean net $/contract (best_strategy / best_mean_net_dollars); a bucket with no positive strategy is not a pick",
@@ -292,7 +292,7 @@
    "taker_rate_multiplier": 0.07
   },
   "global_fade_hit_rate": 0.0,
-  "global_reversion_rate": 0.873563,
+  "global_reversion_rate": 0.890625,
   "min_bucket_markets": 3,
   "min_bucket_n": 8,
   "pass_threshold_score": 0.6,
