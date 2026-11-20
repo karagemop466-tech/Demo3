@@ -360,7 +360,7 @@ Scope: root `dashboard.html`, `assets/style.css`, new `assets/alerts.js`, `asset
 |---|---|---|---|---|---|
 | T1 Two scrolling chat alert panels: price-swing detection (>= $0.10 either direction), "All events" chat + "High ROI model" filter chat, real-time scrolling | done | 6ebc1cb7 | `dashboard.html`, `assets/style.css`, `assets/alerts.js` | Demo REST polling (no key) for market data; swing computed from live last_price vs prior sample; each alert row links its market API URL; high-ROI filter is a labeled model heuristic (flagged as unverified until a model is defined) | F-alert-01 (high-ROI model not defined — labeled heuristic), F-alert-02 (CORS to demo API from Pages unverified — page fails closed to snapshots) |
 | T2 Automated simulated trades: paper strategies fire on swing signals, execution + PnL tracked, categorized by type, results analyzed | done | 6ebc1cb7 | `assets/trade.js` | Paper mode = labeled SIMULATED, nothing sent to Kalshi; settlement semantics per Market Settlement doc | F-trade-01 (no live demo credentials — paper mode only, labeled) |
-| T3 Final integration: verify root site line by line (per-row sources, no broken links, JS syntax), open PR `arena/6ebc1cb7-demo3` -> main, merge, confirm GitHub Pages deploy | in progress | 6ebc1cb7 | `scripts/verify_root_site.py`, `.github/`, PR to main | `verify_root_site.py` 0 failures; `node --check`; whole-site internal link crawl; Pages API `built` | none yet |
+| T3 Final integration: verify root site line by line (per-row sources, no broken links, JS syntax), open PR `arena/6ebc1cb7-demo3` -> main, merge, confirm GitHub Pages deploy | done | 6ebc1cb7 | `scripts/verify_root_site.py`, `.github/`, PR to main | `verify_root_site.py` 0 failures; `node --check` on all JS; whole-site internal link crawl; PR #28 merged (merge commit on main `7e795b2`); Checks workflow success on `7e795b2`; Pages API `built` at `7e795b2`; live site https://karagemop466-tech.github.io/Demo3/dashboard.html serves discovery/ranking, chart, orderbook, resolutions, trading, and the new alert chat card | none |
 
 ### Session 6ebc1cb7 claim (per protocol)
 
@@ -370,5 +370,10 @@ Progress log:
 - 2026-11-20: claim committed & pushed (a49b1a4).
 - 2026-11-20: T1 implemented (assets/alerts.js + dashboard.html cards + style.css + dashboard.js hooks). Verified: node --check OK; verify_root_site.py 0 failures.
 - 2026-11-20: T2 implemented (assets/trade.js automation engine, OFF by default, paper/SIMULATED only, automated fills tagged 'auto'). Verified: node --check OK; verify_root_site.py 0 failures.
-- 2026-11-20: feature commit f1c872f pushed to arena/6ebc1cb7-demo3. T3 in progress: final re-verification, PR, merge, Pages deploy confirmation.
+- 2026-11-20: feature commit f1c872f pushed to arena/6ebc1cb7-demo3.
+- 2026-11-20: PR #28 opened (arena/6ebc1cb7-demo3 -> main): https://github.com/karagemop466-tech/Demo3/pull/28
+- 2026-11-20: PR #28 MERGED (no approval wait, per brief); merge commit on main `7e795b2727564609b1b0b109d376e5d5c28a92c8`; commit 6333867 confirmed in origin/main.
+- 2026-11-20: Checks workflow #44801191913 on `7e795b2`: conclusion success. GitHub Pages: status `built` at `7e795b2`; live site https://karagemop466-tech.github.io/Demo3/ serves the canonical root site including the new alert chat card (section 6). Deploy confirmed live via page fetch.
+
+T1/T2/T3 complete for session 6ebc1cb7. Session is done; no further changes planned on this branch.
 
