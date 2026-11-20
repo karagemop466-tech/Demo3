@@ -67,12 +67,36 @@ jobs:
           ls -la data | head -30
 
       - name: Build compact, committed artifacts
+        id: build
+        continue-on-error: true
         run: |
-          python3 analysis/build.py
-          python3 analysis/strategies.py
-          python3 analysis/settle_check.py || true
-          echo "--- committed artifacts ---"
-          ls -la data/*.json | head -20
+          set -o pipefail
+          {
+            echo "=== build.py ==="
+            python3 analysis/build.py
+            echo "=== strategies.py ==="
+            python3 analysis/strategies.py
+            echo "=== settle_check.py ==="
+            python3 analysis/settle_check.py
+            echo "=== artifacts ==="
+            ls -la data/*.json | head -30
+          } 2>&1 | tee data/build-log.txt
+
+      - name: Publish build log when the build failed
+        if: steps.build.outcome == 'failure'
+        run: |
+          git config user.name "kalshi-collector-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -f data/build-log.txt
+          git commit -m "ci: collect build log (failure diagnostics)"
+          git pull --rebase --autostash origin arena/c2aac20e-demo3 || true
+          git push origin HEAD:arena/c2aac20e-demo3 || true
+
+      - name: Stop on build failure
+        if: steps.build.outcome == 'failure'
+        run: |
+          echo "build failed; see data/build-log.txt in the repo" >&2
+          exit 1
 
       - name: Validate artifacts are parseable JSON
         run: |
