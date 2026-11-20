@@ -61,7 +61,8 @@
     var prev = state.lastPrice[m.ticker];
     if (prev && prev.price !== null && prev.price !== undefined) {
       var change = cur - prev.price;
-      if (Math.abs(change) >= SWING) {
+      // Tolerate floating-point representation error at the inclusive boundary.
+      if (Math.abs(change) + 1e-12 >= SWING) {
         pushAlert(m.ticker, m.title, m.topic, m.series_ticker, prev.price, cur);
       }
     }
@@ -97,7 +98,7 @@
     // High-ROI placeholder heuristic: swing >= $0.10 AND the move is at least 10%
     // of the prior price. NOT a real model — labeled, unverified, flagged F-alert-01.
     var pct = Number(oldP) ? Math.abs(change) / Number(oldP) : 0;
-    alert.roiSignal = Math.abs(change) >= SWING && pct >= 0.10;
+    alert.roiSignal = Math.abs(change) + 1e-12 >= SWING && pct >= 0.10;
     state.alerts.unshift(alert);
     if (state.alerts.length > MAX_ALERTS) state.alerts.length = MAX_ALERTS;
     try { localStorage.setItem(ALERT_KEY, JSON.stringify(state.alerts)); } catch (e) {}

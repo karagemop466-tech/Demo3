@@ -584,27 +584,6 @@ if the browser blocks the request the tables fall back to the snapshot links in
 </div>
 
 <div class="card">
-  <h2>Live price alerts</h2>
-  <p class="small muted">Both feeds update from successive open-market scans. A move of at least $0.10
-  per contract in either direction triggers an alert; the first observed quote is only a baseline.
-  The experimental Model Watch is a transparent screen (last price 5–95¢, displayed yes bid/ask
-  spread at most 10¢, and positive reported contract volume). This is not validated ROI, advice, or
-  an automated trade signal. The market API does not identify news causes: catalyst attribution is
-  unverified unless a linked source is actually supplied. REST polling follows the market scan;
-  no browser WebSocket authentication is attempted.</p>
-  <div class="alert-feeds">
-    <section aria-labelledby="allAlertsHeading">
-      <h3 id="allAlertsHeading">All qualifying price swings <span id="allAlertCount" class="pill">0</span></h3>
-      <div id="allAlerts" class="alert-log" role="log" aria-live="polite" aria-relevant="additions"></div>
-    </section>
-    <section aria-labelledby="modelAlertsHeading">
-      <h3 id="modelAlertsHeading">Model Watch · heuristic only <span id="modelAlertCount" class="pill">0</span></h3>
-      <div id="modelAlerts" class="alert-log" role="log" aria-live="polite" aria-relevant="additions"></div>
-    </section>
-  </div>
-</div>
-
-<div class="card">
   <h2>2 · Selected market: price chart &amp; liquidity</h2>
   <p class="muted" id="detailTitle">Select a market above (Track).</p>
   <p class="small muted" id="detailMeta"></p>
@@ -669,9 +648,36 @@ if the browser blocks the request the tables fall back to the snapshot links in
   <h2>5 · Trade categorization &amp; strategy analysis</h2>
   <div id="strategyBody"></div>
 </div>
+
+<div class="card">
+  <h2>6 · Price-swing alerts &mdash; scrolling chat (&ge; $0.10)</h2>
+  <p class="small muted">Live alerts for contract price swings of <strong>&ge; $0.10 in either direction</strong>,
+     detected from the dashboard's live market samples (GET /markets, demo API, no key). Two scrolling chats:
+     <em>All events</em> shows every swing; <em>High ROI model</em> shows a selective, labeled placeholder
+     heuristic (no real model is defined yet &mdash; flagged F-alert-01, never presented as verified ROI).
+     Each row links its exact market API URL. Alerts persist in this browser only. The market response
+     does not verify an external news cause; see Flagged item I-13.</p>
+  <div class="alert-controls">
+    <label><input type="checkbox" id="alertsEnabled" checked> Alerts enabled</label>
+    <label><input type="checkbox" id="autoTrade" disabled> Automated paper trades on swing (paper/SIMULATED only)</label>
+    <button class="btn secondary" id="clearAlertsBtn">Clear alerts</button>
+    <span class="alert-pill" id="alertCount">0 alerts</span>
+  </div>
+  <div class="chat-tabs">
+    <button class="chat-tab active" id="tabAll" data-chat="all">All events</button>
+    <button class="chat-tab" id="tabROI" data-chat="roi">High ROI model</button>
+  </div>
+  <div class="chat-wrap" id="chatAll">
+    <div id="alertsAll"></div>
+  </div>
+  <div class="chat-wrap" id="chatROI" style="display:none">
+    <div id="alertsROI"></div>
+    <p class="small muted">High-ROI placeholder rule: swing &ge; $0.10 AND move &ge; 10% of prior price. Not a real model.</p>
+  </div>
+</div>
 """
     write_page("dashboard.html", "Live dashboard", "dashboard.html", body,
-               scripts=("assets/app.js", "assets/alerts.js", "assets/trade.js", "assets/dashboard.js", "assets/site.js"))
+               scripts=("assets/app.js", "assets/trade.js", "assets/dashboard.js", "assets/alerts.js", "assets/site.js"))
 
 
 def build_portfolio():
