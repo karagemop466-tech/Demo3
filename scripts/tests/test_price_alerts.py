@@ -27,6 +27,28 @@ class DetectSwings(unittest.TestCase):
         self.assertEqual(a[0]["direction"], "down")
         self.assertEqual(a[0]["delta_dollars"], "-0.1500")
 
+    def test_single_print_is_flagged_when_next_reading_reverts(self):
+        a = pa.detect_swings([row("T-A", "t1", "0.0040"), row("T-A", "t2", "0.8110"), row("T-A", "t3", "0.0030")])
+        self.assertEqual(len(a), 2)  # the up print and the snap-back down move are both swings
+        self.assertEqual(a[0]["direction"], "up")
+        self.assertTrue(a[0]["reverted_next_reading"])
+        self.assertEqual(a[0]["next_reading_dollars"], "0.0030")
+        self.assertFalse(a[1]["reverted_next_reading"])  # nothing after the last reading
+
+    def test_sustained_move_is_not_flagged_as_reverted(self):
+        a = pa.detect_swings([row("T-A", "t1", "0.2000"), row("T-A", "t2", "0.4000"), row("T-A", "t3", "0.4200")])
+        self.assertFalse(a[0]["reverted_next_reading"])
+
+    def test_no_next_reading_means_not_reverted_and_blank_next(self):
+        a = pa.detect_swings([row("T-A", "t1", "0.2000"), row("T-A", "t2", "0.4000")])
+        self.assertFalse(a[0]["reverted_next_reading"])
+        self.assertEqual(a[0]["next_reading_dollars"], "")
+
+    def test_bid_ask_carried_from_the_swing_reading(self):
+        r2 = row("T-A", "t2", "0.8110"); r2["yes_bid_dollars"] = "0.0020"; r2["yes_ask_dollars"] = "0.8110"
+        a = pa.detect_swings([row("T-A", "t1", "0.0040"), r2])
+        self.assertEqual((a[0]["to_bid_dollars"], a[0]["to_ask_dollars"]), ("0.0020", "0.8110"))
+
     def test_first_sample_only_sets_baseline(self):
         self.assertEqual(pa.detect_swings([row("T-A", "t1", "0.9000")]), [])
 

@@ -406,6 +406,15 @@ def consolidated_flags():
         "kalshi-data.yml schedule), so snapshot swings are coarse. The live page polls every 10-60 s "
         "(default 15 s) for its watchlist of 40 top markets. Swings between polls can be missed.",
         [f"{DOCS}/api-reference/market/get-markets.md"], "disclosed", "6d201d19")
+    add("F-6D-07", "Alerts / single prints", "A single last-trade print can look like a swing",
+        "On 2026-11-20 KXPRESNOMD-28-HBID printed last_price 0.8110 at 19:14:49Z while yes_bid was 0.0020 and "
+        "yes_ask 0.8110 (208 contracts offered). A later live read (about 19:25Z) showed last_price 0.0030. A "
+        "last-trade price can be one print, so the page marks a swing whose next reading moves back toward the "
+        "old price as a single print. Swings with no later reading show 'no later reading yet'. Bid and ask "
+        "are shown next to each swing.",
+        ["https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-HBID",
+         f"{DOCS}/api-reference/market/get-markets.md"],
+        "open - review whether alerts should use bid/ask midpoint or require confirmation", "6d201d19")
     add("F-6D-06", "Trading / portfolio", "Demo account portfolio and live trades still blocked",
         "Portfolio, fills and order placement need a Kalshi demo API key. The demo key is created by a "
         "person at demo.kalshi.co; this agent cannot create one. Until a key is provided, trade rows stay "
@@ -733,7 +742,7 @@ change of at least $0.10. Nothing here is inferred: cause links are left blank a
   <p class="small muted" id="snapMeta">Loading data/latest/alerts.json&hellip;</p>
   <div class="tablewrap"><table><thead><tr>
     <th>Snapshot time (UTC)</th><th>Topic</th><th>Market</th><th>Price (from &rarr; to)</th>
-    <th>Change</th><th>High-ROI screen</th><th>Source</th><th>Cause link</th>
+    <th>Change</th><th>Bid / ask at swing</th><th>Next reading (persistence)</th><th>High-ROI screen</th><th>Source</th><th>Cause link</th>
   </tr></thead><tbody id="snapRows"></tbody></table></div>
   <p class="small muted">Rule: two consecutive snapshots of the same market with last prices differing by at least
   $0.10. Sources: <a href="https://docs.kalshi.com/api-reference/market/get-markets.md" target="_blank" rel="noopener">get-markets</a>,

@@ -391,3 +391,5 @@ Protocol notes: other open PRs (#17 `arena/d330ff7d`, #19 `arena/b2e728ab`, #23 
 - Not done in this session: portfolio/trade rows (blocked by F-6D-06); a full re-verification of every earlier row (prior sessions' logs stand; only the rows touched here were re-checked).
 
 **Build-artifact note:** `build_root_site.py` adds one blank line to `api-reference.html` and `methodology.html` on every run (pre-existing generator whitespace); committed as generated.
+
+**Addendum (2026-11-20 19:24Z, session 6d201d19):** the collector's 19:14:49Z snapshot added a **third** swing, `KXPRESNOMD-28-HBID` 0.0040 → 0.8110 (+0.8070, elections, not synthetic). Bid 0.0020 / ask 0.8110 at that reading; a live read at about 19:25Z showed last_price 0.0030. It looks like a single last-trade print. The page now marks swings whose next reading moves back toward the old price as single prints and shows bid/ask. High-ROI screen: does not pass (buy YES at 0.8110, multiple 0.2330). Logged as **F-6D-07**. Snapshot totals: 3 swings (2 synthetic, 1 real-series single print); 0 pass the placeholder screen. Tests: `scripts/tests/test_price_alerts.py` 19/19, `node --test tests/*.test.js` 34/34.

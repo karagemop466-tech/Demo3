@@ -35,7 +35,8 @@
       " (" + esc(C.fmtSigned(a.deltaTicks)) + ") &middot; " +
       '<a href="' + esc(a.sourceUrl) + '" target="_blank" rel="noopener">API source</a> &middot; ' +
       'cause link: <span class="pill warn">unverified - not inferred</span> &middot; ' +
-      '<span class="muted">' + esc(a.origin) + "</span></div>";
+      '<span class="muted">' + esc(a.origin) + "</span></div>" +
+      '<div class="small">' + esc(a.persist) + "</div>";
     if (a.roi) {
       html += '<div class="small muted">High-ROI screen (placeholder): ' +
         (a.roi.passes ? "passes" : "does not pass") + " - would buy " + esc(a.roi.side) + " at " +
@@ -82,6 +83,17 @@
     });
   }
 
+  function persistLabel(a) {
+    if (!a.next_reading_dollars) return "no later reading yet";
+    return a.next_reading_dollars + (a.reverted_next_reading ? " - reverted (single print)" : " - held");
+  }
+  function persistText(a) {
+    if (!a.next_reading_dollars) return "Persistence: no later reading yet (not confirmed).";
+    return a.reverted_next_reading
+      ? "Persistence: next reading " + a.next_reading_dollars + " moved back toward the old price - treat as a single print, not a sustained move."
+      : "Persistence: next reading " + a.next_reading_dollars + " held near the new level.";
+  }
+
   // ---------------------------------------------------------------- snapshot (committed)
   function loadSnapshot() {
     return fetch("data/latest/alerts.json", { cache: "no-store" })
@@ -101,6 +113,7 @@
             timeLabel: utcFromIso(a.ts), topic: a.topic, title: a.title, ticker: a.ticker,
             synthetic: !!a.synthetic, direction: a.direction, fromLabel: C.fmtDollars(from),
             toLabel: C.fmtDollars(to), deltaTicks: to - from, sourceUrl: a.source_url,
+            persist: persistText(a),
             origin: "snapshot " + a.ts, roi: { passes: !!a.high_roi, side: a.roi_side,
               boughtTicks: C.toTicks(a.roi_bought_price_dollars), multiple: parseFloat(a.roi_multiple) }
           };
@@ -109,14 +122,15 @@
             (a.title ? esc(a.title) : '<span class="pill warn">title unverified</span>') +
             "<div class=\"mono small\">" + esc(a.ticker) + "</div></td><td class=\"mono\">" +
             esc(a.from_dollars) + " &rarr; " + esc(a.to_dollars) + "</td><td class=\"mono\">" +
-            esc(a.delta_dollars) + "</td><td>" + (a.high_roi ? "yes" : "no") + "</td><td>" +
+            esc(a.delta_dollars) + "</td><td class=\"mono\">" + esc(a.to_bid_dollars || "") + " / " + esc(a.to_ask_dollars || "") +
+            "</td><td>" + esc(persistLabel(a)) + "</td><td>" + (a.high_roi ? "yes" : "no") + "</td><td>" +
             '<a href="' + esc(a.source_url) + '" target="_blank" rel="noopener">API source</a></td><td>' +
             '<span class="pill warn">unverified - not inferred</span></td>';
           tb.appendChild(tr);
           emit(item);
         });
         if (!(snap.alerts || []).length) {
-          tb.innerHTML = '<tr><td colspan="8" class="muted">No snapshot swings of &ge; $0.10.</td></tr>';
+          tb.innerHTML = '<tr><td colspan="10" class="muted">No snapshot swings of &ge; $0.10.</td></tr>';
         }
         applyTopic();
       });
@@ -176,6 +190,7 @@
             ticker: t, synthetic: C.isSynthetic(t), direction: sw.direction,
             fromLabel: C.fmtDollars(prev), toLabel: C.fmtDollars(ticks), deltaTicks: sw.deltaTicks,
             sourceUrl: API + "/markets?tickers=" + t, origin: "live (browser)",
+            persist: "Single live reading - not yet confirmed by a later reading (persistence check pending).",
             roi: { passes: roi.passes, side: roi.side, boughtTicks: roi.boughtTicks, multiple: roi.multiple }
           });
         }

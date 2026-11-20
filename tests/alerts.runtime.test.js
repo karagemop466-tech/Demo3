@@ -54,6 +54,7 @@ test("alerts.html: snapshot seeds chats; live polls raise >= $0.10 swings; ROI c
   assert.equal(msgs("chatRoi"), snapshot.counts.high_roi);
   const rows = d.querySelectorAll("#snapRows tr");
   assert.equal(rows.length, snapshot.alerts.length);
+  assert.ok(rows[0].children.length === 10, "snapshot row has 10 cells incl. persistence");
   for (const tr of rows) {
     assert.ok(tr.querySelector('a[href^="https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers="]'), "row has official source link");
     assert.ok(/unverified/.test(tr.textContent), "cause link flagged unverified");

@@ -87,38 +87,49 @@ def detect_swings(rows, titles=None):
     alerts = []
     for ticker, rs in by_ticker.items():
         rs = sorted(rs, key=lambda r: r["ts"])
-        prev = None
-        for r in rs:
-            p = dec(r.get("last_price_dollars"))
-            if prev is not None and p is not None and prev["price"] is not None and prev["ts"] != r["ts"]:
-                delta = p - prev["price"]
-                if abs(delta) >= THRESHOLD:
-                    direction = 1 if delta > 0 else -1
-                    vol = dec(r.get("volume_fp"))
-                    passes, side, bought, mult = roi_screen(p, vol, ticker, direction)
-                    meta = titles.get(ticker, {})
-                    alerts.append({
-                        "ts": r["ts"],
-                        "prev_ts": prev["ts"],
-                        "ticker": ticker,
-                        "event_ticker": meta.get("event_ticker", ""),
-                        "title": meta.get("title", ""),
-                        "topic": r.get("topic", meta.get("topic", "")),
-                        "from_dollars": f"{prev['price']:.4f}",
-                        "to_dollars": f"{p:.4f}",
-                        "delta_dollars": f"{delta:+.4f}",
-                        "direction": "up" if direction > 0 else "down",
-                        "volume_fp": str(vol) if vol is not None else "",
-                        "source_url": f"{DEMO}/markets?tickers={ticker}",
-                        "synthetic": is_synthetic(ticker),
-                        "high_roi": passes,
-                        "roi_side": side or "",
-                        "roi_bought_price_dollars": f"{bought:.4f}" if bought is not None else "",
-                        "roi_multiple": f"{mult:.4f}" if mult is not None else "",
-                        "cause_link": "",
-                        "cause_status": "unverified - not inferred",
-                    })
-            prev = {"ts": r["ts"], "price": p}
+        prices = [dec(r.get("last_price_dollars")) for r in rs]
+        for i in range(1, len(rs)):
+            r, prev_r = rs[i], rs[i - 1]
+            p, prev_p = prices[i], prices[i - 1]
+            if p is None or prev_p is None or prev_r["ts"] == r["ts"]:
+                continue
+            delta = p - prev_p
+            if abs(delta) < THRESHOLD:
+                continue
+            direction = 1 if delta > 0 else -1
+            vol = dec(r.get("volume_fp"))
+            passes, side, bought, mult = roi_screen(p, vol, ticker, direction)
+            # Persistence: the NEXT reading. A last-trade print that snaps back toward the old
+            # level is flagged, because a single print is not a sustained price move.
+            nxt = prices[i + 1] if i + 1 < len(rs) else None
+            reverted = nxt is not None and abs(nxt - prev_p) < THRESHOLD / 2
+            meta = titles.get(ticker, {})
+            alerts.append({
+                "ts": r["ts"],
+                "prev_ts": prev_r["ts"],
+                "ticker": ticker,
+                "event_ticker": meta.get("event_ticker", ""),
+                "title": meta.get("title", ""),
+                "topic": r.get("topic", meta.get("topic", "")),
+                "from_dollars": f"{prev_p:.4f}",
+                "to_dollars": f"{p:.4f}",
+                "delta_dollars": f"{delta:+.4f}",
+                "direction": "up" if direction > 0 else "down",
+                "to_bid_dollars": str(dec(r.get("yes_bid_dollars")) or ""),
+                "to_ask_dollars": str(dec(r.get("yes_ask_dollars")) or ""),
+                "next_reading_dollars": f"{nxt:.4f}" if nxt is not None else "",
+                "next_reading_ts": rs[i + 1]["ts"] if nxt is not None else "",
+                "reverted_next_reading": bool(reverted),
+                "volume_fp": str(vol) if vol is not None else "",
+                "source_url": f"{DEMO}/markets?tickers={ticker}",
+                "synthetic": is_synthetic(ticker),
+                "high_roi": passes,
+                "roi_side": side or "",
+                "roi_bought_price_dollars": f"{bought:.4f}" if bought is not None else "",
+                "roi_multiple": f"{mult:.4f}" if mult is not None else "",
+                "cause_link": "",
+                "cause_status": "unverified - not inferred",
+            })
     alerts.sort(key=lambda a: (a["ts"], a["ticker"]))
     return alerts
 
@@ -182,6 +193,7 @@ def main():
             "comparison": "consecutive snapshots of the same ticker; |last_price_dollars change| >= 0.10",
             "input": "data/history/prices.jsonl",
             "either_direction": True,
+            "persistence_check": "a swing whose next reading moves back to within $0.05 of the old price is flagged reverted_next_reading (single print, not sustained)",
         },
         "high_roi_rule": {
             "status": "PLACEHOLDER - not the user's model; arithmetic on official prices, not a forecast",
@@ -197,6 +209,7 @@ def main():
             "up": sum(1 for a in alerts if a["direction"] == "up"),
             "down": sum(1 for a in alerts if a["direction"] == "down"),
             "high_roi": sum(1 for a in alerts if a["high_roi"]),
+            "reverted_next_reading": sum(1 for a in alerts if a["reverted_next_reading"]),
             "synthetic": sum(1 for a in alerts if a["synthetic"]),
             "watchlist": len(watch),
         },

@@ -1,11 +1,12 @@
 {
- "generated_at": "2026-11-20T19:15:11Z",
+ "generated_at": "2026-11-20T19:24:46Z",
  "api_root": "https://external-api.demo.kalshi.co/trade-api/v2",
  "rule": {
   "threshold_dollars": "0.10",
   "comparison": "consecutive snapshots of the same ticker; |last_price_dollars change| >= 0.10",
   "input": "data/history/prices.jsonl",
-  "either_direction": true
+  "either_direction": true,
+  "persistence_check": "a swing whose next reading moves back to within $0.05 of the old price is flagged reverted_next_reading (single print, not sustained)"
  },
  "high_roi_rule": {
   "status": "PLACEHOLDER - not the user's model; arithmetic on official prices, not a forecast",
@@ -17,13 +18,14 @@
    "KXQUICKSETTLE"
   ]
  },
- "snapshot_samples": 120,
+ "snapshot_samples": 132,
  "snapshot_tickers": 24,
  "counts": {
-  "alerts": 2,
-  "up": 2,
+  "alerts": 3,
+  "up": 3,
   "down": 0,
   "high_roi": 0,
+  "reverted_next_reading": 0,
   "synthetic": 2,
   "watchlist": 40
  },
@@ -39,6 +41,11 @@
    "to_dollars": "0.5500",
    "delta_dollars": "+0.2000",
    "direction": "up",
+   "to_bid_dollars": "0.0100",
+   "to_ask_dollars": "1.0000",
+   "next_reading_dollars": "0.6500",
+   "next_reading_ts": "2026-11-20T11:58:42+00:00",
+   "reverted_next_reading": false,
    "volume_fp": "7350.0000",
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXDEMOFUTHOURLY-26NOV20H12-UP",
    "synthetic": true,
@@ -60,6 +67,11 @@
    "to_dollars": "0.6500",
    "delta_dollars": "+0.1000",
    "direction": "up",
+   "to_bid_dollars": "0.0100",
+   "to_ask_dollars": "1.0000",
+   "next_reading_dollars": "",
+   "next_reading_ts": "",
+   "reverted_next_reading": false,
    "volume_fp": "8220.0000",
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXDEMOFUTHOURLY-26NOV20H12-UP",
    "synthetic": true,
@@ -67,6 +79,32 @@
    "roi_side": "YES",
    "roi_bought_price_dollars": "0.6500",
    "roi_multiple": "0.5385",
+   "cause_link": "",
+   "cause_status": "unverified - not inferred"
+  },
+  {
+   "ts": "2026-11-20T19:14:49+00:00",
+   "prev_ts": "2026-11-20T12:38:54+00:00",
+   "ticker": "KXPRESNOMD-28-HBID",
+   "event_ticker": "KXPRESNOMD-28",
+   "title": "Will Hunter Biden be the nominee for the Presidency for the Democratic party?",
+   "topic": "elections",
+   "from_dollars": "0.0040",
+   "to_dollars": "0.8110",
+   "delta_dollars": "+0.8070",
+   "direction": "up",
+   "to_bid_dollars": "0.0020",
+   "to_ask_dollars": "0.8110",
+   "next_reading_dollars": "",
+   "next_reading_ts": "",
+   "reverted_next_reading": false,
+   "volume_fp": "537225527.6800",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-HBID",
+   "synthetic": false,
+   "high_roi": false,
+   "roi_side": "YES",
+   "roi_bought_price_dollars": "0.8110",
+   "roi_multiple": "0.2330",
    "cause_link": "",
    "cause_status": "unverified - not inferred"
   }
@@ -177,27 +215,27 @@
    "synthetic": false
   },
   {
-   "ticker": "KXFEATURE-26GTA6-QUA",
+   "ticker": "KXDANCINGWITHTHESTARS-26DEC31-HSHU",
    "topic": "culture",
-   "title": "Will Quavo be featured on Grand Theft Auto VI: The Album?",
-   "event_ticker": "KXFEATURE-26GTA6",
-   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXFEATURE-26GTA6-QUA",
+   "title": "Will Harry Shum Jr. win Dancing with the Stars Season 35?",
+   "event_ticker": "KXDANCINGWITHTHESTARS-26DEC31",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXDANCINGWITHTHESTARS-26DEC31-HSHU",
    "synthetic": false
   },
   {
-   "ticker": "KXFEATURE-26GTA6-ACD",
+   "ticker": "KXDANCINGWITHTHESTARS-26DEC31-MHIG",
    "topic": "culture",
-   "title": "Will AC/DC be featured on Grand Theft Auto VI: The Album?",
-   "event_ticker": "KXFEATURE-26GTA6",
-   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXFEATURE-26GTA6-ACD",
+   "title": "Will Maura Higgins win Dancing with the Stars Season 35?",
+   "event_ticker": "KXDANCINGWITHTHESTARS-26DEC31",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXDANCINGWITHTHESTARS-26DEC31-MHIG",
    "synthetic": false
   },
   {
-   "ticker": "KXFEATURE-26GTA6-SAM",
+   "ticker": "KXDANCINGWITHTHESTARS-26DEC31-CWOO",
    "topic": "culture",
-   "title": "Will Sam Smith be featured on Grand Theft Auto VI: The Album?",
-   "event_ticker": "KXFEATURE-26GTA6",
-   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXFEATURE-26GTA6-SAM",
+   "title": "Will Connor Wood win Dancing with the Stars Season 35?",
+   "event_ticker": "KXDANCINGWITHTHESTARS-26DEC31",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXDANCINGWITHTHESTARS-26DEC31-CWOO",
    "synthetic": false
   },
   {
