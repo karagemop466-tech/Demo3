@@ -226,9 +226,18 @@ test("alerts.html: two chats, per-row source links, resolution sweep, track wiri
     no_dollars: [["0.55", "800"], ["0.56", "2100"]],
   } };
   const requests = [];
+  let inFlight = 0;
   const fetchMock = async (url) => {
     const u = String(url);
     requests.push(u);
+    inFlight++;
+    try {
+      return await fetchBody(u);
+    } finally {
+      inFlight--;
+    }
+  };
+  const fetchBody = async (u) => {
     if (u.includes("resolutions.json")) return jsonResponse({ resolutions: [] });
     if (u.endsWith("/series") || u.includes("/series?")) {
       return jsonResponse({ series: [
@@ -308,8 +317,17 @@ test("dashboard.html: merged PR #28 chat engine (assets/alerts.js) coexists with
       tags: ["Crypto"], categories: ["Financials"], frequency: "daily" }] };
   const open = { markets: [marketRow({ last_price_dollars: "0.5000",
       yes_bid_dollars: "0.4900", yes_ask_dollars: "0.5100" })] };
+  let dashInFlight = 0;
   const fetchMock = async (url) => {
     const u = String(url);
+    dashInFlight++;
+    try {
+      return await dashBody(u);
+    } finally {
+      dashInFlight--;
+    }
+  };
+  const dashBody = async (u) => {
     if (u.includes("resolutions.json") || u.includes("snapshot.json") ||
         u.includes("verified.json")) {
       return jsonResponse(u.includes("snapshot.json") ? { markets: [] } :
@@ -348,6 +366,9 @@ test("dashboard.html: merged PR #28 chat engine (assets/alerts.js) coexists with
     // let the dashboard's async init (discover + scan chain) settle before teardown
     await waitFor(() => ($("scanStatus") || {}).textContent?.includes("Last scan"),
       "dashboard scan to settle");
+    // wait for network quiescence so no late promise touches restored globals
+    await waitFor(() => dashInFlight === 0, "in-flight fetches to drain");
+    await new Promise((resolve) => setTimeout(resolve, 700));
   } finally {
     cleanup();
   }
