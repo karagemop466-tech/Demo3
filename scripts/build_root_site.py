@@ -175,6 +175,7 @@ NAV = [
     ("crypto.html", "Crypto"),
     ("golf.html", "Golf"),
     ("portfolio.html", "Portfolio"),
+    ("strategy.html", "Strategy lab"),
     ("trades.html", "Trades"),
     ("questions.html", "Questions"),
     ("suggestions.html", "Suggestions"),
@@ -222,6 +223,9 @@ Every table row links its source; blank cells are flagged on <a href="flagged.ht
 
 
 def write_page(name, title, active, body, scripts=()):
+    if name in EXTERNALLY_MAINTAINED and (ROOT / name).exists():
+        print("kept", name, "(maintained outside the generator)")
+        return
     (ROOT / name).write_text(shell(title, active, body, scripts))
     print("wrote", name)
 
@@ -356,6 +360,19 @@ def consolidated_flags():
         "content was ported into the canonical site and the duplicate engine removed "
         "(originals remain in git history at 45bde12). See COORDINATION.md.",
         ["https://github.com/karagemop466-tech/Demo3/commits/main"], "resolved", "3a22fb0f")
+    # session df50b92f: sharp-jump context links
+    add("F-df-01", "Alerts", "Settlement-source links are not proof of a price-move cause",
+        "Sharp-jump alert rows (>= $0.10) show each event's official settlement_sources from "
+        "GET /events/{event_ticker}. These are the sources the exchange resolves the event with. "
+        "They do not show what caused a move; each row says 'Cause not verified'. No news feed "
+        "is in this repo and none is claimed.",
+        [f"{DOCS}/api-reference/events/get-event", f"{DOCS}/api-reference/market/get-market"],
+        "open — labelled in UI", "df50b92f")
+    add("F-df-02", "Alerts", "Browser access to the demo event endpoint is unverified from the build sandbox",
+        "The sandbox cannot reach the demo API host, so the live event fetch from GitHub Pages is "
+        "not verified here. On failure the UI shows 'event record unavailable' and never guesses.",
+        [f"{DOCS}/getting_started/demo_env"],
+        "open — fails closed", "df50b92f")
     add("I-11", "Trading", "No demo-account API credentials were provided",
         "Live order execution needs a Kalshi demo API key (created at demo.kalshi.co). Until one is "
         "supplied, the Trade pages run in clearly labeled paper-trading mode against live demo "
@@ -662,7 +679,11 @@ if the browser blocks the request the tables fall back to the snapshot links in
   <a href="https://docs.kalshi.com/getting_started/quick_start_websockets" target="_blank" rel="noopener">WebSocket API</a>
   requires (flag I-13), so this layer polls. Resolution notices (yes/no) join the All-events feed;
   jumps ≥ $0.10 also mark the card-2 chart. Auto-scroll pauses while you scroll up. Alerts persist
-  in this browser only (localStorage) and can be exported below.</p>
+  in this browser only (localStorage) and can be exported below. Each alert's
+  <em>Context</em> column carries the event's official
+  <span class="mono">settlement_sources</span> from
+  <a href="https://docs.kalshi.com/api-reference/events/get-event" target="_blank" rel="noopener">Get Event</a>
+  — resolution sources, <strong>not proof of cause</strong>: every row says "Cause not verified".</p>
   <div class="alert-controls">
     <label><input type="checkbox" id="alertsEnabled" checked> Alerts enabled</label>
     <label><input type="checkbox" id="autoTrade" disabled> Automated paper trades on swing (paper/SIMULATED only)</label>
@@ -1128,6 +1149,15 @@ def build_wrapped(name, title):
         print("WARN no body in", name)
         return
     write_page(name, title, name, inner, scripts=("assets/app.js", "assets/site.js"))
+
+
+# Integration note (session f428c4bd): session df50b92f had exempted dashboard.html from
+# regeneration (EXTERNALLY_MAINTAINED = {"dashboard.html"}) so that hand-edited content was
+# not dropped. That workaround is no longer needed: the live-alert card (6ebc1cb7's controls
+# + df50b92f's context column + f428c4bd's charts/annotations) is now GENERATED in
+# build_dashboard() below, so regeneration preserves it. The skip set is emptied to restore
+# one source of truth for root pages.
+EXTERNALLY_MAINTAINED = set()
 
 
 def main():

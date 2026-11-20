@@ -28,6 +28,7 @@ PAGES = [
     "gas-prices.html", "elections.html", "culture.html", "crypto.html", "golf.html",
     "questions.html", "suggestions.html", "flagged.html", "sources.html",
     "repo-review.html", "methodology.html", "api-reference.html",
+    "strategy.html",
 ]
 
 
@@ -72,7 +73,7 @@ def main():
 
     # 3. syntax checks
     for js in ["assets/app.js", "assets/dashboard.js", "assets/trade.js", "assets/site.js",
-               "assets/alerts.js", "assets/data-tracking.js"]:
+               "assets/alerts.js", "assets/data-tracking.js", "assets/strategy.js"]:
         r = subprocess.run(["node", "--check", js], cwd=ROOT, capture_output=True, text=True)
         if r.returncode != 0:
             fail(f"node --check {js}: {r.stderr.strip()[:200]}")

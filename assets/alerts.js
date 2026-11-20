@@ -184,13 +184,66 @@
       topic: ctx.topic || "",
       series: ctx.series || "",
       event: ctx.event || "",
+      rules: ctx.rules || "",
       oldPrice: basePx, newPrice: ctx.px, change: change, dir: dir,
       api: apiUrl(ticker),
       roiSignal: rc.roi, rel: rc.rel,
       hr: rc.checks.map(function (c) { return { id: c.id, pass: c.pass }; })
     };
     pushAlert(alert);
+    loadEvent(alert.event);
     return alert;
+  }
+
+  /* ---------- sharp-jump context: official event record (df50b92f feature,
+   * kept by this integration) ----------
+   * GET /events/{event_ticker} (Get Event) returns settlement_sources[{name,url}]:
+   * the official sources the exchange uses to determine the event. These are
+   * context links only — they do NOT prove what caused a price move; each row
+   * says "Cause not verified". Verified against
+   * https://docs.kalshi.com/api-reference/events/get-event (fetched 2026-11-20:
+   * EventData.settlement_sources, "The official sources used for the
+   * determination of markets within this event"). */
+  KD.events = {};                   // event_ticker -> {status, sources, title, api}
+  function eventUrl(evt) {
+    return BASE + "/events/" + encodeURIComponent(evt);
+  }
+  function loadEvent(evt) {
+    if (!evt || KD.events[evt] || typeof fetch !== "function") return;
+    KD.events[evt] = { status: "loading", sources: [], title: "", api: eventUrl(evt) };
+    fetch(eventUrl(evt), { headers: { Accept: "application/json" } })
+      .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+      .then(function (j) {
+        var ev = j.event || {};
+        KD.events[evt] = {
+          status: "ok", title: ev.title || "", api: eventUrl(evt),
+          sources: (ev.settlement_sources || []).filter(function (s) {
+            return s && typeof s.url === "string" && /^https:\/\//.test(s.url);
+          })
+        };
+        render();
+      })
+      .catch(function () {
+        KD.events[evt] = { status: "error", sources: [], title: "", api: eventUrl(evt) };
+        render();
+      });
+  }
+  function contextCell(a) {
+    if (!a.event) return "<span class='muted small'>event not recorded (older alert)</span>";
+    var ev = KD.events[a.event];
+    var out = "<a class='src' href='" + esc(eventUrl(a.event)) + "' target='_blank' rel='noopener'>event API</a>";
+    if (!ev || ev.status === "loading") return out + " <span class='muted small'>loading settlement sources…</span>";
+    if (ev.status === "error") return out + " <span class='muted small'>event record unavailable (browser/API blocked) — not inferred</span>";
+    if (!ev.sources.length) return out + " <span class='muted small'>API lists no settlement sources</span>";
+    out += ev.sources.map(function (s) {
+      return " <a class='src' href='" + esc(s.url) + "' target='_blank' rel='noopener'>" + esc(s.name || s.url) + "</a>";
+    }).join("");
+    return out;
+  }
+  function rulesCell(a) {
+    if (!a.rules) return "";
+    return "<details class='rules'><summary class='small'>rules (Get Market rules_primary)</summary><div class='small'>" +
+      esc(a.rules) + "</div></details>";
   }
   function pushAlert(alert) {
     state.alerts.unshift(alert);
@@ -215,7 +268,7 @@
       t: (sample && sample.t) || Math.floor(Date.now() / 1000),
       px: tracked(b), bid: b.bid, ask: b.ask, vol: b.vol,
       title: m.title, topic: m.topic, series: m.series_ticker,
-      event: m.event_ticker
+      event: m.event_ticker, rules: m.rules_primary || ""
     });
     resolutionCheck({ ticker: m.ticker, status: m.status, result: m.result,
       title: m.title, topic: m.topic, event_ticker: m.event_ticker });
@@ -303,7 +356,8 @@
             t: t0, px: tracked(b), bid: b.bid, ask: b.ask, vol: b.vol,
             title: cached.title || row.title || row.ticker,
             topic: cached.topic || "", series: cached.series || row.series_ticker || "",
-            event: row.event_ticker || cached.event || ""
+            event: row.event_ticker || cached.event || "",
+            rules: row.rules_primary || cached.rules || ""
           });
           resolutionCheck(row);
         });
@@ -359,7 +413,10 @@
       "<td>" + esc(a.title) + hrChips(a.hr) + "</td>" +
       "<td class='num'>" + cents(a.oldPrice) + " &rarr; " + cents(a.newPrice) + "</td>" +
       "<td class='num " + esc(dirLabel) + "'>" + arrow + " " + cents(Math.abs(a.change)) + "</td>" +
-      "<td>" + linkCell(a) + roiBadge + "</td></tr>";
+      "<td>" + linkCell(a) + roiBadge + "</td>" +
+      "<td class='ctx'>" + contextCell(a) +
+      "<div class='small muted'>Cause not verified: a listed source is not proof that it moved the price.</div>" +
+      rulesCell(a) + "</td></tr>";
   }
   function noticeRow(n) {
     var a = { ticker: n.ticker, title: n.title, event: n.event, api: n.api };
@@ -371,17 +428,18 @@
       "<td class='num'>—</td>" +
       "<td class='num'>✓ " + esc(String(n.result).toUpperCase()) + "</td>" +
       "<td>" + linkCell(a) + " · <a class='src' href='https://docs.kalshi.com/getting_started/market_settlement' " +
-      "target='_blank' rel='noopener'>settlement doc</a></td></tr>";
+      "target='_blank' rel='noopener'>settlement doc</a></td>" +
+      "<td class='ctx'>" + contextCell(a) + "</td></tr>";
   }
   function renderPanel(el, rowsHtml, label, emptyHint) {
     if (!el) return;
     var wrap = el.closest ? el.closest(".chat-wrap") : null;
     var nearBottom = !wrap || (wrap.scrollHeight - wrap.scrollTop - wrap.clientHeight < 60);
     var empty = rowsHtml ? "" :
-      "<tr><td colspan='7' class='muted'>No " + label + " yet. " + emptyHint + "</td></tr>";
+      "<tr><td colspan='8' class='muted'>No " + label + " yet. " + emptyHint + "</td></tr>";
     el.innerHTML =
       "<table class='alerts'><thead><tr><th>Time</th><th>Topic</th><th>Ticker</th><th>Event</th>" +
-      "<th>Price move</th><th>Swing</th><th>Source &amp; possible-cause links</th></tr></thead>" +
+      "<th>Price move</th><th>Swing</th><th>Source &amp; possible-cause links</th><th>Context (official links)</th></tr></thead>" +
       "<tbody>" + rowsHtml + empty + "</tbody></table>";
     if (nearBottom && wrap) wrap.scrollTop = wrap.scrollHeight;
   }
@@ -469,7 +527,8 @@
           (a.dir === "up" ? "\u25b2" : "\u25bc") + " " + cents(Math.abs(a.change)) + "</span> " +
           cents(a.oldPrice) + " \u2192 " + cents(a.newPrice) + " " +
           (a.roiSignal ? "<span class='roi'>high-ROI pick</span>" : "") +
-          " · possible-cause links: " + linkCell(a) + "</div>");
+          " · possible-cause links: " + linkCell(a) +
+          " · official event record: " + contextCell(a) + "</div>");
       }
     });
     state.notices.forEach(function (n) {

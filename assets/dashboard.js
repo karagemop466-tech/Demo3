@@ -56,6 +56,7 @@
       last: last, yb: yb, ya: ya, vol: vol, oi: oi,
       volDollars: K.estDollars(vol, last), oiDollars: K.estDollars(oi, last),
       close_time: m.close_time, series_ticker: m.series_ticker || "",
+      rules_primary: m.rules_primary || "",
       topic: m._topic || ""
     };
   }

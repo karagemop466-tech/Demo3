@@ -89,7 +89,8 @@ function boot() {
   w.KalshiDash = { state: { markets: [] }, drawChart: () => { drawn.n += 1; } };
   w.KalshiTrade = { onSwingAlert: (a) => tradeHits.push(a) };
 
-  const keys = ["window", "document", "localStorage", "setInterval", "clearInterval", "Date"];
+  globalThis.__origFetch = globalThis.fetch;
+  const keys = ["window", "document", "localStorage", "setInterval", "clearInterval", "Date", "fetch"];
   const saved = new Map(keys.map((k) => [k, Object.getOwnPropertyDescriptor(globalThis, k)]));
   globalThis.window = w;
   globalThis.document = w.document;
@@ -97,6 +98,11 @@ function boot() {
   globalThis.Date = FakeDate;
   globalThis.setInterval = (fn) => { tickFn = fn; return 1; };
   globalThis.clearInterval = () => {};
+  globalThis.fetch = async (url) => ({
+    ok: true,
+    json: async () => ({ event: { title: "Test Event", event_ticker: "KXTEST-1",
+      settlement_sources: [{ name: "Official Source", url: "https://example-official.gov/data" }] } })
+  });
   // eslint-disable-next-line no-eval
   eval(alertsSrc);
 
@@ -144,6 +150,11 @@ test("integrated engine: scans + poll alert both chats, ROI screen filters, anno
     // mid 41c -> 53c
     assert.match(all.innerHTML, /41\.00¢ → 53\.00¢|0\.41/, "price move rendered");
     assert.match(roi.innerHTML, /KXTEST-1-A/, "T1 (all rules pass) in ROI chat");
+    // context column (df50b92f feature preserved by the integration): official
+    // settlement_sources from GET /events/{event_ticker}, labelled not-proof-of-cause
+    assert.match(all.innerHTML, /Cause not verified/, "context disclaimer per row");
+    assert.match(all.innerHTML, /example-official\.gov\/data/, "official settlement source linked");
+    assert.match(all.innerHTML, /Context \(official links\)/, "context column header");
     assert.doesNotMatch(roi.innerHTML, /KXTEST-2-B/,
       "T2 (no trades: HR-3 fails) absent from ROI chat");
     assert.match(all.innerHTML, /HR-3/, "HR rule chips shown");

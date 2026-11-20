@@ -1,6 +1,36 @@
 {
  "checks": [
   {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1400-2 result",
+   "detail": "stored='yes' live='yes'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1400-2 settlement_value_dollars",
+   "detail": "stored='1.0000' live='1.0000'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1400-2 ticker",
+   "detail": "stored='KXQUICKSETTLE-20NOV26H1400-2' live='KXQUICKSETTLE-20NOV26H1400-2'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1400-3 result",
+   "detail": "stored='no' live='no'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1400-3 settlement_value_dollars",
+   "detail": "stored='0.0000' live='0.0000'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1400-3 ticker",
+   "detail": "stored='KXQUICKSETTLE-20NOV26H1400-3' live='KXQUICKSETTLE-20NOV26H1400-3'",
+   "ok": true
+  },
+  {
    "check": "resolution KXQUICKSETTLE-20NOV26H1350-2 result",
    "detail": "stored='yes' live='yes'",
    "ok": true
@@ -2971,36 +3001,6 @@
    "ok": true
   },
   {
-   "check": "resolution KXETH-26NOV2013-B2532 result",
-   "detail": "stored='no' live='no'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXETH-26NOV2013-B2532 settlement_value_dollars",
-   "detail": "stored='0.0000' live='0.0000'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXETH-26NOV2013-B2532 ticker",
-   "detail": "stored='KXETH-26NOV2013-B2532' live='KXETH-26NOV2013-B2532'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXETH-26NOV2013-B2527 result",
-   "detail": "stored='no' live='no'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXETH-26NOV2013-B2527 settlement_value_dollars",
-   "detail": "stored='0.0000' live='0.0000'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXETH-26NOV2013-B2527 ticker",
-   "detail": "stored='KXETH-26NOV2013-B2527' live='KXETH-26NOV2013-B2527'",
-   "ok": true
-  },
-  {
    "check": "top_event KXPRESNOMD-28 market KXPRESNOMD-28-HBID exists",
    "detail": "live query returned 1 markets",
    "ok": true
@@ -3361,12 +3361,12 @@
    "ok": true
   },
   {
-   "check": "top_event KXTIME-26 market KXTIME-26-LIO exists",
+   "check": "top_event KXTIME-26 market KXTIME-26-CHRR exists",
    "detail": "live query returned 1 markets",
    "ok": true
   },
   {
-   "check": "top_event KXTIME-26 market KXTIME-26-CHRR exists",
+   "check": "top_event KXTIME-26 market KXTIME-26-LIO exists",
    "detail": "live query returned 1 markets",
    "ok": true
   },
@@ -3502,7 +3502,7 @@
   },
   {
    "check": "orderbook KXPRESNOMD-28-BS structure",
-   "detail": "{\"no_dollars\": [[\"0.0300\", \"10.00\"], [\"0.9930\", \"95238.08\"], [\"0.9940\", \"111111.08\"], [\"0.9950\", \"132790.55\"]], \"yes_dol",
+   "detail": "{\"no_dollars\": [[\"0.0300\", \"10.00\"], [\"0.9930\", \"95238.08\"], [\"0.9940\", \"111111.08\"], [\"0.9950\", \"132715.86\"]], \"yes_dol",
    "ok": true
   },
   {
@@ -3512,7 +3512,7 @@
   },
   {
    "check": "orderbook KXPRESNOMD-28-EWAR structure",
-   "detail": "{\"no_dollars\": [[\"0.9700\", \"5555.55\"], [\"0.9800\", \"8333.33\"], [\"0.9900\", \"16635.51\"]], \"yes_dollars\": []}",
+   "detail": "{\"no_dollars\": [], \"yes_dollars\": []}",
    "ok": true
   },
   {
@@ -3523,11 +3523,6 @@
   {
    "check": "orderbook KXPRESNOMD-28-GW structure",
    "detail": "{\"no_dollars\": [[\"0.1200\", \"1589.00\"], [\"0.1210\", \"1665.00\"], [\"0.1220\", \"1688.00\"], [\"0.1230\", \"1699.00\"], [\"0.1240\", \"",
-   "ok": true
-  },
-  {
-   "check": "event KXBTCD-28JAN1018 exists+title",
-   "detail": "title live='Bitcoin price on Jan 10, 2028 at 6pm EST?'",
    "ok": true
   },
   {
@@ -3624,6 +3619,11 @@
    "check": "event KXMESTATELEG-28SEN exists+title",
    "detail": "title live='Maine State Senate winner? (2028)'",
    "ok": true
+  },
+  {
+   "check": "event KXILSTATELEG-28HOUSE exists+title",
+   "detail": "title live='Illinois State House winner? (2028)'",
+   "ok": true
   }
  ],
  "drift_notices": [],
@@ -3640,5 +3640,5 @@
   "passed": 725
  },
  "tool": "scripts/verify_rows.py v1",
- "verified_at": "2026-11-20T19:22:56+00:00"
+ "verified_at": "2026-11-20T19:34:23+00:00"
 }

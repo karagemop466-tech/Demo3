@@ -9,9 +9,10 @@
 <body>
 <header class="top"><div class="wrap"><nav class="main">
 <a class="brand" href="index.html">Kalshi Demo Tracker</a>
-<a href="index.html">Home</a><a href="dashboard.html">Live dashboard</a><a href="data-tracking.html">Data tracking</a><a href="gas-prices.html">Gas prices</a><a href="elections.html">Elections</a><a href="culture.html">Culture</a><a href="crypto.html">Crypto</a><a href="golf.html">Golf</a><a href="portfolio.html">Portfolio</a><a href="trades.html">Trades</a><a href="questions.html">Questions</a><a href="suggestions.html">Suggestions</a><a href="flagged.html">Flagged for review</a><a href="sources.html">Sources</a><a href="repo-review.html">Repo review</a><a href="methodology.html" class="active">Methodology</a><a href="api-reference.html">API reference</a>
+<a href="index.html">Home</a><a href="dashboard.html">Live dashboard</a><a href="data-tracking.html">Data tracking</a><a href="gas-prices.html">Gas prices</a><a href="elections.html">Elections</a><a href="culture.html">Culture</a><a href="crypto.html">Crypto</a><a href="golf.html">Golf</a><a href="portfolio.html">Portfolio</a><a href="strategy.html">Strategy lab</a><a href="trades.html">Trades</a><a href="questions.html">Questions</a><a href="suggestions.html">Suggestions</a><a href="flagged.html">Flagged for review</a><a href="sources.html">Sources</a><a href="repo-review.html">Repo review</a><a href="methodology.html" class="active">Methodology</a><a href="api-reference.html">API reference</a>
 </nav></div></header>
 <main class="wrap">
+
 
 
 
@@ -143,8 +144,8 @@ direction</strong> posts an alert into two simplified scrolling chats — <em>Al
 <td><a href="https://docs.kalshi.com/getting_started/quick_start_websockets">WebSocket connection</a></td></tr>
 <tr><td>High-ROI screen (heuristic)</td><td>A swing alert becomes a “pick” only if the merged relative rule passes (move ≥ $0.10 <em>and</em> ≥ 10% of the prior price) <em>and</em> all five tradability rules pass: HR-1 two-sided book (bid&gt;0 and ask&gt;0) · HR-1b ask&gt;bid · HR-2 quoted spread ≤ $0.10 · HR-3 volume_fp ≥ 1 (a trade exists) · HR-4 post-move price in [0.02, 0.98]. This is a <strong>liquidity/decidability screen, not validated alpha</strong> — no expectancy backtest has been run against it; treat as a starting filter only (extends F-alert-01).</td>
 <td><a href="https://docs.kalshi.com/api-reference/market/get-markets">Get Markets fields</a></td></tr>
-<tr><td>Causation links</td><td>Each jump links (a) its exact API row via <span class="mono">GET /markets/{ticker}</span> — Get Market; the earlier merged engine linked <span class="mono">/series/{s}/markets/{t}</span> here, which is not a documented market-row endpoint — corrected at integration (b) all markets of the same event via <span class="mono">GET /markets?event_ticker=…</span> — both verifiable sources. A third link, “news search?”, is a query <em>generated from the market title</em> at click time so a trader can look for a possible cause. The API exposes no news/attribution field: causation is never asserted, and the link is labelled unverified in the UI.</td>
-<td><a href="https://docs.kalshi.com/api-reference/market/get-market">Get Market</a> · <a href="https://docs.kalshi.com/api-reference/market/get-markets">Get Markets event_ticker</a></td></tr>
+<tr><td>Causation links</td><td>Each jump links (a) its exact API row via <span class="mono">GET /markets/{ticker}</span> — Get Market; the earlier merged engine linked <span class="mono">/series/{s}/markets/{t}</span> here, which is not a documented market-row endpoint — corrected at integration; (b) all markets of the same event via <span class="mono">GET /markets?event_ticker=…</span>; (c) in the <em>Context</em> column, the event&rsquo;s official <span class="mono">settlement_sources</span> from <span class="mono">GET /events/{event_ticker}</span> (Get Event: &ldquo;The official sources used for the determination of markets within this event&rdquo;) — resolution sources, not evidence of cause; each row states &ldquo;Cause not verified&rdquo;; and (d) a “news search?” link, a query <em>generated from the market title</em> at click time so a trader can look for a possible cause. The API exposes no news/attribution field: causation is never asserted, and (d) is labelled unverified in the UI.</td>
+<td><a href="https://docs.kalshi.com/api-reference/market/get-market">Get Market</a> · <a href="https://docs.kalshi.com/api-reference/market/get-markets">Get Markets event_ticker</a> · <a href="https://docs.kalshi.com/api-reference/events/get-event">Get Event</a></td></tr>
 <tr><td>Resolution notices</td><td>Tracked markets that transition to closed/determined/finalized with <span class="mono">result</span> “yes” or “no” post a system message to the All-events chat (result enum + settlement doc). Tracking runs while the page is open, matching card 3&rsquo;s resolution logger.</td>
 <td><a href="https://docs.kalshi.com/getting_started/market_settlement">Market Settlement</a></td></tr>
 <tr><td>Persistence</td><td>Alert log + dedupe memory live in this browser&rsquo;s localStorage (cap 300, exportable as JSON). Nothing is sent to Kalshi; no credentials are used (public market-data endpoints only).</td>
@@ -152,6 +153,7 @@ direction</strong> posts an alert into two simplified scrolling chats — <em>Al
 </tbody>
 </table>
 </section>
+
 
 
 
