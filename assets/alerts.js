@@ -43,6 +43,10 @@
   var MAX_RES = 200;
   var POLL_MS = 20000;                  // one batched REST call per interval
   var CHUNK = 100;                      // Get Markets `limit` for a ticker batch
+  // Demo-exchange synthetic test series settle constantly and can appear in the
+  // chat; rows for them are badged so they are never mistaken for real markets
+  // (irregularity I-15; evidence rows in data/latest/resolutions.json).
+  var SYNTHETIC_RE = /^(KXDEMO|KXQUICKSETTLE)/;
 
   /* ---------- documented ROI heuristic (unverified model) ----------
    * No trained model exists in this repo, so this is a transparent, deterministic
@@ -58,7 +62,7 @@
   var ROI_THRESHOLD = 0.5;
   function clamp(x, lo, hi) { return Math.max(lo, Math.min(hi, x)); }
   function roiModel(oldP, newP, oi) {
-    var change = Number(newP) - Number(oldP);
+    var change = (Math.round(Number(newP) * 100) - Math.round(Number(oldP) * 100)) / 100;
     var swingC = Math.abs(change) * 100;                 // cents
     var swingNorm = clamp(swingC / 50, 0, 1);
     var pct = Number(oldP) ? Math.abs(change) / Number(oldP) : 0;
@@ -129,7 +133,10 @@
   };
 
   function pushAlert(m, oldP, newP) {
-    var change = Number(newP) - Number(oldP);
+    // change in integer cents (float-safe: 0.60 - 0.50 = 0.0999… in binary float,
+    // which would display 9.99¢ for an exact 10¢ move). Detection already uses
+    // an epsilon above; this makes the recorded/displayed move exact as well.
+    var change = (Math.round(Number(newP) * 100) - Math.round(Number(oldP) * 100)) / 100;
     var dir = change > 0 ? "up" : change < 0 ? "down" : "flat";
     var series = m.series_ticker || "";
     var eventTicker = m.event_ticker || "";
@@ -395,12 +402,16 @@
       "<td class='mono small muted'>" + fmtTs(a.ts) + "</td>" +
       "<td><span class='pill topic'>" + esc(a.topic) + "</span></td>" +
       "<td class='mono'>" + esc(a.ticker) + "</td>" +
-      "<td>" + esc(a.title) + roiBadge + "</td>" +
+      "<td>" + esc(a.title) + roiBadge + syntheticBadge(a.ticker) + "</td>" +
       "<td class='num'>" + cents(a.oldPrice) + " → " + cents(a.newPrice) + "</td>" +
       "<td class='num " + esc(dirLabel) + "'>" + arrow + " " + cents(Math.abs(a.change)) + "</td>" +
       "<td class='num'>" + roiCell(a) + "</td>" +
       "<td><a class='src' href='" + esc(a.api) + "' target='_blank' rel='noopener'>market API</a></td>" +
       "<td class='ctx'>" + contextCell(a) + "<div class='small muted'>Cause not verified: a listed source is not proof that it moved the price.</div>" + rulesCell(a) + "</td></tr>";
+  }
+  function syntheticBadge(ticker) {
+    return SYNTHETIC_RE.test(ticker || "") ?
+      " <span class='pill warn' title='Demo-exchange synthetic test series (irregularity I-15)'>demo test market</span>" : "";
   }
   function resRow(r) {
     var yes = r.result === "yes";
@@ -411,7 +422,7 @@
       "<td><span class='pill topic'>" + esc(r.topic) + "</span></td>" +
       "<td class='mono'>" + esc(r.ticker) + "</td>" +
       "<td><span class='pill " + (yes ? "up" : "down") + "'>RESOLVED " + (yes ? "YES" : "NO") + "</span> " +
-      esc(r.title) + "</td>" +
+      esc(r.title) + syntheticBadge(r.ticker) + "</td>" +
       "<td class='num'>" + (yes ? "→ $1.00" : "→ $0.00") + "</td>" +
       "<td class='num'>" + esc(r.status) + "</td>" +
       "<td class='num muted'>n/a</td>" +
