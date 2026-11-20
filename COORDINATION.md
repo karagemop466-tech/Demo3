@@ -374,6 +374,7 @@ Progress log:
 - 2026-11-20: feature commit f1c872f pushed to arena/6ebc1cb7-demo3. T3 in progress: final re-verification, PR, merge, Pages deploy confirmation.
 
 
+
 ## Task board — session 26973298 (measured strategy backtest, `arena/26973298-demo3`) — claimed 2026-11-20 19:20 UTC
 
 Branch: `arena/26973298-demo3` (base `b3b2b231`). Scope is **new files only** plus the final
@@ -387,7 +388,48 @@ on recorded data. Session `5ab18dc3` has claimed the live swing-alert console (`
 
 | # | Task | Status | Owner | File scope | Sources / verification | Irregularities |
 |---|---|---|---|---|---|---|
-| S1 | Strategy backtest engine over committed demo data: entry/exit rules, fill model, fees (only if officially verified), per-strategy metrics | in progress | 26973298 | `scripts/backtest_strategies.py` | Field semantics from docs.kalshi.com; every simulated trade row carries the exact demo API URL of its market | demo-only data; no production inference |
-| S2 | Published strategy page with measured results, trade categorization, and per-row sources | in progress | 26973298 | `strategy.html`, `assets/strategy.js`, `strategy/data/backtest.json`, `strategy/SPEC.md` | Each row links the settled-market API URL it was computed from | unverified fields left blank + flagged |
-| S3 | Integration: NAV entry, README line, checks, PR, merge, Pages confirmation | in progress | 26973298 | `scripts/build_root_site.py` (NAV row + page generator only), `README.md` (one line), `COORDINATION.md` | `scripts/verify_root_site.py`, `scripts/verify_site.py`, `node --check` | none |
+| S1 | Strategy backtest engine over committed demo data: entry/exit rules, fill model, fees (only if officially verified), per-strategy metrics | done | 26973298 | `scripts/backtest_strategies.py` | Field semantics from docs.kalshi.com; every simulated trade row carries the exact demo API URL of its market | demo-only data; no production inference |
+| S2 | Published strategy page with measured results, trade categorization, and per-row sources | done | 26973298 | `strategy.html`, `assets/strategy.js`, `strategy/data/backtest.json`, `strategy/SPEC.md` | Each row links the settled-market API URL it was computed from | unverified fields left blank + flagged |
+| S3 | Integration: NAV entry, README line, checks, PR, merge, Pages confirmation | in progress (PR pending) | 26973298 | `scripts/build_root_site.py` (NAV row + page generator only), `README.md` (one line), `COORDINATION.md` | `scripts/verify_root_site.py`, `scripts/verify_site.py`, `node --check` | none |
 
+### Session 26973298 — sources, verification performed, irregularities
+
+Sources read on 2026-11-20 while building this task (all linked from `strategy.html#sources`):
+`kalshi.com/docs/kalshi-fee-schedule.pdf` (fee formula + the 21-row table),
+`kalshi.com/fee-schedule`, `docs.kalshi.com/api-reference/market/get-market-candlesticks`
+(`period_interval` 1/60/1440, `price.close_dollars` = "last traded YES contract price"),
+`docs.kalshi.com/getting_started/orderbook_responses` (binary complement),
+`docs.kalshi.com/getting_started/fixed_point_migration`, `docs.kalshi.com/getting_started/market_settlement`,
+`docs.kalshi.com/getting_started/demo_env`, `docs.kalshi.com/api-reference/market/get-markets`,
+`docs.kalshi.com/api-reference/market/get-trades`.
+
+Verification performed:
+- Fee function reproduces **all 21 rows** of the official 100-contract fee table
+  (`FeeFormulaTest`, `strategy/data/backtest.json → fee_verification.all_match = true`).
+- 17 unit tests pass (`scripts/tests/test_backtest.py`), including: every trade carries its
+  source URL; metrics equal the recomputed sums; the resolved dataset contains settlement exits
+  only; the exploratory dataset never claims settlement.
+- Every recorded series was checked for a settlement with
+  `GET /markets?status=settled&tickers=…` in three batches; only `KXDEMOFUTHOURLY-26NOV20H12-UP`
+  returned a row, and the 37 `data/history` series returned `status: active`, `result: ""`.
+  This is why the resolved dataset has 2 markets and the exploratory set is marked, not settled.
+- Page verified in jsdom against a local server: 8 tables, 96 data rows, 119 in-row source links,
+  chart renders 2 paths (resolved) / 8 paths (exploratory) and both selects redraw; no console errors.
+- `python3 scripts/verify_root_site.py` → 0 failures; `scripts/verify_site.py` → PASSED;
+  `scripts/check_site.py` → passed; `node --check` on every root script.
+- CI (`.github/workflows/check.yml`) now rebuilds the backtest and fails if the committed
+  numbers drift from the committed data.
+
+Irregularities reported (published on `strategy.html` and in `strategy/SPEC.md` §7):
+- ST-U1 whether the demo environment charges fees (mock funds; fee behaviour not stated) — fees are
+  a modelling assumption.
+- ST-U2 candle closes are not guaranteed achievable fills.
+- ST-U3 no sub-minute candles (`period_interval` limited to 1/60/1440), so second-level strategies
+  cannot be backtested from candles.
+- ST-U4 per-series fee multipliers not applied (default `M = 1`).
+- ST-U5 the resolved sample is 2 markets / 4 trades — reported as too small to establish an edge.
+- Note: `scripts/build_root_site.py` regenerates `dashboard.html` and would drop the alert cards
+  added by session 6ebc1cb7; this session added `EXTERNALLY_MAINTAINED = {"dashboard.html"}` so the
+  generator preserves them. No other session's markup was changed.
+
+Change request for the final integration session: none.
