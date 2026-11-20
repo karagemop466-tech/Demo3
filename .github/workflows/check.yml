@@ -23,6 +23,15 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Swing alert tests (offline; session 6d201d19)
+        run: python3 scripts/tests/test_price_alerts.py
+
+      - name: Install dev dependencies (jsdom) for browser-logic tests
+        run: npm ci
+
+      - name: Node tests (alert core, alerts.html runtime in jsdom, existing suites)
+        run: node --test tests/*.test.js
+
       - name: Offline refresh test (mock server, no network)
         run: python3 scripts/tests/test_refresh_offline.py
 
