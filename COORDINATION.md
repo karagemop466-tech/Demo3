@@ -1022,7 +1022,7 @@ them lists `.github/workflows/collect.yml` in its changed files, so this scope i
 | # | Task | Status | Owner | File scope | Sources / verification | Irregularities |
 |---|---|---|---|---|---|---|
 | C1 | ~~Fix the startup-failing `Collect Kalshi demo data` workflow on `main`~~ **done — code fix delivered in parallel by session `f2b0808f` (I-F2-08, commit `87b80e6`, merged via PR #51/#55); this session's independent fix commit `755551d` is withdrawn as duplicate (branch history only), following the d7ee554b precedent. a56b9e45 independently verified the merged fix parses clean (single `if:` per step) and the workflow now runs** | done (fix by f2b0808f; verification by a56b9e45) | code fix: f2b0808f · verification: a56b9e45 | `.github/workflows/collect.yml` (both sessions) | GitHub Actions run list; strict-YAML duplicate-key parse of every file under `.github/workflows/` — clean at main `541a98d`; run `44804863000` was the pre-fix startup failure | C-F1, C-COLL-1 (below) |
-| C2 | Post-fix verification: `workflow_dispatch` run on `main` green end-to-end (offline tests, live demo collection, snapshot commit, Pages build request HTTP 200/202) and the legacy Pages build status recovering | claimed | a56b9e45 | none (verification only; snapshot commits are made by the collector bot per the existing workflow design) | Run logs, Pages builds API, workflow YAML spec | — |
+| C2 | Post-fix verification: `workflow_dispatch` run on `main` green end-to-end (offline tests, live demo collection, snapshot commit, Pages rebuild request) and the Pages deploy state recorded | **done 2026-11-20 ~20:30 UTC** | a56b9e45 | `verification/C2-COLLECT-FIX-VERIFICATION.md` (new file), `COORDINATION.md` (this section only) | Run [`44809097574`](https://github.com/karagemop466-tech/Demo3/actions/runs/44809097574) completed success 20:21:11Z with every step green, incl. snapshot commit `241c603` (first since 19:26Z); Pages rebuild requests firing; legacy builds still erroring under the documented pile-up (I-F2-07, owner f2b0808f, pages.yml active); live site up (page-fetched 19:53Z & 20:27Z). Job-log HTTP line not readable from sandbox (blob host egress) — flagged in the record. | C-L1 (log limitation, flagged) |
 
 ### Session a56b9e45 — findings recorded at claim time (evidence)
 
@@ -1038,6 +1038,28 @@ them lists `.github/workflows/collect.yml` in its changed files, so this scope i
   last completed deploy (`04d1a4e78`) serves the live site correctly (verified via page fetch).
   No fix needed for Pages itself; C2 only confirms continuity after the collector fix.
 
+### Session a56b9e45 — completion log (C1 withdrawal + C2 results)
+
+- 19:44–19:47 UTC — diagnosed `collect.yml` startup failure (duplicate `if:`), strict-parsed all
+  six workflow files, ran the offline collector suite (2/2 OK) and both site verifiers
+  (`verify_root_site` 0 failures, `verify_site` PASSED) — claim pushed (commit `38f7f20`).
+- ~19:52 UTC — opened PR #56 with an independent fix (commit `755551d`). Merge blocked by a
+  COORDINATION.md conflict; rebasing revealed session `f2b0808f` had already landed the identical
+  fix (`87b80e6` via PR #51/#55, board entry I-F2-08). Resolution per protocol: **union-merged
+  both board sections, withdrew the duplicate code change (`git rebase --skip`; `755551d` kept in
+  branch history only), logged the collision as C-COLL-1**; PR #56 re-framed to the board record
+  and merged.
+- 20:11:31 UTC — dispatched `collect.yml` on `main` (run `44809097574`) after waiting out a shared
+  GitHub API rate-limit exhaustion (0/5450 remaining 19:50–20:11 UTC; polled the exempt
+  `/rate_limit` endpoint). Run **completed success 20:21:11Z**, all steps green, producing the
+  first collector snapshot commit since the regression (`241c603`, 20:20:58Z) — verified in
+  `main`'s ancestry.
+- 20:21–20:30 UTC — recorded the Pages state (rebuild requests firing; legacy builds erroring
+  under the pile-up = I-F2-07 owned by f2b0808f with its `pages.yml` publish workflow active;
+  live site up, verified by page fetch). Full evidence: `verification/C2-COLLECT-FIX-VERIFICATION.md`.
+- Handoff note: data-freshness on the live site catches up when f2b0808f's deploy path lands;
+  the collector itself is healthy again and resumes its `*/10` schedule (no further action from
+  this session; scheduled runs may lag several minutes under GitHub's scheduler delays).
 - 2026-11-20 19:50 UTC: merged current `origin/main` PR #56 (collector workflow fix); board conflict unioned without dropping session claims. Rebuilt and all six local site/determinism checks passed again.
 
 ---
@@ -1498,7 +1520,7 @@ per the brief's "REPO WORK / VERIFICATION" requirements. It deliberately does no
 | V4 | Verify the merged live-alert feature is actually served on the live site (two chat panels, ≥$0.10 threshold, context links) | done | 67643e12 | `COORDINATION.md` (this section) | Live `dashboard.html` + `assets/alerts.js` fetches | none |
 | V5 | Repo hygiene + check-suite run on current `main` (all four site checkers, `node --check`, npm test, offline pipeline tests) | done | 67643e12 | `COORDINATION.md` (this section) | Runs logged below | none |
 | V6 | Open-PR overlap matrix to assist the claimed final-integration session (information only; no merge/close decision made here) | done | 67643e12 | `COORDINATION.md` (this section) | `gh pr view --json files` per open PR; addendum below records the 19:45–20:15 UTC resolution wave | none |
-| V7 | PR of this section to `main`, merge, confirm Pages deploy, record result | in progress | 67643e12 | PR from `arena/67643e12-demo3` | merge + Pages API check | none |
+| V7 | PR of this section to `main`, merge, confirm Pages deploy, record result | done | 67643e12 | PR #67 (https://github.com/karagemop466-tech/Demo3/pull/67), `COORDINATION.md` | **PR #67 MERGED 2026-11-20 20:16:0xZ, merge commit `f8beb0f`**; Pages build for `f8beb0f` started 20:16:01Z but was superseded by newer `main` pushes before publishing (starvation, F-7b-08/R-08 ongoing; live site still serving the 19:38Z artifact at final check 20:27Z; structural fix = open PR #62, custom Actions deployment). Explicit `POST /pages/builds` from the sandbox is not permitted (403, token lacks Pages write); the successful collect.yml dispatch run (below) posts its own rebuild via the workflow's `pages: write`. | none |
 
 Progress log:
 - 2026-11-20 ~19:45 UTC — claim committed and pushed (this commit). Work in progress; results appended below as they complete.
@@ -1695,3 +1717,172 @@ No values were inferred; unchecked items are stated as unchecked.
 - 2026-11-20 ~20:00-20:25Z: **PR #45** (`arena/df50b92f-demo3` -> `main`, follow-up adding F-df-01/02 to the Flagged register and this board log) MERGED, merge commit `e2cfd3c`. Verified: `scripts/verify_root_site.py` 0 failures; generated diff limited to `flagged.html`, `index.html` (count 83 -> 85), and the generator. Branch merged with `origin/main` at each step; collector `data/` conflicts resolved with the newest collector snapshot.
 - **Pages status (honest record):** the live site serves the PR #34 alert code (verified by page fetch of `assets/alerts.js`, build `04d1a4e`). The newer build with the F-df-01/02 rows has NOT yet reached the live site. Builds for each new `main` commit were cancelled by the next commit, because the collector (`collect.yml`, every 10 min) and the other data workflows push to `main` every 2-4 min. Run status: `pages build and deployment` = `completed cancelled` for `d092bc6`, `a3451de`, `f8beb0f`, `deea750`. Latest in-flight: `be94f5c`. The GitHub API also rate-limited this session for about 25 minutes.
 - **R-08 (high, owner decision):** the Pages deploy is starved by `main` data commits. Options for the owner: (a) keep the collector on a non-main data branch, or (b) commit snapshots less often, or (c) let the Pages build run without the explicit `POST /pages/builds` per commit. This session did not edit `collect.yml` (owned by 3b5e95bd).
+
+### Session f2b0808f — Pages delivery status (final for this session, checked 2026-11-20 ~20:20–20:30 UTC)
+
+- **Correction to CR-F2-4 (withdrawn):** the `collect.yml` change proposed above was reverted to the `main` version in the PR that carries this note. The collector keeps its existing `POST /pages/builds` step; it is unchanged by this session.
+- **PR #68** (`pages.yml` + `collect.yml` dispatch) merged 2026-11-20T20:18:05Z as `deea750`. Its `pages.yml` run was queued/pending and was **cancelled** (runs 44810102941 and 44810794380). No Actions deployment has happened.
+- **This PR** makes `.github/workflows/pages.yml` manual-only (`workflow_dispatch`) with a guard: it fails with an explicit message unless the repository Pages source is `workflow` (GitHub Actions). It no longer runs on every push, so it adds no queued runs.
+- **Blocker, verified with the agent's GitHub token (2026-11-20 ~20:21–20:25 UTC):** `PUT /repos/karagemop466-tech/Demo3/pages -f build_type=workflow` → **403 "Resource not accessible by integration"**; `POST /repos/karagemop466-tech/Demo3/pages/builds` → **403** as well. The token reports `admin: true` on the repository but cannot change Pages settings or request builds. This matches the closure reason recorded by session `81c58501` for PR #62.
+- **What the repository owner must do (one-time, not doable from this token):** Settings → Pages → Build and deployment → Source = **GitHub Actions**. Then run the "Deploy GitHub Pages site" workflow once (Actions → workflow_dispatch). The guard step verifies the setting before any deployment.
+- **Live site, verified 2026-11-20 via page fetch:** `https://karagemop466-tech.github.io/Demo3/` serves the last successful legacy build (the 19:38Z content). No legacy build has succeeded since `04d1a4e` (see I-F2-07), so the newest merged pages (for example `requirements.html`, `model.html`, `audit/`) are not yet live.
+- **Status:** I-F2-07 **open**, blocked by the Pages source setting above. Not a broken site: the last good build is still served.
+
+## Task board — session 22661044 (swing → catalyst attribution layer, branch `arena/22661044-demo3`)
+
+Claimed 2026-11-20 19:35 UTC. Session ID `22661044`. The brief line
+*"Live charts should include events and website links that may have caused a sharp jump in contract
+price, greater than or equal to $0.10 in either direction"* is the only requirement on this board with
+**no implementation** on `main`: `grep -ril catalyst` over `*.html *.js *.py *.md` returns 0 files, and
+PR #27 explicitly declines to build it ("disclose that external catalyst attribution is unverified
+rather than inventing news links"). Sessions #26/#27/#29/#30 all work on the alert *chats*, which
+PR #28 already merged — this session does not touch them.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| C1 Swing ledger engine: detect ≥ $0.10 moves from the price tape, poll live demo markets, resolve and stop tracking | in progress | 22661044 | `catalysts/scan.py`, `catalysts/feeds.json`, `catalysts/data/**` | Demo REST `GET /markets?tickers=`, `GET /series/{ticker}` per [Get Markets](https://docs.kalshi.com/api-reference/market/get-markets) / [Get Series](https://docs.kalshi.com/api-reference/market/get-series); swing threshold in exact decimal cents; every row carries the replayable API URL | F-cat-01 |
+| C2 Candidate-catalyst links: news items published inside the swing window, per topic, from a probe-gated feed allowlist; official series `settlement_sources` links | in progress | 22661044 | `catalysts/scan.py`, `catalysts/data/feed_health.json` | A feed is used only after a real fetch proves it returns items (status recorded per run); unmatched swings stay blank + flagged, never invented | F-cat-02, F-cat-03 |
+| C3 Attribution page: swing table with per-row source links + price chart (x = time in s/min/h, y = contract price) with catalyst markers at each ≥ $0.10 swing | in progress | 22661044 | `catalysts/index.html`, `catalysts/assets/**` | Renders committed snapshots; optional in-browser re-poll of the demo API (CORS proven: `data/cors_test.json` browser_direct_fetch_allowed = true) | — |
+| C4 Scheduled refresh in CI + offline tests | in progress | 22661044 | `.github/workflows/catalysts.yml`, `catalysts/tests/**` | Actions runner has the network egress this sandbox lacks (sandbox egress allowlist blocks kalshi.co/RSS; only `fetch_page` reached the demo API); tests run a mock HTTP server | F-cat-04 |
+| C5 PR → merge → Pages confirm; record; change requests for shared nav/flagged pages | pending | 22661044 | `COORDINATION.md`, PR to `main` | `gh pr create/merge`, Pages API build status, live page fetch | — |
+
+Non-overlapping scope guarantee: this session creates files only under `catalysts/**` and
+`.github/workflows/catalysts.yml`, plus its appended section in `COORDINATION.md`. It does **not**
+edit root `*.html`, `assets/*`, `alerts/**`, `data/**`, `collector/**`, `trading/**`, `scripts/*`,
+`docs/**`, `analysis/**`, `demo-desk/**`, or any other workflow file. Root navigation and the root
+Flagged page are shared outputs (integration session only) — change requests are logged in this
+section instead of edits.
+
+Environment note: the platform binds each session to `arena/<id>-demo3`, so per-task
+`session-<id>/<task>` branches are not possible (already recorded as R-04/F-01).
+
+### Change requests from session 22661044 (logged, not applied — shared files)
+
+- **CR-22661044-1** (`index.html` + `scripts/build_root_site.py` nav, owner: integration session):
+  add one nav entry `Catalyst links → catalysts/index.html` so the new page is reachable from the
+  canonical navigation. Until then the page is live at `https://karagemop466-tech.github.io/Demo3/catalysts/`.
+- **CR-22661044-2** (`flagged.html`, owner: integration session): mirror F-cat-01…F-cat-10 from this
+  section onto the root Flagged for Review page; the same list is published on
+  `catalysts/index.html#flags` in the meantime.
+- **CR-22661044-3** (integration session, reconciliation — not a code change for me): `main` gained a
+  second automated-trading layer while this branch was in flight (`trading/paper_engine.py`,
+  `data/paper/`, `scripts/build_paper_desk.py`, `paper-desk/**`, root `portfolio.html`/`trades.html`,
+  PRs #65/#68). The two are deliberately different and both are kept: the paper desk is the site's
+  **fill-and-position ledger** (5 strategies, simulated fills against live quotes, cash, resting-size
+  caps, rejections), while `catalysts/` is the **event-attribution study** — it scores only the ≥ $0.10
+  alert rule and answers "did the alert itself have edge, and what was published when it fired".
+  `catalysts/index.html` now links `../paper-desk/index.html` and `../trades.html`/`../portfolio.html`
+  and states that no order is sent from this page; its own "book" table is labelled an alert-rule
+  study, not the account ledger. If the integration session prefers one place for strategy scoring, the
+  `catalysts/data/strategies.json` "s1/s2" block is the part to fold into `trading/` — it is plain
+  Decimal arithmetic over published fields, with `check_page.py` as its gate.
+
+### Session 22661044 — progress log
+
+- 2026-11-20 19:35 UTC: claim committed & pushed (`205a705`) before any implementation, per protocol.
+- 2026-11-20: C1/C2 implemented — `catalysts/scan.py` (exact-decimal ≥ $0.10 detection over the
+  price tape + live `GET /markets?tickers=` polling + resolution tracking + fail-closed catalyst
+  matching), `catalysts/feeds.json` (17 feeds, all `pending_ci_probe`; the aggregator slot is
+  deliberately disabled).
+- 22661044 C3: `catalysts/index.html` + `assets/catalysts.js` + `assets/catalysts.css` — run-status
+  chips, filters (topic / direction / has-link), price chart (x = 1 min…7 d with sec/min/hour labels,
+  y = contract price in cents, triangles mark ≥ $0.10 swings and are clickable), the swing ledger with
+  per-row market/event/series API links + official `settlement_sources`, in-browser live watch
+  (off by default; same ≥ $0.10 rule; stops polling a market once the API reports it settled),
+  simulated-strategy table, feed-health and endpoint-probe tables, flags + suggestions.
+- 22661044 C4: `.github/workflows/catalysts.yml` — every 15 min: tests → endpoint probe → feed probe
+  → scan → `check_page.py` gate → jsdom render test → commit `catalysts/data/**` → Pages rebuild
+  request. Data-only bot pushes cannot trigger the legacy Pages build, so the job requests it
+  explicitly (same fix session 3b5e95bd recorded for `collect.yml`).
+- Verification (2026-11-20, this session):
+  - `python3 catalysts/tests/test_scan.py` → **Ran 36 tests … OK** (mock demo API + mock feed:
+    threshold inclusive at exactly $0.10, 9¢ does not alert, 1-cent walks never accumulate into an
+    alert, per-ticker isolation, dedupe, lookback window, garbage prices skipped, dollars-vs-legacy-cents
+    field disclosure, window + keyword matching, undated items never matched, RSS/Atom/CDATA parsing,
+    broken XML → no items, enrich/resolution transitions, tape append-dedupe, full live run, offline
+    fallback, strategy arithmetic + sample floor).
+  - `python3 catalysts/tests/check_page.py` → **PASSED** (re-derives every published `abs_delta_dollars`
+    with `Decimal`, re-checks wins+losses+pushes = n and mean = net/n, requires an official demo-host
+    source URL on every row, requires https + matched keywords on every catalyst link, forbids a
+    `matched` status with no items, checks all local hrefs resolve, and rejects placeholder text).
+  - `node --check catalysts/assets/catalysts.js` → OK; `node catalysts/tests/smoke.mjs` →
+    **28/28 checks passed** (rows render, every row links its API record, feed table covers every
+    probed feed, endpoint table stays empty rather than inventing statuses, filters narrow/restore,
+    strategy rows refuse a verdict below the 30-trade floor, and the browser poll fires on +$0.15,
+    stays silent on +$0.09 and reports "resolved NO · tracking stopped").
+  - Repo-wide checkers re-run with this directory added, all still green: `scripts/verify_root_site.py`
+    0 failures, `scripts/verify_site.py` PASSED (28 pages), `scripts/tracker_check.py` OK,
+    `scripts/check_site.py` passed.
+- Live API verification (this session, via the page-fetch tool; sandbox `curl` is blocked by the
+  egress allowlist): `/exchange/status` 200 trading_active; `GET /markets/KXDEMOFUTHOURLY-26NOV20H12-UP`
+  200 with `result:"no"`, `settlement_value_dollars:"0.0000"`, `last_price_dollars:"0.6500"` — which
+  confirms the seeded ledger row's price and outcome against the exchange record; `GET /markets?tickers=`
+  omits unknown tickers (no error), so the scan re-queries misses with `status=settled`;
+  `GET /events?event_tickers=…` **ignores its filter** (returned `KXELONMARS-99`) → F-cat-05;
+  `GET /series?limit=3&category=Crypto` **ignores `limit`** → F-cat-06 (corroborates 6908a11a F9) and
+  proves series rows carry `settlement_sources`, which this layer publishes per row.
+- Irregularities raised by this session (full text on `catalysts/index.html#flags`):
+  F-cat-01 sampling-gap bound; F-cat-02 correlation-not-cause + demo-price warning; F-cat-03 feed
+  allowlist unverified from the build sandbox (probe-gated, pruned only by evidence); F-cat-04 the
+  demo tape is thin and partly synthetic (`KXDEMOFUTHOURLY` is a synthetic exchange-test series, so the
+  seeded swings prove the mechanism, not a market); F-cat-05 `/events?event_tickers=` filter ignored;
+  F-cat-06 `/series?limit=` ignored; F-cat-07 nav/flagged-page integration deferred to the
+  integration session (CR-22661044-1/2).
+- 2026-11-20 20:12 UTC: CI hardening — `catalysts/scan.py` gained a wall-clock budget
+  (`CATALYST_DEADLINE_SECONDS`, default 540 s; feeds/series/watch steps stop early and publish a
+  self-disclosed partial run instead of hanging), `catalysts/report_run.py` writes
+  `catalysts/data/last_run.txt` (per-artifact health, `MISSING` when a step did not complete) and the
+  workflow commits it **on every run, success or failure** — needed because this repo's shared API
+  token is rate-limited (403 `API rate limit exceeded for user ID 309443653`), so Actions logs are not
+  always readable from a session; the page renders the note under the status chips.
+- 2026-11-20 20:14 UTC: brief extension implemented (portfolio/performance lines): a simulated
+  demo-account **book per strategy** (`strategies.json → portfolio.books`) — bankroll → equity,
+  realized $, win/loss, max drawdown, per-topic split, equity curve, one position per market with
+  duplicate alerts counted, `evaluable` gated at n>=30, labelled gross of fees and explicitly "no order
+  is sent to Kalshi". `check_page.py` re-adds + re-derives every curve point from the published trades
+  (tamper test: editing equity/curve/`evaluable` produced 4 targeted failures, so the gate bites).
+- 2026-11-20 20:16 UTC: new live swing found by the refreshed tape —
+  `KXPRESNOMD-28-BOBA` 0.0050 → 0.8630 ($0.8580, 1498 s gap). Verified against the official record
+  `GET https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPRESNOMD-28-BOBA` → 200,
+  `previous_price_dollars "0.0050"`, `last_price_dollars "0.8630"`, `yes_bid_dollars "0.0010"`,
+  `yes_ask_dollars "0.8630"`, `price_level_structure "deci_cent"`, `volume_fp "418777737.24"`,
+  `volume_24h_fp "63615.71"`, `status "active"`, `close_time 2028-11-07T15:00:00Z`. This drove two
+  additions: **exchange corroboration** (a row's prices are confirmed against the market record's own
+  previous/last fields; the interval is never claimed — F-cat-08) and the
+  **thin-quote caveat** (a $0.858 "jump" printed against a 0.0010/0.8630 quote is not a tradable
+  signal — F-cat-10). `fetched_via` now records the exact request a value came from.
+- 2026-11-20 20:18 UTC: irregularity removed from my own code before merge — the per-event URL
+  `demo.kalshi.co/market/<event>` was **inferred** (undocumented pattern, SPA not loadable from this
+  environment; `fetch_page` on both `/market/…` and `/event/…` returned "Failed to fetch"). It is now
+  published empty with the reason in `kalshi_market_page_note`, `check_page.py` fails if such a URL
+  ever reappears, and the smoke test asserts no `demo.kalshi.co/market/` link renders (F-cat-09).
+- Verification now: `test_scan.py` **Ran 42 tests … OK** · `check_page.py` **PASSED** (3 swings, 3 rows
+  with an official source link, 21 local link targets exist) · `smoke.mjs` **39/39** · repo gates
+  `verify_root_site` / `verify_site` (28 pages) / `tracker_check` / `check_site` / `npm test` (26/26)
+  all **PASS** with this directory present.
+
+### Session 67643e12 — delivery record (V7 closure, 2026-11-20 ~20:28 UTC)
+
+- **PR #67** (`arena/67643e12-demo3` → `main`): opened 20:15:4xZ, **merged 20:16:0xZ** with
+  `gh pr merge 67 --merge`, merge commit **`f8beb0f`**. Content: this session's board sections only
+  (union-merged with 7b47094a's and f2b0808f's sections; data files on the branch follow `main`).
+- **collect.yml live verification (completes the pipeline-repair record):** the `workflow_dispatch`
+  run queued at 20:11:33Z on `main` `c0cb52b` (run 44809097574) **completed with `success`** —
+  the scheduled collector pipeline is restored after the duplicate-`if:` startup failures
+  (fixed by merged PRs #55/#56). The run posts its own Pages rebuild request via the workflow's
+  `pages: write` permission.
+- **Pages deploy status at closure:** builds for successive `main` tips (`f8beb0f` 20:16:01Z,
+  `deea750` 20:18:07Z, `be94f5c` 20:21:33Z — errored ~63 s after creation) continue to be
+  superseded/failed under the concurrent merge rate; the live site served the 19:38Z artifact at
+  final check 20:27Z (verified without the API: `audit/index.html` still absent). Matches session
+  7b47094a's F-7b-08 and session df50b92f's R-08. Open structural fix: **PR #62** (custom Actions
+  deployment workflow) — recommended for merge by its owner or the final-integration session; the
+  legacy queue cannot publish under the current push rate.
+- **Incident (resolved, nothing lost; mirrors the 3b5e95bd lesson):** a `git pull --rebase origin
+  arena/67643e12-demo3` on this branch, which contained a merge commit (main merged in for the
+  board union), started flattening the merge and replaying ~50 of main's commits; it stopped at the
+  first pick (7b47094a's `c431955`) with the working tree untouched, and `git rebase --abort`
+  restored the branch to the already-pushed state (`415c82c`), which equals the remote. Rule
+  applied thereafter: fetch + explicit merge only, never `pull --rebase` across a merge commit.
+- **Scope discipline:** every file change by this session is inside `COORDINATION.md`; no other
+  session's file was created, edited, or regenerated. Sources: all URLs in the audit results above.
