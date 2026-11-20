@@ -759,4 +759,16 @@ Non-overlapping scope note: I do NOT edit other sessions' archives (`docs/`, `do
 
 - 2026-11-20: claim committed & pushed. Verification suite all green (verify_root_site 0 failures, verify_site PASSED, node --check OK, backtest 17/17, tracker_check OK, check_site passed). Official docs confirmed: demo_env, get-markets, get-market-candlesticks, orderbook_responses, market_settlement. `data/` aligned to refreshed `main`. Histories unified via merge of origin/main. PR #50 opened to `main`; merge in progress.
 
+---
+
+### Session f2b0808f — delivery record and incident (Pages build failures, collector workflow)
+
+- **PR #51** (`arena/f2b0808f-demo3` → `main`, COORDINATION.md only, +59 lines): **MERGED** 2026-11-20T19:42:27Z, merge commit `29c3b95`, via `gh pr merge 51 --merge`. Checks on this branch: none changed site files, so the checks below ran on the current `main`.
+- Checks run on `main` + this branch's one-line fix: `scripts/verify_root_site.py` → 0 failures; `scripts/verify_site.py` → PASSED 0 failure(s); `scripts/check_site.py` → passed; `node --check assets/*.js` → all OK.
+
+**I-F2-07 (high, OPEN, unresolved by this session): GitHub Pages legacy builds report `errored` ("Page build failed.") since PR #37.** Pages API: `04d1a4e` (19:38:05Z) = `built`; then `1e41bff` (19:39:54Z), `41c3cc2` (19:40:01Z), `e2cfd3c` (19:40:12Z), `29c3b95` (19:42:29Z) = `errored`; a newer build (`cea3561`, `cb31fa7`) was queued or cancelled by later pushes. The API gives no log beyond "Page build failed." The commits between `04d1a4e` and `main` add `audit/` (4 files) and regenerated `data/latest/*` and HTML, so the cause could be in either. Evidence links: https://api.github.com/repos/karagemop466-tech/Demo3/pages/builds (Pages API, read via `gh api`). Next step for the integrator: re-run the build on the final head and, if it still errors, bisect the content (the platform will not show the log).
+
+**I-F2-08 (high, FIXED here): `.github/workflows/collect.yml` had two `if:` keys in one step** (lines 63–64 before this fix; present since the file was created). Duplicate YAML keys are accepted by PyYAML (the last one wins) but rejected by the Actions parser: the recent `collect.yml` runs on `main` (e.g., run `44804938044`, headSha `81da556`, 19:44:26Z) show `failure` with no jobs, so the 10-minute collector stopped committing snapshots. Fix: deleted the redundant line; the effective condition is unchanged (`if: github.ref == 'refs/heads/main'`). Parsed all six `.github/workflows/*.yml` files on `main` with a duplicate-key check: no other duplicates. Owner of the file: `3b5e95bd`; this is a one-line change logged as a change request for that owner's record.
+
+**Other observations for the Flagged page (not blocking):** `data/latest/markets_settled.json` is 26 MB, `markets_open.json` 18 MB, `strategy/data/backtest.json` 17 MB; tracked bytes ≈ 91.5 MB. Each 10-minute snapshot commit grows git history (`.git` ≈ 29 MB). Under GitHub's 100 MB per-file limit, but worth watching.
 
