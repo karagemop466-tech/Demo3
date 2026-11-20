@@ -120,6 +120,16 @@ def main() -> int:
         p = os.path.join(REPO, rel)
         if not os.path.exists(p):
             warnings.append(f"{rel}: absent (optional provenance file)")
+            continue
+        # The builder degrades these to "unverified" rows when they fail to parse, which is the
+        # right publishing behaviour but the wrong CI behaviour: an unparseable snapshot (the
+        # usual cause is an unresolved merge-conflict marker left in a data file, seen on
+        # 2026-11-20 while merging a collector refresh) must stop the run, not silently blank rows.
+        try:
+            json.load(open(p))
+        except json.JSONDecodeError as exc:
+            failures.append(f"{rel}: invalid JSON ({exc}) — the pages would render this file's "
+                            f"rows as unverified; check for conflict markers")
 
     # 6: JS syntax
     js = os.path.join(SITE, "assets", "paper.js")
