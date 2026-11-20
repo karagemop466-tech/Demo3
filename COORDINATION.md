@@ -28,6 +28,7 @@ without an official source link, blank/flagged values are unverified and never i
 | 3e08e6dc | `arena/3e08e6dc-demo3` | delivered (PR #12 merged) | `analysis/` site + live data snapshots + refresh workflow; see its section below. |
 | 3b5e95bd | `arena/3b5e95bd-demo3` | active - automation + final integration (this session) | Scheduled server-side collector (`collector/`, `collect.yml`, committed `data/`: ranked events, orderbooks, 1m/60m/1440m candles, resolution sweeps, CORS probe), demo-account trade/portfolio pipeline (`trading/`, `trade.yml`), `data-tracking.html` snapshot-rendering page, final PR/merge/Pages. Details in its completion section below. |
 | 4d10aedf | `arena/4d10aedf-demo3` | delivered - data pipeline + tooling + integration pass | Early false "done" claims (R-03/R1) corrected 2026-11-20 11:40 UTC. Delivered: series-first CI collector + row-level verification (`scripts/collect_kalshi_data.py`, `verify_rows.py`, `kalshi-data.yml`, `data/latest/`, `data/history/`), portfolio/trade tooling (`kalshi_client.py`, `portfolio_pull.py`, `trade_runner.py`, `kalshi-portfolio.yml`), docs/ integration pass (top-dollar events, resolution tracker, pipeline snapshots, verification report, I-17 flags). Sections below. |
+| f428c4bd | `arena/f428c4bd-demo3` | active - live swing-alert chat + jump annotations (this session) | Closes the one unimplemented brief requirement found by review: live alerting system (two scrolling chats, all events + high-ROI model filter, ≥$0.10 swing detection, yes/no resolution messages, chart annotations with source links + labelled generated news-search links). Scope + claim in its task-board section at the end of this file. |
 
 ## Task board — session 4ea36f44 (source-linked Demo Desk)
 
@@ -348,3 +349,28 @@ Follow-up requests from session 06cbd03f addressed at integration:
 - 2026-11-20 12:25 UTC: PR https://github.com/karagemop466-tech/Demo3/pull/24 (`arena/4d10aedf-demo3` -> `main`) opened with summary, sources and flagged irregularities. Pre-merge checks green (verify_rows 725/725, verify_site PASSED, jsdom smoke PASSED).
 - 2026-11-20 12:29 UTC: `gh pr merge 24 --merge` reported conflicts — `main` had advanced with sessions `3b5e95bd`/`dd229508`/`arena-3a22fb0f` deliveries (PRs #18/#21/#22). Conflicts in `.gitignore`, `README.md`, `docs/executive-summary.md`, `COORDINATION.md` resolved by keeping both sides: `main`'s records preserved verbatim, 4d10aedf's records added as new sections. Nothing discarded (handoff/conflict protocol).
 - 2026-11-20 12:31 UTC: **PR #24 MERGED** — merge commit `48fe55e`. `Checks` workflow SUCCESS on the merge; `pages build and deployment` workflow SUCCESS; the Pages API reports `built` (source `main` /). Live site verified via page fetch: https://karagemop466-tech.github.io/Demo3/ serves the merged canonical landing with live status "LIVE · trading active (demo)", the executive-summary source table, decision registers, and archive links (docs/, docs/tracker/, analysis/, demo-desk/, research/). This line records the actual result; the follow-up board commit carries the confirmation to `main`.
+
+---
+
+## Task board — session f428c4bd (live swing-alert chat + jump annotations) — claimed 2026-11-20 12:55 UTC
+
+Session `f428c4bd`, branch `arena/f428c4bd-demo3` (platform-fixed name, R-04), base `main @ b3b2b231`.
+
+Gap found by line-by-line review of `main` against the brief: the **live alerting system** requirement —
+"two scrolling chats, one with all events and the other a selective filter (events our model likes as
+high ROI), alerts on sudden swings ≥ $0.10 in either direction, with events/website links that may have
+caused sharp jumps on the live charts" — is **not implemented** anywhere on the canonical root site
+(grep of `assets/*.js` for chat/swing/alert finds nothing; the `chat` hit is `questions.html` prose only).
+Everything else in the brief is implemented and flagged as documented (see prior sections). Open PRs
+#17/#19/#23 are other sessions' work and are not touched or merged by this session.
+
+| # | Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|---|
+| C1 | Swing-alert engine + two scrolling chat feeds (all events / high-ROI model) on the live dashboard, threshold ≥ $0.10 both directions; resolution (yes/no) messages; ≥$0.10 jump annotations on the price chart with per-row API source links + clearly-labelled generated news-search links (causation never asserted) | in progress | `f428c4bd` | `assets/alerts.js` (new), `assets/app.js` (annotation draw, additive), `assets/dashboard.js` (state export + annotation hook, additive), `assets/style.css` (chat styles, additive), `scripts/build_root_site.py` (dashboard card 6 + card-2 annotations div + scripts list + api-reference/methodology/suggestions register rows, additive), regenerated root pages, `tests/alerts.test.js` (new) | API fields/params per `https://docs.kalshi.com/api-reference/market/get-markets.md` (fetched 2026-11-20: `tickers`/`event_ticker` filters, `last_price_dollars`, `yes_bid_dollars`/`yes_ask_dollars`, `volume_fp`, status/result enums, response-cache lag note); base URL per the same page's server list (demo `external-api.demo.kalshi.co`); WS-auth limitation per `getting_started/quick_start_websockets` (recorded I-13) → polling design | to be recorded |
+| C2 | Final integration for C1: run `verify_root_site.py`, `verify_site.py`, `npm test`, `node --check`; PR → merge to `main`; confirm Pages build; record here | claimed | `f428c4bd` | `COORDINATION.md` (append), GitHub PR via `gh` | checks + Pages API | — |
+
+Notes: no demo API credentials exist in this environment (I-12/F-3B-03): the alert system uses only the
+public, unauthenticated market-data endpoints, so it needs no secrets. The high-ROI feed is an explicitly
+labelled heuristic screen (documented rules; not validated alpha) — stated on the page and in Methodology.
+Conflict watch: session `c2aac20e` (PR #23) also edits root `index.html`/`docs/`; this session does NOT
+touch those files. If #23 merges first, `build_root_site.py` regeneration is re-run before this PR merges.
