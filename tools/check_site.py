@@ -132,6 +132,20 @@ def check() -> list[str]:
                 problems.append(
                     f"{page.relative_to(ROOT)}: published page links into the non-served archive: {value}")
 
+    # The published artifact directory must stay small: only what the pages fetch. Without this,
+    # someone re-adds a 27 MB raw dump to docs/data and every visitor pays for it.
+    published = sorted((SITE / "data").glob("*.json")) if (SITE / "data").exists() else []
+    allowed_artifacts = {
+        "dashboard.json", "expectancy.json", "meta.json", "order-rules.json",
+        "portfolio.json", "resolutions-compact.json", "resolutions-summary.json",
+    }
+    for f in published:
+        if f.name not in allowed_artifacts:
+            problems.append(f"docs/data/{f.name} is not read by any page; run tools/publish_data.py")
+    total_mb = sum(f.stat().st_size for f in published) / 1024 / 1024
+    if total_mb > 12:
+        problems.append(f"docs/data is {total_mb:.1f} MB; only page artifacts may be published")
+
     json_cache: dict[Path, object] = {}
 
     def load_json(path: Path):

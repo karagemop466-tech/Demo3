@@ -125,9 +125,8 @@ jobs:
         run: |
           git config user.name "kalshi-collector-bot"
           git config user.email "actions@users.noreply.github.com"
-          # The site reads its artifacts from docs/data, so publish them there too.
-          mkdir -p docs/data
-          cp data/*.json docs/data/
+          # The site reads its artifacts from docs/data; publish only the files pages fetch.
+          python3 tools/publish_data.py
           git add data analysis docs/data
           if git diff --cached --quiet; then
             echo "no data changes"
