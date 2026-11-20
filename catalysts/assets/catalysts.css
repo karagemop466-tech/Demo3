@@ -103,6 +103,8 @@ td.down strong { color: var(--down); }
 .alert.down strong { color: var(--down); }
 .alert.notice { color: var(--muted); }
 
+.lastrun { background: #10151c; color: #d7dce3; padding: 10px 12px; border-radius: 8px;
+  overflow-x: auto; font-size: .78rem; line-height: 1.45; white-space: pre-wrap; }
 canvas { width: 100%; max-width: 100%; background: #fff; border: 1px solid var(--line); border-radius: 8px; }
 footer { padding: 18px 16px 28px; }
 @media (max-width: 760px) {

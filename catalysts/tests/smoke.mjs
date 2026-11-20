@@ -141,6 +141,9 @@ ok(errors.length === 0, `no script errors during render (${errors.slice(0, 3).jo
 ok(doc.getElementById("watchToggle").checked === false, "live polling is off until the user opts in");
 ok(doc.getElementById("watchState").textContent.trim() === "idle", "watch state starts idle");
 
+ok(/recorded_at=/.test(doc.getElementById("lastRun").textContent),
+   "the pipeline run note (success or failure) is published on the page itself");
+
 /* ---------- strategy table: numbers as published, verdicts gated by sample size ---------- */
 const stratPath = path.join(SITE, "data", "strategies.json");
 if (fs.existsSync(stratPath)) {

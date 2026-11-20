@@ -8,16 +8,17 @@ name: Swing + catalyst ledger refresh
 # Data provenance: every value written by this job comes from the official demo API
 # (https://external-api.demo.kalshi.co/trade-api/v2 — see
 # https://docs.kalshi.com/getting_started/api_environments.md) or from a feed the run
-# actually parsed; both are recorded in catalysts/data/status.json,
-# feed_health.json and endpoints.json. Nothing is generated when a source is silent.
+# actually parsed; both are recorded in catalysts/data/status.json, feed_health.json
+# and endpoints.json. Nothing is generated when a source is silent, and the last step
+# commits a run-outcome note whether this job succeeded or failed.
 
 on:
   schedule:
     - cron: '*/15 * * * *'
   push:
     # `arena/**` lets a session branch exercise the real (networked) run before its PR
-    # is merged; the paths filter keeps it off every other session's pushes, since only
-    # this session's scope touches catalysts/**.
+    # is merged; the paths filter keeps this off every other session's pushes, since
+    # only this session's scope touches catalysts/**.
     branches: ['main', 'arena/**']
     paths:
       - 'catalysts/**'
@@ -34,7 +35,7 @@ permissions:
   pages: write
 
 concurrency:
-  group: catalysts-ledger
+  group: catalysts-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -50,7 +51,7 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Offline tests (mock demo API + mock feed; no network needed)
+      - name: Offline tests (mock demo API + mock feed; needs no network)
         run: python3 catalysts/tests/test_scan.py -v
 
       - name: Record official endpoint statuses
@@ -63,11 +64,10 @@ jobs:
 
       - name: Probe the news-feed allowlist
         env:
-          # A dead host must not eat the job: short timeout, no retry storms, and the
+          # One dead host must not eat the job: short timeout, no retry storms, and the
           # scan publishes a partial, self-disclosed result if the budget is hit.
           CATALYST_TIMEOUT: '10'
           CATALYST_RETRIES: '1'
-          CATALYST_MIN_INTERVAL: '0.1'
           CATALYST_DEADLINE_SECONDS: '240'
         run: python3 catalysts/scan.py --probe-feeds --quiet
 
@@ -80,35 +80,50 @@ jobs:
           CATALYST_DEADLINE_SECONDS: '420'
         run: python3 catalysts/scan.py --quiet
 
-      - name: Fail if the scan wrote an inconsistent ledger
+      - name: Publish gate (re-derives every number from the artifacts)
         run: python3 catalysts/tests/check_page.py
 
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Install the dev dependency used by the render test (jsdom)
+      - name: Install the dev dependency the render test needs (jsdom)
         run: npm ci --no-audit --no-fund
 
-      - name: Headless render test of the ledger page (incl. the $0.10 browser rule)
-        run: node catalysts/tests/smoke.mjs
+      - name: Headless render test of the ledger page (incl. the browser $0.10 rule)
+        run: |
+          if node -e "require.resolve('jsdom')" 2>/dev/null; then
+            node catalysts/tests/smoke.mjs
+          else
+            echo "::warning::jsdom is not installed (npm ci failed) - render test skipped"
+          fi
 
-      - name: Commit snapshots
+      # Runs even when a step above failed, so the failure and the partial artifacts are
+      # visible in the branch without GitHub API access (this repo's token is rate-limited
+      # by the number of concurrent sessions).
+      - name: Write the run-outcome note
+        if: always()
+        run: python3 catalysts/report_run.py --status "${{ job.status }}"
+
+      - name: Commit snapshots and the outcome note
+        if: always()
         run: |
           git config user.name "catalyst-bot"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add catalysts/data || true
           if git diff --cached --quiet; then
-            echo "No ledger changes to commit"
+            echo "Nothing changed to commit"
           else
-            git commit -m "catalysts: ledger refresh $(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+            git commit -m "catalysts: ledger refresh $(date -u '+%Y-%m-%dT%H:%M:%SZ') (${{ job.status }})"
             git pull --rebase origin "$GITHUB_REF_NAME" --autostash || \
-              echo "::warning::rebase failed; committing on top of the latest local state"
+              echo "::warning::rebase failed; pushing on top of the local state"
             git push origin "HEAD:$GITHUB_REF_NAME"
           fi
 
       - name: Request Pages rebuild (bot pushes do not trigger the legacy Pages workflow)
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' && job.status == 'success'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           code=$(curl -s -o /tmp/pages_build.json -w "%{http_code}" \
             -X POST \
@@ -117,5 +132,3 @@ jobs:
             "https://api.github.com/repos/$GITHUB_REPOSITORY/pages/builds")
           echo "pages build request HTTP $code"
           head -c 300 /tmp/pages_build.json
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

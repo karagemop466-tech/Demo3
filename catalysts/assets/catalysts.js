@@ -104,7 +104,8 @@
       getText("../data/history/prices.jsonl"),
       getText("data/tape.jsonl"),
       getJSON("../data/latest/orderbooks.json"),
-      getJSON("data/strategies.json")
+      getJSON("data/strategies.json"),
+      getText("data/last_run.txt")
     ]);
     state.doc = jobs[0].status === "fulfilled" ? jobs[0].value : null;
     state.status = jobs[1].status === "fulfilled" ? jobs[1].value : null;
@@ -114,6 +115,11 @@
     if (jobs[5].status === "fulfilled") readTape(jobs[5].value, "catalysts/data/tape.jsonl");
     if (jobs[6].status === "fulfilled") state.orderbooks = jobs[6].value;
     state.strategies = jobs[7].status === "fulfilled" ? jobs[7].value : null;
+    if (jobs[8].status === "fulfilled") {
+      var box = $("lastRunBox"), pre = $("lastRun");
+      pre.textContent = jobs[8].value;           // textContent, never innerHTML
+      box.hidden = false;
+    }
     if (!state.doc) {
       banner("<strong>Snapshot unavailable.</strong> <span class='mono'>catalysts/data/swings.json</span> " +
              "could not be read, so the ledger is empty. Nothing is substituted from memory.", "err");
