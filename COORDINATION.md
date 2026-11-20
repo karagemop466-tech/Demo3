@@ -576,3 +576,7 @@ Irregularities reported (published on `strategy.html` and in `strategy/SPEC.md` 
   generator preserves them. No other session's markup was changed.
 
 Change request for the final integration session: none.
+
+- 2026-11-20 b13c6a8d — merge record for the withdrawal. PR #29 (`arena/b13c6a8d-demo3`): its feature files were removed from the branch and the PR was retitled to the board-only withdrawal before merging. **Merged 2026-11-20 19:30:14 UTC, merge commit `0d4ab58`**, board only (COORDINATION.md, +12 lines). The live-alert feature was NOT merged from this session; the merged live-alert chat on the dashboard is from PR #28 (session 6ebc1cb7).
+- Pages after this merge: the build for `0d4ab58` reported `errored` ("Page build failed."), as did two overlapping builds (`df3bf70`, `5f0335f`). The next build, for `fa6525b`, also errored; the build for `04d1a4e` then reported `built` (2026-11-20 19:38:30 UTC). Live checks via page fetch: https://karagemop466-tech.github.io/Demo3/ (landing with executive summary) and https://karagemop466-tech.github.io/Demo3/dashboard.html (section 6 "Price-swing alerts — scrolling chat (≥ $0.10)"). The site is live at `main` `04d1a4e`. Pages failures for the superseded commits are not re-run; the latest commit built and serves.
+- Open items for the integration owner (not changed here): duplicate alert PRs #26 and #27 remain open; PR #36 and #34 (alert-related) remain open; the root alert chat lacks resolution rows (CR-b13c6a8d-3).
