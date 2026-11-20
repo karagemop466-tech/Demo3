@@ -3,20 +3,42 @@
  "caveats": [
   "Demo exchange: prices, volumes and liquidity are simulated test data, not real markets (https://docs.kalshi.com/getting_started/demo_env.md).",
   "Candlestick OHLC is the per-period trade price plus the quoted YES bid/ask at the period open/close; fills assume the taker crosses that quote exactly and ignore book depth -- optimistic, see alerts/SPEC.md 'Fill model'.",
+  "Reversion is measured within a stated 60-minute horizon; the '*_ever' fields show what happens over the rest of the available series. Reading the ever-variant as a tradeable edge would be wrong -- that is why both are published.",
+  "Block size for fees and PnL is 100 contracts; net figures are per contract so they scale, and the fee alignment matches Kalshi's published schedule exactly.",
   "Strategies are simulated trades; no order was sent to Kalshi (no demo API credentials exist in this repo -- COORDINATION.md I-12).",
   "External news links are search deep-links offered as candidate catalysts; timing proximity is not evidence of causation."
  ],
  "event_page_probe": {
   "attempted": true,
-  "checked_at": "2026-11-20T19:37:34Z",
-  "error": null,
-  "site_root": "https://kalshi.com",
+  "attempts": [
+   {
+    "body_bytes": 0,
+    "checked_at": "2026-11-20T20:19:19Z",
+    "error": "HTTP 429",
+    "site_root": "https://kalshi.com",
+    "status_code": 429,
+    "ticker_echoed": false,
+    "title_echoed": false,
+    "url": "https://kalshi.com/event/KXBTCY-27JAN0100"
+   },
+   {
+    "body_bytes": 0,
+    "checked_at": "2026-11-20T20:19:22Z",
+    "error": "HTTP 404",
+    "site_root": "https://demo.kalshi.co",
+    "status_code": 404,
+    "ticker_echoed": false,
+    "title_echoed": false,
+    "url": "https://demo.kalshi.co/event/KXBTCY-27JAN0100"
+   }
+  ],
+  "checked_at": "2026-11-20T20:19:22Z",
   "status_code": 429,
   "ticker_echoed": false,
-  "url": "https://kalshi.com/event/KXBTCY-27JAN0100"
+  "verified_root": null
  },
  "events_with_swings": 3,
- "generated_at": "2026-11-20T19:36:22Z",
+ "generated_at": "2026-11-20T20:18:30Z",
  "hours_1m": 48,
  "hours_60m": 168,
  "markets_scanned": 60,
@@ -37,15 +59,36 @@
   "errors": 0,
   "event_page_probe": {
    "attempted": true,
-   "checked_at": "2026-11-20T19:37:34Z",
-   "error": null,
-   "site_root": "https://kalshi.com",
+   "attempts": [
+    {
+     "body_bytes": 0,
+     "checked_at": "2026-11-20T20:19:19Z",
+     "error": "HTTP 429",
+     "site_root": "https://kalshi.com",
+     "status_code": 429,
+     "ticker_echoed": false,
+     "title_echoed": false,
+     "url": "https://kalshi.com/event/KXBTCY-27JAN0100"
+    },
+    {
+     "body_bytes": 0,
+     "checked_at": "2026-11-20T20:19:22Z",
+     "error": "HTTP 404",
+     "site_root": "https://demo.kalshi.co",
+     "status_code": 404,
+     "ticker_echoed": false,
+     "title_echoed": false,
+     "url": "https://demo.kalshi.co/event/KXBTCY-27JAN0100"
+    }
+   ],
+   "checked_at": "2026-11-20T20:19:22Z",
    "status_code": 429,
    "ticker_echoed": false,
-   "url": "https://kalshi.com/event/KXBTCY-27JAN0100"
+   "verified_root": null
   },
   "mode": "live",
   "requests": 122,
+  "series_meta_source": "fetched this run",
   "universe_counts": {
    "crypto": 12,
    "culture": 12,
@@ -56,7 +99,7 @@
   "universe_units": 60,
   "warnings": []
  },
- "swings_found": 148,
+ "swings_found": 174,
  "threshold_dollars": 0.1,
  "window_minutes": 60
 }
