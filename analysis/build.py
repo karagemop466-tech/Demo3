@@ -138,6 +138,8 @@ def main() -> int:
             "yes_sub_title": m.get("yes_sub_title"),
             "topics": m.get("topics"),
             "status": m.get("status"),
+            "price_level_structure": m.get("price_level_structure"),
+            "price_ranges": m.get("price_ranges"),
             "close_time": m.get("close_time"),
             "expected_expiration_time": m.get("expected_expiration_time"),
             "yes_bid_dollars": m.get("yes_bid_dollars"),

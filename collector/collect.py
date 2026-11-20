@@ -441,6 +441,10 @@ def main() -> int:
             "yes_sub_title": (m.get("yes_sub_title") or "")[:160],
             "status": m.get("status"),
             "market_type": m.get("market_type"),
+            # The valid order price grid for this market. Kalshi rejects off-grid prices with
+            # `invalid_price` (docs: getting_started/order_errors), so we carry it through.
+            "price_level_structure": m.get("price_level_structure"),
+            "price_ranges": m.get("price_ranges"),
             "open_time": m.get("open_time"),
             "close_time": m.get("close_time"),
             "expected_expiration_time": m.get("expected_expiration_time"),

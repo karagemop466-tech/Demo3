@@ -67,6 +67,28 @@ def num(v, default=None):
         return default
 
 
+def snap_to_grid(price: float | None, ranges: list | None) -> float | None:
+    """Round a price onto the market's declared price grid.
+
+    Kalshi returns `price_ranges` ([{start, end, step}]) for every market, and rejects orders
+    whose price is not on that grid with `invalid_price`
+    (https://docs.kalshi.com/getting_started/order_errors). If the ranges are missing we return
+    the price unchanged and mark it unvalidated upstream rather than inventing a grid.
+    """
+    if price is None or not ranges:
+        return price
+    for r in ranges:
+        try:
+            start, end, step = float(r["start"]), float(r["end"]), float(r["step"])
+        except (KeyError, TypeError, ValueError):
+            continue
+        if start <= price <= end and step > 0:
+            steps = round((price - start) / step)
+            snapped = round(start + steps * step, 6)
+            return round(min(max(snapped, start), end), 4)
+    return price
+
+
 def fillable(ladder: list, side: str, limit_price: float | None) -> tuple[float, float]:
     """How many contracts the current book shows at or better than `limit_price`, and cost.
 
@@ -146,7 +168,10 @@ def main() -> int:
                                  "and derived spread <= 0.04; measured NO expectancy +1.58c per "
                                  "contract in that band (data/expectancy.json)",
                     "ticker": ticker, "topic": topic, "title": row.get("title"),
-                    "side": "no", "action": "buy", "limit_price": no_ask,
+                    "side": "no", "action": "buy",
+                    "limit_price": snap_to_grid(no_ask, row.get("price_ranges")),
+                    "price_grid_validated": bool(row.get("price_ranges")),
+                    "price_ranges": row.get("price_ranges"),
                     "size_contracts": min(SIZE_CONTRACTS, int(contracts)) if contracts else 0,
                     "book_contracts_available": contracts,
                     "immediate_cost_dollars": cost,

@@ -1,5 +1,5 @@
 {
- "generated_at_utc": "2026-11-20T12:04:23+00:00",
+ "generated_at_utc": "2026-11-20T12:04:59+00:00",
  "policy": {
   "longshot_max_yes": 0.2,
   "min_volume_24h": 1.0,
@@ -19,6 +19,8 @@
    "side": "no",
    "action": "buy",
    "limit_price": 0.983,
+   "price_grid_validated": false,
+   "price_ranges": null,
    "size_contracts": 10,
    "book_contracts_available": 3622.02,
    "immediate_cost_dollars": 3560.45,
@@ -42,6 +44,8 @@
    "side": "no",
    "action": "buy",
    "limit_price": 0.969,
+   "price_grid_validated": false,
+   "price_ranges": null,
    "size_contracts": 10,
    "book_contracts_available": 21505.36,
    "immediate_cost_dollars": 20838.69,

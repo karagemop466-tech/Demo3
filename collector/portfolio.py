@@ -22,6 +22,16 @@ AUTHENTICATION (verified against the official docs, not guessed)
   Timestamp must be within 30 s of Kalshi's clock.
   Source: https://docs.kalshi.com/getting_started/api_keys.md
 
+ORDER API (verified 2026-11-20, not assumed)
+  The legacy write endpoints under /portfolio/orders (create, cancel, amend, decrease and their
+  batch forms) have been REMOVED and return `410 Gone` with code `deprecated_v1_order_endpoint`.
+  Orders must be sent to POST /portfolio/events/orders with the V2 shape:
+      { ticker, side: "bid"|"ask", count, price, time_in_force,
+        self_trade_prevention_type, client_order_id? }
+  where `side: bid` is the YES book and `side: ask` is the NO book, and `price` is required.
+  A 201 means accepted, not resting: check `remaining_count` in the response.
+  Source: https://docs.kalshi.com/api-reference/orders/create-order-v2.md
+
 SAFETY
   * Demo host only by default; the production host is refused unless KALSHI_ALLOW_PROD=1.
   * Writes require an explicit, exact-match confirmation string.
@@ -204,21 +214,22 @@ def main() -> int:
             for spec in json.loads(orders_file.read_text())[:10]:
                 if spec.get("confirm") != "I_ACCEPT_DEMO_MONEY_IS_FAKE":
                     continue
+                # V2 order shape. `side` is book side: bid = YES book, ask = NO book.
+                side = (spec.get("side") or "yes").lower()
                 body = {
                     "ticker": spec["ticker"],
-                    "client_order_id": spec.get("client_order_id") or f"demo3-{int(time.time()*1000)}",
-                    "side": spec.get("side", "yes"),
-                    "action": spec.get("action", "buy"),
-                    "count": spec.get("count", 1),
-                    "type": spec.get("type", "market"),
+                    "client_order_id": spec.get("client_order_id") or f"demo3{int(time.time()*1000)}",
+                    "side": "bid" if side == "yes" else "ask",
+                    "count": str(spec.get("count", 1)),
+                    "price": f"{(spec.get('price') or 0.5):.4f}",
+                    "time_in_force": spec.get("time_in_force", "good_till_canceled"),
+                    "self_trade_prevention_type": "taker_at_cross",
                 }
-                if spec.get("type") == "limit" and spec.get("yes_price") is not None:
-                    body["yes_price"] = spec["yes_price"]
                 st, resp = signed_request(key_id, key, "POST", base,
-                                          "/trade-api/v2/portfolio/orders", body)
-                log_action({"kind": "order", "env": env_name, "request": body,
+                                          "/trade-api/v2/portfolio/events/orders", body)
+                log_action({"kind": "order_v2", "env": env_name, "request": body,
                             "status": st, "response": resp,
-                            "url": f"{base}/trade-api/v2/portfolio/orders"})
+                            "url": f"{base}/trade-api/v2/portfolio/events/orders"})
                 placed.append({"status": st, "request": body, "response": resp})
             out["orders_placed"] = placed
 
