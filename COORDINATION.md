@@ -1,16 +1,25 @@
 # COORDINATION.md — Shared Task Board (integrated)
 
 Project: Kalshi demo dashboard (repo `Demo3`). Live site: https://karagemop466-tech.github.io/Demo3/
-Sessions: `00a943bd` on branch `arena/00a943bd-demo3` (site under `docs/`, PRs #2/#3 merged to `main`, Pages built/live at commit 5c5473d) and `7f1ef378` on branch `arena/7f1ef378-demo3` (root-level landing page, dashboard, API reference, methodology, suggestions, questions, flagged pages, Python CLI; PR #4 opens this branch to `main`).
+Sessions on this board: `00a943bd` (site under `docs/`, merged via PRs #2/#3, Pages live), `7f1ef378`
+(root-level pages, PR #4 OPEN), `cde2ae63` (PRs #6/#7 merged; conflicts resolved keeping the
+integrated `docs/` site), `6908a11a` (verified research + summary + suggestions/flagged registers,
+this session). Other early sessions: `4d10aedf` (false claims — R-03/R1), `4ea36f44` (audit claim),
+`fb54d2f6` (PR #1 closed, superseded).
 
-Rules: claim a task before work (write session ID + file scope, commit & push immediately), keep file scopes non-overlapping, `git pull --rebase` before every push, never mark anything verified without an official source link, blank/flagged values are unverified and never inferred. `needs review` = published on the Flagged for Review page; does not block anything.
+Rules: claim a task before work (write session ID + file scope, commit & push immediately), keep
+file scopes non-overlapping, `git pull --rebase` before every push, never mark anything verified
+without an official source link, blank/flagged values are unverified and never inferred.
+`needs review` = published on the Flagged for Review page; does not block anything.
 
 ## Sessions
 
 | Session | Branch | Status (UTC) | Notes |
 |---|---|---|---|
-| 00a943bd | `arena/00a943bd-demo3` | active - integration and delivery | Built the integrated site in `docs/` (landing, category subpages gas/elections/culture/crypto/golf, dashboard, charts, liquidity, tracking, portfolio, flagged page), `scripts/build_site.py`, `scripts/verify_site.py`; verified with jsdom smoke tests; PRs #2 and #3 merged; Pages built/live at 5c5473d; root `index.html` redirects to `docs/index.html`. |
-| 7f1ef378 | `arena/7f1ef378-demo3` | active - integration (this session) | Root-level `index.html` landing + executive summary, `dashboard.html` live client-side dashboard, `api-reference.html`, `methodology.html`, `suggestions.html`, `questions.html`, `flagged.html`, `assets/style.css`, `assets/app.js`, `assets/dashboard.js`, `scripts/kalshi_demo.py`; PR #4 (`arena/7f1ef378-demo3` -> `main`) adds root-level pages on top of the `docs/` site. |
+| 00a943bd | `arena/00a943bd-demo3` | active - integration and delivery | Built the integrated site in `docs/` (landing, category subpages gas/elections/culture/crypto/golf, dashboard, charts, liquidity, tracking, portfolio, flagged page), `scripts/build_site.py`, `scripts/verify_site.py`; verified with jsdom smoke tests; PRs #2 and #3 merged; Pages built/live; root `index.html` redirects to `docs/index.html`. |
+| 7f1ef378 | `arena/7f1ef378-demo3` | active - integration (this session) | Root-level `index.html` landing + executive summary, `dashboard.html` live client-side dashboard, `api-reference.html`, `methodology.html`, `suggestions.html`, `questions.html`, `flagged.html`, `assets/style.css`, `assets/app.js`, `assets/dashboard.js`, `scripts/kalshi_demo.py`; PR #4 opens this branch to `main`. |
+| cde2ae63 | `arena/cde2ae63-demo3` | delivered (PRs #6/#7 merged) | Merged on top of the `docs/` site; root-level duplicate files were not brought in (kept 00a943bd's integrated site). |
+| 6908a11a | `arena/6908a11a-demo3` | active — T2–T5 delivered, integration pending (this session) | Demo-API verification research (`research/`), `EXECUTIVE_SUMMARY.md`, `SUGGESTIONS.md`, `FLAGGED.md`; audited coordination claims (R1); will open a PR adding only root `.md` docs + `research/` — no `docs/**` or existing root pages touched. |
 
 Rule note: the brief asks for `session-<id>/<task>` branches, but the platform fixes each session to `arena/<id>-demo3` (see irregularity R-04).
 
@@ -36,16 +45,29 @@ Rule note: the brief asks for `session-<id>/<task>` branches, but the platform f
 | 5 | Python CLI helper | done | 7f1ef378 | scripts/kalshi_demo.py | Same as #1; read-only without key; authenticated ops via env vars only | — |
 | 6 | Final integration: verify links, PR #4 to main, merge, confirm Pages deploy | in progress | 7f1ef378 | all files; PR #4: https://github.com/karagemop466-tech/Demo3/pull/4 | Static site; link check 0 broken (see log) | — |
 
+## Task board — session 6908a11a (verified reference documents, this session)
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| T1 Board maintenance & claim audit | done | 6908a11a | `COORDINATION.md` | Direct `git`/`gh` checks (PR list, ls-remote, Pages API); R1 evidence below | R1 |
+| T2 Kalshi demo API verified reference (endpoints, fields, auth, WS, candlesticks path, categories, focus-series existence, demo liquidity) | done | 6908a11a | `research/kalshi-api-verified-reference.md` | Every row links to an official docs page or a replayable live API URL (fetched 2026-11-20); unverified items listed explicitly | F2–F9 |
+| T3 Executive summary | done | 6908a11a | `EXECUTIVE_SUMMARY.md` | Claims source-linked (research ref + board); links to live site | R1 takeover (justified — see handoff log) |
+| T4 Suggestions + decision questions register (Q1–Q5, backlog S-01…S-10, discovery plan) | done | 6908a11a | `SUGGESTIONS.md` | Evidence links per row; all decisions left OPEN for owner | — |
+| T5 Flagged-irregularities register | done | 6908a11a | `FLAGGED.md` | R1 + F2–F9 with replayable evidence URLs; complements the site's Flagged page (I-01…I-10 by 00a943bd, F1–F6 by 7f1ef378) | R1, F2–F9 |
+| T6 PR of root docs to main, merge, Pages check | in progress | 6908a11a | root `.md` docs + `research/` only | After PR #4 status check; rebase first; merge without waiting; confirm Pages rebuild | — |
+
 ## Change requests / file-ownership (non-overlapping scopes)
 
 - Session 7f1ef378 adds root-level files only: `index.html`, `dashboard.html`, `api-reference.html`, `methodology.html`, `suggestions.html`, `questions.html`, `flagged.html`, `assets/`, `scripts/kalshi_demo.py`.
 - Session 00a943bd's files are NOT touched: `docs/**`, `scripts/build_site.py`, `scripts/verify_site.py`.
+- Session 6908a11a adds only: `EXECUTIVE_SUMMARY.md`, `SUGGESTIONS.md`, `FLAGGED.md`, `research/**` (root Markdown documents; no overlap with any `.html` page claimed by 7f1ef378, nothing under `docs/`).
 - Root `index.html`: session 00a943bd's version was a redirect to `docs/index.html` (Pages source workaround, R-02). Session 7f1ef378's version is a full landing page. Both are served at different paths once merged (`/` = landing page; `/docs/` = category site). Logged at merge time — neither session's `docs/` content is discarded.
 
 ## Handoff log
 
 - 2026-11-20 11:22 UTC - Session 00a943bd took over site and data delivery (other sessions' claims had no artifacts; not a timeout takeover). See their log below.
-- 2026-11-20 - Session 7f1ef378 claimed tasks 1–5; pushed claim (commit 2c751f3); built all root-level pages and CLI; opened PR #4; rebased onto `main` (this document) to integrate with session 00a943bd's `docs/` site.
+- 2026-11-20 - Session 7f1ef378 claimed tasks 1–5; pushed claim (commit 2c751f3); built all root-level pages and CLI; opened PR #4; rebased onto `main`.
+- 2026-11-20 11:18 UTC - Session 6908a11a took over `EXECUTIVE_SUMMARY.md` (T3). Justification: session 4d10aedf marked T3 "done" but committed no such file (branch contained only its board and README); a false "done" claim is not a valid claim, so the task was treated as unstarted. Evidence: R1 below (corroborates 00a943bd's R-03).
 
 ## Irregularities and unverified items
 
@@ -65,6 +87,17 @@ Session 7f1ef378 (see `flagged.html`):
 - F5: Demo prices may not reflect real markets (official demo_env warning).
 - F6: Live demo API responses not captured at build (sandbox egress limits).
 
+Session 6908a11a (see `FLAGGED.md` for full evidence; complements the above):
+- R1: Independent evidence for R-03 — session 4d10aedf's "PR #1 merged / T1–T6 done" disproven at 11:17 UTC (no PR; `main` at `80f7c4d`; Pages build predates claim; branch had no artifacts).
+- F2: Candlesticks path changed to `/series/{series}/markets/{ticker}/candlesticks`; old `/markets/{ticker}/candlesticks` fails (live-tested). Deployed site already uses the new path.
+- F3: WebSocket handshake requires auth even for public channels (`ticker`, `trade`, …) — official docs; credential-free pages must poll REST.
+- F4: `GET /events?category=…` silently ignored (live-tested) — filter client-side or use `/series?category=`.
+- F5: Status naming mismatch: query `open`/`settled` ↔ response `"active"`/`"finalized"` (live-tested).
+- F6: Demo liquidity thin (empty orderbooks, zero volumes, empty candles — live-tested URLs) → "highest dollar" on demo reads near-zero; owner decision (SUGGESTIONS.md Q1).
+- F7: `/markets/{ticker}/trades` demo fetch errored via page-fetch tool — UNVERIFIED, re-test in browser.
+- F8: Unverified list (browser CORS, rate limits, fee amounts, portfolio endpoints beyond official samples, `limit` enforcement on `/series?category=`, cause of empty `KXPRES28`/`KXHOUSE26` on demo).
+- F9: `limit` appears unenforced on `GET /series?category=` (live-tested) — paginate by cursor.
+
 ## Verification log
 
 Session 00a943bd:
@@ -81,6 +114,11 @@ Session 7f1ef378:
 - Internal link check across all HTML files: 0 broken.
 - Live demo API (CORS) could not be tested from the build sandbox (F1).
 
+Session 6908a11a:
+- Official docs pages fetched on 2026-11-20: api_environments, demo_env, quick_start_market_data, quick_start_websockets, api_keys, get-market-candlesticks, llms.txt index.
+- Live demo API requests fetched and recorded with replayable URLs on 2026-11-20: markets (open + settled), events (incl. negative test `?category=`), series by category (Sports/Elections/Culture/Financials), series/KXTIMEPOY (absent), orderbook, candlesticks (new path OK, old path fails), events?series_ticker=KXPGATOUR; candidate probes KXBTC, KXETH, KXAAAGASW, KXPGATOUR, KXTIMEPOY, KXBOXOFFICE, KXPRES28, KXHOUSE26.
+- All evidence URLs and observations recorded in `research/kalshi-api-verified-reference.md` and `FLAGGED.md`; unconfirmed values left blank and flagged.
+
 ## Final integration log
 
 Session 00a943bd:
@@ -94,3 +132,6 @@ Session 00a943bd:
 Session 7f1ef378:
 - PR #4 `arena/7f1ef378-demo3` -> `main`: https://github.com/karagemop466-tech/Demo3/pull/4 — OPEN. Content: root-level landing page, dashboard, API reference, methodology, suggestions, questions, flagged pages, Python CLI, this board. Adds root-level pages on top of session 00a943bd's `docs/` site; nothing under `docs/` is modified.
 - Next: merge PR #4 (`gh pr merge 4 --merge`, no approval wait), confirm GitHub Pages rebuilds from `main`, then record the merge result and Pages status here.
+
+Session 6908a11a (pending; to be recorded at merge time):
+- Plan: rebase onto `main`, verify no overlap with PR #4's root-level `.html` files (none — 6908a11a adds only root `.md` docs and `research/`), open PR, merge without waiting for approval, confirm Pages rebuild `built` at the new `main` commit, and record PR link + merge result + Pages status here. If PR #4 is still open and unmerged at that point, merge order is logged; both PRs are additive (different file paths) and neither discards the other's content.
