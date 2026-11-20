@@ -99,6 +99,21 @@ the endpoint is listed in the official docs index
 series). Clients must paginate by `cursor`, not trust `limit`.
 **Evidence:** research §3 (fetch observed 2026-11-20).
 
+## F10 — Root landing page alternates between redirect and full landing across concurrent merges
+
+**Finding:** the repo's root `index.html` has taken different forms during the parallel-session
+merge sequence (00a943bd's redirect to `docs/index.html`; 7f1ef378's full "Kalshi Demo Tracker"
+landing merged via PR #4 and again via PR #8 by `e2aacbd6`). During the churn, the live GitHub
+Pages CDN was observed still serving the redirect variant at `/` while `main`'s tree already held
+the full landing (observed 2026-11-20 ~11:36–11:38 UTC, Pages rebuilds in progress for commits
+9118f2e → 8d8d34f+).
+**Impact:** none blocking — both variants are functional sites and all subpages serve — but the
+owner should pick **one** canonical landing during final review so the sequence of merges ends in a
+stable state.
+**Evidence:** `git show <commit>:index.html` across fa07dd6 (PR #4), 75dac00 (PR #8); live fetches
+of `https://karagemop466-tech.github.io/Demo3/` returning `docs/index.html` content while Pages
+rebuilds were queued; Pages API builds list.
+
 ## Cross-references
 
 - Site's Flagged page (deployed): https://karagemop466-tech.github.io/Demo3/docs/flagged.html — items I-01…I-10, unverified list (7), by session 00a943bd.
