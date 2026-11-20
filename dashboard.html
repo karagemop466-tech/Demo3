@@ -108,11 +108,38 @@ if the browser blocks the request the tables fall back to the snapshot links in
   <div id="strategyBody"></div>
 </div>
 
+<div class="card">
+  <h2>6 · Price-swing alerts &mdash; scrolling chat (&ge; $0.10)</h2>
+  <p class="small muted">Live alerts for contract price swings of <strong>&ge; $0.10 in either direction</strong>,
+     detected from the dashboard's live market samples (GET /markets, demo API, no key). Two scrolling chats:
+     <em>All events</em> shows every swing; <em>High ROI model</em> shows a selective, labeled placeholder
+     heuristic (no real model is defined yet &mdash; flagged F-alert-01, never presented as verified ROI).
+     Each row links its exact market API URL and, in <em>Context</em>, the event's official <code>settlement_sources</code> (Get Event).
+     Those are resolution sources, not proof of cause: each row says "Cause not verified". Alerts persist in this browser only.</p>
+  <div class="alert-controls">
+    <label><input type="checkbox" id="alertsEnabled" checked> Alerts enabled</label>
+    <label><input type="checkbox" id="autoTrade" disabled> Automated paper trades on swing (paper/SIMULATED only)</label>
+    <button class="btn secondary" id="clearAlertsBtn">Clear alerts</button>
+    <span class="alert-pill" id="alertCount">0 alerts</span>
+  </div>
+  <div class="chat-tabs">
+    <button class="chat-tab active" id="tabAll" data-chat="all">All events</button>
+    <button class="chat-tab" id="tabROI" data-chat="roi">High ROI model</button>
+  </div>
+  <div class="chat-wrap" id="chatAll">
+    <div id="alertsAll"></div>
+  </div>
+  <div class="chat-wrap" id="chatROI" style="display:none">
+    <div id="alertsROI"></div>
+    <p class="small muted">High-ROI placeholder rule: swing &ge; $0.10 AND move &ge; 10% of prior price. Not a real model.</p>
+  </div>
+</div>
+
 </main>
 <footer class="wrap"><p class="small muted">Kalshi Demo Tracker — built from verified sources only. Demo environment
-(mock funds): <span class="mono">https://external-api.demo.kalshi.co/trade-api/v2</span> ·
-Docs: <a href="https://docs.kalshi.com" target="_blank" rel="noopener">docs.kalshi.com</a> ·
+(mock funds): <span class="mono">https://external-api.demo.kalshi.co/trade-api/v2</span> · Docs:
+<a href="https://docs.kalshi.com" target="_blank" rel="noopener">docs.kalshi.com</a> ·
 Every table row links its source; blank cells are flagged on <a href="flagged.html">Flagged for review</a>.</p></footer>
-<script src="assets/app.js"></script><script src="assets/trade.js"></script><script src="assets/dashboard.js"></script><script src="assets/site.js"></script>
+<script src="assets/app.js"></script><script src="assets/trade.js"></script><script src="assets/dashboard.js"></script><script src="assets/alerts.js"></script><script src="assets/site.js"></script>
 </body>
 </html>

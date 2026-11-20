@@ -1,0 +1,100 @@
+{
+ "ticker": "KXAAAGASW-26OCT26-4.2400",
+ "series_ticker": "KXAAAGASW",
+ "period_interval_minutes": 1440,
+ "request_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXAAAGASW/markets/KXAAAGASW-26OCT26-4.2400/candlesticks?start_ts=1790131200&end_ts=1792987140&period_interval=1440",
+ "retrieved_at_utc": "2026-11-20T19:40:00Z",
+ "doc": "https://docs.kalshi.com/api-reference/market/get-market-candlesticks",
+ "note": "Verbatim demo API response captured by the session page-fetch client (only fields used by the backtest are kept: end_period_ts, price.open/close/previous, volume_fp, yes_bid.close, yes_ask.close).",
+ "candlesticks": [
+  {
+   "end_period_ts": 1792468800,
+   "open_interest_fp": "0.00",
+   "price": {},
+   "volume_fp": "0.00",
+   "yes_ask": {
+    "close_dollars": "1.0000"
+   },
+   "yes_bid": {
+    "close_dollars": "0.6700"
+   }
+  },
+  {
+   "end_period_ts": 1792555200,
+   "open_interest_fp": "228617.96",
+   "price": {
+    "close_dollars": "0.0900",
+    "open_dollars": "0.6700"
+   },
+   "volume_fp": "392639.53",
+   "yes_ask": {
+    "close_dollars": "0.0900"
+   },
+   "yes_bid": {
+    "close_dollars": "0.0800"
+   }
+  },
+  {
+   "end_period_ts": 1792641600,
+   "open_interest_fp": "848126.06",
+   "price": {
+    "close_dollars": "0.1600",
+    "open_dollars": "0.0900",
+    "previous_dollars": "0.0900"
+   },
+   "volume_fp": "942631.29",
+   "yes_ask": {
+    "close_dollars": "0.1600"
+   },
+   "yes_bid": {
+    "close_dollars": "0.1500"
+   }
+  },
+  {
+   "end_period_ts": 1792728000,
+   "open_interest_fp": "848129.06",
+   "price": {
+    "close_dollars": "0.5700",
+    "open_dollars": "0.1600",
+    "previous_dollars": "0.1600"
+   },
+   "volume_fp": "5931.57",
+   "yes_ask": {
+    "close_dollars": "0.6000"
+   },
+   "yes_bid": {
+    "close_dollars": "0.5900"
+   }
+  },
+  {
+   "end_period_ts": 1792814400,
+   "open_interest_fp": "848613.74",
+   "price": {
+    "close_dollars": "0.7000",
+    "open_dollars": "0.6000",
+    "previous_dollars": "0.5700"
+   },
+   "volume_fp": "1024.80",
+   "yes_ask": {
+    "close_dollars": "0.9700"
+   },
+   "yes_bid": {
+    "close_dollars": "0.9600"
+   }
+  },
+  {
+   "end_period_ts": 1792900800,
+   "open_interest_fp": "848613.74",
+   "price": {
+    "previous_dollars": "0.7000"
+   },
+   "volume_fp": "0.00",
+   "yes_ask": {
+    "close_dollars": "1.0000"
+   },
+   "yes_bid": {
+    "close_dollars": "0.0000"
+   }
+  }
+ ]
+}

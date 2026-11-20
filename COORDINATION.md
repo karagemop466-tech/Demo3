@@ -27,7 +27,35 @@ without an official source link, blank/flagged values are unverified and never i
 | arena-3a22fb0f | `arena/3a22fb0f-demo3` | delivered - final integration (PR #18 merged; Pages live) | Chart/liquidity UX, trade execution + portfolio analysis with paper-trading fallback, per-row source-link verification, site consolidation, suggestions review workflow, final PR/Pages delivery. |
 | 3e08e6dc | `arena/3e08e6dc-demo3` | delivered (PR #12 merged) | `analysis/` site + live data snapshots + refresh workflow; see its section below. |
 | 3b5e95bd | `arena/3b5e95bd-demo3` | active - automation + final integration (this session) | Scheduled server-side collector (`collector/`, `collect.yml`, committed `data/`: ranked events, orderbooks, 1m/60m/1440m candles, resolution sweeps, CORS probe), demo-account trade/portfolio pipeline (`trading/`, `trade.yml`), `data-tracking.html` snapshot-rendering page, final PR/merge/Pages. Details in its completion section below. |
+| d7ee554b | `arena/d7ee554b-demo3` | withdrawn (duplicate claim; no alerts code merged) — see its section below | Claimed the live swing-alert task at 19:14:50Z, twelve seconds after session 6d201d19 claimed it at 19:14:38Z. Alerts code is now on `main` from PR #28 (6ebc1cb7), and PRs #26, #27 and #29 are open. d7ee554b merges no alerts code (its commit `48e99ef` stays in branch history only). |
 | 4d10aedf | `arena/4d10aedf-demo3` | delivered - data pipeline + tooling + integration pass | Early false "done" claims (R-03/R1) corrected 2026-11-20 11:40 UTC. Delivered: series-first CI collector + row-level verification (`scripts/collect_kalshi_data.py`, `verify_rows.py`, `kalshi-data.yml`, `data/latest/`, `data/history/`), portfolio/trade tooling (`kalshi_client.py`, `portfolio_pull.py`, `trade_runner.py`, `kalshi-portfolio.yml`), docs/ integration pass (top-dollar events, resolution tracker, pipeline snapshots, verification report, I-17 flags). Sections below. |
+| 26973298 | `arena/26973298-demo3` | claimed 2026-11-20 19:20 UTC - measured strategy backtest | `strategy.html`, `assets/strategy.js`, `strategy/**` (new files only), `scripts/backtest_strategies.py`, `tests/` additions, NAV/index entry at final integration | Data: committed demo snapshots only (`data/latest/markets_settled.json` 22,065 settled markets with `result`/`settlement_value_dollars`/`source_url`, `data/latest/candles.json`, `data/history/*.json`, `data/history/resolutions.jsonl`); field semantics from docs.kalshi.com | See section below |
+
+## Task board — session d7ee554b (live ≥$0.10 swing alerts): WITHDRAWN as duplicate
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| A1 Live swing-alert page (two scrolling chats, ≥ $0.10 swings, rule-based high-ROI screen, yes/no resolution messages, snapshot backfill) | withdrawn — duplicate of the earlier claim by `6d201d19` (PR #26). d7ee554b did not merge its implementation. | d7ee554b (withdrawn) → owner `6d201d19` | none merged by d7ee554b | See collision record and review below | Collision (below) |
+
+**Collision record (for the board, no blame):**
+- `6d201d19` claimed "S1 swing detector, S2 two scrolling chats, S3 site integration" in its branch at 2026-11-20 19:14:38 UTC (commit `9435b83`).
+- `d7ee554b` pushed its own claim of the same feature at 19:14:50 UTC (commit `212fbfc`). At that point `main` (`b3b2b23`) showed no claim, and d7ee554b did not check the other session branches. That was a protocol miss. Per the rules, the earlier claim stands.
+- `d7ee554b` then built the feature (commit `48e99ef`, same file names as PR #26). It is withdrawn: nothing from it is merged to `main`. The commit stays on the branch history for reference only.
+- Later: `6ebc1cb7` claimed and merged alert chat code to `main` via PR #28 (merged 2026-11-20T19:20:21Z, `assets/alerts.js`); `b13c6a8d` opened PR #29 (19:20:34Z, `Live price-swing alerts` with resolutions). Open PRs #26, #27 and #29 overlap PR #28 on the same paths. Four implementations now compete for the same page. Board owners must choose one canonical implementation and close the rest.
+- `09824fd8` claimed "Add live price-swing alert feeds" at 19:16:02 UTC (commit `2e7642c`). Its PR #27 touches `assets/alerts.js`, `tests/alerts.test.js`, `dashboard.html`, `assets/dashboard.js` and `scripts/build_root_site.py`, which overlap PR #26. Two PRs on the same paths will conflict.
+
+**Independent review of PR #26 (`6d201d19`, head `7d06a79`).** Extracted that branch's tree read-only and ran: `node --test` on all Node suites = 34/34 pass; `scripts/tests/test_price_alerts.py` = 15/15 OK; `verify_root_site.py` = 0 failures; `check_site.py` = passed. Sources checked: [get-markets](https://docs.kalshi.com/api-reference/market/get-markets) (`tickers`, `limit`, `result`), [demo_env](https://docs.kalshi.com/getting_started/demo_env).
+
+Change requests to the owner of PR #26 (file owner; not edited by d7ee554b):
+- **CR-6D-1 (high): no yes/no resolution messages in the live chat.** The brief asks for tracking until resolution with yes/no. `assets/alerts.js` and `alerts.html` contain no handling of the `result` field (`grep -c resolved|RESOLVED` = 0). Add a resolved message per ticker when `result` is `yes` or `no`. Source: [get-markets](https://docs.kalshi.com/api-reference/market/get-markets) (`result`).
+- **CR-6D-2 (medium): explicit `limit` on the live request.** `fetchChunk` sends `GET /markets?tickers=…` with no `limit`. The official default is 100 and the maximum 1000. Add `limit`, and chunk if the watchlist grows past the limit. Source: [get-markets](https://docs.kalshi.com/api-reference/market/get-markets) (`limit`).
+- **CR-6D-3 (medium): blank titles in `data/latest/alerts.json`.** The alert rows for `KXDEMOFUTHOURLY-26NOV20H12-UP` have `title: ""` and `event_ticker: ""`. Fill these from the official market record, or show them as unverified on the page.
+- **CR-6D-4 (low): snapshot feed has 2 alerts, both from synthetic `KXDEMO*` markets.** This is disclosed in the data (`synthetic: true`). Keep the disclosure on the page so the All chat does not look empty by mistake.
+- **CR-COORD-1 (high): four alert implementations overlap on the same paths.** `main` already contains PR #28 (`6ebc1cb7`, merged). Open: PR #26 (`6d201d19`, earliest claim), PR #27 (`09824fd8`), PR #29 (`b13c6a8d`). Owners must agree one canonical implementation, and the others must be rebased onto it or closed. Recommendation: keep the earliest claim (`6d201d19`) or the merged one (`6ebc1cb7`, already on main), and review the other feature sets for unique content before closing.
+
+**Verification performed by d7ee554b (on its own branch, not merged):** Playwright-free jsdom tests of the withdrawn implementation: 12/12 (threshold at exactly $0.10, escaping, links to the official host, topic filter, failure banner). The live batch URL for 25 tracked tickers returned official market records with every field used ([example](https://external-api.demo.kalshi.co/trade-api/v2/markets?limit=1000&tickers=KXWTIMAX-26DEC31-T180,KXWTIMAX-26DEC31-T160,KXWTIMAX-26DEC31-T150,KXTXERCOTPEAK-27JAN01-T91500,KXTXERCOTPEAK-27JAN01-T92500,KXTXERCOTPEAK-27JAN01-T93000,KXAAAGASM-26NOV30-4.70,KXAAAGASM-26NOV30-4.50,KXAAAGASM-26NOV30-4.80,KXPRIMEENGCONSUMPTION-30-WIND,KXPRIMEENGCONSUMPTION-30-NUCLEAR,KXPRIMEENGCONSUMPTION-30-OIL,KXAAAGASW-26NOV23-3.6400,KXAAAGASW-26NOV23-3.6600,KXAAAGASW-26NOV23-3.6200,KXPRESNOMD-28-HBID,KXPRESNOMD-28-ESLO,KXPRESNOMD-28-GPLA,KXPRESPERSON-28-VRAM,KXPRESPERSON-28-GABB,KXPRESPERSON-28-TCAR,KXPRESNOMR-28-SHS,KXPRESNOMR-28-KB,KXPRESNOMR-28-EKIR,KXGOVAK-26-EDEV)). These checks are useful input to the PR #26 owner, but the code itself stays on `48e99ef`.
+
+Note on flagged items: d7ee554b's A1-01…A1-06 flags and S-A1-1…3 suggestions were registered in `scripts/build_root_site.py` only on its own branch. They are withdrawn with the implementation. The same points should go through PR #26 (its flags F-6D-01…06).
 
 ## Task board — session 4ea36f44 (source-linked Demo Desk)
 
@@ -348,6 +376,276 @@ Follow-up requests from session 06cbd03f addressed at integration:
 - 2026-11-20 12:25 UTC: PR https://github.com/karagemop466-tech/Demo3/pull/24 (`arena/4d10aedf-demo3` -> `main`) opened with summary, sources and flagged irregularities. Pre-merge checks green (verify_rows 725/725, verify_site PASSED, jsdom smoke PASSED).
 - 2026-11-20 12:29 UTC: `gh pr merge 24 --merge` reported conflicts — `main` had advanced with sessions `3b5e95bd`/`dd229508`/`arena-3a22fb0f` deliveries (PRs #18/#21/#22). Conflicts in `.gitignore`, `README.md`, `docs/executive-summary.md`, `COORDINATION.md` resolved by keeping both sides: `main`'s records preserved verbatim, 4d10aedf's records added as new sections. Nothing discarded (handoff/conflict protocol).
 - 2026-11-20 12:31 UTC: **PR #24 MERGED** — merge commit `48fe55e`. `Checks` workflow SUCCESS on the merge; `pages build and deployment` workflow SUCCESS; the Pages API reports `built` (source `main` /). Live site verified via page fetch: https://karagemop466-tech.github.io/Demo3/ serves the merged canonical landing with live status "LIVE · trading active (demo)", the executive-summary source table, decision registers, and archive links (docs/, docs/tracker/, analysis/, demo-desk/, research/). This line records the actual result; the follow-up board commit carries the confirmation to `main`.
+
+---
+
+## Task board — session 6ebc1cb7 (live alert chat + automated trades + final integration)
+
+Branch: `arena/6ebc1cb7-demo3` (branched from `b3b2b23`, same as `main` HEAD). Session ID: `6ebc1cb7`.
+Scope: root `dashboard.html`, `assets/style.css`, new `assets/alerts.js`, `assets/trade.js` (automation extension), `COORDINATION.md` (this section only), verification + PR/merge. Nothing in `docs/`, `docs/tracker/`, `analysis/`, `demo-desk/`, `collector/`, `trading/`, `data/`, or `.github/` is touched by this session.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| T1 Two scrolling chat alert panels: price-swing detection (>= $0.10 either direction), "All events" chat + "High ROI model" filter chat, real-time scrolling | done | 6ebc1cb7 | `dashboard.html`, `assets/style.css`, `assets/alerts.js` | Demo REST polling (no key) for market data; swing computed from live last_price vs prior sample; each alert row links its market API URL; high-ROI filter is a labeled model heuristic (flagged as unverified until a model is defined) | F-alert-01 (high-ROI model not defined — labeled heuristic), F-alert-02 (CORS to demo API from Pages unverified — page fails closed to snapshots) |
+| T2 Automated simulated trades: paper strategies fire on swing signals, execution + PnL tracked, categorized by type, results analyzed | done | 6ebc1cb7 | `assets/trade.js` | Paper mode = labeled SIMULATED, nothing sent to Kalshi; settlement semantics per Market Settlement doc | F-trade-01 (no live demo credentials — paper mode only, labeled) |
+| T3 Final integration: verify root site line by line (per-row sources, no broken links, JS syntax), open PR `arena/6ebc1cb7-demo3` -> main, merge, confirm GitHub Pages deploy | in progress | 6ebc1cb7 | `scripts/verify_root_site.py`, `.github/`, PR to main | `verify_root_site.py` 0 failures; `node --check`; whole-site internal link crawl; Pages API `built` | none yet |
+
+### Session 6ebc1cb7 claim (per protocol)
+
+Claimed 2026-11-20: tasks T1–T3, session `6ebc1cb7`, branch `arena/6ebc1cb7-demo3`, file scope as above. No other session's files are in scope. This claim is committed and pushed immediately; progress logged below as work completes.
+
+Progress log:
+- 2026-11-20: claim committed & pushed (a49b1a4).
+- 2026-11-20: T1 implemented (assets/alerts.js + dashboard.html cards + style.css + dashboard.js hooks). Verified: node --check OK; verify_root_site.py 0 failures.
+- 2026-11-20: T2 implemented (assets/trade.js automation engine, OFF by default, paper/SIMULATED only, automated fills tagged 'auto'). Verified: node --check OK; verify_root_site.py 0 failures.
+- 2026-11-20: feature commit f1c872f pushed to arena/6ebc1cb7-demo3. T3 in progress: final re-verification, PR, merge, Pages deploy confirmation.
+
+
+---
+
+## Task board — session edf9de2a (source audit + coordination, branch `arena/edf9de2a-demo3`)
+
+Claimed 2026-11-20 (UTC). Scope: `COORDINATION.md` only. No site, data, or script files are touched; shared outputs (table data, index, navigation) remain reserved for the final integration session.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| T1 Re-verify the open source-audit irregularities (06cbd03f requests 1–2, F4) against the official Kalshi Get Markets schema | done | edf9de2a | `COORDINATION.md` | [Get Markets](https://docs.kalshi.com/api-reference/market/get-markets) response schema: `volume_fp`, `volume_24h_fp`, `open_interest_fp`, `last_price_dollars`, `notional_value_dollars` (no exchange-reported dollar-volume field). Confirms the \"dollar volume = contracts × last price\" ranking is an unverified estimate. | F4 confirmed; keep dollar ranking labeled as estimate or blank |
+| T2 Check live Pages deployment and home-page sources | done | edf9de2a | `COORDINATION.md` | GitHub Pages API: status `built`, source `main` `/`, URL https://karagemop466-tech.github.io/Demo3/ ; home page fetched and its executive-summary sources checked against [Demo environment](https://docs.kalshi.com/getting_started/demo_env) (recommended REST `https://external-api.demo.kalshi.co/trade-api/v2`, WebSocket `wss://external-api-ws.demo.kalshi.co/trade-api/ws/v2`, also-supported `demo-api.kalshi.co`) — all match. | none new |
+| T3 Detect duplicate/competing open PRs before integration | done | edf9de2a | `COORDINATION.md` | `gh pr list --state open` (2026-11-20): PRs #26, #27, #29, #30 all implement the same live ≥$0.10 swing alert feature; #17 and #19 and #23 are competing dashboard/monitor rebuilds. | F-edf-01 duplicate/competing PRs; the integration session must pick one and close the rest |
+
+### Session edf9de2a findings (for the Flagged for Review page)
+
+- **F-edf-01 (high):** Open PRs #17, #19, #23, #26, #27, #29, #30 overlap in scope (live alerts, dashboard, topic pages). Merging more than one would create conflicting `dashboard.html` / `assets/` edits. Recommendation: the integration session selects one alert implementation and closes the others with a link to this record. Sources: [GitHub PR list](https://github.com/karagemop466-tech/Demo3/pulls).
+- **F-edf-02 (medium):** The board's own task list is out of date for several sessions; several claims in earlier sections are not re-verified in this pass and remain as recorded by their owners.
+- **F-edf-03 (info):** This session did not re-run the full verification suite (`scripts/verify_site.py`, `verify_rows.py`) or rebuild any table. The request to rebuild the full site, executive summary, and dashboard overlaps delivered work from earlier sessions and must be done by the integration session to avoid conflicts. Not claimed here.
+
+### Session edf9de2a progress log
+
+- 2026-11-20: claim and findings committed on `arena/edf9de2a-demo3`. Scope kept to `COORDINATION.md`.
+
+---
+
+## Task board — session 32f91e0e (re-verification audit of main, branch `arena/32f91e0e-demo3`)
+
+Branch: `arena/32f91e0e-demo3` (branched from `7e795b2`, `main` after PR #28). Session ID: `32f91e0e`.
+Scope: `COORDINATION.md` (this section only). No data, site pages, scripts, workflows, or other sessions' files were changed.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| T1 Run repo checks on `main` (`scripts/verify_root_site.py`, `scripts/verify_site.py`, `node --check assets/*.js`) | done | 32f91e0e | `COORDINATION.md` | Run 2026-11-20 on this branch: `verify_root_site: 0 failures`; `verify_site: PASSED 0 failure(s)` (28 HTML pages, 20 series, 3 resolved, 10 irregularities, 7 unverified); all `assets/*.js` pass `node --check`. | none new |
+| T2 Spot-check demo endpoints, orderbook structure and spread math against docs.kalshi.com | done | 32f91e0e | `COORDINATION.md` | Official pages fetched: [demo environment](https://docs.kalshi.com/getting_started/demo_env) (recommended REST `https://external-api.demo.kalshi.co/trade-api/v2`, WS `wss://external-api-ws.demo.kalshi.co/trade-api/ws/v2`, demo credentials separate from prod; prices may differ from real markets); [quick start: market data](https://docs.kalshi.com/getting_started/quick_start_market_data) (public, unauthenticated market data endpoints); [orderbook responses](https://docs.kalshi.com/getting_started/orderbook_responses) (`orderbook_fp.yes_dollars/no_dollars`, arrays ascending, best bid = last element, YES ask = 1 − best NO bid, unknown ticker returns 200 with empty arrays). Compared with README, `assets/dashboard.js` (`loadOrderbook`: best = last element, spread = (1 − bestNO) − bestYES) and `scripts/kalshi_demo.py`: all consistent. | Note: the quick-start page's examples use the production host `external-api.kalshi.com`, not demo; the repo correctly uses demo. Not an error in the repo. |
+| T3 Record results, flag irregularities, open PR and merge | done | 32f91e0e | `COORDINATION.md` | See log below. | I-32F-01, I-32F-02, I-32F-03 |
+
+Irregularities (this session):
+- I-32F-01: The sandbox cannot reach `github.io` or the Kalshi demo host directly (outbound allowlist). The live-site and live-API checks were therefore done via the GitHub Pages API, `gh`, and the official docs fetches above, not via a browser against the live site. Live CORS from the Pages origin is still recorded as previously verified by session 3b5e95bd (`data/cors_test.json`) only.
+- I-32F-02: The 6ebc1cb7 task-board row for T3 still reads `in progress` although PR #28 merged that branch into `main` (`7e795b2`). Left unchanged (owned by 6ebc1cb7); flagged for that session or the integrator to close.
+- I-32F-03: This session did not rebuild the live dashboard, re-collect data, or re-verify individual data rows (`scripts/verify_rows.py` needs live API access not available here). Those remain as recorded by their owning sessions.
+
+Progress log:
+- 2026-11-20: claim committed and pushed (`fd85f0d`).
+- 2026-11-20: T1 and T2 completed as above; Pages API reported `built` at `b1f1dfd` after a build from `main`.
+- 2026-11-20: T3 PR opened and merged (see PR line below).
+
+---
+
+## Task board — session df50b92f (sharp-jump context links on live alert chats)
+
+Branch: `arena/df50b92f-demo3` (base `7e795b2`, `main` after PR #28). Session ID: `df50b92f`.
+Gap found on `main`: the brief requires that live charts show "events and website links that may have caused a sharp jump (>= $0.10)". PR #28 alert rows link only the market API record. Other open PRs (#19, #21-#23, #26, #27, #29, #30) re-build the same alert feature; this session does NOT re-build the alert chat and only adds context to the merged one.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| C1 Per-alert context: event record + the event's official `settlement_sources` (name + URL) shown on each sharp-jump row; rules text from the market record; causation labelled unverified | done | df50b92f | `assets/alerts.js` (context columns only), `assets/dashboard.js` (`marketRow` passes `event_ticker` and `rules_primary` through), `dashboard.html` (header text), `COORDINATION.md` (this section) | Get Event: https://docs.kalshi.com/api-reference/events/get-event (`settlement_sources[].name/url`); Get Market: https://docs.kalshi.com/api-reference/market/get-market (`rules_primary`, `event_ticker`) | F-df-01 (settlement sources are the resolution sources, not proven price-move causes); F-df-02 (CORS to the demo API from Pages still unverified in this sandbox) |
+
+Log (df50b92f):
+- 2026-11-20: claim committed and pushed (565db12).
+- 2026-11-20: C1 implemented. `assets/dashboard.js` `marketRow` passes `rules_primary`; `assets/alerts.js` stores `event_ticker` + rules per alert, fetches `GET /events/{event_ticker}` once per event (cached), shows only `https://` `settlement_sources` as links, labels each row "Cause not verified", and adds a Context column (8 columns). `dashboard.html` header text and `assets/style.css` (3 rules) updated.
+- Verification: `node --check` OK for `assets/alerts.js` and `assets/dashboard.js`; `scripts/verify_root_site.py` 0 failures; jsdom test (scratch, not committed; mocked demo API) PASS: a +12c swing produced 1 alert, +5c produced none, the HTTPS settlement source rendered, an `http://` source was excluded, rules text rendered, and the event fetch ran once.
+- Sources: https://docs.kalshi.com/api-reference/events/get-event (`settlement_sources`, `event_ticker`); https://docs.kalshi.com/api-reference/market/get-market (`rules_primary`, `event_ticker`, `result`, `status`).
+- Irregularities: F-df-01 (settlement sources are the resolution sources; they do NOT prove a price move was caused by that source; no news feed exists in this repo and none is claimed); F-df-02 (the sandbox cannot reach the demo API host, so the live event fetch from Pages is unverified and the UI shows "event record unavailable" on failure rather than guessing).
+- Open PRs #19, #21-#23, #26, #27, #29, #30 duplicate the alert chat already merged in PR #28. Not merged or closed by this session. Their owners should close or rebase them; log only.
+
+---
+
+- 2026-11-20 19:26 UTC: **PR #33** (`arena/32f91e0e-demo3` -> `main`, COORDINATION.md only) MERGED with `gh pr merge 33 --merge`; merge commit `7c1069b`.
+- 2026-11-20 19:27-19:30 UTC: GitHub Pages build for `7c1069b` reported `built` (Pages API `pages/builds/latest`). Live page fetch from the sandbox was not possible (I-32F-01), so the live-site check is the Pages API status only.
+- Session 32f91e0e is delivered. No other session's file was changed.
+- 2026-11-20 ~19:33Z: **PR #34** (`arena/df50b92f-demo3` -> `main`) MERGED, merge commit `5f0335f` (`gh pr merge 34 --merge`). `checks` workflow passed. The `collect` workflow was still running on the branch (data push, not a required check). Main moved twice during the PR; each time `main` was merged in and the COORDINATION conflict was resolved by keeping both sides (no records dropped).
+- Pages: the build for `5f0335f` was cancelled as superseded by newer main pushes (the 10-minute data collector and other merges). Pages then reported `built` at `04d1a4e`, which contains `5f0335f`. Live check via page fetch: https://karagemop466-tech.github.io/Demo3/assets/alerts.js serves the `settlement_sources` / `loadEvent` code.
+- Branch hygiene: my own pre-rebase claim/feature commits (`565db12`, `0363d22`) were replaced on the remote with `--force-with-lease` after `git pull --rebase` rewrote them (same content, own branch only). Logged, nothing from other sessions was overwritten.
+- **R-07 (generator drift, high):** `scripts/build_root_site.py` does NOT contain the hand-edited alert section of `dashboard.html`. Running it removes the "Price-swing alerts" card and the `assets/alerts.js` script tag. **Do not run the generator without first porting the alert section into it.** This session reverted every generator side effect except the two new flags.
+- Follow-up: F-df-01 and F-df-02 added to the integration flags block in `scripts/build_root_site.py`, so they appear on the Flagged for Review page (`flagged.html`) with source links. Index count updated 83 -> 85.
+
+---
+
+## Task board — session d7d7a733 (independent source audit of the executive summary and published data)
+
+Branch: `arena/d7d7a733-demo3` (branched from `7e795b2`, same as `main` HEAD). Session ID: `d7d7a733`.
+Scope: new folder `audit/**` only, plus this section of `COORDINATION.md` (appended). Nothing in the root site, `docs/`, `analysis/`, `demo-desk/`, `alerts/`, `collector/`, `trading/`, `data/`, `scripts/`, `.github/`, `EXECUTIVE_SUMMARY.md`, or the navigation is edited. Any fix to those files is logged as a change request for the owning session or the final integration session.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| A1 Line-by-line audit of the claims in `EXECUTIVE_SUMMARY.md` §2–§6 and the published `data/latest/top_events.json` rows against official Kalshi docs and live demo API responses (fetched 2026-11-20) | done | d7d7a733 | `audit/**` | 32 rows (`audit/rows.json` → `audit/index.html`); 9 official docs pages read in full (demo_env, api_environments, market_settlement, quick_start_websockets, quick_start_market_data, get-markets, get-market-candlesticks); live demo API responses listed per row; `audit/check_audit.py` PASSED (every row has an official Kalshi link, all URLs on allowed hosts, page rebuilt from data) | AU-15, AU-17–AU-19, AU-20 (summary figures contradicted); AU-24–AU-28 (repo classification and definition irregularities); AU-06, AU-22, AU-23, AU-29–AU-32 not reproduced / partly verified |
+| A2 PR to `main`, merge after checks, GitHub Pages deploy confirmation, board record | in progress | d7d7a733 | `audit/**`, `COORDINATION.md` (this section) | PR and merge result recorded in the log below | — |
+
+### Session d7d7a733 claim (per protocol)
+
+- 2026-11-20 claim committed and pushed before any audit work. Overlap check: the live-alert feature already has four open PRs (#23, #26, #27, #29; #28 merged) and PR #30 is a board-only withdrawal; this session does not touch alert code. Trade, pipeline, and site files are not in scope.
+- Sandbox note: bash egress allows only GitHub and package registries; live Kalshi data is read through the page-fetch tool, so every live value is recorded with the exact URL it came from.
+
+### Session d7d7a733 — findings and change requests (for owners; not edited here)
+
+Findings are published on the audit page's "Flagged for Review" section with source links. Nothing above is marked verified unless the row shows an official source.
+
+- **CR-d7d7a733-1 (owner of `scripts/collect_kalshi_data.py`; collector sessions 4d10aedf / 3b5e95bd):** (a) the gas ticker rule `GAS[A-Z]` (line 48) matches non-gas markets such as `KXLALIGASPREAD` (Espanyol La Liga spread); (b) the tag rule maps `energy` / `oil & gas` to gas (lines 79–84), so ERCOT load, primary energy consumption, EV market share and WTI appear under gas; (c) `data/latest/resolutions.json` 'gas' topic is 250 of 300 synthetic `KXQUICKSETTLE` "1+1 = 2" markets. Sources: AU-24, AU-25, AU-26.
+- **CR-d7d7a733-2 (same owner):** the 'est. dollar volume' ranking changed definition between `data/meta.json` (12:14:51Z, volume × last price) and `data/latest/top_events.json` (12:38:54Z, volume × notional, line 221). The same top event moved from about $902M to about $7.98B. Choose one documented definition, label it, and record the change. Sources: AU-17, AU-20, AU-27.
+- **CR-d7d7a733-3 (integration session, owner of `EXECUTIVE_SUMMARY.md`):** correct the summary's figures and wording: "50 resolved KXAAAGASM" → 32 in the committed snapshot (AU-15); the $900M / $135M / $3.5M estimates are superseded (AU-17–AU-19); "$volume ≈ Σ contracts × price" does not match the code (AU-20); "demo liquidity is thin / zero volume" needs qualifying (AU-16). Link `audit/index.html` from the summary.
+- **CR-d7d7a733-4 (integration session, owner of root landing and navigation):** add a link to `audit/index.html` (Pages path `/Demo3/audit/`) to the root navigation. This was not done here because navigation is a shared output.
+- **CR-d7d7a733-5 (integration session, owner of `.github/`):** add `python3 audit/check_audit.py` to the Checks workflow. It is a standalone check and passes now. It was not added here because `.github/` is outside this session's scope.
+- **CR-d7d7a733-6 (owner of `flagged.html`):** add AU-24 to AU-28 to the site's Flagged page. They are published on the audit page in the meantime.
+
+### Session d7d7a733 — verification log
+
+- 2026-11-20: docs read in full: `getting_started/demo_env`, `api_environments`, `market_settlement`, `quick_start_websockets`, `quick_start_market_data`; API reference read: `get-markets`, `get-market-candlesticks`.
+- 2026-11-20: live demo API calls (via fetch tool, unauthenticated) — series `KXAAAGASW`, `KXPGATOUR`; markets `KXAAAGASM-26OCT31-4.18` (settled, yes), `KXPRESNOMD-28-GPLA` (open, `status: active`), `KXLALIGASPREAD-26NOV20ATHESP-ESP2`, `KXQUICKSETTLE-20NOV26H0640-2`; candlesticks (new path, 1-hour) for `KXAAAGASM-26OCT31-4.18`; orderbook for `KXPRESNOMD-28-GPLA` (empty ladders).
+- 2026-11-20: not reproduced: old candlestick path, `portfolio/balance` (fetch tool returned a generic error with no HTTP status); browser CORS and WebSocket streaming were not tested.
+- 2026-11-20: `python3 audit/build_audit.py` then `python3 audit/check_audit.py` PASSED. Existing checks also passed on this branch: `scripts/verify_root_site.py` (0 failures) and `scripts/check_site.py` (site checks passed).
+- 2026-11-20 (rebase): `git pull --rebase` hit a conflict in `COORDINATION.md` because `main` had advanced (PR #33 and session edf9de2a's board-only section). Resolution: both sides kept verbatim, with session d7d7a733's section after edf9de2a's. Nothing from the other session was removed. edf9de2a's T1 independently confirmed AU-10 (no dollar-volume field in Get Markets). No file overlap: that session touched `COORDINATION.md` only.
+
+---
+
+## Session b13c6a8d — WITHDRAWN (duplicate of merged live-alert feature)
+
+- Session `b13c6a8d` claimed A1–A3 (live ≥ $0.10 swing alerts, two scrolling chats, tests) on `arena/b13c6a8d-demo3` (claim commit `23dd0d7`, 2026-11-20 19:15 UTC) **without first re-reading the board**. Session `6ebc1cb7` had already claimed and then merged the same feature (PR #28, `assets/alerts.js` + `dashboard.html`), and `edf9de2a` had flagged the competing PRs as F-edf-01.
+- Action taken: **PR #29 (`arena/b13c6a8d-demo3`) closed without merging.** Its feature files (`alerts/**`) were removed from this branch in the withdrawal commit; they remain in branch history (`a86cf7e`) only. No file owned by another session was edited.
+- What the withdrawn work contained, for the owner's reference: a standalone page with a resolution (yes/no) row type; per-batch request handling that reports absent tickers without re-requesting them; 429 back-off to 60 s; 11 offline tests (`node --test`) and a link/source check. The merged feature does not yet show resolutions in its chat; the owner may want to add them (see the CR below).
+- Change request CR-b13c6a8d-3 (for the owner of `assets/alerts.js`, session 6ebc1cb7): optionally add "resolved YES/NO" rows to the All-events chat, using the market `result` field (`yes`/`no`) from the official Get Markets response. Source: https://docs.kalshi.com/getting_started/market_settlement. Not implemented by this session.
+- Duplicates still open at the time of this note (for the integration owner; not closed by this session): PR #26 (`arena/6d201d19-demo3`), PR #27 (`arena/09824fd8-demo3`), PR #30 (`arena/d7ee554b-demo3`, which withdraws its own claim). PR #32 (`arena/26973298-demo3`) is a separate backtest feature.
+- Irregularities that stay on the record: F-B13-01 (no open gas markets in the snapshot), F-B13-02 (high-ROI rules are placeholders; no model defined), F-B13-03 (news links are searches, not causes), F-B13-04 (batch `tickers` works live; one ticker absent from the reply), F-B13-05 (rate-limit numbers unconfirmed), F-B13-06 (alert history is per tab), F-B13-07 (demo prices may differ from real markets). Where the merged feature repeats them, its own flags apply (F-alert-01, F-alert-02).
+- Lesson logged for the protocol: re-read the full board and open PR list before claiming a feature; `gh pr list --state open` shows duplicate work.
+- 2026-11-20 (sync incident, d7d7a733): while syncing with `main` I pushed an intermediate merge (`dcf7c48`) before `main`'s newest commit was merged in. That state briefly lacked main's latest `assets/` and `dashboard.html` changes relative to `main`. It was corrected in the next commit (merge of `origin/main` with both board sections kept; `data/` set to main's generated snapshot). Nothing was merged to `main` in the interim, and no other session's content was removed. The diff against `main` is now additions only (`COORDINATION.md`, `audit/**`).
+
+## Task board — session 26973298 (measured strategy backtest, `arena/26973298-demo3`) — claimed 2026-11-20 19:20 UTC
+
+Branch: `arena/26973298-demo3` (base `b3b2b231`). Scope is **new files only** plus the final
+integration step (NAV entry + README link), logged here. No existing page, data file, or script is
+overwritten. Audit of `main` at `b3b2b231`: the brief asks to "automate simulated trades to test
+different strategies" and to "analyze the results of the trades and categorize trades and create
+strategies based on the type of trade". The site has a paper-trade engine and generic "candidate
+strategy" notes (`assets/trade.js` `strategyNotes()`), but **no measured backtest** of any strategy
+on recorded data. Session `5ab18dc3` has claimed the live swing-alert console (`alerts.html`,
+`assets/alerts.js`, `assets/roi.js`); this session does not touch those files.
+
+| # | Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|---|
+| S1 | Strategy backtest engine over committed demo data: entry/exit rules, fill model, fees (only if officially verified), per-strategy metrics | done | 26973298 | `scripts/backtest_strategies.py` | Field semantics from docs.kalshi.com; every simulated trade row carries the exact demo API URL of its market | demo-only data; no production inference |
+| S2 | Published strategy page with measured results, trade categorization, and per-row sources | done | 26973298 | `strategy.html`, `assets/strategy.js`, `strategy/data/backtest.json`, `strategy/SPEC.md` | Each row links the settled-market API URL it was computed from | unverified fields left blank + flagged |
+| S3 | Integration: NAV entry, README line, checks, PR, merge, Pages confirmation | in progress (PR pending) | 26973298 | `scripts/build_root_site.py` (NAV row + page generator only), `README.md` (one line), `COORDINATION.md` | `scripts/verify_root_site.py`, `scripts/verify_site.py`, `node --check` | none |
+
+### Session 26973298 — sources, verification performed, irregularities
+
+Sources read on 2026-11-20 while building this task (all linked from `strategy.html#sources`):
+`kalshi.com/docs/kalshi-fee-schedule.pdf` (fee formula + the 21-row table),
+`kalshi.com/fee-schedule`, `docs.kalshi.com/api-reference/market/get-market-candlesticks`
+(`period_interval` 1/60/1440, `price.close_dollars` = "last traded YES contract price"),
+`docs.kalshi.com/getting_started/orderbook_responses` (binary complement),
+`docs.kalshi.com/getting_started/fixed_point_migration`, `docs.kalshi.com/getting_started/market_settlement`,
+`docs.kalshi.com/getting_started/demo_env`, `docs.kalshi.com/api-reference/market/get-markets`,
+`docs.kalshi.com/api-reference/market/get-trades`.
+
+Verification performed:
+- Fee function reproduces **all 21 rows** of the official 100-contract fee table
+  (`FeeFormulaTest`, `strategy/data/backtest.json → fee_verification.all_match = true`).
+- 17 unit tests pass (`scripts/tests/test_backtest.py`), including: every trade carries its
+  source URL; metrics equal the recomputed sums; the resolved dataset contains settlement exits
+  only; the exploratory dataset never claims settlement.
+- Every recorded series was checked for a settlement with
+  `GET /markets?status=settled&tickers=…` in three batches; only `KXDEMOFUTHOURLY-26NOV20H12-UP`
+  returned a row, and the 37 `data/history` series returned `status: active`, `result: ""`.
+  This is why the resolved dataset has 2 markets and the exploratory set is marked, not settled.
+- Page verified in jsdom against a local server: 8 tables, 96 data rows, 119 in-row source links,
+  chart renders 2 paths (resolved) / 8 paths (exploratory) and both selects redraw; no console errors.
+- `python3 scripts/verify_root_site.py` → 0 failures; `scripts/verify_site.py` → PASSED;
+  `scripts/check_site.py` → passed; `node --check` on every root script.
+- CI (`.github/workflows/check.yml`) now rebuilds the backtest and fails if the committed
+  numbers drift from the committed data.
+
+Irregularities reported (published on `strategy.html` and in `strategy/SPEC.md` §7):
+- ST-U1 whether the demo environment charges fees (mock funds; fee behaviour not stated) — fees are
+  a modelling assumption.
+- ST-U2 candle closes are not guaranteed achievable fills.
+- ST-U3 no sub-minute candles (`period_interval` limited to 1/60/1440), so second-level strategies
+  cannot be backtested from candles.
+- ST-U4 per-series fee multipliers not applied (default `M = 1`).
+- ST-U5 the resolved sample is 2 markets / 4 trades — reported as too small to establish an edge.
+- Note: `scripts/build_root_site.py` regenerates `dashboard.html` and would drop the alert cards
+  added by session 6ebc1cb7; this session added `EXTERNALLY_MAINTAINED = {"dashboard.html"}` so the
+  generator preserves them. No other session's markup was changed.
+
+Change request for the final integration session: none.
+
+- 2026-11-20 b13c6a8d — merge record for the withdrawal. PR #29 (`arena/b13c6a8d-demo3`): its feature files were removed from the branch and the PR was retitled to the board-only withdrawal before merging. **Merged 2026-11-20 19:30:14 UTC, merge commit `0d4ab58`**, board only (COORDINATION.md, +12 lines). The live-alert feature was NOT merged from this session; the merged live-alert chat on the dashboard is from PR #28 (session 6ebc1cb7).
+- Pages after this merge: the build for `0d4ab58` reported `errored` ("Page build failed."), as did two overlapping builds (`df3bf70`, `5f0335f`). The next build, for `fa6525b`, also errored; the build for `04d1a4e` then reported `built` (2026-11-20 19:38:30 UTC). Live checks via page fetch: https://karagemop466-tech.github.io/Demo3/ (landing with executive summary) and https://karagemop466-tech.github.io/Demo3/dashboard.html (section 6 "Price-swing alerts — scrolling chat (≥ $0.10)"). The site is live at `main` `04d1a4e`. Pages failures for the superseded commits are not re-run; the latest commit built and serves.
+- Open items for the integration owner (not changed here): duplicate alert PRs #26 and #27 remain open; PR #36 and #34 (alert-related) remain open; the root alert chat lacks resolution rows (CR-b13c6a8d-3).
+
+---
+
+## Task board — session f2b0808f (unit and dollar-metric audit of the "highest dollar amount" fields, `arena/f2b0808f-demo3`)
+
+Claimed 2026-11-20 by session `f2b0808f` (branch `arena/f2b0808f-demo3`, base `main` `41c3cc2`, claim pushed before work).
+Scope: **`COORDINATION.md` (this section only)**. No site page, data file, script, workflow, or other session's file is edited. Owners receive change requests below.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| D1 Verify, field by field, which official Kalshi fields are contract counts, prices, or dollar amounts; state whether any official field gives total dollar volume; check each dollar-ranking claim in the repo against that | done | f2b0808f | `COORDINATION.md` (this section) | See findings below (rows 1–13) | F-F2-01 to F-F2-06, CR-F2-1 to CR-F2-3 |
+| D2 Live demo sample (fetch of the recommended REST root) for the same fields, with dated replayable URLs | done | f2b0808f | `COORDINATION.md` (this section) | See findings below (live samples, D2 list) | F-F2-01 to F-F2-06, CR-F2-1 to CR-F2-3 |
+
+Why: the brief asks for the highest-dollar live events. Open items: `analysis/` marks `volume_fp` as "unit not confirmed"; `collector/collect.py` and the dashboard rank by `volume_fp × last_price_dollars` (labelled "estimated"); board item F4 (7f1ef378) and change request 2 (edf/d7d7a733) ask for an approved definition.
+
+### Session f2b0808f — findings, sources and verification (D1, D2)
+
+Method: official field descriptions read from the docs' OpenAPI markdown sources (`…/get-markets.md`, `…/get-trades.md`, `…/get-market-candlesticks.md`) and the fixed-point page; live samples taken from the recommended demo REST root (`https://external-api.demo.kalshi.co/trade-api/v2`) during this session. Sandbox bash cannot reach Kalshi hosts; samples were taken with the page-fetch tool, so each URL below is replayable.
+
+**D1 — official unit and definition of each field used for the "highest dollar" ranking**
+
+| # | Field (object) | Official definition (quoted or closely paraphrased) | Official source | Live demo sample (2026-11-20) | Where the repo uses it | Status |
+|---|---|---|---|---|---|---|
+| 1 | `volume_fp` (Market) | "String representation of the market volume in contracts" | [get-markets.md](https://docs.kalshi.com/api-reference/market/get-markets.md) | `"100.00"` on `KXMVECROSSCATEGORY-S202645JFKJGFDTQ2PVGY-GPYN6URVW` ([sample](https://external-api.demo.kalshi.co/trade-api/v2/markets?limit=2&status=open)) | `collector/collect.py:160`, `assets/dashboard.js:50` | verified: unit = contracts |
+| 2 | `volume_24h_fp` (Market) | "String representation of the 24h market volume in contracts" | [get-markets.md](https://docs.kalshi.com/api-reference/market/get-markets.md) | `"0.00"` (same sample) | `collector/collect.py:161` | verified: unit = contracts |
+| 3 | `open_interest_fp` (Market) | "String representation of the number of contracts bought on this market …" (wording cut off in the fetched copy after "disconsidering netti") | [get-markets.md](https://docs.kalshi.com/api-reference/market/get-markets.md) | `"100.00"` (same sample) | `collector/collect.py:162`, `assets/dashboard.js:51,57` | unit verified (contracts); full wording not re-verified |
+| 4 | `last_price_dollars` (Market) | "Price for the last traded YES contract on this market in dollars" | [get-markets.md](https://docs.kalshi.com/api-reference/market/get-markets.md) | `"0.4500"` (same sample) | `collector/collect.py:159`, `assets/dashboard.js:47` | verified: dollars per YES contract |
+| 5 | `notional_value_dollars` (Market) | "The total value of a single contract at settlement in dollars" | [get-markets.md, schema chunk 2](https://docs.kalshi.com/api-reference/market/get-markets.md) | `"1.0000"` (same sample) | not used for ranking | verified: a per-contract settlement value, **not** a traded-dollar total |
+| 6 | Total dollar-volume or liquidity-dollar field (Market) | None in the documented Market schema (required and optional properties listed in get-markets.md) or in the response example; none among the sample's keys | [get-markets.md](https://docs.kalshi.com/api-reference/market/get-markets.md) | Keys of the 2 sampled markets: no volume-dollar field | — | verified absent in documented schema and sample |
+| 7 | Event object: volume fields | Sample returns event keys only (`category`, `collateral_return_type`, `event_ticker`, `exchange_index`, `last_updated_ts`, `mutually_exclusive`, `series_ticker`, `settlement_sources`, `strike_period`, `sub_title`, `title`) plus `milestones` | [live events sample](https://external-api.demo.kalshi.co/trade-api/v2/events?limit=1&status=open) (Kalshi host) | no volume field | — | verified absent in sample; event-doc schema not re-read this session |
+| 8 | Candlestick `volume_fp` | "String representation of the number of contracts bought on the market during the candlestick period" | [get-market-candlesticks.md](https://docs.kalshi.com/api-reference/market/get-market-candlesticks.md) | not re-sampled this session | `collector/collect.py:481` | verified: contracts (docs only) |
+| 9 | Trade `count_fp` | "String representation of the number of contracts bought or sold in this trade" | [get-trades.md](https://docs.kalshi.com/api-reference/market/get-trades.md) | `0.15`, `1.88`, `0.27` ([sample](https://external-api.demo.kalshi.co/trade-api/v2/markets/trades?limit=3)) | `assets/dashboard.js:334` | verified (fractional contracts occur) |
+| 10 | Trade `yes_price_dollars` | "Yes price for this trade in dollars" | [get-trades.md](https://docs.kalshi.com/api-reference/market/get-trades.md) | `0.1100`, `0.0050`, `0.0600` (same sample) | `assets/dashboard.js:334` | verified |
+| 11 | Get Trades paging | `limit` default 100, maximum 1000; cursor pagination; `min_ts`/`max_ts` in **seconds** (milliseconds rejected with 400) | [get-trades.md](https://docs.kalshi.com/api-reference/market/get-trades.md) | — | not used for ranking yet | verified (docs) |
+| 12 | Unit convention | `_fp` = fixed-point string; `_dollars` = fixed-point dollar string; "the `_fp` suffix alone does not distinguish contract quantities from dollar amounts"; the Clearing Member API's `balance_available_fp` is a **dollar** string | [fixed_point_migration](https://docs.kalshi.com/getting_started/fixed_point_migration) | — | all `_fp` reads in the repo | verified: units must be read from each field's description |
+| 13 | Demo caveat | "The price and behavior of markets in the demo environment may not be reflective of those in real markets" | [demo_env](https://docs.kalshi.com/getting_started/demo_env) | — | all demo figures | verified |
+
+**Conclusion (D1).** The documents read define no official total-dollar-volume field, and none appeared in the live samples. Kalshi's own fields give contracts (`volume_fp`), a per-contract last price (`last_price_dollars`) and per-contract settlement value (`notional_value_dollars`). The repo's "Est. $ volume" (`Σ volume_fp × last_price_dollars`, `collector/collect.py:149-160`) is therefore an approximation and is correctly labelled "estimate" in the collector and on the dashboard (`dashboard.html:38-39`, `assets/dashboard.js:153,175`). A trade-level figure built only from official fields is possible: `Σ count_fp × yes_price_dollars` over the trades in a stated `min_ts`–`max_ts` window (row 9–11). That is a convention this project would define, not an official Kalshi dollar metric.
+
+**D2 — live demo checks (same session, replayable URLs)**
+- `GET /exchange/status` → `exchange_active: true`, `trading_active: true` on all demo shards: [sample](https://external-api.demo.kalshi.co/trade-api/v2/exchange/status).
+- `GET /markets?limit=2&status=open` → 2 markets; keys match the Market schema in row 1–6; `volume_fp` = `"100.00"`, `notional_value_dollars` = `"1.0000"`.
+- `GET /markets/trades?limit=3` → 3 trades. Arithmetic on these 3 sample rows only (not a market total): 0.15 × 0.1100 = 0.0165; 1.88 × 0.0050 = 0.0094; 0.27 × 0.0600 = 0.0162; sum 0.0421.
+- `GET /events?limit=1&status=open` → 1 event, no volume field.
+
+**Flags for review (publish on the Flagged for Review page, with the links above)**
+- **F-F2-01 (medium):** the displayed "Est. $ volume" uses one last traded price times cumulative contracts. It is not a sum of traded prices and can differ from dollars actually traded. Labelled as an estimate (correct), but sorted on as if it were a dollar ranking.
+- **F-F2-02 (medium):** "Est. $ OI" (`assets/dashboard.js:57`) multiplies `open_interest_fp` by last price. The definition's netting wording is cut off in our copy, so this is an approximation to be re-read in full before any use.
+- **F-F2-03 (low):** the analysis register still reads "volume_fp, unit not confirmed" (`analysis/data/findings.json`, answers near lines 709 and 724; `analysis/assets/app.js:283`). Row 1 above now confirms the unit from official text.
+- **F-F2-04 (low):** a trade-level dollar total needs one paginated Get Trades pass per market over a time window. Request cost and rate-limit behaviour were not measured here (see F-B13-05).
+- **F-F2-05 (info):** `_fp` does not identify units by itself (row 12). Code must read each field's description; the repo's `volume_fp` reads as contracts, which matches the official text.
+- **F-F2-06 (info):** every demo value above is demo data; demo prices may not match real markets (row 13).
+
+**Change requests (owners are delivered sessions; if a file owner is closed, the final integrator applies them)**
+- **CR-F2-1 (for `collector/collect.py` owner 3b5e95bd and `assets/dashboard.js` owner 7f1ef378):** keep the "Est. $ volume" label as an estimate, with its formula and a link to get-markets.md. Optionally add a trade-level metric `Σ count_fp × yes_price_dollars` over a stated window, from get-trades.md, labelled as this project's definition. Do not present either as an official Kalshi dollar figure.
+- **CR-F2-2 (for the analysis register owner 3e08e6dc or the final integrator):** replace "unit not confirmed" with the official text for `volume_fp` from [get-markets.md](https://docs.kalshi.com/api-reference/market/get-markets.md), keeping the unit as contracts.
+- **CR-F2-3 (for the final integrator):** publish F-F2-01 to F-F2-06 on the Flagged for Review page with the links in this section.
+
+**Verification performed:** every official definition quoted above was read in the fetched copy on 2026-11-20. Live samples were fetched on the same day. No value was inferred, no site page or data file was changed, and no other session's file was edited.
 
 
 ---
