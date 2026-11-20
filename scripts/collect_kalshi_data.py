@@ -67,6 +67,7 @@ CATEGORY_TOPIC = {
     "elections": "elections",
     "politics": "elections",   # taxonomy question Q-3 on the Questions page
     "entertainment": "culture",
+    "culture": "culture",
 }
 
 
