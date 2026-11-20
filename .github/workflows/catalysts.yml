@@ -40,7 +40,7 @@ concurrency:
 jobs:
   scan:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
@@ -56,15 +56,28 @@ jobs:
       - name: Record official endpoint statuses
         env:
           KALSHI_API_ROOT: https://external-api.demo.kalshi.co/trade-api/v2
+          CATALYST_TIMEOUT: '12'
+          CATALYST_RETRIES: '2'
+          CATALYST_DEADLINE_SECONDS: '180'
         run: python3 catalysts/scan.py --probe-endpoints --quiet
 
       - name: Probe the news-feed allowlist
+        env:
+          # A dead host must not eat the job: short timeout, no retry storms, and the
+          # scan publishes a partial, self-disclosed result if the budget is hit.
+          CATALYST_TIMEOUT: '10'
+          CATALYST_RETRIES: '1'
+          CATALYST_MIN_INTERVAL: '0.1'
+          CATALYST_DEADLINE_SECONDS: '240'
         run: python3 catalysts/scan.py --probe-feeds --quiet
 
       - name: Detect swings >= $0.10 and attach candidate catalyst links
         env:
           KALSHI_API_ROOT: https://external-api.demo.kalshi.co/trade-api/v2
           CATALYST_LOOKBACK_HOURS: ${{ github.event.inputs.lookback_hours || '168' }}
+          CATALYST_TIMEOUT: '12'
+          CATALYST_RETRIES: '2'
+          CATALYST_DEADLINE_SECONDS: '420'
         run: python3 catalysts/scan.py --quiet
 
       - name: Fail if the scan wrote an inconsistent ledger

@@ -61,6 +61,7 @@ import json
 import os
 import re
 import sys
+import time
 import urllib.error
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -85,6 +86,17 @@ DEFAULT_LOOKBACK_HOURS = 72
 DEFAULT_WINDOW_PRE_MIN = 180                # a link "may have caused" a jump only if
 DEFAULT_WINDOW_POST_MIN = 60                # published at/near the move
 USER_AGENT = "kalshi-demo-tracker/1.0 (catalyst scan; research use)"
+
+# Hard wall-clock budget so a scheduled run can never hang on a dead news host. When it
+# is reached the scan stops early, publishes what it verified, and says so in status.json
+# (partial data + disclosure beats a red X and an empty ledger).
+DEADLINE_SECONDS = float(os.environ.get("CATALYST_DEADLINE_SECONDS", "540"))
+_DEADLINE_END: list = [None]
+
+
+def past_deadline() -> bool:
+    end = _DEADLINE_END[0]
+    return bool(end) and time.time() > end
 
 DOCS = {
     "demo_env": "https://docs.kalshi.com/getting_started/demo_env",
@@ -190,10 +202,11 @@ def sha16(*parts) -> str:
 class Http:
     """Minimal urllib client with retry, backoff and per-run accounting."""
 
-    def __init__(self, timeout: float = 20.0, retries: int = 3, min_interval: float = 0.2,
-                 log=None):
+    def __init__(self, timeout: float = 20.0, retries: int | None = None,
+                 min_interval: float = 0.2, log=None):
         self.timeout = timeout
-        self.retries = max(1, retries)
+        self.retries = max(1, retries if retries is not None
+                          else int(os.environ.get("CATALYST_RETRIES", "3")))
         self.min_interval = min_interval
         self.log = log or (lambda m: None)
         self.requests = 0
@@ -684,6 +697,13 @@ def load_feeds(path: str) -> list[dict]:
 def fetch_feeds(http: Http, feeds: list[dict], log) -> tuple[list[dict], list[dict]]:
     items, health = [], []
     for feed in feeds:
+        if past_deadline():
+            health.append({"name": feed.get("name", ""), "url": feed.get("url", ""),
+                           "topics": feed.get("topics") or [], "items_parsed": 0,
+                           "http_status": None, "ok": False, "checked_at": now_iso(),
+                           "error": "skipped_deadline: the run hit its wall-clock budget "
+                                     "(CATALYST_DEADLINE_SECONDS) before reaching this feed"})
+            continue
         rec = {"name": feed.get("name", ""), "url": feed.get("url", ""),
                "topics": feed.get("topics") or [], "items_parsed": 0,
                "http_status": None, "ok": False, "error": "", "checked_at": now_iso()}
@@ -991,7 +1011,8 @@ def main(argv=None) -> int:
     out_health = os.path.join(data_dir, "feed_health.json")
     out_endpoints = os.path.join(data_dir, "endpoints.json")
 
-    http = Http(timeout=float(os.environ.get("CATALYST_TIMEOUT", "20")), log=log)
+    http = Http(timeout=float(os.environ.get("CATALYST_TIMEOUT", "20")),
+                retries=int(os.environ.get("CATALYST_RETRIES", "3")), log=log)
     mode = "offline"
     if not args.offline:
         # Reachability probe against the recommended demo root (exchange status needs
@@ -1065,7 +1086,7 @@ def main(argv=None) -> int:
     markets_by_ticker: dict[str, dict] = {}
     poll_errors: list[str] = []
 
-    if mode != "offline":
+    if mode != "offline" and not past_deadline():
         watch = set()
         top = read_json(os.path.join(repo, "data", "latest", "top_events.json"), {}) or {}
         for topic, events in (top.get("by_topic") or {}).items():
@@ -1170,7 +1191,7 @@ def main(argv=None) -> int:
         st = (s.get("series_ticker") or (mkt or {}).get("series_ticker")
               or ev_info.get("series_ticker") or "")
         st = st or derive_series(ev_ticker or s.get("event_ticker", ""))
-        if st and st not in series_cache:
+        if st and st not in series_cache and not past_deadline():
             series_cache[st] = (fetch_series(http, args.root, st, log) if mode != "offline"
                                 else {"series_ticker": st, "title": "", "category": "",
                                       "frequency": "", "settlement_sources": [],
@@ -1260,6 +1281,8 @@ def main(argv=None) -> int:
         "swings_total": len(merged),
         "swings_new": len(swings),
         "swings_with_catalyst_links": matched,
+        "deadline_seconds": DEADLINE_SECONDS,
+        "deadline_reached": past_deadline(),
         "feeds_ok": sum(1 for f in feed_health if f.get("ok")),
         "feeds_total": len(feed_health),
         "tracked_markets": len(tracked),
