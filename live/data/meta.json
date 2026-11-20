@@ -21,7 +21,7 @@
  },
  "counts": {
   "alerts": 204,
-  "alerts_high_roi": 40,
+  "alerts_high_roi": 38,
   "candle_markets": 46,
   "resolved_markets": 20052,
   "simulated_trades": 1472,
@@ -35,7 +35,7 @@
   "simulated_trade": "taker fills at the candle's quoted side price; exits at +$0.10, -$0.10, or resolution; $1 payout for the winning side per market settlement docs; fees not modelled",
   "swing_alert": "alert when |close(i) - close(i-w)| >= $0.10 (step) or (high - low) >= $0.10 in one candle (intrabar)"
  },
- "generated_at": "2026-11-20T19:32:05.025969+00:00",
+ "generated_at": "2026-11-20T19:37:32.070524+00:00",
  "largest_move_by_topic": {
   "crypto": {
    "abs_move": 0.01,
@@ -102,11 +102,11 @@
  "roi_min_ev": 0.03,
  "roi_min_roi_pct": 10.0,
  "snapshots": {
-  "events_retrieved_at": "2026-11-20T19:26:46+00:00",
+  "events_retrieved_at": "2026-11-20T19:27:37+00:00",
   "markets_open_count": 15139,
-  "markets_open_retrieved_at": "2026-11-20T19:26:46+00:00",
+  "markets_open_retrieved_at": "2026-11-20T19:27:37+00:00",
   "markets_settled_count": 22052,
-  "markets_settled_retrieved_at": "2026-11-20T19:26:46+00:00"
+  "markets_settled_retrieved_at": "2026-11-20T19:27:37+00:00"
  },
  "sources": {
   "api_environments": "https://docs.kalshi.com/getting_started/api_environments",
