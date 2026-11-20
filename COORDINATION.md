@@ -587,3 +587,47 @@ Change request for the final integration session: none.
 - 2026-11-20 b13c6a8d — merge record for the withdrawal. PR #29 (`arena/b13c6a8d-demo3`): its feature files were removed from the branch and the PR was retitled to the board-only withdrawal before merging. **Merged 2026-11-20 19:30:14 UTC, merge commit `0d4ab58`**, board only (COORDINATION.md, +12 lines). The live-alert feature was NOT merged from this session; the merged live-alert chat on the dashboard is from PR #28 (session 6ebc1cb7).
 - Pages after this merge: the build for `0d4ab58` reported `errored` ("Page build failed."), as did two overlapping builds (`df3bf70`, `5f0335f`). The next build, for `fa6525b`, also errored; the build for `04d1a4e` then reported `built` (2026-11-20 19:38:30 UTC). Live checks via page fetch: https://karagemop466-tech.github.io/Demo3/ (landing with executive summary) and https://karagemop466-tech.github.io/Demo3/dashboard.html (section 6 "Price-swing alerts — scrolling chat (≥ $0.10)"). The site is live at `main` `04d1a4e`. Pages failures for the superseded commits are not re-run; the latest commit built and serves.
 - Open items for the integration owner (not changed here): duplicate alert PRs #26 and #27 remain open; PR #36 and #34 (alert-related) remain open; the root alert chat lacks resolution rows (CR-b13c6a8d-3).
+
+---
+
+## Task board — session c75f4bf1 (chart swing events + sources; final integration)
+
+Branch: `arena/c75f4bf1-demo3`. Session ID: `c75f4bf1`. Base at session start: `7e795b2`;
+reconciled onto `main` `e2cfd3c` before final integration (see collision note).
+Scope: `assets/app.js` (additive chart annotations), `assets/dashboard.js` (chart swing caption +
+annotations), `dashboard.html` (`#swingCaption`), `flagged.html` (F-c75-03 row),
+`scripts/verify_root_site.py` (`alerts.js` in `node --check`), `COORDINATION.md` (this section).
+
+### Collision & reconciliation (important)
+- The brief's "live charts include events and website links that may have caused a sharp jump"
+  was implemented in **two overlapping ways**:
+  - **Session `df50b92f`** (merged, PR #45, commit `64d09ad`) already delivers the **alert-row**
+    event + official `settlement_sources` context (`assets/alerts.js` `contextCell`/`loadEvent`,
+    `KD.events` cache) and flags F-df-01/02.
+  - **Session `c75f4bf1`** (this session) first implemented the same alert-row linkage (C1) on top
+    of `7e795b2`. On discovering the overlap, this session **discarded its redundant C1** (reset to
+    `main`) and kept only the **non-redundant C2/C3**: a **chart-level** swing caption + chart
+    markers showing the swing events and their official source links (df50b92f did alert rows, not
+    the chart), plus verifier coverage for `alerts.js` and one complementary flag. Nothing from
+    df50b92f was discarded; no other session's file was overwritten.
+- Duplicate alert PRs #26/#27/#29 remain open (sessions `6d201d19`/`09824fd8`/`b13c6a8d`); #29 was
+  merged board-only (0d4ab58). This session does not merge those duplicates.
+
+| # | Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|------|--------|-------|-------------|------------------------|----------------|
+| C2 | Chart shows swing events + website links: caption under the price chart lists the selected market's recent >=$0.10 swings with event ticker + official source links; chart markers at swing points | done | c75f4bf1 | `assets/app.js`, `assets/dashboard.js`, `dashboard.html` | `drawPriceChart` additive `opts.annotations`; caption reads `window.KD.events[evt].sources` (the alerts cache). Live-verified source field: `settlement_sources:[{name,url}]` on `events?limit=1` (2026-11-20). [Get Event](https://docs.kalshi.com/api-reference/events/get-event), [Changelog](https://docs.kalshi.com/changelog) | F-c75-03 (caption depends on alerts event cache; fails closed, never inferred) |
+| C3 | Verifier coverage for `alerts.js` + one complementary flag | done | c75f4bf1 | `scripts/verify_root_site.py`, `flagged.html` | `alerts.js` added to `node --check`; F-c75-03 source-linked (complementary to F-df-01/02) | none |
+| C4 | Final integration: verify combined data line by line, PR to main, merge, confirm GitHub Pages deploy | in progress | c75f4bf1 | whole repo (shared files only by append) | all four verifiers + jsdom smoke + npm test | none yet |
+
+### Session c75f4bf1 — completion record (C2/C3)
+- **C2:** additive `opts.annotations` to `drawPriceChart` (swing markers); `swingAnnotations()` +
+  `renderSwingCaption()` in `dashboard.js` render a caption under the price chart listing the
+  selected market's recent >=$0.10 swings with the event ticker and official settlement-source
+  links, disclosed as "not asserted as the cause of the move".
+- **C3:** `assets/alerts.js` added to the verifier's `node --check` set; `flagged.html` row
+  F-c75-03 (chart caption depends on the alerts event cache; fails closed).
+- **Verification (all green, 2026-11-20):** `verify_root_site.py` 0 failures; `verify_site.py`
+  PASSED; `tracker_check.py` OK; `check_site.py` passed; `npm test` 26/26; jsdom smoke tests
+  (alerts + chart caption, adapted to `main`'s alerts API) passed; temp smoke scripts removed.
+- **No hallucination:** chart source links are the exchange-published official settlement sources;
+  no external "cause" link is fabricated. Every new table row carries an official source link.
