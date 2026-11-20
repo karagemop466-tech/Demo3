@@ -1217,3 +1217,32 @@ is recorded in this section.
 - Change request **CR-eb2af75b-2** (for the integration session, not done here): add a
   `series_ticker` key to `top_events.json` market rows in the collector so consumers do not need an
   extra API round-trip.
+
+### Session 7b47094a — merge and deployment record (2026-11-20 20:00–20:20 UTC)
+
+* **PR #60 merged into `main`** at 20:00:26 UTC, merge commit `75cc16d`
+  (https://github.com/karagemop466-tech/Demo3/pull/60). `git ls-tree -r origin/main` confirms the
+  delivered files: `assets/roi-model.js`, `model/build_roi_model.py`, `data/latest/roi_model.json`,
+  `requirements.html`, `model.html`, `tests/alerts_resolution.test.js`, `scripts/tests/test_roi_model.py`,
+  plus the regenerated root pages and `assets/alerts.js`.
+* Reconciliation with `5bc43641`'s PR #57 chat (already on `main`): one implementation, their
+  `roiModel` score column kept, the yes/no resolution watcher and the published screen added on top;
+  the ROI score cell now prints which rule admitted the row. Row links use the documented
+  `GET /markets/{ticker}` route (verified live 2026-11-20); the previous `/series/{s}/markets/{t}`
+  form is not a documented endpoint and is no longer emitted.
+* Re-verified on the merged branch: `node --test` 41/41 pass (main's suites + my 10 cases),
+  `python3 scripts/tests/test_roi_model.py` 8/8, `model/build_roi_model.py --check` OK against the
+  19:55Z snapshot, `verify_root_site.py` 0 failures, `verify_site.py` PASSED, `check_site.py` passed.
+* **GitHub Pages (measured through the Pages API, not inferred):** every build since 19:40 UTC reports
+  `errored — "Page build failed."`, and each build's `updated_at` equals the *next* build's
+  `created_at` (e.g. `75cc16d` created 20:00:28 → errored at 20:03:39 when `2430d9a` started). In other
+  words the builds are being superseded before they finish: this repo pushes to `main` on a 10-minute
+  collector schedule plus continuous session merges, so no build gets a quiet window. The build for
+  `2430d9a` (started 20:03:39) was still `building` 15+ minutes later with no newer push. Meanwhile the
+  live root site serves the last successful artefact — verified by fetch:
+  https://karagemop466-tech.github.io/Demo3/ renders the landing + executive summary + all five topic
+  links, while `/Demo3/model.html` and `/Demo3/requirements.html` (added by `75cc16d`) are not yet
+  deployed. Repo content checks out (374 files, 95 MB, no oversized or invalid-UTF-8 file), so this is
+  deployment starvation, not a broken page — recorded as **F-7b-08** for the owner, whose practical fix
+  is one quiet minute followed by `POST /repos/karagemop466-tech/Demo3/pages/builds`.
+* This follow-up PR is board-only (COORDINATION.md); it changes no site, data, script or workflow file.
