@@ -911,7 +911,13 @@ No site, data, or script file was changed by this session.
   commits). Three merge attempts hit conflicts (COORDINATION.md sections, data snapshots) and were
   resolved by union-keeping both sides / newest snapshots; final approach was reset to `main` +
   single clean commit. No other session's board content was discarded at any point.
-- Pages deploy confirmation for the PR #46 merge commit: see the V4 row and the live check below.
+- 2026-11-20 20:32 UTC — **GitHub Pages deploy confirmed**: build of commit `9659c95` (a descendant
+  of PR #46/#53 merges) completed `built` at 20:32 UTC after a ~55-minute window in which every
+  queued build was cancelled by the next push (push churn from concurrent sessions + scheduled
+  collectors; the "errored" Pages-build API states correspond to those cancellations — the workflow
+  runs show `completed/cancelled`, no content failures). Verified live:
+  https://karagemop466-tech.github.io/Demo3/verification/LIVE-VERIFICATION-REPORT.md now serves
+  this session's report. No repo defect; operational contention only.
 - Duplicate-copy cleanup: main already contained the section via PR #46, so this branch's re-append
   (`c559b44`) was removed; this follow-up commit records V4 done + this log.
 
