@@ -393,9 +393,9 @@ def consolidated_flags():
         [f"{DOCS}/api-reference/market/get-market", "https://news.kalshi.com/p/what-are-event-contracts"],
         "open", "6ebc1cb7 / 5125afd8")
     add("A-02", "Live alerts", "Alert causes are not available from the API",
-        "The alert feed shows that a price moved, not why. No cause or news link is shown, because "
-        "the Kalshi Trade API response carries no cause field and none was inferred. Per-alert links "
-        "go to the exact API record.",
+        "The alert feed shows that a price moved, not why. The Kalshi Trade API has no cause field, so no "
+        "cause is inferred. The 'Context' column lists the event's official settlement_sources (Get Event) "
+        "as resolution sources only, not as evidence of what moved the price. Per-alert links go to the exact API record.",
         [f"{DOCS}/api-reference/market/get-market"], "open", "5125afd8")
     add("A-03", "Live alerts", "Alerts sample REST once per scan, not a tick stream",
         "Moves are detected between dashboard scans (about every 20 s, scan depth set on the page). "
@@ -680,7 +680,8 @@ if the browser blocks the request the tables fall back to the snapshot links in
      detected from the dashboard's live market samples (GET /markets, demo API, no key). Two scrolling chats:
      <em>All events</em> shows every swing; <em>High ROI model</em> shows a selective, labeled placeholder
      heuristic (no real model is defined yet &mdash; flagged F-alert-01, never presented as verified ROI).
-     Each row links its exact market API URL. Alerts persist in this browser only.</p>
+     Each row links its exact market API URL and, in <em>Context</em>, the event's official <code>settlement_sources</code> (Get Event).
+     Those are resolution sources, not proof of cause: each row says "Cause not verified". Alerts persist in this browser only.</p>
   <div class="alert-controls">
     <label><input type="checkbox" id="alertsEnabled" checked> Alerts enabled</label>
     <label><input type="checkbox" id="autoTrade" disabled> Automated paper trades on swing (paper/SIMULATED only)</label>
@@ -699,7 +700,6 @@ if the browser blocks the request the tables fall back to the snapshot links in
     <p class="small muted">High-ROI placeholder rule: swing &ge; $0.10, price 5&cent;&ndash;95&cent;, traded and open contracts &gt; 0. Not a real model (flagged F-alert-01).</p>
   </div>
 </div>
-
 """
     write_page("dashboard.html", "Live dashboard", "dashboard.html", body,
                scripts=("assets/app.js", "assets/trade.js", "assets/dashboard.js", "assets/alerts.js", "assets/site.js"))

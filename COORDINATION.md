@@ -445,9 +445,43 @@ Progress log:
 - 2026-11-20: claim committed and pushed (`fd85f0d`).
 - 2026-11-20: T1 and T2 completed as above; Pages API reported `built` at `b1f1dfd` after a build from `main`.
 - 2026-11-20: T3 PR opened and merged (see PR line below).
+
+---
+
+## Task board — session df50b92f (sharp-jump context links on live alert chats)
+
+Branch: `arena/df50b92f-demo3` (base `7e795b2`, `main` after PR #28). Session ID: `df50b92f`.
+Gap found on `main`: the brief requires that live charts show "events and website links that may have caused a sharp jump (>= $0.10)". PR #28 alert rows link only the market API record. Other open PRs (#19, #21-#23, #26, #27, #29, #30) re-build the same alert feature; this session does NOT re-build the alert chat and only adds context to the merged one.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| C1 Per-alert context: event record + the event's official `settlement_sources` (name + URL) shown on each sharp-jump row; rules text from the market record; causation labelled unverified | done | df50b92f | `assets/alerts.js` (context columns only), `assets/dashboard.js` (`marketRow` passes `event_ticker` and `rules_primary` through), `dashboard.html` (header text), `COORDINATION.md` (this section) | Get Event: https://docs.kalshi.com/api-reference/events/get-event (`settlement_sources[].name/url`); Get Market: https://docs.kalshi.com/api-reference/market/get-market (`rules_primary`, `event_ticker`) | F-df-01 (settlement sources are the resolution sources, not proven price-move causes); F-df-02 (CORS to the demo API from Pages still unverified in this sandbox) |
+
+Log (df50b92f):
+- 2026-11-20: claim committed and pushed (565db12).
+- 2026-11-20: C1 implemented. `assets/dashboard.js` `marketRow` passes `rules_primary`; `assets/alerts.js` stores `event_ticker` + rules per alert, fetches `GET /events/{event_ticker}` once per event (cached), shows only `https://` `settlement_sources` as links, labels each row "Cause not verified", and adds a Context column (8 columns). `dashboard.html` header text and `assets/style.css` (3 rules) updated.
+- Verification: `node --check` OK for `assets/alerts.js` and `assets/dashboard.js`; `scripts/verify_root_site.py` 0 failures; jsdom test (scratch, not committed; mocked demo API) PASS: a +12c swing produced 1 alert, +5c produced none, the HTTPS settlement source rendered, an `http://` source was excluded, rules text rendered, and the event fetch ran once.
+- Sources: https://docs.kalshi.com/api-reference/events/get-event (`settlement_sources`, `event_ticker`); https://docs.kalshi.com/api-reference/market/get-market (`rules_primary`, `event_ticker`, `result`, `status`).
+- Irregularities: F-df-01 (settlement sources are the resolution sources; they do NOT prove a price move was caused by that source; no news feed exists in this repo and none is claimed); F-df-02 (the sandbox cannot reach the demo API host, so the live event fetch from Pages is unverified and the UI shows "event record unavailable" on failure rather than guessing).
+- Open PRs #19, #21-#23, #26, #27, #29, #30 duplicate the alert chat already merged in PR #28. Not merged or closed by this session. Their owners should close or rebase them; log only.
+
+---
+
 - 2026-11-20 19:26 UTC: **PR #33** (`arena/32f91e0e-demo3` -> `main`, COORDINATION.md only) MERGED with `gh pr merge 33 --merge`; merge commit `7c1069b`.
 - 2026-11-20 19:27-19:30 UTC: GitHub Pages build for `7c1069b` reported `built` (Pages API `pages/builds/latest`). Live page fetch from the sandbox was not possible (I-32F-01), so the live-site check is the Pages API status only.
 - Session 32f91e0e is delivered. No other session's file was changed.
+
+---
+
+## Session b13c6a8d — WITHDRAWN (duplicate of merged live-alert feature)
+
+- Session `b13c6a8d` claimed A1–A3 (live ≥ $0.10 swing alerts, two scrolling chats, tests) on `arena/b13c6a8d-demo3` (claim commit `23dd0d7`, 2026-11-20 19:15 UTC) **without first re-reading the board**. Session `6ebc1cb7` had already claimed and then merged the same feature (PR #28, `assets/alerts.js` + `dashboard.html`), and `edf9de2a` had flagged the competing PRs as F-edf-01.
+- Action taken: **PR #29 (`arena/b13c6a8d-demo3`) closed without merging.** Its feature files (`alerts/**`) were removed from this branch in the withdrawal commit; they remain in branch history (`a86cf7e`) only. No file owned by another session was edited.
+- What the withdrawn work contained, for the owner's reference: a standalone page with a resolution (yes/no) row type; per-batch request handling that reports absent tickers without re-requesting them; 429 back-off to 60 s; 11 offline tests (`node --test`) and a link/source check. The merged feature does not yet show resolutions in its chat; the owner may want to add them (see the CR below).
+- Change request CR-b13c6a8d-3 (for the owner of `assets/alerts.js`, session 6ebc1cb7): optionally add "resolved YES/NO" rows to the All-events chat, using the market `result` field (`yes`/`no`) from the official Get Markets response. Source: https://docs.kalshi.com/getting_started/market_settlement. Not implemented by this session.
+- Duplicates still open at the time of this note (for the integration owner; not closed by this session): PR #26 (`arena/6d201d19-demo3`), PR #27 (`arena/09824fd8-demo3`), PR #30 (`arena/d7ee554b-demo3`, which withdraws its own claim). PR #32 (`arena/26973298-demo3`) is a separate backtest feature.
+- Irregularities that stay on the record: F-B13-01 (no open gas markets in the snapshot), F-B13-02 (high-ROI rules are placeholders; no model defined), F-B13-03 (news links are searches, not causes), F-B13-04 (batch `tickers` works live; one ticker absent from the reply), F-B13-05 (rate-limit numbers unconfirmed), F-B13-06 (alert history is per tab), F-B13-07 (demo prices may differ from real markets). Where the merged feature repeats them, its own flags apply (F-alert-01, F-alert-02).
+- Lesson logged for the protocol: re-read the full board and open PR list before claiming a feature; `gh pr list --state open` shows duplicate work.
 
 ## Task board — session 5125afd8 (review + fixes for the live swing-alert chat)
 

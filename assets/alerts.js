@@ -50,12 +50,12 @@
   }
   // Official Get Market endpoint: GET /markets/{ticker}
   // (https://docs.kalshi.com/api-reference/market/get-market). The series-scoped path
-  // /series/{s}/markets/{t} is the candlestick route and returns an error for this record.
+  // /series/{s}/markets/{t} is the candlestick route and returned an error for this record.
   function apiUrl(ticker) {
     return "https://external-api.demo.kalshi.co/trade-api/v2/markets/" + encodeURIComponent(ticker);
   }
-  // Float-safe rounding: 0.6 - 0.5 evaluates to 0.09999999999999998 in IEEE doubles, which would
-  // silently drop an exact $0.10 swing. Round to 4 decimals (the API's dollar precision).
+  // Float-safe rounding: 0.6 - 0.5 is 0.09999999999999998 in IEEE doubles, which would drop an
+  // exact $0.10 swing. Round to 4 decimals (the API's dollar precision).
   function round4(x) { return Math.round(Number(x) * 10000) / 10000; }
 
   /* ---------- swing detection ---------- */
@@ -67,8 +67,9 @@
     if (prev && prev.price !== null && prev.price !== undefined) {
       var change = round4(cur - prev.price);
       if (Math.abs(change) >= SWING) {
-        pushAlert(m.ticker, m.title, m.topic, m.series_ticker, prev.price, cur,
+        var a = pushAlert(m.ticker, m.title, m.topic, m.series_ticker, prev.price, cur,
           { vol: m.vol, oi: m.oi });
+        if (a) { a.event = m.event_ticker || ""; a.rules = m.rules_primary || ""; persist(); loadEvent(a.event); }
       }
     }
     state.lastPrice[m.ticker] = { price: cur, ts: sample.t };
@@ -100,20 +101,75 @@
       dir: dir,
       api: apiUrl(ticker)
     };
+    // High-ROI placeholder heuristic: swing >= $0.10 AND the move is at least 10%
+    // of the prior price. NOT a real model — labeled, unverified, flagged F-alert-01.
     // High-ROI PLACEHOLDER heuristic (NOT a real model; flagged F-alert-01): swing >= $0.10,
-    // price between $0.05 and $0.95 (not pinned at the extremes), and traded and open contracts
-    // > 0 (volume_fp, open_interest_fp from the official Get Market record). A 10%-of-price test
-    // was dropped: with prices capped at $1 it is always true for a $0.10 swing, so it filtered nothing.
+    // price between $0.05 and $0.95, and traded and open contracts > 0 (volume_fp, open_interest_fp
+    // from the official Get Market record). The earlier "move >= 10% of prior price" test was always
+    // true for a $0.10 swing (prices are capped at $1), so it filtered nothing.
     var liqOk = !!liq && Number(liq.vol) > 0 && Number(liq.oi) > 0;
-    alert.roiSignal = Math.abs(change) >= SWING && newP >= ROI_MIN_PRICE && newP <= ROI_MAX_PRICE && liqOk;
+    alert.roiSignal = Math.abs(change) >= SWING && Number(newP) >= ROI_MIN_PRICE &&
+      Number(newP) <= ROI_MAX_PRICE && liqOk;
     state.alerts.unshift(alert);
     if (state.alerts.length > MAX_ALERTS) state.alerts.length = MAX_ALERTS;
-    try { localStorage.setItem(ALERT_KEY, JSON.stringify(state.alerts)); } catch (e) {}
+    persist();
     render();
     if (window.KalshiTrade && window.KalshiTrade.onSwingAlert) {
       try { window.KalshiTrade.onSwingAlert(alert); } catch (e) { /* automation must not break alerts */ }
     }
     return alert;
+  }
+
+  function persist() {
+    try { localStorage.setItem(ALERT_KEY, JSON.stringify(state.alerts)); } catch (e) {}
+  }
+
+  /* ---------- sharp-jump context: official event record ----------
+   * GET /events/{event_ticker} (Get Event) returns settlement_sources[{name,url}]:
+   * the sources the exchange uses to resolve the event. These are shown as
+   * context links only. They do NOT prove what caused a price move.
+   * Source: https://docs.kalshi.com/api-reference/events/get-event
+   */
+  KD.events = {};                   // event_ticker -> {status, sources, title, api}
+  function loadEvent(evt) {
+    if (!evt || KD.events[evt]) return;
+    KD.events[evt] = { status: "loading", sources: [], title: "", api: eventUrl(evt) };
+    fetch(eventUrl(evt), { headers: { Accept: "application/json" } })
+      .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+      .then(function (j) {
+        var ev = j.event || {};
+        KD.events[evt] = {
+          status: "ok", title: ev.title || "", api: eventUrl(evt),
+          sources: (ev.settlement_sources || []).filter(function (s) {
+            return s && typeof s.url === "string" && /^https:\/\//.test(s.url);
+          })
+        };
+        render();
+      })
+      .catch(function () {
+        KD.events[evt] = { status: "error", sources: [], title: "", api: eventUrl(evt) };
+        render();
+      });
+  }
+  function eventUrl(evt) {
+    return "https://external-api.demo.kalshi.co/trade-api/v2/events/" + encodeURIComponent(evt);
+  }
+  function contextCell(a) {
+    if (!a.event) return "<span class='muted small'>event not recorded (older alert)</span>";
+    var ev = KD.events[a.event];
+    var out = "<a class='src' href='" + esc(eventUrl(a.event)) + "' target='_blank' rel='noopener'>event API</a>";
+    if (!ev || ev.status === "loading") return out + " <span class='muted small'>loading settlement sources&hellip;</span>";
+    if (ev.status === "error") return out + " <span class='muted small'>event record unavailable (browser/API blocked) &mdash; not inferred</span>";
+    if (!ev.sources.length) return out + " <span class='muted small'>API lists no settlement sources</span>";
+    out += ev.sources.map(function (s) {
+      return " <a class='src' href='" + esc(s.url) + "' target='_blank' rel='noopener'>" + esc(s.name || s.url) + "</a>";
+    }).join("");
+    return out;
+  }
+  function rulesCell(a) {
+    if (!a.rules) return "";
+    return "<details class='rules'><summary class='small'>rules (Get Market rules_primary)</summary><div class='small'>" +
+      esc(a.rules) + "</div></details>";
   }
 
   /* ---------- chat row selection ---------- */
@@ -139,15 +195,16 @@
       "<td>" + esc(a.title) + "</td>" +
       "<td class='num'>" + cents(a.oldPrice) + " &rarr; " + cents(a.newPrice) + "</td>" +
       "<td class='num " + esc(dirLabel) + "'>" + arrow + " " + cents(Math.abs(a.change)) + "</td>" +
-      "<td><a class='src' href='" + esc(a.api) + "' target='_blank' rel='noopener'>market API</a>" + esc(roiBadge) + "</td></tr>";
+      "<td><a class='src' href='" + esc(a.api) + "' target='_blank' rel='noopener'>market API</a>" + esc(roiBadge) + "</td>" +
+      "<td class='ctx'>" + contextCell(a) + "<div class='small muted'>Cause not verified: a listed source is not proof that it moved the price.</div>" + rulesCell(a) + "</td></tr>";
   }
   function renderPanel(el, rows, label, emptyHint) {
     if (!el) return;
     var rowsHtml = rows.map(alertRow).join("");
-    var empty = rows.length ? "" : "<tr><td colspan='7' class='muted'>No " + label + " swing alerts yet. " + emptyHint + "</td></tr>";
+    var empty = rows.length ? "" : "<tr><td colspan='8' class='muted'>No " + label + " swing alerts yet. " + emptyHint + "</td></tr>";
     el.innerHTML =
       "<table class='alerts'><thead><tr><th>Time</th><th>Topic</th><th>Ticker</th><th>Event</th>" +
-      "<th>Price move</th><th>Swing</th><th>Source</th></tr></thead><tbody>" + rowsHtml + empty + "</tbody></table>";
+      "<th>Price move</th><th>Swing</th><th>Source</th><th>Context (official links)</th></tr></thead><tbody>" + rowsHtml + empty + "</tbody></table>";
   }
   function render() {
     renderPanel(document.getElementById("alertsAll"), KD.allRows(), "all",
