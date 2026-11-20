@@ -1,0 +1,233 @@
+{
+  "_meta": {
+    "title": "Kalshi demo Trade API — verified snapshot",
+    "purpose": "Offline fallback + evidence base for the Demo3 site. Every value below was read directly from a live Kalshi endpoint or an official Kalshi documentation page during this session. Nothing is inferred, rounded, or filled in.",
+    "environment": "Kalshi demo",
+    "rest_base_url": "https://external-api.demo.kalshi.co/trade-api/v2",
+    "websocket_url": "wss://external-api-ws.demo.kalshi.co/trade-api/ws/v2",
+    "collected_by": "Arena agent session arena-b2e728ab",
+    "collected_at_utc": "2026-11-20T11:11Z to 2026-11-20T11:20Z",
+    "collection_method": "HTTP GET via the agent's fetch tool (sandbox egress to *.kalshi.co is blocked for direct sockets; see COORDINATION.md activity log)",
+    "api_spec_version_reported_by_docs": "3.37.0",
+    "rules": [
+      "A field is present only if it appeared verbatim in the cited response.",
+      "Blank means unverified — never substituted with an estimate.",
+      "Derived values are labelled in a sibling key suffixed with _note."
+    ]
+  },
+  "exchange_status": {
+    "source": "https://external-api.demo.kalshi.co/trade-api/v2/exchange/status",
+    "observed_at_utc": "2026-11-20T11:20Z",
+    "exchange_active": true,
+    "trading_active": true,
+    "intra_exchange_transfers_active": true,
+    "shards": [
+      { "exchange_index": 0, "description": "Default", "exchange_active": true, "trading_active": true, "intra_exchange_transfers_active": true },
+      { "exchange_index": 1, "description": "Demo shard 1", "exchange_active": true, "trading_active": true, "intra_exchange_transfers_active": true },
+      { "exchange_index": 2, "description": "Demo shard 2", "exchange_active": true, "trading_active": true, "intra_exchange_transfers_active": true },
+      { "exchange_index": 3, "description": "", "exchange_active": true, "trading_active": true, "intra_exchange_transfers_active": true }
+    ]
+  },
+  "categories": {
+    "source": "https://external-api.demo.kalshi.co/trade-api/v2/search/tags_by_categories",
+    "observed_at_utc": "2026-11-20T11:20Z",
+    "doc": "https://docs.kalshi.com/api-reference/search/get-tags-for-series-categories.md",
+    "note": "Returned verbatim. null means the category exists but publishes no tags.",
+    "tags_by_categories": {
+      "AI": null,
+      "Business": null,
+      "Climate and Weather": ["Snow and rain", "Daily temperature", "Rain", "Ski Resorts", "Natural disasters", "Snow", "Events", "Climate change", "Hurricanes", "Cold", "Degree days"],
+      "Commodities": ["Metals", "Oil & Gas", "Tech", "Tokens", "Aluminum", "Compute", "Gold", "Industrial Metals", "Precious Metals"],
+      "Companies": ["Elon Musk", "CEOs", "KPIs", "Product launches"],
+      "Crypto": ["BTC", "15 min", "Hourly", "ETH", "SOL", "Crypto", "Bitcoin", "DOGE", "BNB", "HYPE", "XRP", "ZEC", "Ethereum", "Pre-Market", "NEAR", "Shiba Inu", "Solana", "NEAR Protocol", "Zcash"],
+      "Economics": ["Jobs & Economy", "Oil and energy", "Growth", "Inflation", "Econ Daily", "Housing", "Global Central Banks", "Fed", "Econ Weekly", "GDP", "Interest rates", "International"],
+      "Elections": ["International elections", "US Elections", "State legislatures", "Senate", "2028", "Governor", "House", "Election Combos", "Other US Elections", "Primaries", "Leadership races", "Mexico", "Nomination race", "Who runs", "Mayors & local", "Mixed Combos", "Senate Combos", "Statewide offices", "Presidential winner", "Spain & Italy", "House Combos", "Referendums", "Rest of Europe", "Brazil", "East Asia", "Germany & France", "House control", "Africa & Middle East", "Canada", "Democratic primaries", "Governor Combos", "Peru", "President by state", "Senate nominees", "Governor nominees", "Governor races", "Republican primaries"],
+      "Entertainment": ["Music", "Awards", "People", "Television", "Movies", "Critics Choice Awards", "Oscars", "Music charts", "Video games", "Live Music", "Reality TV", "Collectibles", "Music Industry", "Views", "Achievements", "Art", "TV Charts", "Grammys", "Movie Charts", "New Music", "Dancing with the Stars", "Food", "Rotten Tomatoes", "Golden Globes", "Music Streams", "The Game Awards", "The Voice", "Pokémon", "Singles", "Streamer Awards", "Weekly Views"],
+      "Financials": ["KPIs", "Companies", "Markets", "Indices", "Interest Rates", "Industries", "Credit Card Spend", "IPOs", "Foreign Exchange", "CEOs", "Product launches", "Company metrics", "M&A", "App Downloads", "Point of Sale", "Real Estate", "Foot Traffic", "Headcount", "Advertising Spend", "Compute", "Biotech", "Match Ups", "Company news", "Net Worth", "Other", "S&P", "Technology"],
+      "Health": ["FDA Approval", "Vaccines"],
+      "Mentions": ["Earnings", "Politicians", "Trump", "Business"],
+      "Politics": ["Trump", "Congress", "International", "Local", "SCOTUS & courts", "Recurring", "State laws", "Iran", "NYC", "Leadership & committees", "Departures", "Economy", "Health & social bills", "Impeachment", "Other legislation", "AI", "Latin America", "Confirmations", "Travel & meetings", "Europe & EU", "Lawsuits & rulings", "Cabinet & staff", "Taxes & spending", "Immigration", "State & city officials", "Trump administration", "Asia & Pacific", "Projects & regulators", "Trade & tariffs", "Executive actions", "Filibuster & vetoes", "Global institutions", "Israel & Middle East", "Media & press", "Members", "Venezuela", "Budget & shutdowns", "Business & regulation", "Congress & courts", "State & local", "Tax & economy bills", "Prosecutions", "Russia & Ukraine", "Supreme Court & judges", "UK & Ireland", "World leaders", "Approval & politics", "Canada", "Federal Reserve", "Foreign Elections", "Parties & redistricting", "Shipping lanes"],
+      "Science and Technology": ["AI", "Space", "Market Share", "Public Health", "Big Tech & Business", "Medicine", "Physics & Math", "Energy", "Tokens", "Education"],
+      "Social": null,
+      "Sports": ["Soccer", "Football", "Basketball", "Hockey", "Golf", "Tennis", "Motorsport", "MMA", "Baseball", "Boxing", "Esports", "Cricket", "Chess", "Other", "Lacrosse", "Rugby", "Darts", "Volleyball", "Wrestling", "Cities", "Padel", "Table Tennis"],
+      "Test": null,
+      "World": ["Foreign economies", "International politics"],
+      "harrison-test": null
+    }
+  },
+  "topic_mapping": {
+    "note": "The five requested topics are mapped onto Kalshi's own published taxonomy. Kalshi has no 'Culture' category; the mapping below is the closest official categories, and the substitution is flagged for review.",
+    "topics": {
+      "gas-prices": {
+        "kalshi_category": ["Commodities"],
+        "kalshi_tags_any": ["Oil & Gas"],
+        "secondary_category": ["Economics"],
+        "secondary_tags_any": ["Oil and energy"],
+        "series_source": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Commodities&tags=Oil%20%26%20Gas&include_volume=true"
+      },
+      "elections": {
+        "kalshi_category": ["Elections"],
+        "series_source": "https://docs.kalshi.com/api-reference/market/get-series-list.md",
+        "observed_series": ["KXPRESNOMD", "KXPRESPERSON", "KXSENATEDEMLEAD", "KXFRENCHPRES"],
+        "observed_series_evidence": "market tickers seen in GET /markets/trades?limit=120 at 2026-11-20T11:17:39Z"
+      },
+      "culture": {
+        "kalshi_category": ["Entertainment"],
+        "kalshi_tags_any": ["Video games", "Movies", "Television", "Music", "Awards", "People"],
+        "flag": "FLAG-03"
+      },
+      "crypto": {
+        "kalshi_category": ["Crypto"],
+        "series_source": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Crypto&include_volume=true",
+        "observed_series": ["KXBTCY", "KXLINK", "KXAVAX", "KXBTCMINY", "KXNEAR", "KXDOTMINY", "KXDOGEPERP", "KXCRYPTORETURNY", "KXBNBMINY", "KXPRCBTC", "KXFDVFOGO"]
+      },
+      "golf": {
+        "kalshi_category": ["Sports"],
+        "kalshi_tags_any": ["Golf"],
+        "series_source": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Sports&tags=Golf&include_volume=true",
+        "observed_series": ["KXPGATOUR", "KXDPWORLDTOUR", "KXCHAMPTOUR", "KXCHAMPTOURR1LEAD", "KXTIGERMASTERS", "KXGOLFTENNISMAJORS"]
+      }
+    }
+  },
+  "series_volume_observations": {
+    "note": "volume_fp is the official series-level field returned when include_volume=true: 'total number of contracts traded across all events in this series'. It is a CONTRACT COUNT, not a dollar figure. Definition source: https://docs.kalshi.com/api-reference/market/get-series-list.md",
+    "fields": ["ticker", "title", "category", "tags", "frequency", "fee_type", "fee_multiplier", "exchange_index", "settlement_source", "volume_fp", "last_updated_ts"],
+    "rows": [
+      { "ticker": "KXDPWORLDTOUR", "title": "DP World Tour Tournament Winner", "category": "Sports", "tags": ["Golf"], "frequency": "custom", "fee_type": "quadratic", "fee_multiplier": 1, "exchange_index": 0, "settlement_source": "DP World Tour — https://www.europeantour.com/dpworld-tour/schedule/", "volume_fp": "8245802181.00", "last_updated_ts": "2026-11-20T08:49:44.825882Z", "source": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Sports&tags=Golf&include_volume=true" },
+      { "ticker": "KXCHAMPTOUR", "title": "PGA Champions Tour", "category": "Sports", "tags": ["Golf"], "frequency": "custom", "fee_type": "quadratic", "fee_multiplier": 1, "exchange_index": 0, "settlement_source": "ESPN / the Governing League — https://www.pgatour.com/", "volume_fp": "170.00", "last_updated_ts": "2026-11-20T08:49:44.825882Z", "source": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Sports&tags=Golf&include_volume=true" },
+      { "ticker": "KXGOLFTENNISMAJORS", "title": "More Major Wins, Tennis vs Golf", "category": "Sports", "tags": ["Golf", "Tennis"], "frequency": "one_off", "fee_type": "quadratic", "fee_multiplier": 1, "exchange_index": 3, "settlement_source": "AP / ESPN / Fox Sports / WSJ", "volume_fp": "9.00", "last_updated_ts": "2026-10-13T18:26:35.309038Z", "source": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Sports&tags=Golf&include_volume=true" },
+      { "ticker": "KXTIGERMASTERS", "title": "Will Tiger Woods play in the Masters", "category": "Sports", "tags": ["Golf"], "frequency": "custom", "fee_type": "quadratic", "fee_multiplier": 1, "exchange_index": 0, "settlement_source": "WSJ / ESPN", "volume_fp": "0.00", "last_updated_ts": "2026-11-20T11:06:21.364714Z", "source": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Sports&tags=Golf&include_volume=true" },
+      { "ticker": "KXCHAMPTOURR1LEAD", "title": "round 1 leader", "category": "Sports", "tags": ["Golf"], "frequency": "custom", "fee_type": "quadratic", "fee_multiplier": 1, "exchange_index": 0, "settlement_source": "ESPN / the Governing League — https://www.pgatour.com/", "volume_fp": "0.00", "last_updated_ts": "2026-10-13T18:26:35.309038Z", "source": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Sports&tags=Golf&include_volume=true" },
+      { "ticker": "KXWTI", "title": "WTI oil election day", "category": "Commodities", "tags": ["Oil & Gas"], "frequency": "custom", "fee_type": "quadratic", "fee_multiplier": 1, "exchange_index": 0, "settlement_source": "ICE — https://www.theice.com/products/213/WTI-Crude-Futures", "volume_fp": "332483087.00", "last_updated_ts": "2026-11-20T09:31:37.706643Z", "source": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Commodities&tags=Oil%20%26%20Gas&include_volume=true" },
+      { "ticker": "KXWTIW", "title": "WTI oil weekly range", "category": "Commodities", "tags": ["Oil & Gas"], "frequency": "weekly", "fee_type": "quadratic", "fee_multiplier": 1, "exchange_index": 0, "settlement_source": "ICE — https://www.theice.com/products/213/WTI-Crude-Futures", "volume_fp": "96382957.00", "last_updated_ts": "2026-11-20T09:31:37.696331Z", "source": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Commodities&tags=Oil%20%26%20Gas&include_volume=true" },
+      { "ticker": "KXBRENTD", "title": "Brent Oil Daily", "category": "Commodities", "tags": ["Oil & Gas"], "frequency": "daily", "fee_type": "quadratic", "fee_multiplier": 1, "exchange_index": 0, "settlement_source": "Pyth - Brent — https://app.pyth.com/explore/Commodities.Index.BRENT%2FUSD", "volume_fp": "13587404.00", "last_updated_ts": "2026-10-13T18:34:01.879891Z", "source": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Commodities&tags=Oil%20%26%20Gas&include_volume=true" },
+      { "ticker": "KXWTIMIN", "title": "WTI oil low", "category": "Commodities", "tags": ["Oil & Gas"], "frequency": "annual", "fee_type": "quadratic", "fee_multiplier": 1, "exchange_index": 0, "settlement_source": "ICE — https://www.ice.com/report/10", "volume_fp": "55388.00", "last_updated_ts": "2026-11-20T09:58:58.531711Z", "source": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Commodities&tags=Oil%20%26%20Gas&include_volume=true" },
+      { "ticker": "KXWTIH", "title": "WTI Hourly", "category": "Commodities", "tags": ["Oil & Gas"], "frequency": "hourly", "fee_type": "quadratic", "fee_multiplier": 1, "exchange_index": 0, "settlement_source": "Pyth - WTI — https://app.pyth.com/explore/Commodities.Index.PYTHOIL%2FUSD", "volume_fp": "7646.00", "last_updated_ts": "2026-10-13T18:34:01.879891Z", "source": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Commodities&tags=Oil%20%26%20Gas&include_volume=true" },
+      { "ticker": "KXNATGASMON", "title": "Natural Gas Monthly", "category": "Commodities", "tags": ["Oil & Gas"], "frequency": "monthly", "fee_type": "quadratic", "fee_multiplier": 1, "exchange_index": 0, "settlement_source": "Pyth - NATGAS — https://app.pyth.com/explore/Commodities.Index.NATGAS%2FUSD", "volume_fp": "646.00", "last_updated_ts": "2026-10-13T18:34:01.879891Z", "source": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Commodities&tags=Oil%20%26%20Gas&include_volume=true" },
+      { "ticker": "KXWTI15M", "title": "WTI 15-minute", "category": "Commodities", "tags": ["Oil & Gas"], "frequency": "fifteen_min", "fee_type": "quadratic", "fee_multiplier": 1, "exchange_index": 0, "settlement_source": "Pyth - WTI — https://app.pyth.com/explore/Commodities.Index.PYTHOIL%2FUSD", "volume_fp": "4546.00", "last_updated_ts": "2026-10-20T17:06:47.158823Z", "source": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Commodities&tags=Oil%20%26%20Gas&include_volume=true" },
+      { "ticker": "KXBRENT15M", "title": "Brent 15-minute", "category": "Commodities", "tags": ["Oil & Gas"], "frequency": "fifteen_min", "fee_type": "quadratic", "fee_multiplier": 1, "exchange_index": 2, "settlement_source": "Pyth - Brent — https://app.pyth.com/explore/Commodities.Index.BRENT%2FUSD", "volume_fp": "109.00", "last_updated_ts": "2026-10-20T17:07:23.895728Z", "source": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Commodities&tags=Oil%20%26%20Gas&include_volume=true" },
+      { "ticker": "KXWTIMINM", "title": "WTI oil monthly low", "category": "Commodities", "tags": ["Oil & Gas"], "frequency": "one_off", "fee_type": "quadratic", "fee_multiplier": 1, "exchange_index": 0, "settlement_source": "ICE — https://www.ice.com/report/10", "volume_fp": "14.00", "last_updated_ts": "2026-11-20T09:57:42.460006Z", "source": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Commodities&tags=Oil%20%26%20Gas&include_volume=true" },
+      { "ticker": "KXWTIMONTHLY", "title": "WTI oil monthly", "category": "Commodities", "tags": ["Oil & Gas"], "frequency": "monthly", "fee_type": "quadratic", "fee_multiplier": 1, "exchange_index": 0, "settlement_source": "ICE — https://www.ice.com/report/10", "volume_fp": "0.00", "last_updated_ts": "2026-11-20T09:58:57.215095Z", "source": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Commodities&tags=Oil%20%26%20Gas&include_volume=true" },
+      { "ticker": "KXWTIE", "title": "WTI oil election day", "category": "Commodities", "tags": ["Oil & Gas"], "frequency": "custom", "fee_type": "quadratic", "fee_multiplier": 1, "exchange_index": 0, "settlement_source": "ICE — https://www.theice.com/products/213/WTI-Crude-Futures", "volume_fp": "0.00", "last_updated_ts": "2026-11-20T09:59:22.419938Z", "source": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Commodities&tags=Oil%20%26%20Gas&include_volume=true" },
+      { "ticker": "KXWTIEU", "title": "WTI oil up after election", "category": "Commodities", "tags": ["Oil & Gas"], "frequency": "custom", "fee_type": "quadratic", "fee_multiplier": 1, "exchange_index": 0, "settlement_source": "ICE — https://www.theice.com/products/213/WTI-Crude-Futures", "volume_fp": "0.00", "last_updated_ts": "2026-11-20T09:58:07.863351Z", "source": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Commodities&tags=Oil%20%26%20Gas&include_volume=true" },
+      { "ticker": "KXHOILW", "title": "Heating Oil Weekly", "category": "Commodities", "tags": ["Oil & Gas"], "frequency": "weekly", "fee_type": "quadratic", "fee_multiplier": 1, "exchange_index": 0, "settlement_source": "Trading Economics - Heating Oil — https://tradingeconomics.com/commodity/heating-oil", "volume_fp": "0.00", "last_updated_ts": "2026-10-13T18:34:01.879891Z", "source": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Commodities&tags=Oil%20%26%20Gas&include_volume=true" },
+      { "ticker": "KXHOILMON", "title": "Heating Oil Monthly", "category": "Commodities", "tags": ["Oil & Gas"], "frequency": "monthly", "fee_type": "quadratic", "fee_multiplier": 1, "exchange_index": 0, "settlement_source": "Trading Economics - Heating Oil — https://tradingeconomics.com/commodity/heating-oil", "volume_fp": "0.00", "last_updated_ts": "2026-10-13T18:34:01.879891Z", "source": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Commodities&tags=Oil%20%26%20Gas&include_volume=true" },
+      { "ticker": "KXBRENTWEX", "title": "Brent Oil Weekly Exclusive", "category": "Commodities", "tags": ["Oil & Gas"], "frequency": "one_off", "fee_type": "quadratic", "fee_multiplier": 1, "exchange_index": 0, "settlement_source": "Pyth Commodities — https://app.pyth.com/explore?asset_type=commodity", "volume_fp": "0.00", "last_updated_ts": "2026-10-13T18:34:01.879891Z", "source": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Commodities&tags=Oil%20%26%20Gas&include_volume=true" },
+      { "ticker": "KXLINK", "title": "Chainlink range", "category": "Crypto", "tags": [], "frequency": "daily", "fee_type": "quadratic", "fee_multiplier": 1, "exchange_index": 2, "settlement_source": "CF Benchmarks — https://www.cfbenchmarks.com/data/indices/LINKUSD_RTI", "volume_fp": "24510512.00", "last_updated_ts": "2026-11-20T08:30:31.635653Z", "source": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Crypto&include_volume=true" },
+      { "ticker": "KXBTCMINY", "title": "How low will Bitcoin fall this year?", "category": "Crypto", "tags": ["Crypto", "Bitcoin"], "frequency": "annual", "fee_type": "quadratic", "fee_multiplier": 1, "exchange_index": 2, "settlement_source": "CF Benchmarks — https://www.cfbenchmarks.com/data/indices/BRTI", "volume_fp": "19464180.00", "last_updated_ts": "2026-11-20T10:46:14.263334Z", "source": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Crypto&include_volume=true" },
+      { "ticker": "KXAVAX", "title": "Avalanche range", "category": "Crypto", "tags": [], "frequency": "daily", "fee_type": "quadratic", "fee_multiplier": 1, "exchange_index": 2, "settlement_source": "CF Benchmarks — https://www.cfbenchmarks.com/data/indices/AVAXUSD_RTI", "volume_fp": "17532299.00", "last_updated_ts": "2026-11-20T10:39:49.540549Z", "source": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Crypto&include_volume=true" },
+      { "ticker": "KXCRYPTORETURNY", "title": "Crypto being positive", "category": "Crypto", "tags": ["Crypto"], "frequency": "annual", "fee_type": "quadratic", "fee_multiplier": 1, "exchange_index": 2, "settlement_source": "CF Benchmarks — https://www.cfbenchmarks.com/", "volume_fp": "165735.00", "last_updated_ts": "2026-11-20T10:55:20.206365Z", "source": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Crypto&include_volume=true" },
+      { "ticker": "KXPRCBTC", "title": "Bitcoin legalization in PRC", "category": "Crypto", "tags": ["Crypto", "Bitcoin"], "frequency": "custom", "fee_type": "quadratic", "fee_multiplier": 1, "exchange_index": 2, "settlement_source": "Bloomberg — https://www.bloomberg.com/", "volume_fp": "16875.00", "last_updated_ts": "2026-11-20T09:57:34.476427Z", "source": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Crypto&include_volume=true" },
+      { "ticker": "KXDOTMINY", "title": "Polkadot min", "category": "Crypto", "tags": ["Crypto"], "frequency": "annual", "fee_type": "quadratic", "fee_multiplier": 1, "exchange_index": 2, "settlement_source": "CF Benchmarks — https://www.cfbenchmarks.com/", "volume_fp": "71848.00", "last_updated_ts": "2026-11-20T10:59:07.408662Z", "source": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Crypto&include_volume=true" },
+      { "ticker": "KXBNBMINY", "title": "BNB Min Year", "category": "Crypto", "tags": ["BNB", "Crypto"], "frequency": "annual", "fee_type": "quadratic", "fee_multiplier": 1, "exchange_index": 2, "settlement_source": "CF Benchmarks — https://www.cfbenchmarks.com/", "volume_fp": "24.00", "last_updated_ts": "2026-10-13T18:34:01.879891Z", "source": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Crypto&include_volume=true" },
+      { "ticker": "KXNEAR", "title": "NEAR range", "category": "Crypto", "tags": ["Hourly"], "frequency": "hourly", "fee_type": "quadratic", "fee_multiplier": 1, "exchange_index": 2, "settlement_source": "CF Benchmarks — https://www.cfbenchmarks.com/", "volume_fp": "0.00", "last_updated_ts": "2026-10-13T18:34:01.879891Z", "source": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Crypto&include_volume=true" },
+      { "ticker": "KXFDVFOGO", "title": "FOGO FDV", "category": "Crypto", "tags": ["Crypto", "Pre-Market"], "frequency": "one_off", "fee_type": "quadratic", "fee_multiplier": 1, "exchange_index": 2, "settlement_source": "CoinGecko — https://www.coingecko.com", "volume_fp": "0.00", "last_updated_ts": "2026-11-20T10:55:01.813381Z", "source": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Crypto&include_volume=true" },
+      { "ticker": "KXDOGEPERP", "title": "100 DOGE", "category": "Crypto", "tags": [], "frequency": "often", "fee_type": "quadratic", "fee_multiplier": 1, "exchange_index": 2, "settlement_source": "", "volume_fp": "0.00", "last_updated_ts": "2026-11-20T10:30:58.962445Z", "source": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Crypto&include_volume=true" }
+    ]
+  },
+  "featured_events": {
+    "note": "Event objects exactly as returned by GET /events?tickers=... . 'category' is present on the response but is deprecated in favour of the series-level category — see https://docs.kalshi.com/api-reference/events/get-events.md",
+    "source": "https://external-api.demo.kalshi.co/trade-api/v2/events?tickers=KXPRESNOMD-28,KXTIME-26,KXGTA6UNITS-01JAN27,KXWTIW-26NOV21,KXBTCY-27JAN0100",
+    "observed_at_utc": "2026-11-20T11:24Z",
+    "rows": [
+      { "event_ticker": "KXPRESNOMD-28", "title": "Who will be the Democratic nominee in 2028?", "series_ticker": "KXPRESNOMD", "category": "Elections", "collateral_return_type": "MECNET", "mutually_exclusive": true, "strike_date": null, "strike_period": "", "sub_title": "In 2028", "exchange_index": 0, "last_updated_ts": "2026-11-19T19:36:26.997953Z", "settlement_sources": [{" name": "Democratic Party", "url": "https://democrats.org/" }] },
+      { "event_ticker": "KXBTCY-27JAN0100", "title": "Bitcoin price at the end of 2026", "series_ticker": "KXBTCY", "category": "Crypto", "collateral_return_type": "MECNET", "mutually_exclusive": true, "strike_date": "2027-01-01T05:00:00Z", "strike_period": "", "sub_title": "On Jan 1, 2027 at 12am EST", "exchange_index": 0, "last_updated_ts": "2026-11-13T01:59:56.512157Z", "product_metadata_cadence": "Annual", "settlement_sources": [{" name": "CF Benchmarks", "url": "https://www.cfbenchmarks.com/" }] },
+      { "event_ticker": "KXTIME-26", "title": "TIME's Person of the Year for 2026?", "series_ticker": "KXTIME", "category": "Entertainment", "collateral_return_type": "", "mutually_exclusive": false, "strike_date": null, "strike_period": "", "sub_title": "In 2026", "exchange_index": 0, "last_updated_ts": "2026-11-12T17:06:21.593079Z", "settlement_sources": [{" name": "TIME", "url": "https://time.com/" }] },
+      { "event_ticker": "KXGTA6UNITS-01JAN27", "title": "GTA VI · Reported units sold before 2027", "series_ticker": "KXGTA6UNITS", "category": "Entertainment", "collateral_return_type": "", "mutually_exclusive": false, "strike_date": "2027-01-01T05:00:00Z", "strike_period": "before January 1, 2027", "sub_title": "Before January 1, 2027", "exchange_index": 0, "last_updated_ts": "2026-11-19T04:36:14.719922Z", "settlement_sources_count": 15, "settlement_sources_first": "MS Now — https://www.ms.now/" },
+      { "event_ticker": "KXWTIW-26NOV21", "title": "", "series_ticker": "", "category": "", "note": "NOT VERIFIED — this ticker was requested in the batch above and was absent from the response. Left blank rather than assumed." }
+    ]
+  },
+  "live_trade_sample": {
+    "note": "First records of GET /markets/trades?limit=120 (exchange-wide, newest first). Used to demonstrate the dollar-volume computation. The leaderboard on the site is recomputed live from the same endpoint, over many pages.",
+    "source": "https://external-api.demo.kalshi.co/trade-api/v2/markets/trades?limit=120",
+    "observed_at_utc": "2026-11-20T11:17:39.607926Z",
+    "dollar_volume_formula": "notional = count_fp x taker_price, where taker_price = yes_price_dollars when taker_outcome_side == 'yes' else no_price_dollars",
+    "formula_source": "https://docs.kalshi.com/api-reference/market/get-trades.md",
+    "rows": [
+      { "ticker": "KXPRESNOMD-28-SAS", "created_time": "2026-11-20T11:17:39.607926Z", "count_fp": "1.05", "yes_price_dollars": "0.0040", "no_price_dollars": "0.9960", "taker_outcome_side": "yes", "taker_book_side": "bid", "is_block_trade": false },
+      { "ticker": "KXSENATEDEMLEAD-28JAN01-BSCH", "created_time": "2026-11-20T11:17:39.607396Z", "count_fp": "0.31", "yes_price_dollars": "0.0100", "no_price_dollars": "0.9900", "taker_outcome_side": "yes", "taker_book_side": "bid", "is_block_trade": false },
+      { "ticker": "KXPRESNOMR-28-BK", "created_time": "2026-11-20T11:17:39.606296Z", "count_fp": "0.81", "yes_price_dollars": "0.0180", "no_price_dollars": "0.9820", "taker_outcome_side": "yes", "taker_book_side": "bid", "is_block_trade": false },
+      { "ticker": "KXPRESNOMD-28-CHOL", "created_time": "2026-11-20T11:17:39.597792Z", "count_fp": "5555.55", "yes_price_dollars": "0.0300", "no_price_dollars": "0.9700", "taker_outcome_side": "yes", "taker_book_side": "bid", "is_block_trade": false },
+      { "ticker": "KXBTCY-27JAN0100-B62500", "created_time": "2026-11-20T11:17:39.591397Z", "count_fp": "711.08", "yes_price_dollars": "0.2300", "no_price_dollars": "0.7700", "taker_outcome_side": "no", "taker_book_side": "ask", "is_block_trade": false },
+      { "ticker": "KXFRENCHPRES-27-JCAS", "created_time": "2026-11-20T11:17:39.590343Z", "count_fp": "5555.55", "yes_price_dollars": "0.0300", "no_price_dollars": "0.9700", "taker_outcome_side": "yes", "taker_book_side": "bid", "is_block_trade": false },
+      { "ticker": "KXFRENCHPRES-27-MBOM", "created_time": "2026-11-20T11:17:39.588842Z", "count_fp": "5554.75", "yes_price_dollars": "0.0300", "no_price_dollars": "0.9700", "taker_outcome_side": "yes", "taker_book_side": "bid", "is_block_trade": false },
+      { "ticker": "KXBTCY-27JAN0100-B97500", "created_time": "2026-11-20T11:17:39.587771Z", "count_fp": "5555.55", "yes_price_dollars": "0.0300", "no_price_dollars": "0.9700", "taker_outcome_side": "yes", "taker_book_side": "bid", "is_block_trade": false },
+      { "ticker": "KXBTCY-27JAN0100-B127500", "created_time": "2026-11-20T11:17:39.586346Z", "count_fp": "5555.55", "yes_price_dollars": "0.0300", "no_price_dollars": "0.9700", "taker_outcome_side": "yes", "taker_book_side": "bid", "is_block_trade": false },
+      { "ticker": "KXTIME-26-MARK", "created_time": "2026-11-20T11:17:39.561834Z", "count_fp": "1851.85", "yes_price_dollars": "0.0900", "no_price_dollars": "0.9100", "taker_outcome_side": "no", "taker_book_side": "ask", "is_block_trade": false },
+      { "ticker": "KXNBA-27-MIA", "created_time": "2026-11-20T11:17:39.527542Z", "count_fp": "1.85", "yes_price_dollars": "0.0400", "no_price_dollars": "0.9600", "taker_outcome_side": "yes", "taker_book_side": "bid", "is_block_trade": false },
+      { "ticker": "KXGTA6UNITS-01JAN27-T0", "created_time": "2026-11-20T11:17:39.526992Z", "count_fp": "1.01", "yes_price_dollars": "0.4100", "no_price_dollars": "0.5900", "taker_outcome_side": "yes", "taker_book_side": "bid", "is_block_trade": false },
+      { "ticker": "KXPGATOUR-THRC26-JHIG", "created_time": "2026-11-20T11:17:39.454195Z", "count_fp": "1.65", "yes_price_dollars": "0.0030", "no_price_dollars": "0.9970", "taker_outcome_side": "yes", "taker_book_side": "bid", "is_block_trade": false },
+      { "ticker": "KXPGATOUR-THRC26-CDAV", "created_time": "2026-11-20T11:17:39.512830Z", "count_fp": "1.82", "yes_price_dollars": "0.0030", "no_price_dollars": "0.9970", "taker_outcome_side": "yes", "taker_book_side": "bid", "is_block_trade": false },
+      { "ticker": "KXPGATOUR-THRC26-BCAU", "created_time": "2026-11-20T11:17:39.526258Z", "count_fp": "1.52", "yes_price_dollars": "0.0030", "no_price_dollars": "0.9970", "taker_outcome_side": "yes", "taker_book_side": "bid", "is_block_trade": false }
+    ]
+  },
+  "orderbook_sample": {
+    "source": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPGATOUR-THRC26-HLEB/orderbook?depth=4",
+    "observed_at_utc": "2026-11-20T11:22Z",
+    "doc": "https://docs.kalshi.com/getting_started/orderbook_responses.md",
+    "interpretation": "Bids only, ascending by price, best bid last. YES BID at X = NO ASK at $1.00-X. Depth = contracts resting at each price.",
+    "orderbook_fp": {
+      "yes_dollars": [["0.0040", "41666.66"], ["0.0050", "34267.33"], ["0.0060", "27225.77"]],
+      "no_dollars": [["0.9900", "16666.66"], ["0.9910", "18518.51"], ["0.9920", "20828.48"]]
+    }
+  },
+  "candlesticks_sample": {
+    "source": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPGATOUR/markets/KXPGATOUR-THRC26-HLEB/candlesticks?start_ts=1794568800&end_ts=1795173600&period_interval=1440",
+    "observed_at_utc": "2026-11-20T11:22Z",
+    "doc": "https://docs.kalshi.com/api-reference/market/get-market-candlesticks.md",
+    "candlesticks": [
+      {
+        "end_period_ts": 1795150800,
+        "volume_fp": "3279.22",
+        "open_interest_fp": "3279.22",
+        "price": { "open_dollars": "0.0060", "high_dollars": "0.0060", "low_dollars": "0.0060", "close_dollars": "0.0060", "mean_dollars": "0.0060" },
+        "yes_bid": { "open_dollars": "0.0050", "high_dollars": "0.0050", "low_dollars": "0.0050", "close_dollars": "0.0050" },
+        "yes_ask": { "open_dollars": "1.0000", "high_dollars": "1.0000", "low_dollars": "0.0060", "close_dollars": "0.0060" }
+      }
+    ],
+    "constraint": "period_interval accepts only 1 (minute), 60 (hour), 1440 (day). start_ts/end_ts required, in seconds. Max 5,000 periods per request."
+  },
+  "settled_market_example": {
+    "purpose": "Evidence for the 'how did the event resolve (yes/no)' requirement: the fields that carry the answer.",
+    "source": "https://external-api.demo.kalshi.co/trade-api/v2/markets?series_ticker=KXPGATOUR&status=settled&limit=1",
+    "observed_at_utc": "2026-11-20T11:26Z",
+    "market": {
+      "ticker": "KXPGATOUR-AUCPBCS26-WGOR",
+      "event_ticker": "KXPGATOUR-AUCPBCS26",
+      "title": "Austin Championship presented by Compliance Solutions: Will Gordon wins",
+      "status": "finalized",
+      "result": "no",
+      "settlement_ts": "2026-11-16T22:33:33.370951Z",
+      "settlement_value_dollars": "0.0000",
+      "close_time": "2026-11-16T22:29:34Z",
+      "last_price_dollars": "0.0160",
+      "volume_fp": "13635.01",
+      "open_interest_fp": "13541.22",
+      "rules_primary": "If Will Gordon wins the Austin Championship presented by Compliance Solutions, then the market resolves to Yes."
+    },
+    "resolution_field_notes": [
+      "result is lowercase 'no' / 'yes' on the market object; empty string while unresolved.",
+      "status for a settled market came back as 'finalized', while the request used the filter value 'settled'. The filter vocabulary and the object vocabulary differ — logged as FLAG-02."
+    ]
+  },
+  "open_market_shape": {
+    "source": "https://external-api.demo.kalshi.co/trade-api/v2/markets?event_ticker=KXPGATOUR-THRC26&status=open&limit=3",
+    "observed_at_utc": "2026-11-20T11:25Z",
+    "fields_returned": ["can_close_early", "close_time", "created_time", "custom_strike", "early_close_condition", "event_ticker", "exchange_index", "expected_expiration_time", "expiration_value", "last_price_dollars", "latest_expiration_time", "market_type", "no_ask_dollars", "no_bid_dollars", "no_sub_title", "notional_value_dollars", "open_interest_fp", "open_time", "previous_price_dollars", "previous_yes_ask_dollars", "previous_yes_bid_dollars", "price_level_structure", "price_ranges", "primary_participant_key", "result", "rules_primary", "rules_secondary", "settlement_bounds_type", "settlement_timer_seconds", "status", "strike_type", "ticker", "title", "updated_time", "volume_24h_fp", "volume_fp", "yes_ask_dollars", "yes_ask_size_fp", "yes_bid_dollars", "yes_bid_size_fp", "yes_sub_title"],
+    "observations": [
+      "notional_value_dollars = \"1.0000\" on every market sampled: one YES contract pays $1.00 on the winning side.",
+      "There is no dollar-volume field on the market object: only volume_fp (contracts) and volume_24h_fp (contracts).",
+      "There is no liquidity field on the market object in this API version. Resting size is per-level in yes_bid_size_fp / yes_ask_size_fp and in the orderbook endpoint.",
+      "status came back as 'active' for markets requested with status=open."
+    ]
+  },
+  "provisional_multivariate_shape": {
+    "source": "https://external-api.demo.kalshi.co/trade-api/v2/markets?limit=2&status=open",
+    "observed_at_utc": "2026-11-20T11:19Z",
+    "observations": [
+      "Newly created exchange-wide multivariate (combo) markets appear at the top of GET /markets?status=open because results are sorted by creation time, newest first.",
+      "These rows carry is_provisional=true, mve_collection_ticker, mve_selected_legs and a custom_strike block, and volume_fp may be 0.00 while open_interest_fp is 100.00.",
+      "Any 'top by volume' ranking built by paging GET /markets from newest to oldest will therefore be dominated by brand-new combo markets. Ranking must be done from GET /markets/trades or by filtering on volume. Logged as FLAG-01."
+    ]
+  }
+}
