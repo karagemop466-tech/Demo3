@@ -316,6 +316,16 @@ Follow-up requests from session 06cbd03f addressed at integration:
 - **Flagged items** (none block the merge, per the brief; all published with evidence links on the site's Flagged for review page): I-11 (no demo credentials — paper mode labeled, discovery steps documented), I-12/BUILD-U (source-less cells left blank + flagged, never inferred), R-05 (duplicate engines consolidated, originals preserved), R-06 (archive trees use the production API base — disclosed), plus the preserved registers of all other sessions (I-01..I-10, F1-F9, F-01..F-22, R-01..R-04, R-09).
 - This record closes T12. Further board updates (if any) follow the same claim/log protocol.
 
+---
+
+## Task board — session 0b17a627 (paper-automation UI safety regression)
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| T1 Review and fix paper-automation toggle state after page reload; add offline regression tests for default-off and persisted-state visibility | in progress | `0b17a627` | `assets/trade.js`, new `tests/trade-automation.test.js`, this section of `COORDINATION.md` only | Code-path review of the merged dashboard/trade engine; no Kalshi API behavior is changed | Open alert PRs #26/#27/#29 own overlapping alert/dashboard files; those files and generated data are explicitly out of scope. Current platform branch is fixed as `arena/0b17a627-demo3`; the requested `session-<id>/<task>` branch cannot be created. |
+
+Claimed 2026-11-20 on `arena/0b17a627-demo3`. Finding: `assets/dashboard.js` invokes `KalshiTrade.renderAll()` during startup, but `assets/trade.js` does not reflect the persisted `kd_automation_v1.enabled` state in the `#autoTrade` checkbox. On a reload, an enabled paper strategy could therefore keep running while the visible toggle appears off. Scope is limited to synchronizing the persisted state into the existing control and regression coverage; automation remains paper/SIMULATED only and defaults off. No other session's active alert or data files will be edited.
+
 ## Task board — session 4d10aedf (automated data pipeline + trade/portfolio tooling + integration)
 
 | Task | Status | Owner | File scope | Sources / verification | Irregularities |
