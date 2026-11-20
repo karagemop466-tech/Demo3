@@ -1,6 +1,96 @@
 {
  "checks": [
   {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1430-2 result",
+   "detail": "stored='yes' live='yes'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1430-2 settlement_value_dollars",
+   "detail": "stored='1.0000' live='1.0000'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1430-2 ticker",
+   "detail": "stored='KXQUICKSETTLE-20NOV26H1430-2' live='KXQUICKSETTLE-20NOV26H1430-2'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1430-3 result",
+   "detail": "stored='no' live='no'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1430-3 settlement_value_dollars",
+   "detail": "stored='0.0000' live='0.0000'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1430-3 ticker",
+   "detail": "stored='KXQUICKSETTLE-20NOV26H1430-3' live='KXQUICKSETTLE-20NOV26H1430-3'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1420-2 result",
+   "detail": "stored='yes' live='yes'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1420-2 settlement_value_dollars",
+   "detail": "stored='1.0000' live='1.0000'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1420-2 ticker",
+   "detail": "stored='KXQUICKSETTLE-20NOV26H1420-2' live='KXQUICKSETTLE-20NOV26H1420-2'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1420-3 result",
+   "detail": "stored='no' live='no'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1420-3 settlement_value_dollars",
+   "detail": "stored='0.0000' live='0.0000'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1420-3 ticker",
+   "detail": "stored='KXQUICKSETTLE-20NOV26H1420-3' live='KXQUICKSETTLE-20NOV26H1420-3'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1410-2 result",
+   "detail": "stored='yes' live='yes'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1410-2 settlement_value_dollars",
+   "detail": "stored='1.0000' live='1.0000'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1410-2 ticker",
+   "detail": "stored='KXQUICKSETTLE-20NOV26H1410-2' live='KXQUICKSETTLE-20NOV26H1410-2'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1410-3 result",
+   "detail": "stored='no' live='no'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1410-3 settlement_value_dollars",
+   "detail": "stored='0.0000' live='0.0000'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXQUICKSETTLE-20NOV26H1410-3 ticker",
+   "detail": "stored='KXQUICKSETTLE-20NOV26H1410-3' live='KXQUICKSETTLE-20NOV26H1410-3'",
+   "ok": true
+  },
+  {
    "check": "resolution KXDOGE-26NOV2013-T0.2349999 result",
    "detail": "stored='no' live='no'",
    "ok": true
@@ -2911,96 +3001,6 @@
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2013-T0.1999 result",
-   "detail": "stored='no' live='no'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXXRPD-26NOV2013-T0.1999 settlement_value_dollars",
-   "detail": "stored='0.0000' live='0.0000'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXXRPD-26NOV2013-T0.1999 ticker",
-   "detail": "stored='KXXRPD-26NOV2013-T0.1999' live='KXXRPD-26NOV2013-T0.1999'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXXRPD-26NOV2013-T0.1799 result",
-   "detail": "stored='no' live='no'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXXRPD-26NOV2013-T0.1799 settlement_value_dollars",
-   "detail": "stored='0.0000' live='0.0000'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXXRPD-26NOV2013-T0.1799 ticker",
-   "detail": "stored='KXXRPD-26NOV2013-T0.1799' live='KXXRPD-26NOV2013-T0.1799'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXXRPD-26NOV2013-T0.1599 result",
-   "detail": "stored='no' live='no'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXXRPD-26NOV2013-T0.1599 settlement_value_dollars",
-   "detail": "stored='0.0000' live='0.0000'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXXRPD-26NOV2013-T0.1599 ticker",
-   "detail": "stored='KXXRPD-26NOV2013-T0.1599' live='KXXRPD-26NOV2013-T0.1599'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXDOGE-26NOV2014-T0.2349999 result",
-   "detail": "stored='no' live='no'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXDOGE-26NOV2014-T0.2349999 settlement_value_dollars",
-   "detail": "stored='0.0000' live='0.0000'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXDOGE-26NOV2014-T0.2349999 ticker",
-   "detail": "stored='KXDOGE-26NOV2014-T0.2349999' live='KXDOGE-26NOV2014-T0.2349999'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXDOGE-26NOV2014-T0.0100000 result",
-   "detail": "stored='no' live='no'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXDOGE-26NOV2014-T0.0100000 settlement_value_dollars",
-   "detail": "stored='0.0000' live='0.0000'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXDOGE-26NOV2014-T0.0100000 ticker",
-   "detail": "stored='KXDOGE-26NOV2014-T0.0100000' live='KXDOGE-26NOV2014-T0.0100000'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXDOGE-26NOV2014-B0.232 result",
-   "detail": "stored='no' live='no'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXDOGE-26NOV2014-B0.232 settlement_value_dollars",
-   "detail": "stored='0.0000' live='0.0000'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXDOGE-26NOV2014-B0.232 ticker",
-   "detail": "stored='KXDOGE-26NOV2014-B0.232' live='KXDOGE-26NOV2014-B0.232'",
-   "ok": true
-  },
-  {
    "check": "top_event KXPRESNOMD-28 market KXPRESNOMD-28-HBID exists",
    "detail": "live query returned 1 markets",
    "ok": true
@@ -3497,12 +3497,12 @@
   },
   {
    "check": "orderbook KXPRESNOMD-28-BOBA structure",
-   "detail": "{\"no_dollars\": [[\"0.1170\", \"150.00\"], [\"0.1180\", \"179.00\"], [\"0.1190\", \"186.00\"], [\"0.1200\", \"155.00\"], [\"0.1210\", \"243.",
+   "detail": "{\"no_dollars\": [[\"0.1130\", \"181.00\"], [\"0.1140\", \"250.00\"], [\"0.1150\", \"180.00\"], [\"0.1160\", \"163.00\"], [\"0.1170\", \"150.",
    "ok": true
   },
   {
    "check": "orderbook KXPRESNOMD-28-BS structure",
-   "detail": "{\"no_dollars\": [[\"0.0300\", \"10.00\"], [\"0.9930\", \"95238.08\"], [\"0.9940\", \"111111.08\"], [\"0.9950\", \"132692.89\"]], \"yes_dol",
+   "detail": "{\"no_dollars\": [[\"0.0300\", \"10.00\"], [\"0.9930\", \"47619.04\"], [\"0.9940\", \"55555.54\"], [\"0.9950\", \"66515.18\"]], \"yes_dolla",
    "ok": true
   },
   {
@@ -3512,7 +3512,7 @@
   },
   {
    "check": "orderbook KXPRESNOMD-28-EWAR structure",
-   "detail": "{\"no_dollars\": [[\"0.9700\", \"5555.55\"], [\"0.9800\", \"8333.33\"], [\"0.9900\", \"16662.07\"]], \"yes_dollars\": []}",
+   "detail": "{\"no_dollars\": [[\"0.9700\", \"5555.55\"], [\"0.9800\", \"8333.33\"], [\"0.9900\", \"16666.16\"]], \"yes_dollars\": []}",
    "ok": true
   },
   {
@@ -3640,5 +3640,5 @@
   "passed": 725
  },
  "tool": "scripts/verify_rows.py v1",
- "verified_at": "2026-11-20T19:40:51+00:00"
+ "verified_at": "2026-11-20T20:09:24+00:00"
 }
