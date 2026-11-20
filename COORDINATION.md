@@ -107,6 +107,7 @@ Session 6908a11a (see `FLAGGED.md` for full evidence; complements the above):
 - F7: `/markets/{ticker}/trades` demo fetch errored via page-fetch tool — UNVERIFIED, re-test in browser.
 - F8: Unverified list (browser CORS, rate limits, fee amounts, portfolio endpoints beyond official samples, `limit` enforcement on `/series?category=`, cause of empty `KXPRES28`/`KXHOUSE26` on demo).
 - F9: `limit` appears unenforced on `GET /series?category=` (live-tested) — paginate by cursor.
+- F10: Root landing alternates (redirect vs full landing) across concurrent merges; owner to pick one canonical landing at final review (see FLAGGED.md).
 
 ## Verification log
 
