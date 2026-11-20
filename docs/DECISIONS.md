@@ -98,7 +98,7 @@ Status legend: `CLOSED` (evidence in hand) · `OPEN` (needs the account owner or
 - **Blocks?** No; the site shows capture timestamps and never claims sub-second freshness.
 
 ### D9 — Do we have enough settlement history for reliable expectancy? `OPEN`
-- **Known:** 12,567 settled rows, but they are concentrated in a short window (Nov 2026 = 12,004 rows; Oct 2026 = 563
+- **Known:** 12,567 settled rows, but they are concentrated in a short window (Nov 2026 = 11,680 rows; Oct 2026 = 563
   rows), dominated by short-dated crypto and golf contracts.
 - **Unknown:** whether the measured expectancy holds across regimes, seasons and market types.
 - **What would close it:** deeper history via `GET /historical/markets` and `GET /historical/trades`

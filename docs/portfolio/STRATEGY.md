@@ -93,9 +93,9 @@ These describe the **shape** of a trade, not the trader's intent, and they can b
 
 | Band (YES price) | n | Realised YES rate | Avg price paid | YES expectancy / contract | NO expectancy / contract |
 |---|---|---|---|---|---|
-| 0.01 – 0.20 | 1,817 | 1.65% | 0.0323 | −0.0158 | **+0.0158** |
-| 0.80 – 0.99 | 936 | 82.26% | 0.9750 | **−0.1523** | +0.1523 |
-| all rows | 12,521 | 19.55% | 0.1483 | +0.0472 | −0.0472 |
+| 0.01 – 0.20 | 1,820 | 1.65% | 0.0322 | −0.0158 | **+0.0158** |
+| 0.80 – 0.99 | 929 | 82.13% | 0.9749 | **−0.1536** | +0.1536 |
+| all rows | 12,521 | 19.50% | 0.1477 | +0.0472 | −0.0472 |
 
 **Interpretation:** buying the "sure thing" at 97.5¢ to win $1 is a bad trade in this sample — it wins 82% of the time
 and still loses 15.2¢ per contract. The cheap side is where the residual edge sat, and only just.

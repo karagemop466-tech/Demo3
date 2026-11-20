@@ -33,13 +33,14 @@ it stays blank and is listed on the **Flagged for review** page. Nothing is infe
 
 ## The headline findings
 
-- **Fading longshots is the only edge that survived.** Of 12,521 settled markets, the 0.01–0.20 band
-  won 1.65% of the time at an average price of 0.0323 — buying NO there returned **+0.0158** per
-  contract before fees.
-- **Buying favourites loses money.** The 0.80–0.99 band won 82.26% at an average price of 0.975,
-  which is **−0.1523** per contract. The popular "buy near-certainties" strategy is negative at the
+- **Fading longshots is the only edge that survived.** Two bets point in opposite directions on the same data. The 0.01–0.20 "longshot" band (n = 1,820) won
+  1.65% of the time at an average price of 0.0322, so buying NO returned **+0.0158** per contract before
+  fees. The `<=0.10` bucket (n = 10,478) is even starker: 7.71% wins at 0.39¢, **+0.0732** for YES — but
+  that is driven by 1.9 bn contracts of junk that nobody could buy at 0.39¢.
+- **Buying favourites loses money.** The 0.80–0.99 band won 82.13% at an average price of 0.9749,
+  which is **−0.1536** per contract. The popular "buy near-certainties" strategy is negative at the
   prices actually paid.
-- **The numbers are narrow, fee-free and mostly one month.** 12,004 of 12,567 settled rows are from
+- **The numbers are narrow, fee-free and mostly one month.** 11,680 of 12,567 settled rows are from
   November 2026 and fees are excluded, so every table carries that caveat and the site does not
   claim predictive power. See flagged item F9.
 - **"Highest dollar amount" is ambiguous and the candidate metrics disagree.** The biggest markets

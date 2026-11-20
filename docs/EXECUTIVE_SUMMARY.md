@@ -61,12 +61,12 @@ Kalshi's own `result` field, counted over the accumulated settled rows:
 
 | Topic | YES | NO | scalar |
 |---|---|---|---|
-| Crypto | 1,023 | 3,391 | 0 |
+| Crypto | 1,016 | 3,398 | 0 |
 | Golf | 332 | 3,538 | 46 |
 | Elections | 73 | 166 | 0 |
 | Gas prices | 796 | 2,595 | 0 |
 | Culture | 224 | 383 | 0 |
-| **Total** | **2,448** | **10,073** | **46** |
+| **Total** | **2,441** | **10,080** | **46** |
 
 Source field: `result` on `GET /markets?status=settled`
 · rules: [Market Settlement](https://docs.kalshi.com/getting_started/market_settlement.md).
@@ -77,18 +77,18 @@ This is the finding that should change how anyone uses the dashboard.
 
 | YES price band | Settled markets | Resolved YES | Realised win rate | Average YES price | YES expectancy / contract | NO expectancy / contract |
 |---|---|---|---|---|---|---|
-| ≤ 0.10 | 10,467 | 808 | 7.72% | 0.0039 | +0.0733 | −0.0733 |
-| 0.10 – 0.20 | 145 | 6 | 4.14% | 0.1368 | −0.0954 | +0.0954 |
-| 0.20 – 0.40 | 78 | 11 | 14.10% | 0.2864 | −0.1454 | +0.1454 |
-| 0.40 – 0.60 | 41 | 19 | 46.34% | 0.4768 | −0.0134 | +0.0134 |
-| 0.60 – 0.80 | 35 | 15 | 42.86% | 0.6820 | −0.2534 | +0.2534 |
-| 0.80 – 0.90 | 47 | 35 | 74.47% | 0.8598 | −0.1151 | +0.1151 |
-| 0.90 – 0.99 | 276 | 197 | 71.38% | 0.9613 | −0.2475 | +0.2475 |
-| ≥ 0.99 | 1,432 | 1,357 | 94.76% | 0.9951 | −0.0475 | +0.0475 |
+| ≤ 0.10 | 10,478 | 808 | 7.71% | 0.0039 | +0.0732 | −0.0732 |
+| 0.10–0.20 | 143 | 6 | 4.20% | 0.1366 | −0.0946 | +0.0946 |
+| 0.20–0.40 | 76 | 11 | 14.47% | 0.2863 | −0.1416 | +0.1416 |
+| 0.40–0.60 | 41 | 19 | 46.34% | 0.4768 | −0.0134 | +0.0134 |
+| 0.60–0.80 | 35 | 15 | 42.86% | 0.6820 | −0.2534 | +0.2534 |
+| 0.80–0.90 | 47 | 35 | 74.47% | 0.8602 | −0.1155 | +0.1155 |
+| 0.90–0.99 | 276 | 197 | 71.38% | 0.9613 | −0.2476 | +0.2476 |
+| ≥ 0.99 | 1,425 | 1,350 | 94.74% | 0.9952 | −0.0478 | +0.0478 |
 
-Aggregated bands: the **0.80–0.99 "favourite" band** (n = 936) resolved YES 82.26% of the time but averaged a
-97.50¢ price → **YES expectancy −15.23¢/contract**; the **0.01–0.20 "longshot" band** (n = 1,817) resolved YES 1.65%
-of the time at a 3.23¢ average price → **NO expectancy +1.58¢/contract**. Fees are excluded in both.
+Aggregated bands: the **0.80–0.99 "favourite" band** (n = 929) resolved YES 82.13% of the time but averaged a
+97.49¢ price → **YES expectancy −15.36¢/contract**; the **0.01–0.20 "longshot" band** (n = 1,820) resolved YES 1.65%
+of the time at a 3.22¢ average price → **NO expectancy +1.58¢/contract**. Fees are excluded in both.
 
 *Formula:* `expectancy = realised win rate − price paid`; both in dollars per contract.
 *Caveats that must travel with this number:* `last_price_dollars` is the **last trade**, not the average price paid;
@@ -99,7 +99,7 @@ window are counted; **historical expectancy does not predict the future.**
 
 - **Median settlement lag** (settlement time − scheduled close): **0.13 h (~8 minutes)** across 12,567 observations;
   p90 = 8.36 h; no market in the sample settled before its scheduled close.
-- **Median resting liquidity** on the 34 sampled books: **$1,084,947.76**; median derived YES spread **$0.001**.
+- **Median resting liquidity** on the 34 sampled books: **$1,084,837.97**; median derived YES spread **$0.001**.
 - Deep books concentrate in the election nomination markets (largest single book sampled: **$4.24 M** resting).
 - **Order-book structure matters:** many in-scope markets quote with a **0.00 bid / 1.00 ask** shell, i.e. no
   resting bids at all. A "highest dollar volume" ranking built on traded contracts therefore points at markets

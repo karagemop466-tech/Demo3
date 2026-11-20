@@ -21,7 +21,7 @@ automatically. Each row carries an `ID`, a cost estimate in engineer-hours, a de
 
 ### S2 — Show measured expectancy next to every price ✅ *implemented this session*
 - **Problem it solves:** D9. A price on Kalshi is not a calibrated probability. In the collected settlement sample the
-  0.80–0.99 band won 82.26% of the time at a 97.50¢ average price (**−15.23¢/contract**) while the 0.01–0.20 band's
+  0.80–0.99 band won 82.13% of the time at a 97.49¢ average price (**−15.36¢/contract**) while the 0.01–0.20 band's
   NO side earned **+1.58¢/contract**.
 - **Proposal:** a "what this price has historically been worth" panel on every category page, with the sample size and
   the caveats (last-trade price, fees excluded, survivorship, not predictive).
@@ -68,7 +68,7 @@ automatically. Each row carries an `ID`, a cost estimate in engineer-hours, a de
 - **Effort:** 3 h. **Reversible:** yes.
 
 ### S8 — Deepen history via the historical endpoints `suggested`
-- **Problem it solves:** D9 — the settlement sample is narrow (12,004 of 12,567 rows are from Nov 2026).
+- **Problem it solves:** D9 — the settlement sample is narrow (11,680 of 12,567 rows are from Nov 2026).
 - **Proposal:** page `GET /historical/markets` and `GET /historical/trades`, keep monthly rollups, and re-run the study
   by quarter so regime drift is visible.
 - **Source:** [Historical Data](https://docs.kalshi.com/getting_started/historical_data.md).

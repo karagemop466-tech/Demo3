@@ -133,6 +133,23 @@ All entries below are backed by commits on `arena/c2aac20e-demo3` and green CI r
   `data/dashboard.json`. Restored from `6ee1523` in `447e0cc`, and `analysis/build.py` now refuses
   to overwrite committed artifacts when its inputs are empty. Also published as **F6**.
 
+### Figure audit — an error this session found in its own work
+
+Before opening the PR every headline number was recomputed from the committed artifacts. The
+audit found a real mistake: the prose said the `<=0.10` bucket *lost* money for YES buyers, when
+the artifact shows **+0.0732 per contract** (7.71% of 10,478 markets resolved YES at a 0.39¢
+average price). The claim was wrong, not just stale. It is now stated correctly and, more
+importantly, the reason it was wrong is documented: that band is dominated by 1.9 bn contracts of
+junk that could not actually be bought at 0.39¢, so it is an artefact of `last_price_dollars`
+rather than a tradable edge.
+
+Every figure that changed with the 12:15Z snapshot was corrected site-wide (favourite band
+82.13% / 97.49¢ / −15.36¢; longshot band n=1,820 at 3.22¢; totals 2,441 YES / 10,080 NO / 46
+scalar; median resting liquidity $1,084,837.97; Nov-2026 concentration 11,680 of 12,567). So that
+this cannot silently happen again, `tools/check_figures.py` re-derives each quoted number from the
+JSON and fails the build on any mismatch — verified by re-injecting the old values and watching it
+fail, then removing them.
+
 ### Verification performed (line by line)
 
 1. **Order-book maths** reproduced Kalshi's own documented worked example exactly (best YES bid
