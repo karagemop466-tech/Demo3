@@ -82,6 +82,16 @@ NESTED_MARKETS = {
         "close_time": "2026-12-31T23:59:00Z", "can_close_early": True,
         "strike_type": "greater", "rules_primary": "Resolves Yes if...",
     }],
+    "KXHIGHNY-26NOV": [{
+        "ticker": "KXHIGHNY-26NOV-T75", "event_ticker": "KXHIGHNY-26NOV",
+        "title": "Highest temperature in NYC ... 75F or higher", "yes_sub_title": "75F or higher",
+        "market_type": "binary", "status": "active", "result": "",
+        "yes_bid_dollars": "0.3000", "yes_ask_dollars": "0.3200",
+        "last_price_dollars": "0.3100", "volume_fp": "400.00", "volume_24h_fp": "40.00",
+        "open_interest_fp": "900.00", "yes_bid_size_fp": "30.00", "yes_ask_size_fp": "20.00",
+        "close_time": "2026-11-20T23:59:00Z", "can_close_early": True,
+        "strike_type": "greater", "rules_primary": "Resolves Yes if...",
+    }],
     "KXPGATOUR-26DEC": [{
         "ticker": "KXPGATOUR-26DEC-PLAYERA", "event_ticker": "KXPGATOUR-26DEC",
         "title": "Player A", "yes_sub_title": "Player A",
@@ -141,6 +151,21 @@ class MockAPI(BaseHTTPRequestHandler):
             self.wfile.write(b'{"status":"operational"}')
         elif p == "/events":
             self._json(EVENTS_PAGE)
+        elif p == "/markets":
+            series = q.get("series_ticker", [None])[0]
+            status = q.get("status", [None])[0]
+            if series == "KXAAAGASM" and status == "settled":
+                self._json({"cursor": "", "markets": [{
+                    "ticker": "KXAAAGASM-26NOV-T4.00", "event_ticker": "KXAAAGASM-26NOV",
+                    "title": "Highest US gas price ... $4.00 or higher",
+                    "status": "settled", "result": "yes", "last_price_dollars": "1.0000",
+                    "volume_fp": "2100.00", "settled_time": "2026-11-20T05:00:00Z",
+                    "close_time": "2026-11-20T05:00:00Z"}]})
+                return
+            flat = []
+            for ev_t, ms in NESTED_MARKETS.items():
+                flat.extend(ms)
+            self._json({"cursor": "", "markets": flat})
         elif p.startswith("/events/") and q.get("with_nested_markets", ["false"])[0] == "true":
             ticker = p.rsplit("/", 1)[-1]
             if ticker == "KXGAS-OLD-1":  # a settled (resolved) tracked event
@@ -214,6 +239,7 @@ class CollectorTest(unittest.TestCase):
                          {"KXBTCD-26DEC31", "KXAAAGASM-26DEC", "KXPGATOUR-26DEC"})
         topics = set(events["topics"].keys())
         self.assertEqual(topics, {"crypto", "gas", "golf"})
+        self.assertEqual(events["topic_counts"]["crypto"], 1)
         # 2. ranking: BTC event (5000 x 0.63 = 3150) first
         self.assertEqual(events["ranked"][0]["event_ticker"], "KXBTCD-26DEC31")
         self.assertAlmostEqual(events["ranked"][0]["est_dollar_volume"], 3150.0, places=2)
@@ -250,7 +276,14 @@ class CollectorTest(unittest.TestCase):
         meta = self._read("meta.json")
         self.assertGreater(meta["request_count"], 0)
         self.assertEqual(meta["error_count"], 0)
-        self.assertIn("Climate and Weather", meta["category_counts_open_exchange"])
+        self.assertIn("Crypto Currencies", meta["category_counts_open_exchange"])
+        # weather event had an open market but stayed out of scope
+        self.assertNotIn("KXHIGHNY-26NOV", {e["event_ticker"] for e in events["ranked"]})
+        # 9. series resolution sweep recorded the settled gas market (topic with no
+        #    live events still gets resolution tracking)
+        by_market = res["by_market"]
+        self.assertIn("KXAAAGASM-26NOV-T4.00", by_market)
+        self.assertEqual(by_market["KXAAAGASM-26NOV-T4.00"]["result"], "yes")
 
     def test_out_of_scope_never_enters(self):
         c = self._run()
