@@ -7,17 +7,17 @@
     {
      "key": "cheap (<30¢)",
      "losses": 0,
-     "pnl": 4570.0,
-     "stake": 4181.9,
-     "trades": 457,
-     "wins": 457
+     "pnl": 5000.0,
+     "stake": 4194.9,
+     "trades": 500,
+     "wins": 500
     },
     {
      "key": "expensive (>70¢)",
-     "losses": 180,
-     "pnl": -1790.0,
-     "stake": 16195.6,
-     "trades": 181,
+     "losses": 181,
+     "pnl": -1800.0,
+     "stake": 16371.2,
+     "trades": 182,
      "wins": 1
     },
     {
@@ -32,19 +32,19 @@
    "by_series": [
     {
      "key": "KXPRESNOMD",
-     "losses": 154,
-     "pnl": 1990.0,
-     "stake": 16889.7,
-     "trades": 507,
-     "wins": 353
+     "losses": 150,
+     "pnl": 2260.0,
+     "stake": 16553.4,
+     "trades": 526,
+     "wins": 376
     },
     {
      "key": "KXPRESPERSON",
-     "losses": 7,
-     "pnl": 620.0,
-     "stake": 1730.8,
-     "trades": 76,
-     "wins": 69
+     "losses": 12,
+     "pnl": 770.0,
+     "stake": 2255.7,
+     "trades": 101,
+     "wins": 89
     },
     {
      "key": "KXECCOMPACT",
@@ -90,11 +90,11 @@
    "by_topic": [
     {
      "key": "elections",
-     "losses": 181,
-     "pnl": 2780.0,
-     "stake": 20550.5,
-     "trades": 640,
-     "wins": 459
+     "losses": 182,
+     "pnl": 3200.0,
+     "stake": 20739.1,
+     "trades": 684,
+     "wins": 502
     },
     {
      "key": "culture",
@@ -105,8 +105,8 @@
      "wins": 6
     }
    ],
-   "closed": 647,
-   "equity": 12830.0,
+   "closed": 691,
+   "equity": 13250.0,
    "equity_curve": [
     {
      "equity": 10010.0,
@@ -2254,16 +2254,6 @@
      "ts": "2026-11-13T14:00:00Z"
     },
     {
-     "equity": 11460.0,
-     "trade": "S1:KXPRESNOMD-28-HBID:1794578400",
-     "ts": "2026-11-13T15:00:00Z"
-    },
-    {
-     "equity": 11450.0,
-     "trade": "S1:KXPRESNOMD-28-BOBA:1794578400",
-     "ts": "2026-11-13T15:00:00Z"
-    },
-    {
      "equity": 11440.0,
      "trade": "S1:KXPRESNOMD-28-MK:1793142000",
      "ts": "2026-11-13T16:00:00Z"
@@ -2584,780 +2574,1010 @@
      "ts": "2026-11-13T16:00:00Z"
     },
     {
-     "equity": 12020.0,
-     "trade": "S1:KXPRESNOMD-28-JSTE:1794578400",
-     "ts": "2026-11-13T20:00:00Z"
-    },
-    {
-     "equity": 12010.0,
+     "equity": 12000.0,
      "trade": "S1:KXPRESNOMD-28-MK:1794585600",
      "ts": "2026-11-13T21:00:00Z"
     },
     {
+     "equity": 12010.0,
+     "trade": "S1:KXPRESPERSON-28-VRAM:1794603600",
+     "ts": "2026-11-13T22:00:00Z"
+    },
+    {
      "equity": 12000.0,
-     "trade": "S1:KXPRESNOMD-28-HBID:1794600000",
-     "ts": "2026-11-13T21:00:00Z"
+     "trade": "S1:KXPRESNOMD-28-HBID:1794603600",
+     "ts": "2026-11-13T23:00:00Z"
     },
     {
      "equity": 11990.0,
-     "trade": "S1:KXPRESNOMD-28-JSTE:1794600000",
-     "ts": "2026-11-13T21:00:00Z"
+     "trade": "S1:KXPRESNOMD-28-JSTE:1794603600",
+     "ts": "2026-11-13T23:00:00Z"
     },
     {
-     "equity": 12000.0,
-     "trade": "S1:KXPRESPERSON-28-VRAM:1794578400",
-     "ts": "2026-11-13T22:00:00Z"
-    },
-    {
-     "equity": 12010.0,
-     "trade": "S1:KXPRESPERSON-28-VRAM:1794600000",
-     "ts": "2026-11-13T22:00:00Z"
-    },
-    {
-     "equity": 12000.0,
+     "equity": 11980.0,
      "trade": "S1:KXNEXTSPEAKER-31-HJEF:1794081600",
      "ts": "2026-11-14T01:00:00Z"
     },
     {
-     "equity": 11990.0,
+     "equity": 11970.0,
      "trade": "S1:KXNEXTSPEAKER-31-HJEF:1794110400",
      "ts": "2026-11-14T01:00:00Z"
     },
     {
-     "equity": 11980.0,
+     "equity": 11960.0,
      "trade": "S1:KXNEXTSPEAKER-31-HJEF:1794153600",
      "ts": "2026-11-14T01:00:00Z"
     },
     {
-     "equity": 11970.0,
+     "equity": 11950.0,
      "trade": "S1:KXNEXTSPEAKER-31-HJEF:1794189600",
      "ts": "2026-11-14T01:00:00Z"
     },
     {
-     "equity": 11960.0,
+     "equity": 11940.0,
      "trade": "S1:KXNEXTSPEAKER-31-HJEF:1794232800",
      "ts": "2026-11-14T01:00:00Z"
     },
     {
-     "equity": 11950.0,
+     "equity": 11930.0,
      "trade": "S1:KXNEXTSPEAKER-31-HJEF:1794283200",
      "ts": "2026-11-14T01:00:00Z"
     },
     {
-     "equity": 11940.0,
+     "equity": 11920.0,
      "trade": "S1:KXNEXTSPEAKER-31-HJEF:1794344400",
      "ts": "2026-11-14T01:00:00Z"
     },
     {
-     "equity": 11930.0,
+     "equity": 11910.0,
      "trade": "S1:KXNEXTSPEAKER-31-HJEF:1794376800",
      "ts": "2026-11-14T01:00:00Z"
     },
     {
-     "equity": 11920.0,
+     "equity": 11900.0,
      "trade": "S1:KXNEXTSPEAKER-31-HJEF:1794427200",
      "ts": "2026-11-14T01:00:00Z"
     },
     {
-     "equity": 11910.0,
+     "equity": 11890.0,
      "trade": "S1:KXNEXTSPEAKER-31-HJEF:1794452400",
      "ts": "2026-11-14T01:00:00Z"
     },
     {
-     "equity": 11900.0,
+     "equity": 11880.0,
      "trade": "S1:KXNEXTSPEAKER-31-HJEF:1794517200",
      "ts": "2026-11-14T01:00:00Z"
     },
     {
-     "equity": 11890.0,
+     "equity": 11870.0,
      "trade": "S1:KXNEXTSPEAKER-31-HJEF:1794582000",
      "ts": "2026-11-14T01:00:00Z"
     },
     {
-     "equity": 11880.0,
-     "trade": "S1:KXPRESNOMD-28-HBID:1794621600",
-     "ts": "2026-11-14T03:00:00Z"
+     "equity": 11860.0,
+     "trade": "S1:KXPRESNOMD-28-HBID:1794625200",
+     "ts": "2026-11-14T05:00:00Z"
     },
     {
      "equity": 11870.0,
-     "trade": "S1:KXPRESPERSON-28-VRAM:1794621600",
-     "ts": "2026-11-14T03:00:00Z"
-    },
-    {
-     "equity": 11860.0,
-     "trade": "S1:KXPRESNOMD-28-JSTE:1794621600",
+     "trade": "S1:KXPRESNOMD-28-JSTE:1794625200",
      "ts": "2026-11-14T08:00:00Z"
     },
     {
-     "equity": 11850.0,
-     "trade": "S1:KXPRESNOMD-28-JSTE:1794643200",
-     "ts": "2026-11-14T09:00:00Z"
+     "equity": 11860.0,
+     "trade": "S1:KXPRESNOMD-28-JSTE:1794646800",
+     "ts": "2026-11-14T11:00:00Z"
     },
     {
-     "equity": 11840.0,
+     "equity": 11850.0,
      "trade": "S1:KXNEXTSPEAKER-31-HJEF:1794618000",
      "ts": "2026-11-14T21:00:00Z"
     },
     {
-     "equity": 11850.0,
-     "trade": "S1:KXPRESNOMD-28-GW:1794578400",
-     "ts": "2026-11-15T06:00:00Z"
-    },
-    {
      "equity": 11860.0,
-     "trade": "S1:KXPRESNOMD-28-GW:1794600000",
+     "trade": "S1:KXPRESNOMD-28-GW:1794603600",
      "ts": "2026-11-15T06:00:00Z"
     },
     {
      "equity": 11870.0,
-     "trade": "S1:KXPRESNOMD-28-GW:1794621600",
+     "trade": "S1:KXPRESNOMD-28-GW:1794625200",
      "ts": "2026-11-15T06:00:00Z"
     },
     {
      "equity": 11880.0,
-     "trade": "S1:KXPRESNOMD-28-GW:1794643200",
+     "trade": "S1:KXPRESNOMD-28-GW:1794646800",
      "ts": "2026-11-15T06:00:00Z"
     },
     {
      "equity": 11890.0,
-     "trade": "S1:KXPRESNOMD-28-GW:1794664800",
+     "trade": "S1:KXPRESNOMD-28-GW:1794668400",
      "ts": "2026-11-15T06:00:00Z"
     },
     {
      "equity": 11900.0,
-     "trade": "S1:KXPRESNOMD-28-GW:1794686400",
+     "trade": "S1:KXPRESNOMD-28-GW:1794690000",
      "ts": "2026-11-15T06:00:00Z"
     },
     {
      "equity": 11910.0,
-     "trade": "S1:KXPRESNOMD-28-GW:1794708000",
+     "trade": "S1:KXPRESNOMD-28-GW:1794711600",
      "ts": "2026-11-15T06:00:00Z"
     },
     {
      "equity": 11920.0,
-     "trade": "S1:KXPRESNOMD-28-BOBA:1794600000",
+     "trade": "S1:KXPRESNOMD-28-BOBA:1794603600",
      "ts": "2026-11-15T14:00:00Z"
     },
     {
      "equity": 11930.0,
-     "trade": "S1:KXPRESNOMD-28-BOBA:1794621600",
+     "trade": "S1:KXPRESNOMD-28-BOBA:1794625200",
      "ts": "2026-11-15T14:00:00Z"
     },
     {
      "equity": 11940.0,
-     "trade": "S1:KXPRESNOMD-28-BOBA:1794643200",
+     "trade": "S1:KXPRESNOMD-28-BOBA:1794646800",
      "ts": "2026-11-15T14:00:00Z"
     },
     {
      "equity": 11950.0,
-     "trade": "S1:KXPRESNOMD-28-BOBA:1794664800",
+     "trade": "S1:KXPRESNOMD-28-BOBA:1794668400",
      "ts": "2026-11-15T14:00:00Z"
     },
     {
      "equity": 11960.0,
-     "trade": "S1:KXPRESNOMD-28-BOBA:1794686400",
+     "trade": "S1:KXPRESNOMD-28-BOBA:1794690000",
      "ts": "2026-11-15T14:00:00Z"
     },
     {
-     "equity": 11950.0,
-     "trade": "S1:KXPRESNOMD-28-BOBA:1794708000",
+     "equity": 11970.0,
+     "trade": "S1:KXPRESNOMD-28-BOBA:1794711600",
      "ts": "2026-11-15T14:00:00Z"
     },
     {
-     "equity": 11960.0,
-     "trade": "S1:KXPRESNOMD-28-BOBA:1794729600",
+     "equity": 11980.0,
+     "trade": "S1:KXPRESNOMD-28-BOBA:1794733200",
      "ts": "2026-11-15T14:00:00Z"
     },
     {
-     "equity": 11950.0,
+     "equity": 11970.0,
      "trade": "S1:KXPRESNOMD-28-HCLI:1793599200",
      "ts": "2026-11-15T15:00:00Z"
     },
     {
-     "equity": 11960.0,
+     "equity": 11980.0,
      "trade": "S1:KXPRESNOMD-28-HCLI:1793671200",
      "ts": "2026-11-15T15:00:00Z"
     },
     {
-     "equity": 11970.0,
+     "equity": 11990.0,
      "trade": "S1:KXPRESNOMD-28-HCLI:1793754000",
      "ts": "2026-11-15T15:00:00Z"
     },
     {
-     "equity": 11980.0,
+     "equity": 12000.0,
      "trade": "S1:KXTVSEASONRELEASETHELASTOFUS-27-JAN:1794344400",
      "ts": "2026-11-15T17:00:00Z"
     },
     {
-     "equity": 11990.0,
+     "equity": 12010.0,
      "trade": "S1:KXTVSEASONRELEASETHELASTOFUS-27-JAN:1794416400",
      "ts": "2026-11-15T17:00:00Z"
     },
     {
-     "equity": 12000.0,
+     "equity": 12020.0,
      "trade": "S1:KXTVSEASONRELEASETHELASTOFUS-27-JAN:1794668400",
      "ts": "2026-11-15T17:00:00Z"
     },
     {
-     "equity": 12010.0,
+     "equity": 12030.0,
      "trade": "S1:KXTVSEASONRELEASETHELASTOFUS-27-JAN:1794754800",
      "ts": "2026-11-15T17:00:00Z"
     },
     {
-     "equity": 12020.0,
-     "trade": "S1:KXPRESNOMD-28-JSTE:1794664800",
+     "equity": 12040.0,
+     "trade": "S1:KXPRESNOMD-28-JSTE:1794668400",
      "ts": "2026-11-15T19:00:00Z"
     },
     {
-     "equity": 12010.0,
-     "trade": "S1:KXPRESNOMD-28-JSTE:1794686400",
+     "equity": 12050.0,
+     "trade": "S1:KXPRESNOMD-28-JSTE:1794690000",
      "ts": "2026-11-15T19:00:00Z"
     },
     {
-     "equity": 12000.0,
-     "trade": "S1:KXPRESNOMD-28-JSTE:1794708000",
+     "equity": 12060.0,
+     "trade": "S1:KXPRESNOMD-28-JSTE:1794711600",
      "ts": "2026-11-15T19:00:00Z"
     },
     {
-     "equity": 12010.0,
-     "trade": "S1:KXPRESNOMD-28-JSTE:1794729600",
+     "equity": 12070.0,
+     "trade": "S1:KXPRESNOMD-28-JSTE:1794733200",
      "ts": "2026-11-15T19:00:00Z"
     },
     {
-     "equity": 12020.0,
-     "trade": "S1:KXPRESNOMD-28-JSTE:1794751200",
+     "equity": 12080.0,
+     "trade": "S1:KXPRESNOMD-28-JSTE:1794754800",
      "ts": "2026-11-15T19:00:00Z"
     },
     {
-     "equity": 12030.0,
+     "equity": 12090.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1793797200",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12040.0,
+     "equity": 12100.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1793818800",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12050.0,
+     "equity": 12110.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1793840400",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12060.0,
+     "equity": 12120.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1793862000",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12070.0,
+     "equity": 12130.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1793883600",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12080.0,
+     "equity": 12140.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1793908800",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12090.0,
+     "equity": 12150.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1793930400",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12100.0,
+     "equity": 12160.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1793952000",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12110.0,
+     "equity": 12170.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1793973600",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12100.0,
+     "equity": 12160.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1793995200",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12110.0,
+     "equity": 12170.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794016800",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12120.0,
+     "equity": 12180.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794038400",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12130.0,
+     "equity": 12190.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794060000",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12120.0,
+     "equity": 12180.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794081600",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12130.0,
+     "equity": 12190.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794103200",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12140.0,
+     "equity": 12200.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794124800",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12150.0,
+     "equity": 12210.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794146400",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12160.0,
+     "equity": 12220.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794178800",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12170.0,
+     "equity": 12230.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794200400",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12180.0,
+     "equity": 12240.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794222000",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12190.0,
+     "equity": 12250.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794243600",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12200.0,
+     "equity": 12260.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794265200",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12210.0,
+     "equity": 12270.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794286800",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12220.0,
+     "equity": 12280.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794308400",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12230.0,
+     "equity": 12290.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794330000",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12240.0,
+     "equity": 12300.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794351600",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12250.0,
+     "equity": 12310.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794373200",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12260.0,
+     "equity": 12320.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794394800",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12270.0,
+     "equity": 12330.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794416400",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12280.0,
+     "equity": 12340.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794438000",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12290.0,
+     "equity": 12350.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794459600",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12300.0,
+     "equity": 12360.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794481200",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12310.0,
+     "equity": 12370.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794502800",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12320.0,
+     "equity": 12380.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794524400",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12330.0,
+     "equity": 12390.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794546000",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12340.0,
+     "equity": 12400.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794567600",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12350.0,
+     "equity": 12410.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794589200",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12360.0,
+     "equity": 12420.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794610800",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12350.0,
+     "equity": 12410.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794632400",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12360.0,
+     "equity": 12420.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794654000",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12370.0,
+     "equity": 12430.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794675600",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12380.0,
+     "equity": 12440.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794697200",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12390.0,
+     "equity": 12450.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794718800",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12400.0,
+     "equity": 12460.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794740400",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12410.0,
+     "equity": 12470.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794762000",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 12400.0,
-     "trade": "S1:KXPRESNOMD-28-JSTE:1794772800",
+     "equity": 12480.0,
+     "trade": "S1:KXPRESNOMD-28-JSTE:1794776400",
      "ts": "2026-11-16T00:00:00Z"
     },
     {
-     "equity": 12410.0,
+     "equity": 12490.0,
      "trade": "S1:KXPRESPERSON-28-JOSS:1794783600",
      "ts": "2026-11-16T02:00:00Z"
     },
     {
-     "equity": 12400.0,
-     "trade": "S1:KXPRESNOMD-28-JSTE:1794794400",
+     "equity": 12480.0,
+     "trade": "S1:KXPRESNOMD-28-JSTE:1794798000",
      "ts": "2026-11-16T04:00:00Z"
     },
     {
-     "equity": 12390.0,
-     "trade": "S1:KXPRESNOMD-28-BOBA:1794751200",
+     "equity": 12470.0,
+     "trade": "S1:KXPRESNOMD-28-BOBA:1794754800",
      "ts": "2026-11-16T11:00:00Z"
     },
     {
-     "equity": 12380.0,
-     "trade": "S1:KXPRESNOMD-28-BOBA:1794772800",
+     "equity": 12460.0,
+     "trade": "S1:KXPRESNOMD-28-BOBA:1794776400",
      "ts": "2026-11-16T11:00:00Z"
     },
     {
-     "equity": 12370.0,
-     "trade": "S1:KXPRESNOMD-28-BOBA:1794794400",
+     "equity": 12450.0,
+     "trade": "S1:KXPRESNOMD-28-BOBA:1794798000",
      "ts": "2026-11-16T11:00:00Z"
-    },
-    {
-     "equity": 12360.0,
-     "trade": "S1:KXPRESNOMD-28-BOBA:1794816000",
-     "ts": "2026-11-16T11:00:00Z"
-    },
-    {
-     "equity": 12350.0,
-     "trade": "S1:KXPRESNOMD-28-JSTE:1794816000",
-     "ts": "2026-11-16T11:00:00Z"
-    },
-    {
-     "equity": 12360.0,
-     "trade": "S1:KXPRESNOMD-28-ESLO:1794578400",
-     "ts": "2026-11-19T17:00:00Z"
-    },
-    {
-     "equity": 12370.0,
-     "trade": "S1:KXPRESNOMD-28-JTAL:1794578400",
-     "ts": "2026-11-19T17:00:00Z"
-    },
-    {
-     "equity": 12380.0,
-     "trade": "S1:KXPRESNOMD-28-ESLO:1794600000",
-     "ts": "2026-11-19T17:00:00Z"
-    },
-    {
-     "equity": 12390.0,
-     "trade": "S1:KXPRESNOMD-28-JTAL:1794600000",
-     "ts": "2026-11-19T17:00:00Z"
-    },
-    {
-     "equity": 12400.0,
-     "trade": "S1:KXPRESNOMD-28-ESLO:1794621600",
-     "ts": "2026-11-19T17:00:00Z"
-    },
-    {
-     "equity": 12410.0,
-     "trade": "S1:KXPRESNOMD-28-JTAL:1794621600",
-     "ts": "2026-11-19T17:00:00Z"
-    },
-    {
-     "equity": 12420.0,
-     "trade": "S1:KXPRESNOMD-28-ESLO:1794643200",
-     "ts": "2026-11-19T17:00:00Z"
-    },
-    {
-     "equity": 12430.0,
-     "trade": "S1:KXPRESNOMD-28-JTAL:1794643200",
-     "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12440.0,
-     "trade": "S1:KXPRESNOMD-28-ESLO:1794664800",
+     "trade": "S1:KXPRESNOMD-28-BOBA:1794819600",
+     "ts": "2026-11-16T11:00:00Z"
+    },
+    {
+     "equity": 12430.0,
+     "trade": "S1:KXPRESNOMD-28-JSTE:1794819600",
+     "ts": "2026-11-16T11:00:00Z"
+    },
+    {
+     "equity": 12440.0,
+     "trade": "S1:KXPRESNOMD-28-ESLO:1794603600",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12450.0,
-     "trade": "S1:KXPRESNOMD-28-JTAL:1794664800",
+     "trade": "S1:KXPRESNOMD-28-JTAL:1794603600",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12460.0,
-     "trade": "S1:KXPRESNOMD-28-ESLO:1794686400",
+     "trade": "S1:KXPRESNOMD-28-ESLO:1794625200",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12470.0,
-     "trade": "S1:KXPRESNOMD-28-JTAL:1794686400",
+     "trade": "S1:KXPRESNOMD-28-JTAL:1794625200",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12480.0,
-     "trade": "S1:KXPRESNOMD-28-ESLO:1794708000",
+     "trade": "S1:KXPRESNOMD-28-ESLO:1794646800",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12490.0,
-     "trade": "S1:KXPRESNOMD-28-JTAL:1794708000",
+     "trade": "S1:KXPRESNOMD-28-JTAL:1794646800",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12500.0,
-     "trade": "S1:KXPRESNOMD-28-ESLO:1794729600",
+     "trade": "S1:KXPRESNOMD-28-ESLO:1794668400",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12510.0,
-     "trade": "S1:KXPRESNOMD-28-JTAL:1794729600",
+     "trade": "S1:KXPRESNOMD-28-JTAL:1794668400",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12520.0,
-     "trade": "S1:KXPRESNOMD-28-ESLO:1794751200",
+     "trade": "S1:KXPRESNOMD-28-ESLO:1794690000",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12530.0,
-     "trade": "S1:KXPRESNOMD-28-JTAL:1794751200",
+     "trade": "S1:KXPRESNOMD-28-JTAL:1794690000",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12540.0,
-     "trade": "S1:KXPRESNOMD-28-ESLO:1794772800",
+     "trade": "S1:KXPRESNOMD-28-ESLO:1794711600",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12550.0,
-     "trade": "S1:KXPRESNOMD-28-JTAL:1794772800",
+     "trade": "S1:KXPRESNOMD-28-JTAL:1794711600",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12560.0,
-     "trade": "S1:KXPRESNOMD-28-ESLO:1794794400",
+     "trade": "S1:KXPRESNOMD-28-ESLO:1794733200",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12570.0,
-     "trade": "S1:KXPRESNOMD-28-JTAL:1794794400",
+     "trade": "S1:KXPRESNOMD-28-JTAL:1794733200",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12580.0,
-     "trade": "S1:KXPRESNOMD-28-ESLO:1794816000",
+     "trade": "S1:KXPRESNOMD-28-ESLO:1794754800",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12590.0,
-     "trade": "S1:KXPRESNOMD-28-JTAL:1794816000",
+     "trade": "S1:KXPRESNOMD-28-JTAL:1794754800",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12600.0,
-     "trade": "S1:KXPRESNOMD-28-ESLO:1794837600",
+     "trade": "S1:KXPRESNOMD-28-ESLO:1794776400",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12610.0,
-     "trade": "S1:KXPRESNOMD-28-JTAL:1794837600",
+     "trade": "S1:KXPRESNOMD-28-JTAL:1794776400",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12620.0,
-     "trade": "S1:KXPRESNOMD-28-ESLO:1794859200",
+     "trade": "S1:KXPRESNOMD-28-ESLO:1794798000",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12630.0,
-     "trade": "S1:KXPRESNOMD-28-JTAL:1794859200",
+     "trade": "S1:KXPRESNOMD-28-JTAL:1794798000",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12640.0,
-     "trade": "S1:KXPRESNOMD-28-ESLO:1794880800",
+     "trade": "S1:KXPRESNOMD-28-ESLO:1794819600",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12650.0,
-     "trade": "S1:KXPRESNOMD-28-JTAL:1794880800",
+     "trade": "S1:KXPRESNOMD-28-JTAL:1794819600",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12660.0,
-     "trade": "S1:KXPRESNOMD-28-ESLO:1794902400",
+     "trade": "S1:KXPRESNOMD-28-ESLO:1794841200",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12670.0,
-     "trade": "S1:KXPRESNOMD-28-JTAL:1794902400",
+     "trade": "S1:KXPRESNOMD-28-JTAL:1794841200",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12680.0,
-     "trade": "S1:KXPRESNOMD-28-ESLO:1794924000",
+     "trade": "S1:KXPRESNOMD-28-ESLO:1794862800",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12690.0,
-     "trade": "S1:KXPRESNOMD-28-JTAL:1794924000",
+     "trade": "S1:KXPRESNOMD-28-JTAL:1794862800",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12700.0,
-     "trade": "S1:KXPRESNOMD-28-ESLO:1794945600",
+     "trade": "S1:KXPRESNOMD-28-ESLO:1794884400",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12710.0,
-     "trade": "S1:KXPRESNOMD-28-JTAL:1794945600",
+     "trade": "S1:KXPRESNOMD-28-JTAL:1794884400",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12720.0,
-     "trade": "S1:KXPRESNOMD-28-ESLO:1794967200",
+     "trade": "S1:KXPRESNOMD-28-ESLO:1794906000",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12730.0,
-     "trade": "S1:KXPRESNOMD-28-JTAL:1794967200",
+     "trade": "S1:KXPRESNOMD-28-JTAL:1794906000",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12740.0,
-     "trade": "S1:KXPRESNOMD-28-ESLO:1794988800",
+     "trade": "S1:KXPRESNOMD-28-ESLO:1794927600",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12750.0,
-     "trade": "S1:KXPRESNOMD-28-JTAL:1794988800",
+     "trade": "S1:KXPRESNOMD-28-JTAL:1794927600",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12760.0,
-     "trade": "S1:KXPRESNOMD-28-ESLO:1795010400",
-     "ts": "2026-11-19T17:00:00Z"
-    },
-    {
-     "equity": 12750.0,
-     "trade": "S1:KXPRESNOMD-28-JTAL:1795010400",
-     "ts": "2026-11-19T17:00:00Z"
-    },
-    {
-     "equity": 12760.0,
-     "trade": "S1:KXPRESNOMD-28-ESLO:1795032000",
+     "trade": "S1:KXPRESNOMD-28-ESLO:1794949200",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12770.0,
-     "trade": "S1:KXPRESNOMD-28-JTAL:1795032000",
+     "trade": "S1:KXPRESNOMD-28-JTAL:1794949200",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12780.0,
-     "trade": "S1:KXPRESNOMD-28-ESLO:1795053600",
+     "trade": "S1:KXPRESNOMD-28-ESLO:1794970800",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12790.0,
-     "trade": "S1:KXPRESNOMD-28-JTAL:1795053600",
+     "trade": "S1:KXPRESNOMD-28-JTAL:1794970800",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12800.0,
-     "trade": "S1:KXPRESNOMD-28-ESLO:1795075200",
+     "trade": "S1:KXPRESNOMD-28-ESLO:1794992400",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12810.0,
-     "trade": "S1:KXPRESNOMD-28-JTAL:1795075200",
+     "trade": "S1:KXPRESNOMD-28-JTAL:1794992400",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12820.0,
-     "trade": "S1:KXPRESNOMD-28-ESLO:1795096800",
+     "trade": "S1:KXPRESNOMD-28-ESLO:1795014000",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 12830.0,
-     "trade": "S1:KXPRESNOMD-28-JTAL:1795096800",
+     "trade": "S1:KXPRESNOMD-28-JTAL:1795014000",
      "ts": "2026-11-19T17:00:00Z"
+    },
+    {
+     "equity": 12840.0,
+     "trade": "S1:KXPRESNOMD-28-ESLO:1795035600",
+     "ts": "2026-11-19T17:00:00Z"
+    },
+    {
+     "equity": 12850.0,
+     "trade": "S1:KXPRESNOMD-28-JTAL:1795035600",
+     "ts": "2026-11-19T17:00:00Z"
+    },
+    {
+     "equity": 12860.0,
+     "trade": "S1:KXPRESNOMD-28-ESLO:1795057200",
+     "ts": "2026-11-19T17:00:00Z"
+    },
+    {
+     "equity": 12870.0,
+     "trade": "S1:KXPRESNOMD-28-JTAL:1795057200",
+     "ts": "2026-11-19T17:00:00Z"
+    },
+    {
+     "equity": 12880.0,
+     "trade": "S1:KXPRESNOMD-28-ESLO:1795078800",
+     "ts": "2026-11-19T17:00:00Z"
+    },
+    {
+     "equity": 12890.0,
+     "trade": "S1:KXPRESNOMD-28-JTAL:1795078800",
+     "ts": "2026-11-19T17:00:00Z"
+    },
+    {
+     "equity": 12900.0,
+     "trade": "S1:KXPRESNOMD-28-ESLO:1795100400",
+     "ts": "2026-11-19T17:00:00Z"
+    },
+    {
+     "equity": 12910.0,
+     "trade": "S1:KXPRESNOMD-28-JTAL:1795100400",
+     "ts": "2026-11-19T17:00:00Z"
+    },
+    {
+     "equity": 12920.0,
+     "trade": "S1:KXPRESNOMD-28-HBID:1794646800",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 12930.0,
+     "trade": "S1:KXPRESNOMD-28-HBID:1794668400",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 12940.0,
+     "trade": "S1:KXPRESNOMD-28-HBID:1794690000",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 12930.0,
+     "trade": "S1:KXPRESNOMD-28-HBID:1794711600",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 12940.0,
+     "trade": "S1:KXPRESNOMD-28-HBID:1794733200",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 12950.0,
+     "trade": "S1:KXPRESNOMD-28-HBID:1794754800",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 12960.0,
+     "trade": "S1:KXPRESNOMD-28-HBID:1794776400",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 12970.0,
+     "trade": "S1:KXPRESNOMD-28-HBID:1794798000",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 12980.0,
+     "trade": "S1:KXPRESNOMD-28-HBID:1794819600",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 12990.0,
+     "trade": "S1:KXPRESNOMD-28-HBID:1794841200",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 13000.0,
+     "trade": "S1:KXPRESNOMD-28-HBID:1794862800",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 13010.0,
+     "trade": "S1:KXPRESNOMD-28-HBID:1794884400",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 13020.0,
+     "trade": "S1:KXPRESNOMD-28-HBID:1794906000",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 13030.0,
+     "trade": "S1:KXPRESNOMD-28-HBID:1794927600",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 13040.0,
+     "trade": "S1:KXPRESNOMD-28-HBID:1794949200",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 13050.0,
+     "trade": "S1:KXPRESNOMD-28-HBID:1794970800",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 13060.0,
+     "trade": "S1:KXPRESNOMD-28-HBID:1794992400",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 13070.0,
+     "trade": "S1:KXPRESNOMD-28-HBID:1795014000",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 13080.0,
+     "trade": "S1:KXPRESNOMD-28-HBID:1795035600",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 13070.0,
+     "trade": "S1:KXPRESNOMD-28-HBID:1795057200",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 13080.0,
+     "trade": "S1:KXPRESNOMD-28-HBID:1795078800",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 13090.0,
+     "trade": "S1:KXPRESNOMD-28-HBID:1795100400",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 13100.0,
+     "trade": "S1:KXPRESNOMD-28-HBID:1795122000",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 13090.0,
+     "trade": "S1:KXPRESNOMD-28-HBID:1795143600",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 13100.0,
+     "trade": "S1:KXPRESNOMD-28-HBID:1795165200",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 13090.0,
+     "trade": "S1:KXPRESPERSON-28-VRAM:1794625200",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 13100.0,
+     "trade": "S1:KXPRESPERSON-28-VRAM:1794646800",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 13110.0,
+     "trade": "S1:KXPRESPERSON-28-VRAM:1794668400",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 13120.0,
+     "trade": "S1:KXPRESPERSON-28-VRAM:1794693600",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 13130.0,
+     "trade": "S1:KXPRESPERSON-28-VRAM:1794715200",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 13140.0,
+     "trade": "S1:KXPRESPERSON-28-VRAM:1794736800",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 13150.0,
+     "trade": "S1:KXPRESPERSON-28-VRAM:1794758400",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 13160.0,
+     "trade": "S1:KXPRESPERSON-28-VRAM:1794780000",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 13170.0,
+     "trade": "S1:KXPRESPERSON-28-VRAM:1794801600",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 13160.0,
+     "trade": "S1:KXPRESPERSON-28-VRAM:1794823200",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 13150.0,
+     "trade": "S1:KXPRESPERSON-28-VRAM:1794844800",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 13160.0,
+     "trade": "S1:KXPRESPERSON-28-VRAM:1794866400",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 13170.0,
+     "trade": "S1:KXPRESPERSON-28-VRAM:1794888000",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 13180.0,
+     "trade": "S1:KXPRESPERSON-28-VRAM:1794909600",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 13170.0,
+     "trade": "S1:KXPRESPERSON-28-VRAM:1794931200",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 13160.0,
+     "trade": "S1:KXPRESPERSON-28-VRAM:1794952800",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 13170.0,
+     "trade": "S1:KXPRESPERSON-28-VRAM:1794974400",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 13180.0,
+     "trade": "S1:KXPRESPERSON-28-VRAM:1794996000",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 13190.0,
+     "trade": "S1:KXPRESPERSON-28-VRAM:1795017600",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 13200.0,
+     "trade": "S1:KXPRESPERSON-28-VRAM:1795039200",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 13210.0,
+     "trade": "S1:KXPRESPERSON-28-VRAM:1795060800",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 13220.0,
+     "trade": "S1:KXPRESPERSON-28-VRAM:1795082400",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 13230.0,
+     "trade": "S1:KXPRESPERSON-28-VRAM:1795104000",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 13240.0,
+     "trade": "S1:KXPRESPERSON-28-VRAM:1795125600",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 13230.0,
+     "trade": "S1:KXPRESPERSON-28-VRAM:1795147200",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 13240.0,
+     "trade": "S1:KXPRESPERSON-28-VRAM:1795168800",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 13250.0,
+     "trade": "S1:KXPRESPERSON-28-VRAM:1795190400",
+     "ts": "2026-11-20T18:00:00Z"
     }
    ],
-   "expectancy_per_trade": 4.37,
+   "expectancy_per_trade": 4.7,
    "id": "S1",
-   "losses": 182,
+   "losses": 183,
    "max_drawdown": 540.0,
    "name": "Swing momentum",
-   "open": 32,
-   "open_stake": 1237.3,
-   "realized_pnl": 2830.0,
-   "return_on_stake_pct": 13.58,
+   "open": 31,
+   "open_stake": 1219.7,
+   "realized_pnl": 3250.0,
+   "return_on_stake_pct": 15.45,
    "rule": "Trade in the direction of a 1-hour move of at least $0.10; enter at the quoted ask/bid, exit at +$0.10, -$0.10, or resolution.",
-   "total_staked": 20841.5,
-   "trades": 679,
-   "win_rate_pct": 71.9,
-   "wins": 465
+   "total_staked": 21030.1,
+   "trades": 722,
+   "win_rate_pct": 73.5,
+   "wins": 508
   },
   {
    "bankroll": 10000.0,
@@ -3365,17 +3585,17 @@
     {
      "key": "cheap (<30¢)",
      "losses": 1,
-     "pnl": 1790.0,
-     "stake": 1904.4,
-     "trades": 181,
-     "wins": 180
+     "pnl": 1800.0,
+     "stake": 1828.8,
+     "trades": 182,
+     "wins": 181
     },
     {
      "key": "expensive (>70¢)",
-     "losses": 457,
-     "pnl": -4570.0,
-     "stake": 41518.1,
-     "trades": 457,
+     "losses": 500,
+     "pnl": -5000.0,
+     "stake": 45805.1,
+     "trades": 500,
      "wins": 0
     },
     {
@@ -3390,19 +3610,19 @@
    "by_series": [
     {
      "key": "KXPRESNOMD",
-     "losses": 353,
-     "pnl": -1990.0,
-     "stake": 33810.3,
-     "trades": 507,
-     "wins": 154
+     "losses": 376,
+     "pnl": -2260.0,
+     "stake": 36046.6,
+     "trades": 526,
+     "wins": 150
     },
     {
      "key": "KXPRESPERSON",
-     "losses": 69,
-     "pnl": -620.0,
-     "stake": 5869.2,
-     "trades": 76,
-     "wins": 7
+     "losses": 89,
+     "pnl": -770.0,
+     "stake": 7844.3,
+     "trades": 101,
+     "wins": 12
     },
     {
      "key": "KXECCOMPACT",
@@ -3448,11 +3668,11 @@
    "by_topic": [
     {
      "key": "elections",
-     "losses": 459,
-     "pnl": -2780.0,
-     "stake": 43449.5,
-     "trades": 640,
-     "wins": 181
+     "losses": 502,
+     "pnl": -3200.0,
+     "stake": 47660.9,
+     "trades": 684,
+     "wins": 182
     },
     {
      "key": "culture",
@@ -3463,8 +3683,8 @@
      "wins": 1
     }
    ],
-   "closed": 647,
-   "equity": 7170.0,
+   "closed": 691,
+   "equity": 6750.0,
    "equity_curve": [
     {
      "equity": 9990.0,
@@ -5612,16 +5832,6 @@
      "ts": "2026-11-13T14:00:00Z"
     },
     {
-     "equity": 8540.0,
-     "trade": "S2:KXPRESNOMD-28-HBID:1794578400",
-     "ts": "2026-11-13T15:00:00Z"
-    },
-    {
-     "equity": 8550.0,
-     "trade": "S2:KXPRESNOMD-28-BOBA:1794578400",
-     "ts": "2026-11-13T15:00:00Z"
-    },
-    {
      "equity": 8560.0,
      "trade": "S2:KXPRESNOMD-28-MK:1793142000",
      "ts": "2026-11-13T16:00:00Z"
@@ -5942,780 +6152,1010 @@
      "ts": "2026-11-13T16:00:00Z"
     },
     {
-     "equity": 7980.0,
-     "trade": "S2:KXPRESNOMD-28-JSTE:1794578400",
-     "ts": "2026-11-13T20:00:00Z"
-    },
-    {
-     "equity": 7990.0,
+     "equity": 8000.0,
      "trade": "S2:KXPRESNOMD-28-MK:1794585600",
      "ts": "2026-11-13T21:00:00Z"
     },
     {
+     "equity": 7990.0,
+     "trade": "S2:KXPRESPERSON-28-VRAM:1794603600",
+     "ts": "2026-11-13T22:00:00Z"
+    },
+    {
      "equity": 8000.0,
-     "trade": "S2:KXPRESNOMD-28-HBID:1794600000",
-     "ts": "2026-11-13T21:00:00Z"
+     "trade": "S2:KXPRESNOMD-28-HBID:1794603600",
+     "ts": "2026-11-13T23:00:00Z"
     },
     {
      "equity": 8010.0,
-     "trade": "S2:KXPRESNOMD-28-JSTE:1794600000",
-     "ts": "2026-11-13T21:00:00Z"
+     "trade": "S2:KXPRESNOMD-28-JSTE:1794603600",
+     "ts": "2026-11-13T23:00:00Z"
     },
     {
-     "equity": 8000.0,
-     "trade": "S2:KXPRESPERSON-28-VRAM:1794578400",
-     "ts": "2026-11-13T22:00:00Z"
-    },
-    {
-     "equity": 7990.0,
-     "trade": "S2:KXPRESPERSON-28-VRAM:1794600000",
-     "ts": "2026-11-13T22:00:00Z"
-    },
-    {
-     "equity": 8000.0,
+     "equity": 8020.0,
      "trade": "S2:KXNEXTSPEAKER-31-HJEF:1794081600",
      "ts": "2026-11-14T01:00:00Z"
     },
     {
-     "equity": 8010.0,
+     "equity": 8030.0,
      "trade": "S2:KXNEXTSPEAKER-31-HJEF:1794110400",
      "ts": "2026-11-14T01:00:00Z"
     },
     {
-     "equity": 8020.0,
+     "equity": 8040.0,
      "trade": "S2:KXNEXTSPEAKER-31-HJEF:1794153600",
      "ts": "2026-11-14T01:00:00Z"
     },
     {
-     "equity": 8030.0,
+     "equity": 8050.0,
      "trade": "S2:KXNEXTSPEAKER-31-HJEF:1794189600",
      "ts": "2026-11-14T01:00:00Z"
     },
     {
-     "equity": 8040.0,
+     "equity": 8060.0,
      "trade": "S2:KXNEXTSPEAKER-31-HJEF:1794232800",
      "ts": "2026-11-14T01:00:00Z"
     },
     {
-     "equity": 8050.0,
+     "equity": 8070.0,
      "trade": "S2:KXNEXTSPEAKER-31-HJEF:1794283200",
      "ts": "2026-11-14T01:00:00Z"
     },
     {
-     "equity": 8060.0,
+     "equity": 8080.0,
      "trade": "S2:KXNEXTSPEAKER-31-HJEF:1794344400",
      "ts": "2026-11-14T01:00:00Z"
     },
     {
-     "equity": 8070.0,
+     "equity": 8090.0,
      "trade": "S2:KXNEXTSPEAKER-31-HJEF:1794376800",
      "ts": "2026-11-14T01:00:00Z"
     },
     {
-     "equity": 8080.0,
+     "equity": 8100.0,
      "trade": "S2:KXNEXTSPEAKER-31-HJEF:1794427200",
      "ts": "2026-11-14T01:00:00Z"
     },
     {
-     "equity": 8090.0,
+     "equity": 8110.0,
      "trade": "S2:KXNEXTSPEAKER-31-HJEF:1794452400",
      "ts": "2026-11-14T01:00:00Z"
     },
     {
-     "equity": 8100.0,
+     "equity": 8120.0,
      "trade": "S2:KXNEXTSPEAKER-31-HJEF:1794517200",
      "ts": "2026-11-14T01:00:00Z"
     },
     {
-     "equity": 8110.0,
+     "equity": 8130.0,
      "trade": "S2:KXNEXTSPEAKER-31-HJEF:1794582000",
      "ts": "2026-11-14T01:00:00Z"
     },
     {
-     "equity": 8120.0,
-     "trade": "S2:KXPRESNOMD-28-HBID:1794621600",
-     "ts": "2026-11-14T03:00:00Z"
+     "equity": 8140.0,
+     "trade": "S2:KXPRESNOMD-28-HBID:1794625200",
+     "ts": "2026-11-14T05:00:00Z"
     },
     {
      "equity": 8130.0,
-     "trade": "S2:KXPRESPERSON-28-VRAM:1794621600",
-     "ts": "2026-11-14T03:00:00Z"
-    },
-    {
-     "equity": 8140.0,
-     "trade": "S2:KXPRESNOMD-28-JSTE:1794621600",
+     "trade": "S2:KXPRESNOMD-28-JSTE:1794625200",
      "ts": "2026-11-14T08:00:00Z"
     },
     {
-     "equity": 8150.0,
-     "trade": "S2:KXPRESNOMD-28-JSTE:1794643200",
-     "ts": "2026-11-14T09:00:00Z"
+     "equity": 8140.0,
+     "trade": "S2:KXPRESNOMD-28-JSTE:1794646800",
+     "ts": "2026-11-14T11:00:00Z"
     },
     {
-     "equity": 8160.0,
+     "equity": 8150.0,
      "trade": "S2:KXNEXTSPEAKER-31-HJEF:1794618000",
      "ts": "2026-11-14T21:00:00Z"
     },
     {
-     "equity": 8150.0,
-     "trade": "S2:KXPRESNOMD-28-GW:1794578400",
-     "ts": "2026-11-15T06:00:00Z"
-    },
-    {
      "equity": 8140.0,
-     "trade": "S2:KXPRESNOMD-28-GW:1794600000",
+     "trade": "S2:KXPRESNOMD-28-GW:1794603600",
      "ts": "2026-11-15T06:00:00Z"
     },
     {
      "equity": 8130.0,
-     "trade": "S2:KXPRESNOMD-28-GW:1794621600",
+     "trade": "S2:KXPRESNOMD-28-GW:1794625200",
      "ts": "2026-11-15T06:00:00Z"
     },
     {
      "equity": 8120.0,
-     "trade": "S2:KXPRESNOMD-28-GW:1794643200",
+     "trade": "S2:KXPRESNOMD-28-GW:1794646800",
      "ts": "2026-11-15T06:00:00Z"
     },
     {
      "equity": 8110.0,
-     "trade": "S2:KXPRESNOMD-28-GW:1794664800",
+     "trade": "S2:KXPRESNOMD-28-GW:1794668400",
      "ts": "2026-11-15T06:00:00Z"
     },
     {
      "equity": 8100.0,
-     "trade": "S2:KXPRESNOMD-28-GW:1794686400",
+     "trade": "S2:KXPRESNOMD-28-GW:1794690000",
      "ts": "2026-11-15T06:00:00Z"
     },
     {
      "equity": 8090.0,
-     "trade": "S2:KXPRESNOMD-28-GW:1794708000",
+     "trade": "S2:KXPRESNOMD-28-GW:1794711600",
      "ts": "2026-11-15T06:00:00Z"
     },
     {
      "equity": 8080.0,
-     "trade": "S2:KXPRESNOMD-28-BOBA:1794600000",
+     "trade": "S2:KXPRESNOMD-28-BOBA:1794603600",
      "ts": "2026-11-15T14:00:00Z"
     },
     {
      "equity": 8070.0,
-     "trade": "S2:KXPRESNOMD-28-BOBA:1794621600",
+     "trade": "S2:KXPRESNOMD-28-BOBA:1794625200",
      "ts": "2026-11-15T14:00:00Z"
     },
     {
      "equity": 8060.0,
-     "trade": "S2:KXPRESNOMD-28-BOBA:1794643200",
+     "trade": "S2:KXPRESNOMD-28-BOBA:1794646800",
      "ts": "2026-11-15T14:00:00Z"
     },
     {
      "equity": 8050.0,
-     "trade": "S2:KXPRESNOMD-28-BOBA:1794664800",
+     "trade": "S2:KXPRESNOMD-28-BOBA:1794668400",
      "ts": "2026-11-15T14:00:00Z"
     },
     {
      "equity": 8040.0,
-     "trade": "S2:KXPRESNOMD-28-BOBA:1794686400",
+     "trade": "S2:KXPRESNOMD-28-BOBA:1794690000",
      "ts": "2026-11-15T14:00:00Z"
     },
     {
-     "equity": 8050.0,
-     "trade": "S2:KXPRESNOMD-28-BOBA:1794708000",
+     "equity": 8030.0,
+     "trade": "S2:KXPRESNOMD-28-BOBA:1794711600",
      "ts": "2026-11-15T14:00:00Z"
     },
     {
-     "equity": 8040.0,
-     "trade": "S2:KXPRESNOMD-28-BOBA:1794729600",
+     "equity": 8020.0,
+     "trade": "S2:KXPRESNOMD-28-BOBA:1794733200",
      "ts": "2026-11-15T14:00:00Z"
     },
     {
-     "equity": 8050.0,
+     "equity": 8030.0,
      "trade": "S2:KXPRESNOMD-28-HCLI:1793599200",
      "ts": "2026-11-15T15:00:00Z"
     },
     {
-     "equity": 8040.0,
+     "equity": 8020.0,
      "trade": "S2:KXPRESNOMD-28-HCLI:1793671200",
      "ts": "2026-11-15T15:00:00Z"
     },
     {
-     "equity": 8030.0,
+     "equity": 8010.0,
      "trade": "S2:KXPRESNOMD-28-HCLI:1793754000",
      "ts": "2026-11-15T15:00:00Z"
     },
     {
-     "equity": 8020.0,
+     "equity": 8000.0,
      "trade": "S2:KXTVSEASONRELEASETHELASTOFUS-27-JAN:1794344400",
      "ts": "2026-11-15T17:00:00Z"
     },
     {
-     "equity": 8010.0,
+     "equity": 7990.0,
      "trade": "S2:KXTVSEASONRELEASETHELASTOFUS-27-JAN:1794416400",
      "ts": "2026-11-15T17:00:00Z"
     },
     {
-     "equity": 8000.0,
+     "equity": 7980.0,
      "trade": "S2:KXTVSEASONRELEASETHELASTOFUS-27-JAN:1794668400",
      "ts": "2026-11-15T17:00:00Z"
     },
     {
-     "equity": 7990.0,
+     "equity": 7970.0,
      "trade": "S2:KXTVSEASONRELEASETHELASTOFUS-27-JAN:1794754800",
      "ts": "2026-11-15T17:00:00Z"
     },
     {
-     "equity": 7980.0,
-     "trade": "S2:KXPRESNOMD-28-JSTE:1794664800",
+     "equity": 7960.0,
+     "trade": "S2:KXPRESNOMD-28-JSTE:1794668400",
      "ts": "2026-11-15T19:00:00Z"
     },
     {
-     "equity": 7990.0,
-     "trade": "S2:KXPRESNOMD-28-JSTE:1794686400",
+     "equity": 7950.0,
+     "trade": "S2:KXPRESNOMD-28-JSTE:1794690000",
      "ts": "2026-11-15T19:00:00Z"
     },
     {
-     "equity": 8000.0,
-     "trade": "S2:KXPRESNOMD-28-JSTE:1794708000",
+     "equity": 7940.0,
+     "trade": "S2:KXPRESNOMD-28-JSTE:1794711600",
      "ts": "2026-11-15T19:00:00Z"
     },
     {
-     "equity": 7990.0,
-     "trade": "S2:KXPRESNOMD-28-JSTE:1794729600",
+     "equity": 7930.0,
+     "trade": "S2:KXPRESNOMD-28-JSTE:1794733200",
      "ts": "2026-11-15T19:00:00Z"
     },
     {
-     "equity": 7980.0,
-     "trade": "S2:KXPRESNOMD-28-JSTE:1794751200",
+     "equity": 7920.0,
+     "trade": "S2:KXPRESNOMD-28-JSTE:1794754800",
      "ts": "2026-11-15T19:00:00Z"
     },
     {
-     "equity": 7970.0,
+     "equity": 7910.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1793797200",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7960.0,
+     "equity": 7900.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1793818800",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7950.0,
+     "equity": 7890.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1793840400",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7940.0,
+     "equity": 7880.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1793862000",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7930.0,
+     "equity": 7870.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1793883600",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7920.0,
+     "equity": 7860.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1793908800",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7910.0,
+     "equity": 7850.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1793930400",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7900.0,
+     "equity": 7840.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1793952000",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7890.0,
+     "equity": 7830.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1793973600",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7900.0,
+     "equity": 7840.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1793995200",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7890.0,
+     "equity": 7830.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794016800",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7880.0,
+     "equity": 7820.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794038400",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7870.0,
+     "equity": 7810.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794060000",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7880.0,
+     "equity": 7820.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794081600",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7870.0,
+     "equity": 7810.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794103200",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7860.0,
+     "equity": 7800.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794124800",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7850.0,
+     "equity": 7790.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794146400",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7840.0,
+     "equity": 7780.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794178800",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7830.0,
+     "equity": 7770.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794200400",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7820.0,
+     "equity": 7760.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794222000",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7810.0,
+     "equity": 7750.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794243600",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7800.0,
+     "equity": 7740.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794265200",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7790.0,
+     "equity": 7730.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794286800",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7780.0,
+     "equity": 7720.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794308400",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7770.0,
+     "equity": 7710.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794330000",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7760.0,
+     "equity": 7700.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794351600",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7750.0,
+     "equity": 7690.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794373200",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7740.0,
+     "equity": 7680.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794394800",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7730.0,
+     "equity": 7670.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794416400",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7720.0,
+     "equity": 7660.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794438000",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7710.0,
+     "equity": 7650.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794459600",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7700.0,
+     "equity": 7640.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794481200",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7690.0,
+     "equity": 7630.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794502800",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7680.0,
+     "equity": 7620.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794524400",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7670.0,
+     "equity": 7610.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794546000",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7660.0,
+     "equity": 7600.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794567600",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7650.0,
+     "equity": 7590.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794589200",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7640.0,
+     "equity": 7580.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794610800",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7650.0,
+     "equity": 7590.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794632400",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7640.0,
+     "equity": 7580.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794654000",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7630.0,
+     "equity": 7570.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794675600",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7620.0,
+     "equity": 7560.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794697200",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7610.0,
+     "equity": 7550.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794718800",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7600.0,
+     "equity": 7540.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794740400",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7590.0,
+     "equity": 7530.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794762000",
      "ts": "2026-11-15T23:00:00Z"
     },
     {
-     "equity": 7600.0,
-     "trade": "S2:KXPRESNOMD-28-JSTE:1794772800",
+     "equity": 7520.0,
+     "trade": "S2:KXPRESNOMD-28-JSTE:1794776400",
      "ts": "2026-11-16T00:00:00Z"
     },
     {
-     "equity": 7590.0,
+     "equity": 7510.0,
      "trade": "S2:KXPRESPERSON-28-JOSS:1794783600",
      "ts": "2026-11-16T02:00:00Z"
     },
     {
-     "equity": 7600.0,
-     "trade": "S2:KXPRESNOMD-28-JSTE:1794794400",
+     "equity": 7520.0,
+     "trade": "S2:KXPRESNOMD-28-JSTE:1794798000",
      "ts": "2026-11-16T04:00:00Z"
     },
     {
-     "equity": 7610.0,
-     "trade": "S2:KXPRESNOMD-28-BOBA:1794751200",
+     "equity": 7530.0,
+     "trade": "S2:KXPRESNOMD-28-BOBA:1794754800",
      "ts": "2026-11-16T11:00:00Z"
     },
     {
-     "equity": 7620.0,
-     "trade": "S2:KXPRESNOMD-28-BOBA:1794772800",
+     "equity": 7540.0,
+     "trade": "S2:KXPRESNOMD-28-BOBA:1794776400",
      "ts": "2026-11-16T11:00:00Z"
     },
     {
-     "equity": 7630.0,
-     "trade": "S2:KXPRESNOMD-28-BOBA:1794794400",
+     "equity": 7550.0,
+     "trade": "S2:KXPRESNOMD-28-BOBA:1794798000",
      "ts": "2026-11-16T11:00:00Z"
-    },
-    {
-     "equity": 7640.0,
-     "trade": "S2:KXPRESNOMD-28-BOBA:1794816000",
-     "ts": "2026-11-16T11:00:00Z"
-    },
-    {
-     "equity": 7650.0,
-     "trade": "S2:KXPRESNOMD-28-JSTE:1794816000",
-     "ts": "2026-11-16T11:00:00Z"
-    },
-    {
-     "equity": 7640.0,
-     "trade": "S2:KXPRESNOMD-28-ESLO:1794578400",
-     "ts": "2026-11-19T17:00:00Z"
-    },
-    {
-     "equity": 7630.0,
-     "trade": "S2:KXPRESNOMD-28-JTAL:1794578400",
-     "ts": "2026-11-19T17:00:00Z"
-    },
-    {
-     "equity": 7620.0,
-     "trade": "S2:KXPRESNOMD-28-ESLO:1794600000",
-     "ts": "2026-11-19T17:00:00Z"
-    },
-    {
-     "equity": 7610.0,
-     "trade": "S2:KXPRESNOMD-28-JTAL:1794600000",
-     "ts": "2026-11-19T17:00:00Z"
-    },
-    {
-     "equity": 7600.0,
-     "trade": "S2:KXPRESNOMD-28-ESLO:1794621600",
-     "ts": "2026-11-19T17:00:00Z"
-    },
-    {
-     "equity": 7590.0,
-     "trade": "S2:KXPRESNOMD-28-JTAL:1794621600",
-     "ts": "2026-11-19T17:00:00Z"
-    },
-    {
-     "equity": 7580.0,
-     "trade": "S2:KXPRESNOMD-28-ESLO:1794643200",
-     "ts": "2026-11-19T17:00:00Z"
-    },
-    {
-     "equity": 7570.0,
-     "trade": "S2:KXPRESNOMD-28-JTAL:1794643200",
-     "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7560.0,
-     "trade": "S2:KXPRESNOMD-28-ESLO:1794664800",
+     "trade": "S2:KXPRESNOMD-28-BOBA:1794819600",
+     "ts": "2026-11-16T11:00:00Z"
+    },
+    {
+     "equity": 7570.0,
+     "trade": "S2:KXPRESNOMD-28-JSTE:1794819600",
+     "ts": "2026-11-16T11:00:00Z"
+    },
+    {
+     "equity": 7560.0,
+     "trade": "S2:KXPRESNOMD-28-ESLO:1794603600",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7550.0,
-     "trade": "S2:KXPRESNOMD-28-JTAL:1794664800",
+     "trade": "S2:KXPRESNOMD-28-JTAL:1794603600",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7540.0,
-     "trade": "S2:KXPRESNOMD-28-ESLO:1794686400",
+     "trade": "S2:KXPRESNOMD-28-ESLO:1794625200",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7530.0,
-     "trade": "S2:KXPRESNOMD-28-JTAL:1794686400",
+     "trade": "S2:KXPRESNOMD-28-JTAL:1794625200",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7520.0,
-     "trade": "S2:KXPRESNOMD-28-ESLO:1794708000",
+     "trade": "S2:KXPRESNOMD-28-ESLO:1794646800",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7510.0,
-     "trade": "S2:KXPRESNOMD-28-JTAL:1794708000",
+     "trade": "S2:KXPRESNOMD-28-JTAL:1794646800",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7500.0,
-     "trade": "S2:KXPRESNOMD-28-ESLO:1794729600",
+     "trade": "S2:KXPRESNOMD-28-ESLO:1794668400",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7490.0,
-     "trade": "S2:KXPRESNOMD-28-JTAL:1794729600",
+     "trade": "S2:KXPRESNOMD-28-JTAL:1794668400",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7480.0,
-     "trade": "S2:KXPRESNOMD-28-ESLO:1794751200",
+     "trade": "S2:KXPRESNOMD-28-ESLO:1794690000",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7470.0,
-     "trade": "S2:KXPRESNOMD-28-JTAL:1794751200",
+     "trade": "S2:KXPRESNOMD-28-JTAL:1794690000",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7460.0,
-     "trade": "S2:KXPRESNOMD-28-ESLO:1794772800",
+     "trade": "S2:KXPRESNOMD-28-ESLO:1794711600",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7450.0,
-     "trade": "S2:KXPRESNOMD-28-JTAL:1794772800",
+     "trade": "S2:KXPRESNOMD-28-JTAL:1794711600",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7440.0,
-     "trade": "S2:KXPRESNOMD-28-ESLO:1794794400",
+     "trade": "S2:KXPRESNOMD-28-ESLO:1794733200",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7430.0,
-     "trade": "S2:KXPRESNOMD-28-JTAL:1794794400",
+     "trade": "S2:KXPRESNOMD-28-JTAL:1794733200",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7420.0,
-     "trade": "S2:KXPRESNOMD-28-ESLO:1794816000",
+     "trade": "S2:KXPRESNOMD-28-ESLO:1794754800",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7410.0,
-     "trade": "S2:KXPRESNOMD-28-JTAL:1794816000",
+     "trade": "S2:KXPRESNOMD-28-JTAL:1794754800",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7400.0,
-     "trade": "S2:KXPRESNOMD-28-ESLO:1794837600",
+     "trade": "S2:KXPRESNOMD-28-ESLO:1794776400",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7390.0,
-     "trade": "S2:KXPRESNOMD-28-JTAL:1794837600",
+     "trade": "S2:KXPRESNOMD-28-JTAL:1794776400",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7380.0,
-     "trade": "S2:KXPRESNOMD-28-ESLO:1794859200",
+     "trade": "S2:KXPRESNOMD-28-ESLO:1794798000",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7370.0,
-     "trade": "S2:KXPRESNOMD-28-JTAL:1794859200",
+     "trade": "S2:KXPRESNOMD-28-JTAL:1794798000",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7360.0,
-     "trade": "S2:KXPRESNOMD-28-ESLO:1794880800",
+     "trade": "S2:KXPRESNOMD-28-ESLO:1794819600",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7350.0,
-     "trade": "S2:KXPRESNOMD-28-JTAL:1794880800",
+     "trade": "S2:KXPRESNOMD-28-JTAL:1794819600",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7340.0,
-     "trade": "S2:KXPRESNOMD-28-ESLO:1794902400",
+     "trade": "S2:KXPRESNOMD-28-ESLO:1794841200",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7330.0,
-     "trade": "S2:KXPRESNOMD-28-JTAL:1794902400",
+     "trade": "S2:KXPRESNOMD-28-JTAL:1794841200",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7320.0,
-     "trade": "S2:KXPRESNOMD-28-ESLO:1794924000",
+     "trade": "S2:KXPRESNOMD-28-ESLO:1794862800",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7310.0,
-     "trade": "S2:KXPRESNOMD-28-JTAL:1794924000",
+     "trade": "S2:KXPRESNOMD-28-JTAL:1794862800",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7300.0,
-     "trade": "S2:KXPRESNOMD-28-ESLO:1794945600",
+     "trade": "S2:KXPRESNOMD-28-ESLO:1794884400",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7290.0,
-     "trade": "S2:KXPRESNOMD-28-JTAL:1794945600",
+     "trade": "S2:KXPRESNOMD-28-JTAL:1794884400",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7280.0,
-     "trade": "S2:KXPRESNOMD-28-ESLO:1794967200",
+     "trade": "S2:KXPRESNOMD-28-ESLO:1794906000",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7270.0,
-     "trade": "S2:KXPRESNOMD-28-JTAL:1794967200",
+     "trade": "S2:KXPRESNOMD-28-JTAL:1794906000",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7260.0,
-     "trade": "S2:KXPRESNOMD-28-ESLO:1794988800",
+     "trade": "S2:KXPRESNOMD-28-ESLO:1794927600",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7250.0,
-     "trade": "S2:KXPRESNOMD-28-JTAL:1794988800",
+     "trade": "S2:KXPRESNOMD-28-JTAL:1794927600",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7240.0,
-     "trade": "S2:KXPRESNOMD-28-ESLO:1795010400",
-     "ts": "2026-11-19T17:00:00Z"
-    },
-    {
-     "equity": 7250.0,
-     "trade": "S2:KXPRESNOMD-28-JTAL:1795010400",
-     "ts": "2026-11-19T17:00:00Z"
-    },
-    {
-     "equity": 7240.0,
-     "trade": "S2:KXPRESNOMD-28-ESLO:1795032000",
+     "trade": "S2:KXPRESNOMD-28-ESLO:1794949200",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7230.0,
-     "trade": "S2:KXPRESNOMD-28-JTAL:1795032000",
+     "trade": "S2:KXPRESNOMD-28-JTAL:1794949200",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7220.0,
-     "trade": "S2:KXPRESNOMD-28-ESLO:1795053600",
+     "trade": "S2:KXPRESNOMD-28-ESLO:1794970800",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7210.0,
-     "trade": "S2:KXPRESNOMD-28-JTAL:1795053600",
+     "trade": "S2:KXPRESNOMD-28-JTAL:1794970800",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7200.0,
-     "trade": "S2:KXPRESNOMD-28-ESLO:1795075200",
+     "trade": "S2:KXPRESNOMD-28-ESLO:1794992400",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7190.0,
-     "trade": "S2:KXPRESNOMD-28-JTAL:1795075200",
+     "trade": "S2:KXPRESNOMD-28-JTAL:1794992400",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7180.0,
-     "trade": "S2:KXPRESNOMD-28-ESLO:1795096800",
+     "trade": "S2:KXPRESNOMD-28-ESLO:1795014000",
      "ts": "2026-11-19T17:00:00Z"
     },
     {
      "equity": 7170.0,
-     "trade": "S2:KXPRESNOMD-28-JTAL:1795096800",
+     "trade": "S2:KXPRESNOMD-28-JTAL:1795014000",
      "ts": "2026-11-19T17:00:00Z"
+    },
+    {
+     "equity": 7160.0,
+     "trade": "S2:KXPRESNOMD-28-ESLO:1795035600",
+     "ts": "2026-11-19T17:00:00Z"
+    },
+    {
+     "equity": 7150.0,
+     "trade": "S2:KXPRESNOMD-28-JTAL:1795035600",
+     "ts": "2026-11-19T17:00:00Z"
+    },
+    {
+     "equity": 7140.0,
+     "trade": "S2:KXPRESNOMD-28-ESLO:1795057200",
+     "ts": "2026-11-19T17:00:00Z"
+    },
+    {
+     "equity": 7130.0,
+     "trade": "S2:KXPRESNOMD-28-JTAL:1795057200",
+     "ts": "2026-11-19T17:00:00Z"
+    },
+    {
+     "equity": 7120.0,
+     "trade": "S2:KXPRESNOMD-28-ESLO:1795078800",
+     "ts": "2026-11-19T17:00:00Z"
+    },
+    {
+     "equity": 7110.0,
+     "trade": "S2:KXPRESNOMD-28-JTAL:1795078800",
+     "ts": "2026-11-19T17:00:00Z"
+    },
+    {
+     "equity": 7100.0,
+     "trade": "S2:KXPRESNOMD-28-ESLO:1795100400",
+     "ts": "2026-11-19T17:00:00Z"
+    },
+    {
+     "equity": 7090.0,
+     "trade": "S2:KXPRESNOMD-28-JTAL:1795100400",
+     "ts": "2026-11-19T17:00:00Z"
+    },
+    {
+     "equity": 7080.0,
+     "trade": "S2:KXPRESNOMD-28-HBID:1794646800",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 7070.0,
+     "trade": "S2:KXPRESNOMD-28-HBID:1794668400",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 7060.0,
+     "trade": "S2:KXPRESNOMD-28-HBID:1794690000",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 7070.0,
+     "trade": "S2:KXPRESNOMD-28-HBID:1794711600",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 7060.0,
+     "trade": "S2:KXPRESNOMD-28-HBID:1794733200",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 7050.0,
+     "trade": "S2:KXPRESNOMD-28-HBID:1794754800",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 7040.0,
+     "trade": "S2:KXPRESNOMD-28-HBID:1794776400",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 7030.0,
+     "trade": "S2:KXPRESNOMD-28-HBID:1794798000",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 7020.0,
+     "trade": "S2:KXPRESNOMD-28-HBID:1794819600",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 7010.0,
+     "trade": "S2:KXPRESNOMD-28-HBID:1794841200",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 7000.0,
+     "trade": "S2:KXPRESNOMD-28-HBID:1794862800",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 6990.0,
+     "trade": "S2:KXPRESNOMD-28-HBID:1794884400",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 6980.0,
+     "trade": "S2:KXPRESNOMD-28-HBID:1794906000",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 6970.0,
+     "trade": "S2:KXPRESNOMD-28-HBID:1794927600",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 6960.0,
+     "trade": "S2:KXPRESNOMD-28-HBID:1794949200",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 6950.0,
+     "trade": "S2:KXPRESNOMD-28-HBID:1794970800",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 6940.0,
+     "trade": "S2:KXPRESNOMD-28-HBID:1794992400",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 6930.0,
+     "trade": "S2:KXPRESNOMD-28-HBID:1795014000",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 6920.0,
+     "trade": "S2:KXPRESNOMD-28-HBID:1795035600",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 6930.0,
+     "trade": "S2:KXPRESNOMD-28-HBID:1795057200",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 6920.0,
+     "trade": "S2:KXPRESNOMD-28-HBID:1795078800",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 6910.0,
+     "trade": "S2:KXPRESNOMD-28-HBID:1795100400",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 6900.0,
+     "trade": "S2:KXPRESNOMD-28-HBID:1795122000",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 6910.0,
+     "trade": "S2:KXPRESNOMD-28-HBID:1795143600",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 6900.0,
+     "trade": "S2:KXPRESNOMD-28-HBID:1795165200",
+     "ts": "2026-11-20T15:00:00Z"
+    },
+    {
+     "equity": 6910.0,
+     "trade": "S2:KXPRESPERSON-28-VRAM:1794625200",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 6900.0,
+     "trade": "S2:KXPRESPERSON-28-VRAM:1794646800",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 6890.0,
+     "trade": "S2:KXPRESPERSON-28-VRAM:1794668400",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 6880.0,
+     "trade": "S2:KXPRESPERSON-28-VRAM:1794693600",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 6870.0,
+     "trade": "S2:KXPRESPERSON-28-VRAM:1794715200",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 6860.0,
+     "trade": "S2:KXPRESPERSON-28-VRAM:1794736800",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 6850.0,
+     "trade": "S2:KXPRESPERSON-28-VRAM:1794758400",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 6840.0,
+     "trade": "S2:KXPRESPERSON-28-VRAM:1794780000",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 6830.0,
+     "trade": "S2:KXPRESPERSON-28-VRAM:1794801600",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 6840.0,
+     "trade": "S2:KXPRESPERSON-28-VRAM:1794823200",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 6850.0,
+     "trade": "S2:KXPRESPERSON-28-VRAM:1794844800",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 6840.0,
+     "trade": "S2:KXPRESPERSON-28-VRAM:1794866400",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 6830.0,
+     "trade": "S2:KXPRESPERSON-28-VRAM:1794888000",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 6820.0,
+     "trade": "S2:KXPRESPERSON-28-VRAM:1794909600",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 6830.0,
+     "trade": "S2:KXPRESPERSON-28-VRAM:1794931200",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 6840.0,
+     "trade": "S2:KXPRESPERSON-28-VRAM:1794952800",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 6830.0,
+     "trade": "S2:KXPRESPERSON-28-VRAM:1794974400",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 6820.0,
+     "trade": "S2:KXPRESPERSON-28-VRAM:1794996000",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 6810.0,
+     "trade": "S2:KXPRESPERSON-28-VRAM:1795017600",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 6800.0,
+     "trade": "S2:KXPRESPERSON-28-VRAM:1795039200",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 6790.0,
+     "trade": "S2:KXPRESPERSON-28-VRAM:1795060800",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 6780.0,
+     "trade": "S2:KXPRESPERSON-28-VRAM:1795082400",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 6770.0,
+     "trade": "S2:KXPRESPERSON-28-VRAM:1795104000",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 6760.0,
+     "trade": "S2:KXPRESPERSON-28-VRAM:1795125600",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 6770.0,
+     "trade": "S2:KXPRESPERSON-28-VRAM:1795147200",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 6760.0,
+     "trade": "S2:KXPRESPERSON-28-VRAM:1795168800",
+     "ts": "2026-11-20T18:00:00Z"
+    },
+    {
+     "equity": 6750.0,
+     "trade": "S2:KXPRESPERSON-28-VRAM:1795190400",
+     "ts": "2026-11-20T18:00:00Z"
     }
    ],
-   "expectancy_per_trade": -4.37,
+   "expectancy_per_trade": -4.7,
    "id": "S2",
-   "losses": 465,
-   "max_drawdown": 2910.0,
+   "losses": 508,
+   "max_drawdown": 3330.0,
    "name": "Fade the swing",
-   "open": 32,
-   "open_stake": 1962.7,
-   "realized_pnl": -2830.0,
-   "return_on_stake_pct": -6.45,
+   "open": 31,
+   "open_stake": 1880.3,
+   "realized_pnl": -3250.0,
+   "return_on_stake_pct": -6.76,
    "rule": "Trade against a 1-hour move of at least $0.10 (mean reversion); same exits as S1.",
-   "total_staked": 43858.5,
-   "trades": 679,
-   "win_rate_pct": 28.1,
-   "wins": 182
+   "total_staked": 48069.9,
+   "trades": 722,
+   "win_rate_pct": 26.5,
+   "wins": 183
   },
   {
    "bankroll": 10000.0,
@@ -6730,10 +7170,10 @@
     },
     {
      "key": "expensive (>70¢)",
-     "losses": 18,
-     "pnl": -180.0,
-     "stake": 1488.3,
-     "trades": 18,
+     "losses": 17,
+     "pnl": -170.0,
+     "stake": 1405.4,
+     "trades": 17,
      "wins": 0
     },
     {
@@ -6748,18 +7188,18 @@
    "by_series": [
     {
      "key": "KXPRESNOMD",
-     "losses": 18,
-     "pnl": -150.0,
-     "stake": 1561.0,
-     "trades": 21,
+     "losses": 16,
+     "pnl": -130.0,
+     "stake": 1397.9,
+     "trades": 19,
      "wins": 3
     },
     {
      "key": "KXPRESPERSON",
-     "losses": 1,
-     "pnl": 0.0,
-     "stake": 140.2,
-     "trades": 2,
+     "losses": 2,
+     "pnl": -10.0,
+     "stake": 220.4,
+     "trades": 3,
      "wins": 1
     },
     {
@@ -6782,10 +7222,10 @@
    "by_topic": [
     {
      "key": "elections",
-     "losses": 20,
-     "pnl": -160.0,
-     "stake": 1765.2,
-     "trades": 24,
+     "losses": 19,
+     "pnl": -150.0,
+     "stake": 1682.3,
+     "trades": 23,
      "wins": 4
     },
     {
@@ -6797,8 +7237,8 @@
      "wins": 0
     }
    ],
-   "closed": 25,
-   "equity": 9830.0,
+   "closed": 24,
+   "equity": 9840.0,
    "equity_curve": [
     {
      "equity": 9990.0,
@@ -6842,106 +7282,101 @@
     },
     {
      "equity": 9970.0,
-     "trade": "S3:KXPRESNOMD-28-BOBA:1794578400",
-     "ts": "2026-11-13T15:00:00Z"
-    },
-    {
-     "equity": 9960.0,
-     "trade": "S3:KXPRESNOMD-28-HBID:1794582000",
-     "ts": "2026-11-13T16:00:00Z"
-    },
-    {
-     "equity": 9950.0,
      "trade": "S3:KXPRESNOMD-28-AOC:1794578400",
      "ts": "2026-11-13T21:00:00Z"
     },
     {
-     "equity": 9940.0,
-     "trade": "S3:KXPRESNOMD-28-JSTE:1794600000",
-     "ts": "2026-11-13T21:00:00Z"
-    },
-    {
-     "equity": 9930.0,
+     "equity": 9960.0,
      "trade": "S3:KXPRESNOMD-28-HBID:1794603600",
      "ts": "2026-11-13T23:00:00Z"
     },
     {
-     "equity": 9920.0,
+     "equity": 9950.0,
      "trade": "S3:KXPRESPERSON-28-VRAM:1794607200",
      "ts": "2026-11-13T23:00:00Z"
     },
     {
-     "equity": 9910.0,
+     "equity": 9940.0,
+     "trade": "S3:KXPRESNOMD-28-JSTE:1794610800",
+     "ts": "2026-11-14T00:00:00Z"
+    },
+    {
+     "equity": 9930.0,
      "trade": "S3:KXPRESNOMD-28-HBID:1794632400",
      "ts": "2026-11-14T06:00:00Z"
     },
     {
-     "equity": 9900.0,
+     "equity": 9920.0,
      "trade": "S3:KXPRESNOMD-28-JSTE:1794643200",
      "ts": "2026-11-14T09:00:00Z"
     },
     {
-     "equity": 9890.0,
+     "equity": 9910.0,
      "trade": "S3:KXNEXTSPEAKER-31-HJEF:1794618000",
      "ts": "2026-11-14T21:00:00Z"
     },
     {
-     "equity": 9880.0,
+     "equity": 9900.0,
      "trade": "S3:KXPRESNOMD-28-GW:1794722400",
      "ts": "2026-11-15T08:00:00Z"
     },
     {
-     "equity": 9870.0,
+     "equity": 9890.0,
      "trade": "S3:KXTVSEASONRELEASETHELASTOFUS-27-JAN:1794182400",
      "ts": "2026-11-15T17:00:00Z"
     },
     {
-     "equity": 9860.0,
+     "equity": 9880.0,
      "trade": "S3:KXPRESNOMD-28-JSTE:1794769200",
      "ts": "2026-11-15T20:00:00Z"
     },
     {
-     "equity": 9870.0,
+     "equity": 9890.0,
      "trade": "S3:KXPRESPERSON-28-JOSS:1794783600",
      "ts": "2026-11-16T02:00:00Z"
     },
     {
-     "equity": 9860.0,
+     "equity": 9880.0,
      "trade": "S3:KXPRESNOMD-28-JSTE:1794805200",
      "ts": "2026-11-16T07:00:00Z"
     },
     {
-     "equity": 9850.0,
+     "equity": 9870.0,
      "trade": "S3:KXPRESNOMD-28-BOBA:1794751200",
      "ts": "2026-11-16T11:00:00Z"
     },
     {
-     "equity": 9840.0,
+     "equity": 9860.0,
      "trade": "S3:KXPRESNOMD-28-JTAL:1795107600",
      "ts": "2026-11-19T18:00:00Z"
     },
     {
-     "equity": 9830.0,
+     "equity": 9850.0,
      "trade": "S3:KXPRESNOMD-28-ESLO:1795107600",
      "ts": "2026-11-19T20:00:00Z"
+    },
+    {
+     "equity": 9840.0,
+     "trade": "S3:KXPRESPERSON-28-VRAM:1795197600",
+     "ts": "2026-11-20T19:00:00Z"
     }
    ],
-   "expectancy_per_trade": -6.8,
+   "expectancy_per_trade": -6.67,
    "id": "S3",
-   "losses": 21,
-   "max_drawdown": 170.0,
+   "losses": 20,
+   "max_drawdown": 160.0,
    "name": "Model edge",
-   "open": 3,
-   "open_stake": 241.0,
-   "realized_pnl": -170.0,
-   "return_on_stake_pct": -9.34,
+   "open": 4,
+   "open_stake": 322.0,
+   "realized_pnl": -160.0,
+   "return_on_stake_pct": -9.21,
    "rule": "Take the side with the largest modelled edge (p_hat vs quoted ask/bid) when the edge is at least $0.03 per contract; same exits.",
-   "total_staked": 1819.2,
+   "total_staked": 1736.3,
    "trades": 28,
-   "win_rate_pct": 16.0,
+   "win_rate_pct": 16.7,
    "wins": 4
   }
  ],
- "generated_at": "2026-11-20T19:22:18.442395+00:00",
+ "generated_at": "2026-11-20T19:31:08.107939+00:00",
  "mode": "simulated"
 }

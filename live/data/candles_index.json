@@ -282,51 +282,51 @@
   },
   "KXPRESNOMD-28-BOBA": {
    "environment": "demo",
-   "first_ts": 1794574800,
+   "first_ts": 1794600000,
    "intervals": {
     "1": 120,
     "60": 168
    },
-   "last_ts": 1795178460,
+   "last_ts": 1795202340,
    "path": "data/candles/KXPRESNOMD-28-BOBA.json",
    "series_ticker": "KXPRESNOMD",
-   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-BOBA/candlesticks?start_ts=1794573674&end_ts=1795178474&period_interval=60"
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-BOBA/candlesticks?start_ts=1794597593&end_ts=1795202393&period_interval=60"
   },
   "KXPRESNOMD-28-BS": {
    "environment": "demo",
-   "first_ts": 1794574800,
+   "first_ts": 1794600000,
    "intervals": {
-    "1": 119,
+    "1": 120,
     "60": 168
    },
-   "last_ts": 1795178460,
+   "last_ts": 1795202340,
    "path": "data/candles/KXPRESNOMD-28-BS.json",
    "series_ticker": "KXPRESNOMD",
-   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-BS/candlesticks?start_ts=1794573674&end_ts=1795178474&period_interval=60"
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-BS/candlesticks?start_ts=1794597593&end_ts=1795202393&period_interval=60"
   },
   "KXPRESNOMD-28-ESLO": {
    "environment": "demo",
-   "first_ts": 1794574800,
+   "first_ts": 1794600000,
    "intervals": {
     "1": 120,
     "60": 168
    },
-   "last_ts": 1795178460,
+   "last_ts": 1795202340,
    "path": "data/candles/KXPRESNOMD-28-ESLO.json",
    "series_ticker": "KXPRESNOMD",
-   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-ESLO/candlesticks?start_ts=1794573674&end_ts=1795178474&period_interval=60"
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-ESLO/candlesticks?start_ts=1794597593&end_ts=1795202393&period_interval=60"
   },
   "KXPRESNOMD-28-EWAR": {
    "environment": "demo",
-   "first_ts": 1794574800,
+   "first_ts": 1794600000,
    "intervals": {
     "1": 120,
     "60": 168
    },
-   "last_ts": 1795178460,
+   "last_ts": 1795202340,
    "path": "data/candles/KXPRESNOMD-28-EWAR.json",
    "series_ticker": "KXPRESNOMD",
-   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-EWAR/candlesticks?start_ts=1794573674&end_ts=1795178474&period_interval=60"
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-EWAR/candlesticks?start_ts=1794597593&end_ts=1795202393&period_interval=60"
   },
   "KXPRESNOMD-28-GPLA": {
    "environment": "demo",
@@ -342,27 +342,27 @@
   },
   "KXPRESNOMD-28-GW": {
    "environment": "demo",
-   "first_ts": 1794574800,
-   "intervals": {
-    "1": 119,
-    "60": 168
-   },
-   "last_ts": 1795178460,
-   "path": "data/candles/KXPRESNOMD-28-GW.json",
-   "series_ticker": "KXPRESNOMD",
-   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-GW/candlesticks?start_ts=1794573674&end_ts=1795178474&period_interval=60"
-  },
-  "KXPRESNOMD-28-HBID": {
-   "environment": "demo",
-   "first_ts": 1794574800,
+   "first_ts": 1794600000,
    "intervals": {
     "1": 120,
     "60": 168
    },
-   "last_ts": 1795178460,
+   "last_ts": 1795202340,
+   "path": "data/candles/KXPRESNOMD-28-GW.json",
+   "series_ticker": "KXPRESNOMD",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-GW/candlesticks?start_ts=1794597593&end_ts=1795202393&period_interval=60"
+  },
+  "KXPRESNOMD-28-HBID": {
+   "environment": "demo",
+   "first_ts": 1794600000,
+   "intervals": {
+    "1": 120,
+    "60": 168
+   },
+   "last_ts": 1795202340,
    "path": "data/candles/KXPRESNOMD-28-HBID.json",
    "series_ticker": "KXPRESNOMD",
-   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-HBID/candlesticks?start_ts=1794573674&end_ts=1795178474&period_interval=60"
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-HBID/candlesticks?start_ts=1794597593&end_ts=1795202393&period_interval=60"
   },
   "KXPRESNOMD-28-HCLI": {
    "environment": "demo",
@@ -404,27 +404,27 @@
   },
   "KXPRESNOMD-28-JSTE": {
    "environment": "demo",
-   "first_ts": 1794574800,
+   "first_ts": 1794600000,
    "intervals": {
     "1": 120,
     "60": 168
    },
-   "last_ts": 1795178460,
+   "last_ts": 1795202340,
    "path": "data/candles/KXPRESNOMD-28-JSTE.json",
    "series_ticker": "KXPRESNOMD",
-   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-JSTE/candlesticks?start_ts=1794573674&end_ts=1795178474&period_interval=60"
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-JSTE/candlesticks?start_ts=1794597593&end_ts=1795202393&period_interval=60"
   },
   "KXPRESNOMD-28-JTAL": {
    "environment": "demo",
-   "first_ts": 1794574800,
+   "first_ts": 1794600000,
    "intervals": {
     "1": 120,
     "60": 168
    },
-   "last_ts": 1795178460,
+   "last_ts": 1795202340,
    "path": "data/candles/KXPRESNOMD-28-JTAL.json",
    "series_ticker": "KXPRESNOMD",
-   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-JTAL/candlesticks?start_ts=1794573674&end_ts=1795178474&period_interval=60"
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-JTAL/candlesticks?start_ts=1794597593&end_ts=1795202393&period_interval=60"
   },
   "KXPRESNOMD-28-KH": {
    "environment": "demo",
@@ -469,26 +469,26 @@
    "environment": "demo",
    "first_ts": 1779681600,
    "intervals": {
-    "1": 1456,
+    "1": 1550,
     "1440": 180,
-    "60": 684
+    "60": 691
    },
-   "last_ts": 1795178460,
+   "last_ts": 1795202340,
    "path": "data/candles/KXPRESNOMD-28-RW.json",
    "series_ticker": "KXPRESNOMD",
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-RW/candlesticks"
   },
   "KXPRESNOMD-28-SAS": {
    "environment": "demo",
-   "first_ts": 1794574800,
+   "first_ts": 1794600000,
    "intervals": {
-    "1": 120,
-    "60": 153
+    "1": 4,
+    "60": 149
    },
-   "last_ts": 1795178460,
+   "last_ts": 1795202340,
    "path": "data/candles/KXPRESNOMD-28-SAS.json",
    "series_ticker": "KXPRESNOMD",
-   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-SAS/candlesticks?start_ts=1794573674&end_ts=1795178474&period_interval=60"
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-SAS/candlesticks?start_ts=1794597593&end_ts=1795202393&period_interval=60"
   },
   "KXPRESNOMR-28-MG": {
    "environment": "demo",
@@ -542,15 +542,15 @@
   },
   "KXPRESPERSON-28-VRAM": {
    "environment": "demo",
-   "first_ts": 1794574800,
+   "first_ts": 1794600000,
    "intervals": {
     "1": 120,
     "60": 168
    },
-   "last_ts": 1795178460,
+   "last_ts": 1795202340,
    "path": "data/candles/KXPRESPERSON-28-VRAM.json",
    "series_ticker": "KXPRESPERSON",
-   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESPERSON/markets/KXPRESPERSON-28-VRAM/candlesticks?start_ts=1794573674&end_ts=1795178474&period_interval=60"
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESPERSON/markets/KXPRESPERSON-28-VRAM/candlesticks?start_ts=1794597593&end_ts=1795202393&period_interval=60"
   },
   "KXPRIMEENGCONSUMPTION-30-SOLAR": {
    "environment": "demo",

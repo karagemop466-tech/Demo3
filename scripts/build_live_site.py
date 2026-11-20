@@ -730,6 +730,36 @@ row links the official source that was checked.</p>
 </div>
 
 <div class="card">
+<h2>Repo review 2026-11-20 — findings from this session</h2>
+<p class="small muted">Line-by-line review of the files on <code>main</code> against official
+documentation, with the full register and the verified-correct list in
+<a href="https://github.com/karagemop466-tech/Demo3/blob/main/REVIEW_2026-11-20.md" target="_blank" rel="noopener">REVIEW_2026-11-20.md</a>.
+Rows here are the ones a trader could trip over.</p>
+{table(["ID", "Finding", "Official source checked", "Status"],
+       [["R-91-01", "Root dashboard live-order body uses <code>action</code>/<code>side: yes|no</code>/<code>yes_price</code>; V2 expects <code>side: bid|ask</code>, fixed-point string <code>count</code> and <code>price</code>, and <code>time_in_force</code> values <code>good_till_canceled|immediate_or_cancel|fill_or_kill</code>. Live entry would be rejected as written; inactive because no credentials exist.",
+         src_link("https://docs.kalshi.com/api-reference/orders/create-order-v2", "Create Order V2"), '<span class="chip warn">needs review</span>'],
+        ["R-91-02", "<code>scripts/kalshi_client.py</code> always signs RSA-PSS; docs now issue Ed25519 keys by default, which must sign the message directly. The newer collector/trading modules handle both.",
+         src_link("https://docs.kalshi.com/getting_started/api_keys", "API keys"), '<span class="chip warn">needs review</span>'],
+        ["R-91-03", "Root <code>assets/alerts.js</code> high-ROI filter is a disclosed placeholder (≥ $0.10 and ≥ 10%) — not a model. This desk replaces it with a published EV model plus a measured simulated track record.",
+         src_link("https://github.com/karagemop466-tech/Demo3/blob/main/assets/alerts.js", "alerts.js"), '<span class="chip warn">needs review</span>'],
+        ["R-91-04", "Root alerts only exist while the tab is open (in-browser polling). This desk detects swings from committed candlesticks, so alerts survive reloads.",
+         src_link("https://docs.kalshi.com/api-reference/market/get-market-candlesticks", "candlesticks"), '<span class="chip warn">needs review</span>'],
+        ["R-91-05", "The analysis archive was collected from the production endpoint; those 12 contracts are labelled production here and never mixed silently.",
+         src_link("https://docs.kalshi.com/getting_started/api_environments", "environments"), '<span class="chip warn">needs review</span>'],
+        ["R-91-06", "Several parallel dashboards exist (root, docs/, docs/tracker/, demo-desk/, analysis/, live/) plus three open PRs proposing more. Nothing broken; a trader has many doors.",
+         src_link("https://github.com/karagemop466-tech/Demo3/pulls", "PR list"), '<span class="chip warn">needs review</span>']])}
+<h3>Verified correct (spot-checked line by line)</h3>
+<ul class="small">
+<li>Demo + WS roots match {src_link("https://docs.kalshi.com/getting_started/demo_env", "demo environments")}.</li>
+<li>Orderbook is bids-only, ascending, best = last, YES ask = 1 − best NO bid ({src_link("https://docs.kalshi.com/getting_started/orderbook_responses", "orderbook responses")}); implemented identically here.</li>
+<li>Candlestick path and <code>period_interval</code> ∈ {{1, 60, 1440}} ({src_link("https://docs.kalshi.com/api-reference/market/get-market-candlesticks", "candlesticks")}).</li>
+<li>$1 per winning contract and zero settlement fee for simple yes/no ({src_link("https://docs.kalshi.com/getting_started/market_settlement", "settlement")}).</li>
+<li>Signed message = timestamp + METHOD + path-without-query; Ed25519 direct / RSA-PSS-SHA256 ({src_link("https://docs.kalshi.com/getting_started/api_keys", "API keys")}).</li>
+<li>429 backoff for unauthenticated requests ({src_link("https://docs.kalshi.com/getting_started/rate_limits", "rate limits")}).</li>
+</ul>
+</div>
+
+<div class="card">
 <h2>Repo review — earlier sessions' registers</h2>
 <p class="small muted">Registers from previous sessions on the same repository remain published at
 their canonical URLs; this page covers the Live Alert Desk. Irregularities found while reviewing
