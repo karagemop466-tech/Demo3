@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Paper desk summary &middot; Kalshi demo paper desk</title>
+<link rel="stylesheet" href="assets/paper.css">
+</head>
+<body>
+<header class="top"><div class="bar"><a class="brand" href="index.html">Kalshi demo &middot; paper desk</a><nav class="main"><a href="index.html" class="active">Desk summary</a><a href="trades.html">Trade journal</a><a href="positions.html">Positions & liquidity</a><a href="analysis.html">Strategy analysis</a><a href="resolutions.html">Resolutions</a><a href="methodology.html">Rules & methodology</a><a href="sources.html">Sources</a></nav><span class="flexrow" style="margin-left:auto"><span class="pill sim">no runs yet</span><span class="pill ok">ledger updated awaiting first cycle</span><span class="pill">collector ok</span></span></div></header>
+<main>
+<h1>Paper desk summary</h1>
+<p class="muted">Automated simulated trading on Kalshi&rsquo;s demo exchange, five focus topics: gas prices, elections, culture, crypto, golf.</p>
+
+<div class="banner"><strong>No ledger yet.</strong> <span class="mono">data/paper/</span> is
+created by the first run of <span class="mono">.github/workflows/paper-desk.yml</span>
+(scheduled every 20 minutes on the default branch, or on demand). The pages below stay
+valid and fill in as cycles complete; nothing on this site is back-filled by hand.</div>
+<div class="note">The desk runs unattended: it reads the tracked universe from the collector
+snapshot, pulls <strong>live quotes</strong> from the official demo REST root
+<span class="mono">https://external-api.demo.kalshi.co/trade-api/v2</span>,
+applies five fixed rules in <a class="mono" href="https://github.com/karagemop466-tech/Demo3/blob/main/trading/paper_strategies.py"
+target="_blank" rel="noopener">trading/paper_strategies.py</a>, and simulates fills against the
+published top-of-book prices with only the contracts actually resting at that price.
+No order is ever sent; no credentials are used (public market data needs none per
+<a href="https://docs.kalshi.com/getting_started/quick_start_market_data.md" target="_blank" rel="noopener">the docs</a>).</div>
+<h2>Portfolio performance (simulated)</h2>
+<div class="grid"><div class="kpi"><div class="v">&mdash;</div><div class="l">Equity (marked at bid)</div></div><div class="kpi"><div class="v">&mdash;</div><div class="l">Cash</div></div><div class="kpi"><div class="v">&mdash;</div><div class="l">Realized P&amp;L</div></div><div class="kpi"><div class="v">&mdash;</div><div class="l">Unrealized P&amp;L</div></div><div class="kpi"><div class="v">0</div><div class="l">Open positions</div></div><div class="kpi"><div class="v">0</div><div class="l">Resting orders</div></div><div class="kpi"><div class="v">0</div><div class="l">Simulated fills</div></div><div class="kpi"><div class="v">0</div><div class="l">Rejected for no liquidity</div></div><div class="kpi"><div class="v">0</div><div class="l">Settled positions</div></div><div class="kpi"><div class="v">0</div><div class="l">Desk cycles</div></div><div class="kpi"><div class="v">$5,000.0000</div><div class="l">Start cash</div></div><div class="kpi"><div class="v">&mdash;</div><div class="l">Max drawdown</div></div></div>
+<h2>Equity curve &mdash; x: desk cycle time, y: dollars</h2>
+<p class="muted small">The equity curve appears after the second desk cycle (each cycle adds one sample).</p>
+<h2>Rules under test</h2>
+<table><thead><tr><th>Strategy</th><th>id</th><th>family</th><th>entry condition (verbatim rule)</th><th>exit rule</th><th>API fields used</th><th>source</th></tr></thead><tbody><tr><td>Swing fade (buy after a &gt;= $0.10 drop)</td><td>swing_fade</td><td>reversion</td><td>best ask available with size, after last-&gt;ask fell by &gt;= 0.10 vs the previous desk sample and price stays inside [0.10, 0.90]</td><td>take-profit +0.20, stop -0.20, else hold to settlement</td><td><span class="mono">yes_bid_dollars, yes_ask_dollars, volume_24h_fp, status</span></td><td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-markets.md" target="_blank" rel="noopener">field docs</a></td></tr><tr><td>Swing momentum (buy after a &gt;= $0.10 rise)</td><td>swing_momentum</td><td>momentum</td><td>best ask available with size, after last-&gt;ask rose by &gt;= 0.10 vs the previous desk sample, price inside [0.10, 0.90] and 24h volume &gt; 0</td><td>take-profit +0.20, stop -0.20, else hold to settlement</td><td><span class="mono">yes_bid_dollars, yes_ask_dollars, volume_24h_fp, status</span></td><td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-markets.md" target="_blank" rel="noopener">field docs</a></td></tr><tr><td>Favorite carry (buy &gt;= 0.90 quotes closing within 14 days)</td><td>favorite_carry</td><td>carry</td><td>best ask in [0.90, 0.99] with size, close_time within 14 days</td><td>take-profit +0.20, stop -0.20, else hold to settlement</td><td><span class="mono">yes_ask_dollars, yes_ask_size_fp, close_time, status</span></td><td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-markets.md" target="_blank" rel="noopener">field docs</a></td></tr><tr><td>Longshot fade (buy NO when YES quotes &lt;= 0.10)</td><td>longshot_fade_no</td><td>reversion</td><td>best NO ask in [0.90, 0.99] with size, YES last &lt;= 0.10, 24h volume &gt; 0</td><td>take-profit +0.20, stop -0.20, else hold to settlement</td><td><span class="mono">no_ask_dollars, yes_bid_size_fp, last_price_dollars, volume_24h_fp, close_time</span></td><td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-markets.md" target="_blank" rel="noopener">field docs</a></td></tr><tr><td>Maker mid-quote (resting bid one tick inside the spread)</td><td>maker_midquote</td><td>liquidity</td><td>resting limit buy at yes_bid + one grid step (never crosses); fills only when a later demo sample shows the best ask at or below the limit</td><td>take-profit +0.20, stop -0.20, else hold to settlement</td><td><span class="mono">yes_bid_dollars, yes_ask_dollars, price_ranges, status</span></td><td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-markets.md" target="_blank" rel="noopener">field docs</a></td></tr></tbody></table>
+<h2>Last desk cycles</h2>
+<table><thead><tr><th>ts</th><th>run</th><th>universe</th><th>markets quoted</th><th>orders sent</th><th>fills</th><th>rejects</th><th>settlements</th><th>equity</th><th>API requests</th><th>API errors</th><th>mode</th><th>requests made</th></tr></thead><tbody><tr><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td></tr></tbody></table>
+<h2>Recent equity samples</h2>
+<table><thead><tr><th>ts</th><th>run</th><th>cash</th><th>positions value</th><th>equity</th><th>realized</th><th>unrealized</th><th>open</th><th>resting</th><th>source</th></tr></thead><tbody><tr><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td></tr></tbody></table>
+<div class="card"><h2>Live panel</h2><p class="small muted">The committed ledger updates every
+cycle. For quotes as of right now, open <a href="positions.html">Positions &amp; liquidity</a>
+and press <em>Refresh from the demo API</em> &mdash; that button reads
+<span class="mono">GET /markets?tickers=</span> from the browser against the same official demo
+endpoint (public, no auth).</p></div>
+</main>
+<footer>Simulated ledger only &mdash; not a demo-account balance, and not investment advice. Demo prices "may not be reflective of those in real markets" per <a href="https://docs.kalshi.com/getting_started/demo_env.md" target="_blank" rel="noopener">Kalshi&rsquo;s demo-environment doc</a>. Generated by <span class="mono">scripts/build_paper_desk.py</span> from <span class="mono">data/paper/*.json</span> (refreshed by <span class="mono">.github/workflows/paper-desk.yml</span>).</footer>
+</body>
+</html>

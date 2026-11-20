@@ -56,6 +56,7 @@
       last: last, yb: yb, ya: ya, vol: vol, oi: oi,
       volDollars: K.estDollars(vol, last), oiDollars: K.estDollars(oi, last),
       close_time: m.close_time, series_ticker: m.series_ticker || "",
+      rules_primary: m.rules_primary || "",
       topic: m._topic || ""
     };
   }
@@ -254,11 +255,45 @@
         .filter(function (p) { return p.t >= start; });
     }
   }
+  function swingAnnotations() {
+    // >=$0.10 swings on the selected market within the current chart window.
+    var tk = state.selected;
+    if (!tk || !window.KD || !window.KD.allRows) return [];
+    var start = Math.floor(Date.now() / 1000) - state.windowSec;
+    return window.KD.allRows()
+      .filter(function (a) { return a.ticker === tk && a.ts >= start; })
+      .map(function (a) { return { t: a.ts, label: a.event || a.ticker, dir: a.dir }; });
+  }
+  function renderSwingCaption() {
+    // Chart shows the swing EVENTS and their official source links.
+    // Event sources come from the alerts cache (window.KD.events[evt].sources);
+    // if unavailable the market API link is shown as the fallback source.
+    var el = $("swingCaption");
+    if (!el) return;
+    var tk = state.selected;
+    if (!tk || !window.KD || !window.KD.allRows) { el.innerHTML = ""; return; }
+    var start = Math.floor(Date.now() / 1000) - state.windowSec;
+    var rows = window.KD.allRows().filter(function (a) { return a.ticker === tk && a.ts >= start; });
+    if (!rows.length) { el.innerHTML = ""; return; }
+    var html = "<strong>Swing events on this chart (&ge; $0.10):</strong> ";
+    html += rows.slice(0, 8).map(function (a) {
+      var ev = (window.KD.events && window.KD.events[a.event]) || null;
+      var src = (ev && ev.sources && ev.sources[0]) || null;
+      var label = a.event ? (a.event + " — " + a.title) : a.title;
+      var link = src ? K.srcLink(src.url, src.name || "source") : K.srcLink(a.api, "market API");
+      return "<span class='mono'>" + K.esc(label) + "</span> " + link;
+    }).join(" · ");
+    html += " <span class='muted'>official settlement source(s) where published; " +
+      "not asserted as the cause of the move (F-c75-03).</span>";
+    el.innerHTML = html;
+  }
   function drawChart() {
     if (!$("priceChart")) return;
     var pts = state.candles || [];
     K.drawPriceChart($("priceChart"), pts,
-      { windowLabel: "window: " + windowLabel(), spanSec: state.windowSec });
+      { windowLabel: "window: " + windowLabel(), spanSec: state.windowSec,
+        annotations: swingAnnotations() });
+    renderSwingCaption();
   }
   function windowLabel() {
     var s = state.windowSec;
@@ -351,7 +386,8 @@
           !state.resolutions.find(function (r) { return r.ticker === m.ticker; })) {
         state.resolutions.push({ ticker: m.ticker, title: m.title, topic: m.topic,
           result: String(m.result).toLowerCase(), status: m.status,
-          ts: Math.floor(Date.now() / 1000) });
+          ts: Math.floor(Date.now() / 1000),
+          event_ticker: m.event_ticker || "", series_ticker: m.series_ticker || "" });
         changed = true;
       }
     });
@@ -592,10 +628,21 @@
       var auto = $("autoTrade");
       if (auto) {
         auto.disabled = false;
+        // Restore persisted automation state on load (checkbox always reloaded
+        // unchecked before this fix).
+        var st = T.automationStatus ? T.automationStatus() : {};
+        auto.checked = !!st.enabled;
         auto.addEventListener("change", function () {
           T.setAutomation(auto.checked);
-          if ($("autoTrade")) { /* keep checkbox in sync with persisted state */ }
+          var s = T.automationStatus ? T.automationStatus() : {};
+          auto.checked = !!s.enabled;
         });
+      }
+      var strat = $("autoStrategy");
+      if (strat) {
+        var cur = (T.automationStatus ? T.automationStatus().strategy : "momentum") || "momentum";
+        strat.value = cur;
+        strat.addEventListener("change", function () { T.setStrategy(strat.value); });
       }
     }
     renderResolutions();

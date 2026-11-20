@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Strategy analysis &middot; Kalshi demo paper desk</title>
+<link rel="stylesheet" href="assets/paper.css">
+</head>
+<body>
+<header class="top"><div class="bar"><a class="brand" href="index.html">Kalshi demo &middot; paper desk</a><nav class="main"><a href="index.html">Desk summary</a><a href="trades.html">Trade journal</a><a href="positions.html">Positions & liquidity</a><a href="analysis.html" class="active">Strategy analysis</a><a href="resolutions.html">Resolutions</a><a href="methodology.html">Rules & methodology</a><a href="sources.html">Sources</a></nav><span class="flexrow" style="margin-left:auto"><span class="pill sim">no runs yet</span><span class="pill ok">ledger updated awaiting first cycle</span><span class="pill">collector ok</span></span></div></header>
+<main>
+<h1>Strategy analysis</h1>
+
+
+<div class="banner"><strong>No ledger yet.</strong> <span class="mono">data/paper/</span> is
+created by the first run of <span class="mono">.github/workflows/paper-desk.yml</span>
+(scheduled every 20 minutes on the default branch, or on demand). The pages below stay
+valid and fill in as cycles complete; nothing on this site is back-filled by hand.</div>
+<h2>Ledger totals</h2>
+<div class="grid"><div class="kpi"><div class="v">&mdash;</div><div class="l">realized</div></div><div class="kpi"><div class="v">&mdash;</div><div class="l">unrealized</div></div><div class="kpi"><div class="v">&mdash;</div><div class="l">total</div></div><div class="kpi"><div class="v">&mdash;</div><div class="l">equity</div></div><div class="kpi"><div class="v">0</div><div class="l">settled positions</div></div><div class="kpi"><div class="v">0</div><div class="l">samples</div></div></div>
+<div class="note small">Reading these tables: a group's realized P&amp;L is the sum of closed and
+settled trades in that group only; open positions are shown separately as unrealized on the
+<a href="positions.html">positions page</a>. Nothing here is a forecast &mdash; it is arithmetic on
+the desk&rsquo;s own simulated fills, over a small number of samples.</div>
+<h2>By strategy (rule tested)</h2><p class="muted small">No closed trades in this group yet.</p><h2>By focus topic</h2><p class="muted small">No closed trades in this group yet.</p><h2>By contract side</h2><p class="muted small">No closed trades in this group yet.</p><h2>By trade type (price band at entry)</h2><p class="muted small">No closed trades in this group yet.</p><h2>By strategy family</h2><p class="muted small">No closed trades in this group yet.</p><h2>By action recorded</h2><p class="muted small">No closed trades in this group yet.</p>
+<h2>Trade-type ranking (auto-derived from realized results)</h2>
+<p class="small muted">&mdash; Minimum closed trades for a type to be
+listed: &mdash;.</p>
+<table><thead><tr><th>trade type</th><th>closed trades</th><th>realized P&amp;L</th><th>win rate</th><th>avg per trade</th><th>records behind this row</th></tr></thead><tbody><tr><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td><td><span class="muted">no rows yet</span></td></tr></tbody></table>
+<h2>Universe coverage this cycle</h2>
+<table><thead><tr><th>metric</th><th>value</th><th>source</th></tr></thead><tbody><tr><td>markets tracked</td><td>&mdash;</td><td><a class="src" href="../data/latest/top_events.json" target="_blank" rel="noopener">collector snapshot</a></td></tr><tr><td>markets quoted</td><td>&mdash;</td><td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-markets.md" target="_blank" rel="noopener">endpoint doc</a></td></tr><tr><td>with a two-sided quote</td><td>&mdash;</td><td><a class="src" href="https://docs.kalshi.com/getting_started/orderbook_responses.md" target="_blank" rel="noopener">book structure</a></td></tr><tr><td>snapshot retrieved at</td><td>&mdash;</td><td><a class="src" href="../data/latest/meta.json" target="_blank" rel="noopener">collector meta</a></td></tr><tr><td>synthetic demo series excluded</td><td>0</td><td><a class="src" href="../data/paper/sources.json" target="_blank" rel="noopener">exclusion list + evidence</a></td></tr></tbody></table>
+<h2>API usage (politeness)</h2>
+<table><thead><tr><th>metric</th><th>value</th><th>note</th><th>source</th></tr></thead><tbody><tr><td>requests this cycle</td><td>&mdash;</td><td>batched 50 tickers per request</td><td><a class="src" href="../data/paper/runs.json">run log</a></td></tr><tr><td>errors this cycle</td><td>&mdash;</td><td>recorded, never retried into a fake value</td><td><a class="src" href="../data/paper/runs.json">run log</a></td></tr><tr><td>quote batches</td><td>&mdash;</td><td>&mdash;</td><td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-markets.md" target="_blank" rel="noopener">endpoint doc</a></td></tr><tr><td>orderbook batches / tickers</td><td>None / None</td><td>GET /markets/orderbooks, max 100 tickers per request</td><td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-multiple-market-orderbooks.md" target="_blank" rel="noopener">endpoint doc</a></td></tr></tbody></table>
+<h2>Disclosed limitations</h2>
+<table><thead><tr><th>limitation</th><th>detail (verbatim from the ledger)</th><th>source</th></tr></thead><tbody><tr><td>demo prices</td><td>&mdash;</td><td><a class="src" href="https://docs.kalshi.com/getting_started/demo_env.md" target="_blank" rel="noopener">official doc</a></td></tr><tr><td>fees</td><td>&mdash;</td><td><a class="src" href="../data/paper/analysis.json">caveats</a></td></tr><tr><td>account</td><td>&mdash;</td><td><a class="src" href="../data/latest/portfolio.json">portfolio status</a></td></tr><tr><td>cache lag</td><td>&mdash;</td><td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-markets.md" target="_blank" rel="noopener">official doc</a></td></tr></tbody></table>
+</main>
+<footer>Simulated ledger only &mdash; not a demo-account balance, and not investment advice. Demo prices "may not be reflective of those in real markets" per <a href="https://docs.kalshi.com/getting_started/demo_env.md" target="_blank" rel="noopener">Kalshi&rsquo;s demo-environment doc</a>. Generated by <span class="mono">scripts/build_paper_desk.py</span> from <span class="mono">data/paper/*.json</span> (refreshed by <span class="mono">.github/workflows/paper-desk.yml</span>).</footer>
+</body>
+</html>
