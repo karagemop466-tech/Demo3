@@ -98,6 +98,55 @@ files exist on the owner's branch **and** every factual row carries an official 
   >30 s off (`header_timestamp_expired`, official docs). Sandbox date is 2026-11-20; any HMAC
   signing executed outside CI must be timestamp-checked first.
 
+## Progress log — session c2aac20e
+
+All entries below are backed by commits on `arena/c2aac20e-demo3` and green CI runs.
+
+| When (UTC) | Item | Evidence |
+|---|---|---|
+| 11:21 | Board created; R1–R5 logged after re-verifying every prior claim | `COORDINATION.md`; PR list empty |
+| 11:26 | Proved GitHub Actions runners can reach the Kalshi demo API (sandbox cannot) | run [44727245939](https://github.com/karagemop466-tech/Demo3/actions/runs/44727245939) |
+| 11:34 | Collector v1 (too broad, 80 MB) → rejected and rewritten | this log, **R7** |
+| 11:57 | Collector v2: series-first selection, top 14 series per topic by volume | run 44731483738 |
+| 12:02 | Analysis: compact artifacts + computed report (per-topic aggregates, settlement lag, liquidity) | `analysis/report.json`, `analysis/REPORT.md` |
+| 12:03 | Expectancy study over 12,521 settled markets — **the finding that killed the obvious strategy** | `data/expectancy.json` |
+| 12:05 | Corrected order API to V2 `/portfolio/events/orders` after verifying the 410-Gone change on an official page | `collector/portfolio.py`; **F13** |
+| 12:09 | Docs set: executive summary, decision register (14 items), suggestions (14), flagged (16), sources (23 + responses) | `docs/*.md` |
+| 12:11 | Site: 15 pages, four size metrics, price/depth chart with second-to-day windows, review pages with accept/defer/reject + JSON export | `docs/**` |
+| 12:11 | Offline test suites: 16 Python tests (incl. Kalshi's own order-book worked example) and a 15-page jsdom render test; both wired into CI | `collector/tests/**`, `tools/render_test.js`, runs 44733777166 |
+
+### Irregularities added by this session
+
+- **R6 — shared concurrency group starved the repo.** A parallel session's run held the global
+  `collect-kalshi` group `in_progress` for ~22 minutes (run 44728531840), so queued runs
+  44729361223 and 44729416593 were cancelled. This session's workflow now uses
+  `collect-kalshi-c2aac20e`. Other sessions should scope theirs.
+- **R7 — v1 collector was unusable and was thrown away, not patched.** It paged the global
+  `/markets` feed (newest-first), so it captured thousands of 15-minute crypto contracts, missed
+  long-running high-volume events, produced ~80 MB of artifacts, and classified 9,418 series into
+  the five topics because the rules matched entire categories such as `Economics`. v2 selects
+  series first (top 14 per topic by series volume) and keeps matched series at 70. Both the
+  artefacts and the rules were replaced; the v1 data is not published anywhere.
+- **R8 — artifact integrity incident (self-inflicted, fixed).** An automated CI commit captured a
+  build traceback into `data/build-log.txt`, and a later local `git checkout` restored an older
+  tree over freshly written artifacts, so commit `44da973` briefly contained an empty
+  `data/dashboard.json`. Restored from `6ee1523` in `447e0cc`, and `analysis/build.py` now refuses
+  to overwrite committed artifacts when its inputs are empty. Also published as **F6**.
+
+### Verification performed (line by line)
+
+1. **Order-book maths** reproduced Kalshi's own documented worked example exactly (best YES bid
+   0.42, implied YES ask 0.44, spread 0.02, depth 61.70) — `collector/tests/test_pipeline.py`.
+2. **Topic mapping** checked against real tickers and categories observed from `/series`
+   (`KXAAAGASW` → gas by prefix, not by its `Economics` category; `KXPGARYDER` → golf by tag).
+3. **Every published figure** recomputed from the committed artifacts before being quoted in
+   `docs/EXECUTIVE_SUMMARY.md`; two mismatches were found and corrected (series count and
+   open-market count were from a different run).
+4. **Every documented URL** verified by fetching it; the one that mattered —
+   `orders/create-order-v2.md` — changed our implementation.
+5. **Site integrity**: `tools/check_site.py` (links, citation hosts, required pages, per-row
+   sources) and `tools/render_test.js` (15 pages, real data, no script errors) both pass.
+
 ## Sources used for the facts on this board
 
 - Kalshi API environments: https://docs.kalshi.com/getting_started/api_environments.md
