@@ -1,0 +1,62 @@
+# Publishes the repository root as the GitHub Pages site through a custom Actions workflow.
+#
+# Why: legacy "deploy from branch" Pages builds are limited to a soft 10 builds per hour
+# (https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits).
+# The collector commits snapshots every 10 minutes and sessions merge often, so legacy
+# builds were erroring ("Page build failed.") from 19:39Z on 2026-11-20. The limit does not
+# apply to sites published by a custom GitHub Actions workflow.
+#
+# Deploy path: this workflow runs on pushes to main and on workflow_dispatch. Data-only
+# commits made by the collector use GITHUB_TOKEN, which does not trigger other workflows,
+# so collect.yml dispatches this workflow explicitly after each snapshot.
+
+name: Deploy GitHub Pages site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never cancel an in-flight Pages deployment (GitHub's recommendation for Pages).
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Enable Pages (workflow source)
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      # Publish the repo root. .git and .github are not part of the site; everything else
+      # (HTML, assets, data/, docs/, analysis/, demo-desk/, .nojekyll) is kept as-is.
+      - name: Stage site
+        run: |
+          rm -rf _site && mkdir _site
+          tar --exclude=./.git --exclude=./.github --exclude=./_site -cf - . | tar -xf - -C _site
+          test -f _site/index.html
+          test -f _site/.nojekyll
+          echo "staged files: $(find _site -type f | wc -l)"
+          du -sh _site
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -45,8 +45,14 @@ TOPICS = ("gas", "elections", "culture", "crypto", "golf")
 TOPIC_RULES = [
     # (topic, series_ticker regex, title regex) — checked BEFORE the category
     # overlay so specific ticker/title evidence wins over generic demo categories
-    ("gas", re.compile(r"(^KXGAS|GAS(W|NY|US)?$|GAS[A-Z]|NATGAS|HEATINGOIL|DIESEL|PROPANE)", re.I), re.compile(
-        r"\b(gasoline|gas price|nat(?:ural)?\s?gas|heating oil|diesel|gallon|aaa gas)\b", re.I)),
+    # GAS-PRICE markets only (CR-d7d7a733-1, 764c370e). Ticker prefixes are anchored; the old unanchored
+    # `GAS[A-Z]` / `^KXGAS` rules matched KXGASTATELEG (Georgia legislature), KXPGASTROKEMARGIN (PGA),
+    # KXLALIGASCORE (soccer) and similar. `DIESEL(?!EXPORT)` excludes the export-ban policy series.
+    # Crude oil (WTI, Brent, crude inventories) is deliberately NOT gas: it is a separate commodity topic.
+    ("gas", re.compile(r"^(KX)?(AAAGAS|NGAS|NATGAS|DIESEL(?!EXPORT)|GASMAX$|GASMIN$|GAS$|GASW$|TRUFGAS|CPIGAS$|HEATINGOIL)", re.I), re.compile(
+        # title: a fuel-price word, unless the title is about production, inventories, tax, bans, trade or licences
+        r"^(?!.*\b(?:production|inventor\w*|tax|ban|export|import|license|stove)\b)"
+        r"(?=.*\b(?:gasoline|gas prices?|diesel prices?|natural gas|nat gas|heating oil|aaa gas)\b)", re.I)),
     ("crypto", re.compile(r"^KX(BTC|ETH|SOL|XRP|DOGE|CRYPTO|BINANCE|COINBASE|STABLE)", re.I), re.compile(
         r"\b(bitcoin|btc|ethereum|eth\b|solana|crypto|xrp|dogecoin|coinbase|stablecoin)\b", re.I)),
     ("golf", re.compile(r"^KX(GOLF|PGA|LIV|MASTERS|OPEN|USOPEN|RYDER|DPWT)", re.I), re.compile(
@@ -78,7 +84,8 @@ CATEGORY_TOPIC = {
 # e.g. KXWTI "WTI oil election day" (tag "Oil & Gas") maps to gas, not elections).
 TAG_TOPIC = [
     (re.compile(r"golf", re.I), "golf"),
-    (re.compile(r"oil\s*&\s*gas|natural gas|energy", re.I), "gas"),
+    # exact fuel tags only; "Oil & Gas", "Oil and energy" and "Energy" are too broad (they carry WTI, ERCOT, test series)
+    (re.compile(r"^(gas|gasoline|diesel|natural gas)$", re.I), "gas"),
     (re.compile(r"election", re.I), "elections"),
 ]
 

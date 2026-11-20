@@ -3502,7 +3502,11 @@
   },
   {
    "check": "orderbook KXPRESNOMD-28-BS structure",
+<<<<<<< HEAD
    "detail": "{\"no_dollars\": [[\"0.0300\", \"10.00\"], [\"0.9930\", \"47619.04\"], [\"0.9940\", \"55555.54\"], [\"0.9950\", \"66447.61\"]], \"yes_dolla",
+=======
+   "detail": "{\"no_dollars\": [[\"0.0300\", \"10.00\"], [\"0.9930\", \"47619.04\"], [\"0.9940\", \"55555.54\"], [\"0.9950\", \"66477.87\"]], \"yes_dolla",
+>>>>>>> origin/main
    "ok": true
   },
   {
@@ -3562,8 +3566,8 @@
   },
   {
    "check": "event KXSTATELEGMA-28NOV07MAH126 exists+title",
-   "detail": "title live='Massachusetts House 4th Suffolk District winner? (2028)'",
-   "ok": true
+   "detail": "missing",
+   "ok": false
   },
   {
    "check": "event KXSTATELEGLA-27OCT09LAH008 exists+title",
@@ -3572,8 +3576,8 @@
   },
   {
    "check": "event KXSTATELEGMA-28NOV07MASD10 exists+title",
-   "detail": "title live='Massachusetts Senate Worcester and Middlesex District winner? (2028)'",
-   "ok": true
+   "detail": "missing",
+   "ok": false
   },
   {
    "check": "event KXHOUSERACE-TN03-28 exists+title",
@@ -3582,8 +3586,8 @@
   },
   {
    "check": "event KXSTATELEGMA-28NOV07MAH061 exists+title",
-   "detail": "title live='Massachusetts House 3rd Middlesex District winner? (2028)'",
-   "ok": true
+   "detail": "missing",
+   "ok": false
   },
   {
    "check": "event KXSTATELEGMA-28NOV07MAH145 exists+title",
@@ -3592,8 +3596,8 @@
   },
   {
    "check": "event KXCPIPARTYCOMBO-30MAR exists+title",
-   "detail": "title live='2029 inflation × 2028 winner'",
-   "ok": true
+   "detail": "missing",
+   "ok": false
   },
   {
    "check": "event KXSTATELEGVA-27NOV02VAH070 exists+title",
@@ -3602,8 +3606,8 @@
   },
   {
    "check": "event KXINSCOMMRACE-NC-28 exists+title",
-   "detail": "title live='North Carolina Insurance Commissioner winner? (2028)'",
-   "ok": true
+   "detail": "missing",
+   "ok": false
   },
   {
    "check": "event KXSTATELEGOK-28NOV07OKH087 exists+title",
@@ -3612,8 +3616,8 @@
   },
   {
    "check": "event KXSTATELEGIN-28NOV07INH008 exists+title",
-   "detail": "title live='Indiana House District 8 winner? (2028)'",
-   "ok": true
+   "detail": "missing",
+   "ok": false
   },
   {
    "check": "event KXMESTATELEG-28SEN exists+title",
@@ -3622,13 +3626,14 @@
   },
   {
    "check": "event KXILSTATELEG-28HOUSE exists+title",
-   "detail": "title live='Illinois State House winner? (2028)'",
-   "ok": true
+   "detail": "missing",
+   "ok": false
   }
  ],
  "drift_notices": [],
  "hard_failures": [
   {
+<<<<<<< HEAD
    "check": "event KXSTATELEGVA-27NOV02VAS029 exists+title",
    "detail": "missing"
   },
@@ -3654,6 +3659,33 @@
   },
   {
    "check": "event KXMESTATELEG-28SEN exists+title",
+=======
+   "check": "event KXSTATELEGMA-28NOV07MAH126 exists+title",
+   "detail": "missing"
+  },
+  {
+   "check": "event KXSTATELEGMA-28NOV07MASD10 exists+title",
+   "detail": "missing"
+  },
+  {
+   "check": "event KXSTATELEGMA-28NOV07MAH061 exists+title",
+   "detail": "missing"
+  },
+  {
+   "check": "event KXCPIPARTYCOMBO-30MAR exists+title",
+   "detail": "missing"
+  },
+  {
+   "check": "event KXINSCOMMRACE-NC-28 exists+title",
+   "detail": "missing"
+  },
+  {
+   "check": "event KXSTATELEGIN-28NOV07INH008 exists+title",
+   "detail": "missing"
+  },
+  {
+   "check": "event KXILSTATELEG-28HOUSE exists+title",
+>>>>>>> origin/main
    "detail": "missing"
   }
  ],
@@ -3669,5 +3701,9 @@
   "passed": 718
  },
  "tool": "scripts/verify_rows.py v1",
+<<<<<<< HEAD
  "verified_at": "2026-11-20T20:18:00+00:00"
+=======
+ "verified_at": "2026-11-20T20:14:42+00:00"
+>>>>>>> origin/main
 }

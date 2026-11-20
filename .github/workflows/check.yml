@@ -23,6 +23,9 @@ jobs:
         with:
           node-version: "20"
 
+      - name: Swing alert detector tests (offline; session 6d201d19)
+        run: python3 scripts/tests/test_price_alerts.py
+
       - name: Offline refresh test (mock server, no network)
         run: python3 scripts/tests/test_refresh_offline.py
 
