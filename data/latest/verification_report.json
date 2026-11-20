@@ -1,3003 +1,3003 @@
 {
  "checks": [
   {
-   "check": "resolution KXQUICKSETTLE-20NOV26H0640-2 result",
+   "check": "resolution KXQUICKSETTLE-20NOV26H1350-2 result",
    "detail": "stored='yes' live='yes'",
    "ok": true
   },
   {
-   "check": "resolution KXQUICKSETTLE-20NOV26H0640-2 settlement_value_dollars",
+   "check": "resolution KXQUICKSETTLE-20NOV26H1350-2 settlement_value_dollars",
    "detail": "stored='1.0000' live='1.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXQUICKSETTLE-20NOV26H0640-2 ticker",
-   "detail": "stored='KXQUICKSETTLE-20NOV26H0640-2' live='KXQUICKSETTLE-20NOV26H0640-2'",
+   "check": "resolution KXQUICKSETTLE-20NOV26H1350-2 ticker",
+   "detail": "stored='KXQUICKSETTLE-20NOV26H1350-2' live='KXQUICKSETTLE-20NOV26H1350-2'",
    "ok": true
   },
   {
-   "check": "resolution KXQUICKSETTLE-20NOV26H0640-3 result",
+   "check": "resolution KXQUICKSETTLE-20NOV26H1350-3 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXQUICKSETTLE-20NOV26H0640-3 settlement_value_dollars",
+   "check": "resolution KXQUICKSETTLE-20NOV26H1350-3 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXQUICKSETTLE-20NOV26H0640-3 ticker",
-   "detail": "stored='KXQUICKSETTLE-20NOV26H0640-3' live='KXQUICKSETTLE-20NOV26H0640-3'",
+   "check": "resolution KXQUICKSETTLE-20NOV26H1350-3 ticker",
+   "detail": "stored='KXQUICKSETTLE-20NOV26H1350-3' live='KXQUICKSETTLE-20NOV26H1350-3'",
    "ok": true
   },
   {
-   "check": "resolution KXQUICKSETTLE-20NOV26H0650-2 result",
+   "check": "resolution KXQUICKSETTLE-20NOV26H1330-2 result",
    "detail": "stored='yes' live='yes'",
    "ok": true
   },
   {
-   "check": "resolution KXQUICKSETTLE-20NOV26H0650-2 settlement_value_dollars",
+   "check": "resolution KXQUICKSETTLE-20NOV26H1330-2 settlement_value_dollars",
    "detail": "stored='1.0000' live='1.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXQUICKSETTLE-20NOV26H0650-2 ticker",
-   "detail": "stored='KXQUICKSETTLE-20NOV26H0650-2' live='KXQUICKSETTLE-20NOV26H0650-2'",
+   "check": "resolution KXQUICKSETTLE-20NOV26H1330-2 ticker",
+   "detail": "stored='KXQUICKSETTLE-20NOV26H1330-2' live='KXQUICKSETTLE-20NOV26H1330-2'",
    "ok": true
   },
   {
-   "check": "resolution KXQUICKSETTLE-20NOV26H0650-3 result",
+   "check": "resolution KXQUICKSETTLE-20NOV26H1330-3 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXQUICKSETTLE-20NOV26H0650-3 settlement_value_dollars",
+   "check": "resolution KXQUICKSETTLE-20NOV26H1330-3 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXQUICKSETTLE-20NOV26H0650-3 ticker",
-   "detail": "stored='KXQUICKSETTLE-20NOV26H0650-3' live='KXQUICKSETTLE-20NOV26H0650-3'",
+   "check": "resolution KXQUICKSETTLE-20NOV26H1330-3 ticker",
+   "detail": "stored='KXQUICKSETTLE-20NOV26H1330-3' live='KXQUICKSETTLE-20NOV26H1330-3'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-T1.6399 result",
-   "detail": "stored='no' live='no'",
+   "check": "resolution KXQUICKSETTLE-20NOV26H1340-2 result",
+   "detail": "stored='yes' live='yes'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-T1.6399 settlement_value_dollars",
-   "detail": "stored='0.0000' live='0.0000'",
+   "check": "resolution KXQUICKSETTLE-20NOV26H1340-2 settlement_value_dollars",
+   "detail": "stored='1.0000' live='1.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-T1.6399 ticker",
-   "detail": "stored='KXXRP-26NOV2006-T1.6399' live='KXXRP-26NOV2006-T1.6399'",
+   "check": "resolution KXQUICKSETTLE-20NOV26H1340-2 ticker",
+   "detail": "stored='KXQUICKSETTLE-20NOV26H1340-2' live='KXQUICKSETTLE-20NOV26H1340-2'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-T0.18000 result",
+   "check": "resolution KXQUICKSETTLE-20NOV26H1340-3 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-T0.18000 settlement_value_dollars",
+   "check": "resolution KXQUICKSETTLE-20NOV26H1340-3 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-T0.18000 ticker",
-   "detail": "stored='KXXRP-26NOV2006-T0.18000' live='KXXRP-26NOV2006-T0.18000'",
+   "check": "resolution KXQUICKSETTLE-20NOV26H1340-3 ticker",
+   "detail": "stored='KXQUICKSETTLE-20NOV26H1340-3' live='KXQUICKSETTLE-20NOV26H1340-3'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.6299500 result",
+   "check": "resolution KXBTC-26NOV2013-T72799.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.6299500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-T72799.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.6299500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B1.6299500' live='KXXRP-26NOV2006-B1.6299500'",
+   "check": "resolution KXBTC-26NOV2013-T72799.99 ticker",
+   "detail": "stored='KXBTC-26NOV2013-T72799.99' live='KXBTC-26NOV2013-T72799.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.6099500 result",
+   "check": "resolution KXBTC-26NOV2013-T54200 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.6099500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-T54200 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.6099500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B1.6099500' live='KXXRP-26NOV2006-B1.6099500'",
+   "check": "resolution KXBTC-26NOV2013-T54200 ticker",
+   "detail": "stored='KXBTC-26NOV2013-T54200' live='KXBTC-26NOV2013-T54200'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.5899500 result",
+   "check": "resolution KXBTC-26NOV2013-B72750 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.5899500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B72750 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.5899500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B1.5899500' live='KXXRP-26NOV2006-B1.5899500'",
+   "check": "resolution KXBTC-26NOV2013-B72750 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B72750' live='KXBTC-26NOV2013-B72750'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.5699500 result",
+   "check": "resolution KXBTC-26NOV2013-B72650 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.5699500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B72650 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.5699500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B1.5699500' live='KXXRP-26NOV2006-B1.5699500'",
+   "check": "resolution KXBTC-26NOV2013-B72650 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B72650' live='KXBTC-26NOV2013-B72650'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.5499500 result",
+   "check": "resolution KXBTC-26NOV2013-B72550 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.5499500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B72550 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.5499500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B1.5499500' live='KXXRP-26NOV2006-B1.5499500'",
+   "check": "resolution KXBTC-26NOV2013-B72550 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B72550' live='KXBTC-26NOV2013-B72550'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.5299500 result",
+   "check": "resolution KXBTC-26NOV2013-B72450 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.5299500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B72450 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.5299500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B1.5299500' live='KXXRP-26NOV2006-B1.5299500'",
+   "check": "resolution KXBTC-26NOV2013-B72450 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B72450' live='KXBTC-26NOV2013-B72450'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.5099500 result",
+   "check": "resolution KXBTC-26NOV2013-B72350 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.5099500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B72350 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.5099500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B1.5099500' live='KXXRP-26NOV2006-B1.5099500'",
+   "check": "resolution KXBTC-26NOV2013-B72350 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B72350' live='KXBTC-26NOV2013-B72350'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.4899500 result",
+   "check": "resolution KXBTC-26NOV2013-B72250 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.4899500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B72250 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.4899500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B1.4899500' live='KXXRP-26NOV2006-B1.4899500'",
+   "check": "resolution KXBTC-26NOV2013-B72250 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B72250' live='KXBTC-26NOV2013-B72250'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.4699500 result",
+   "check": "resolution KXBTC-26NOV2013-B72150 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.4699500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B72150 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.4699500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B1.4699500' live='KXXRP-26NOV2006-B1.4699500'",
+   "check": "resolution KXBTC-26NOV2013-B72150 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B72150' live='KXBTC-26NOV2013-B72150'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.4499500 result",
+   "check": "resolution KXBTC-26NOV2013-B72050 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.4499500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B72050 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.4499500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B1.4499500' live='KXXRP-26NOV2006-B1.4499500'",
+   "check": "resolution KXBTC-26NOV2013-B72050 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B72050' live='KXBTC-26NOV2013-B72050'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.4299500 result",
+   "check": "resolution KXBTC-26NOV2013-B71950 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.4299500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B71950 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.4299500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B1.4299500' live='KXXRP-26NOV2006-B1.4299500'",
+   "check": "resolution KXBTC-26NOV2013-B71950 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B71950' live='KXBTC-26NOV2013-B71950'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.4099500 result",
+   "check": "resolution KXBTC-26NOV2013-B71850 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.4099500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B71850 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.4099500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B1.4099500' live='KXXRP-26NOV2006-B1.4099500'",
+   "check": "resolution KXBTC-26NOV2013-B71850 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B71850' live='KXBTC-26NOV2013-B71850'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.3899500 result",
+   "check": "resolution KXBTC-26NOV2013-B71750 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.3899500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B71750 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.3899500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B1.3899500' live='KXXRP-26NOV2006-B1.3899500'",
+   "check": "resolution KXBTC-26NOV2013-B71750 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B71750' live='KXBTC-26NOV2013-B71750'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.3699500 result",
+   "check": "resolution KXBTC-26NOV2013-B71650 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.3699500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B71650 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.3699500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B1.3699500' live='KXXRP-26NOV2006-B1.3699500'",
+   "check": "resolution KXBTC-26NOV2013-B71650 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B71650' live='KXBTC-26NOV2013-B71650'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.3499500 result",
+   "check": "resolution KXBTC-26NOV2013-B71550 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.3499500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B71550 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.3499500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B1.3499500' live='KXXRP-26NOV2006-B1.3499500'",
+   "check": "resolution KXBTC-26NOV2013-B71550 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B71550' live='KXBTC-26NOV2013-B71550'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.3299500 result",
+   "check": "resolution KXBTC-26NOV2013-B71450 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.3299500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B71450 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.3299500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B1.3299500' live='KXXRP-26NOV2006-B1.3299500'",
+   "check": "resolution KXBTC-26NOV2013-B71450 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B71450' live='KXBTC-26NOV2013-B71450'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.3099500 result",
+   "check": "resolution KXBTC-26NOV2013-B71350 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.3099500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B71350 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.3099500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B1.3099500' live='KXXRP-26NOV2006-B1.3099500'",
+   "check": "resolution KXBTC-26NOV2013-B71350 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B71350' live='KXBTC-26NOV2013-B71350'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.2899500 result",
+   "check": "resolution KXBTC-26NOV2013-B71250 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.2899500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B71250 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.2899500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B1.2899500' live='KXXRP-26NOV2006-B1.2899500'",
+   "check": "resolution KXBTC-26NOV2013-B71250 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B71250' live='KXBTC-26NOV2013-B71250'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.2699500 result",
+   "check": "resolution KXBTC-26NOV2013-B71150 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.2699500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B71150 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.2699500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B1.2699500' live='KXXRP-26NOV2006-B1.2699500'",
+   "check": "resolution KXBTC-26NOV2013-B71150 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B71150' live='KXBTC-26NOV2013-B71150'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.2499500 result",
+   "check": "resolution KXBTC-26NOV2013-B71050 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.2499500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B71050 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.2499500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B1.2499500' live='KXXRP-26NOV2006-B1.2499500'",
+   "check": "resolution KXBTC-26NOV2013-B71050 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B71050' live='KXBTC-26NOV2013-B71050'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.2299500 result",
+   "check": "resolution KXBTC-26NOV2013-B70950 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.2299500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B70950 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.2299500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B1.2299500' live='KXXRP-26NOV2006-B1.2299500'",
+   "check": "resolution KXBTC-26NOV2013-B70950 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B70950' live='KXBTC-26NOV2013-B70950'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.2099500 result",
+   "check": "resolution KXBTC-26NOV2013-B70850 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.2099500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B70850 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.2099500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B1.2099500' live='KXXRP-26NOV2006-B1.2099500'",
+   "check": "resolution KXBTC-26NOV2013-B70850 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B70850' live='KXBTC-26NOV2013-B70850'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.1899500 result",
+   "check": "resolution KXBTC-26NOV2013-B70750 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.1899500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B70750 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.1899500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B1.1899500' live='KXXRP-26NOV2006-B1.1899500'",
+   "check": "resolution KXBTC-26NOV2013-B70750 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B70750' live='KXBTC-26NOV2013-B70750'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.1699500 result",
+   "check": "resolution KXBTC-26NOV2013-B70650 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.1699500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B70650 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.1699500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B1.1699500' live='KXXRP-26NOV2006-B1.1699500'",
+   "check": "resolution KXBTC-26NOV2013-B70650 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B70650' live='KXBTC-26NOV2013-B70650'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.1499500 result",
+   "check": "resolution KXBTC-26NOV2013-B70550 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.1499500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B70550 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.1499500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B1.1499500' live='KXXRP-26NOV2006-B1.1499500'",
+   "check": "resolution KXBTC-26NOV2013-B70550 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B70550' live='KXBTC-26NOV2013-B70550'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.1299500 result",
+   "check": "resolution KXBTC-26NOV2013-B70450 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.1299500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B70450 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.1299500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B1.1299500' live='KXXRP-26NOV2006-B1.1299500'",
+   "check": "resolution KXBTC-26NOV2013-B70450 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B70450' live='KXBTC-26NOV2013-B70450'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.1099500 result",
+   "check": "resolution KXBTC-26NOV2013-B70350 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.1099500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B70350 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.1099500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B1.1099500' live='KXXRP-26NOV2006-B1.1099500'",
+   "check": "resolution KXBTC-26NOV2013-B70350 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B70350' live='KXBTC-26NOV2013-B70350'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.0899500 result",
+   "check": "resolution KXBTC-26NOV2013-B70250 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.0899500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B70250 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.0899500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B1.0899500' live='KXXRP-26NOV2006-B1.0899500'",
+   "check": "resolution KXBTC-26NOV2013-B70250 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B70250' live='KXBTC-26NOV2013-B70250'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.0699500 result",
+   "check": "resolution KXBTC-26NOV2013-B70150 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.0699500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B70150 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.0699500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B1.0699500' live='KXXRP-26NOV2006-B1.0699500'",
+   "check": "resolution KXBTC-26NOV2013-B70150 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B70150' live='KXBTC-26NOV2013-B70150'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.0499500 result",
+   "check": "resolution KXBTC-26NOV2013-B70050 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.0499500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B70050 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.0499500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B1.0499500' live='KXXRP-26NOV2006-B1.0499500'",
+   "check": "resolution KXBTC-26NOV2013-B70050 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B70050' live='KXBTC-26NOV2013-B70050'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.0299500 result",
+   "check": "resolution KXBTC-26NOV2013-B69950 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.0299500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B69950 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.0299500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B1.0299500' live='KXXRP-26NOV2006-B1.0299500'",
+   "check": "resolution KXBTC-26NOV2013-B69950 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B69950' live='KXBTC-26NOV2013-B69950'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.0099500 result",
+   "check": "resolution KXBTC-26NOV2013-B69850 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.0099500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B69850 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B1.0099500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B1.0099500' live='KXXRP-26NOV2006-B1.0099500'",
+   "check": "resolution KXBTC-26NOV2013-B69850 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B69850' live='KXBTC-26NOV2013-B69850'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.9899500 result",
+   "check": "resolution KXBTC-26NOV2013-B69750 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.9899500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B69750 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.9899500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.9899500' live='KXXRP-26NOV2006-B0.9899500'",
+   "check": "resolution KXBTC-26NOV2013-B69750 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B69750' live='KXBTC-26NOV2013-B69750'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.9699500 result",
+   "check": "resolution KXBTC-26NOV2013-B69650 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.9699500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B69650 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.9699500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.9699500' live='KXXRP-26NOV2006-B0.9699500'",
+   "check": "resolution KXBTC-26NOV2013-B69650 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B69650' live='KXBTC-26NOV2013-B69650'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.9499500 result",
+   "check": "resolution KXBTC-26NOV2013-B69550 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.9499500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B69550 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.9499500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.9499500' live='KXXRP-26NOV2006-B0.9499500'",
+   "check": "resolution KXBTC-26NOV2013-B69550 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B69550' live='KXBTC-26NOV2013-B69550'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.9299500 result",
+   "check": "resolution KXBTC-26NOV2013-B69450 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.9299500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B69450 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.9299500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.9299500' live='KXXRP-26NOV2006-B0.9299500'",
+   "check": "resolution KXBTC-26NOV2013-B69450 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B69450' live='KXBTC-26NOV2013-B69450'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.9099500 result",
+   "check": "resolution KXBTC-26NOV2013-B69350 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.9099500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B69350 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.9099500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.9099500' live='KXXRP-26NOV2006-B0.9099500'",
+   "check": "resolution KXBTC-26NOV2013-B69350 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B69350' live='KXBTC-26NOV2013-B69350'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.8899500 result",
+   "check": "resolution KXBTC-26NOV2013-B69250 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.8899500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B69250 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.8899500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.8899500' live='KXXRP-26NOV2006-B0.8899500'",
+   "check": "resolution KXBTC-26NOV2013-B69250 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B69250' live='KXBTC-26NOV2013-B69250'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.8699500 result",
+   "check": "resolution KXBTC-26NOV2013-B69150 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.8699500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B69150 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.8699500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.8699500' live='KXXRP-26NOV2006-B0.8699500'",
+   "check": "resolution KXBTC-26NOV2013-B69150 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B69150' live='KXBTC-26NOV2013-B69150'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.8499500 result",
+   "check": "resolution KXBTC-26NOV2013-B69050 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.8499500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B69050 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.8499500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.8499500' live='KXXRP-26NOV2006-B0.8499500'",
+   "check": "resolution KXBTC-26NOV2013-B69050 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B69050' live='KXBTC-26NOV2013-B69050'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.8299500 result",
+   "check": "resolution KXBTC-26NOV2013-B68950 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.8299500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B68950 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.8299500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.8299500' live='KXXRP-26NOV2006-B0.8299500'",
+   "check": "resolution KXBTC-26NOV2013-B68950 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B68950' live='KXBTC-26NOV2013-B68950'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.8099500 result",
+   "check": "resolution KXBTC-26NOV2013-B68850 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.8099500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B68850 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.8099500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.8099500' live='KXXRP-26NOV2006-B0.8099500'",
+   "check": "resolution KXBTC-26NOV2013-B68850 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B68850' live='KXBTC-26NOV2013-B68850'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.7899500 result",
+   "check": "resolution KXBTC-26NOV2013-B68750 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.7899500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B68750 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.7899500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.7899500' live='KXXRP-26NOV2006-B0.7899500'",
+   "check": "resolution KXBTC-26NOV2013-B68750 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B68750' live='KXBTC-26NOV2013-B68750'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.7699500 result",
+   "check": "resolution KXBTC-26NOV2013-B68650 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.7699500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B68650 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.7699500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.7699500' live='KXXRP-26NOV2006-B0.7699500'",
+   "check": "resolution KXBTC-26NOV2013-B68650 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B68650' live='KXBTC-26NOV2013-B68650'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.7499500 result",
+   "check": "resolution KXBTC-26NOV2013-B68550 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.7499500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B68550 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.7499500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.7499500' live='KXXRP-26NOV2006-B0.7499500'",
+   "check": "resolution KXBTC-26NOV2013-B68550 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B68550' live='KXBTC-26NOV2013-B68550'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.7299500 result",
+   "check": "resolution KXBTC-26NOV2013-B68450 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.7299500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B68450 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.7299500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.7299500' live='KXXRP-26NOV2006-B0.7299500'",
+   "check": "resolution KXBTC-26NOV2013-B68450 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B68450' live='KXBTC-26NOV2013-B68450'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.7099500 result",
+   "check": "resolution KXBTC-26NOV2013-B68350 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.7099500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B68350 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.7099500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.7099500' live='KXXRP-26NOV2006-B0.7099500'",
+   "check": "resolution KXBTC-26NOV2013-B68350 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B68350' live='KXBTC-26NOV2013-B68350'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.6899500 result",
+   "check": "resolution KXBTC-26NOV2013-B68250 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.6899500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B68250 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.6899500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.6899500' live='KXXRP-26NOV2006-B0.6899500'",
+   "check": "resolution KXBTC-26NOV2013-B68250 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B68250' live='KXBTC-26NOV2013-B68250'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.6699500 result",
+   "check": "resolution KXBTC-26NOV2013-B68150 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.6699500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B68150 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.6699500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.6699500' live='KXXRP-26NOV2006-B0.6699500'",
+   "check": "resolution KXBTC-26NOV2013-B68150 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B68150' live='KXBTC-26NOV2013-B68150'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.6499500 result",
+   "check": "resolution KXBTC-26NOV2013-B68050 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.6499500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B68050 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.6499500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.6499500' live='KXXRP-26NOV2006-B0.6499500'",
+   "check": "resolution KXBTC-26NOV2013-B68050 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B68050' live='KXBTC-26NOV2013-B68050'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.6299500 result",
+   "check": "resolution KXBTC-26NOV2013-B67950 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.6299500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B67950 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.6299500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.6299500' live='KXXRP-26NOV2006-B0.6299500'",
+   "check": "resolution KXBTC-26NOV2013-B67950 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B67950' live='KXBTC-26NOV2013-B67950'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.6099500 result",
+   "check": "resolution KXBTC-26NOV2013-B67850 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.6099500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B67850 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.6099500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.6099500' live='KXXRP-26NOV2006-B0.6099500'",
+   "check": "resolution KXBTC-26NOV2013-B67850 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B67850' live='KXBTC-26NOV2013-B67850'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.5899500 result",
+   "check": "resolution KXBTC-26NOV2013-B67750 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.5899500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B67750 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.5899500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.5899500' live='KXXRP-26NOV2006-B0.5899500'",
+   "check": "resolution KXBTC-26NOV2013-B67750 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B67750' live='KXBTC-26NOV2013-B67750'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.5699500 result",
+   "check": "resolution KXBTC-26NOV2013-B67650 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.5699500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B67650 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.5699500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.5699500' live='KXXRP-26NOV2006-B0.5699500'",
+   "check": "resolution KXBTC-26NOV2013-B67650 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B67650' live='KXBTC-26NOV2013-B67650'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.5499500 result",
+   "check": "resolution KXBTC-26NOV2013-B67550 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.5499500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B67550 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.5499500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.5499500' live='KXXRP-26NOV2006-B0.5499500'",
+   "check": "resolution KXBTC-26NOV2013-B67550 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B67550' live='KXBTC-26NOV2013-B67550'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.5299500 result",
+   "check": "resolution KXBTC-26NOV2013-B67450 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.5299500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B67450 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.5299500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.5299500' live='KXXRP-26NOV2006-B0.5299500'",
+   "check": "resolution KXBTC-26NOV2013-B67450 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B67450' live='KXBTC-26NOV2013-B67450'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.5099500 result",
+   "check": "resolution KXBTC-26NOV2013-B67350 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.5099500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B67350 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.5099500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.5099500' live='KXXRP-26NOV2006-B0.5099500'",
+   "check": "resolution KXBTC-26NOV2013-B67350 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B67350' live='KXBTC-26NOV2013-B67350'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.4899500 result",
+   "check": "resolution KXBTC-26NOV2013-B67250 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.4899500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B67250 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.4899500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.4899500' live='KXXRP-26NOV2006-B0.4899500'",
+   "check": "resolution KXBTC-26NOV2013-B67250 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B67250' live='KXBTC-26NOV2013-B67250'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.4699500 result",
+   "check": "resolution KXBTC-26NOV2013-B67150 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.4699500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B67150 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.4699500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.4699500' live='KXXRP-26NOV2006-B0.4699500'",
+   "check": "resolution KXBTC-26NOV2013-B67150 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B67150' live='KXBTC-26NOV2013-B67150'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.4499500 result",
+   "check": "resolution KXBTC-26NOV2013-B67050 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.4499500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B67050 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.4499500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.4499500' live='KXXRP-26NOV2006-B0.4499500'",
+   "check": "resolution KXBTC-26NOV2013-B67050 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B67050' live='KXBTC-26NOV2013-B67050'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.4299500 result",
+   "check": "resolution KXBTC-26NOV2013-B66950 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.4299500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B66950 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.4299500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.4299500' live='KXXRP-26NOV2006-B0.4299500'",
+   "check": "resolution KXBTC-26NOV2013-B66950 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B66950' live='KXBTC-26NOV2013-B66950'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.4099500 result",
+   "check": "resolution KXBTC-26NOV2013-B66850 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.4099500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B66850 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.4099500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.4099500' live='KXXRP-26NOV2006-B0.4099500'",
+   "check": "resolution KXBTC-26NOV2013-B66850 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B66850' live='KXBTC-26NOV2013-B66850'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.3899500 result",
+   "check": "resolution KXBTC-26NOV2013-B66750 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.3899500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B66750 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.3899500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.3899500' live='KXXRP-26NOV2006-B0.3899500'",
+   "check": "resolution KXBTC-26NOV2013-B66750 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B66750' live='KXBTC-26NOV2013-B66750'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.3699500 result",
+   "check": "resolution KXBTC-26NOV2013-B66650 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.3699500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B66650 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.3699500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.3699500' live='KXXRP-26NOV2006-B0.3699500'",
+   "check": "resolution KXBTC-26NOV2013-B66650 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B66650' live='KXBTC-26NOV2013-B66650'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.3499500 result",
+   "check": "resolution KXBTC-26NOV2013-B66550 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.3499500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B66550 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.3499500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.3499500' live='KXXRP-26NOV2006-B0.3499500'",
+   "check": "resolution KXBTC-26NOV2013-B66550 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B66550' live='KXBTC-26NOV2013-B66550'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.3299500 result",
+   "check": "resolution KXBTC-26NOV2013-B66450 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.3299500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B66450 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.3299500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.3299500' live='KXXRP-26NOV2006-B0.3299500'",
+   "check": "resolution KXBTC-26NOV2013-B66450 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B66450' live='KXBTC-26NOV2013-B66450'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.3099500 result",
+   "check": "resolution KXBTC-26NOV2013-B66350 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.3099500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B66350 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.3099500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.3099500' live='KXXRP-26NOV2006-B0.3099500'",
+   "check": "resolution KXBTC-26NOV2013-B66350 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B66350' live='KXBTC-26NOV2013-B66350'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.2899500 result",
+   "check": "resolution KXBTC-26NOV2013-B66250 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.2899500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B66250 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.2899500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.2899500' live='KXXRP-26NOV2006-B0.2899500'",
+   "check": "resolution KXBTC-26NOV2013-B66250 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B66250' live='KXBTC-26NOV2013-B66250'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.2699500 result",
+   "check": "resolution KXBTC-26NOV2013-B66150 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.2699500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B66150 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.2699500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.2699500' live='KXXRP-26NOV2006-B0.2699500'",
+   "check": "resolution KXBTC-26NOV2013-B66150 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B66150' live='KXBTC-26NOV2013-B66150'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.2499500 result",
+   "check": "resolution KXBTC-26NOV2013-B66050 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.2499500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B66050 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.2499500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.2499500' live='KXXRP-26NOV2006-B0.2499500'",
+   "check": "resolution KXBTC-26NOV2013-B66050 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B66050' live='KXBTC-26NOV2013-B66050'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.2299500 result",
+   "check": "resolution KXBTC-26NOV2013-B65950 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.2299500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B65950 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.2299500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.2299500' live='KXXRP-26NOV2006-B0.2299500'",
+   "check": "resolution KXBTC-26NOV2013-B65950 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B65950' live='KXBTC-26NOV2013-B65950'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.2099500 result",
+   "check": "resolution KXBTC-26NOV2013-B65850 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.2099500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B65850 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.2099500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.2099500' live='KXXRP-26NOV2006-B0.2099500'",
+   "check": "resolution KXBTC-26NOV2013-B65850 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B65850' live='KXBTC-26NOV2013-B65850'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.1899500 result",
+   "check": "resolution KXBTC-26NOV2013-B65750 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.1899500 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B65750 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2006-B0.1899500 ticker",
-   "detail": "stored='KXXRP-26NOV2006-B0.1899500' live='KXXRP-26NOV2006-B0.1899500'",
+   "check": "resolution KXBTC-26NOV2013-B65750 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B65750' live='KXBTC-26NOV2013-B65750'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-T0.2349999 result",
+   "check": "resolution KXBTC-26NOV2013-B65650 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-T0.2349999 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B65650 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-T0.2349999 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-T0.2349999' live='KXDOGE-26NOV2006-T0.2349999'",
+   "check": "resolution KXBTC-26NOV2013-B65650 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B65650' live='KXBTC-26NOV2013-B65650'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-T0.0100000 result",
+   "check": "resolution KXBTC-26NOV2013-B65550 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-T0.0100000 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B65550 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-T0.0100000 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-T0.0100000' live='KXDOGE-26NOV2006-T0.0100000'",
+   "check": "resolution KXBTC-26NOV2013-B65550 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B65550' live='KXBTC-26NOV2013-B65550'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.232 result",
+   "check": "resolution KXBTC-26NOV2013-B65450 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.232 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B65450 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.232 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.232' live='KXDOGE-26NOV2006-B0.232'",
+   "check": "resolution KXBTC-26NOV2013-B65450 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B65450' live='KXBTC-26NOV2013-B65450'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.227 result",
+   "check": "resolution KXBTC-26NOV2013-B65350 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.227 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B65350 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.227 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.227' live='KXDOGE-26NOV2006-B0.227'",
+   "check": "resolution KXBTC-26NOV2013-B65350 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B65350' live='KXBTC-26NOV2013-B65350'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.222 result",
+   "check": "resolution KXBTC-26NOV2013-B65250 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.222 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B65250 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.222 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.222' live='KXDOGE-26NOV2006-B0.222'",
+   "check": "resolution KXBTC-26NOV2013-B65250 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B65250' live='KXBTC-26NOV2013-B65250'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.217 result",
+   "check": "resolution KXBTC-26NOV2013-B65150 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.217 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B65150 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.217 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.217' live='KXDOGE-26NOV2006-B0.217'",
+   "check": "resolution KXBTC-26NOV2013-B65150 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B65150' live='KXBTC-26NOV2013-B65150'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.212 result",
+   "check": "resolution KXBTC-26NOV2013-B65050 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.212 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B65050 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.212 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.212' live='KXDOGE-26NOV2006-B0.212'",
+   "check": "resolution KXBTC-26NOV2013-B65050 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B65050' live='KXBTC-26NOV2013-B65050'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.207 result",
+   "check": "resolution KXBTC-26NOV2013-B64950 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.207 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B64950 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.207 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.207' live='KXDOGE-26NOV2006-B0.207'",
+   "check": "resolution KXBTC-26NOV2013-B64950 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B64950' live='KXBTC-26NOV2013-B64950'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.202 result",
+   "check": "resolution KXBTC-26NOV2013-B64850 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.202 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B64850 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.202 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.202' live='KXDOGE-26NOV2006-B0.202'",
+   "check": "resolution KXBTC-26NOV2013-B64850 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B64850' live='KXBTC-26NOV2013-B64850'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.197 result",
+   "check": "resolution KXBTC-26NOV2013-B64750 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.197 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B64750 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.197 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.197' live='KXDOGE-26NOV2006-B0.197'",
+   "check": "resolution KXBTC-26NOV2013-B64750 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B64750' live='KXBTC-26NOV2013-B64750'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.192 result",
+   "check": "resolution KXBTC-26NOV2013-B64650 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.192 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B64650 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.192 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.192' live='KXDOGE-26NOV2006-B0.192'",
+   "check": "resolution KXBTC-26NOV2013-B64650 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B64650' live='KXBTC-26NOV2013-B64650'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.187 result",
+   "check": "resolution KXBTC-26NOV2013-B64550 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.187 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B64550 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.187 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.187' live='KXDOGE-26NOV2006-B0.187'",
+   "check": "resolution KXBTC-26NOV2013-B64550 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B64550' live='KXBTC-26NOV2013-B64550'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.182 result",
+   "check": "resolution KXBTC-26NOV2013-B64450 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.182 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B64450 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.182 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.182' live='KXDOGE-26NOV2006-B0.182'",
+   "check": "resolution KXBTC-26NOV2013-B64450 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B64450' live='KXBTC-26NOV2013-B64450'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.177 result",
+   "check": "resolution KXBTC-26NOV2013-B64350 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.177 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B64350 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.177 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.177' live='KXDOGE-26NOV2006-B0.177'",
+   "check": "resolution KXBTC-26NOV2013-B64350 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B64350' live='KXBTC-26NOV2013-B64350'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.172 result",
+   "check": "resolution KXBTC-26NOV2013-B64250 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.172 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B64250 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.172 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.172' live='KXDOGE-26NOV2006-B0.172'",
+   "check": "resolution KXBTC-26NOV2013-B64250 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B64250' live='KXBTC-26NOV2013-B64250'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.167 result",
+   "check": "resolution KXBTC-26NOV2013-B64150 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.167 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B64150 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.167 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.167' live='KXDOGE-26NOV2006-B0.167'",
+   "check": "resolution KXBTC-26NOV2013-B64150 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B64150' live='KXBTC-26NOV2013-B64150'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.162 result",
+   "check": "resolution KXBTC-26NOV2013-B64050 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.162 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B64050 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.162 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.162' live='KXDOGE-26NOV2006-B0.162'",
+   "check": "resolution KXBTC-26NOV2013-B64050 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B64050' live='KXBTC-26NOV2013-B64050'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.157 result",
+   "check": "resolution KXBTC-26NOV2013-B63950 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.157 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B63950 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.157 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.157' live='KXDOGE-26NOV2006-B0.157'",
+   "check": "resolution KXBTC-26NOV2013-B63950 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B63950' live='KXBTC-26NOV2013-B63950'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.152 result",
+   "check": "resolution KXBTC-26NOV2013-B63850 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.152 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B63850 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.152 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.152' live='KXDOGE-26NOV2006-B0.152'",
+   "check": "resolution KXBTC-26NOV2013-B63850 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B63850' live='KXBTC-26NOV2013-B63850'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.147 result",
+   "check": "resolution KXBTC-26NOV2013-B63750 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.147 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B63750 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.147 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.147' live='KXDOGE-26NOV2006-B0.147'",
+   "check": "resolution KXBTC-26NOV2013-B63750 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B63750' live='KXBTC-26NOV2013-B63750'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.142 result",
+   "check": "resolution KXBTC-26NOV2013-B63650 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.142 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B63650 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.142 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.142' live='KXDOGE-26NOV2006-B0.142'",
+   "check": "resolution KXBTC-26NOV2013-B63650 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B63650' live='KXBTC-26NOV2013-B63650'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.137 result",
+   "check": "resolution KXBTC-26NOV2013-B63550 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.137 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B63550 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.137 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.137' live='KXDOGE-26NOV2006-B0.137'",
+   "check": "resolution KXBTC-26NOV2013-B63550 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B63550' live='KXBTC-26NOV2013-B63550'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.132 result",
+   "check": "resolution KXBTC-26NOV2013-B63450 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.132 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B63450 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.132 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.132' live='KXDOGE-26NOV2006-B0.132'",
+   "check": "resolution KXBTC-26NOV2013-B63450 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B63450' live='KXBTC-26NOV2013-B63450'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.127 result",
+   "check": "resolution KXBTC-26NOV2013-B63350 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.127 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B63350 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.127 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.127' live='KXDOGE-26NOV2006-B0.127'",
+   "check": "resolution KXBTC-26NOV2013-B63350 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B63350' live='KXBTC-26NOV2013-B63350'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.122 result",
+   "check": "resolution KXBTC-26NOV2013-B63250 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.122 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B63250 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.122 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.122' live='KXDOGE-26NOV2006-B0.122'",
+   "check": "resolution KXBTC-26NOV2013-B63250 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B63250' live='KXBTC-26NOV2013-B63250'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.117 result",
+   "check": "resolution KXBTC-26NOV2013-B63150 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.117 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B63150 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.117 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.117' live='KXDOGE-26NOV2006-B0.117'",
+   "check": "resolution KXBTC-26NOV2013-B63150 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B63150' live='KXBTC-26NOV2013-B63150'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.112 result",
+   "check": "resolution KXBTC-26NOV2013-B63050 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.112 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B63050 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.112 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.112' live='KXDOGE-26NOV2006-B0.112'",
+   "check": "resolution KXBTC-26NOV2013-B63050 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B63050' live='KXBTC-26NOV2013-B63050'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.107 result",
+   "check": "resolution KXBTC-26NOV2013-B62950 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.107 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B62950 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.107 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.107' live='KXDOGE-26NOV2006-B0.107'",
+   "check": "resolution KXBTC-26NOV2013-B62950 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B62950' live='KXBTC-26NOV2013-B62950'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.102 result",
+   "check": "resolution KXBTC-26NOV2013-B62850 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.102 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B62850 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.102 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.102' live='KXDOGE-26NOV2006-B0.102'",
+   "check": "resolution KXBTC-26NOV2013-B62850 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B62850' live='KXBTC-26NOV2013-B62850'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.097 result",
+   "check": "resolution KXBTC-26NOV2013-B62750 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.097 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B62750 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.097 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.097' live='KXDOGE-26NOV2006-B0.097'",
+   "check": "resolution KXBTC-26NOV2013-B62750 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B62750' live='KXBTC-26NOV2013-B62750'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.092 result",
+   "check": "resolution KXBTC-26NOV2013-B62650 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.092 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B62650 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.092 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.092' live='KXDOGE-26NOV2006-B0.092'",
+   "check": "resolution KXBTC-26NOV2013-B62650 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B62650' live='KXBTC-26NOV2013-B62650'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.087 result",
+   "check": "resolution KXBTC-26NOV2013-B62550 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.087 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B62550 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.087 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.087' live='KXDOGE-26NOV2006-B0.087'",
+   "check": "resolution KXBTC-26NOV2013-B62550 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B62550' live='KXBTC-26NOV2013-B62550'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.082 result",
+   "check": "resolution KXBTC-26NOV2013-B62450 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.082 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B62450 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.082 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.082' live='KXDOGE-26NOV2006-B0.082'",
+   "check": "resolution KXBTC-26NOV2013-B62450 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B62450' live='KXBTC-26NOV2013-B62450'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.077 result",
+   "check": "resolution KXBTC-26NOV2013-B62350 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.077 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B62350 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.077 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.077' live='KXDOGE-26NOV2006-B0.077'",
+   "check": "resolution KXBTC-26NOV2013-B62350 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B62350' live='KXBTC-26NOV2013-B62350'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.072 result",
+   "check": "resolution KXBTC-26NOV2013-B62250 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.072 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B62250 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.072 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.072' live='KXDOGE-26NOV2006-B0.072'",
+   "check": "resolution KXBTC-26NOV2013-B62250 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B62250' live='KXBTC-26NOV2013-B62250'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.067 result",
+   "check": "resolution KXBTC-26NOV2013-B62150 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.067 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B62150 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.067 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.067' live='KXDOGE-26NOV2006-B0.067'",
+   "check": "resolution KXBTC-26NOV2013-B62150 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B62150' live='KXBTC-26NOV2013-B62150'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.062 result",
+   "check": "resolution KXBTC-26NOV2013-B62050 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.062 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B62050 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.062 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.062' live='KXDOGE-26NOV2006-B0.062'",
+   "check": "resolution KXBTC-26NOV2013-B62050 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B62050' live='KXBTC-26NOV2013-B62050'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.057 result",
+   "check": "resolution KXBTC-26NOV2013-B61950 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.057 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B61950 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.057 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.057' live='KXDOGE-26NOV2006-B0.057'",
+   "check": "resolution KXBTC-26NOV2013-B61950 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B61950' live='KXBTC-26NOV2013-B61950'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.052 result",
+   "check": "resolution KXBTC-26NOV2013-B61850 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.052 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B61850 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.052 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.052' live='KXDOGE-26NOV2006-B0.052'",
+   "check": "resolution KXBTC-26NOV2013-B61850 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B61850' live='KXBTC-26NOV2013-B61850'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.047 result",
+   "check": "resolution KXBTC-26NOV2013-B61750 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.047 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B61750 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.047 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.047' live='KXDOGE-26NOV2006-B0.047'",
+   "check": "resolution KXBTC-26NOV2013-B61750 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B61750' live='KXBTC-26NOV2013-B61750'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.042 result",
+   "check": "resolution KXBTC-26NOV2013-B61650 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.042 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B61650 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.042 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.042' live='KXDOGE-26NOV2006-B0.042'",
+   "check": "resolution KXBTC-26NOV2013-B61650 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B61650' live='KXBTC-26NOV2013-B61650'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.037 result",
+   "check": "resolution KXBTC-26NOV2013-B61550 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.037 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B61550 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.037 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.037' live='KXDOGE-26NOV2006-B0.037'",
+   "check": "resolution KXBTC-26NOV2013-B61550 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B61550' live='KXBTC-26NOV2013-B61550'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.032 result",
+   "check": "resolution KXBTC-26NOV2013-B61450 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.032 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B61450 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.032 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.032' live='KXDOGE-26NOV2006-B0.032'",
+   "check": "resolution KXBTC-26NOV2013-B61450 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B61450' live='KXBTC-26NOV2013-B61450'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.027 result",
+   "check": "resolution KXBTC-26NOV2013-B61350 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.027 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B61350 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.027 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.027' live='KXDOGE-26NOV2006-B0.027'",
+   "check": "resolution KXBTC-26NOV2013-B61350 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B61350' live='KXBTC-26NOV2013-B61350'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.022 result",
+   "check": "resolution KXBTC-26NOV2013-B61250 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.022 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B61250 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.022 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.022' live='KXDOGE-26NOV2006-B0.022'",
+   "check": "resolution KXBTC-26NOV2013-B61250 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B61250' live='KXBTC-26NOV2013-B61250'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.017 result",
+   "check": "resolution KXBTC-26NOV2013-B61150 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.017 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B61150 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.017 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.017' live='KXDOGE-26NOV2006-B0.017'",
+   "check": "resolution KXBTC-26NOV2013-B61150 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B61150' live='KXBTC-26NOV2013-B61150'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.012 result",
+   "check": "resolution KXBTC-26NOV2013-B61050 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.012 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B61050 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2006-B0.012 ticker",
-   "detail": "stored='KXDOGE-26NOV2006-B0.012' live='KXDOGE-26NOV2006-B0.012'",
+   "check": "resolution KXBTC-26NOV2013-B61050 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B61050' live='KXBTC-26NOV2013-B61050'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.6399 result",
+   "check": "resolution KXBTC-26NOV2013-B60950 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.6399 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B60950 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.6399 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T1.6399' live='KXXRPD-26NOV2006-T1.6399'",
+   "check": "resolution KXBTC-26NOV2013-B60950 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B60950' live='KXBTC-26NOV2013-B60950'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.6199 result",
+   "check": "resolution KXBTC-26NOV2013-B60850 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.6199 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B60850 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.6199 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T1.6199' live='KXXRPD-26NOV2006-T1.6199'",
+   "check": "resolution KXBTC-26NOV2013-B60850 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B60850' live='KXBTC-26NOV2013-B60850'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.5999 result",
+   "check": "resolution KXBTC-26NOV2013-B60750 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.5999 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B60750 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.5999 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T1.5999' live='KXXRPD-26NOV2006-T1.5999'",
+   "check": "resolution KXBTC-26NOV2013-B60750 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B60750' live='KXBTC-26NOV2013-B60750'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.5799 result",
+   "check": "resolution KXBTC-26NOV2013-B60650 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.5799 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B60650 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.5799 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T1.5799' live='KXXRPD-26NOV2006-T1.5799'",
+   "check": "resolution KXBTC-26NOV2013-B60650 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B60650' live='KXBTC-26NOV2013-B60650'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.5599 result",
+   "check": "resolution KXBTC-26NOV2013-B60550 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.5599 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B60550 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.5599 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T1.5599' live='KXXRPD-26NOV2006-T1.5599'",
+   "check": "resolution KXBTC-26NOV2013-B60550 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B60550' live='KXBTC-26NOV2013-B60550'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.5399 result",
+   "check": "resolution KXBTC-26NOV2013-B60450 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.5399 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B60450 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.5399 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T1.5399' live='KXXRPD-26NOV2006-T1.5399'",
+   "check": "resolution KXBTC-26NOV2013-B60450 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B60450' live='KXBTC-26NOV2013-B60450'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.5199 result",
+   "check": "resolution KXBTC-26NOV2013-B60350 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.5199 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B60350 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.5199 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T1.5199' live='KXXRPD-26NOV2006-T1.5199'",
+   "check": "resolution KXBTC-26NOV2013-B60350 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B60350' live='KXBTC-26NOV2013-B60350'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.4999 result",
+   "check": "resolution KXBTC-26NOV2013-B60250 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.4999 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B60250 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.4999 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T1.4999' live='KXXRPD-26NOV2006-T1.4999'",
+   "check": "resolution KXBTC-26NOV2013-B60250 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B60250' live='KXBTC-26NOV2013-B60250'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.4799 result",
+   "check": "resolution KXBTC-26NOV2013-B60150 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.4799 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B60150 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.4799 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T1.4799' live='KXXRPD-26NOV2006-T1.4799'",
+   "check": "resolution KXBTC-26NOV2013-B60150 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B60150' live='KXBTC-26NOV2013-B60150'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.4599 result",
+   "check": "resolution KXBTC-26NOV2013-B60050 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.4599 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B60050 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.4599 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T1.4599' live='KXXRPD-26NOV2006-T1.4599'",
+   "check": "resolution KXBTC-26NOV2013-B60050 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B60050' live='KXBTC-26NOV2013-B60050'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.4399 result",
+   "check": "resolution KXBTC-26NOV2013-B59950 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.4399 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B59950 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.4399 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T1.4399' live='KXXRPD-26NOV2006-T1.4399'",
+   "check": "resolution KXBTC-26NOV2013-B59950 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B59950' live='KXBTC-26NOV2013-B59950'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.4199 result",
+   "check": "resolution KXBTC-26NOV2013-B59850 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.4199 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B59850 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.4199 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T1.4199' live='KXXRPD-26NOV2006-T1.4199'",
+   "check": "resolution KXBTC-26NOV2013-B59850 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B59850' live='KXBTC-26NOV2013-B59850'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.3999 result",
+   "check": "resolution KXBTC-26NOV2013-B59750 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.3999 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B59750 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.3999 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T1.3999' live='KXXRPD-26NOV2006-T1.3999'",
+   "check": "resolution KXBTC-26NOV2013-B59750 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B59750' live='KXBTC-26NOV2013-B59750'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.3799 result",
+   "check": "resolution KXBTC-26NOV2013-B59650 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.3799 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B59650 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.3799 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T1.3799' live='KXXRPD-26NOV2006-T1.3799'",
+   "check": "resolution KXBTC-26NOV2013-B59650 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B59650' live='KXBTC-26NOV2013-B59650'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.3599 result",
+   "check": "resolution KXBTC-26NOV2013-B59550 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.3599 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B59550 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.3599 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T1.3599' live='KXXRPD-26NOV2006-T1.3599'",
+   "check": "resolution KXBTC-26NOV2013-B59550 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B59550' live='KXBTC-26NOV2013-B59550'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.3399 result",
+   "check": "resolution KXBTC-26NOV2013-B59450 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.3399 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B59450 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.3399 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T1.3399' live='KXXRPD-26NOV2006-T1.3399'",
+   "check": "resolution KXBTC-26NOV2013-B59450 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B59450' live='KXBTC-26NOV2013-B59450'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.3199 result",
+   "check": "resolution KXBTC-26NOV2013-B59350 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.3199 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B59350 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.3199 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T1.3199' live='KXXRPD-26NOV2006-T1.3199'",
+   "check": "resolution KXBTC-26NOV2013-B59350 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B59350' live='KXBTC-26NOV2013-B59350'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.2999 result",
+   "check": "resolution KXBTC-26NOV2013-B59250 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.2999 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B59250 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.2999 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T1.2999' live='KXXRPD-26NOV2006-T1.2999'",
+   "check": "resolution KXBTC-26NOV2013-B59250 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B59250' live='KXBTC-26NOV2013-B59250'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.2799 result",
+   "check": "resolution KXBTC-26NOV2013-B59150 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.2799 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B59150 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.2799 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T1.2799' live='KXXRPD-26NOV2006-T1.2799'",
+   "check": "resolution KXBTC-26NOV2013-B59150 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B59150' live='KXBTC-26NOV2013-B59150'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.2599 result",
+   "check": "resolution KXBTC-26NOV2013-B59050 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.2599 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B59050 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.2599 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T1.2599' live='KXXRPD-26NOV2006-T1.2599'",
+   "check": "resolution KXBTC-26NOV2013-B59050 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B59050' live='KXBTC-26NOV2013-B59050'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.2399 result",
+   "check": "resolution KXBTC-26NOV2013-B58950 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.2399 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B58950 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.2399 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T1.2399' live='KXXRPD-26NOV2006-T1.2399'",
+   "check": "resolution KXBTC-26NOV2013-B58950 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B58950' live='KXBTC-26NOV2013-B58950'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.2199 result",
+   "check": "resolution KXBTC-26NOV2013-B58850 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.2199 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B58850 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.2199 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T1.2199' live='KXXRPD-26NOV2006-T1.2199'",
+   "check": "resolution KXBTC-26NOV2013-B58850 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B58850' live='KXBTC-26NOV2013-B58850'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.1999 result",
+   "check": "resolution KXBTC-26NOV2013-B58750 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.1999 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B58750 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.1999 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T1.1999' live='KXXRPD-26NOV2006-T1.1999'",
+   "check": "resolution KXBTC-26NOV2013-B58750 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B58750' live='KXBTC-26NOV2013-B58750'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.1799 result",
+   "check": "resolution KXBTC-26NOV2013-B58650 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.1799 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B58650 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.1799 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T1.1799' live='KXXRPD-26NOV2006-T1.1799'",
+   "check": "resolution KXBTC-26NOV2013-B58650 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B58650' live='KXBTC-26NOV2013-B58650'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.1599 result",
+   "check": "resolution KXBTC-26NOV2013-B58550 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.1599 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B58550 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.1599 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T1.1599' live='KXXRPD-26NOV2006-T1.1599'",
+   "check": "resolution KXBTC-26NOV2013-B58550 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B58550' live='KXBTC-26NOV2013-B58550'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.1399 result",
+   "check": "resolution KXBTC-26NOV2013-B58450 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.1399 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B58450 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.1399 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T1.1399' live='KXXRPD-26NOV2006-T1.1399'",
+   "check": "resolution KXBTC-26NOV2013-B58450 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B58450' live='KXBTC-26NOV2013-B58450'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.1199 result",
+   "check": "resolution KXBTC-26NOV2013-B58350 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.1199 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B58350 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.1199 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T1.1199' live='KXXRPD-26NOV2006-T1.1199'",
+   "check": "resolution KXBTC-26NOV2013-B58350 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B58350' live='KXBTC-26NOV2013-B58350'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.0999 result",
+   "check": "resolution KXBTC-26NOV2013-B58250 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.0999 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B58250 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.0999 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T1.0999' live='KXXRPD-26NOV2006-T1.0999'",
+   "check": "resolution KXBTC-26NOV2013-B58250 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B58250' live='KXBTC-26NOV2013-B58250'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.0799 result",
+   "check": "resolution KXBTC-26NOV2013-B58150 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.0799 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B58150 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.0799 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T1.0799' live='KXXRPD-26NOV2006-T1.0799'",
+   "check": "resolution KXBTC-26NOV2013-B58150 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B58150' live='KXBTC-26NOV2013-B58150'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.0599 result",
+   "check": "resolution KXBTC-26NOV2013-B58050 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.0599 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B58050 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.0599 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T1.0599' live='KXXRPD-26NOV2006-T1.0599'",
+   "check": "resolution KXBTC-26NOV2013-B58050 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B58050' live='KXBTC-26NOV2013-B58050'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.0399 result",
+   "check": "resolution KXBTC-26NOV2013-B57950 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.0399 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B57950 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.0399 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T1.0399' live='KXXRPD-26NOV2006-T1.0399'",
+   "check": "resolution KXBTC-26NOV2013-B57950 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B57950' live='KXBTC-26NOV2013-B57950'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.0199 result",
+   "check": "resolution KXBTC-26NOV2013-B57850 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.0199 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B57850 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T1.0199 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T1.0199' live='KXXRPD-26NOV2006-T1.0199'",
+   "check": "resolution KXBTC-26NOV2013-B57850 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B57850' live='KXBTC-26NOV2013-B57850'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.9999 result",
+   "check": "resolution KXBTC-26NOV2013-B57750 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.9999 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B57750 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.9999 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.9999' live='KXXRPD-26NOV2006-T0.9999'",
+   "check": "resolution KXBTC-26NOV2013-B57750 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B57750' live='KXBTC-26NOV2013-B57750'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.9799 result",
+   "check": "resolution KXBTC-26NOV2013-B57650 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.9799 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B57650 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.9799 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.9799' live='KXXRPD-26NOV2006-T0.9799'",
+   "check": "resolution KXBTC-26NOV2013-B57650 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B57650' live='KXBTC-26NOV2013-B57650'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.9599 result",
+   "check": "resolution KXBTC-26NOV2013-B57550 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.9599 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B57550 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.9599 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.9599' live='KXXRPD-26NOV2006-T0.9599'",
+   "check": "resolution KXBTC-26NOV2013-B57550 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B57550' live='KXBTC-26NOV2013-B57550'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.9399 result",
+   "check": "resolution KXBTC-26NOV2013-B57450 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.9399 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B57450 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.9399 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.9399' live='KXXRPD-26NOV2006-T0.9399'",
+   "check": "resolution KXBTC-26NOV2013-B57450 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B57450' live='KXBTC-26NOV2013-B57450'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.9199 result",
+   "check": "resolution KXBTC-26NOV2013-B57350 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.9199 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B57350 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.9199 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.9199' live='KXXRPD-26NOV2006-T0.9199'",
+   "check": "resolution KXBTC-26NOV2013-B57350 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B57350' live='KXBTC-26NOV2013-B57350'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.8999 result",
+   "check": "resolution KXBTC-26NOV2013-B57250 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.8999 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B57250 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.8999 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.8999' live='KXXRPD-26NOV2006-T0.8999'",
+   "check": "resolution KXBTC-26NOV2013-B57250 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B57250' live='KXBTC-26NOV2013-B57250'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.8799 result",
+   "check": "resolution KXBTC-26NOV2013-B57150 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.8799 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B57150 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.8799 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.8799' live='KXXRPD-26NOV2006-T0.8799'",
+   "check": "resolution KXBTC-26NOV2013-B57150 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B57150' live='KXBTC-26NOV2013-B57150'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.8599 result",
+   "check": "resolution KXBTC-26NOV2013-B57050 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.8599 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B57050 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.8599 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.8599' live='KXXRPD-26NOV2006-T0.8599'",
+   "check": "resolution KXBTC-26NOV2013-B57050 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B57050' live='KXBTC-26NOV2013-B57050'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.8399 result",
+   "check": "resolution KXBTC-26NOV2013-B56950 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.8399 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B56950 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.8399 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.8399' live='KXXRPD-26NOV2006-T0.8399'",
+   "check": "resolution KXBTC-26NOV2013-B56950 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B56950' live='KXBTC-26NOV2013-B56950'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.8199 result",
+   "check": "resolution KXBTC-26NOV2013-B56850 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.8199 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B56850 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.8199 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.8199' live='KXXRPD-26NOV2006-T0.8199'",
+   "check": "resolution KXBTC-26NOV2013-B56850 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B56850' live='KXBTC-26NOV2013-B56850'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.7999 result",
+   "check": "resolution KXBTC-26NOV2013-B56750 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.7999 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B56750 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.7999 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.7999' live='KXXRPD-26NOV2006-T0.7999'",
+   "check": "resolution KXBTC-26NOV2013-B56750 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B56750' live='KXBTC-26NOV2013-B56750'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.7799 result",
+   "check": "resolution KXBTC-26NOV2013-B56650 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.7799 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B56650 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.7799 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.7799' live='KXXRPD-26NOV2006-T0.7799'",
+   "check": "resolution KXBTC-26NOV2013-B56650 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B56650' live='KXBTC-26NOV2013-B56650'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.7599 result",
+   "check": "resolution KXBTC-26NOV2013-B56550 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.7599 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B56550 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.7599 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.7599' live='KXXRPD-26NOV2006-T0.7599'",
+   "check": "resolution KXBTC-26NOV2013-B56550 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B56550' live='KXBTC-26NOV2013-B56550'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.7399 result",
+   "check": "resolution KXBTC-26NOV2013-B56450 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.7399 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B56450 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.7399 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.7399' live='KXXRPD-26NOV2006-T0.7399'",
+   "check": "resolution KXBTC-26NOV2013-B56450 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B56450' live='KXBTC-26NOV2013-B56450'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.7199 result",
+   "check": "resolution KXBTC-26NOV2013-B56350 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.7199 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B56350 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.7199 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.7199' live='KXXRPD-26NOV2006-T0.7199'",
+   "check": "resolution KXBTC-26NOV2013-B56350 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B56350' live='KXBTC-26NOV2013-B56350'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.6999 result",
+   "check": "resolution KXBTC-26NOV2013-B56250 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.6999 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B56250 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.6999 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.6999' live='KXXRPD-26NOV2006-T0.6999'",
+   "check": "resolution KXBTC-26NOV2013-B56250 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B56250' live='KXBTC-26NOV2013-B56250'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.6799 result",
+   "check": "resolution KXBTC-26NOV2013-B56150 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.6799 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B56150 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.6799 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.6799' live='KXXRPD-26NOV2006-T0.6799'",
+   "check": "resolution KXBTC-26NOV2013-B56150 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B56150' live='KXBTC-26NOV2013-B56150'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.6599 result",
+   "check": "resolution KXBTC-26NOV2013-B56050 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.6599 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B56050 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.6599 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.6599' live='KXXRPD-26NOV2006-T0.6599'",
+   "check": "resolution KXBTC-26NOV2013-B56050 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B56050' live='KXBTC-26NOV2013-B56050'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.6399 result",
+   "check": "resolution KXBTC-26NOV2013-B55950 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.6399 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B55950 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.6399 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.6399' live='KXXRPD-26NOV2006-T0.6399'",
+   "check": "resolution KXBTC-26NOV2013-B55950 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B55950' live='KXBTC-26NOV2013-B55950'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.6199 result",
+   "check": "resolution KXBTC-26NOV2013-B55850 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.6199 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B55850 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.6199 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.6199' live='KXXRPD-26NOV2006-T0.6199'",
+   "check": "resolution KXBTC-26NOV2013-B55850 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B55850' live='KXBTC-26NOV2013-B55850'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.5999 result",
+   "check": "resolution KXBTC-26NOV2013-B55750 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.5999 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B55750 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.5999 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.5999' live='KXXRPD-26NOV2006-T0.5999'",
+   "check": "resolution KXBTC-26NOV2013-B55750 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B55750' live='KXBTC-26NOV2013-B55750'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.5799 result",
+   "check": "resolution KXBTC-26NOV2013-B55650 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.5799 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B55650 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.5799 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.5799' live='KXXRPD-26NOV2006-T0.5799'",
+   "check": "resolution KXBTC-26NOV2013-B55650 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B55650' live='KXBTC-26NOV2013-B55650'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.5599 result",
+   "check": "resolution KXBTC-26NOV2013-B55550 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.5599 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B55550 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.5599 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.5599' live='KXXRPD-26NOV2006-T0.5599'",
+   "check": "resolution KXBTC-26NOV2013-B55550 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B55550' live='KXBTC-26NOV2013-B55550'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.5399 result",
+   "check": "resolution KXBTC-26NOV2013-B55450 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.5399 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B55450 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.5399 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.5399' live='KXXRPD-26NOV2006-T0.5399'",
+   "check": "resolution KXBTC-26NOV2013-B55450 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B55450' live='KXBTC-26NOV2013-B55450'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.5199 result",
+   "check": "resolution KXBTC-26NOV2013-B55350 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.5199 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B55350 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.5199 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.5199' live='KXXRPD-26NOV2006-T0.5199'",
+   "check": "resolution KXBTC-26NOV2013-B55350 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B55350' live='KXBTC-26NOV2013-B55350'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.4999 result",
+   "check": "resolution KXBTC-26NOV2013-B55250 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.4999 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B55250 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.4999 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.4999' live='KXXRPD-26NOV2006-T0.4999'",
+   "check": "resolution KXBTC-26NOV2013-B55250 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B55250' live='KXBTC-26NOV2013-B55250'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.4799 result",
+   "check": "resolution KXBTC-26NOV2013-B55150 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.4799 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B55150 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.4799 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.4799' live='KXXRPD-26NOV2006-T0.4799'",
+   "check": "resolution KXBTC-26NOV2013-B55150 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B55150' live='KXBTC-26NOV2013-B55150'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.4599 result",
+   "check": "resolution KXBTC-26NOV2013-B55050 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.4599 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B55050 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.4599 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.4599' live='KXXRPD-26NOV2006-T0.4599'",
+   "check": "resolution KXBTC-26NOV2013-B55050 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B55050' live='KXBTC-26NOV2013-B55050'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.4399 result",
+   "check": "resolution KXBTC-26NOV2013-B54950 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.4399 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B54950 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.4399 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.4399' live='KXXRPD-26NOV2006-T0.4399'",
+   "check": "resolution KXBTC-26NOV2013-B54950 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B54950' live='KXBTC-26NOV2013-B54950'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.4199 result",
+   "check": "resolution KXBTC-26NOV2013-B54850 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.4199 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B54850 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.4199 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.4199' live='KXXRPD-26NOV2006-T0.4199'",
+   "check": "resolution KXBTC-26NOV2013-B54850 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B54850' live='KXBTC-26NOV2013-B54850'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.3999 result",
+   "check": "resolution KXBTC-26NOV2013-B54750 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.3999 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B54750 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.3999 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.3999' live='KXXRPD-26NOV2006-T0.3999'",
+   "check": "resolution KXBTC-26NOV2013-B54750 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B54750' live='KXBTC-26NOV2013-B54750'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.3799 result",
+   "check": "resolution KXBTC-26NOV2013-B54650 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.3799 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B54650 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.3799 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.3799' live='KXXRPD-26NOV2006-T0.3799'",
+   "check": "resolution KXBTC-26NOV2013-B54650 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B54650' live='KXBTC-26NOV2013-B54650'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.3599 result",
+   "check": "resolution KXBTC-26NOV2013-B54550 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.3599 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B54550 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.3599 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.3599' live='KXXRPD-26NOV2006-T0.3599'",
+   "check": "resolution KXBTC-26NOV2013-B54550 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B54550' live='KXBTC-26NOV2013-B54550'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.3399 result",
+   "check": "resolution KXBTC-26NOV2013-B54450 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.3399 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B54450 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.3399 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.3399' live='KXXRPD-26NOV2006-T0.3399'",
+   "check": "resolution KXBTC-26NOV2013-B54450 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B54450' live='KXBTC-26NOV2013-B54450'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.3199 result",
+   "check": "resolution KXBTC-26NOV2013-B54350 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.3199 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B54350 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.3199 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.3199' live='KXXRPD-26NOV2006-T0.3199'",
+   "check": "resolution KXBTC-26NOV2013-B54350 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B54350' live='KXBTC-26NOV2013-B54350'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.2999 result",
+   "check": "resolution KXBTC-26NOV2013-B54250 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.2999 settlement_value_dollars",
+   "check": "resolution KXBTC-26NOV2013-B54250 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.2999 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.2999' live='KXXRPD-26NOV2006-T0.2999'",
+   "check": "resolution KXBTC-26NOV2013-B54250 ticker",
+   "detail": "stored='KXBTC-26NOV2013-B54250' live='KXBTC-26NOV2013-B54250'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.2799 result",
+   "check": "resolution KXETH-26NOV2013-T2544.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.2799 settlement_value_dollars",
+   "check": "resolution KXETH-26NOV2013-T2544.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.2799 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.2799' live='KXXRPD-26NOV2006-T0.2799'",
+   "check": "resolution KXETH-26NOV2013-T2544.99 ticker",
+   "detail": "stored='KXETH-26NOV2013-T2544.99' live='KXETH-26NOV2013-T2544.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.2599 result",
+   "check": "resolution KXETH-26NOV2013-T1055 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.2599 settlement_value_dollars",
+   "check": "resolution KXETH-26NOV2013-T1055 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.2599 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.2599' live='KXXRPD-26NOV2006-T0.2599'",
+   "check": "resolution KXETH-26NOV2013-T1055 ticker",
+   "detail": "stored='KXETH-26NOV2013-T1055' live='KXETH-26NOV2013-T1055'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.2399 result",
+   "check": "resolution KXETH-26NOV2013-B2542 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.2399 settlement_value_dollars",
+   "check": "resolution KXETH-26NOV2013-B2542 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.2399 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.2399' live='KXXRPD-26NOV2006-T0.2399'",
+   "check": "resolution KXETH-26NOV2013-B2542 ticker",
+   "detail": "stored='KXETH-26NOV2013-B2542' live='KXETH-26NOV2013-B2542'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.2199 result",
+   "check": "resolution KXETH-26NOV2013-B2537 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.2199 settlement_value_dollars",
+   "check": "resolution KXETH-26NOV2013-B2537 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.2199 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.2199' live='KXXRPD-26NOV2006-T0.2199'",
+   "check": "resolution KXETH-26NOV2013-B2537 ticker",
+   "detail": "stored='KXETH-26NOV2013-B2537' live='KXETH-26NOV2013-B2537'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.1999 result",
+   "check": "resolution KXETH-26NOV2013-B2532 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.1999 settlement_value_dollars",
+   "check": "resolution KXETH-26NOV2013-B2532 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.1999 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.1999' live='KXXRPD-26NOV2006-T0.1999'",
+   "check": "resolution KXETH-26NOV2013-B2532 ticker",
+   "detail": "stored='KXETH-26NOV2013-B2532' live='KXETH-26NOV2013-B2532'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.1799 result",
+   "check": "resolution KXETH-26NOV2013-B2527 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.1799 settlement_value_dollars",
+   "check": "resolution KXETH-26NOV2013-B2527 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2006-T0.1799 ticker",
-   "detail": "stored='KXXRPD-26NOV2006-T0.1799' live='KXXRPD-26NOV2006-T0.1799'",
+   "check": "resolution KXETH-26NOV2013-B2527 ticker",
+   "detail": "stored='KXETH-26NOV2013-B2527' live='KXETH-26NOV2013-B2527'",
    "ok": true
   },
   {
@@ -3246,31 +3246,6 @@
    "ok": true
   },
   {
-   "check": "top_event KXFEATURE-26GTA6 market KXFEATURE-26GTA6-QUA exists",
-   "detail": "live query returned 1 markets",
-   "ok": true
-  },
-  {
-   "check": "top_event KXFEATURE-26GTA6 market KXFEATURE-26GTA6-ACD exists",
-   "detail": "live query returned 1 markets",
-   "ok": true
-  },
-  {
-   "check": "top_event KXFEATURE-26GTA6 market KXFEATURE-26GTA6-SAM exists",
-   "detail": "live query returned 1 markets",
-   "ok": true
-  },
-  {
-   "check": "top_event KXFEATURE-26GTA6 market KXFEATURE-26GTA6-FAL exists",
-   "detail": "live query returned 1 markets",
-   "ok": true
-  },
-  {
-   "check": "top_event KXFEATURE-26GTA6 market KXFEATURE-26GTA6-OZU exists",
-   "detail": "live query returned 1 markets",
-   "ok": true
-  },
-  {
    "check": "top_event KXDANCINGWITHTHESTARS-26DEC31 market KXDANCINGWITHTHESTARS-26DEC31-HSHU exists",
    "detail": "live query returned 1 markets",
    "ok": true
@@ -3391,7 +3366,7 @@
    "ok": true
   },
   {
-   "check": "top_event KXTIME-26 market KXTIME-26-PHEG exists",
+   "check": "top_event KXTIME-26 market KXTIME-26-CHRR exists",
    "detail": "live query returned 1 markets",
    "ok": true
   },
@@ -3471,6 +3446,31 @@
    "ok": true
   },
   {
+   "check": "top_event KXLPGATOUR-CMEGTC26 market KXLPGATOUR-CMEGTC26-PAJANA exists",
+   "detail": "live query returned 1 markets",
+   "ok": true
+  },
+  {
+   "check": "top_event KXLPGATOUR-CMEGTC26 market KXLPGATOUR-CMEGTC26-ROSZHA exists",
+   "detail": "live query returned 1 markets",
+   "ok": true
+  },
+  {
+   "check": "top_event KXLPGATOUR-CMEGTC26 market KXLPGATOUR-CMEGTC26-PATTAV exists",
+   "detail": "live query returned 1 markets",
+   "ok": true
+  },
+  {
+   "check": "top_event KXLPGATOUR-CMEGTC26 market KXLPGATOUR-CMEGTC26-ALIKIM exists",
+   "detail": "live query returned 1 markets",
+   "ok": true
+  },
+  {
+   "check": "top_event KXLPGATOUR-CMEGTC26 market KXLPGATOUR-CMEGTC26-NELKOR exists",
+   "detail": "live query returned 1 markets",
+   "ok": true
+  },
+  {
    "check": "top_event KXAAAGASM-26NOV30 market KXAAAGASM-26NOV30-4.70 exists",
    "detail": "live query returned 1 markets",
    "ok": true
@@ -3497,12 +3497,12 @@
   },
   {
    "check": "orderbook KXPRESNOMD-28-BOBA structure",
-   "detail": "{\"no_dollars\": [[\"0.1190\", \"186.00\"], [\"0.1200\", \"155.00\"], [\"0.1210\", \"243.00\"], [\"0.1220\", \"134.00\"], [\"0.1230\", \"180.",
+   "detail": "{\"no_dollars\": [[\"0.1170\", \"150.00\"], [\"0.1180\", \"179.00\"], [\"0.1190\", \"186.00\"], [\"0.1200\", \"155.00\"], [\"0.1210\", \"243.",
    "ok": true
   },
   {
    "check": "orderbook KXPRESNOMD-28-BS structure",
-   "detail": "{\"no_dollars\": [[\"0.0300\", \"10.00\"], [\"0.9930\", \"95238.08\"], [\"0.9940\", \"111111.08\"], [\"0.9950\", \"128209.89\"]], \"yes_dol",
+   "detail": "{\"no_dollars\": [[\"0.0300\", \"10.00\"], [\"0.9930\", \"95238.08\"], [\"0.9940\", \"111111.08\"], [\"0.9950\", \"132782.76\"]], \"yes_dol",
    "ok": true
   },
   {
@@ -3512,7 +3512,7 @@
   },
   {
    "check": "orderbook KXPRESNOMD-28-EWAR structure",
-   "detail": "{\"no_dollars\": [[\"0.9700\", \"5555.55\"], [\"0.9800\", \"8333.33\"], [\"0.9900\", \"16666.29\"]], \"yes_dollars\": []}",
+   "detail": "{\"no_dollars\": [[\"0.9700\", \"5555.55\"], [\"0.9800\", \"8333.33\"], [\"0.9900\", \"16624.41\"]], \"yes_dollars\": []}",
    "ok": true
   },
   {
@@ -3526,18 +3526,13 @@
    "ok": true
   },
   {
-   "check": "event KXSTATELEGKY-28NOV07KYH098 exists+title",
-   "detail": "title live='Kentucky House District 98 winner? (2028)'",
+   "check": "event KXBTCD-28JAN1018 exists+title",
+   "detail": "title live='Bitcoin price on Jan 10, 2028 at 6pm EST?'",
    "ok": true
   },
   {
-   "check": "event KXBTCD-28JAN1019 exists+title",
-   "detail": "title live='Bitcoin price on Jan 10, 2028 at 7pm EST?'",
-   "ok": true
-  },
-  {
-   "check": "event KXDARTMOUTHRATE-2027 exists+title",
-   "detail": "title live='Dartmouth Admissions Rate in Fall 2027'",
+   "check": "event KXDANIELLESMITHOUT-28 exists+title",
+   "detail": "title live='Danielle Smith announces departure as Alberta UCP leader?'",
    "ok": true
   },
   {
@@ -3546,13 +3541,13 @@
    "ok": true
   },
   {
-   "check": "event KXSTATELEGME-28NOV07MEH008 exists+title",
-   "detail": "title live='Maine House District 8 winner? (2028)'",
+   "check": "event KXSTATELEGME-28NOV07MEH079 exists+title",
+   "detail": "title live='Maine House District 79 winner? (2028)'",
    "ok": true
   },
   {
-   "check": "event KXSTATELEGOH-28NOV07OHS020 exists+title",
-   "detail": "title live='Ohio Senate District 20 winner? (2028)'",
+   "check": "event KXSTATELEGOH-28NOV07OHS002 exists+title",
+   "detail": "title live='Ohio Senate District 2 winner? (2028)'",
    "ok": true
   },
   {
@@ -3566,23 +3561,23 @@
    "ok": true
   },
   {
-   "check": "event KXSTATELEGMN-28NOV07MNH40B exists+title",
-   "detail": "title live='Minnesota House District 40B winner? (2028)'",
+   "check": "event KXSTATELEGMN-28NOV07MNH40A exists+title",
+   "detail": "title live='Minnesota House District 40A winner? (2028)'",
    "ok": true
   },
   {
-   "check": "event KXSTATELEGMA-28NOV07MAH145 exists+title",
-   "detail": "title live='Massachusetts House 4th Worcester District winner? (2028)'",
+   "check": "event KXSTATELEGMA-28NOV07MAH126 exists+title",
+   "detail": "title live='Massachusetts House 4th Suffolk District winner? (2028)'",
    "ok": true
   },
   {
-   "check": "event KXSTATELEGLA-27OCT09LAH080 exists+title",
-   "detail": "title live='Louisiana House District 80 winner? (2027)'",
+   "check": "event KXSTATELEGLA-27OCT09LAH008 exists+title",
+   "detail": "title live='Louisiana House District 8 winner? (2027)'",
    "ok": true
   },
   {
-   "check": "event KXMASTATELEG-28HOUSE exists+title",
-   "detail": "title live='Massachusetts State House winner? (2028)'",
+   "check": "event KXSTATELEGMA-28NOV07MASD10 exists+title",
+   "detail": "title live='Massachusetts Senate Worcester and Middlesex District winner? (2028)'",
    "ok": true
   },
   {
@@ -3591,13 +3586,13 @@
    "ok": true
   },
   {
-   "check": "event KXSTATELEGMA-28NOV07MAH098 exists+title",
-   "detail": "title live='Massachusetts House 3rd Norfolk District winner? (2028)'",
+   "check": "event KXSTATELEGMA-28NOV07MAH061 exists+title",
+   "detail": "title live='Massachusetts House 3rd Middlesex District winner? (2028)'",
    "ok": true
   },
   {
-   "check": "event KXSTATELEGMA-28NOV07MAH005 exists+title",
-   "detail": "title live='Massachusetts House 5th Barnstable District winner? (2028)'",
+   "check": "event KXSTATELEGMA-28NOV07MAH145 exists+title",
+   "detail": "title live='Massachusetts House 4th Worcester District winner? (2028)'",
    "ok": true
   },
   {
@@ -3611,18 +3606,23 @@
    "ok": true
   },
   {
-   "check": "event KXSTATEOFFICERACE-NCLABOR-28 exists+title",
-   "detail": "title live='North Carolina Labor Commissioner winner? (2028)'",
+   "check": "event KXINSCOMMRACE-NC-28 exists+title",
+   "detail": "title live='North Carolina Insurance Commissioner winner? (2028)'",
    "ok": true
   },
   {
-   "check": "event KXSTATELEGOK-28NOV07OKH088 exists+title",
-   "detail": "title live='Oklahoma House District 88 winner? (2028)'",
+   "check": "event KXSTATELEGOK-28NOV07OKH087 exists+title",
+   "detail": "title live='Oklahoma House District 87 winner? (2028)'",
    "ok": true
   },
   {
-   "check": "event KXSTATELEGIN-28NOV07INH080 exists+title",
-   "detail": "title live='Indiana House District 80 winner? (2028)'",
+   "check": "event KXSTATELEGIN-28NOV07INH008 exists+title",
+   "detail": "title live='Indiana House District 8 winner? (2028)'",
+   "ok": true
+  },
+  {
+   "check": "event KXMESTATELEG-28SEN exists+title",
+   "detail": "title live='Maine State Senate winner? (2028)'",
    "ok": true
   }
  ],
@@ -3640,5 +3640,5 @@
   "passed": 725
  },
  "tool": "scripts/verify_rows.py v1",
- "verified_at": "2026-11-20T12:41:26+00:00"
+ "verified_at": "2026-11-20T19:24:37+00:00"
 }
