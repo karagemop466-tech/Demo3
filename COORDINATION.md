@@ -542,3 +542,55 @@ Irregularities reported (published on `strategy.html` and in `strategy/SPEC.md` 
   generator preserves them. No other session's markup was changed.
 
 Change request for the final integration session: none.
+
+---
+
+## Task board — session e6cd6515 (calibrated High-ROI model + final integration)
+
+Branch: `arena/e6cd6515-demo3` (base `04d1a4e` = `main` HEAD). Session ID: `e6cd6515`.
+Claimed 2026-11-20 19:44 UTC.
+
+**Why this scope.** The brief asks for "a selective filter based on events that our model likes as
+high ROI". Every alert implementation on the board still ships a *placeholder* high-ROI rule
+(F-alert-01, F-6D-01, F-B13-02). This session owns the missing piece: a **calibrated** model whose
+parameters are fitted to the exchange's own settled outcomes (`market.result` = yes/no) and whose
+out-of-sample performance is measured and published. It also owns final integration
+(per the brief: "Shared outputs ... are changed only by a final integration session").
+
+| # | Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|---|
+| I1 | Calibrated High-ROI model: train/test split on settled demo markets, published parameters, measured hit-rate and ROI vs. baseline, per-row official source links | in progress | e6cd6515 | `scripts/build_roi_model.py`, `scripts/verify_roi_model.py`, `data/roi/**`, `assets/roi-model.js`, `roi-model.html`, `tests/test_roi_model.py` | `GET /markets?status=settled` (`result`, `last_price_dollars`, `volume_fp`, `open_interest_fp`); fee formula from the official fee schedule (already reproduced against the published 100-contract table by session 26973298); docs.kalshi.com market settlement | ROI-01 (demo settlement data shows a near-step price->outcome map that is an artifact of the demo simulator, not real-market behaviour) |
+| I2 | Final integration: adopt one canonical swing-alert implementation, replace the placeholder High-ROI screen with the calibrated model, add nav entry, re-verify every table row, PR -> main, merge, confirm Pages deploy | in progress | e6cd6515 | `assets/alerts-core.js`, `assets/alerts.js`, `assets/alerts-page.js`, `alerts.html`, `scripts/build_root_site.py` (NAV + page only), `dashboard.html` (nav + link only), `COORDINATION.md` (this section + integration log) | Get Markets, Get Event, Market Settlement, Fee schedule | F-edf-01 (duplicate open PRs) — triage recorded below |
+
+### Session e6cd6515 claim (protocol)
+
+Claimed 2026-11-20 19:44 UTC: tasks I1 and I2, session `e6cd6515`, branch `arena/e6cd6515-demo3`.
+File scope as above. No other session's files are edited except the shared integration files named
+above, and only for the NAV entry / canonical wiring required by I2.
+
+### Triage of the competing alert implementations (review performed 2026-11-20 19:41-19:44 UTC)
+
+All eleven open PRs were read branch-by-branch (`git diff origin/main <branch>`), not from titles.
+
+| PR | Branch | What it actually contains | Assessment |
+|---|---|---|---|
+| #43 | `13603ac5` | Integer-tick swing detection, yes/no **resolution feed** from `market.result`, exchange `previous_price_dollars` first-read detection, official event + `settlement_sources` links, `alerts.html` full page, `assets/alerts-core.js` shared by browser and `scripts/price_alerts.py` (parity tests), snapshot backfill, 11 new honesty flags | **Canonical.** Only implementation that satisfies "track until the event resolved, yes or no" *and* keeps a Python/JS parity test. Adopted as the base of I2. |
+| #42 | `996e3e28` | `alerts.html` + `assets/alerts-page.js` with a liquidity-aware `modelLike` screen and a resolutions table | Useful idea (liquidity gate on the ROI screen) carried into I1; **not merged** because the branch also **deletes the whole strategy lab** (`strategy.html`, `assets/strategy.js`, `scripts/backtest_strategies.py`, `scripts/build_strategy_page.py`, `scripts/tests/test_backtest.py` and a 557,689-line `strategy/data/backtest.json`) and the `audit/` tree — a destructive regression against merged PRs #32 and #37. |
+| #40 | `5125afd8` | Float-safe $0.10 threshold, generator-owned alert panel, "real placeholder ROI rule" | Threshold and generator ownership are subsumed by #43. Its ROI rule is still a placeholder — that is exactly the gap I1 fills. |
+| #41 | `1d7c7660` | Live swing chats in `assets/app.js`/`dashboard.js` | Subsumed by #43 (`assets/alerts.js` + `alerts.html`). |
+| #39 | `91a02c9d` | Self-contained `/live` desk with `p_hat = price + 0.5*momentum - 0.15*spread`, determinism-tested engine, CI workflow | Its model formula is a **published heuristic**, not fitted to outcomes; its tree is a second site that duplicates the canonical root UI. Its formula is quoted as a comparison point in I1; its tree is not merged into the canonical UI. |
+| #38 | `0b17a627` | `syncAutomationControl()` — paper-automation switch could show OFF while the saved strategy still ran | Small, correct, **not** in #43. Carried into I2. |
+| #37 | `d7d7a733` | `audit/` tree (independent source audit of 32 published rows) | Already on `main`; preserved. |
+| #36 | `028b2648` | Sampled swing alerts + `assets/paper-strategy.js` | Sampled alerts are subsumed by #43's snapshot backfill; paper strategy is covered by `assets/trade.js` on `main`. |
+| #27 | `09824fd8` | "Harden merged alert integration and generator parity" | Superseded by #43, which *is* the hardened integration. |
+| #26 | `6d201d19` | `scripts/price_alerts.py` + snapshot detector | `scripts/price_alerts.py` and `scripts/tests/test_price_alerts.py` are **already inside #43** (identical 440/154-line files), so #26 is fully absorbed. |
+| #44 | `b13c6a8d` | Board-only record | Board-only; no conflict. |
+
+**F-edf-01 disposition.** #43 is the canonical alert implementation and is adopted as the base of I2.
+#26 and #40 are absorbed by it. #42 is not merged because it would delete merged work (strategy lab,
+`audit/`). The remaining branches keep their commits in git history; nothing is deleted from the
+repository. Because those sessions were **active within the last 60 minutes** (the board's takeover
+rule does not apply), this session does **not** close their pull requests — it records the assessment
+above so the owner can close or rebase. Only the branches whose content is fully absorbed are named
+as such.
+
