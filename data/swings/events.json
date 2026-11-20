@@ -18,8 +18,8 @@
    ],
    "source_urls": [
     "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESPERSON-28-VRAM",
-    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESPERSON/markets/KXPRESPERSON-28-VRAM/candlesticks?start_ts=1794601131&end_ts=1795205931&period_interval=60",
-    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESPERSON/markets/KXPRESPERSON-28-VRAM/candlesticks?start_ts=1795033130&end_ts=1795205930&period_interval=1"
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESPERSON/markets/KXPRESPERSON-28-VRAM/candlesticks?start_ts=1794602377&end_ts=1795207177&period_interval=60",
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESPERSON/markets/KXPRESPERSON-28-VRAM/candlesticks?start_ts=1795034376&end_ts=1795207176&period_interval=1"
    ],
    "status": "active",
    "title": "Who will win the next presidential election?",
@@ -30,7 +30,7 @@
    "close_time": "2028-11-07T15:00:00Z",
    "event_ticker": "KXPRESNOMD-28",
    "first_swing_iso": "2026-11-13T23:00:00Z",
-   "last_swing_iso": "2026-11-20T20:18:00Z",
+   "last_swing_iso": "2026-11-20T20:37:00Z",
    "markets_flagged": [
     "KXPRESNOMD-28-BOBA",
     "KXPRESNOMD-28-ESLO",
@@ -40,10 +40,10 @@
     "KXPRESNOMD-28-JTAL"
    ],
    "max_abs_delta_dollars": 0.859,
-   "n_swings": 48,
+   "n_swings": 60,
    "resolution_outcome": null,
-   "reversion_hits": 31,
-   "reversion_rate": 0.6458,
+   "reversion_hits": 43,
+   "reversion_rate": 0.7167,
    "series": [
     "KXPRESNOMD"
    ],
@@ -54,17 +54,17 @@
     "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-HBID",
     "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-JSTE",
     "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-JTAL",
-    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-BOBA/candlesticks?start_ts=1794601135&end_ts=1795205935&period_interval=60",
-    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-BOBA/candlesticks?start_ts=1795033135&end_ts=1795205935&period_interval=1",
-    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-ESLO/candlesticks?start_ts=1794601132&end_ts=1795205932&period_interval=60",
-    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-ESLO/candlesticks?start_ts=1795033131&end_ts=1795205931&period_interval=1",
-    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-GW/candlesticks?start_ts=1794601133&end_ts=1795205933&period_interval=60",
-    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-HBID/candlesticks?start_ts=1794601130&end_ts=1795205930&period_interval=60",
-    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-HBID/candlesticks?start_ts=1795033129&end_ts=1795205929&period_interval=1",
-    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-JSTE/candlesticks?start_ts=1794601139&end_ts=1795205939&period_interval=60",
-    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-JSTE/candlesticks?start_ts=1795033138&end_ts=1795205938&period_interval=1",
-    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-JTAL/candlesticks?start_ts=1794601138&end_ts=1795205938&period_interval=60",
-    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-JTAL/candlesticks?start_ts=1795033137&end_ts=1795205937&period_interval=1"
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-BOBA/candlesticks?start_ts=1794602382&end_ts=1795207182&period_interval=60",
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-BOBA/candlesticks?start_ts=1795034381&end_ts=1795207181&period_interval=1",
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-ESLO/candlesticks?start_ts=1794602378&end_ts=1795207178&period_interval=60",
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-ESLO/candlesticks?start_ts=1795034377&end_ts=1795207177&period_interval=1",
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-GW/candlesticks?start_ts=1794602380&end_ts=1795207180&period_interval=60",
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-HBID/candlesticks?start_ts=1794602375&end_ts=1795207175&period_interval=60",
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-HBID/candlesticks?start_ts=1795034375&end_ts=1795207175&period_interval=1",
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-JSTE/candlesticks?start_ts=1794602386&end_ts=1795207186&period_interval=60",
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-JSTE/candlesticks?start_ts=1795034386&end_ts=1795207186&period_interval=1",
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-JTAL/candlesticks?start_ts=1794602385&end_ts=1795207185&period_interval=60",
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-JTAL/candlesticks?start_ts=1795034385&end_ts=1795207185&period_interval=1"
    ],
    "status": "active",
    "title": "Will Hunter Biden be the nominee for the Presidency for the Democratic party?",
@@ -75,26 +75,26 @@
    "close_time": "2027-01-01T05:00:00Z",
    "event_ticker": "KXBTCY-27JAN0100",
    "first_swing_iso": "2026-11-14T01:00:00Z",
-   "last_swing_iso": "2026-11-20T20:17:00Z",
+   "last_swing_iso": "2026-11-20T20:38:00Z",
    "markets_flagged": [
     "KXBTCY-27JAN0100-B47500",
     "KXBTCY-27JAN0100-B97500"
    ],
    "max_abs_delta_dollars": 0.96,
-   "n_swings": 21,
+   "n_swings": 27,
    "resolution_outcome": null,
-   "reversion_hits": 17,
-   "reversion_rate": 0.8095,
+   "reversion_hits": 24,
+   "reversion_rate": 0.8889,
    "series": [
     "KXBTCY"
    ],
    "source_urls": [
     "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTCY-27JAN0100-B47500",
     "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTCY-27JAN0100-B97500",
-    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXBTCY/markets/KXBTCY-27JAN0100-B47500/candlesticks?start_ts=1794601116&end_ts=1795205916&period_interval=60",
-    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXBTCY/markets/KXBTCY-27JAN0100-B47500/candlesticks?start_ts=1795033116&end_ts=1795205916&period_interval=1",
-    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXBTCY/markets/KXBTCY-27JAN0100-B97500/candlesticks?start_ts=1794601118&end_ts=1795205918&period_interval=60",
-    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXBTCY/markets/KXBTCY-27JAN0100-B97500/candlesticks?start_ts=1795033118&end_ts=1795205918&period_interval=1"
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXBTCY/markets/KXBTCY-27JAN0100-B47500/candlesticks?start_ts=1794602360&end_ts=1795207160&period_interval=60",
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXBTCY/markets/KXBTCY-27JAN0100-B47500/candlesticks?start_ts=1795034360&end_ts=1795207160&period_interval=1",
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXBTCY/markets/KXBTCY-27JAN0100-B97500/candlesticks?start_ts=1794602362&end_ts=1795207162&period_interval=60",
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXBTCY/markets/KXBTCY-27JAN0100-B97500/candlesticks?start_ts=1795034362&end_ts=1795207162&period_interval=1"
    ],
    "status": "active",
    "title": "BTC price  on Jan 1, 2027?",
@@ -117,7 +117,7 @@
    "attempts": [
     {
      "body_bytes": 0,
-     "checked_at": "2026-11-20T20:19:19Z",
+     "checked_at": "2026-11-20T20:40:11Z",
      "error": "HTTP 429",
      "site_root": "https://kalshi.com",
      "status_code": 429,
@@ -127,7 +127,7 @@
     },
     {
      "body_bytes": 0,
-     "checked_at": "2026-11-20T20:19:22Z",
+     "checked_at": "2026-11-20T20:40:13Z",
      "error": "HTTP 404",
      "site_root": "https://demo.kalshi.co",
      "status_code": 404,
@@ -136,13 +136,13 @@
      "url": "https://demo.kalshi.co/event/KXBTCY-27JAN0100"
     }
    ],
-   "checked_at": "2026-11-20T20:19:22Z",
+   "checked_at": "2026-11-20T20:40:13Z",
    "status_code": 429,
    "ticker_echoed": false,
    "verified_root": null
   },
   "events_with_swings": 3,
-  "generated_at": "2026-11-20T20:18:30Z",
+  "generated_at": "2026-11-20T20:39:12Z",
   "hours_1m": 48,
   "hours_60m": 168,
   "markets_scanned": 60,
@@ -166,7 +166,7 @@
     "attempts": [
      {
       "body_bytes": 0,
-      "checked_at": "2026-11-20T20:19:19Z",
+      "checked_at": "2026-11-20T20:40:11Z",
       "error": "HTTP 429",
       "site_root": "https://kalshi.com",
       "status_code": 429,
@@ -176,7 +176,7 @@
      },
      {
       "body_bytes": 0,
-      "checked_at": "2026-11-20T20:19:22Z",
+      "checked_at": "2026-11-20T20:40:13Z",
       "error": "HTTP 404",
       "site_root": "https://demo.kalshi.co",
       "status_code": 404,
@@ -185,7 +185,7 @@
       "url": "https://demo.kalshi.co/event/KXBTCY-27JAN0100"
      }
     ],
-    "checked_at": "2026-11-20T20:19:22Z",
+    "checked_at": "2026-11-20T20:40:13Z",
     "status_code": 429,
     "ticker_echoed": false,
     "verified_root": null
@@ -203,7 +203,7 @@
    "universe_units": 60,
    "warnings": []
   },
-  "swings_found": 174,
+  "swings_found": 192,
   "threshold_dollars": 0.1,
   "window_minutes": 60
  }
