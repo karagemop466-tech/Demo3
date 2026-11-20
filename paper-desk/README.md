@@ -31,6 +31,21 @@ Full source register and the verbatim doc language: [`SOURCES.md`](SOURCES.md).
    per market, flags a ≥ $0.10 change since the last desk cycle, and shows **no** prices when a
    request fails.
 
+## How the pages were checked with a populated ledger
+
+The committed pages can only be filled by a live cycle, so the generator was exercised against a
+non-empty ledger in a **throwaway `git worktree` copy** (`/tmp`): `trading/paper_engine.py`
+`run_cycle` was replayed nine times through `FixtureClient` with scripted quote paths (a $0.10
+drop, a rising-volume momentum, a longshot, a near-certain carry) and two settlements, then
+`build_paper_desk.py` + `verify_paper_desk.py` + the DOM gate were run over the result:
+`188/188 data rows carry a source link`, `result: PASS (0 failures, 0 notes)`, 332 links checked.
+That replay data was **not** committed anywhere — nothing in `data/paper/` here is simulated
+replay output; the files arrive from the scheduled live cycles.
+
+Two defects that check found and fixed: aggregate analysis rows (by action / trade type) had no
+source cell, and the DOM gate skipped silently when `jsdom` or a built page was missing (now a hard
+failure under `CI`, which Actions always sets).
+
 ## Rebuild / check locally
 
 ```bash
