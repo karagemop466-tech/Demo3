@@ -1,40 +1,45 @@
 #!/usr/bin/env python3
 """
-Kalshi demo/production market-data collector.
+Kalshi market-data collector (v2) — precise, bounded, self-citing.
 
-WHY THIS RUNS IN GITHUB ACTIONS, NOT IN THE DEV SANDBOX
-------------------------------------------------------
-The development sandbox has no network route to *.kalshi.co (TLS reset on 443 and 80).
-GitHub Actions runners do reach it; this was verified by workflow run 44727245939
-(.github/workflows/smoke.yml) before this collector was written.
+WHY IT RUNS IN GITHUB ACTIONS
+------------------------------
+The development sandbox has no network route to *.kalshi.co (TLS reset on 443 and 80; DNS
+resolves but the handshake is dropped). GitHub Actions runners do reach it: verified by run
+44727245939 (.github/workflows/smoke.yml) before this collector existed.
 
-WHAT IT DOES (all unauthenticated, public market data only)
-----------------------------------------------------------
-1. GET /exchange/status
-2. GET /series  (paginated)  -> full series catalogue incl. category + tags
-3. GET /markets?status=open&mve_filter=exclude (paginated) -> live standalone markets
-4. GET /markets?status=settled&mve_filter=exclude&min_settled_ts=... (paginated)
-   -> resolved markets, used for "how did it resolve: yes or no"
-5. GET /markets/{ticker}/orderbook  -> price levels and contracts available per level
-6. GET /series/{s}/markets/{t}/candlesticks -> 1m/60m/1440m OHLC for the price chart
-7. GET /historical/cutoff -> documents that older data lives behind /historical/*
+DESIGN DECISION: SELECT SERIES FIRST, THEN THEIR MARKETS
+--------------------------------------------------------
+v1 paged the global /markets feed, which is sorted newest-first. That flooded the dataset with
+thousands of 15-minute crypto contracts and produced ~80 MB of artifacts while still missing
+long-running high-volume events. v2 instead:
+  1. pages the full series catalogue (GET /series, includes series-level volume_fp),
+  2. classifies every series against the five requested topics (collector/topics.json),
+  3. keeps the top-N series *per topic by series volume* — i.e. literally the highest-volume
+     live events in scope,
+  4. fetches only those series' markets (open + settled) via ?series_ticker=...,
+  5. enriches the top markets with orderbook depth and candlesticks.
 
-HONESTY RULES BUILT IN
-----------------------
-* Every value written is copied from an API response; nothing is inferred or estimated.
-* Every artifact stores the exact request URL(s) it came from plus a fetch timestamp.
-* Missing fields become null and are listed in `_missing`; they are never back-filled.
-* Portfolio/trade endpoints require API-key auth (Kalshi docs) and are NOT called here;
-  `probe_auth_required()` records the observed 401 as evidence instead of guessing data.
-* Volume metric ambiguity: we publish several explicitly-labelled metrics
-  (contracts traded, open interest, resting-liquidity dollars) instead of inventing
-  one "dollar amount" definition. See data/metrics.json.
+HONESTY RULES
+-------------
+* Nothing is inferred: every number is copied from a Kalshi response and every artifact stores
+  the exact request URL it came from plus the fetch timestamp.
+* Missing values are null and named in `_missing`; never back-filled.
+* Portfolio/trade endpoints require an Ed25519 API key and are NOT called here. Their observed
+  401s are recorded as evidence (`auth_probes`) instead of inventing holdings.
+* "Dollar amount" is ambiguous in Kalshi's data model, so four explicitly-labelled metrics are
+  published instead of one invented number:
+      contracts_traded, traded_notional_dollars_derived, open_interest_dollars_derived,
+      resting_liquidity_dollars
+  Derived metrics carry `_derived` and a `price_basis` field explaining the multiplier.
 
-Outputs (relative to repo root):
-  data/live.json                 latest snapshot: status, series, markets, orderbooks, candles
-  data/resolutions.json          accumulated settled-market results (yes/no) per topic
-  data/history/YYYY-MM-DD.jsonl  one JSON line per tracked market per run (time series)
-  data/meta.json                 run metadata, request log, auth probes
+OUTPUTS
+-------
+  data/live.json          in-scope series + open markets + orderbooks + candles (demo)
+  data/live-prod.json     same for production (the brief says "on kalshi" for market data)
+  data/resolutions.json   settled markets with the API's own result (yes/no/scalar)
+  data/history/*.jsonl    append-only observation log used for the "live" chart
+  data/meta.json          run metadata, counts, request log, auth-probe evidence
 """
 from __future__ import annotations
 
@@ -49,43 +54,43 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-
 HOSTS = {
-    # Kalshi docs, "API Environments and Endpoints":
+    # Kalshi docs -> "API Environments and Endpoints"
     # https://docs.kalshi.com/getting_started/api_environments.md
-    "demo": "https://external-api.demo.kalshi.co",
     "prod": "https://external-api.kalshi.com",
+    "demo": "https://external-api.demo.kalshi.co",
 }
-
-# How many live markets per host get orderbook + candlestick treatment.
-MAX_ORDERBOOKS = int(os.environ.get("MAX_ORDERBOOKS", "24"))
-# Topic rules live in a separate, auditable file.
 TOPICS_FILE = ROOT / "collector" / "topics.json"
-# Retention for the appended time-series files.
+
+TOP_SERIES_PER_TOPIC = int(os.environ.get("TOP_SERIES_PER_TOPIC", "14"))
+MAX_ORDERBOOKS = int(os.environ.get("MAX_ORDERBOOKS", "20"))
+SETTLED_WINDOW_DAYS = int(os.environ.get("SETTLED_WINDOW_DAYS", "30"))
 HISTORY_KEEP_DAYS = 21
 
-_sessions: list[dict] = []
+_requests: list[dict] = []
 
 
-# --------------------------------------------------------------------------- http
-def api_get(host_key: str, path: str, params: dict | None = None, *, attempts: int = 4,
-            timeout: int = 45) -> tuple[int, object, str]:
-    """GET a Kalshi API path. Returns (status, parsed_body_or_text, full_url).
+def _now() -> datetime:
+    return datetime.now(timezone.utc)
 
-    Retries on network errors and 429/5xx with exponential backoff. Records every
-    request in the module-level `_sessions` list so artifacts can cite themselves.
-    """
-    base = HOSTS[host_key]
-    url = base + path
+
+def _stamp() -> str:
+    return _now().isoformat(timespec="seconds")
+
+
+# --------------------------------------------------------------------------- HTTP
+def api_get(host: str, path: str, params: dict | None = None, *, attempts: int = 4,
+            timeout: int = 45) -> tuple[int, object]:
+    """GET path on host. Returns (status, body). Logs every call into `_requests`."""
+    url = HOSTS[host] + path
     if params:
-        url += "?" + urllib.parse.urlencode(params, safe=",")
-
+        url += "?" + urllib.parse.urlencode({k: v for k, v in params.items() if v is not None},
+                                            safe=",")
     req = urllib.request.Request(url, headers={
         "Accept": "application/json",
-        "User-Agent": "Demo3-kalshi-collector/1.0 (+https://github.com/karagemop466-tech/Demo3)",
+        "User-Agent": "Demo3-kalshi-collector/2.0 (+https://github.com/karagemop466-tech/Demo3)",
     })
-    started = time.time()
-    last_err = None
+    t0 = time.time()
     for attempt in range(attempts):
         try:
             with urllib.request.urlopen(req, timeout=timeout) as resp:
@@ -94,152 +99,91 @@ def api_get(host_key: str, path: str, params: dict | None = None, *, attempts: i
             try:
                 body: object = json.loads(raw)
             except json.JSONDecodeError:
-                body = raw[:4000]
-            _sessions.append({
-                "url": url, "status": status, "ms": int((time.time() - started) * 1000),
-                "at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-            })
-            return status, body, url
+                body = {"_non_json": raw[:2000]}
+            _requests.append({"url": url, "status": status,
+                              "ms": int((time.time() - t0) * 1000), "at": _stamp()})
+            return status, body
         except urllib.error.HTTPError as exc:
-            raw = exc.read().decode("utf-8", "replace")[:2000]
-            _sessions.append({
-                "url": url, "status": exc.code, "ms": int((time.time() - started) * 1000),
-                "at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-                "error": raw[:300],
-            })
+            detail = exc.read().decode("utf-8", "replace")[:400]
+            _requests.append({"url": url, "status": exc.code,
+                              "ms": int((time.time() - t0) * 1000), "at": _stamp(),
+                              "error": detail[:200]})
             if exc.code in (429, 500, 502, 503, 504) and attempt < attempts - 1:
                 time.sleep(2 ** attempt)
                 continue
-            return exc.code, {"_http_error": exc.code, "_body": raw}, url
-        except Exception as exc:  # noqa: BLE001 - any transport failure retries
-            last_err = exc
+            return exc.code, {"_http_error": exc.code, "_body": detail}
+        except Exception as exc:  # noqa: BLE001
             if attempt < attempts - 1:
                 time.sleep(2 ** attempt)
                 continue
-            _sessions.append({
-                "url": url, "status": 0, "err": repr(exc)[:300],
-                "at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-            })
-            return 0, {"_transport_error": repr(last_err)[:300]}, url
-    return 0, {"_transport_error": "exhausted"}, url
+            _requests.append({"url": url, "status": 0, "err": repr(exc)[:300], "at": _stamp()})
+            return 0, {"_transport_error": repr(exc)[:300]}
+    return 0, {"_transport_error": "exhausted"}
 
 
-def api_paged(host_key: str, path: str, params: dict | None = None,
-              list_key: str = "markets", max_pages: int = 25) -> tuple[list, list[str]]:
-    """Follow `cursor` pagination. Returns (items, urls_called)."""
-    params = dict(params or {})
+def api_paged(host: str, path: str, params: dict, list_key: str, max_pages: int = 40,
+              max_items: int = 40000) -> list:
+    params = dict(params)
     items: list = []
-    urls: list[str] = []
     cursor = None
     for _ in range(max_pages):
         if cursor:
             params["cursor"] = cursor
-        status, body, url = api_get(host_key, path, params)
-        urls.append(url)
+        status, body = api_get(host, path, params)
         if status != 200 or not isinstance(body, dict):
             break
         items.extend(body.get(list_key) or [])
         cursor = body.get("cursor") or ""
-        if not cursor:
+        if not cursor or len(items) >= max_items:
             break
-        time.sleep(0.12)
-    return items, urls
+        time.sleep(0.1)
+    return items
 
 
-# ------------------------------------------------------------------- topics config
-def load_topics() -> dict:
-    with open(TOPICS_FILE, encoding="utf-8") as fh:
-        return json.load(fh)
-
-
-def classify_series(series: dict, cfg: dict) -> list[str]:
-    """Map one series to the dashboard topics it belongs to.
-
-    Rules are declarative (collector/topics.json) and evaluated in a fixed order.
-    A series may map to several topics. No fuzzy matching: exact category names and
-    explicit ticker/tag rules only, so the mapping is reproducible and auditable.
-    """
-    topics: list[str] = []
+# ------------------------------------------------------------------------ topics
+def classify(series: dict, cfg: dict) -> list[str]:
+    """Deterministic topic mapping. Exact matches only; see collector/topics.json."""
+    hits: list[str] = []
     category = (series.get("category") or "").strip()
-    categories = [c.strip() for c in (series.get("categories") or [])]
-    tags = [t.strip().lower() for t in (series.get("tags") or [])]
+    cats = [c.strip() for c in (series.get("categories") or []) if c]
+    tags = [str(t).strip().lower() for t in (series.get("tags") or [])]
     ticker = (series.get("ticker") or "").upper()
     title = (series.get("title") or "").lower()
 
     for topic, rule in cfg["topics"].items():
-        if category in rule.get("categories", []) or any(c in rule.get("categories", []) for c in categories):
-            topics.append(topic)
-            continue
-        if any(t in rule.get("tags_any", []) for t in tags):
-            topics.append(topic)
-            continue
-        if any(ticker.startswith(p) for p in rule.get("ticker_prefixes", [])):
-            topics.append(topic)
-            continue
-        if any(s in title for s in rule.get("title_contains", [])):
-            topics.append(topic)
-            continue
-    return topics
+        matched = None
+        if rule.get("categories"):
+            if category in rule["categories"]:
+                matched = f"category={category}"
+            elif any(c in rule["categories"] for c in cats):
+                matched = "categories[]"
+        if not matched and rule.get("tags_any") and any(t in rule["tags_any"] for t in tags):
+            matched = "tag"
+        if not matched and rule.get("ticker_prefixes") and \
+                any(ticker.startswith(p) for p in rule["ticker_prefixes"]):
+            matched = "ticker_prefix"
+        if not matched and rule.get("title_contains") and \
+                any(s in title for s in rule["title_contains"]):
+            matched = "title"
+        if matched:
+            hits.append({"topic": topic, "matched_by": matched})
+    return hits
 
 
-def series_ticker_of_market(market: dict) -> str:
-    """Kalshi event tickers are `<SERIES>-<DATE...>`; the market ticker adds a strike.
-
-    We only accept the prefix when it is an actual series ticker (checked against the
-    catalogue in main()), so this can never invent a series.
-    """
+def series_of_market(market: dict, known: set[str]) -> str | None:
+    """Resolve a market's series ticker from its event ticker, only if it is in the catalogue."""
     ev = market.get("event_ticker") or ""
-    if "-" not in ev:
-        return ""
-    return ev.rsplit("-", 1)[0] if ev.count("-") == 1 else "-".join(ev.split("-")[:-1])
+    if not ev:
+        return None
+    parts = ev.split("-")
+    for cut in range(len(parts) - 1, 0, -1):
+        candidate = "-".join(parts[:cut])
+        if candidate in known:
+            return candidate
+    return None
 
 
-# ------------------------------------------------------------------------ fetching
-def fetch_series(host_key: str) -> tuple[list, list[str]]:
-    return api_paged(host_key, "/trade-api/v2/series", {"limit": 200, "include_volume": "true"},
-                     list_key="series", max_pages=15)
-
-
-def fetch_markets(host_key: str, status: str, extra: dict | None = None) -> tuple[list, list[str]]:
-    params = {"limit": 1000, "status": status, "mve_filter": "exclude"}
-    params.update(extra or {})
-    return api_paged(host_key, "/trade-api/v2/markets", params, list_key="markets", max_pages=12)
-
-
-def fetch_orderbook(host_key: str, ticker: str) -> dict:
-    status, body, url = api_get(host_key, f"/trade-api/v2/markets/{ticker}/orderbook")
-    return {"status": status, "body": body, "url": url}
-
-
-def fetch_candles(host_key: str, series_ticker: str, ticker: str, period: int,
-                  days_back: int) -> dict:
-    now = int(time.time())
-    start = now - days_back * 86400
-    # Docs: one request may span at most 5,000 periods; 1-minute data is ~3.5 days max.
-    if period == 1 and days_back > 3:
-        start = now - 3 * 86400
-    path = f"/trade-api/v2/series/{series_ticker}/markets/{ticker}/candlesticks"
-    status, body, url = api_get(host_key, path, {
-        "start_ts": start, "end_ts": now, "period_interval": period,
-    })
-    return {"status": status, "body": body, "url": url, "period_interval": period}
-
-
-def probe_auth_required(host_key: str) -> list[dict]:
-    """Record evidence that private endpoints are gated, instead of inventing data."""
-    probes = []
-    for path in ("/trade-api/v2/portfolio/balance",
-                 "/trade-api/v2/portfolio/positions",
-                 "/trade-api/v2/portfolio/orders"):
-        status, body, url = api_get(host_key, path)
-        probes.append({"url": url, "status": status,
-                       "body_excerpt": json.dumps(body)[:300]})
-    return probes
-
-
-# --------------------------------------------------------------------------- maths
 def fnum(value, default=None):
-    """Parse a Kalshi fixed-point string ('0.5600', '10.00') into a float."""
     if value in (None, ""):
         return default
     try:
@@ -248,102 +192,158 @@ def fnum(value, default=None):
         return default
 
 
-def book_levels(orderbook: dict) -> dict:
-    """Turn a /orderbook response into explicit price levels with contract counts.
+def money(value, nd=2):
+    n = fnum(value)
+    return None if n is None else round(n, nd)
 
-    Docs (orderbook_responses): response is `orderbook_fp` with `yes_dollars` and
-    `no_dollars`; each entry is ["price_dollars", "count_fp"]; arrays ascending, so the
-    last element is the best bid. Kalshi returns bids only: a YES bid at X is a NO ask at
-    1-X. We therefore derive implied asks explicitly and label them as derived.
+
+# ------------------------------------------------------------------ orderbook math
+def book_from(orderbook_body: dict) -> dict:
+    """Normalise GET /markets/{t}/orderbook into price levels + liquidity.
+
+    Docs (https://docs.kalshi.com/getting_started/orderbook_responses.md):
+    only bids are returned; each level is ["price_dollars", "count_fp"]; arrays are
+    ascending so the LAST entry is the best bid. A YES bid at X equals a NO ask at 1-X,
+    so implied asks are labelled `_derived`.
     """
-    ob = (orderbook or {}).get("orderbook_fp") or (orderbook or {}).get("orderbook") or {}
-    yes = [[fnum(p), fnum(c)] for p, c in (ob.get("yes_dollars") or [])]
-    no = [[fnum(p), fnum(c)] for p, c in (ob.get("no_dollars") or [])]
-    yes = [x for x in yes if x[0] is not None and x[1] is not None]
-    no = [x for x in no if x[0] is not None and x[1] is not None]
+    body = orderbook_body or {}
+    ob = body.get("orderbook_fp") or body.get("orderbook") or {}
+    yes = [(money(p, 4), money(c, 2)) for p, c in (ob.get("yes_dollars") or [])]
+    no = [(money(p, 4), money(c, 2)) for p, c in (ob.get("no_dollars") or [])]
+    yes = [(p, c) for p, c in yes if p is not None and c is not None]
+    no = [(p, c) for p, c in no if p is not None and c is not None]
 
     best_yes_bid = max((p for p, _ in yes), default=None)
     best_no_bid = max((p for p, _ in no), default=None)
     best_yes_ask = round(1 - best_no_bid, 4) if best_no_bid is not None else None
     best_no_ask = round(1 - best_yes_bid, 4) if best_yes_bid is not None else None
 
-    def depth_dollars(side):
-        return round(sum(p * c for p, c in side), 2)
-
-    levels = [{"side": "yes_bid", "price": p, "contracts": c} for p, c in sorted(yes, reverse=True)]
-    levels += [{"side": "no_bid", "price": p, "contracts": c} for p, c in sorted(no, reverse=True)]
+    def depth(levels):
+        return round(sum(p * c for p, c in levels), 2)
 
     return {
         "best_yes_bid": best_yes_bid,
-        "best_yes_ask": best_yes_ask,
+        "best_yes_ask_derived": best_yes_ask,
         "best_no_bid": best_no_bid,
-        "best_no_ask": best_no_ask,
-        "best_yes_ask_derived": best_yes_ask is not None,
-        "spread_yes": round(best_yes_ask - best_yes_bid, 4)
-        if best_yes_ask is not None and best_yes_bid is not None else None,
-        "yes_depth_dollars": depth_dollars(yes),
-        "no_depth_dollars": depth_dollars(no),
-        "total_resting_liquidity_dollars": round(depth_dollars(yes) + depth_dollars(no), 2),
+        "best_no_ask_derived": best_no_ask,
+        "spread_yes_derived": (round(best_yes_ask - best_yes_bid, 4)
+                               if None not in (best_yes_ask, best_yes_bid) else None),
+        "yes_resting_dollars": depth(yes),
+        "no_resting_dollars": depth(no),
+        "total_resting_dollars": round(depth(yes) + depth(no), 2),
         "yes_levels": len(yes),
         "no_levels": len(no),
-        "levels": levels,
+        # Full ladder, best price first, so "how many contracts are available at a price"
+        # is answerable straight from the artifact.
+        "ladder": ([{"side": "yes", "price": p, "contracts": c} for p, c in sorted(yes, reverse=True)]
+                   + [{"side": "no", "price": p, "contracts": c} for p, c in sorted(no, reverse=True)]),
     }
 
 
 def size_metrics(market: dict, book: dict | None) -> dict:
-    """Explicitly-labelled size metrics. No single opaque 'dollar amount' is invented."""
     volume = fnum(market.get("volume_fp"))
     volume_24h = fnum(market.get("volume_24h_fp"))
     oi = fnum(market.get("open_interest_fp"))
     last = fnum(market.get("last_price_dollars"))
-    yes_bid = fnum(market.get("yes_bid_dollars"))
-    yes_ask = fnum(market.get("yes_ask_dollars"))
-    mid = None
-    if yes_bid is not None and yes_ask is not None and yes_ask >= yes_bid:
-        mid = round((yes_bid + yes_ask) / 2, 4)
-    price_for_notional = last if last is not None else mid
+    bid = fnum(market.get("yes_bid_dollars"))
+    ask = fnum(market.get("yes_ask_dollars"))
+    mid = round((bid + ask) / 2, 4) if None not in (bid, ask) and ask >= bid else None
+    basis_price = last if last is not None else mid
     return {
-        "contracts_traded": volume,
-        "contracts_traded_24h": volume_24h,
-        "open_interest_contracts": oi,
-        # Notional dollars = contracts * price. Labelled DERIVED because Kalshi does not
-        # return a dollar notional; price used is last trade, else mid, else null.
-        "traded_notional_dollars_derived": round(volume * price_for_notional, 2)
-        if volume is not None and price_for_notional is not None else None,
-        "open_interest_dollars_derived": round(oi * price_for_notional, 2)
-        if oi is not None and price_for_notional is not None else None,
-        "price_used_for_notional": price_for_notional,
-        "price_basis": "last_trade" if last is not None else ("mid" if mid is not None else None),
-        "resting_liquidity_dollars": book.get("total_resting_liquidity_dollars") if book else None,
+        "contracts_traded": money(volume, 2),
+        "contracts_traded_24h": money(volume_24h, 2),
+        "open_interest_contracts": money(oi, 2),
+        "traded_notional_dollars_derived":
+            round(volume * basis_price, 2) if volume is not None and basis_price is not None else None,
+        "open_interest_dollars_derived":
+            round(oi * basis_price, 2) if oi is not None and basis_price is not None else None,
+        "resting_liquidity_dollars": book.get("total_resting_dollars") if book else None,
+        "price_basis": ("last_trade" if last is not None else ("mid" if mid is not None else None)),
+        "price_used": basis_price,
     }
 
 
-# ----------------------------------------------------------------------------- main
+# --------------------------------------------------------------------------- main
 def main() -> int:
-    host_key = sys.argv[1] if len(sys.argv) > 1 else "demo"
-    if host_key not in HOSTS:
-        print(f"unknown host {host_key}", file=sys.stderr)
+    host = sys.argv[1] if len(sys.argv) > 1 else "demo"
+    if host not in HOSTS:
+        print(f"unknown host {host!r}", file=sys.stderr)
         return 2
 
-    cfg = load_topics()
-    started_at = datetime.now(timezone.utc)
-    run_id = started_at.strftime("%Y%m%dT%H%M%SZ")
-    out = {"meta": {}, "status": {}, "series": [], "markets": [], "orderbooks": {},
-           "candles": {}, "settled": [], "auth_probes": []}
+    cfg = json.loads(TOPICS_FILE.read_text(encoding="utf-8"))
+    started = _now()
 
-    # 1. exchange status ---------------------------------------------------------
-    st_status, st_body, st_url = api_get(host_key, "/trade-api/v2/exchange/status")
-    out["status"] = {"http": st_status, "body": st_body, "source": st_url}
+    out: dict = {"meta": {}, "status": {}, "topics": {}, "series": [], "markets": [],
+                 "orderbooks": {}, "candles": {}, "auth_probes": []}
 
-    # 2. series catalogue --------------------------------------------------------
-    series, series_urls = fetch_series(host_key)
-    series_by_ticker = {s.get("ticker"): s for s in series if s.get("ticker")}
-    for s in series:
-        topics = classify_series(s, cfg)
-        if not topics:
-            continue
+    # 1) exchange status -------------------------------------------------------
+    st_status, st_body = api_get(host, "/trade-api/v2/exchange/status")
+    out["status"] = {"http": st_status, "body": st_body,
+                     "source": f"{HOSTS[host]}/trade-api/v2/exchange/status"}
+
+    # 2) series catalogue ------------------------------------------------------
+    catalogue = api_paged(host, "/trade-api/v2/series",
+                          {"limit": 200, "include_volume": "true"}, "series", max_pages=100)
+    known_series = {s.get("ticker") for s in catalogue if s.get("ticker")}
+    by_ticker = {s["ticker"]: s for s in catalogue if s.get("ticker")}
+
+    classified: dict[str, list] = {t: [] for t in cfg["topics"]}
+    for s in catalogue:
+        hits = classify(s, cfg)
+        for hit in hits:
+            classified[hit["topic"]].append({
+                "series_ticker": s["ticker"],
+                "title": s.get("title"),
+                "category": s.get("category"),
+                "tags": s.get("tags"),
+                "volume_fp": s.get("volume_fp"),
+                "matched_by": hit["matched_by"],
+                "_volume": fnum(s.get("volume_fp"), 0.0) or 0.0,
+            })
+
+    selected: dict[str, dict] = {}
+    for topic, rows in classified.items():
+        rows.sort(key=lambda r: r["_volume"], reverse=True)
+        keep = [r for r in rows if r["_volume"] > 0][:TOP_SERIES_PER_TOPIC]
+        out["topics"][topic] = {
+            "label": cfg["topics"][topic]["label"],
+            "rule": cfg["topics"][topic],
+            "series_matched_total": len(rows),
+            "series_with_volume": sum(1 for r in rows if r["_volume"] > 0),
+            "selected": [{k: v for k, v in r.items() if k != "_volume"} for r in keep],
+        }
+        for r in keep:
+            selected.setdefault(r["series_ticker"], []).append(topic)
+
+    # 3) per-series market fetch ----------------------------------------------
+    open_markets: list[dict] = []
+    settled_markets: list[dict] = []
+    min_settled = int(started.timestamp()) - SETTLED_WINDOW_DAYS * 86400
+    for series_ticker in selected:
+        st, body = api_get(host, "/trade-api/v2/markets", {
+            "series_ticker": series_ticker, "status": "open",
+            "mve_filter": "exclude", "limit": 1000,
+        })
+        if st == 200 and isinstance(body, dict):
+            open_markets.extend(body.get("markets") or [])
+        time.sleep(0.1)
+
+        st, body = api_get(host, "/trade-api/v2/markets", {
+            "series_ticker": series_ticker, "status": "settled",
+            "mve_filter": "exclude", "limit": 200,
+            "min_settled_ts": min_settled,
+        })
+        if st == 200 and isinstance(body, dict):
+            for m in body.get("markets") or []:
+                m["_series_hint"] = series_ticker
+                settled_markets.append(m)
+        time.sleep(0.1)
+
+    # 4) series reference rows for the selected series only --------------------
+    for st_ticker, topics in selected.items():
+        s = by_ticker.get(st_ticker) or {}
         out["series"].append({
-            "series_ticker": s.get("ticker"),
+            "series_ticker": st_ticker,
             "title": s.get("title"),
             "category": s.get("category"),
             "categories": s.get("categories"),
@@ -351,224 +351,209 @@ def main() -> int:
             "frequency": s.get("frequency"),
             "volume_fp": s.get("volume_fp"),
             "topics": topics,
-            "settlement_sources": s.get("settlement_sources"),
+            "settlement_sources": [
+                {"name": x.get("name"), "url": x.get("url")}
+                for x in (s.get("settlement_sources") or [])
+            ][:6],
             "contract_terms_url": s.get("contract_terms_url"),
             "contract_url": s.get("contract_url"),
-            "source": series_urls[0] if series_urls else None,
+            "source": f"{HOSTS[host]}/trade-api/v2/series",
         })
-    tracked_series = {s["series_ticker"]: s for s in out["series"]}
 
-    # 3. live markets ------------------------------------------------------------
-    open_markets, open_urls = fetch_markets(host_key, "open")
-    tracked_markets = []
-    unmapped = 0
+    # 5) rank open markets; enrich the top ones -------------------------------
     for m in open_markets:
-        st = series_ticker_of_market(m)
-        if st not in tracked_series:
-            unmapped += 1
-            continue
-        topics = tracked_series[st]["topics"]
-        if not topics:
-            continue
-        tracked_markets.append({"m": m, "series_ticker": st, "topics": topics})
+        m["_series"] = series_of_market(m, known_series) or m.pop("_series_hint", None)
+    open_markets = [m for m in open_markets if m.get("_series") in selected]
+    open_markets.sort(key=lambda m: fnum(m.get("volume_fp"), 0.0) or 0.0, reverse=True)
+    enrich = [m.get("ticker") for m in open_markets[:MAX_ORDERBOOKS] if m.get("ticker")]
 
-    # Rank by contracts traded (explicit metric) and keep the head of the list for
-    # orderbook + candlestick enrichment, so the published tables stay verifiable.
-    def traded(item):
-        return fnum(item["m"].get("volume_fp")) or 0.0
-
-    tracked_markets.sort(key=traded, reverse=True)
-    enrich_set = {item["m"].get("ticker") for item in tracked_markets[:MAX_ORDERBOOKS]}
-
-    out["orderbooks"] = {}
-    for ticker in list(enrich_set):
-        ob = fetch_orderbook(host_key, ticker)
-        if ob["status"] == 200:
-            book = book_levels(ob["body"])
-            book["source"] = ob["url"]
-            book["http"] = ob["status"]
+    for ticker in enrich:
+        st, body = api_get(host, f"/trade-api/v2/markets/{ticker}/orderbook")
+        src = f"{HOSTS[host]}/trade-api/v2/markets/{ticker}/orderbook"
+        if st == 200 and isinstance(body, dict):
+            book = book_from(body)
+            book.update({"http": st, "source": src})
             out["orderbooks"][ticker] = book
         else:
-            out["orderbooks"][ticker] = {"http": ob["status"], "source": ob["url"],
-                                         "_missing": ["orderbook"]}
-        time.sleep(0.15)
+            out["orderbooks"][ticker] = {"http": st, "source": src, "_missing": ["orderbook"]}
+        time.sleep(0.12)
 
-    # 4. candlesticks for the same set ------------------------------------------
-    out["candles"] = {}
-    for ticker in list(enrich_set):
-        st = next((i["series_ticker"] for i in tracked_markets if i["m"].get("ticker") == ticker), None)
-        if not st:
+    for ticker in enrich:
+        series_ticker = next((m["_series"] for m in open_markets if m.get("ticker") == ticker), None)
+        if not series_ticker:
             continue
-        entry = {}
+        sets = {}
         for period, days in ((1, 1), (60, 7), (1440, 90)):
-            c = fetch_candles(host_key, st, ticker, period, days)
-            if c["status"] == 200 and isinstance(c["body"], dict):
-                entry[str(period)] = {
-                    "source": c["url"],
-                    "candlesticks": c["body"].get("candlesticks") or [],
-                }
-            else:
-                entry[str(period)] = {"source": c["url"], "http": c["status"],
-                                      "candlesticks": [], "_missing": ["candlesticks"]}
-            time.sleep(0.15)
-        out["candles"][ticker] = entry
+            end = int(time.time())
+            start = end - days * 86400
+            st, body = api_get(
+                host,
+                f"/trade-api/v2/series/{series_ticker}/markets/{ticker}/candlesticks",
+                {"start_ts": start, "end_ts": end, "period_interval": period})
+            src = (f"{HOSTS[host]}/trade-api/v2/series/{series_ticker}/markets/{ticker}"
+                   f"/candlesticks?start_ts={start}&end_ts={end}&period_interval={period}")
+            candles = (body.get("candlesticks") if isinstance(body, dict) else None) or []
+            sets[str(period)] = {"http": st, "source": src, "count": len(candles),
+                                 "candlesticks": candles[:2000]}
+            time.sleep(0.12)
+        out["candles"][ticker] = sets
 
-    # 5. assemble market rows ----------------------------------------------------
-    for item in tracked_markets:
-        m = item["m"]
+    # 6) build market rows ----------------------------------------------------
+    for m in open_markets:
         ticker = m.get("ticker")
         book = out["orderbooks"].get(ticker)
+        series_ticker = m["_series"]
+        series_matches = [t for t in selected.get(series_ticker, [])]
         row = {
             "ticker": ticker,
             "event_ticker": m.get("event_ticker"),
-            "series_ticker": item["series_ticker"],
-            "topics": item["topics"],
-            "title": m.get("title") or m.get("yes_sub_title"),
-            "yes_sub_title": m.get("yes_sub_title"),
+            "series_ticker": series_ticker,
+            "topics": series_matches,
+            "title": (m.get("title") or m.get("yes_sub_title") or "")[:220],
+            "yes_sub_title": (m.get("yes_sub_title") or "")[:160],
             "status": m.get("status"),
             "market_type": m.get("market_type"),
             "open_time": m.get("open_time"),
             "close_time": m.get("close_time"),
             "expected_expiration_time": m.get("expected_expiration_time"),
-            "latest_expiration_time": m.get("latest_expiration_time"),
-            "yes_bid_dollars": m.get("yes_bid_dollars"),
-            "yes_ask_dollars": m.get("yes_ask_dollars"),
-            "no_bid_dollars": m.get("no_bid_dollars"),
-            "no_ask_dollars": m.get("no_ask_dollars"),
-            "yes_bid_size_fp": m.get("yes_bid_size_fp"),
-            "yes_ask_size_fp": m.get("yes_ask_size_fp"),
-            "last_price_dollars": m.get("last_price_dollars"),
-            "previous_price_dollars": m.get("previous_price_dollars"),
-            "volume_fp": m.get("volume_fp"),
-            "volume_24h_fp": m.get("volume_24h_fp"),
-            "open_interest_fp": m.get("open_interest_fp"),
-            "liquidity_dollars": m.get("liquidity_dollars"),
-            "result": m.get("result"),
-            "rules_primary": m.get("rules_primary"),
-            "settlement_sources": (tracked_series.get(item["series_ticker"]) or {}).get("settlement_sources"),
-            "contract_terms_url": (tracked_series.get(item["series_ticker"]) or {}).get("contract_terms_url"),
-            "source": f"{HOSTS[host_key]}/trade-api/v2/markets?status=open&mve_filter=exclude&limit=1000",
+            "yes_bid_dollars": money(m.get("yes_bid_dollars"), 4),
+            "yes_ask_dollars": money(m.get("yes_ask_dollars"), 4),
+            "no_bid_dollars": money(m.get("no_bid_dollars"), 4),
+            "no_ask_dollars": money(m.get("no_ask_dollars"), 4),
+            "yes_bid_size_fp": money(m.get("yes_bid_size_fp"), 2),
+            "yes_ask_size_fp": money(m.get("yes_ask_size_fp"), 2),
+            "last_price_dollars": money(m.get("last_price_dollars"), 4),
+            "volume_fp": money(m.get("volume_fp"), 2),
+            "volume_24h_fp": money(m.get("volume_24h_fp"), 2),
+            "open_interest_fp": money(m.get("open_interest_fp"), 2),
+            "rules_primary": (m.get("rules_primary") or "")[:400],
             "metrics": size_metrics(m, book),
+            "source": (f"{HOSTS[host]}/trade-api/v2/markets?series_ticker={series_ticker}"
+                       f"&status=open&mve_filter=exclude&limit=1000"),
             "orderbook_source": (book or {}).get("source"),
-            "candles_source": (out["candles"].get(ticker) or {}).get("1", {}).get("source"),
+            "candles_source": ((out["candles"].get(ticker) or {}).get("1") or {}).get("source"),
         }
         missing = [k for k in ("yes_bid_dollars", "yes_ask_dollars", "last_price_dollars",
-                               "volume_fp", "open_interest_fp") if row.get(k) in (None, "")]
+                               "volume_fp", "open_interest_fp") if row.get(k) is None]
         if missing:
             row["_missing"] = missing
         out["markets"].append(row)
 
-    # 6. settled markets for resolution tracking (last 45 days) -----------------
-    now_ts = int(time.time())
-    settled, settled_urls = fetch_markets(host_key, "settled",
-                                         {"min_settled_ts": now_ts - 45 * 86400})
-    for m in settled:
-        st = series_ticker_of_market(m)
-        if st not in tracked_series:
-            continue
-        out["settled"].append({
+    # 7) settled rows ---------------------------------------------------------
+    for m in settled_markets:
+        series_ticker = m.get("_series_hint")
+        out.setdefault("_settled_rows", []).append({
             "ticker": m.get("ticker"),
             "event_ticker": m.get("event_ticker"),
-            "series_ticker": st,
-            "topics": tracked_series[st]["topics"],
-            "title": m.get("title") or m.get("yes_sub_title"),
-            "yes_sub_title": m.get("yes_sub_title"),
+            "series_ticker": series_ticker,
+            "topics": selected.get(series_ticker, []),
+            "title": (m.get("title") or m.get("yes_sub_title") or "")[:220],
+            "yes_sub_title": (m.get("yes_sub_title") or "")[:160],
             "result": m.get("result"),
-            "settlement_value_dollars": m.get("settlement_value_dollars"),
+            "settlement_value_dollars": money(m.get("settlement_value_dollars"), 4),
             "settlement_ts": m.get("settlement_ts"),
             "close_time": m.get("close_time"),
-            "expiration_value": m.get("expiration_value"),
-            "last_price_dollars": m.get("last_price_dollars"),
-            "volume_fp": m.get("volume_fp"),
-            "open_interest_fp": m.get("open_interest_fp"),
+            "expiration_value": (m.get("expiration_value") or "")[:120],
+            "last_price_dollars": money(m.get("last_price_dollars"), 4),
+            "volume_fp": money(m.get("volume_fp"), 2),
+            "open_interest_fp": money(m.get("open_interest_fp"), 2),
             "can_close_early": m.get("can_close_early"),
-            "rules_primary": m.get("rules_primary"),
-            "source": f"{HOSTS[host_key]}/trade-api/v2/markets?status=settled&mve_filter=exclude&limit=1000",
+            "source": (f"{HOSTS[host]}/trade-api/v2/markets?series_ticker={series_ticker}"
+                       f"&status=settled&mve_filter=exclude&limit=200"),
         })
 
-    # 7. historical cutoff + authenticated-endpoint evidence --------------------
-    cutoff_status, cutoff_body, cutoff_url = api_get(host_key, "/trade-api/v2/historical/cutoff")
-    out["historical_cutoff"] = {"http": cutoff_status, "body": cutoff_body, "source": cutoff_url}
-    out["auth_probes"] = probe_auth_required(host_key)
+    # 8) evidence that private data is unavailable ----------------------------
+    for path in ("/trade-api/v2/portfolio/balance", "/trade-api/v2/portfolio/positions",
+                 "/trade-api/v2/portfolio/orders"):
+        st, body = api_get(host, path)
+        out["auth_probes"].append({
+            "url": HOSTS[host] + path,
+            "status": st,
+            "body_excerpt": json.dumps(body, default=str)[:240],
+            "interpretation": ("401 = endpoint requires the signed API-key headers documented at "
+                               "https://docs.kalshi.com/getting_started/api_keys.md; no key is "
+                               "configured for this repository, so no portfolio data is published."),
+        })
 
-    # 8. metadata ---------------------------------------------------------------
-    finished_at = datetime.now(timezone.utc)
+    finished = _now()
     out["meta"] = {
-        "run_id": run_id,
-        "environment": host_key,
-        "base_url": HOSTS[host_key],
-        "started_at_utc": started_at.isoformat(timespec="seconds"),
-        "finished_at_utc": finished_at.isoformat(timespec="seconds"),
-        "duration_seconds": round((finished_at - started_at).total_seconds(), 1),
+        "run_id": started.strftime("%Y%m%dT%H%M%SZ"),
+        "environment": host,
+        "base_url": HOSTS[host],
+        "started_at_utc": started.isoformat(timespec="seconds"),
+        "finished_at_utc": finished.isoformat(timespec="seconds"),
+        "duration_seconds": round((finished - started).total_seconds(), 1),
         "counts": {
-            "series_total_fetched": len(series),
-            "series_in_scope": len(out["series"]),
-            "open_markets_fetched": len(open_markets),
+            "series_in_catalogue": len(catalogue),
+            "series_selected": len(selected),
             "open_markets_in_scope": len(out["markets"]),
-            "open_markets_belonging_to_untracked_series": unmapped,
+            "settled_markets_in_scope": len(out.get("_settled_rows") or []),
             "orderbooks": len(out["orderbooks"]),
             "candlestick_sets": len(out["candles"]),
-            "settled_in_scope": len(out["settled"]),
         },
-        "topic_rules_file": "collector/topics.json",
-        "requests": _sessions,
-        "request_count": len(_sessions),
+        "topics": {t: {"label": v["label"],
+                       "series_matched_total": v["series_matched_total"],
+                       "series_selected": len(v["selected"])}
+                   for t, v in out["topics"].items()},
+        "parameters": {"top_series_per_topic": TOP_SERIES_PER_TOPIC,
+                       "max_orderbooks": MAX_ORDERBOOKS,
+                       "settled_window_days": SETTLED_WINDOW_DAYS},
+        "request_count": len(_requests),
+        "requests": _requests,
         "docs": {
             "api_environments": "https://docs.kalshi.com/getting_started/api_environments.md",
             "demo_env": "https://docs.kalshi.com/getting_started/demo_env.md",
+            "quickstart_market_data": "https://docs.kalshi.com/getting_started/quick_start_market_data.md",
             "markets": "https://docs.kalshi.com/api-reference/market/get-markets.md",
-            "events": "https://docs.kalshi.com/api-reference/events/get-events.md",
+            "series_list": "https://docs.kalshi.com/api-reference/market/get-series-list.md",
             "orderbook": "https://docs.kalshi.com/getting_started/orderbook_responses.md",
             "candlesticks": "https://docs.kalshi.com/api-reference/market/get-market-candlesticks.md",
+            "settlement": "https://docs.kalshi.com/getting_started/market_settlement.md",
             "historical": "https://docs.kalshi.com/getting_started/historical_data.md",
             "api_keys": "https://docs.kalshi.com/getting_started/api_keys.md",
             "websockets": "https://docs.kalshi.com/getting_started/quick_start_websockets.md",
+            "rate_limits": "https://docs.kalshi.com/getting_started/rate_limits.md",
         },
     }
 
-    # 9. write artifacts --------------------------------------------------------
+    # 9) persist -------------------------------------------------------------
     data_dir = ROOT / "data"
     (data_dir / "history").mkdir(parents=True, exist_ok=True)
+    live_path = data_dir / ("live.json" if host == "demo" else f"live-{host}.json")
+    live_path.write_text(json.dumps(out, indent=0, separators=(",", ":")), encoding="utf-8")
 
-    if host_key == "demo":
-        live_path = data_dir / "live.json"
-    else:
-        live_path = data_dir / f"live-{host_key}.json"
-    live_path.write_text(json.dumps(out, indent=1), encoding="utf-8")
-
-    # Accumulate resolutions (never lose a row we have seen before).
+    # resolutions accumulate
     res_path = data_dir / "resolutions.json"
     existing = {"rows": []}
     if res_path.exists():
         try:
             existing = json.loads(res_path.read_text(encoding="utf-8"))
         except json.JSONDecodeError:
-            existing = {"rows": []}
-    by_key = {(r["environment"], r["ticker"]): r for r in existing.get("rows", [])}
-    for r in out["settled"]:
-        by_key[(host_key, r["ticker"])] = {"environment": host_key, **r}
+            pass
+    rows = {(r.get("environment"), r.get("ticker")): r for r in existing.get("rows", [])}
+    for r in out.get("_settled_rows") or []:
+        rows[(host, r["ticker"])] = {"environment": host, **r}
     res_path.write_text(json.dumps({
         "meta": {
-            "updated_at_utc": finished_at.isoformat(timespec="seconds"),
-            "note": "One row per settled market observed via GET /markets?status=settled"
-                    "&mve_filter=exclude. `result` is the API's own field: yes | no | scalar."
-                    " Rows accumulate across runs and are never deleted.",
-            "source": f"{HOSTS[host_key]}/trade-api/v2/markets?status=settled",
+            "updated_at_utc": finished.isoformat(timespec="seconds"),
+            "note": ("One row per settled market seen via GET /markets?series_ticker=..."
+                     "&status=settled. `result` is Kalshi's own field (yes | no | scalar | '')."
+                     " Rows accumulate across runs and are never deleted, so the history of "
+                     "resolutions stays auditable."),
             "docs": "https://docs.kalshi.com/getting_started/market_settlement.md",
         },
-        "rows": sorted(by_key.values(), key=lambda r: (r.get("settlement_ts") or "", r["ticker"])),
-    }, indent=1), encoding="utf-8")
+        "rows": sorted(rows.values(), key=lambda r: (r.get("settlement_ts") or "", r.get("ticker") or "")),
+    }, indent=0, separators=(",", ":")), encoding="utf-8")
 
-    # Append minute-level observation lines for the live chart.
-    day = started_at.strftime("%Y-%m-%d")
-    hist_path = data_dir / "history" / f"{day}.jsonl"
-    with open(hist_path, "a", encoding="utf-8") as fh:
+    # append-only observation log
+    hist = data_dir / "history" / f"{started:%Y-%m-%d}.jsonl"
+    with open(hist, "a", encoding="utf-8") as fh:
         for row in out["markets"]:
-            book = out["orderbooks"].get(row["ticker"]) or {}
+            m = row["metrics"]
             fh.write(json.dumps({
-                "ts": started_at.isoformat(timespec="seconds"),
-                "epoch": int(started_at.timestamp()),
-                "env": host_key,
+                "ts": started.isoformat(timespec="seconds"),
+                "epoch": int(started.timestamp()),
+                "env": host,
                 "ticker": row["ticker"],
                 "topics": row["topics"],
                 "yes_bid": row["yes_bid_dollars"],
@@ -576,10 +561,9 @@ def main() -> int:
                 "last": row["last_price_dollars"],
                 "volume": row["volume_fp"],
                 "oi": row["open_interest_fp"],
-                "liq": book.get("total_resting_liquidity_dollars"),
-            }) + "\n")
+                "liq": m.get("resting_liquidity_dollars"),
+            }, separators=(",", ":")) + "\n")
 
-    # Prune history older than HISTORY_KEEP_DAYS.
     cutoff = time.time() - HISTORY_KEEP_DAYS * 86400
     for p in (data_dir / "history").glob("*.jsonl"):
         try:
@@ -590,12 +574,9 @@ def main() -> int:
 
     (data_dir / "meta.json").write_text(json.dumps(out["meta"], indent=1), encoding="utf-8")
 
-    print(json.dumps({
-        "environment": host_key,
-        "counts": out["meta"]["counts"],
-        "requests": out["meta"]["request_count"],
-        "duration_seconds": out["meta"]["duration_seconds"],
-    }, indent=1))
+    print(json.dumps({"environment": host, "counts": out["meta"]["counts"],
+                      "requests": out["meta"]["request_count"],
+                      "duration_seconds": out["meta"]["duration_seconds"]}, indent=1))
     return 0
 
 

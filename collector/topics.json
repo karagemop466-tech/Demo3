@@ -116,7 +116,7 @@
         "grammy",
         "emmy"
       ],
-      "why": "Kalshi publishes Entertainment/Culture series categories and music-chart series (e.g. a #1 hit series settled from Billboard)."
+      "why": "Kalshi publishes an Entertainment category and music/film/TV series (e.g. Billboard #1-hit series). Entertainment is broad by nature; every matched series is listed on the site so the mapping can be audited series-by-series."
     },
     "golf": {
       "label": "Golf",
@@ -142,10 +142,7 @@
     },
     "gas": {
       "label": "Gas prices",
-      "categories": [
-        "Economics",
-        "Commodities"
-      ],
+      "categories": [],
       "tags_any": [
         "gas prices",
         "gasoline",
@@ -161,13 +158,14 @@
         "gasoline",
         "aaa gas"
       ],
-      "why": "Kalshi runs an AAA national average gas price series (KXAAAGASW) inside Economics; matched by ticker prefix and title."
+      "why": "Kalshi's AAA national-average gas-price series (KXAAAGASW) lives inside the Economics category, but Economics also holds ~900 unrelated series, so a category rule would mislabel them. Gas is therefore matched only by ticker prefix / tag / title."
     }
   },
   "notes": {
     "excluded_on_purpose": "Sports series other than Golf are excluded even though they carry the largest demo volumes, because the brief limits scope to the five topics.",
     "overlap": "A series may map to more than one topic (e.g. a crypto series tagged 'Crypto' inside 'Financials'); all matched topics are recorded on the row.",
     "no_inference": "If a series has no category, no tag and no matching prefix, it is dropped and counted in meta.counts.open_markets_belonging_to_untracked_series.",
-    "over_broad_avoided": "Tags like 'oil' or 'energy' were deliberately NOT used for the gas topic: they also match crude-oil and general energy series, which would mislabel non-gasoline markets as gas prices."
+    "over_broad_avoided": "Tags like 'oil' or 'energy' were deliberately NOT used for the gas topic: they also match crude-oil and general energy series, which would mislabel non-gasoline markets as gas prices.",
+    "precision_over_recall": "Rules prefer precision: a series is only counted in a topic when it matches an explicit category, tag, ticker prefix or title fragment. Series that match nothing are left out and counted in data/meta.json rather than guessed in."
   }
 }
