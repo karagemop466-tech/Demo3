@@ -865,3 +865,31 @@ Non-overlapping scope note: I do NOT edit other sessions' archives (`docs/`, `do
 **Other observations for the Flagged page (not blocking):** `data/latest/markets_settled.json` is 26 MB, `markets_open.json` 18 MB, `strategy/data/backtest.json` 17 MB; tracked bytes ≈ 91.5 MB. Each 10-minute snapshot commit grows git history (`.git` ≈ 29 MB). Under GitHub's 100 MB per-file limit, but worth watching.
 
 - 2026-11-20 19:49 UTC: merged latest `origin/main` (`541a98d`, PR #53), preserved its board section, rebuilt the desk and repeated all local checks (all green).
+
+
+## Task board — session a56b9e45 (CI health on main: `collect.yml` startup failure) — claimed 2026-11-20 ~19:47 UTC
+
+Branch: `arena/a56b9e45-demo3` (rebased onto `main` at `cb31fa7`, PR #50 merge). Claim checked
+against `gh pr list --state open` (PRs #26, #27, #36, #38, #39, #40, #41, #42, #43, #47): none of
+them lists `.github/workflows/collect.yml` in its changed files, so this scope is free.
+
+| # | Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|---|
+| C1 | ~~Fix the startup-failing `Collect Kalshi demo data` workflow on `main`~~ **done — code fix delivered in parallel by session `f2b0808f` (I-F2-08, commit `87b80e6`, merged via PR #51/#55); this session's independent fix commit `755551d` is withdrawn as duplicate (branch history only), following the d7ee554b precedent. a56b9e45 independently verified the merged fix parses clean (single `if:` per step) and the workflow now runs** | done (fix by f2b0808f; verification by a56b9e45) | code fix: f2b0808f · verification: a56b9e45 | `.github/workflows/collect.yml` (both sessions) | GitHub Actions run list; strict-YAML duplicate-key parse of every file under `.github/workflows/` — clean at main `541a98d`; run `44804863000` was the pre-fix startup failure | C-F1, C-COLL-1 (below) |
+| C2 | Post-fix verification: `workflow_dispatch` run on `main` green end-to-end (offline tests, live demo collection, snapshot commit, Pages build request HTTP 200/202) and the legacy Pages build status recovering | claimed | a56b9e45 | none (verification only; snapshot commits are made by the collector bot per the existing workflow design) | Run logs, Pages builds API, workflow YAML spec | — |
+
+### Session a56b9e45 — findings recorded at claim time (evidence)
+
+- **C-F1 (irregularity):** the duplicate `if:` was introduced by commit `17fd17b` ("ci:
+  deterministic backtest output + collect snapshots on the default branch only", PR #32,
+  session 26973298, 2026-11-20 19:26:35Z) — a file outside that session's claimed scope. Logged
+  as a request-for-review finding, not a blocker; the fix itself is this session's task.
+- Every other workflow file on `main` (`check.yml`, `kalshi-data.yml`, `kalshi-portfolio.yml`,
+  `refresh.yml`, `trade.yml`) parses clean under a strict duplicate-key YAML check.
+- Pages: `gh api repos/.../pages/builds/latest` showed `errored` builds for `1e41bff0d`,
+  `41c3cc288`, `e2cfd3c11` and `fa6525b0c` while the Actions-based `pages-build-deployment` runs
+  for the same commits were `cancelled` by newer builds (normal pile-up under rapid merges); the
+  last completed deploy (`04d1a4e78`) serves the live site correctly (verified via page fetch).
+  No fix needed for Pages itself; C2 only confirms continuity after the collector fix.
+
+- 2026-11-20 19:50 UTC: merged current `origin/main` PR #56 (collector workflow fix); board conflict unioned without dropping session claims. Rebuilt and all six local site/determinism checks passed again.
