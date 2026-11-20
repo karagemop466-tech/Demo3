@@ -348,3 +348,51 @@ Follow-up requests from session 06cbd03f addressed at integration:
 - 2026-11-20 12:25 UTC: PR https://github.com/karagemop466-tech/Demo3/pull/24 (`arena/4d10aedf-demo3` -> `main`) opened with summary, sources and flagged irregularities. Pre-merge checks green (verify_rows 725/725, verify_site PASSED, jsdom smoke PASSED).
 - 2026-11-20 12:29 UTC: `gh pr merge 24 --merge` reported conflicts — `main` had advanced with sessions `3b5e95bd`/`dd229508`/`arena-3a22fb0f` deliveries (PRs #18/#21/#22). Conflicts in `.gitignore`, `README.md`, `docs/executive-summary.md`, `COORDINATION.md` resolved by keeping both sides: `main`'s records preserved verbatim, 4d10aedf's records added as new sections. Nothing discarded (handoff/conflict protocol).
 - 2026-11-20 12:31 UTC: **PR #24 MERGED** — merge commit `48fe55e`. `Checks` workflow SUCCESS on the merge; `pages build and deployment` workflow SUCCESS; the Pages API reports `built` (source `main` /). Live site verified via page fetch: https://karagemop466-tech.github.io/Demo3/ serves the merged canonical landing with live status "LIVE · trading active (demo)", the executive-summary source table, decision registers, and archive links (docs/, docs/tracker/, analysis/, demo-desk/, research/). This line records the actual result; the follow-up board commit carries the confirmation to `main`.
+
+
+---
+
+## Session eb2af75b — automated simulated (paper) trading desk + strategy analytics (branch `arena/eb2af75b-demo3`) — claimed 2026-11-20 19:20 UTC
+
+Base `b3b2b23` (= `main` at claim time). Protocol note: the platform binds this session to
+`arena/eb2af75b-demo3`, so the brief's `session-<id>/<task>` branch naming is not possible (same
+irregularity already recorded as R-04).
+
+**Gap identified (audited against `main` at `b3b2b23`).** The brief requires "Automate simulated
+trades to test different strategies", "Execute trades on events and track the performance", "Track
+the portfolio performance … on the site", "analyze the results of the trades and categorize trades
+and create strategies based on the type of trade", and "no manual input on my part". What exists:
+- `trading/kalshi_trade.py` + `.github/workflows/trade.yml` — order placement and portfolio pull,
+  but **credential-gated** (exits code 3 with no demo secrets) and **manual-dispatch only**
+  (`on: workflow_dispatch`). No scheduled automation, no strategy loop, no persisted ledger.
+- `assets/trade.js` — in-browser paper fills, but stored in `localStorage`: per-visitor, not
+  persisted to the repo, not automated, invisible to the deployed site's other pages.
+- `data/latest/portfolio.json` — `status: credentials_missing`, all account fields blank.
+So no automated simulated-trading pipeline exists. This session delivers exactly that.
+
+**Non-overlapping scope (new files only — no shared file edited except this board, append-only):**
+| Path | Owner |
+|---|---|
+| `trading/paper_engine.py`, `trading/paper_strategies.py`, `trading/test_paper_engine.py` | eb2af75b |
+| `.github/workflows/paper-desk.yml` | eb2af75b |
+| `scripts/build_paper_desk.py`, `data/paper/**` | eb2af75b |
+| `paper-desk/**` (self-contained subsite) | eb2af75b |
+
+**Not touched (claimed by others):** `alerts.html`, `assets/alerts*.js`, `assets/roi.js`,
+`scripts/scan_swings.py`, `scripts/build_root_site.py`, `scripts/verify_root_site.py`,
+`assets/style.css`, `assets/dashboard.js`, `assets/app.js`, `assets/trade.js`, root `*.html`,
+`docs/**`, `analysis/**`, `demo-desk/**`, `demo-monitor/**`, `collector/**`, `scripts/collect_kalshi_data.py`,
+`data/latest/**`, `data/events.json`, `.github/workflows/collect.yml`, `check.yml`. Root-site nav
+entry for this subsite is logged as change request **CR-eb2af75b-1** for the integration session.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| P1 Paper-trading engine (deterministic strategies, taker fills sized by live orderbook depth, mark-to-market, settlement sweep) | in progress | eb2af75b | `trading/paper_engine.py`, `trading/paper_strategies.py` | Live demo responses + official docs fetched this session (register in `paper-desk/SOURCES.md`) | F-EB2-01 (simulated, not account-backed) |
+| P2 Scheduled automation with no manual input | in progress | eb2af75b | `.github/workflows/paper-desk.yml` | GitHub Actions scheduled-workflow doc; run evidence recorded here | F-EB2-02 (first scheduled run only after merge to `main`) |
+| P3 Trade journal + portfolio analytics + categorization (topic × side × price band × strategy) | in progress | eb2af75b | `data/paper/**`, `scripts/build_paper_desk.py` | every row carries the exact demo-API URL it came from | F-EB2-03 (no fee model — disclosed) |
+| P4 Self-contained `paper-desk/` subsite (tables, equity chart, per-row sources) | in progress | eb2af75b | `paper-desk/**` | `scripts/verify_paper_desk.py` link + source check | — |
+| P5 Offline tests (mock API, no network) | in progress | eb2af75b | `trading/test_paper_engine.py` | run recorded below | — |
+| P6 PR → merge → Pages check → record | pending | eb2af75b | — | Pages API + live fetch after merge | — |
+
+Claim pushed immediately per board rules. Nothing is marked verified until the official-source check
+is recorded in this section.
