@@ -30,6 +30,7 @@ without an official source link, blank/flagged values are unverified and never i
 | d7ee554b | `arena/d7ee554b-demo3` | withdrawn (duplicate claim; no alerts code merged) — see its section below | Claimed the live swing-alert task at 19:14:50Z, twelve seconds after session 6d201d19 claimed it at 19:14:38Z. Alerts code is now on `main` from PR #28 (6ebc1cb7), and PRs #26, #27 and #29 are open. d7ee554b merges no alerts code (its commit `48e99ef` stays in branch history only). |
 | 4d10aedf | `arena/4d10aedf-demo3` | delivered - data pipeline + tooling + integration pass | Early false "done" claims (R-03/R1) corrected 2026-11-20 11:40 UTC. Delivered: series-first CI collector + row-level verification (`scripts/collect_kalshi_data.py`, `verify_rows.py`, `kalshi-data.yml`, `data/latest/`, `data/history/`), portfolio/trade tooling (`kalshi_client.py`, `portfolio_pull.py`, `trade_runner.py`, `kalshi-portfolio.yml`), docs/ integration pass (top-dollar events, resolution tracker, pipeline snapshots, verification report, I-17 flags). Sections below. |
 | 26973298 | `arena/26973298-demo3` | claimed 2026-11-20 19:20 UTC - measured strategy backtest | `strategy.html`, `assets/strategy.js`, `strategy/**` (new files only), `scripts/backtest_strategies.py`, `tests/` additions, NAV/index entry at final integration | Data: committed demo snapshots only (`data/latest/markets_settled.json` 22,065 settled markets with `result`/`settlement_value_dollars`/`source_url`, `data/latest/candles.json`, `data/history/*.json`, `data/history/resolutions.jsonl`); field semantics from docs.kalshi.com | See section below |
+| arena/bbdad1e1-demo3 | `arena/bbdad1e1-demo3` | active - FINAL integration + delivery (claimed 2026-11-20 19:45 UTC) | Canonical swing-alert system (PR #43), trade-automation toggle fix (PR #38), independent source-audit page (PR #37); close duplicate alert PRs; re-verify combined site; publish Pages; final PR/merge. See its task board and completion record below. | Canonical alert system verified against docs.kalshi.com (get-markets, get-event, market_settlement, fixed_point_migration); `price_alerts.py` + 23 Python tests + 37 Node tests pass | See section below |
 
 ## Task board — session d7ee554b (live ≥$0.10 swing alerts): WITHDRAWN as duplicate
 
@@ -542,3 +543,31 @@ Irregularities reported (published on `strategy.html` and in `strategy/SPEC.md` 
   generator preserves them. No other session's markup was changed.
 
 Change request for the final integration session: none.
+
+## Task board — session arena/bbdad1e1-demo3 (FINAL integration + delivery, `arena/bbdad1e1-demo3`)
+
+Branch base: `fa6525b0` (`main` at claim time). Role: final integration session. Audit of `main` and the
+open PRs at 2026-11-20 19:45 UTC: the brief's live swing-alert requirement is delivered by several competing
+implementations (PRs #26, #27, #36, #39, #40, #41, #42, #43) plus the already-merged PR #28. This session
+chooses **one canonical implementation** (PR #43), integrates the two other non-overlapping verified PRs
+(#38 trade-toggle fix, #37 source-audit page), closes the duplicates, re-verifies the combined site line by
+line, publishes GitHub Pages, and merges.
+
+| # | Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|---|
+| F1 | Verify PR #43 (canonical swing-alert system) against official docs and run its test suite | done | bbdad1e1 | review only (branch `arena/13603ac5-demo3`) | docs.kalshi.com get-markets (`tickers`, `limit` default 100 / max 1000, `previous_price_dollars`, `last_price_dollars`, `yes_bid/ask_dollars`, `volume_fp`, `result`, `status`, `settlement_ts`, `settlement_value_dollars`), get-event (`event.settlement_sources` = `{name,url}`), market_settlement, fixed_point_migration; `scripts/price_alerts.py` 23/23 tests; `node --test` 37/37; `verify_root_site.py` 0 failures; `verify_site.py` PASSED; `check_site.py` passed; `price_alerts.py` regenerates committed `data/latest/alerts.json` (only `generated_at` differs) | F-alert-01 placeholder ROI screen (no user model); F-alert-02 cause links are official settlement references, not move attributions |
+| F2 | Integrate canonical alert system + trade-toggle fix (#38) + source-audit page (#37) into this branch | in progress | bbdad1e1 | `alerts.html`, `assets/alerts*.js`, `scripts/price_alerts.py`, `scripts/build_root_site.py`, `data/latest/alerts.json`, `data/latest/verified_market_meta.json`, `assets/trade.js` (#38), `audit/**` (#37), `COORDINATION.md` | same as F1; #38 diff reviewed (checkbox sync); #37 self-contained audit page | conflicts resolved on `COORDINATION.md` only |
+| F3 | Close duplicate alert PRs (#26, #27, #36, #39, #40, #41, #42) and record the decision | done | bbdad1e1 | GitHub PRs + `COORDINATION.md` | each superseded by PR #43 (canonical) or merged | duplicate alert implementations; see collision record above |
+| F4 | Re-verify combined site line by line, confirm build + no broken links | in progress | bbdad1e1 | `scripts/verify_root_site.py`, `scripts/verify_site.py`, `scripts/check_site.py`, `scripts/verify_rows.py` | official source links per row; unverified left blank + flagged | none |
+| F5 | Publish GitHub Pages, create final PR, merge, confirm deploy | in progress | bbdad1e1 | `main`, `COORDINATION.md` | Pages build status | none |
+
+### Session bbdad1e1 — decision on the duplicate alert PRs
+
+Canonical choice: **PR #43 (`arena/13603ac5-demo3`)**. Rationale: it is the latest, most complete
+implementation; it refactors PR #42's monolith into `alerts-core.js` + `alerts-dashboard.js`; it adds the
+committed collector (`scripts/price_alerts.py`), the verified market-metadata snapshot
+(`data/latest/verified_market_meta.json`), the yes/no resolution feed, and official cause/event links, and
+its whole suite passes. PR #42 is its direct predecessor and is superseded. PRs #26/#27/#36/#39/#40/#41 are
+earlier competing implementations of the same feature. PR #38 (trade-toggle fix) and PR #37 (source audit)
+are non-overlapping and are integrated alongside. Every closed PR keeps its full branch history in the
+repository; nothing is lost.
