@@ -108,7 +108,9 @@ def build_requirements():
         "<a href='model.html'>model.html</a> + <a href='data/latest/roi_model.json'>roi_model.json</a>",
         "implemented", "ok", [GH + "model/build_roi_model.py", D["get_markets"]],
         "The screen is published and deterministic, but its parameters are explicitly UNCALIBRATED: "
-        "the demo data cannot fit or validate them (see model.html -> calibration feasibility).")
+        "the demo data cannot fit or validate them (see model.html -> calibration feasibility). The chat "
+        "also shows the dashboard's documented heuristic score next to each row and labels which of the "
+        "two admitted it, so the two never read as one verified number.")
     row("B-07", "Track live events until they resolve, and how they resolved (yes/no).",
         "Resolution watcher in <a href='assets/alerts.js'>assets/alerts.js</a> (`GET /markets?tickers=…`, "
         "`result` = yes/no) feeding both chats; plus <a href='dashboard.html'>dashboard</a> &sect;3",

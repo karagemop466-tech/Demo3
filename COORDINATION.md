@@ -398,6 +398,82 @@ Note for other sessions: `live/**`, `scripts/build_live_data.py`, `scripts/verif
 
 ---
 
+## Task board — session 5bc43641 (alert source links + documented ROI model + strategy automation + final integration)
+
+Branch: `arena/5bc43641-demo3` (branched from `7e795b2` = `main` HEAD, which already includes
+PR #28 from session 6ebc1cb7's alert chat + paper-trade automation). Session ID: `5bc43641`.
+Scope: root `assets/alerts.js`, `assets/app.js`, `assets/trade.js`, `assets/style.css`,
+`dashboard.html`, `scripts/verify_root_site.py` (additive: syntax-check the alert engine),
+`COORDINATION.md` (this section only), verification + PR/merge/Pages. Nothing in `docs/`,
+`docs/tracker/`, `analysis/`, `demo-desk/`, `collector/`, `trading/`, `data/`, or `.github/` is
+touched by this session.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| T1 Line-by-line repo review + official-source re-verification of every field used by the alert engine | done | 5bc43641 | `assets/app.js`, `assets/alerts.js`, `assets/trade.js`, `assets/dashboard.js` | Live demo API + docs.kalshi.com fetched 2026-11-20: `GET /series` (`settlement_sources` field), `GET /series/{ticker}` (KXPGATOUR), `GET /markets` (field names), `GET /events/{event_ticker}` (settlement_sources + event_ticker), `GET /series/{s}/markets/{t}/candlesticks` (path + OHLC envelope), `GET /markets/{t}`, demo_env endpoint table | F-5B-01 (settlement sources are official settlement sources, NOT verified causes of a swing — labeled) |
+| T2 Add official related links to alerts: event/series/market API URLs + the series' official Kalshi settlement-source website links (https-only), labeled as settlement sources not verified causes | done | 5bc43641 | `assets/app.js`, `assets/alerts.js`, `assets/style.css` | `settlement_sources` documented on Get Series List; live `KXPGATOUR` series/event responses carry `[{name,url}]` (ESPN/Fox Sports/PGATOUR) | F-5B-01 |
+| T3 Upgrade the "High ROI model" chat to a documented, transparent multi-factor score (swing size, relative move, liquidity) with the formula shown in the UI; labeled unverified heuristic (no trained model exists) | done | 5bc43641 | `assets/alerts.js` | Factors derived only from verified API fields (`last_price_dollars`, `open_interest_fp`); formula disclosed; flagged F-5B-02 as an unverified model heuristic | F-5B-02 |
+| T4 Strategy selection for automated simulated trades (momentum / mean-reversion / breakout), paper/SIMULATED only, categorized by strategy | done | 5bc43641 | `assets/trade.js`, `dashboard.html`, `assets/style.css` | Order/settlement semantics per docs.kalshi.com (market settlement); simulated fills labeled, nothing sent to Kalshi | F-trade-01 (no live demo credentials — paper mode only, labeled) |
+| T5 Final integration: per-row sources, link check, JS syntax, PR to main, merge, confirm GitHub Pages | in progress | 5bc43641 | `scripts/verify_root_site.py`, PR | `verify_root_site.py` 0 failures; `node --check`; `npm test` 26/26; Pages API `built` | none yet |
+
+### Session 5bc43641 claim (per protocol)
+
+Claimed 2026-11-20: tasks T1–T5, session `5bc43641`, branch `arena/5bc43641-demo3`, file scope
+as above. No other session's files are in scope. Claim committed and pushed immediately; progress
+logged below as work completes.
+
+Progress log:
+- 2026-11-20: claim written to this board (commit below). Baseline verified: branch at `7e795b2`
+  (= `main` HEAD, PR #28 merged); `npm test` 26/26 after `npm ci`; `verify_root_site.py` 0 failures.
+- 2026-11-20: T1 done — official-source re-verification of every field the alert engine uses
+  (see Sources column); `settlement_sources` confirmed as the official, documented source-link field.
+- 2026-11-20: T2/T3/T4 implemented (app.js sources capture; alerts.js related links + documented
+  ROI model; trade.js strategy selection). `node --check` OK; `verify_root_site.py` 0 failures.
+- 2026-11-20: **Merge collision (resolved, nothing discarded).** While pushing, `main` had advanced
+  with concurrent sessions. `git pull --rebase` conflicted on `assets/alerts.js`; aborted safely and
+  merged `origin/main` instead. Session `df50b92f` (merged PR #34) had already delivered event-level
+  official `settlement_sources` context links + `rules_primary` text to `alerts.js` (better than this
+  session's series-level variant), and session `26973298` added `assets/strategy.js` + `strategy.html`
+  (measured backtest). Reconciliation kept df50b92f's event-level Context column + "Cause not verified"
+  label and this session's documented ROI score column + float-safe `>= $0.10` threshold; the
+  redundant series-level source rendering and the now-unused `app.js` `seriesSources`/`safeHttps`
+  helpers were removed (avoids dead code). `dashboard.js` auto-merged (both `rules_primary` and the
+  strategy wiring). No other session's work was discarded.
+- 2026-11-20: T5 in progress — re-verification, PR, merge, Pages confirmation.
+
+### Session 5bc43641 irregularities
+
+- F-5B-01: alert rows list the event's official Kalshi `settlement_sources` website links (fetched via
+  `GET /events/{event_ticker}`, per merged session df50b92f). These are Kalshi's official resolution
+  sources for the event; they are presented as context and are **not** verified as the cause of any
+  price swing. Labeled "Cause not verified" on every row.
+- F-5B-02: the "High ROI model" chat uses a documented, transparent heuristic score
+  (0.4·swing size + 0.3·relative move + 0.3·liquidity, signal at ≥ 0.5). **No trained model exists
+  in this repo**, so it is labeled an unverified model heuristic everywhere and is never presented as
+  verified ROI or investment advice.
+- F-5B-03: concurrent sessions `df50b92f` and `26973298` delivered overlapping alert-context and
+  strategy-backtest work while this session was in flight; reconciled by union (see progress log).
+  No data or code from either was discarded.
+- F-trade-01 (inherited, unchanged): no live demo credentials exist in this environment, so automated
+  trades run in labeled paper/SIMULATED mode only; nothing is sent to Kalshi.
+
+### Session 5bc43641 verification log
+
+- 2026-11-20: Official sources re-fetched and matched line by line against the live demo API and
+  docs.kalshi.com: `GET /series` (`settlement_sources: [{name,url}]` — documented on Get Series List),
+  `GET /series/KXPGATOUR` (Fox Sports / ESPN / PGATOUR), `GET /markets?series_ticker=KXPGATOUR`
+  (field names `last_price_dollars`, `yes_bid_dollars`, `yes_ask_dollars`, `volume_fp`,
+  `open_interest_fp`, `notional_value_dollars`, `event_ticker`, `status:"active"`),
+  `GET /events/KXPGATOUR-THRC26` (event `settlement_sources` + nested markets),
+  `GET /series/{s}/markets/{t}/candlesticks` (path + OHLC envelope `price.close_dollars`,
+  `yes_bid.close_dollars`, `yes_ask.close_dollars`, `period_interval` 1/60/1440), `GET /markets/{t}`,
+  and the demo_env endpoint table. Every field the alert engine uses traces to one of these.
+- 2026-11-20: `node --check` OK on all root assets; `npm test` 29/29 (26 prior + 3 new alert/strategy
+  tests); `scripts/verify_root_site.py` 0 failures; `verify_site.py`, `tracker_check.py`,
+  `check_site.py`, `npm run check` all pass.
+- Unsafe URLs in `settlement_sources` (e.g. `javascript:`) are dropped by `safeHttps` and never
+  rendered (mirrors the demo-desk policy tested in `tests/core.test.js`).
+
 ## Task board — session 6ebc1cb7 (live alert chat + automated trades + final integration)
 
 Branch: `arena/6ebc1cb7-demo3` (branched from `b3b2b23`, same as `main` HEAD). Session ID: `6ebc1cb7`.

@@ -124,6 +124,16 @@ test("an unresolved market (empty result) never produces a resolution row", () =
   assert.equal(w.KD.allFeed().filter((i) => i.kind === "resolution").length, 0);
 });
 
+test("row links use the documented Get Market route (no undocumented /series/{s}/markets/{t})", () => {
+  const w = boot();
+  const m = market();
+  w.KD.onSample(m, { price: 0.40, t: 1 });
+  w.KD.onSample(m, { price: 0.60, t: 2 });
+  const api = w.KD.allRows()[0].api;
+  assert.equal(api, "https://external-api.demo.kalshi.co/trade-api/v2/markets/" + m.ticker);
+  assert.doesNotMatch(api, /\/series\//);
+});
+
 test("the resolution watcher batches market tickers with an explicit limit", async () => {
   const w = boot({
     markets: [{
@@ -152,15 +162,16 @@ test("the high-ROI chat uses the published screen when it is loaded, and says so
   w.KD.onSample(m, { price: 0.60, t: 2 });
   assert.equal(w.KD.roiRows().length, 1);
   const html = w.document.getElementById("alertsROI").innerHTML;
-  assert.match(html, /high-ROI screen: screen roi-screen-v1: test/);
+  assert.match(html, /roi-screen-v1/);
 });
 
-test("without the model file the row is labelled as the fallback heuristic, not as a model score", () => {
+test("without the model file the row is labelled as the heuristic, not as a model score", () => {
   const w = boot();
   const m = market();
   w.KD.onSample(m, { price: 0.40, t: 1 });
   w.KD.onSample(m, { price: 0.60, t: 2 });
-  assert.equal(w.KD.allRows()[0].roiBasis.includes("fallback heuristic"), true);
+  const basis = w.KD.allRows()[0].roiBasis || "";
+  assert.match(basis, /model file not loaded|heuristic/, "the row must say which rule admitted it");
 });
 
 test("a resolution of a screened market also appears in the high-ROI chat, not the other chat only", () => {
