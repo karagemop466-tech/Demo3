@@ -171,7 +171,7 @@ Why a separate folder: `main` already holds `docs/` (session 00a943bd) and root-
 | T8 Suggestions decision board | done | e2aacbd6 | `docs/tracker/suggestions.html`, `data/suggestions.json` | Derived from flags; nothing implemented | — |
 | T9 Questions / gaps | done | e2aacbd6 | `docs/tracker/questions.html`, `data/questions.json` | Sources cited per question | Q-01…Q-14 |
 | T10 Build + link/source check + DOM test | done | e2aacbd6 | `scripts/tracker_build.py`, `scripts/tracker_check.py` | `tracker_check.py` OK; jsdom loaded all 14 pages, 0 errors | — |
-| T11 PR → merge → Pages check | in progress | e2aacbd6 | — | See log below | — |
+| T11 PR → merge → Pages check | done | e2aacbd6 | — | PR #8 merged (merge commit 75dac00 on main); Pages build `built` at 75dac00; live tracker verified | — |
 
 Change requests (logged, not edited — shared files):
 - CR-e2aacbd6-1: `README.md` (shared) should link the tracker: `docs/tracker/index.html`. Layout and checks are described in `docs/tracker/README.md`.
@@ -185,3 +185,7 @@ Verification (e2aacbd6):
 
 Log:
 - 2026-11-20 e2aacbd6 — Claimed T1–T11 on `arena/e2aacbd6-demo3`. Built the tracker, verified it, opened PR #8. The merge was blocked because `main` had moved (DIRTY, add/add on overlapping filenames). Resolved by moving the tracker into `docs/tracker/` and merging `main`; no other session's file was changed (COORDINATION kept with appended section).
+- 2026-11-20 e2aacbd6 — PR #8 (`arena/e2aacbd6-demo3` → `main`): MERGED with a merge commit (`gh pr merge 8 --merge`). `main` is now at 75dac00. Before merging, `main` was merged in twice more (PR #9, #10 from session 6908a11a); their board and files were kept, and only the tracker section was appended.
+- 2026-11-20 e2aacbd6 — GitHub Pages: build for 75dac00 reports `built`. Live pages checked with the page-fetch tool: https://karagemop466-tech.github.io/Demo3/docs/tracker/ (home, counts 19 series / 18 verified / 12 markets / 3 finalized / 22 flags) and https://karagemop466-tech.github.io/Demo3/docs/tracker/data/snapshot.json. The Pages source was not changed.
+- Still open for the owner (not blocking, see Flagged and Questions): demo API key for portfolio/trades (Q-01); browser CORS for the live dashboard (F-19; falls back to snapshot); gasoline series (F-18).
+
