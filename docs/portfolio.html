@@ -24,6 +24,15 @@ No credentials exist in this workspace, so no balances, positions, fills, or ord
 <tr><td>Portfolio performance</td><td><span class="flag unv">unverified - no data</span></td></tr>
 <tr><td>Strategies</td><td><span class="flag unv">none - needs trade data</span></td></tr>
 </tbody></table></div>
+<h2>Demo account state (automated pull)</h2>
+<p class="note">A scheduled GitHub Actions workflow pulls balance, positions, orders, and fills from the official demo API when credentials are configured as repository secrets (<code>KALSHI_KEY_ID</code>, <code>KALSHI_PRIVATE_KEY</code>). Until then the tables below stay blank and flagged &mdash; values are never inferred. Implementation: <code>scripts/kalshi_client.py</code> (signing traced line-by-line from the <a href="https://github.com/Kalshi/kalshi-starter-code-python" target="_blank" rel="noopener">official starter code</a>), <code>scripts/portfolio_pull.py</code>, <code>.github/workflows/kalshi-portfolio.yml</code>.</p>
+<div data-render="portfolio-state"></div>
+<h2>Strategy playbook (proposed &mdash; review before use)</h2>
+<p class="note">Strategies derived from the trade-type taxonomy below. <b>None are implemented or auto-executed.</b> Choose a path on <a href="suggestions.html">Suggestions</a> before anything runs with real (demo) funds.</p>
+<div data-render="strategies"></div>
+<h2>Order ticket (dry run)</h2>
+<p class="note">Compose an order and see the exact request the official API expects. Nothing is sent from this page. Execution path: <code>scripts/trade_runner.py</code> with demo credentials (see its header for the safety rules). Order shape verified against <a href="https://docs.kalshi.com/getting_started/quick_start_create_order.md" target="_blank" rel="noopener">Quick Start: Create your first order</a>.</p>
+<div data-render="order-ticket"></div>
 <h2>How trades will be categorised</h2>
 <p class="note">Fields below are defined in the Kalshi API. Each one comes from the market object, so it can be recorded for every trade once data is available.</p>
 <div data-render="schema"></div>

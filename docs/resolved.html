@@ -14,13 +14,16 @@
 <p class="lead">Final results as reported by the Kalshi API. Each contract pays $1 to the side that wins. Markets that are still open are tracked on the live dashboard until they resolve.</p>
 <h2>Settled markets in the snapshot</h2>
 <div data-render="resolved"></div>
+<h2>Resolution tracker (automated pipeline, all five topics)</h2>
+<p class="note">Every settled market in scope (gas, elections, culture, crypto, golf) is recorded with its final <code>result</code> (<b>yes</b> or <b>no</b>) and settlement timestamp, collected twice hourly from the official demo API and accumulated across runs. Rows re-verified against the live API by <code>scripts/verify_rows.py</code> (settlement results must match exactly).</p>
+<div data-render="pipeline-resolved"></div>
 <h2>How results are recorded</h2>
 <ul>
 <li>The <code>result</code> field is <code>yes</code>, <code>no</code>, or <code>scalar</code>, set once the market is determined. <a href="https://docs.kalshi.com/getting_started/market_lifecycle.md" target="_blank" rel="noopener">source</a></li>
 <li>Settled markets move to the <code>finalized</code> status, and settlement pays out positions. <a href="https://docs.kalshi.com/getting_started/market_lifecycle.md" target="_blank" rel="noopener">source</a></li>
 </ul>
 <h2>Status of other categories</h2>
-<p>Settled markets were queried only for the gas series (KXAAAGASW). No settled results were pulled for elections, culture, crypto, or golf, so none are listed here. That is not a claim that none exist. Tracked markets on the <a href="dashboard.html">dashboard</a> show their final result once Kalshi reports it.</p>
+<p>The verified snapshot above recorded settled results for the gas series (KXAAAGASW) only. The automated pipeline section covers settled markets across all five topics on every run since it started, so the combined table grows over time. Tracked markets on the <a href="dashboard.html">dashboard</a> show their final result once Kalshi reports it.</p>
 
 </main>
 <footer>Snapshot date (UTC): <span id="snapshot-date">2026-11-20</span>. Data from the public Kalshi Trade API and Kalshi docs.

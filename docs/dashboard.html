@@ -13,6 +13,9 @@
 <h1>Live dashboard</h1>
 <p class="lead">Top open markets across gas prices, elections, culture, crypto, and golf, refreshed every 60 seconds from the public Kalshi API.</p>
 <div id="live-status" class="banner">Loading live data...</div>
+<h2>Top live events by dollar volume (demo pipeline snapshot)</h2>
+<p class="note">Ranked by <b>derived dollar volume</b> = <code>volume_fp &times; notional_value_dollars</code> (arithmetic on two API fields; every input shown per row). Snapshots are collected twice hourly by GitHub Actions from the official <b>demo</b> Trade API (<code>https://external-api.demo.kalshi.co/trade-api/v2</code>) and each row links to the exact request that produced it. Collector: <code>scripts/collect_kalshi_data.py</code>. Row-level re-verification: <code>scripts/verify_rows.py</code>.</p>
+<div data-render="top-events"></div>
 <h2>Top open markets</h2>
 <div class="card" data-live="gas elections culture crypto golf" data-limit="30"></div>
 

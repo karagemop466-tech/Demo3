@@ -13,6 +13,12 @@
 <h1>Sources</h1>
 <p class="lead">Official Kalshi pages and API responses used in this site, with the date they were checked (2026-11-20 UTC).</p>
 <div data-render="sources"></div>
+<h2>Automated data pipeline sources</h2>
+<p class="note">Endpoints and documentation used by the twice-hourly collector (<code>scripts/collect_kalshi_data.py</code>) and the row-level verifier (<code>scripts/verify_rows.py</code>). The collector's full request log for the latest run is published at <a href="../data/latest/meta.json" target="_blank" rel="noopener">data/latest/meta.json</a>.</p>
+<div data-render="pipeline-sources"></div>
+<h2>Row re-verification report (latest CI run)</h2>
+<p class="note">Static fields and settlement results must match the live API exactly; price drift between collection and verification is reported but tolerated (markets move). Report file: <a href="../data/latest/verification_report.json" target="_blank" rel="noopener">data/latest/verification_report.json</a>.</p>
+<div data-render="verify-report"></div>
 
 </main>
 <footer>Snapshot date (UTC): <span id="snapshot-date">2026-11-20</span>. Data from the public Kalshi Trade API and Kalshi docs.

@@ -6,7 +6,8 @@
 (function () {
   'use strict';
 
-  var API = 'https://external-api.kalshi.com/trade-api/v2';
+  var API = 'https://external-api.demo.kalshi.co/trade-api/v2'; /* demo endpoint recommended by the
+   * project brief; official list: https://docs.kalshi.com/getting_started/api_environments */
   var ROOT = document.body.getAttribute('data-root') || './';
   var PAGE = document.body.getAttribute('data-page') || '';
   var WATCH_KEY = 'kalshi_watchlist_v1';
@@ -262,6 +263,15 @@
       if (what === 'repo') html = renderRepo();
       if (what === 'decisions') html = renderDecisions();
       if (what === 'schema') html = renderPortfolioSchema();
+      if (what === 'top-events') { renderTopEvents(el); return; }
+      if (what === 'pipeline-markets') { renderPipelineMarkets(el, cat); return; }
+      if (what === 'pipeline-resolved') { renderPipelineResolved(el); return; }
+      if (what === 'portfolio-state') { renderPortfolioState(el); return; }
+      if (what === 'strategies') html = renderStrategies();
+      if (what === 'order-ticket') html = renderOrderTicket();
+      if (what === 'pipeline-flags') html = renderPipelineFlags();
+      if (what === 'pipeline-sources') { renderPipelineSources(el); return; }
+      if (what === 'verify-report') { renderVerifyReport(el); return; }
       if (what === 'counts') {
         html = '<div class="grid">' +
           kpi(DATA.series.length, 'series in verified snapshot') +
@@ -593,6 +603,255 @@
     return (d.getMonth() + 1) + '/' + d.getDate() + ' ' + pad(d.getHours()) + ':00';
   }
 
+  /* ---------- automated pipeline renderers (data/latest/** by CI collector) ---------- */
+  function pipelineUrl(name) { return ROOT + '../data/latest/' + name; }
+  function getPipeline(name) {
+    return fetch(pipelineUrl(name)).then(function (r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status + ' ' + name);
+      return r.json();
+    });
+  }
+  function pipelineFail(el, e, name) {
+    el.innerHTML = '<p class="muted">Pipeline data unavailable (' + esc(name) + '): ' + esc(e.message) +
+      '. The collector publishes it twice hourly to <code>data/latest/</code> on the main branch.</p>';
+  }
+
+  function renderTopEvents(el) {
+    getPipeline('top_events.json').then(function (d) {
+      var rows = (d.overall || []).map(function (e, i) {
+        return [String(i + 1), esc(e.topic), esc(e.event_ticker), esc(e.title), String(e.market_count),
+          fmtNum(e.volume_dollars_derived, 2), fmtNum(e.volume_24h_dollars_derived, 2),
+          fmtNum(e.open_interest_dollars_derived, 2), link(e.source_url, 'API request')];
+      });
+      var html = table(['Rank', 'Topic', 'Event', 'Title', 'Markets',
+        'Volume $ (derived)', 'Volume 24h $ (derived)', 'Open interest $ (derived)', 'Source'],
+        rows, [0, 4, 5, 6, 7]);
+      html += '<h3>Top events per topic</h3>';
+      ['gas', 'elections', 'culture', 'crypto', 'golf'].forEach(function (t) {
+        var tr = ((d.by_topic || {})[t] || []).slice(0, 10).map(function (e, i) {
+          return [String(i + 1), esc(e.event_ticker), esc(e.title),
+            fmtNum(e.volume_dollars_derived, 2), link(e.source_url, 'API request')];
+        });
+        html += '<h4>' + esc(t) + '</h4>' + table(
+          ['Rank', 'Event', 'Title', 'Volume $ (derived)', 'Source'], tr, [0, 3]);
+      });
+      html += '<p class="note">Ranking metric: <code>' + esc(d.ranking_metric || '') + '</code>. ' +
+        'Snapshot collected ' + esc(d.retrieved_at || '') + ' UTC from the official demo API. ' +
+        'Derived values are arithmetic on the two linked API fields; nothing is inferred.</p>';
+      el.innerHTML = html;
+    }).catch(function (e) { pipelineFail(el, e, 'top_events.json'); });
+  }
+
+  function renderPipelineMarkets(el, cat) {
+    if (!cat) { el.innerHTML = ''; return; }
+    getPipeline('topic_' + cat + '.json').then(function (d) {
+      var rows = (d.markets || []).slice(0, 40).map(function (m) {
+        return [link(m.source_url, m.ticker), esc(m.title), fmtPrice(m.last_price_dollars),
+          fmtPrice(m.yes_bid_dollars) + ' / ' + fmtPrice(m.yes_ask_dollars),
+          fmtNum(m.volume_fp), fmtNum(m.open_interest_fp), outcomeChip(m), link(m.source_url, 'API request')];
+      });
+      el.innerHTML = '<p class="note">Topic <b>' + esc(cat) + '</b>: ' + esc(String(d.count || 0)) +
+        ' open markets at snapshot ' + esc(d.retrieved_at || '') + ' UTC. Classification rule is stored per row in ' +
+        '<a href="' + pipelineUrl('topic_' + cat + '.json') + '" target="_blank" rel="noopener">topic_' + esc(cat) + '.json</a>.</p>' +
+        table(['Market', 'Title', 'Last', 'YES bid / ask', 'Volume (contracts)', 'Open interest', 'Status', 'Source'],
+          rows, [2, 4, 5]);
+    }).catch(function (e) { pipelineFail(el, e, 'topic_' + cat + '.json'); });
+  }
+
+  function renderPipelineResolved(el) {
+    getPipeline('resolutions.json').then(function (d) {
+      var rows = (d.resolutions || []).map(function (r) {
+        return [link(r.source_url, r.ticker), esc(r.title), esc(r.topic),
+          '<b>' + esc(String(r.result || '').toUpperCase()) + '</b>',
+          esc(r.settlement_ts), esc(r.settlement_value_dollars), link(r.source_url, 'API request')];
+      });
+      el.innerHTML = table(['Market', 'Title', 'Topic', 'Result', 'Settled (UTC)',
+        'Settlement value ($)', 'Source'], rows, [5]);
+    }).catch(function (e) { pipelineFail(el, e, 'resolutions.json'); });
+  }
+
+  function renderPortfolioState(el) {
+    getPipeline('portfolio.json').then(function (p) {
+      var html = '';
+      if (p.status !== 'ok') {
+        html += '<div class="banner"><b>Not connected (' + esc(p.status || 'unknown') + '). ' +
+          esc(p.note || '') + '</b></div>' +
+          table(['Endpoint', 'Status', 'Source'],
+            [['balance / positions / orders / fills / settlements',
+              '<span class="flag unv">blank - credentials missing</span>',
+              link('https://docs.kalshi.com/getting_started/api_keys', 'api_keys docs')],
+             ['request signing (RSA-PSS SHA-256, official starter code)',
+              '<span class="flag">implemented in scripts/kalshi_client.py</span>',
+              link('https://github.com/Kalshi/kalshi-starter-code-python', 'starter code')],
+             ['scheduled pull workflow',
+              '<span class="flag">.github/workflows/kalshi-portfolio.yml (runs when secrets exist)</span>',
+              link('https://docs.kalshi.com/getting_started/demo_env', 'demo env docs')]]);
+        html += '<p class="note">To activate: create a demo-account API key (' +
+          link('https://docs.kalshi.com/getting_started/demo_env', 'demo env guide') + '), then add repository secrets ' +
+          '<code>KALSHI_KEY_ID</code> and <code>KALSHI_PRIVATE_KEY</code>. The hourly workflow fills these tables ' +
+          'automatically. Values are never fabricated.</p>';
+        el.innerHTML = html;
+        return;
+      }
+      html += '<div class="banner ok">Connected to the demo account. Snapshot ' + esc(p.retrieved_at || '') + ' UTC.</div>';
+      html += kpi(fmtNum(p.balance && p.balance.balance, 2) || '-', 'balance ($)');
+      html += kpi((p.positions || []).length, 'positions');
+      html += kpi((p.fills || []).length, 'fills');
+      html += kpi((p.settlements || []).length, 'settlements');
+      var posRows = (p.positions || []).map(function (o) {
+        return [esc(o.ticker || o.market_ticker || ''), fmtNum(o.position || o.count || o.quantity),
+          fmtNum(o.exposure), fmtPrice(o.market_exposure_dollars),
+          link('https://external-api.demo.kalshi.co/trade-api/v2/portfolio/positions', 'API request')];
+      });
+      html += '<h3>Positions</h3>' + table(['Market', 'Net position', 'Exposure', 'Market exposure $', 'Source'], posRows, [1, 2, 3]);
+      var catTotals = {};
+      var fillRows = (p.fills || []).map(function (f) {
+        var c = f.categorization || {};
+        var bucket = c.price_bucket || 'unverified';
+        catTotals[bucket] = (catTotals[bucket] || 0) + (num(f.count || f.count_fp) || 0);
+        return [esc(f.fill_id || ''), esc(f.ticker || ''), esc(f.side || ''),
+          fmtPrice(f.yes_price || f.yes_price_dollars), esc(f.count || f.count_fp),
+          esc(c.price_bucket), esc(c.direction), esc(c.topic),
+          link(f.source_url || 'https://external-api.demo.kalshi.co/trade-api/v2/portfolio/fills', 'API request')];
+      });
+      html += '<h3>Fills with automatic categorisation</h3>' +
+        table(['Fill', 'Market', 'Side', 'YES price', 'Count', 'Price bucket', 'Direction', 'Topic', 'Source'],
+          fillRows, [4]);
+      var catRows = Object.keys(catTotals).map(function (k) { return [esc(k), fmtNum(catTotals[k])]; });
+      html += '<h3>Volume by price bucket</h3>' + table(['Bucket', 'Contracts'], catRows, [1]);
+      el.innerHTML = html;
+    }).catch(function (e) { pipelineFail(el, e, 'portfolio.json'); });
+  }
+
+  function renderStrategies() {
+    var S = [
+      ['S1', 'Directional favorite', 'price_bucket=favorite (entry &gt; $0.90)',
+       'Buy YES on high-probability outcomes near close; collect the $1 settlement on winners.',
+       'Small edge per contract; a single loss wipes ~10 wins. Cap per-event exposure.',
+       'https://docs.kalshi.com/getting_started/market_settlement'],
+      ['S2', 'Longshot basket', 'price_bucket=longshot (entry &lt; $0.10)',
+       'Buy many cheap YES contracts across events; positive skew, most expire worthless.',
+       'Position size 1/10 of S1 per event. Only with settlement sources rated official.',
+       'https://docs.kalshi.com/getting_started/market_settlement'],
+      ['S3', 'Momentum on 1-minute candles', 'price movement &gt; 5c within 15 min with rising volume',
+       'Enter in the move direction using the candlesticks feed; exit on the first opposite candle.',
+       'Whipsaw risk in thin books. Require book depth &ge; 1,000 contracts at best price.',
+       'https://docs.kalshi.com/api-reference/market/get-market-candlesticks'],
+      ['S4', 'Liquidity provision', 'spread &ge; 3c and depth &le; 500 contracts at best bid',
+       'Rest a bid 1c above best bid, capture the spread as the market converges.',
+       'Adverse selection around news. Use self-trade prevention and cancel on status change.',
+       'https://docs.kalshi.com/getting_started/orderbook_responses'],
+      ['S5', 'Hold-to-settlement vs sell-before-close', 'topic + days-to-close buckets',
+       'Compare realised results of holding to settlement against selling at last price.',
+       'Settlement timing irregularities (see I-05/I-11). Prefer can_close_early markets.',
+       'https://docs.kalshi.com/getting_started/market_lifecycle'],
+      ['S6', 'Category rotation on dollar-volume rank', 'topic top-decile by derived dollar volume',
+       'Concentrate risk in the most active events each day using the pipeline ranking.',
+       'Volume is not direction. Combine with S1-S3 entries only.',
+       'https://docs.kalshi.com/getting_started/quick_start_market_data']
+    ];
+    var rows = S.map(function (s) {
+      return [esc(s[0]), esc(s[1]), esc(s[2]), esc(s[3]), esc(s[4]),
+        '<span class="flag unv">proposed - not implemented</span>', link(s[5], 'source')];
+    });
+    return table(['ID', 'Strategy', 'Trade type / trigger', 'Rule', 'Risk controls', 'Status', 'Source'], rows);
+  }
+
+  function renderOrderTicket() {
+    return '<div class="card" id="order-ticket">' +
+      '<p class="note"><b>Dry run only.</b> This form composes the documented request body; it never sends anything. ' +
+      'To execute on the demo account run <code>python scripts/trade_runner.py --dry-run</code> first, then without the flag ' +
+      'once the strategy is approved (see the script header for its safety rules).</p>' +
+      '<div class="controls">' +
+      '<input id="ot-ticker" placeholder="market ticker, e.g. KXAAAGASW-26NOV26-GAS325" size="42">' +
+      '<select id="ot-side"><option value="bid">bid (buy)</option><option value="ask">ask (sell)</option></select>' +
+      '<input id="ot-count" type="number" min="1" value="1" style="width:80px" title="contracts">' +
+      '<input id="ot-price" value="0.0100" style="width:90px" title="limit price, dollars">' +
+      '<select id="ot-tif"><option>good_till_canceled</option><option>immediate_or_cancel</option><option>fill_or_kill</option></select>' +
+      '</div>' +
+      '<pre id="ot-preview" class="small"></pre>' +
+      '<p class="note">Endpoint: <code>POST /trade-api/v2/portfolio/orders</code> with headers ' +
+      '<code>KALSHI-ACCESS-KEY</code>, <code>KALSHI-ACCESS-SIGNATURE</code> (RSA-PSS SHA-256 base64 over ' +
+      '<code>timestamp + &quot;POST&quot; + &quot;/trade-api/v2/portfolio/orders&quot;</code>), ' +
+      '<code>KALSHI-ACCESS-TIMESTAMP</code> (ms). ' +
+      link('https://docs.kalshi.com/getting_started/quick_start_create_order', 'order quick start') + ' ' +
+      link('https://docs.kalshi.com/getting_started/api_environments', 'signing rules') + ' ' +
+      link('https://docs.kalshi.com/getting_started/order_errors', 'error codes') + '</p></div>';
+  }
+  function setupOrderTicket() {
+    var pre = document.getElementById('ot-preview'); if (!pre) return;
+    function upd() {
+      var body = {
+        ticker: document.getElementById('ot-ticker').value || '&lt;ticker&gt;',
+        side: document.getElementById('ot-side').value,
+        count: document.getElementById('ot-count').value || '1',
+        price: document.getElementById('ot-price').value || '0.0100',
+        time_in_force: document.getElementById('ot-tif').value,
+        self_trade_prevention_type: 'taker_at_cross',
+        client_order_id: '(generate a fresh UUID per order)'
+      };
+      pre.textContent = 'POST ' + API + '/portfolio/orders\n\n' + JSON.stringify(body, null, 2);
+    }
+    ['ot-ticker', 'ot-side', 'ot-count', 'ot-price', 'ot-tif'].forEach(function (id) {
+      var elx = document.getElementById(id); if (elx) elx.addEventListener('input', upd);
+    });
+    upd();
+  }
+
+  function renderPipelineFlags() {
+    var rows = [
+      ['I-11', 'API', 'The candlesticks endpoint at the older path shape /markets/{ticker}/candlesticks returns 404 on the demo deployment. The working official path is /series/{series_ticker}/markets/{ticker}/candlesticks with period_interval in minutes (1, 60, 1440). Verified live both ways 2026-11-20.', 'high',
+        'https://docs.kalshi.com/api-reference/market/get-market-candlesticks'],
+      ['I-12', 'Portfolio', 'Portfolio, fill, and order endpoints reject unauthenticated access. No demo API credentials were supplied to this project, so all account values remain blank and flagged. Discovery path: create demo API keys, add repo secrets KALSHI_KEY_ID / KALSHI_PRIVATE_KEY; the hourly workflow then fills the tables.', 'high',
+        'https://docs.kalshi.com/getting_started/api_keys'],
+      ['I-13', 'WebSockets', 'WebSocket connections require KALSHI-ACCESS-* auth headers at handshake. Browsers cannot attach headers to a WebSocket handshake, so a static page cannot stream WS data without a signed proxy. The dashboard therefore uses public REST polling (market data needs no auth) plus CI snapshots, and its banner says which mode is active.', 'medium',
+        'https://docs.kalshi.com/getting_started/quick_start_websockets'],
+      ['I-14', 'Environments', 'The verified snapshot in docs/data/verified.json was collected from the production endpoint, while the project brief specifies the demo endpoint. Both are official. The live panels and the automated pipeline now use the demo endpoint; the earlier snapshot rows keep their original production source links as provenance.', 'medium',
+        'https://docs.kalshi.com/getting_started/api_environments'],
+      ['I-15', 'Demo data', 'The demo exchange contains synthetic exchange-test series (for example KXDEMOFUTHOURLY hourly BTC demo markets and KXQUICKSETTLE test markets such as "1+1 = 2"). They rank high by volume in demo snapshots and must not be read as real-world markets.', 'medium',
+        'https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXQUICKSETTLE-20NOV26H0530-2'],
+      ['I-16', 'Ranking metric', 'The brief asks for highest dollar amount. The API publishes no dollar-volume field. The dashboard shows both the verbatim contracts ranking (verified snapshot) and a clearly labelled derived dollar volume (volume_fp x notional_value_dollars). The intended definition is an open question (Q on the Questions page).', 'medium',
+        'https://docs.kalshi.com/api-reference/market/get-market-candlesticks']
+    ];
+    return table(['ID', 'Area', 'Finding', 'Severity', 'Source'], rows.map(function (r) {
+      return [esc(r[0]), esc(r[1]), esc(r[2]), sevFlag(r[3]), link(r[4], 'source')];
+    }));
+  }
+
+  function renderPipelineSources(el) {
+    getPipeline('meta.json').then(function (m) {
+      var rows = Object.keys(m.official_docs || {}).map(function (k) {
+        return [esc(k), link(m.official_docs[k], m.official_docs[k]), 'official documentation'];
+      });
+      rows.unshift(['demo Trade API base', link(m.base_url, m.base_url),
+        'all market-data rows in data/latest/ (collector request log: ' + (m.api_calls || '?') + ' calls this run)']);
+      rows.push(['collector request log', link(pipelineUrl('meta.json'), 'data/latest/meta.json'),
+        'every URL requested by the latest run, with status codes']);
+      el.innerHTML = table(['Source', 'URL', 'Used for'], rows) +
+        '<p class="note">Topic classification this run: ' + esc(JSON.stringify(m.topic_counts || {})) +
+        (m.truncated ? ' | pagination truncation flags: ' + esc(JSON.stringify(m.truncated)) : '') + '</p>';
+    }).catch(function (e) { pipelineFail(el, e, 'meta.json'); });
+  }
+
+  function renderVerifyReport(el) {
+    getPipeline('verification_report.json').then(function (v) {
+      var s = v.summary || {};
+      var html = '<div class="grid">' +
+        kpi(s.checked || 0, 'checks run') + kpi(s.passed || 0, 'passed') +
+        kpi(s.hard_failures || 0, 'hard failures') + kpi(s.drift_notices || 0, 'price drift notices') + '</div>';
+      if ((v.hard_failures || []).length) {
+        html += table(['Check', 'Detail'], (v.hard_failures || []).map(function (f) {
+          return [esc(f.check), esc(f.detail)];
+        }));
+      } else {
+        html += '<p class="banner ok">Latest CI re-verification found no hard failures: every checked row matched the live API on its static fields and settlement results.</p>';
+      }
+      html += '<p class="note">Policy: ' + esc((v.policy && v.policy.static_fields) || '') + ' | ' +
+        esc((v.policy && v.policy.dynamic_fields) || '') + '</p>';
+      el.innerHTML = html;
+    }).catch(function (e) { pipelineFail(el, e, 'verification_report.json'); });
+  }
+
   /* ---------- decisions (suggestions page) ---------- */
   function setupDecisions() {
     document.querySelectorAll('.opts input[type=radio]').forEach(function (r) {
@@ -618,6 +877,7 @@
       DATA = d;
       renderSnapshots();
       setupDecisions();
+      setupOrderTicket();
       var stamp = document.getElementById('snapshot-date');
       if (stamp) stamp.textContent = d.meta.snapshot_date_utc;
       if (document.getElementById('detail')) setupDetailControls();
