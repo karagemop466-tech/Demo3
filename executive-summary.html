@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0b1527"><title>Executive Summary · Kalshi Demo Monitor</title><link rel="stylesheet" href="styles.css"></head>
+<body>
+  <main class="main-content" style="margin:0 auto;width:min(100%,1100px);padding:24px">
+    <header class="topbar"><a class="text-link" href="index.html#overview">← Dashboard</a><span class="env-badge"><i></i> DEMO · READ ONLY</span></header>
+    <section class="page active">
+      <div class="welcome-row"><div><div class="eyebrow">KALSHI DEMO MARKET MONITOR</div><h1>Executive summary</h1><p class="lede">What is established, what this prototype can monitor, and what still blocks a defensible decision.</p></div></div>
+      <div class="panel">
+        <h2>Key facts verified from Kalshi documentation</h2>
+        <ul class="status-list">
+          <li><span class="status-check">✓</span><span>The recommended demo REST API base is <code>https://external-api.demo.kalshi.co/trade-api/v2</code>; Kalshi also lists <code>https://demo-api.kalshi.co/trade-api/v2</code> as supported.</span></li>
+          <li><span class="status-check">✓</span><span>The recommended demo WebSocket is <code>wss://external-api-ws.demo.kalshi.co/trade-api/ws/v2</code>; the supported host is <code>wss://demo-api.kalshi.co/trade-api/ws/v2</code>.</span></li>
+          <li><span class="status-check">✓</span><span>Kalshi documents market fields for price, status, volume, open interest, result and settlement metadata; its orderbook returns YES and NO bid levels with contract quantities.</span></li>
+          <li><span class="status-check">✓</span><span>Portfolio balance, positions, fills and order operations use authenticated endpoints. The documented WebSocket handshake is authenticated.</span></li>
+        </ul>
+      </div>
+      <div class="panel" style="margin-top:14px">
+        <h2>Implementation and limitations</h2>
+        <ul class="status-list">
+          <li><span class="status-check">✓</span><span>The dashboard attempts direct, read-only requests to the public demo REST API. It displays no fabricated rows and reports fetch failure if browser CORS/network access prevents data retrieval.</span></li>
+          <li><span class="status-check">✓</span><span>It filters open-market discovery for gas prices, elections, culture, crypto and golf using API event metadata and title/ticker text. Topic matches are discovery heuristics, not guaranteed official classifications.</span></li>
+          <li><span class="status-flag">!</span><span>The leading activity view sorts by reported 24-hour contract volume, not dollars. A dollar-turnover formula and its period have not been validated; dollar ranking remains blank and flagged.</span></li>
+          <li><span class="status-flag">!</span><span>Price graphs start capturing when a market is selected and are in-session only. Sampling cadence is selected by the Seconds/Minutes/Hours setting; no historical chart is backfilled or persisted.</span></li>
+          <li><span class="status-flag">!</span><span>Private account performance and trade execution are not connected. This static site does not collect or store private keys and places no orders. A secret-managed backend and explicit approval/safeguards are required.</span></li>
+        </ul>
+      </div>
+      <div class="panel" style="margin-top:14px"><div class="panel-title"><div><span class="panel-kicker">OFFICIAL REFERENCES</span><h2>Verified source index</h2></div></div>
+        <div class="table-scroll"><table><thead><tr><th>SOURCE</th><th>WHAT IT CONFIRMS</th></tr></thead><tbody>
+          <tr><td><a class="source-link" href="https://docs.kalshi.com/getting_started/api_environments" target="_blank" rel="noreferrer">API environments ↗</a></td><td>Demo REST and WebSocket endpoint URLs and environment separation.</td></tr>
+          <tr><td><a class="source-link" href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noreferrer">Get Markets ↗</a></td><td>Market status and returned price, volume, result and settlement fields.</td></tr>
+          <tr><td><a class="source-link" href="https://docs.kalshi.com/api-reference/events/get-events" target="_blank" rel="noreferrer">Get Events ↗</a></td><td>Event metadata including title/category and pagination options.</td></tr>
+          <tr><td><a class="source-link" href="https://docs.kalshi.com/api-reference/market/get-market-orderbook" target="_blank" rel="noreferrer">Get Market Orderbook ↗</a></td><td>Bid-only YES/NO order-book price levels and fixed-point contract quantities.</td></tr>
+          <tr><td><a class="source-link" href="https://docs.kalshi.com/getting_started/quick_start_market_data" target="_blank" rel="noreferrer">Market-data quick start ↗</a></td><td>Public REST market-data access examples and orderbook fields.</td></tr>
+          <tr><td><a class="source-link" href="https://docs.kalshi.com/getting_started/quick_start_websockets" target="_blank" rel="noreferrer">WebSocket quick start ↗</a></td><td>Authenticated WebSocket connection and market-data subscription examples.</td></tr>
+          <tr><td><a class="source-link" href="https://docs.kalshi.com/api-reference/portfolio/get-balance" target="_blank" rel="noreferrer">Get Balance ↗</a></td><td>Authenticated available balance and portfolio-value fields.</td></tr>
+          <tr><td><a class="source-link" href="https://docs.kalshi.com/api-reference/portfolio/get-positions" target="_blank" rel="noreferrer">Get Positions ↗</a></td><td>Authenticated market/event positions and reported exposure/P&amp;L fields.</td></tr>
+          <tr><td><a class="source-link" href="https://docs.kalshi.com/api-reference/portfolio/get-fills" target="_blank" rel="noreferrer">Get Fills ↗</a></td><td>Authenticated account fill records.</td></tr>
+          <tr><td><a class="source-link" href="https://docs.kalshi.com/getting_started/quick_start_create_order" target="_blank" rel="noreferrer">Create-order quick start ↗</a></td><td>Authenticated demo order workflow; not enabled in this prototype.</td></tr>
+        </tbody></table></div>
+      </div>
+      <div class="callout" style="margin-top:14px"><strong>Decision required:</strong> define the intended dollar-volume metric, approve category mapping, choose secure private-account architecture, and specify explicit trade safeguards. See <a href="index.html#review">Flagged for review</a> and <a href="index.html#suggestions">Suggestions</a> before making changes.</div>
+      <footer class="site-footer"><a href="README.md">Repository README ↗</a><a href="index.html#overview">Return to dashboard →</a></footer>
+    </section>
+  </main>
+</body>
+</html>
