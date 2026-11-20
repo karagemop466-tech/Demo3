@@ -176,6 +176,7 @@ NAV = [
     ("crypto.html", "Crypto"),
     ("golf.html", "Golf"),
     ("portfolio.html", "Portfolio"),
+    ("strategy.html", "Strategy lab"),
     ("trades.html", "Trades"),
     ("questions.html", "Questions"),
     ("suggestions.html", "Suggestions"),
@@ -223,6 +224,9 @@ Every table row links its source; blank cells are flagged on <a href="flagged.ht
 
 
 def write_page(name, title, active, body, scripts=()):
+    if name in EXTERNALLY_MAINTAINED and (ROOT / name).exists():
+        print("kept", name, "(maintained outside the generator)")
+        return
     (ROOT / name).write_text(shell(title, active, body, scripts))
     print("wrote", name)
 
@@ -1280,6 +1284,11 @@ def build_wrapped(name, title):
         print("WARN no body in", name)
         return
     write_page(name, title, name, inner, scripts=("assets/app.js", "assets/site.js"))
+
+
+# Pages whose live markup is maintained outside this generator (added by other sessions).
+# Regenerating them here would drop that work, so the generator leaves them untouched.
+EXTERNALLY_MAINTAINED = {"dashboard.html"}
 
 
 def main():

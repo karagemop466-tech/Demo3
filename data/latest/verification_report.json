@@ -3361,12 +3361,12 @@
    "ok": true
   },
   {
-   "check": "top_event KXTIME-26 market KXTIME-26-LIO exists",
+   "check": "top_event KXTIME-26 market KXTIME-26-CHRR exists",
    "detail": "live query returned 1 markets",
    "ok": true
   },
   {
-   "check": "top_event KXTIME-26 market KXTIME-26-CHRR exists",
+   "check": "top_event KXTIME-26 market KXTIME-26-LIO exists",
    "detail": "live query returned 1 markets",
    "ok": true
   },
@@ -3502,7 +3502,7 @@
   },
   {
    "check": "orderbook KXPRESNOMD-28-BS structure",
-   "detail": "{\"no_dollars\": [[\"0.0300\", \"10.00\"], [\"0.9930\", \"95238.08\"], [\"0.9940\", \"111111.08\"], [\"0.9950\", \"132790.55\"]], \"yes_dol",
+   "detail": "{\"no_dollars\": [[\"0.0300\", \"10.00\"], [\"0.9930\", \"95238.08\"], [\"0.9940\", \"111111.08\"], [\"0.9950\", \"132744.33\"]], \"yes_dol",
    "ok": true
   },
   {
@@ -3512,7 +3512,7 @@
   },
   {
    "check": "orderbook KXPRESNOMD-28-EWAR structure",
-   "detail": "{\"no_dollars\": [[\"0.9700\", \"5555.55\"], [\"0.9800\", \"8333.33\"], [\"0.9900\", \"16635.51\"]], \"yes_dollars\": []}",
+   "detail": "{\"no_dollars\": [[\"0.9700\", \"5555.55\"], [\"0.9800\", \"8333.33\"], [\"0.9900\", \"16664.99\"]], \"yes_dollars\": []}",
    "ok": true
   },
   {
@@ -3640,5 +3640,5 @@
   "passed": 725
  },
  "tool": "scripts/verify_rows.py v1",
- "verified_at": "2026-11-20T19:22:56+00:00"
+ "verified_at": "2026-11-20T19:30:23+00:00"
 }

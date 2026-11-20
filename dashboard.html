@@ -114,9 +114,14 @@ if the browser blocks the request the tables fall back to the snapshot links in
      detected from the dashboard&rsquo;s live market samples (GET /markets, demo API, no key). Two scrolling chats:
      <em>All events</em> shows every swing; <em>High ROI model</em> shows a selective, labeled placeholder
      heuristic (no real model is defined yet &mdash; flagged F-alert-01, never presented as verified ROI).
+<<<<<<< HEAD
      Each row links its exact market API URL. Alerts persist in this browser only. The dedicated
      <a href="alerts.html">Swing alerts page</a> adds the yes/no resolution feed, the official event
      settlement-source links and the committed snapshot swings.</p>
+=======
+     Each row links its exact market API URL and, in <em>Context</em>, the event's official <code>settlement_sources</code> (Get Event).
+     Those are resolution sources, not proof of cause: each row says "Cause not verified". Alerts persist in this browser only.</p>
+>>>>>>> origin/main
   <div class="alert-controls">
     <label><input type="checkbox" id="alertsEnabled" checked> Alerts enabled</label>
     <label><input type="checkbox" id="autoTrade" disabled> Automated paper trades on swing (paper/SIMULATED only)</label>

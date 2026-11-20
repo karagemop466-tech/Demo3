@@ -43,3 +43,23 @@ jobs:
 
       - name: Canonical root site checks (links, per-row sources, syntax)
         run: python3 scripts/verify_root_site.py
+
+      - name: Strategy backtest (deterministic rebuild + consistency tests)
+        run: |
+          # The published artefacts are pinned to a data snapshot; the scheduled collector
+          # refreshes data/ independently, so a rebuild may legitimately differ from the
+          # commit. (GitHub validates PRs against the merge commit with main, where data/ is
+          # newer than any branch.) What must hold: two rebuilds are byte-identical, and every
+          # published metric is recomputed from the published trades.
+          python3 scripts/backtest_strategies.py
+          python3 scripts/build_strategy_page.py
+          cp strategy/data/backtest.json /tmp/run1.json
+          cp strategy.html /tmp/run1.html
+          python3 scripts/backtest_strategies.py
+          python3 scripts/build_strategy_page.py
+          cmp /tmp/run1.json strategy/data/backtest.json
+          cmp /tmp/run1.html strategy.html
+          echo "rebuild is deterministic"
+          python3 -m unittest discover -s scripts/tests -p "test_backtest*.py" -v
+          git checkout -- strategy/data/backtest.json strategy.html
+          echo "published artefacts restored"
