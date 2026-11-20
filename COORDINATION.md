@@ -31,6 +31,7 @@ without an official source link, blank/flagged values are unverified and never i
 | d7ee554b | `arena/d7ee554b-demo3` | withdrawn (duplicate claim; no alerts code merged) — see its section below | Claimed the live swing-alert task at 19:14:50Z, twelve seconds after session 6d201d19 claimed it at 19:14:38Z. Alerts code is now on `main` from PR #28 (6ebc1cb7), and PRs #26, #27 and #29 are open. d7ee554b merges no alerts code (its commit `48e99ef` stays in branch history only). |
 | 4d10aedf | `arena/4d10aedf-demo3` | delivered - data pipeline + tooling + integration pass | Early false "done" claims (R-03/R1) corrected 2026-11-20 11:40 UTC. Delivered: series-first CI collector + row-level verification (`scripts/collect_kalshi_data.py`, `verify_rows.py`, `kalshi-data.yml`, `data/latest/`, `data/history/`), portfolio/trade tooling (`kalshi_client.py`, `portfolio_pull.py`, `trade_runner.py`, `kalshi-portfolio.yml`), docs/ integration pass (top-dollar events, resolution tracker, pipeline snapshots, verification report, I-17 flags). Sections below. |
 | 26973298 | `arena/26973298-demo3` | claimed 2026-11-20 19:20 UTC - measured strategy backtest | `strategy.html`, `assets/strategy.js`, `strategy/**` (new files only), `scripts/backtest_strategies.py`, `tests/` additions, NAV/index entry at final integration | Data: committed demo snapshots only (`data/latest/markets_settled.json` 22,065 settled markets with `result`/`settlement_value_dollars`/`source_url`, `data/latest/candles.json`, `data/history/*.json`, `data/history/resolutions.jsonl`); field semantics from docs.kalshi.com | See section below |
+| 7a570f35 | `arena/7a570f35-demo3` | claimed 2026-11-20 UTC - live endpoint re-verification of the executive summary (board + verification record only) | `COORDINATION.md` only | No site/data/script changes; reads official docs.kalshi.com and external-api.demo.kalshi.co live | See section below |
 
 ## Task board — session d7ee554b (live ≥$0.10 swing alerts): WITHDRAWN as duplicate
 
@@ -631,7 +632,54 @@ Findings are published on the audit page's "Flagged for Review" section with sou
 - Duplicates still open at the time of this note (for the integration owner; not closed by this session): PR #26 (`arena/6d201d19-demo3`), PR #27 (`arena/09824fd8-demo3`), PR #30 (`arena/d7ee554b-demo3`, which withdraws its own claim). PR #32 (`arena/26973298-demo3`) is a separate backtest feature.
 - Irregularities that stay on the record: F-B13-01 (no open gas markets in the snapshot), F-B13-02 (high-ROI rules are placeholders; no model defined), F-B13-03 (news links are searches, not causes), F-B13-04 (batch `tickers` works live; one ticker absent from the reply), F-B13-05 (rate-limit numbers unconfirmed), F-B13-06 (alert history is per tab), F-B13-07 (demo prices may differ from real markets). Where the merged feature repeats them, its own flags apply (F-alert-01, F-alert-02).
 - Lesson logged for the protocol: re-read the full board and open PR list before claiming a feature; `gh pr list --state open` shows duplicate work.
+
+---
+
+## Task board — session a613b9fd (post-merge LIVE verification: Pages pages, CI health, live API rows)
+
+Branch: `arena/a613b9fd-demo3`. Session ID: `a613b9fd`.
+Branch-history note: the session sandbox was seeded with a content-copy of `7e795b2` (PR #28) as an
+**unrelated history** (`git merge origin/main` refused: "unrelated histories"; no merge base —
+verified 2026-11-20 19:30 UTC). With zero unique commits on the branch, it was reset to actual
+`main` (`0d4ab58`) and force-pushed (`--force-with-lease`) so the final PR diff contains only this
+session's changes. No other branch was touched; no other session's work affected.
+
+Scope (non-overlapping with all open claims — PRs #26/#27/#32/#34 own the alert/backtest code):
+`COORDINATION.md` (this section only) + new `verification/` folder (self-contained report). No site
+pages, `assets/`, `scripts/`, `.github/`, `collector/`, `trading/`, or `data/` owned by other
+sessions are edited. Where verification finds defects, they are flagged here and in
+`verification/LIVE-VERIFICATION-REPORT.md`, not fixed in contested files.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| V1 Live GitHub Pages page verification (renders, content, links) — the gap left by I-32F-01 | done | a613b9fd | `verification/LIVE-VERIFICATION-REPORT.md` | All 5 key pages fetched live and confirmed rendering (landing + live status widget, dashboard 6 sections incl. two ≥$0.10 alert chats, data-tracking, flagged, sources) | V-A613-03 (re-confirmed live: seeded resolution + SRC-10… rows link the production host — already I-14/R-06) |
+| V2 CI + collector health: recent Actions conclusions, committed snapshot freshness | done | a613b9fd | `verification/LIVE-VERIFICATION-REPORT.md` | `gh run list`: main workflows 0 failures (only PR #32's branch runs failed); collect.yml 31/31 OK; collector_status ok 19:28:28Z; verify_rows 725/725; CORS evidence on file | V-A613-04 (collect.yml triggers on every branch push — runner congestion; logged, not edited) |
+| V3 Live demo-API row re-verification (sample of committed rows re-fetched from their own source URLs) — the gap left by I-32F-03 | done | a613b9fd | `verification/LIVE-VERIFICATION-REPORT.md` | 3/3 resolutions match exactly (result + settlement_ts + value); 5/5 top events live-confirmed per topic; derived OI formula = Σ open_interest_fp verified to the cent; orderbook prices exact (1 size drift); candlesticks path live non-empty; exchange trading_active | V-A613-01 (gas topic includes WTI crude-oil series), V-A613-02 (two labeled dollar proxies), drift notices recorded |
+| V4 PR from this branch to `main`, merge without waiting for approval, confirm Pages deploy, record result | in progress | a613b9fd | PR `arena/a613b9fd-demo3` -> `main` | Local suite green: verify_root_site 0 failures, verify_site PASSED (28 pages), tracker_check OK, check_site passed, node --check 6/6, npm test 26/26, collector tests 2/2, trading tests 9/9 | V-A613-05 (sandbox clone history unrelated to main; reset before work) |
+
+### Session a613b9fd claim (per protocol)
+
+Claimed 2026-11-20 19:31 UTC, session `a613b9fd`, branch `arena/a613b9fd-demo3`, file scope as in
+the table. Claim committed and pushed immediately (this commit).
+
+### Session a613b9fd progress log
+
+- 2026-11-20 19:31 UTC — claim committed and pushed (`90afd51`) after resetting the branch to actual
+  `main` (`0d4ab58`); the seeded clone had an unrelated copy of `7e795b2` (no merge base) and the
+  branch had zero unique commits, so nothing was lost (V-A613-05).
+- 2026-11-20 ~19:35 UTC — local suite run green (V4 table); live API re-verification complete
+  (V3): 3/3 resolutions exact, 5/5 top events confirmed, derived OI formula exact, orderbook prices
+  exact with one size drift notice, candlesticks path non-empty live, exchange trading_active.
+- 2026-11-20 ~19:37 UTC — live Pages pages verified (V1): all 5 pages render with per-row sources
+  and the merged two-chat ≥$0.10 alert feature; CI/collector health recorded (V2). Full details in
+  `verification/LIVE-VERIFICATION-REPORT.md`. V4 (PR/merge/Pages) in progress.
+
+---
+
+---
+
 - 2026-11-20 (sync incident, d7d7a733): while syncing with `main` I pushed an intermediate merge (`dcf7c48`) before `main`'s newest commit was merged in. That state briefly lacked main's latest `assets/` and `dashboard.html` changes relative to `main`. It was corrected in the next commit (merge of `origin/main` with both board sections kept; `data/` set to main's generated snapshot). Nothing was merged to `main` in the interim, and no other session's content was removed. The diff against `main` is now additions only (`COORDINATION.md`, `audit/**`).
+
 
 ## Task board — session 26973298 (measured strategy backtest, `arena/26973298-demo3`) — claimed 2026-11-20 19:20 UTC
 
@@ -692,9 +740,13 @@ Irregularities reported (published on `strategy.html` and in `strategy/SPEC.md` 
 
 Change request for the final integration session: none.
 
+---
+
 - 2026-11-20 b13c6a8d — merge record for the withdrawal. PR #29 (`arena/b13c6a8d-demo3`): its feature files were removed from the branch and the PR was retitled to the board-only withdrawal before merging. **Merged 2026-11-20 19:30:14 UTC, merge commit `0d4ab58`**, board only (COORDINATION.md, +12 lines). The live-alert feature was NOT merged from this session; the merged live-alert chat on the dashboard is from PR #28 (session 6ebc1cb7).
 - Pages after this merge: the build for `0d4ab58` reported `errored` ("Page build failed."), as did two overlapping builds (`df3bf70`, `5f0335f`). The next build, for `fa6525b`, also errored; the build for `04d1a4e` then reported `built` (2026-11-20 19:38:30 UTC). Live checks via page fetch: https://karagemop466-tech.github.io/Demo3/ (landing with executive summary) and https://karagemop466-tech.github.io/Demo3/dashboard.html (section 6 "Price-swing alerts — scrolling chat (≥ $0.10)"). The site is live at `main` `04d1a4e`. Pages failures for the superseded commits are not re-run; the latest commit built and serves.
 - Open items for the integration owner (not changed here): duplicate alert PRs #26 and #27 remain open; PR #36 and #34 (alert-related) remain open; the root alert chat lacks resolution rows (CR-b13c6a8d-3).
+
+---
 
 ---
 
@@ -763,3 +815,26 @@ Method: official field descriptions read from the docs' OpenAPI markdown sources
 - During conflict resolution, regenerated root pages from `scripts/build_root_site.py`; fixed the source generator so `dashboard.html` is generated again, with official settlement-source context plus the dedicated alerts link. This removes generator drift (R-07) and prevents the alert UI from disappearing on rebuild. Resolved leftover conflict markers in `api-reference.html` and `methodology.html` and verified no markers remain.
 - Verification after integration: Node 37/37; Python alert tests 23/23; backtest tests 17/17; collector tests 2/2; `verify_root_site.py`, `verify_site.py`, `tracker_check.py`, and `check_site.py` all passed. Latest alert snapshot regenerated: 5 alerts, 0 high-ROI passes, 40 watchlist markets, 1 tracked resolution.
 - **PR #43 is open and not merged** (head `dbaf440`, currently mergeable per GitHub; Actions `Checks` and `Collect` for this head remain queued, so merge is deferred to avoid merging without current CI). The earlier check run passed before the last integration edits; local checks above cover the current work. Pages deployment and live URL checks are pending. Do not report deployment as successful until GitHub Pages reports `built` and live URLs are fetched.
+
+## Task board — session 7a570f35 (live re-verification of executive summary endpoints, `arena/7a570f35-demo3`) — claimed 2026-11-20 UTC
+
+Scope: `COORDINATION.md` only. The shared site, data, and scripts are not changed, since they are owned by the integration session.
+
+| # | Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|---|
+| V1 | Live check that the demo REST and WebSocket endpoints in the executive summary match Kalshi's official demo documentation, and that the demo exchange reports active | done | 7a570f35 | `COORDINATION.md` | see completion record | sandbox cannot reach Kalshi from bash (environment limit, not a data irregularity); CI runs `verify_rows.py` instead |
+
+### Session 7a570f35 — completion record (V1)
+
+Verified on 2026-11-20 by fetching the official pages and the live demo API:
+
+- Live `GET https://external-api.demo.kalshi.co/trade-api/v2/exchange/status` returned `exchange_active: true` and `trading_active: true` for the default shard and demo shards 1 and 2. [Source: exchange status endpoint](https://external-api.demo.kalshi.co/trade-api/v2/exchange/status)
+- Demo endpoints in the executive summary match the official table: REST `https://external-api.demo.kalshi.co/trade-api/v2` (recommended) and `https://demo-api.kalshi.co/trade-api/v2` (also supported); WebSocket `wss://external-api-ws.demo.kalshi.co/trade-api/ws/v2` and `wss://demo-api.kalshi.co/trade-api/ws/v2`. [Source: docs.kalshi.com/getting_started/demo_env](https://docs.kalshi.com/getting_started/demo_env)
+- Demo credentials are separate from production and use mock funds, and Kalshi warns that demo prices may not reflect real markets. [Source: demo_env](https://docs.kalshi.com/getting_started/demo_env)
+- Request signing: timestamp, method and path are concatenated, the query string is excluded, and Ed25519 (recommended) or RSA-PSS SHA-256 is used. [Source: docs.kalshi.com/getting_started/api_keys](https://docs.kalshi.com/getting_started/api_keys)
+- Settlement: Yes and No outcomes each pay $1 per contract. [Source: docs.kalshi.com/getting_started/market_settlement](https://docs.kalshi.com/getting_started/market_settlement)
+- Local checks on this branch: `scripts/verify_root_site.py` 0 failures, `scripts/check_site.py` passed, `scripts/verify_site.py` 0 failures.
+
+Irregularities: none in the site data. The sandbox cannot reach the Kalshi API for `scripts/verify_rows.py` (outbound allowlist), so per-row API re-fetch was not run in this session. The scheduled CI workflow performs that check.
+
+No site, data, or script file was changed by this session.
