@@ -21,6 +21,11 @@ let bootNumber = 0;
 
 const BASE = "https://external-api.demo.kalshi.co/trade-api/v2";
 
+/* Real timers, captured before the boot harness swaps the globals. */
+const realSetTimeout = setTimeout;
+const realClearTimeout = clearTimeout;
+const sleep = (ms) => new Promise((r) => realSetTimeout(r, ms));
+
 function jsonResponse(payload) {
   const body = JSON.stringify(payload);
   return { ok: true, status: 200, json: async () => payload, text: async () => body };
@@ -30,7 +35,7 @@ async function waitFor(predicate, label, timeoutMs = 8000) {
   const deadline = Date.now() + timeoutMs;
   while (Date.now() < deadline) {
     if (predicate()) return;
-    await new Promise((resolve) => setTimeout(resolve, 5));
+    await sleep(5);
   }
   assert.fail(`Timed out waiting for ${label}`);
 }
@@ -71,13 +76,22 @@ async function bootAlertsPage(fetchMock) {
     url: "https://demo.example.test/Demo3/alerts.html",
     pretendToBeVisual: true,
   });
-  const keys = ["window", "document", "fetch", "setInterval", "clearInterval", "localStorage"];
+  const keys = ["window", "document", "fetch", "setInterval", "clearInterval",
+    "setTimeout", "clearTimeout", "localStorage"];
   const old = new Map(keys.map((k) => [k, Object.getOwnPropertyDescriptor(globalThis, k)]));
   globalThis.window = dom.window;
   globalThis.document = dom.window.document;
   globalThis.fetch = fetchMock;
   globalThis.setInterval = () => ({ mocked: true });
   globalThis.clearInterval = () => {};
+  /* the merged KD engine schedules setTimeout(pollOnce, 4000) at module scope.
+   * Pass through short delays (apiGet sleeps <= 400ms; waitFor polls) but
+   * swallow >= 1 s engine timers so none can fire after globals are restored. */
+  globalThis.setTimeout = (fn, ms, ...rest) => {
+    if (typeof ms === "number" && ms >= 1000) return { mocked: true };
+    return realSetTimeout(fn, ms, ...rest);
+  };
+  globalThis.clearTimeout = (t) => { if (t && t.mocked) return; realClearTimeout?.(t); };
   globalThis.localStorage = dom.window.localStorage;
   const n = ++bootNumber;
   try {
@@ -104,13 +118,22 @@ async function bootPage(html, scripts, fetchMock) {
     url: "https://demo.example.test/Demo3/page.html",
     pretendToBeVisual: true,
   });
-  const keys = ["window", "document", "fetch", "setInterval", "clearInterval", "localStorage"];
+  const keys = ["window", "document", "fetch", "setInterval", "clearInterval",
+    "setTimeout", "clearTimeout", "localStorage"];
   const old = new Map(keys.map((k) => [k, Object.getOwnPropertyDescriptor(globalThis, k)]));
   globalThis.window = dom.window;
   globalThis.document = dom.window.document;
   globalThis.fetch = fetchMock;
   globalThis.setInterval = () => ({ mocked: true });
   globalThis.clearInterval = () => {};
+  /* the merged KD engine schedules setTimeout(pollOnce, 4000) at module scope.
+   * Pass through short delays (apiGet sleeps <= 400ms; waitFor polls) but
+   * swallow >= 1 s engine timers so none can fire after globals are restored. */
+  globalThis.setTimeout = (fn, ms, ...rest) => {
+    if (typeof ms === "number" && ms >= 1000) return { mocked: true };
+    return realSetTimeout(fn, ms, ...rest);
+  };
+  globalThis.clearTimeout = (t) => { if (t && t.mocked) return; realClearTimeout?.(t); };
   globalThis.localStorage = dom.window.localStorage;
   const n = ++bootNumber;
   try {
@@ -366,9 +389,16 @@ test("dashboard.html: merged PR #28 chat engine (assets/alerts.js) coexists with
     // let the dashboard's async init (discover + scan chain) settle before teardown
     await waitFor(() => ($("scanStatus") || {}).textContent?.includes("Last scan"),
       "dashboard scan to settle");
-    // wait for network quiescence so no late promise touches restored globals
-    await waitFor(() => dashInFlight === 0, "in-flight fetches to drain");
-    await new Promise((resolve) => setTimeout(resolve, 700));
+    // sustained network quiescence: K.apiGet sleeps ~400ms BEFORE each fetch,
+    // so "no in-flight fetch" must hold across a window longer than that
+    // spacing (and any chain that just woke up) before globals are restored.
+    let quietStreak = 0;
+    for (let i = 0; i < 12; i++) {
+      await sleep(500);
+      quietStreak = dashInFlight === 0 ? quietStreak + 1 : 0;
+      if (quietStreak >= 4) break;
+    }
+    assert.ok(quietStreak >= 4, "fetch activity never went quiet before teardown");
   } finally {
     cleanup();
   }
