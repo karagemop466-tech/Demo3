@@ -40,7 +40,11 @@ jobs:
           KALSHI_API_ROOT: https://external-api.demo.kalshi.co/trade-api/v2
         run: python3 collector/collect.py
 
-      - name: Commit snapshots
+      # Snapshot commits happen on the default branch only. Committing on every push (as an
+      # earlier version did) rewrites data/ on feature branches while other sessions work,
+      # which forces rebases mid-task and puts open pull requests into a conflicted state.
+      - name: Commit snapshots (default branch only)
+        if: github.ref_name == github.event.repository.default_branch
         run: |
           git config user.name "collector-bot"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -56,6 +60,7 @@ jobs:
 
       - name: Request Pages rebuild (data pushes use GITHUB_TOKEN, which does not
               trigger the legacy pages-build-deployment workflow)
+        if: github.ref_name == github.event.repository.default_branch
         if: github.ref == 'refs/heads/main'
         run: |
           # Pushes made with GITHUB_TOKEN do not trigger workflow runs (GitHub
