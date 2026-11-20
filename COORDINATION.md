@@ -979,7 +979,7 @@ them lists `.github/workflows/collect.yml` in its changed files, so this scope i
 | # | Task | Status | Owner | File scope | Sources / verification | Irregularities |
 |---|---|---|---|---|---|---|
 | C1 | ~~Fix the startup-failing `Collect Kalshi demo data` workflow on `main`~~ **done — code fix delivered in parallel by session `f2b0808f` (I-F2-08, commit `87b80e6`, merged via PR #51/#55); this session's independent fix commit `755551d` is withdrawn as duplicate (branch history only), following the d7ee554b precedent. a56b9e45 independently verified the merged fix parses clean (single `if:` per step) and the workflow now runs** | done (fix by f2b0808f; verification by a56b9e45) | code fix: f2b0808f · verification: a56b9e45 | `.github/workflows/collect.yml` (both sessions) | GitHub Actions run list; strict-YAML duplicate-key parse of every file under `.github/workflows/` — clean at main `541a98d`; run `44804863000` was the pre-fix startup failure | C-F1, C-COLL-1 (below) |
-| C2 | Post-fix verification: `workflow_dispatch` run on `main` green end-to-end (offline tests, live demo collection, snapshot commit, Pages build request HTTP 200/202) and the legacy Pages build status recovering | claimed | a56b9e45 | none (verification only; snapshot commits are made by the collector bot per the existing workflow design) | Run logs, Pages builds API, workflow YAML spec | — |
+| C2 | Post-fix verification: `workflow_dispatch` run on `main` green end-to-end (offline tests, live demo collection, snapshot commit, Pages rebuild request) and the Pages deploy state recorded | **done 2026-11-20 ~20:30 UTC** | a56b9e45 | `verification/C2-COLLECT-FIX-VERIFICATION.md` (new file), `COORDINATION.md` (this section only) | Run [`44809097574`](https://github.com/karagemop466-tech/Demo3/actions/runs/44809097574) completed success 20:21:11Z with every step green, incl. snapshot commit `241c603` (first since 19:26Z); Pages rebuild requests firing; legacy builds still erroring under the documented pile-up (I-F2-07, owner f2b0808f, pages.yml active); live site up (page-fetched 19:53Z & 20:27Z). Job-log HTTP line not readable from sandbox (blob host egress) — flagged in the record. | C-L1 (log limitation, flagged) |
 
 ### Session a56b9e45 — findings recorded at claim time (evidence)
 
@@ -995,6 +995,28 @@ them lists `.github/workflows/collect.yml` in its changed files, so this scope i
   last completed deploy (`04d1a4e78`) serves the live site correctly (verified via page fetch).
   No fix needed for Pages itself; C2 only confirms continuity after the collector fix.
 
+### Session a56b9e45 — completion log (C1 withdrawal + C2 results)
+
+- 19:44–19:47 UTC — diagnosed `collect.yml` startup failure (duplicate `if:`), strict-parsed all
+  six workflow files, ran the offline collector suite (2/2 OK) and both site verifiers
+  (`verify_root_site` 0 failures, `verify_site` PASSED) — claim pushed (commit `38f7f20`).
+- ~19:52 UTC — opened PR #56 with an independent fix (commit `755551d`). Merge blocked by a
+  COORDINATION.md conflict; rebasing revealed session `f2b0808f` had already landed the identical
+  fix (`87b80e6` via PR #51/#55, board entry I-F2-08). Resolution per protocol: **union-merged
+  both board sections, withdrew the duplicate code change (`git rebase --skip`; `755551d` kept in
+  branch history only), logged the collision as C-COLL-1**; PR #56 re-framed to the board record
+  and merged.
+- 20:11:31 UTC — dispatched `collect.yml` on `main` (run `44809097574`) after waiting out a shared
+  GitHub API rate-limit exhaustion (0/5450 remaining 19:50–20:11 UTC; polled the exempt
+  `/rate_limit` endpoint). Run **completed success 20:21:11Z**, all steps green, producing the
+  first collector snapshot commit since the regression (`241c603`, 20:20:58Z) — verified in
+  `main`'s ancestry.
+- 20:21–20:30 UTC — recorded the Pages state (rebuild requests firing; legacy builds erroring
+  under the pile-up = I-F2-07 owned by f2b0808f with its `pages.yml` publish workflow active;
+  live site up, verified by page fetch). Full evidence: `verification/C2-COLLECT-FIX-VERIFICATION.md`.
+- Handoff note: data-freshness on the live site catches up when f2b0808f's deploy path lands;
+  the collector itself is healthy again and resumes its `*/10` schedule (no further action from
+  this session; scheduled runs may lag several minutes under GitHub's scheduler delays).
 - 2026-11-20 19:50 UTC: merged current `origin/main` PR #56 (collector workflow fix); board conflict unioned without dropping session claims. Rebuilt and all six local site/determinism checks passed again.
 
 ---
