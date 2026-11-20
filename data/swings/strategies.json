@@ -1,103 +1,243 @@
 {
  "bucket_detail": {
   "crypto|0-5c|>40c|>14d": {
-   "fade_n": 0,
-   "fade_net_sum": 0.0,
-   "fade_wins": 0,
-   "mean_delta_dollars": 0.95,
-   "n": 5,
+   "mean_delta_dollars": 0.955556,
+   "n": 9,
    "n_markets": 2,
    "resolved_no": 0,
    "resolved_yes": 0,
-   "reversion_hits": 5,
-   "tickers": [],
-   "unresolved": 5
+   "reversion_hits": 8,
+   "reversion_hits_ever": 9,
+   "strat": {
+    "momo60": {
+     "gross_sum": -0.96,
+     "n": 1,
+     "net_sum": -0.9628,
+     "wins": 0
+    }
+   },
+   "unresolved": 9
   },
   "crypto|5-20c|>40c|>14d": {
-   "fade_n": 0,
-   "fade_net_sum": 0.0,
-   "fade_wins": 0,
    "mean_delta_dollars": 0.91,
    "n": 2,
    "n_markets": 1,
    "resolved_no": 0,
    "resolved_yes": 0,
-   "reversion_hits": 1,
-   "tickers": [],
+   "reversion_hits": 2,
+   "reversion_hits_ever": 2,
+   "strat": {
+    "fade15": {
+     "gross_sum": -0.01,
+     "n": 1,
+     "net_sum": -0.0174,
+     "wins": 0
+    },
+    "fade60": {
+     "gross_sum": -0.01,
+     "n": 1,
+     "net_sum": -0.0174,
+     "wins": 0
+    },
+    "fade_settle": {
+     "gross_sum": -0.01,
+     "n": 1,
+     "net_sum": -0.0174,
+     "wins": 0
+    },
+    "momo60": {
+     "gross_sum": -0.9400000000000001,
+     "n": 2,
+     "net_sum": -0.9521999999999999,
+     "wins": 0
+    }
+   },
    "unresolved": 2
   },
   "crypto|95-100c|>40c|>14d": {
-   "fade_n": 1,
-   "fade_net_sum": -0.0121,
-   "fade_wins": 0,
-   "mean_delta_dollars": 0.956667,
-   "n": 3,
+   "mean_delta_dollars": 0.959,
+   "n": 10,
    "n_markets": 1,
    "resolved_no": 0,
    "resolved_yes": 0,
-   "reversion_hits": 3,
-   "tickers": [],
-   "unresolved": 3
+   "reversion_hits": 7,
+   "reversion_hits_ever": 9,
+   "strat": {
+    "fade15": {
+     "gross_sum": -0.01,
+     "n": 1,
+     "net_sum": -0.0121,
+     "wins": 0
+    },
+    "fade60": {
+     "gross_sum": -0.01,
+     "n": 1,
+     "net_sum": -0.0121,
+     "wins": 0
+    },
+    "momo60": {
+     "gross_sum": -0.01,
+     "n": 1,
+     "net_sum": -0.0121,
+     "wins": 0
+    }
+   },
+   "unresolved": 10
   },
   "elections|0-5c|>40c|>14d": {
-   "fade_n": 33,
-   "fade_net_sum": -11.455200000000003,
-   "fade_wins": 0,
-   "mean_delta_dollars": 0.800358,
-   "n": 67,
-   "n_markets": 6,
+   "mean_delta_dollars": 0.803405,
+   "n": 74,
+   "n_markets": 7,
    "resolved_no": 0,
    "resolved_yes": 0,
-   "reversion_hits": 66,
-   "tickers": [],
-   "unresolved": 67
+   "reversion_hits": 63,
+   "reversion_hits_ever": 72,
+   "strat": {
+    "fade15": {
+     "gross_sum": -11.359999999999998,
+     "n": 35,
+     "net_sum": -11.525700000000002,
+     "wins": 0
+    },
+    "fade60": {
+     "gross_sum": -13.775999999999994,
+     "n": 35,
+     "net_sum": -13.973600000000003,
+     "wins": 0
+    },
+    "fade_settle": {
+     "gross_sum": -4.151999999999999,
+     "n": 35,
+     "net_sum": -4.2238000000000016,
+     "wins": 0
+    },
+    "momo60": {
+     "gross_sum": -29.01800000000001,
+     "n": 53,
+     "net_sum": -29.427800000000005,
+     "wins": 0
+    }
+   },
+   "unresolved": 74
   },
   "elections|80-95c|>40c|>14d": {
-   "fade_n": 45,
-   "fade_net_sum": -10.601900000000002,
-   "fade_wins": 0,
-   "mean_delta_dollars": 0.801606,
-   "n": 71,
+   "mean_delta_dollars": 0.801987,
+   "n": 79,
    "n_markets": 5,
    "resolved_no": 0,
    "resolved_yes": 0,
-   "reversion_hits": 66,
-   "tickers": [],
-   "unresolved": 71
+   "reversion_hits": 72,
+   "reversion_hits_ever": 74,
+   "strat": {
+    "fade15": {
+     "gross_sum": -10.485999999999997,
+     "n": 51,
+     "net_sum": -10.653800000000002,
+     "wins": 0
+    },
+    "fade60": {
+     "gross_sum": -13.686999999999994,
+     "n": 56,
+     "net_sum": -13.900900000000005,
+     "wins": 0
+    },
+    "fade_settle": {
+     "gross_sum": -17.70200000000001,
+     "n": 77,
+     "net_sum": -17.98100000000001,
+     "wins": 0
+    },
+    "momo60": {
+     "gross_sum": -24.97200000000003,
+     "n": 58,
+     "net_sum": -25.335199999999997,
+     "wins": 0
+    }
+   },
+   "unresolved": 79
   }
  },
  "buckets": {
   "crypto|0-5c|>40c|>14d": {
+   "best_mean_net_dollars": -0.9628,
+   "best_strategy": "momo60",
    "evidence": "insufficient",
    "evidence_rule": "n_swings >= 8 and n_markets >= 3",
    "fade_hit_rate": null,
    "fade_hit_rate_shrunk": null,
    "fade_mean_net_dollars": null,
-   "fade_n_quotable": 0,
+   "fade_n_quotable": null,
    "n_markets": 2,
-   "n_swings": 5,
+   "n_swings": 9,
    "resolved_no": 0,
    "resolved_yes": 0,
-   "reversion_rate": 1.0,
-   "reversion_rate_shrunk": 0.978979,
-   "unresolved": 5
+   "reversion_rate": 0.888889,
+   "reversion_rate_ever": 1.0,
+   "reversion_rate_shrunk": 0.884173,
+   "reversion_rate_within_horizon_minutes": 60,
+   "strategies": {
+    "momo60": {
+     "hit_rate": 0.0,
+     "hit_rate_shrunk": 0.4,
+     "mean_gross_dollars": -0.96,
+     "mean_net_dollars": -0.9628,
+     "n_quotable": 1
+    }
+   },
+   "unresolved": 9
   },
   "crypto|5-20c|>40c|>14d": {
+   "best_mean_net_dollars": -0.0174,
+   "best_strategy": "fade15",
    "evidence": "insufficient",
    "evidence_rule": "n_swings >= 8 and n_markets >= 3",
-   "fade_hit_rate": null,
-   "fade_hit_rate_shrunk": null,
-   "fade_mean_net_dollars": null,
-   "fade_n_quotable": 0,
+   "fade_hit_rate": 0.0,
+   "fade_hit_rate_shrunk": 0.4,
+   "fade_mean_net_dollars": -0.0174,
+   "fade_n_quotable": 1,
    "n_markets": 1,
    "n_swings": 2,
    "resolved_no": 0,
    "resolved_yes": 0,
-   "reversion_rate": 0.5,
-   "reversion_rate_shrunk": 0.801802,
+   "reversion_rate": 1.0,
+   "reversion_rate_ever": 1.0,
+   "reversion_rate_shrunk": 0.915709,
+   "reversion_rate_within_horizon_minutes": 60,
+   "strategies": {
+    "fade15": {
+     "hit_rate": 0.0,
+     "hit_rate_shrunk": 0.4,
+     "mean_gross_dollars": -0.01,
+     "mean_net_dollars": -0.0174,
+     "n_quotable": 1
+    },
+    "fade60": {
+     "hit_rate": 0.0,
+     "hit_rate_shrunk": 0.4,
+     "mean_gross_dollars": -0.01,
+     "mean_net_dollars": -0.0174,
+     "n_quotable": 1
+    },
+    "fade_settle": {
+     "hit_rate": 0.0,
+     "hit_rate_shrunk": 0.4,
+     "mean_gross_dollars": -0.01,
+     "mean_net_dollars": -0.0174,
+     "n_quotable": 1
+    },
+    "momo60": {
+     "hit_rate": 0.0,
+     "hit_rate_shrunk": 0.333333,
+     "mean_gross_dollars": -0.47,
+     "mean_net_dollars": -0.4761,
+     "n_quotable": 2
+    }
+   },
    "unresolved": 2
   },
   "crypto|95-100c|>40c|>14d": {
+   "best_mean_net_dollars": -0.0121,
+   "best_strategy": "fade15",
    "evidence": "insufficient",
    "evidence_rule": "n_swings >= 8 and n_markets >= 3",
    "fade_hit_rate": 0.0,
@@ -105,68 +245,183 @@
    "fade_mean_net_dollars": -0.0121,
    "fade_n_quotable": 1,
    "n_markets": 1,
-   "n_swings": 3,
+   "n_swings": 10,
    "resolved_no": 0,
    "resolved_yes": 0,
-   "reversion_rate": 1.0,
-   "reversion_rate_shrunk": 0.972973,
-   "unresolved": 3
+   "reversion_rate": 0.7,
+   "reversion_rate_ever": 0.9,
+   "reversion_rate_shrunk": 0.749589,
+   "reversion_rate_within_horizon_minutes": 60,
+   "strategies": {
+    "fade15": {
+     "hit_rate": 0.0,
+     "hit_rate_shrunk": 0.4,
+     "mean_gross_dollars": -0.01,
+     "mean_net_dollars": -0.0121,
+     "n_quotable": 1
+    },
+    "fade60": {
+     "hit_rate": 0.0,
+     "hit_rate_shrunk": 0.4,
+     "mean_gross_dollars": -0.01,
+     "mean_net_dollars": -0.0121,
+     "n_quotable": 1
+    },
+    "momo60": {
+     "hit_rate": 0.0,
+     "hit_rate_shrunk": 0.4,
+     "mean_gross_dollars": -0.01,
+     "mean_net_dollars": -0.0121,
+     "n_quotable": 1
+    }
+   },
+   "unresolved": 10
   },
   "elections|0-5c|>40c|>14d": {
+   "best_mean_net_dollars": -0.12068,
+   "best_strategy": "fade_settle",
    "evidence": "sufficient",
    "evidence_rule": "n_swings >= 8 and n_markets >= 3",
    "fade_hit_rate": 0.0,
-   "fade_hit_rate_shrunk": 0.054054,
-   "fade_mean_net_dollars": -0.347127,
-   "fade_n_quotable": 33,
-   "n_markets": 6,
-   "n_swings": 67,
+   "fade_hit_rate_shrunk": 0.051282,
+   "fade_mean_net_dollars": -0.399246,
+   "fade_n_quotable": 35,
+   "n_markets": 7,
+   "n_swings": 74,
    "resolved_no": 0,
    "resolved_yes": 0,
-   "reversion_rate": 0.985075,
-   "reversion_rate_shrunk": 0.983251,
-   "unresolved": 67
+   "reversion_rate": 0.851351,
+   "reversion_rate_ever": 0.972973,
+   "reversion_rate_shrunk": 0.85249,
+   "reversion_rate_within_horizon_minutes": 60,
+   "strategies": {
+    "fade15": {
+     "hit_rate": 0.0,
+     "hit_rate_shrunk": 0.051282,
+     "mean_gross_dollars": -0.324571,
+     "mean_net_dollars": -0.329306,
+     "n_quotable": 35
+    },
+    "fade60": {
+     "hit_rate": 0.0,
+     "hit_rate_shrunk": 0.051282,
+     "mean_gross_dollars": -0.3936,
+     "mean_net_dollars": -0.399246,
+     "n_quotable": 35
+    },
+    "fade_settle": {
+     "hit_rate": 0.0,
+     "hit_rate_shrunk": 0.051282,
+     "mean_gross_dollars": -0.118629,
+     "mean_net_dollars": -0.12068,
+     "n_quotable": 35
+    },
+    "momo60": {
+     "hit_rate": 0.0,
+     "hit_rate_shrunk": 0.035088,
+     "mean_gross_dollars": -0.547509,
+     "mean_net_dollars": -0.555242,
+     "n_quotable": 53
+    }
+   },
+   "unresolved": 74
   },
   "elections|80-95c|>40c|>14d": {
+   "best_mean_net_dollars": -0.208898,
+   "best_strategy": "fade15",
    "evidence": "sufficient",
    "evidence_rule": "n_swings >= 8 and n_markets >= 3",
    "fade_hit_rate": 0.0,
-   "fade_hit_rate_shrunk": 0.040816,
-   "fade_mean_net_dollars": -0.235598,
-   "fade_n_quotable": 45,
+   "fade_hit_rate_shrunk": 0.033333,
+   "fade_mean_net_dollars": -0.24823,
+   "fade_n_quotable": 56,
    "n_markets": 5,
-   "n_swings": 71,
+   "n_swings": 79,
    "resolved_no": 0,
    "resolved_yes": 0,
-   "reversion_rate": 0.929577,
-   "reversion_rate_shrunk": 0.930811,
-   "unresolved": 71
+   "reversion_rate": 0.911392,
+   "reversion_rate_ever": 0.936709,
+   "reversion_rate_shrunk": 0.909569,
+   "reversion_rate_within_horizon_minutes": 60,
+   "strategies": {
+    "fade15": {
+     "hit_rate": 0.0,
+     "hit_rate_shrunk": 0.036364,
+     "mean_gross_dollars": -0.205608,
+     "mean_net_dollars": -0.208898,
+     "n_quotable": 51
+    },
+    "fade60": {
+     "hit_rate": 0.0,
+     "hit_rate_shrunk": 0.033333,
+     "mean_gross_dollars": -0.244411,
+     "mean_net_dollars": -0.24823,
+     "n_quotable": 56
+    },
+    "fade_settle": {
+     "hit_rate": 0.0,
+     "hit_rate_shrunk": 0.024691,
+     "mean_gross_dollars": -0.229896,
+     "mean_net_dollars": -0.233519,
+     "n_quotable": 77
+    },
+    "momo60": {
+     "hit_rate": 0.0,
+     "hit_rate_shrunk": 0.032258,
+     "mean_gross_dollars": -0.430552,
+     "mean_net_dollars": -0.436814,
+     "n_quotable": 58
+    }
+   },
+   "unresolved": 79
   }
  },
  "counts": {
   "events": 3,
-  "strategy_rows": 584,
-  "swings": 148
+  "strategy_rows": 696,
+  "swings": 174
  },
  "meta": {
   "api_root": "https://external-api.demo.kalshi.co/trade-api/v2",
   "caveats": [
    "Demo exchange: prices, volumes and liquidity are simulated test data, not real markets (https://docs.kalshi.com/getting_started/demo_env.md).",
    "Candlestick OHLC is the per-period trade price plus the quoted YES bid/ask at the period open/close; fills assume the taker crosses that quote exactly and ignore book depth -- optimistic, see alerts/SPEC.md 'Fill model'.",
+   "Reversion is measured within a stated 60-minute horizon; the '*_ever' fields show what happens over the rest of the available series. Reading the ever-variant as a tradeable edge would be wrong -- that is why both are published.",
+   "Block size for fees and PnL is 100 contracts; net figures are per contract so they scale, and the fee alignment matches Kalshi's published schedule exactly.",
    "Strategies are simulated trades; no order was sent to Kalshi (no demo API credentials exist in this repo -- COORDINATION.md I-12).",
    "External news links are search deep-links offered as candidate catalysts; timing proximity is not evidence of causation."
   ],
   "event_page_probe": {
    "attempted": true,
-   "checked_at": "2026-11-20T19:37:34Z",
-   "error": null,
-   "site_root": "https://kalshi.com",
+   "attempts": [
+    {
+     "body_bytes": 0,
+     "checked_at": "2026-11-20T20:19:19Z",
+     "error": "HTTP 429",
+     "site_root": "https://kalshi.com",
+     "status_code": 429,
+     "ticker_echoed": false,
+     "title_echoed": false,
+     "url": "https://kalshi.com/event/KXBTCY-27JAN0100"
+    },
+    {
+     "body_bytes": 0,
+     "checked_at": "2026-11-20T20:19:22Z",
+     "error": "HTTP 404",
+     "site_root": "https://demo.kalshi.co",
+     "status_code": 404,
+     "ticker_echoed": false,
+     "title_echoed": false,
+     "url": "https://demo.kalshi.co/event/KXBTCY-27JAN0100"
+    }
+   ],
+   "checked_at": "2026-11-20T20:19:22Z",
    "status_code": 429,
    "ticker_echoed": false,
-   "url": "https://kalshi.com/event/KXBTCY-27JAN0100"
+   "verified_root": null
   },
   "events_with_swings": 3,
-  "generated_at": "2026-11-20T19:36:22Z",
+  "generated_at": "2026-11-20T20:18:30Z",
   "hours_1m": 48,
   "hours_60m": 168,
   "markets_scanned": 60,
@@ -187,15 +442,36 @@
    "errors": 0,
    "event_page_probe": {
     "attempted": true,
-    "checked_at": "2026-11-20T19:37:34Z",
-    "error": null,
-    "site_root": "https://kalshi.com",
+    "attempts": [
+     {
+      "body_bytes": 0,
+      "checked_at": "2026-11-20T20:19:19Z",
+      "error": "HTTP 429",
+      "site_root": "https://kalshi.com",
+      "status_code": 429,
+      "ticker_echoed": false,
+      "title_echoed": false,
+      "url": "https://kalshi.com/event/KXBTCY-27JAN0100"
+     },
+     {
+      "body_bytes": 0,
+      "checked_at": "2026-11-20T20:19:22Z",
+      "error": "HTTP 404",
+      "site_root": "https://demo.kalshi.co",
+      "status_code": 404,
+      "ticker_echoed": false,
+      "title_echoed": false,
+      "url": "https://demo.kalshi.co/event/KXBTCY-27JAN0100"
+     }
+    ],
+    "checked_at": "2026-11-20T20:19:22Z",
     "status_code": 429,
     "ticker_echoed": false,
-    "url": "https://kalshi.com/event/KXBTCY-27JAN0100"
+    "verified_root": null
    },
    "mode": "live",
    "requests": 122,
+   "series_meta_source": "fetched this run",
    "universe_counts": {
     "crypto": 12,
     "culture": 12,
@@ -206,173 +482,209 @@
    "universe_units": 60,
    "warnings": []
   },
-  "swings_found": 148,
+  "swings_found": 174,
   "threshold_dollars": 0.1,
   "window_minutes": 60
  },
  "strategies": {
-  "fade": {
-   "by_topic": {
-    "crypto": {
-     "hit_rate": 0.0,
-     "mean_fees_dollars": 0.21,
-     "mean_net_dollars": -0.0121,
-     "mean_roi_on_paid": -0.565421,
-     "median_net_dollars": -0.0121,
-     "n": 9,
-     "n_quotable": 1,
-     "total_net_dollars": -0.0121,
-     "unquotable": 8
-    },
-    "elections": {
-     "hit_rate": 0.0,
-     "mean_fees_dollars": 0.429615,
-     "mean_net_dollars": -0.282783,
-     "mean_roi_on_paid": -0.496471,
-     "median_net_dollars": -0.0015,
-     "n": 137,
-     "n_quotable": 78,
-     "total_net_dollars": -22.0571,
-     "unquotable": 59
-    }
-   },
-   "overall": {
-    "direction_split": {
-     "down": 73,
-     "up": 73
-    },
-    "hit_rate": 0.0,
-    "mean_fees_dollars": 0.426835,
-    "mean_net_dollars": -0.279357,
-    "mean_roi_on_paid": -0.497344,
-    "median_net_dollars": -0.0015,
-    "n": 146,
-    "n_quotable": 79,
-    "total_net_dollars": -22.0692,
-    "unquotable": 67
-   }
-  },
   "fade15": {
    "by_topic": {
     "crypto": {
      "hit_rate": 0.0,
-     "mean_fees_dollars": 0.21,
-     "mean_net_dollars": -0.0121,
-     "mean_roi_on_paid": -0.565421,
-     "median_net_dollars": -0.0121,
-     "n": 9,
-     "n_quotable": 1,
-     "total_net_dollars": -0.0121,
-     "unquotable": 8
+     "hit_rate_gross": 0.0,
+     "mean_fees_dollars": 0.00475,
+     "mean_gross_dollars": -0.01,
+     "mean_net_dollars": -0.01475,
+     "mean_roi_on_paid": -0.291835,
+     "median_net_dollars": -0.01475,
+     "n": 21,
+     "n_quotable": 2,
+     "not_measurable": 0,
+     "total_net_dollars": -0.0295,
+     "unquotable": 19
     },
     "elections": {
      "hit_rate": 0.0,
-     "mean_fees_dollars": 0.380959,
-     "mean_net_dollars": -0.246563,
-     "mean_roi_on_paid": -0.458448,
+     "hit_rate_gross": 0.0,
+     "mean_fees_dollars": 0.003878,
+     "mean_gross_dollars": -0.254023,
+     "mean_net_dollars": -0.257901,
+     "mean_roi_on_paid": -0.481339,
      "median_net_dollars": -0.0015,
-     "n": 137,
-     "n_quotable": 73,
-     "total_net_dollars": -17.9991,
-     "unquotable": 64
+     "n": 153,
+     "n_quotable": 86,
+     "not_measurable": 0,
+     "total_net_dollars": -22.1795,
+     "unquotable": 67
     }
    },
    "overall": {
     "direction_split": {
-     "down": 73,
-     "up": 73
+     "down": 89,
+     "up": 85
     },
     "hit_rate": 0.0,
-    "mean_fees_dollars": 0.378649,
-    "mean_net_dollars": -0.243395,
-    "mean_roi_on_paid": -0.459894,
+    "hit_rate_gross": 0.0,
+    "mean_fees_dollars": 0.003898,
+    "mean_gross_dollars": -0.248477,
+    "mean_net_dollars": -0.252375,
+    "mean_roi_on_paid": -0.477032,
     "median_net_dollars": -0.0015,
-    "n": 146,
-    "n_quotable": 74,
-    "total_net_dollars": -18.0112,
-    "unquotable": 72
+    "n": 174,
+    "n_quotable": 88,
+    "not_measurable": 0,
+    "total_net_dollars": -22.209,
+    "unquotable": 86
+   }
+  },
+  "fade60": {
+   "by_topic": {
+    "crypto": {
+     "hit_rate": 0.0,
+     "hit_rate_gross": 0.0,
+     "mean_fees_dollars": 0.00475,
+     "mean_gross_dollars": -0.01,
+     "mean_net_dollars": -0.01475,
+     "mean_roi_on_paid": -0.291835,
+     "median_net_dollars": -0.01475,
+     "n": 21,
+     "n_quotable": 2,
+     "not_measurable": 0,
+     "total_net_dollars": -0.0295,
+     "unquotable": 19
+    },
+    "elections": {
+     "hit_rate": 0.0,
+     "hit_rate_gross": 0.0,
+     "mean_fees_dollars": 0.004522,
+     "mean_gross_dollars": -0.301791,
+     "mean_net_dollars": -0.306313,
+     "mean_roi_on_paid": -0.530694,
+     "median_net_dollars": -0.0015,
+     "n": 153,
+     "n_quotable": 91,
+     "not_measurable": 0,
+     "total_net_dollars": -27.8745,
+     "unquotable": 62
+    }
+   },
+   "overall": {
+    "direction_split": {
+     "down": 89,
+     "up": 85
+    },
+    "hit_rate": 0.0,
+    "hit_rate_gross": 0.0,
+    "mean_fees_dollars": 0.004527,
+    "mean_gross_dollars": -0.295516,
+    "mean_net_dollars": -0.300043,
+    "mean_roi_on_paid": -0.525557,
+    "median_net_dollars": -0.0015,
+    "n": 174,
+    "n_quotable": 93,
+    "not_measurable": 0,
+    "total_net_dollars": -27.904,
+    "unquotable": 81
    }
   },
   "fade_settle": {
    "by_topic": {
     "crypto": {
-     "hit_rate": null,
-     "mean_fees_dollars": null,
-     "mean_net_dollars": null,
-     "mean_roi_on_paid": null,
-     "median_net_dollars": null,
-     "n": 9,
-     "n_quotable": 0,
-     "total_net_dollars": null,
-     "unquotable": 9
+     "hit_rate": 0.0,
+     "hit_rate_gross": 0.0,
+     "mean_fees_dollars": 0.0074,
+     "mean_gross_dollars": -0.01,
+     "mean_net_dollars": -0.0174,
+     "mean_roi_on_paid": -0.01825,
+     "median_net_dollars": -0.0174,
+     "n": 21,
+     "n_quotable": 1,
+     "not_measurable": 0,
+     "total_net_dollars": -0.0174,
+     "unquotable": 20
     },
     "elections": {
      "hit_rate": 0.0,
-     "mean_fees_dollars": 0.319903,
-     "mean_net_dollars": -0.198752,
-     "mean_roi_on_paid": -0.453697,
+     "hit_rate_gross": 0.0,
+     "mean_fees_dollars": 0.003132,
+     "mean_gross_dollars": -0.195125,
+     "mean_net_dollars": -0.198257,
+     "mean_roi_on_paid": -0.452449,
      "median_net_dollars": -0.0015,
-     "n": 137,
-     "n_quotable": 103,
-     "total_net_dollars": -20.4715,
-     "unquotable": 34
+     "n": 153,
+     "n_quotable": 112,
+     "not_measurable": 0,
+     "total_net_dollars": -22.2048,
+     "unquotable": 41
     }
    },
    "overall": {
     "direction_split": {
-     "down": 73,
-     "up": 73
+     "down": 89,
+     "up": 85
     },
     "hit_rate": 0.0,
-    "mean_fees_dollars": 0.319903,
-    "mean_net_dollars": -0.198752,
-    "mean_roi_on_paid": -0.453697,
+    "hit_rate_gross": 0.0,
+    "mean_fees_dollars": 0.00317,
+    "mean_gross_dollars": -0.193487,
+    "mean_net_dollars": -0.196657,
+    "mean_roi_on_paid": -0.448607,
     "median_net_dollars": -0.0015,
-    "n": 146,
-    "n_quotable": 103,
-    "total_net_dollars": -20.4715,
-    "unquotable": 43
+    "n": 174,
+    "n_quotable": 113,
+    "not_measurable": 0,
+    "total_net_dollars": -22.2222,
+    "unquotable": 61
    }
   },
   "momo60": {
    "by_topic": {
     "crypto": {
      "hit_rate": 0.0,
-     "mean_fees_dollars": 0.323333,
-     "mean_net_dollars": -0.636567,
-     "mean_roi_on_paid": -0.648593,
-     "median_net_dollars": -0.9348,
-     "n": 9,
-     "n_quotable": 3,
-     "total_net_dollars": -1.9097,
-     "unquotable": 6
+     "hit_rate_gross": 0.0,
+     "mean_fees_dollars": 0.004275,
+     "mean_gross_dollars": -0.4775,
+     "mean_net_dollars": -0.481775,
+     "mean_roi_on_paid": -0.554413,
+     "median_net_dollars": -0.4761,
+     "n": 21,
+     "n_quotable": 4,
+     "not_measurable": 0,
+     "total_net_dollars": -1.9271,
+     "unquotable": 17
     },
     "elections": {
      "hit_rate": 0.0,
-     "mean_fees_dollars": 0.6026,
-     "mean_net_dollars": -0.415856,
-     "mean_roi_on_paid": -0.551872,
-     "median_net_dollars": -0.79775,
-     "n": 137,
-     "n_quotable": 100,
-     "total_net_dollars": -41.5856,
-     "unquotable": 37
+     "hit_rate_gross": 0.0,
+     "mean_fees_dollars": 0.006964,
+     "mean_gross_dollars": -0.486396,
+     "mean_net_dollars": -0.49336,
+     "mean_roi_on_paid": -0.621626,
+     "median_net_dollars": -0.8114,
+     "n": 153,
+     "n_quotable": 111,
+     "not_measurable": 0,
+     "total_net_dollars": -54.763,
+     "unquotable": 42
     }
    },
    "overall": {
     "direction_split": {
-     "down": 73,
-     "up": 73
+     "down": 89,
+     "up": 85
     },
     "hit_rate": 0.0,
-    "mean_fees_dollars": 0.594466,
-    "mean_net_dollars": -0.422284,
-    "mean_roi_on_paid": -0.554689,
-    "median_net_dollars": -0.8001,
-    "n": 146,
-    "n_quotable": 103,
-    "total_net_dollars": -43.4953,
-    "unquotable": 43
+    "hit_rate_gross": 0.0,
+    "mean_fees_dollars": 0.00687,
+    "mean_gross_dollars": -0.486087,
+    "mean_net_dollars": -0.492957,
+    "mean_roi_on_paid": -0.619288,
+    "median_net_dollars": -0.8114,
+    "n": 174,
+    "n_quotable": 115,
+    "not_measurable": 0,
+    "total_net_dollars": -56.6901,
+    "unquotable": 59
    }
   }
  }
