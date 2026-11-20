@@ -1,5 +1,5 @@
 {
- "generated_at_utc": "2026-11-20T12:04:59+00:00",
+ "generated_at_utc": "2026-11-20T12:15:16+00:00",
  "policy": {
   "longshot_max_yes": 0.2,
   "min_volume_24h": 1.0,
@@ -19,8 +19,14 @@
    "side": "no",
    "action": "buy",
    "limit_price": 0.983,
-   "price_grid_validated": false,
-   "price_ranges": null,
+   "price_grid_validated": true,
+   "price_ranges": [
+    {
+     "end": "1.0000",
+     "start": "0.0000",
+     "step": "0.0010"
+    }
+   ],
    "size_contracts": 10,
    "book_contracts_available": 3622.02,
    "immediate_cost_dollars": 3560.45,
@@ -30,7 +36,7 @@
     "yes_price_used": 0.018,
     "spread": 0.001,
     "resting_depth_dollars": 1704252.95,
-    "volume_24h": 7616.09,
+    "volume_24h": 7629.15,
     "close_time": "2028-11-07T15:00:00Z"
    },
    "source": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPRESNOMD-28-JTAL/orderbook"
@@ -44,8 +50,14 @@
    "side": "no",
    "action": "buy",
    "limit_price": 0.969,
-   "price_grid_validated": false,
-   "price_ranges": null,
+   "price_grid_validated": true,
+   "price_ranges": [
+    {
+     "end": "1.0000",
+     "start": "0.0000",
+     "step": "0.0010"
+    }
+   ],
    "size_contracts": 10,
    "book_contracts_available": 21505.36,
    "immediate_cost_dollars": 20838.69,
@@ -54,8 +66,8 @@
     "best_no_bid": 0.967,
     "yes_price_used": 0.033,
     "spread": 0.002,
-    "resting_depth_dollars": 99120.86,
-    "volume_24h": 7578.63,
+    "resting_depth_dollars": 99062.31,
+    "volume_24h": 7602.44,
     "close_time": "2028-11-07T15:00:00Z"
    },
    "source": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPRESNOMD-28-RW/orderbook"

@@ -1,6 +1,6 @@
 {
  "meta": {
-  "built_at_utc": "2026-11-20T12:09:15+00:00",
+  "built_at_utc": "2026-11-20T12:15:16+00:00",
   "rows": 12567,
   "sources": {
    "settled_markets": "GET https://external-api.kalshi.com/trade-api/v2/markets?status=settled&series_ticker=...",
@@ -10,15 +10,15 @@
   "note": "Counts of Kalshi's own `result` field per topic. `blank` means the API returned an empty result (typically a scalar or voided market); it is never guessed into yes/no."
  },
  "by_topic": {
-  "gas": {
-   "label": "Gas prices",
-   "yes": 796,
-   "no": 2595
-  },
   "crypto": {
    "label": "Crypto",
    "no": 3398,
    "yes": 1016
+  },
+  "gas": {
+   "label": "Gas prices",
+   "yes": 796,
+   "no": 2595
   },
   "golf": {
    "label": "Golf",
@@ -38,8 +38,8 @@
   }
  },
  "totals": {
-  "yes": 2441,
   "no": 10080,
+  "yes": 2441,
   "scalar": 46
  },
  "by_month": {
@@ -48,8 +48,8 @@
    "no": 400
   },
   "2026-11": {
-   "yes": 2278,
    "no": 9680,
+   "yes": 2278,
    "scalar": 46
   }
  },
@@ -210,6 +210,27 @@
    "settled": 223
   },
   {
+   "series_ticker": "KXXRP",
+   "counts": {
+    "no": 200
+   },
+   "settled": 200
+  },
+  {
+   "series_ticker": "KXDOGE",
+   "counts": {
+    "no": 200
+   },
+   "settled": 200
+  },
+  {
+   "series_ticker": "KXXRPD",
+   "counts": {
+    "no": 200
+   },
+   "settled": 200
+  },
+  {
    "series_ticker": "KXSOLD",
    "counts": {
     "yes": 86,
@@ -230,30 +251,6 @@
    "counts": {
     "no": 116,
     "yes": 84
-   },
-   "settled": 200
-  },
-  {
-   "series_ticker": "KXZEC15M",
-   "counts": {
-    "yes": 91,
-    "no": 109
-   },
-   "settled": 200
-  },
-  {
-   "series_ticker": "KXHYPE15M",
-   "counts": {
-    "no": 107,
-    "yes": 93
-   },
-   "settled": 200
-  },
-  {
-   "series_ticker": "KXXRP15M",
-   "counts": {
-    "no": 111,
-    "yes": 89
    },
    "settled": 200
   }

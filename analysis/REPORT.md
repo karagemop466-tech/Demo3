@@ -1,6 +1,6 @@
 # Analysis report
 
-Generated 2026-11-20T12:09:14+00:00 from demo run `20261120T120655Z` and production run `20261120T120745Z`.
+Generated 2026-11-20T12:15:15+00:00 from demo run `20261120T121208Z` and production run `20261120T121407Z`.
 
 Every figure below is an aggregation of API fields listed in *Definitions*;
 nothing is estimated. Where data is unavailable it says so instead of showing zero.
@@ -19,11 +19,11 @@ nothing is estimated. Where data is unavailable it says so instead of showing ze
 
 | Topic | Open markets | Contracts traded | Open interest (contracts) | Traded notional $ (derived) | Open-interest $ (derived) | Resting liquidity $ | Median price |
 |---|---|---|---|---|---|---|---|
-| crypto | 5217 | 2,223,100,064.09 | 414,526,788.83 | 253,015,280.03 | 49,552,950.77 | 30,055.54 | 0.0 |
-| elections | 267 | 11,026,208,255.47 | 3,708,369,323.68 | 1,189,797,102.78 | 321,662,407.68 | 2,376,214.59 | 0.005 |
-| culture | 254 | 34,463,863.71 | 23,028,432.93 | 3,687,551.29 | 2,001,321.48 | — | 0.02 |
-| golf | 1171 | 18,373,255.64 | 16,909,634.84 | 208,033.42 | 188,558.17 | — | 0.0 |
-| gas | 126 | 576,745.90 | 521,678.13 | 86,010.91 | 68,420.88 | — | 0.02 |
+| crypto | 5217 | 2,223,100,114.09 | 414,526,838.83 | 253,015,293.53 | 49,552,964.27 | 30,055.54 | 0.0 |
+| elections | 267 | 11,026,212,353.07 | 3,708,371,386.87 | 1,080,846,474.61 | 269,108,570.69 | 2,405,850.66 | 0.005 |
+| culture | 254 | 34,463,984.89 | 23,028,516.74 | 3,687,571.80 | 2,001,340.87 | — | 0.02 |
+| golf | 1171 | 18,376,234.42 | 16,911,744.95 | 205,804.79 | 186,315.04 | — | 0.0 |
+| gas | 126 | 576,841.46 | 521,730.82 | 86,043.70 | 68,452.83 | — | 0.02 |
 
 ## Resolution outcomes
 
@@ -31,8 +31,8 @@ _Count of settled markets per topic by Kalshi `result` (yes/no/scalar/blank). In
 
 | Topic | yes | no | scalar | blank |
 |---|---|---|---|---|
-| gas | 796 | 2595 | 0 | 0 |
 | crypto | 1016 | 3398 | 0 | 0 |
+| gas | 796 | 2595 | 0 | 0 |
 | golf | 332 | 3538 | 46 | 0 |
 | elections | 73 | 166 | 0 | 0 |
 | culture | 224 | 383 | 0 | 0 |
@@ -45,20 +45,20 @@ Input: data/resolutions-compact.json (settled markets with a result and a last p
 
 | YES price band | n | resolved yes | win rate | avg YES price | YES expectancy / contract | NO expectancy / contract |
 |---|---|---|---|---|---|---|
-| <=0.10 | 10,467 | 808 | 7.72% | 0.0039 | +0.0733 | -0.0733 |
-| 0.10-0.20 | 145 | 6 | 4.14% | 0.1368 | -0.0954 | +0.0954 |
-| 0.20-0.40 | 78 | 11 | 14.10% | 0.2864 | -0.1454 | +0.1454 |
+| <=0.10 | 10,478 | 808 | 7.71% | 0.0039 | +0.0732 | -0.0732 |
+| 0.10-0.20 | 143 | 6 | 4.20% | 0.1366 | -0.0946 | +0.0946 |
+| 0.20-0.40 | 76 | 11 | 14.47% | 0.2863 | -0.1416 | +0.1416 |
 | 0.40-0.60 | 41 | 19 | 46.34% | 0.4768 | -0.0134 | +0.0134 |
 | 0.60-0.80 | 35 | 15 | 42.86% | 0.6820 | -0.2534 | +0.2534 |
-| 0.80-0.90 | 47 | 35 | 74.47% | 0.8598 | -0.1151 | +0.1151 |
-| 0.90-0.99 | 276 | 197 | 71.38% | 0.9613 | -0.2475 | +0.2475 |
-| >=0.99 | 1,432 | 1,357 | 94.76% | 0.9951 | -0.0475 | +0.0475 |
+| 0.80-0.90 | 47 | 35 | 74.47% | 0.8602 | -0.1155 | +0.1155 |
+| 0.90-0.99 | 276 | 197 | 71.38% | 0.9613 | -0.2476 | +0.2476 |
+| >=0.99 | 1,425 | 1,350 | 94.74% | 0.9952 | -0.0478 | +0.0478 |
 
-**0.80-0.99 favourite band**: n=936, win rate 82.26%, avg price 0.9750, YES expectancy -0.1523/contract, NO expectancy +0.1523/contract.
+**0.80-0.99 favourite band**: n=929, win rate 82.13%, avg price 0.9749, YES expectancy -0.1536/contract, NO expectancy +0.1536/contract.
 
-**0.01-0.20 longshot band**: n=1,817, win rate 1.65%, avg price 0.0323, YES expectancy -0.0158/contract, NO expectancy +0.0158/contract.
+**0.01-0.20 longshot band**: n=1,820, win rate 1.65%, avg price 0.0322, YES expectancy -0.0158/contract, NO expectancy +0.0158/contract.
 
-**all settled rows**: n=12,521, win rate 19.55%, avg price 0.1483, YES expectancy +0.0472/contract, NO expectancy -0.0472/contract.
+**all settled rows**: n=12,521, win rate 19.50%, avg price 0.1477, YES expectancy +0.0472/contract, NO expectancy -0.0472/contract.
 
 Caveats:
 - last_price_dollars is the last traded price, not the average price paid by holders.
@@ -82,7 +82,7 @@ _(settlement_ts - close_time) in hours, for rows where both timestamps exist._
 
 - observations: 12567
 - median: 0.13 h
-- mean: 247.35 h
+- mean: 247.36 h
 - p90: 8.36 h
 - settled before scheduled close: 0
 

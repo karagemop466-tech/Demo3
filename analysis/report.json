@@ -1,8 +1,8 @@
 {
- "generated_at_utc": "2026-11-20T12:09:14+00:00",
+ "generated_at_utc": "2026-11-20T12:15:15+00:00",
  "inputs": {
-  "demo_run_id": "20261120T120655Z",
-  "prod_run_id": "20261120T120745Z"
+  "demo_run_id": "20261120T121208Z",
+  "prod_run_id": "20261120T121407Z"
  },
  "definitions": {
   "contracts_traded": "Kalshi `volume_fp` \u2014 contracts exchanged on the market. Source: GET /markets.",
@@ -16,50 +16,50 @@
  "per_topic_demo": {
   "crypto": {
    "open_markets": 5217,
-   "sum_contracts_traded": 2223100064.09,
-   "sum_open_interest_contracts": 414526788.83,
-   "sum_traded_notional_dollars_derived": 253015280.03,
-   "sum_open_interest_dollars_derived": 49552950.77,
+   "sum_contracts_traded": 2223100114.09,
+   "sum_open_interest_contracts": 414526838.83,
+   "sum_traded_notional_dollars_derived": 253015293.53,
+   "sum_open_interest_dollars_derived": 49552964.27,
    "sum_resting_liquidity_dollars": 30055.54,
    "median_last_price": 0.0,
    "markets_with_missing_price": 0
   },
   "elections": {
    "open_markets": 267,
-   "sum_contracts_traded": 11026208255.47,
-   "sum_open_interest_contracts": 3708369323.68,
-   "sum_traded_notional_dollars_derived": 1189797102.78,
-   "sum_open_interest_dollars_derived": 321662407.68,
-   "sum_resting_liquidity_dollars": 2376214.59,
+   "sum_contracts_traded": 11026212353.07,
+   "sum_open_interest_contracts": 3708371386.87,
+   "sum_traded_notional_dollars_derived": 1080846474.61,
+   "sum_open_interest_dollars_derived": 269108570.69,
+   "sum_resting_liquidity_dollars": 2405850.66,
    "median_last_price": 0.005,
    "markets_with_missing_price": 0
   },
   "culture": {
    "open_markets": 254,
-   "sum_contracts_traded": 34463863.71,
-   "sum_open_interest_contracts": 23028432.93,
-   "sum_traded_notional_dollars_derived": 3687551.29,
-   "sum_open_interest_dollars_derived": 2001321.48,
+   "sum_contracts_traded": 34463984.89,
+   "sum_open_interest_contracts": 23028516.74,
+   "sum_traded_notional_dollars_derived": 3687571.8,
+   "sum_open_interest_dollars_derived": 2001340.87,
    "sum_resting_liquidity_dollars": null,
    "median_last_price": 0.02,
    "markets_with_missing_price": 0
   },
   "golf": {
    "open_markets": 1171,
-   "sum_contracts_traded": 18373255.64,
-   "sum_open_interest_contracts": 16909634.84,
-   "sum_traded_notional_dollars_derived": 208033.42,
-   "sum_open_interest_dollars_derived": 188558.17,
+   "sum_contracts_traded": 18376234.42,
+   "sum_open_interest_contracts": 16911744.95,
+   "sum_traded_notional_dollars_derived": 205804.79,
+   "sum_open_interest_dollars_derived": 186315.04,
    "sum_resting_liquidity_dollars": null,
    "median_last_price": 0.0,
    "markets_with_missing_price": 0
   },
   "gas": {
    "open_markets": 126,
-   "sum_contracts_traded": 576745.9,
-   "sum_open_interest_contracts": 521678.13,
-   "sum_traded_notional_dollars_derived": 86010.91,
-   "sum_open_interest_dollars_derived": 68420.88,
+   "sum_contracts_traded": 576841.46,
+   "sum_open_interest_contracts": 521730.82,
+   "sum_traded_notional_dollars_derived": 86043.7,
+   "sum_open_interest_dollars_derived": 68452.83,
    "sum_resting_liquidity_dollars": null,
    "median_last_price": 0.02,
    "markets_with_missing_price": 0
@@ -69,13 +69,13 @@
   "formula": "Count of settled markets per topic by Kalshi `result` (yes/no/scalar/blank). Input: data/resolutions.json (GET /markets?status=settled).",
   "total_rows": 12567,
   "by_topic": {
-   "gas": {
-    "yes": 796,
-    "no": 2595
-   },
    "crypto": {
     "no": 3398,
     "yes": 1016
+   },
+   "gas": {
+    "yes": 796,
+    "no": 2595
    },
    "golf": {
     "no": 3538,
@@ -92,15 +92,15 @@
    }
   },
   "by_environment": {
-   "prod": 6995,
-   "demo": 5572
+   "demo": 5572,
+   "prod": 6995
   }
  },
  "settlement_lag_hours": {
   "formula": "(settlement_ts - close_time) in hours, for rows where both timestamps exist.",
   "n": 12567,
   "median": 0.13,
-  "mean": 247.35,
+  "mean": 247.36,
   "p90": 8.36,
   "negative_count": 0,
   "note": "Negative values mean the market settled before its scheduled close, which the API permits via early close (can_close_early)."
@@ -125,39 +125,39 @@
   "buckets": [
    {
     "bucket": "<=0.10",
-    "n": 10467,
+    "n": 10478,
     "yes": 808,
-    "no": 9659,
-    "win_rate_yes": 0.0772,
+    "no": 9670,
+    "win_rate_yes": 0.0771,
     "avg_yes_price": 0.0039,
-    "yes_expectancy_per_contract": 0.0733,
-    "no_expectancy_per_contract": -0.0733,
+    "yes_expectancy_per_contract": 0.0732,
+    "no_expectancy_per_contract": -0.0732,
     "volume_weighted_win_rate": 0.0017,
-    "contracts_traded": 1922784727.21
+    "contracts_traded": 1921845511.43
    },
    {
     "bucket": "0.10-0.20",
-    "n": 145,
+    "n": 143,
     "yes": 6,
-    "no": 139,
-    "win_rate_yes": 0.0414,
-    "avg_yes_price": 0.1368,
-    "yes_expectancy_per_contract": -0.0954,
-    "no_expectancy_per_contract": 0.0954,
-    "volume_weighted_win_rate": 0.0711,
-    "contracts_traded": 8431106.1
+    "no": 137,
+    "win_rate_yes": 0.042,
+    "avg_yes_price": 0.1366,
+    "yes_expectancy_per_contract": -0.0946,
+    "no_expectancy_per_contract": 0.0946,
+    "volume_weighted_win_rate": 0.0703,
+    "contracts_traded": 8527797.6
    },
    {
     "bucket": "0.20-0.40",
-    "n": 78,
+    "n": 76,
     "yes": 11,
-    "no": 67,
-    "win_rate_yes": 0.141,
-    "avg_yes_price": 0.2864,
-    "yes_expectancy_per_contract": -0.1454,
-    "no_expectancy_per_contract": 0.1454,
+    "no": 65,
+    "win_rate_yes": 0.1447,
+    "avg_yes_price": 0.2863,
+    "yes_expectancy_per_contract": -0.1416,
+    "no_expectancy_per_contract": 0.1416,
     "volume_weighted_win_rate": 0.084,
-    "contracts_traded": 1276982.87
+    "contracts_traded": 1276950.25
    },
    {
     "bucket": "0.40-0.60",
@@ -189,11 +189,11 @@
     "yes": 35,
     "no": 12,
     "win_rate_yes": 0.7447,
-    "avg_yes_price": 0.8598,
-    "yes_expectancy_per_contract": -0.1151,
-    "no_expectancy_per_contract": 0.1151,
-    "volume_weighted_win_rate": 0.8946,
-    "contracts_traded": 32339.27
+    "avg_yes_price": 0.8602,
+    "yes_expectancy_per_contract": -0.1155,
+    "no_expectancy_per_contract": 0.1155,
+    "volume_weighted_win_rate": 0.8942,
+    "contracts_traded": 32201.03
    },
    {
     "bucket": "0.90-0.99",
@@ -202,42 +202,42 @@
     "no": 79,
     "win_rate_yes": 0.7138,
     "avg_yes_price": 0.9613,
-    "yes_expectancy_per_contract": -0.2475,
-    "no_expectancy_per_contract": 0.2475,
+    "yes_expectancy_per_contract": -0.2476,
+    "no_expectancy_per_contract": 0.2476,
     "volume_weighted_win_rate": 0.2321,
-    "contracts_traded": 96238600.24
+    "contracts_traded": 96237493.6
    },
    {
     "bucket": ">=0.99",
-    "n": 1432,
-    "yes": 1357,
+    "n": 1425,
+    "yes": 1350,
     "no": 75,
-    "win_rate_yes": 0.9476,
-    "avg_yes_price": 0.9951,
-    "yes_expectancy_per_contract": -0.0475,
-    "no_expectancy_per_contract": 0.0475,
+    "win_rate_yes": 0.9474,
+    "avg_yes_price": 0.9952,
+    "yes_expectancy_per_contract": -0.0478,
+    "no_expectancy_per_contract": 0.0478,
     "volume_weighted_win_rate": 0.9996,
-    "contracts_traded": 673702239.68
+    "contracts_traded": 673337562.11
    }
   ],
   "favourite_band_0_80_to_0_99": {
-   "n": 936,
-   "win_rate_yes": 0.8226,
-   "avg_yes_price": 0.975,
-   "yes_expectancy_per_contract": -0.1523,
-   "no_expectancy_per_contract": 0.1523
+   "n": 929,
+   "win_rate_yes": 0.8213,
+   "avg_yes_price": 0.9749,
+   "yes_expectancy_per_contract": -0.1536,
+   "no_expectancy_per_contract": 0.1536
   },
   "longshot_band_0_01_to_0_20": {
-   "n": 1817,
+   "n": 1820,
    "win_rate_yes": 0.0165,
-   "avg_yes_price": 0.0323,
+   "avg_yes_price": 0.0322,
    "yes_expectancy_per_contract": -0.0158,
    "no_expectancy_per_contract": 0.0158
   },
   "all_rows": {
    "n": 12521,
-   "win_rate_yes": 0.1955,
-   "avg_yes_price": 0.1483,
+   "win_rate_yes": 0.195,
+   "avg_yes_price": 0.1477,
    "yes_expectancy_per_contract": 0.0472,
    "no_expectancy_per_contract": -0.0472
   },

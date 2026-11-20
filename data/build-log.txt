@@ -1,19 +1,19 @@
 === build.py ===
 {
  "<=0.10": {
-  "n": 10467,
-  "win_rate_yes": 0.0772,
+  "n": 10478,
+  "win_rate_yes": 0.0771,
   "avg_yes_price": 0.0039
  },
  "0.10-0.20": {
-  "n": 145,
-  "win_rate_yes": 0.0414,
-  "avg_yes_price": 0.1368
+  "n": 143,
+  "win_rate_yes": 0.042,
+  "avg_yes_price": 0.1366
  },
  "0.20-0.40": {
-  "n": 78,
-  "win_rate_yes": 0.141,
-  "avg_yes_price": 0.2864
+  "n": 76,
+  "win_rate_yes": 0.1447,
+  "avg_yes_price": 0.2863
  },
  "0.40-0.60": {
   "n": 41,
@@ -28,7 +28,7 @@
  "0.80-0.90": {
   "n": 47,
   "win_rate_yes": 0.7447,
-  "avg_yes_price": 0.8598
+  "avg_yes_price": 0.8602
  },
  "0.90-0.99": {
   "n": 276,
@@ -36,15 +36,15 @@
   "avg_yes_price": 0.9613
  },
  ">=0.99": {
-  "n": 1432,
-  "win_rate_yes": 0.9476,
-  "avg_yes_price": 0.9951
+  "n": 1425,
+  "win_rate_yes": 0.9474,
+  "avg_yes_price": 0.9952
  }
 }
 {
- "dashboard_bytes": 1959719,
+ "dashboard_bytes": 1959848,
  "resolutions_rows": 12567,
- "resolutions_bytes": 6364934
+ "resolutions_bytes": 6364984
 }
 === strategies.py ===
 {
@@ -56,15 +56,15 @@
 {
  "rows": 12567,
  "by_topic": {
-  "gas": {
-   "label": "Gas prices",
-   "yes": 796,
-   "no": 2595
-  },
   "crypto": {
    "label": "Crypto",
    "no": 3398,
    "yes": 1016
+  },
+  "gas": {
+   "label": "Gas prices",
+   "yes": 796,
+   "no": 2595
   },
   "golf": {
    "label": "Golf",
@@ -86,13 +86,13 @@
  "reconciled_orders": 0
 }
 === artifacts ===
--rw-r--r-- 1 runner runner  1959719 Nov 20 12:09 data/dashboard.json
--rw-r--r-- 1 runner runner     3589 Nov 20 12:09 data/expectancy.json
--rw-r--r-- 1 runner runner 11770194 Nov 20 12:09 data/live-prod.json
--rw-r--r-- 1 runner runner 27341596 Nov 20 12:07 data/live.json
--rw-r--r-- 1 runner runner    25186 Nov 20 12:09 data/meta.json
--rw-r--r-- 1 runner runner    12002 Nov 20 12:09 data/order-rules.json
--rw-r--r-- 1 runner runner      748 Nov 20 12:06 data/portfolio.json
--rw-r--r-- 1 runner runner  6364934 Nov 20 12:09 data/resolutions-compact.json
--rw-r--r-- 1 runner runner     3995 Nov 20 12:09 data/resolutions-summary.json
--rw-r--r-- 1 runner runner  7906453 Nov 20 12:09 data/resolutions.json
+-rw-r--r-- 1 runner runner  1959848 Nov 20 12:15 data/dashboard.json
+-rw-r--r-- 1 runner runner     3588 Nov 20 12:15 data/expectancy.json
+-rw-r--r-- 1 runner runner 11771245 Nov 20 12:15 data/live-prod.json
+-rw-r--r-- 1 runner runner 27333878 Nov 20 12:14 data/live.json
+-rw-r--r-- 1 runner runner    23601 Nov 20 12:15 data/meta.json
+-rw-r--r-- 1 runner runner    12013 Nov 20 12:15 data/order-rules.json
+-rw-r--r-- 1 runner runner      748 Nov 20 12:12 data/portfolio.json
+-rw-r--r-- 1 runner runner  6364984 Nov 20 12:15 data/resolutions-compact.json
+-rw-r--r-- 1 runner runner     3942 Nov 20 12:15 data/resolutions-summary.json
+-rw-r--r-- 1 runner runner  7906503 Nov 20 12:15 data/resolutions.json

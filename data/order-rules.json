@@ -1,5 +1,5 @@
 {
- "generated_at_utc": "2026-11-20T12:09:14+00:00",
+ "generated_at_utc": "2026-11-20T12:15:16+00:00",
  "policy": {
   "longshot_max_yes": 0.2,
   "min_volume_24h": 1.0,
@@ -36,7 +36,7 @@
     "yes_price_used": 0.018,
     "spread": 0.001,
     "resting_depth_dollars": 1704252.95,
-    "volume_24h": 7621.59,
+    "volume_24h": 7629.15,
     "close_time": "2028-11-07T15:00:00Z"
    },
    "source": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPRESNOMD-28-JTAL/orderbook"
@@ -66,8 +66,8 @@
     "best_no_bid": 0.967,
     "yes_price_used": 0.033,
     "spread": 0.002,
-    "resting_depth_dollars": 99095.55,
-    "volume_24h": 7589.03,
+    "resting_depth_dollars": 99062.31,
+    "volume_24h": 7602.44,
     "close_time": "2028-11-07T15:00:00Z"
    },
    "source": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPRESNOMD-28-RW/orderbook"
@@ -142,7 +142,7 @@
   {
    "ticker": "KXPRESNOMD-28-EWAR",
    "topic": "elections",
-   "reason": "resting depth $0.00 < $50 \u2014 R4 avoid"
+   "reason": "spread not derivable (one side of the book is empty)"
   },
   {
    "ticker": "KXOSCARPIC-27-DIG",
