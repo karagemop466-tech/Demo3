@@ -348,3 +348,21 @@ Follow-up requests from session 06cbd03f addressed at integration:
 - 2026-11-20 12:25 UTC: PR https://github.com/karagemop466-tech/Demo3/pull/24 (`arena/4d10aedf-demo3` -> `main`) opened with summary, sources and flagged irregularities. Pre-merge checks green (verify_rows 725/725, verify_site PASSED, jsdom smoke PASSED).
 - 2026-11-20 12:29 UTC: `gh pr merge 24 --merge` reported conflicts — `main` had advanced with sessions `3b5e95bd`/`dd229508`/`arena-3a22fb0f` deliveries (PRs #18/#21/#22). Conflicts in `.gitignore`, `README.md`, `docs/executive-summary.md`, `COORDINATION.md` resolved by keeping both sides: `main`'s records preserved verbatim, 4d10aedf's records added as new sections. Nothing discarded (handoff/conflict protocol).
 - 2026-11-20 12:31 UTC: **PR #24 MERGED** — merge commit `48fe55e`. `Checks` workflow SUCCESS on the merge; `pages build and deployment` workflow SUCCESS; the Pages API reports `built` (source `main` /). Live site verified via page fetch: https://karagemop466-tech.github.io/Demo3/ serves the merged canonical landing with live status "LIVE · trading active (demo)", the executive-summary source table, decision registers, and archive links (docs/, docs/tracker/, analysis/, demo-desk/, research/). This line records the actual result; the follow-up board commit carries the confirmation to `main`.
+
+---
+
+## Task board — session 6ebc1cb7 (live alert chat + automated trades + final integration)
+
+Branch: `arena/6ebc1cb7-demo3` (branched from `b3b2b23`, same as `main` HEAD). Session ID: `6ebc1cb7`.
+Scope: root `dashboard.html`, `assets/style.css`, new `assets/alerts.js`, `assets/trade.js` (automation extension), `COORDINATION.md` (this section only), verification + PR/merge. Nothing in `docs/`, `docs/tracker/`, `analysis/`, `demo-desk/`, `collector/`, `trading/`, `data/`, or `.github/` is touched by this session.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| T1 Two scrolling chat alert panels: price-swing detection (>= $0.10 either direction), "All events" chat + "High ROI model" filter chat, real-time scrolling | in progress | 6ebc1cb7 | `dashboard.html`, `assets/style.css`, `assets/alerts.js` | Demo REST polling (no key) for market data; swing computed from live last_price vs prior sample; each alert row links its market API URL; high-ROI filter is a labeled model heuristic (flagged as unverified until a model is defined) | F-alert-01 (high-ROI model not defined — labeled heuristic), F-alert-02 (CORS to demo API from Pages unverified — page fails closed to snapshots) |
+| T2 Automated simulated trades: paper strategies fire on swing signals, execution + PnL tracked, categorized by type, results analyzed | in progress | 6ebc1cb7 | `assets/trade.js` | Paper mode = labeled SIMULATED, nothing sent to Kalshi; settlement semantics per Market Settlement doc | F-trade-01 (no live demo credentials — paper mode only, labeled) |
+| T3 Final integration: verify root site line by line (per-row sources, no broken links, JS syntax), open PR `arena/6ebc1cb7-demo3` -> main, merge, confirm GitHub Pages deploy | unclaimed | 6ebc1cb7 | `scripts/verify_root_site.py`, `.github/`, PR to main | `verify_root_site.py` 0 failures; `node --check`; whole-site internal link crawl; Pages API `built` | none yet |
+
+### Session 6ebc1cb7 claim (per protocol)
+
+Claimed 2026-11-20: tasks T1–T3, session `6ebc1cb7`, branch `arena/6ebc1cb7-demo3`, file scope as above. No other session's files are in scope. This claim is committed and pushed immediately; progress logged below as work completes.
+
