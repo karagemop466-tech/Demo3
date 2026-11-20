@@ -449,10 +449,24 @@ def main() -> int:
                 "source_url": r["source_url"],
             })
     resolutions.sort(key=lambda x: x.get("settlement_ts") or "", reverse=True)
-    resolutions = resolutions[:1000]
+    result_counts: dict[str, int] = {}
+    for row in resolutions:
+        result_counts[row["result"]] = result_counts.get(row["result"], 0) + 1
+    kept, per_topic = [], {t: 0 for t in TOPICS}
+    for row in resolutions:  # balance topics: crypto ladders settle thousands/hour
+        t = row["topic"]
+        if per_topic.get(t, 0) >= 300:
+            continue
+        per_topic[t] = per_topic.get(t, 0) + 1
+        kept.append(row)
+        if len(kept) >= 1000:
+            break
+    resolutions = kept
     write_json(f"{REPO_DATA}/latest/resolutions.json", {
         "retrieved_at": retrieved_at,
         "count": len(resolutions),
+        "result_counts_this_run": result_counts,
+        "per_topic_caps": "max 300 rows per topic so ladder settlements cannot crowd out other topics",
         "resolution_field": "market.result (yes|no) per https://docs.kalshi.com/getting_started/market_settlement",
         "resolutions": resolutions,
     })
