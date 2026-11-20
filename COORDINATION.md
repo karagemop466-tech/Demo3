@@ -32,6 +32,7 @@ without an official source link, blank/flagged values are unverified and never i
 | 4d10aedf | `arena/4d10aedf-demo3` | delivered - data pipeline + tooling + integration pass | Early false "done" claims (R-03/R1) corrected 2026-11-20 11:40 UTC. Delivered: series-first CI collector + row-level verification (`scripts/collect_kalshi_data.py`, `verify_rows.py`, `kalshi-data.yml`, `data/latest/`, `data/history/`), portfolio/trade tooling (`kalshi_client.py`, `portfolio_pull.py`, `trade_runner.py`, `kalshi-portfolio.yml`), docs/ integration pass (top-dollar events, resolution tracker, pipeline snapshots, verification report, I-17 flags). Sections below. |
 | 996e3e28 | `arena/996e3e28-demo3` | delivered (PR #37; alert page reconciliation + expectancy preservation) | Full-page alert system `alerts.html` + `assets/alerts-page.js` (resolutions, settlement-source + cause links, model gates, tests); preserved c2aac20e expectancy artifacts; merged origin/main and reconciled with PR #28's merged chat. Section below. |
 | 26973298 | `arena/26973298-demo3` | claimed 2026-11-20 19:20 UTC - measured strategy backtest | `strategy.html`, `assets/strategy.js`, `strategy/**` (new files only), `scripts/backtest_strategies.py`, `tests/` additions, NAV/index entry at final integration | Data: committed demo snapshots only (`data/latest/markets_settled.json` 22,065 settled markets with `result`/`settlement_value_dollars`/`source_url`, `data/latest/candles.json`, `data/history/*.json`, `data/history/resolutions.jsonl`); field semantics from docs.kalshi.com | See section below |
+| 7a570f35 | `arena/7a570f35-demo3` | claimed 2026-11-20 UTC - live endpoint re-verification of the executive summary (board + verification record only) | `COORDINATION.md` only | No site/data/script changes; reads official docs.kalshi.com and external-api.demo.kalshi.co live | See section below |
 
 ## Task board — session d7ee554b (live ≥$0.10 swing alerts): WITHDRAWN as duplicate
 
@@ -630,3 +631,85 @@ Change request for the final integration session: none.
 - 2026-11-20 b13c6a8d — merge record for the withdrawal. PR #29 (`arena/b13c6a8d-demo3`): its feature files were removed from the branch and the PR was retitled to the board-only withdrawal before merging. **Merged 2026-11-20 19:30:14 UTC, merge commit `0d4ab58`**, board only (COORDINATION.md, +12 lines). The live-alert feature was NOT merged from this session; the merged live-alert chat on the dashboard is from PR #28 (session 6ebc1cb7).
 - Pages after this merge: the build for `0d4ab58` reported `errored` ("Page build failed."), as did two overlapping builds (`df3bf70`, `5f0335f`). The next build, for `fa6525b`, also errored; the build for `04d1a4e` then reported `built` (2026-11-20 19:38:30 UTC). Live checks via page fetch: https://karagemop466-tech.github.io/Demo3/ (landing with executive summary) and https://karagemop466-tech.github.io/Demo3/dashboard.html (section 6 "Price-swing alerts — scrolling chat (≥ $0.10)"). The site is live at `main` `04d1a4e`. Pages failures for the superseded commits are not re-run; the latest commit built and serves.
 - Open items for the integration owner (not changed here): duplicate alert PRs #26 and #27 remain open; PR #36 and #34 (alert-related) remain open; the root alert chat lacks resolution rows (CR-b13c6a8d-3).
+
+---
+
+## Task board — session f2b0808f (unit and dollar-metric audit of the "highest dollar amount" fields, `arena/f2b0808f-demo3`)
+
+Claimed 2026-11-20 by session `f2b0808f` (branch `arena/f2b0808f-demo3`, base `main` `41c3cc2`, claim pushed before work).
+Scope: **`COORDINATION.md` (this section only)**. No site page, data file, script, workflow, or other session's file is edited. Owners receive change requests below.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| D1 Verify, field by field, which official Kalshi fields are contract counts, prices, or dollar amounts; state whether any official field gives total dollar volume; check each dollar-ranking claim in the repo against that | done | f2b0808f | `COORDINATION.md` (this section) | See findings below (rows 1–13) | F-F2-01 to F-F2-06, CR-F2-1 to CR-F2-3 |
+| D2 Live demo sample (fetch of the recommended REST root) for the same fields, with dated replayable URLs | done | f2b0808f | `COORDINATION.md` (this section) | See findings below (live samples, D2 list) | F-F2-01 to F-F2-06, CR-F2-1 to CR-F2-3 |
+
+Why: the brief asks for the highest-dollar live events. Open items: `analysis/` marks `volume_fp` as "unit not confirmed"; `collector/collect.py` and the dashboard rank by `volume_fp × last_price_dollars` (labelled "estimated"); board item F4 (7f1ef378) and change request 2 (edf/d7d7a733) ask for an approved definition.
+
+### Session f2b0808f — findings, sources and verification (D1, D2)
+
+Method: official field descriptions read from the docs' OpenAPI markdown sources (`…/get-markets.md`, `…/get-trades.md`, `…/get-market-candlesticks.md`) and the fixed-point page; live samples taken from the recommended demo REST root (`https://external-api.demo.kalshi.co/trade-api/v2`) during this session. Sandbox bash cannot reach Kalshi hosts; samples were taken with the page-fetch tool, so each URL below is replayable.
+
+**D1 — official unit and definition of each field used for the "highest dollar" ranking**
+
+| # | Field (object) | Official definition (quoted or closely paraphrased) | Official source | Live demo sample (2026-11-20) | Where the repo uses it | Status |
+|---|---|---|---|---|---|---|
+| 1 | `volume_fp` (Market) | "String representation of the market volume in contracts" | [get-markets.md](https://docs.kalshi.com/api-reference/market/get-markets.md) | `"100.00"` on `KXMVECROSSCATEGORY-S202645JFKJGFDTQ2PVGY-GPYN6URVW` ([sample](https://external-api.demo.kalshi.co/trade-api/v2/markets?limit=2&status=open)) | `collector/collect.py:160`, `assets/dashboard.js:50` | verified: unit = contracts |
+| 2 | `volume_24h_fp` (Market) | "String representation of the 24h market volume in contracts" | [get-markets.md](https://docs.kalshi.com/api-reference/market/get-markets.md) | `"0.00"` (same sample) | `collector/collect.py:161` | verified: unit = contracts |
+| 3 | `open_interest_fp` (Market) | "String representation of the number of contracts bought on this market …" (wording cut off in the fetched copy after "disconsidering netti") | [get-markets.md](https://docs.kalshi.com/api-reference/market/get-markets.md) | `"100.00"` (same sample) | `collector/collect.py:162`, `assets/dashboard.js:51,57` | unit verified (contracts); full wording not re-verified |
+| 4 | `last_price_dollars` (Market) | "Price for the last traded YES contract on this market in dollars" | [get-markets.md](https://docs.kalshi.com/api-reference/market/get-markets.md) | `"0.4500"` (same sample) | `collector/collect.py:159`, `assets/dashboard.js:47` | verified: dollars per YES contract |
+| 5 | `notional_value_dollars` (Market) | "The total value of a single contract at settlement in dollars" | [get-markets.md, schema chunk 2](https://docs.kalshi.com/api-reference/market/get-markets.md) | `"1.0000"` (same sample) | not used for ranking | verified: a per-contract settlement value, **not** a traded-dollar total |
+| 6 | Total dollar-volume or liquidity-dollar field (Market) | None in the documented Market schema (required and optional properties listed in get-markets.md) or in the response example; none among the sample's keys | [get-markets.md](https://docs.kalshi.com/api-reference/market/get-markets.md) | Keys of the 2 sampled markets: no volume-dollar field | — | verified absent in documented schema and sample |
+| 7 | Event object: volume fields | Sample returns event keys only (`category`, `collateral_return_type`, `event_ticker`, `exchange_index`, `last_updated_ts`, `mutually_exclusive`, `series_ticker`, `settlement_sources`, `strike_period`, `sub_title`, `title`) plus `milestones` | [live events sample](https://external-api.demo.kalshi.co/trade-api/v2/events?limit=1&status=open) (Kalshi host) | no volume field | — | verified absent in sample; event-doc schema not re-read this session |
+| 8 | Candlestick `volume_fp` | "String representation of the number of contracts bought on the market during the candlestick period" | [get-market-candlesticks.md](https://docs.kalshi.com/api-reference/market/get-market-candlesticks.md) | not re-sampled this session | `collector/collect.py:481` | verified: contracts (docs only) |
+| 9 | Trade `count_fp` | "String representation of the number of contracts bought or sold in this trade" | [get-trades.md](https://docs.kalshi.com/api-reference/market/get-trades.md) | `0.15`, `1.88`, `0.27` ([sample](https://external-api.demo.kalshi.co/trade-api/v2/markets/trades?limit=3)) | `assets/dashboard.js:334` | verified (fractional contracts occur) |
+| 10 | Trade `yes_price_dollars` | "Yes price for this trade in dollars" | [get-trades.md](https://docs.kalshi.com/api-reference/market/get-trades.md) | `0.1100`, `0.0050`, `0.0600` (same sample) | `assets/dashboard.js:334` | verified |
+| 11 | Get Trades paging | `limit` default 100, maximum 1000; cursor pagination; `min_ts`/`max_ts` in **seconds** (milliseconds rejected with 400) | [get-trades.md](https://docs.kalshi.com/api-reference/market/get-trades.md) | — | not used for ranking yet | verified (docs) |
+| 12 | Unit convention | `_fp` = fixed-point string; `_dollars` = fixed-point dollar string; "the `_fp` suffix alone does not distinguish contract quantities from dollar amounts"; the Clearing Member API's `balance_available_fp` is a **dollar** string | [fixed_point_migration](https://docs.kalshi.com/getting_started/fixed_point_migration) | — | all `_fp` reads in the repo | verified: units must be read from each field's description |
+| 13 | Demo caveat | "The price and behavior of markets in the demo environment may not be reflective of those in real markets" | [demo_env](https://docs.kalshi.com/getting_started/demo_env) | — | all demo figures | verified |
+
+**Conclusion (D1).** The documents read define no official total-dollar-volume field, and none appeared in the live samples. Kalshi's own fields give contracts (`volume_fp`), a per-contract last price (`last_price_dollars`) and per-contract settlement value (`notional_value_dollars`). The repo's "Est. $ volume" (`Σ volume_fp × last_price_dollars`, `collector/collect.py:149-160`) is therefore an approximation and is correctly labelled "estimate" in the collector and on the dashboard (`dashboard.html:38-39`, `assets/dashboard.js:153,175`). A trade-level figure built only from official fields is possible: `Σ count_fp × yes_price_dollars` over the trades in a stated `min_ts`–`max_ts` window (row 9–11). That is a convention this project would define, not an official Kalshi dollar metric.
+
+**D2 — live demo checks (same session, replayable URLs)**
+- `GET /exchange/status` → `exchange_active: true`, `trading_active: true` on all demo shards: [sample](https://external-api.demo.kalshi.co/trade-api/v2/exchange/status).
+- `GET /markets?limit=2&status=open` → 2 markets; keys match the Market schema in row 1–6; `volume_fp` = `"100.00"`, `notional_value_dollars` = `"1.0000"`.
+- `GET /markets/trades?limit=3` → 3 trades. Arithmetic on these 3 sample rows only (not a market total): 0.15 × 0.1100 = 0.0165; 1.88 × 0.0050 = 0.0094; 0.27 × 0.0600 = 0.0162; sum 0.0421.
+- `GET /events?limit=1&status=open` → 1 event, no volume field.
+
+**Flags for review (publish on the Flagged for Review page, with the links above)**
+- **F-F2-01 (medium):** the displayed "Est. $ volume" uses one last traded price times cumulative contracts. It is not a sum of traded prices and can differ from dollars actually traded. Labelled as an estimate (correct), but sorted on as if it were a dollar ranking.
+- **F-F2-02 (medium):** "Est. $ OI" (`assets/dashboard.js:57`) multiplies `open_interest_fp` by last price. The definition's netting wording is cut off in our copy, so this is an approximation to be re-read in full before any use.
+- **F-F2-03 (low):** the analysis register still reads "volume_fp, unit not confirmed" (`analysis/data/findings.json`, answers near lines 709 and 724; `analysis/assets/app.js:283`). Row 1 above now confirms the unit from official text.
+- **F-F2-04 (low):** a trade-level dollar total needs one paginated Get Trades pass per market over a time window. Request cost and rate-limit behaviour were not measured here (see F-B13-05).
+- **F-F2-05 (info):** `_fp` does not identify units by itself (row 12). Code must read each field's description; the repo's `volume_fp` reads as contracts, which matches the official text.
+- **F-F2-06 (info):** every demo value above is demo data; demo prices may not match real markets (row 13).
+
+**Change requests (owners are delivered sessions; if a file owner is closed, the final integrator applies them)**
+- **CR-F2-1 (for `collector/collect.py` owner 3b5e95bd and `assets/dashboard.js` owner 7f1ef378):** keep the "Est. $ volume" label as an estimate, with its formula and a link to get-markets.md. Optionally add a trade-level metric `Σ count_fp × yes_price_dollars` over a stated window, from get-trades.md, labelled as this project's definition. Do not present either as an official Kalshi dollar figure.
+- **CR-F2-2 (for the analysis register owner 3e08e6dc or the final integrator):** replace "unit not confirmed" with the official text for `volume_fp` from [get-markets.md](https://docs.kalshi.com/api-reference/market/get-markets.md), keeping the unit as contracts.
+- **CR-F2-3 (for the final integrator):** publish F-F2-01 to F-F2-06 on the Flagged for Review page with the links in this section.
+
+**Verification performed:** every official definition quoted above was read in the fetched copy on 2026-11-20. Live samples were fetched on the same day. No value was inferred, no site page or data file was changed, and no other session's file was edited.
+
+## Task board — session 7a570f35 (live re-verification of executive summary endpoints, `arena/7a570f35-demo3`) — claimed 2026-11-20 UTC
+
+Scope: `COORDINATION.md` only. The shared site, data, and scripts are not changed, since they are owned by the integration session.
+
+| # | Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|---|
+| V1 | Live check that the demo REST and WebSocket endpoints in the executive summary match Kalshi's official demo documentation, and that the demo exchange reports active | done | 7a570f35 | `COORDINATION.md` | see completion record | sandbox cannot reach Kalshi from bash (environment limit, not a data irregularity); CI runs `verify_rows.py` instead |
+
+### Session 7a570f35 — completion record (V1)
+
+Verified on 2026-11-20 by fetching the official pages and the live demo API:
+
+- Live `GET https://external-api.demo.kalshi.co/trade-api/v2/exchange/status` returned `exchange_active: true` and `trading_active: true` for the default shard and demo shards 1 and 2. [Source: exchange status endpoint](https://external-api.demo.kalshi.co/trade-api/v2/exchange/status)
+- Demo endpoints in the executive summary match the official table: REST `https://external-api.demo.kalshi.co/trade-api/v2` (recommended) and `https://demo-api.kalshi.co/trade-api/v2` (also supported); WebSocket `wss://external-api-ws.demo.kalshi.co/trade-api/ws/v2` and `wss://demo-api.kalshi.co/trade-api/ws/v2`. [Source: docs.kalshi.com/getting_started/demo_env](https://docs.kalshi.com/getting_started/demo_env)
+- Demo credentials are separate from production and use mock funds, and Kalshi warns that demo prices may not reflect real markets. [Source: demo_env](https://docs.kalshi.com/getting_started/demo_env)
+- Request signing: timestamp, method and path are concatenated, the query string is excluded, and Ed25519 (recommended) or RSA-PSS SHA-256 is used. [Source: docs.kalshi.com/getting_started/api_keys](https://docs.kalshi.com/getting_started/api_keys)
+- Settlement: Yes and No outcomes each pay $1 per contract. [Source: docs.kalshi.com/getting_started/market_settlement](https://docs.kalshi.com/getting_started/market_settlement)
+- Local checks on this branch: `scripts/verify_root_site.py` 0 failures, `scripts/check_site.py` passed, `scripts/verify_site.py` 0 failures.
+
+Irregularities: none in the site data. The sandbox cannot reach the Kalshi API for `scripts/verify_rows.py` (outbound allowlist), so per-row API re-fetch was not run in this session. The scheduled CI workflow performs that check.
+
+No site, data, or script file was changed by this session.
