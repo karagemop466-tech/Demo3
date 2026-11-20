@@ -1,0 +1,30 @@
+recorded_at=2026-11-20T20:26:45Z
+job_status=pre-merge (offline over main's tape)
+workflow=local
+event=local
+ref=local
+sha=local
+run_url=https://github.com/local/actions/runs/n/a
+status.json: mode=offline finished_at=2026-11-20T20:26:44Z requests=0 errors=0 deadline_reached=False tape_rows=264 swings_total=8 simulated_trades=7
+swings.json: 8 swings, 0 with candidate links, 2 resolved; threshold >= $0.10 from=https://external-api.demo.kalshi.co/trade-api/v2
+feed_health.json: 0 of 17 feeds usable (mode=offline, checked_at=2026-11-20T19:46:25Z)
+  not usable: AP News (hub RSS is not published; homepage listed for manual review) — skipped_offline
+  not usable: Reuters — skipped_offline
+  not usable: BBC News — World — skipped_offline
+  not usable: BBC News — Business — skipped_offline
+  not usable: BBC News — Entertainment & Arts — skipped_offline
+  not usable: NPR — News Topics — skipped_offline
+  not usable: NPR — Politics — skipped_offline
+  not usable: NPR — Business — skipped_offline
+  not usable: CoinDesk — skipped_offline
+  not usable: The Block — skipped_offline
+  not usable: ESPN — Sports Top News — skipped_offline
+  not usable: PGA Tour — News — skipped_offline
+  not usable: Golf Digest — skipped_offline
+  not usable: AAA — Gas Prices (publisher page; no RSS published) — skipped_offline
+  not usable: U.S. EIA — Petroleum (official government statistics feed) — skipped_offline
+  not usable: The Guardian — World — skipped_offline
+  not usable: Variety — skipped_offline
+endpoints.json: 0 probed, 0 returned HTTP 200 (probed_at=2026-11-20T19:46:25Z)
+  note: skipped: this runner has no egress to the demo API (the build sandbox allowlists github.com / npmjs / pypi only). The scheduled GitHub Actions run rewrites this file with real HTTP statuses.
+strategies.json: 7 simulated trade(s), 3 categor(y/ies), 0 above the n>=30 floor

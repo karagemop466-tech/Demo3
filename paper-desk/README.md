@@ -56,6 +56,15 @@ python3 scripts/verify_paper_desk.py              # links + per-row sources + JS
 node --test paper-desk/tests/dom.test.mjs         # DOM smoke test (npm i jsdom)
 ```
 
+## If `main` moves during a CI cycle
+
+Four other workflows push to `main` on their own schedules, so the desk's commit step can be
+rejected as non-fast-forward. It then merges `main` (keeping other sessions' edits to shared
+files, keeping this cycle's output for `data/paper/**` and `paper-desk/**`), rebuilds, re-verifies
+and retries the push — and refuses to push at all if the rebuilt pages fail verification. That
+path was exercised in a scratch clone before shipping (the failure it fixes is real: run
+44809258893 lost a cycle to exactly this race).
+
 Automation runs on a schedule in CI (`*/20 * * * *`, default branch). Scheduled workflows do not
 run on non-default branches, so pre-merge cycles are started with **Actions → Paper desk
 (automated simulated trading) → Run workflow**
