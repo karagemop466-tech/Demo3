@@ -351,6 +351,39 @@ Follow-up requests from session 06cbd03f addressed at integration:
 
 ---
 
+## Task board — session 5bc43641 (alert source links + documented ROI model + strategy automation + final integration)
+
+Branch: `arena/5bc43641-demo3` (branched from `7e795b2` = `main` HEAD, which already includes
+PR #28 from session 6ebc1cb7's alert chat + paper-trade automation). Session ID: `5bc43641`.
+Scope: root `assets/alerts.js`, `assets/app.js`, `assets/trade.js`, `assets/style.css`,
+`dashboard.html`, `scripts/verify_root_site.py` (additive: syntax-check the alert engine),
+`COORDINATION.md` (this section only), verification + PR/merge/Pages. Nothing in `docs/`,
+`docs/tracker/`, `analysis/`, `demo-desk/`, `collector/`, `trading/`, `data/`, or `.github/` is
+touched by this session.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| T1 Line-by-line repo review + official-source re-verification of every field used by the alert engine | done | 5bc43641 | `assets/app.js`, `assets/alerts.js`, `assets/trade.js`, `assets/dashboard.js` | Live demo API + docs.kalshi.com fetched 2026-11-20: `GET /series` (`settlement_sources` field), `GET /series/{ticker}` (KXPGATOUR), `GET /markets` (field names), `GET /events/{event_ticker}` (settlement_sources + event_ticker), `GET /series/{s}/markets/{t}/candlesticks` (path + OHLC envelope), `GET /markets/{t}`, demo_env endpoint table | F-5B-01 (settlement sources are official settlement sources, NOT verified causes of a swing — labeled) |
+| T2 Add official related links to alerts: event/series/market API URLs + the series' official Kalshi settlement-source website links (https-only), labeled as settlement sources not verified causes | done | 5bc43641 | `assets/app.js`, `assets/alerts.js`, `assets/style.css` | `settlement_sources` documented on Get Series List; live `KXPGATOUR` series/event responses carry `[{name,url}]` (ESPN/Fox Sports/PGATOUR) | F-5B-01 |
+| T3 Upgrade the "High ROI model" chat to a documented, transparent multi-factor score (swing size, relative move, liquidity) with the formula shown in the UI; labeled unverified heuristic (no trained model exists) | done | 5bc43641 | `assets/alerts.js` | Factors derived only from verified API fields (`last_price_dollars`, `open_interest_fp`); formula disclosed; flagged F-5B-02 as an unverified model heuristic | F-5B-02 |
+| T4 Strategy selection for automated simulated trades (momentum / mean-reversion / breakout), paper/SIMULATED only, categorized by strategy | done | 5bc43641 | `assets/trade.js`, `dashboard.html`, `assets/style.css` | Order/settlement semantics per docs.kalshi.com (market settlement); simulated fills labeled, nothing sent to Kalshi | F-trade-01 (no live demo credentials — paper mode only, labeled) |
+| T5 Final integration: per-row sources, link check, JS syntax, PR to main, merge, confirm GitHub Pages | in progress | 5bc43641 | `scripts/verify_root_site.py`, PR | `verify_root_site.py` 0 failures; `node --check`; `npm test` 26/26; Pages API `built` | none yet |
+
+### Session 5bc43641 claim (per protocol)
+
+Claimed 2026-11-20: tasks T1–T5, session `5bc43641`, branch `arena/5bc43641-demo3`, file scope
+as above. No other session's files are in scope. Claim committed and pushed immediately; progress
+logged below as work completes.
+
+Progress log:
+- 2026-11-20: claim written to this board (commit below). Baseline verified: branch at `7e795b2`
+  (= `main` HEAD, PR #28 merged); `npm test` 26/26 after `npm ci`; `verify_root_site.py` 0 failures.
+- 2026-11-20: T1 done — official-source re-verification of every field the alert engine uses
+  (see Sources column); `settlement_sources` confirmed as the official, documented source-link field.
+- 2026-11-20: T2/T3/T4 implemented (app.js sources capture; alerts.js related links + documented
+  ROI model; trade.js strategy selection). `node --check` OK; `verify_root_site.py` 0 failures.
+- 2026-11-20: T5 in progress — re-verification, PR, merge, Pages confirmation.
+
 ## Task board — session 6ebc1cb7 (live alert chat + automated trades + final integration)
 
 Branch: `arena/6ebc1cb7-demo3` (branched from `b3b2b23`, same as `main` HEAD). Session ID: `6ebc1cb7`.
