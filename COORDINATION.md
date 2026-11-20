@@ -394,3 +394,43 @@ Claimed 2026-11-20 (UTC). Scope: `COORDINATION.md` only. No site, data, or scrip
 ### Session edf9de2a progress log
 
 - 2026-11-20: claim and findings committed on `arena/edf9de2a-demo3`. Scope kept to `COORDINATION.md`.
+
+
+---
+
+## Task board — session 22661044 (swing → catalyst attribution layer, branch `arena/22661044-demo3`)
+
+Claimed 2026-11-20 19:35 UTC. Session ID `22661044`. The brief line
+*"Live charts should include events and website links that may have caused a sharp jump in contract
+price, greater than or equal to $0.10 in either direction"* is the only requirement on this board with
+**no implementation** on `main`: `grep -ril catalyst` over `*.html *.js *.py *.md` returns 0 files, and
+PR #27 explicitly declines to build it ("disclose that external catalyst attribution is unverified
+rather than inventing news links"). Sessions #26/#27/#29/#30 all work on the alert *chats*, which
+PR #28 already merged — this session does not touch them.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| C1 Swing ledger engine: detect ≥ $0.10 moves from the price tape, poll live demo markets, resolve and stop tracking | in progress | 22661044 | `catalysts/scan.py`, `catalysts/feeds.json`, `catalysts/data/**` | Demo REST `GET /markets?tickers=`, `GET /series/{ticker}` per [Get Markets](https://docs.kalshi.com/api-reference/market/get-markets) / [Get Series](https://docs.kalshi.com/api-reference/market/get-series); swing threshold in exact decimal cents; every row carries the replayable API URL | F-cat-01 |
+| C2 Candidate-catalyst links: news items published inside the swing window, per topic, from a probe-gated feed allowlist; official series `settlement_sources` links | in progress | 22661044 | `catalysts/scan.py`, `catalysts/data/feed_health.json` | A feed is used only after a real fetch proves it returns items (status recorded per run); unmatched swings stay blank + flagged, never invented | F-cat-02, F-cat-03 |
+| C3 Attribution page: swing table with per-row source links + price chart (x = time in s/min/h, y = contract price) with catalyst markers at each ≥ $0.10 swing | in progress | 22661044 | `catalysts/index.html`, `catalysts/assets/**` | Renders committed snapshots; optional in-browser re-poll of the demo API (CORS proven: `data/cors_test.json` browser_direct_fetch_allowed = true) | — |
+| C4 Scheduled refresh in CI + offline tests | in progress | 22661044 | `.github/workflows/catalysts.yml`, `catalysts/tests/**` | Actions runner has the network egress this sandbox lacks (sandbox egress allowlist blocks kalshi.co/RSS; only `fetch_page` reached the demo API); tests run a mock HTTP server | F-cat-04 |
+| C5 PR → merge → Pages confirm; record; change requests for shared nav/flagged pages | pending | 22661044 | `COORDINATION.md`, PR to `main` | `gh pr create/merge`, Pages API build status, live page fetch | — |
+
+Non-overlapping scope guarantee: this session creates files only under `catalysts/**` and
+`.github/workflows/catalysts.yml`, plus its appended section in `COORDINATION.md`. It does **not**
+edit root `*.html`, `assets/*`, `alerts/**`, `data/**`, `collector/**`, `trading/**`, `scripts/*`,
+`docs/**`, `analysis/**`, `demo-desk/**`, or any other workflow file. Root navigation and the root
+Flagged page are shared outputs (integration session only) — change requests are logged in this
+section instead of edits.
+
+Environment note: the platform binds each session to `arena/<id>-demo3`, so per-task
+`session-<id>/<task>` branches are not possible (already recorded as R-04/F-01).
+
+### Change requests from session 22661044 (logged, not applied — shared files)
+
+- **CR-22661044-1** (`index.html` + `scripts/build_root_site.py` nav, owner: integration session):
+  add one nav entry `Catalyst links → catalysts/index.html` so the new page is reachable from the
+  canonical navigation. Until then the page is live at `https://karagemop466-tech.github.io/Demo3/catalysts/`.
+- **CR-22661044-2** (`flagged.html`, owner: integration session): mirror F-cat-01…F-cat-05 from this
+  section onto the root Flagged for Review page; the same list is published on
+  `catalysts/index.html#flags` in the meantime.
