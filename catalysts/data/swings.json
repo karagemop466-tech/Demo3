@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-20T20:36:46Z",
+ "generated_at": "2026-11-20T21:00:35Z",
  "api_root": "https://external-api.demo.kalshi.co/trade-api/v2",
  "threshold_dollars": "0.10",
  "threshold_note": ">= $0.10 (10 cents) per contract between consecutive samples, either direction; exact decimal arithmetic.",
@@ -255,6 +255,92 @@
     "items_in_window": 0,
     "match_status": "feeds_not_polled_offline",
     "note": "The build sandbox has no egress to news hosts; the scheduled CI run performs feed matching. Nothing is inferred here."
+   },
+   "threshold_dollars": "0.1000"
+  },
+  {
+   "id": "76855ca83f215b95",
+   "ticker": "KXPRESNOMD-28-HBID",
+   "topic": "elections",
+   "event_ticker": "KXPRESNOMD-28",
+   "series_ticker": "KXPRESNOMD",
+   "direction": "up",
+   "delta_dollars": "0.8080",
+   "abs_delta_dollars": "0.8080",
+   "from": {
+    "ts": "2026-11-20T19:33:16Z",
+    "last_price_dollars": "0.0030",
+    "price_field": "last_price_dollars"
+   },
+   "to": {
+    "ts": "2026-11-20T19:34:30Z",
+    "last_price_dollars": "0.8110",
+    "price_field": "last_price_dollars"
+   },
+   "sample_gap_seconds": 74,
+   "detected_by": "price_tape",
+   "origin": "data/history/prices.jsonl",
+   "detected_at": "2026-11-20T21:00:35Z",
+   "record_source": "committed demo-API snapshot data/latest/markets_open.json (retrieved 2026-11-20T20:53:52+00:00)",
+   "status": "active",
+   "result": "",
+   "close_time": "2028-11-07T15:00:00Z",
+   "settlement_ts": "",
+   "settlement_value_dollars": "",
+   "volume_fp": "537226065.88",
+   "open_interest_fp": "140195530.08",
+   "market_url_pair": "",
+   "api_corroboration": {
+    "last_price_dollars": "0.0030",
+    "previous_price_dollars": "0.0030",
+    "yes_bid_dollars": "0.0020",
+    "yes_ask_dollars": "0.0030",
+    "previous_yes_ask_dollars": "",
+    "previous_yes_bid_dollars": "",
+    "price_level_structure": "",
+    "volume_24h_fp": "8149.75",
+    "note": "prices only: the API does not timestamp previous_price_dollars, so the interval in which the move happened stays bounded by the sample gap",
+    "status": "mismatch"
+   },
+   "title": "Will Hunter Biden be the nominee for the Presidency for the Democratic party? \u2014 Hunter Biden / Hunter Biden",
+   "resolved": false,
+   "tracking": "active",
+   "links": {
+    "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPRESNOMD-28-HBID",
+    "fetched_via": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-HBID",
+    "event_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/events/KXPRESNOMD-28",
+    "kalshi_market_page": "",
+    "kalshi_site_root": "https://demo.kalshi.co/",
+    "kalshi_market_page_note": "Per-event page URL not published: the demo desk's URL pattern for a single event is not documented at https://docs.kalshi.com/getting_started/demo_env and could not be confirmed from this build environment, so guessing it would be an inferred value. The canonical API records above are the verifiable sources.",
+    "series_ticker": "KXPRESNOMD"
+   },
+   "series": {
+    "series_ticker": "KXPRESNOMD",
+    "title": "Democratic Primary winner",
+    "category": "Elections",
+    "frequency": "custom",
+    "settlement_sources": [
+     {
+      "name": "Republican Party",
+      "url": "https://gop.com/"
+     },
+     {
+      "name": "Democratic Party",
+      "url": "https://democrats.org/"
+     }
+    ],
+    "contract_terms_url": "https://assets.kalshi.com/contract_terms/PRESNOM.pdf",
+    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD",
+    "provenance": "GET /series/{ticker} (this run)"
+   },
+   "title_source": "api:markets",
+   "resolution_label": "",
+   "catalysts": [],
+   "catalyst_match": {
+    "items_in_window": 25,
+    "match_status": "items_in_window_but_no_keyword_overlap",
+    "window_start_ts": "2026-11-20T16:33:16Z",
+    "window_end_ts": "2026-11-20T20:34:30Z"
    },
    "threshold_dollars": "0.1000"
   },

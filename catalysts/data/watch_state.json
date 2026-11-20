@@ -374,8 +374,119 @@
   },
   "KXMAXSHARDINGTEST-27DEC2417-T140000": {
    "topic": "crypto"
+  },
+  "KXAAAGASMAXCA-26DEC31-7.20": {
+   "topic": "gas"
+  },
+  "KXAAAGASMAXCA-26DEC31-7.40": {
+   "topic": "gas"
+  },
+  "KXAAAGASMAXCA-26DEC31-7.60": {
+   "topic": "gas"
+  },
+  "KXAAAGASMAXCA-26DEC31-7.80": {
+   "topic": "gas"
+  },
+  "KXAAAGASMAXCA-26DEC31-8.00": {
+   "topic": "gas"
+  },
+  "KXAAAGASMAXTX-26DEC31-5.20": {
+   "topic": "gas"
+  },
+  "KXAAAGASMAXTX-26DEC31-5.40": {
+   "topic": "gas"
+  },
+  "KXAAAGASMAXTX-26DEC31-5.60": {
+   "topic": "gas"
+  },
+  "KXAAAGASMAXTX-26DEC31-5.80": {
+   "topic": "gas"
+  },
+  "KXAAAGASMAXTX-26DEC31-6.00": {
+   "topic": "gas"
+  },
+  "KXAAAGASMINCA-26DEC31-3.80": {
+   "topic": "gas"
+  },
+  "KXAAAGASMINCA-26DEC31-3.90": {
+   "topic": "gas"
+  },
+  "KXAAAGASMINCA-26DEC31-4.00": {
+   "topic": "gas"
+  },
+  "KXAAAGASMINCA-26DEC31-4.10": {
+   "topic": "gas"
+  },
+  "KXAAAGASMINTX-26DEC31-1.80": {
+   "topic": "gas"
+  },
+  "KXAAAGASMINTX-26DEC31-1.90": {
+   "topic": "gas"
+  },
+  "KXAAAGASMINTX-26DEC31-2.10": {
+   "topic": "gas"
+  },
+  "KXAAAGASMINTX-26DEC31-2.20": {
+   "topic": "gas"
+  },
+  "KXAAAGASMINTX-26DEC31-2.30": {
+   "topic": "gas"
+  },
+  "KXAAAGASWNJ-26NOV23-3.8400": {
+   "topic": "gas"
+  },
+  "KXAAAGASWNJ-26NOV23-3.8600": {
+   "topic": "gas"
+  },
+  "KXAAAGASWNJ-26NOV23-3.8800": {
+   "topic": "gas"
+  },
+  "KXAAAGASWNJ-26NOV23-4.0200": {
+   "topic": "gas"
+  },
+  "KXAAAGASWNJ-26NOV23-4.0400": {
+   "topic": "gas"
+  },
+  "KXDIESELD-26NOV21-T5.860": {
+   "topic": "other"
+  },
+  "KXDIESELD-26NOV21-T5.935": {
+   "topic": "other"
+  },
+  "KXDIESELD-26NOV21-T5.940": {
+   "topic": "other"
+  },
+  "KXDIESELD-26NOV21-T5.945": {
+   "topic": "other"
+  },
+  "KXDIESELD-26NOV21-T5.950": {
+   "topic": "other"
+  },
+  "KXDIESELW-26NOV23-T5.82": {
+   "topic": "other"
+  },
+  "KXDIESELW-26NOV23-T5.88": {
+   "topic": "other"
+  },
+  "KXDIESELW-26NOV23-T5.90": {
+   "topic": "other"
+  },
+  "KXDIESELW-26NOV23-T5.92": {
+   "topic": "other"
+  },
+  "KXDIESELW-26NOV23-T6.20": {
+   "topic": "other"
+  },
+  "KXETHD-26NOV2016-T1594.99": {
+   "topic": "crypto"
+  },
+  "KXETHD-26NOV2016-T1604.99": {
+   "topic": "crypto"
+  },
+  "KXETHD-26NOV2017-T1859.99": {
+   "topic": "crypto"
   }
  },
- "updated_at": "2026-11-20T20:36:46Z",
+ "updated_at": "2026-11-20T21:00:35Z",
  "policy": "A market is polled until the API reports it settled/finalized with a result; then tracking stops and the yes/no outcome is kept."
 }
