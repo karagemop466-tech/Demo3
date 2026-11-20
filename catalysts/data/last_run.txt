@@ -1,30 +1,19 @@
-recorded_at=2026-11-20T20:26:45Z
-job_status=pre-merge (offline over main's tape)
-workflow=local
-event=local
-ref=local
-sha=local
-run_url=https://github.com/local/actions/runs/n/a
-status.json: mode=offline finished_at=2026-11-20T20:26:44Z requests=0 errors=0 deadline_reached=False tape_rows=264 swings_total=8 simulated_trades=7
+recorded_at=2026-11-20T20:36:57Z
+job_status=failure
+workflow=Swing + catalyst ledger refresh
+event=push
+ref=main
+sha=d44d8fd6dd44b2634ed085f7c8abdb7fb10875a5
+run_url=https://github.com/karagemop466-tech/Demo3/actions/runs/44811505391
+status.json: mode=live finished_at=2026-11-20T20:36:46Z requests=23 errors=4 deadline_reached=False tape_rows=384 swings_total=8 simulated_trades=7
 swings.json: 8 swings, 0 with candidate links, 2 resolved; threshold >= $0.10 from=https://external-api.demo.kalshi.co/trade-api/v2
-feed_health.json: 0 of 17 feeds usable (mode=offline, checked_at=2026-11-20T19:46:25Z)
-  not usable: AP News (hub RSS is not published; homepage listed for manual review) — skipped_offline
-  not usable: Reuters — skipped_offline
-  not usable: BBC News — World — skipped_offline
-  not usable: BBC News — Business — skipped_offline
-  not usable: BBC News — Entertainment & Arts — skipped_offline
-  not usable: NPR — News Topics — skipped_offline
-  not usable: NPR — Politics — skipped_offline
-  not usable: NPR — Business — skipped_offline
-  not usable: CoinDesk — skipped_offline
-  not usable: The Block — skipped_offline
-  not usable: ESPN — Sports Top News — skipped_offline
-  not usable: PGA Tour — News — skipped_offline
-  not usable: Golf Digest — skipped_offline
-  not usable: AAA — Gas Prices (publisher page; no RSS published) — skipped_offline
-  not usable: U.S. EIA — Petroleum (official government statistics feed) — skipped_offline
-  not usable: The Guardian — World — skipped_offline
-  not usable: Variety — skipped_offline
-endpoints.json: 0 probed, 0 returned HTTP 200 (probed_at=2026-11-20T19:46:25Z)
-  note: skipped: this runner has no egress to the demo API (the build sandbox allowlists github.com / npmjs / pypi only). The scheduled GitHub Actions run rewrites this file with real HTTP statuses.
+feed_health.json: 12 of 17 feeds usable (mode=live, checked_at=2026-11-20T20:36:51Z)
+  not usable: AP News (hub RSS is not published; homepage listed for manual review) — HTTP 403
+  not usable: Reuters — HTTP 404
+  not usable: PGA Tour — News — fetched but no items parsed
+  not usable: Golf Digest — HTTP 404
+  not usable: U.S. EIA — Petroleum (official government statistics feed) — HTTP 404
+endpoints.json: 7 probed, 7 returned HTTP 200 (probed_at=2026-11-20T20:36:42Z)
+  note: status = what the runner observed on this run; blank/unverified rows stay blank on the site, they are never back-filled
+  filter ignored by this deployment: GET https://external-api.demo.kalshi.co/trade-api/v2/events?event_tickers=KXDEMOFUTHOURLY-26NOV20H12&with_nested_markets=false
 strategies.json: 7 simulated trade(s), 3 categor(y/ies), 0 above the n>=30 floor
