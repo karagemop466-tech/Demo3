@@ -27,7 +27,16 @@ without an official source link, blank/flagged values are unverified and never i
 | arena-3a22fb0f | `arena/3a22fb0f-demo3` | delivered - final integration (PR #18 merged; Pages live) | Chart/liquidity UX, trade execution + portfolio analysis with paper-trading fallback, per-row source-link verification, site consolidation, suggestions review workflow, final PR/Pages delivery. |
 | 3e08e6dc | `arena/3e08e6dc-demo3` | delivered (PR #12 merged) | `analysis/` site + live data snapshots + refresh workflow; see its section below. |
 | 3b5e95bd | `arena/3b5e95bd-demo3` | active - automation + final integration (this session) | Scheduled server-side collector (`collector/`, `collect.yml`, committed `data/`: ranked events, orderbooks, 1m/60m/1440m candles, resolution sweeps, CORS probe), demo-account trade/portfolio pipeline (`trading/`, `trade.yml`), `data-tracking.html` snapshot-rendering page, final PR/merge/Pages. Details in its completion section below. |
+| d7ee554b | `arena/d7ee554b-demo3` | active - live ≥$0.10 swing alerts (claimed 2026-11-20; see its section below) | Claims the missing live swing-alert feature (two scrolling chats) and its integration into `main`. Other open PRs (#17 d330ff7d, #19 b2e728ab, #23 c2aac20e) are NOT merged by this session. |
 | 4d10aedf | `arena/4d10aedf-demo3` | delivered - data pipeline + tooling + integration pass | Early false "done" claims (R-03/R1) corrected 2026-11-20 11:40 UTC. Delivered: series-first CI collector + row-level verification (`scripts/collect_kalshi_data.py`, `verify_rows.py`, `kalshi-data.yml`, `data/latest/`, `data/history/`), portfolio/trade tooling (`kalshi_client.py`, `portfolio_pull.py`, `trade_runner.py`, `kalshi-portfolio.yml`), docs/ integration pass (top-dollar events, resolution tracker, pipeline snapshots, verification report, I-17 flags). Sections below. |
+
+## Task board — session d7ee554b (live ≥$0.10 swing alerts, two scrolling chats)
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| A1 Live swing-alert page: browser polls the official demo `GET /markets?tickers=` for tracked markets, flags moves ≥ $0.10 either direction, two scrolling chats (all swings; rule-based high-ROI screen), yes/no resolution messages, snapshot back-fill from `data/history/prices.jsonl` | in progress (claimed 2026-11-20) | d7ee554b | `alerts.html`, `assets/alerts.js`, `assets/alerts-core.js`, `tests/alerts.test.js`, `scripts/build_root_site.py` (NAV entry + `build_alerts` only), `scripts/verify_root_site.py` (PAGES + syntax list only), `COORDINATION.md` (this section) | pending | pending |
+
+Claim note: no other session has claimed alerts. This session edits shared root nav/verify lists only to add the new page (integration step, per the board rules). Regenerated root pages will be checked against `git diff` so no unrelated page content changes.
 
 ## Task board — session 4ea36f44 (source-linked Demo Desk)
 
