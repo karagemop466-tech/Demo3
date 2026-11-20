@@ -1,0 +1,671 @@
+{
+  "meta": {
+    "verified_on": "2026-11-20",
+    "environment": "Kalshi DEMO (mock funds). Kalshi docs state demo prices may not reflect real markets.",
+    "api_base": "https://external-api.demo.kalshi.co/trade-api/v2",
+    "api_docs": "https://docs.kalshi.com/getting_started/demo_env",
+    "method": "Rows copied field-by-field from the JSON responses of the public (unauthenticated) demo REST endpoints listed in each row's source_api. Values not present in a response are left blank and flagged."
+  },
+  "series": [
+    {
+      "topic": "golf",
+      "ticker": "KXPGATOP40",
+      "title": "PGA Top 40 Finisher",
+      "category": "Sports",
+      "tags": [
+        "Golf"
+      ],
+      "frequency": "custom",
+      "volume_contracts": "1791408.00",
+      "fee_type": "quadratic",
+      "last_updated_ts": "2026-11-20T08:31:01.275764Z",
+      "contract_terms_url": "https://assets.kalshi.com/contract_terms/GOLFFINISH.pdf",
+      "settlement_sources": "ESPN (espn.com); Fox Sports (foxsports.com); the Governing League (pgatour.com)",
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/series?tags=Golf&include_volume=true",
+      "verified": true,
+      "flag": ""
+    },
+    {
+      "topic": "golf",
+      "ticker": "KXPGARYDER",
+      "title": "Ryder Cup",
+      "category": "Sports",
+      "tags": [
+        "Golf"
+      ],
+      "frequency": "custom",
+      "volume_contracts": "43303.00",
+      "fee_type": "quadratic",
+      "last_updated_ts": "2026-11-20T09:58:07.544137Z",
+      "contract_terms_url": "https://assets.kalshi.com/contract_terms/PGATOUR.pdf",
+      "settlement_sources": "The Wall Street Journal (wsj.com); ESPN (espn.com); Fox Sports (foxsports.com)",
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/series?tags=Golf&include_volume=true",
+      "verified": true,
+      "flag": "Contract terms file is named PGATOUR.pdf for a Ryder Cup series — confirm it is the correct document (see F-08)."
+    },
+    {
+      "topic": "golf",
+      "ticker": "KXPGAH2H",
+      "title": "PGA Head-to-Head Matchups",
+      "category": "Sports",
+      "tags": [
+        "Golf"
+      ],
+      "frequency": "custom",
+      "volume_contracts": "1021.00",
+      "fee_type": "quadratic",
+      "last_updated_ts": "2026-11-20T08:31:48.698493Z",
+      "contract_terms_url": "https://assets.kalshi.com/contract_terms/GOLFH2H.pdf",
+      "settlement_sources": "ESPN (espn.com); NBC Sports (nbcsports.com); The Wall Street Journal (wsj.com); Fox Sports (foxsports.com); the Governing League (pgatour.com); the Associated Press (apnews.com); Golf Channel (golfchannel.com)",
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/series?tags=Golf&include_volume=true",
+      "verified": true,
+      "flag": ""
+    },
+    {
+      "topic": "golf",
+      "ticker": "KXPGAEAGLE",
+      "title": "Player to Record an Eagle in Round",
+      "category": "Sports",
+      "tags": [
+        "Golf"
+      ],
+      "frequency": "custom",
+      "volume_contracts": "0.00",
+      "fee_type": "quadratic",
+      "last_updated_ts": "2026-11-20T08:30:14.40189Z",
+      "contract_terms_url": "https://assets.kalshi.com/contract_terms/GOLFWHOSTAT.pdf",
+      "settlement_sources": "Fox Sports (foxsports.com); ESPN (espn.com); the Governing League (pgatour.com)",
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/series?tags=Golf&include_volume=true",
+      "verified": true,
+      "flag": "Contract terms file name (GOLFWHOSTAT.pdf) does not match the series title (see F-09)."
+    },
+    {
+      "topic": "crypto",
+      "ticker": "KXAVAXMINY",
+      "title": "Avalanche min",
+      "category": "Crypto",
+      "tags": [
+        "Crypto"
+      ],
+      "frequency": "annual",
+      "volume_contracts": "40427.00",
+      "fee_type": "quadratic",
+      "last_updated_ts": "2026-11-20T10:39:50.923843Z",
+      "contract_terms_url": "https://assets.kalshi.com/contract_terms/AVAXMINMAX.pdf",
+      "settlement_sources": "CF Benchmarks (cfbenchmarks.com)",
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Crypto&include_volume=true",
+      "verified": true,
+      "flag": ""
+    },
+    {
+      "topic": "crypto",
+      "ticker": "KXAIRDROPPUMPFUN",
+      "title": "PumpFun airdrop",
+      "category": "Crypto",
+      "tags": [
+        "Crypto",
+        "Pre-Market"
+      ],
+      "frequency": "custom",
+      "volume_contracts": "3696.00",
+      "fee_type": "quadratic",
+      "last_updated_ts": "2026-11-20T10:35:56.883549Z",
+      "contract_terms_url": "https://assets.kalshi.com/contract_terms/AIRDROP.pdf",
+      "settlement_sources": "Polygonscan (polygonscan.com); The Block (listed URL kalshi.com); Arbiscan (listed URL kalshi.com); WSJ (wsj.com); Bloomberg News (bloomberg.com); CoinDesk (coindesk.com); others",
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Crypto&include_volume=true",
+      "verified": true,
+      "flag": "Several settlement sources list a kalshi.com URL under a different publisher name (see F-05)."
+    },
+    {
+      "topic": "crypto",
+      "ticker": "KXAIRDROPHYPE",
+      "title": "HYPE airdrop",
+      "category": "Crypto",
+      "tags": [
+        "Crypto",
+        "HYPE",
+        "Pre-Market"
+      ],
+      "frequency": "custom",
+      "volume_contracts": "394.00",
+      "fee_type": "quadratic",
+      "last_updated_ts": "2026-11-20T10:35:56.837609Z",
+      "contract_terms_url": "https://assets.kalshi.com/contract_terms/AIRDROP.pdf",
+      "settlement_sources": "Same source list as the PumpFun airdrop series (see F-05)",
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Crypto&include_volume=true",
+      "verified": true,
+      "flag": "Shares the AIRDROP.pdf contract terms with the PumpFun series; confirm per-series terms (see F-05)."
+    },
+    {
+      "topic": "crypto",
+      "ticker": "KXBTC75VS100",
+      "title": "Will BTC fall below 75k before hitting 100k?",
+      "category": "Crypto",
+      "tags": [
+        "Crypto",
+        "Bitcoin"
+      ],
+      "frequency": "custom",
+      "volume_contracts": "0.00",
+      "fee_type": "quadratic",
+      "last_updated_ts": "2026-11-20T10:55:07.013506Z",
+      "contract_terms_url": "https://assets.kalshi.com/contract_terms/CRYPTOHIT.pdf",
+      "settlement_sources": "CF Benchmarks (listed URL cfbenchmarks.com/data/indices/DOTUSD_RTI)",
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Crypto&include_volume=true",
+      "verified": true,
+      "flag": "Bitcoin market lists a DOT index URL as its settlement source (see F-06)."
+    },
+    {
+      "topic": "crypto",
+      "ticker": "KXETHATH",
+      "title": "ETH ATH",
+      "category": "Crypto",
+      "tags": [
+        "Crypto",
+        "Ethereum"
+      ],
+      "frequency": "one_off",
+      "volume_contracts": "0.00",
+      "fee_type": "quadratic",
+      "last_updated_ts": "2026-11-20T11:05:24.010403Z",
+      "contract_terms_url": "https://assets.kalshi.com/contract_terms/ETHMINMAX.pdf",
+      "settlement_sources": "CF Benchmarks (cfbenchmarks.com)",
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Crypto&include_volume=true",
+      "verified": true,
+      "flag": ""
+    },
+    {
+      "topic": "crypto",
+      "ticker": "KXSUIATH",
+      "title": "Sui ATH 2026",
+      "category": "Crypto",
+      "tags": [
+        "Hourly"
+      ],
+      "frequency": "one_off",
+      "volume_contracts": "0.00",
+      "fee_type": "quadratic",
+      "last_updated_ts": "2026-10-13T18:34:01.879891Z",
+      "contract_terms_url": "https://assets.kalshi.com/contract_terms/CRYPTO.pdf",
+      "settlement_sources": "CF Benchmarks (cfbenchmarks.com)",
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Crypto&include_volume=true",
+      "verified": true,
+      "flag": "Series tag reads 'Hourly' for a one-off ATH market (see F-07)."
+    },
+    {
+      "topic": "crypto",
+      "ticker": "KXDOGEPERP",
+      "title": "100 DOGE",
+      "category": "Crypto",
+      "tags": [],
+      "frequency": "often",
+      "volume_contracts": "0.00",
+      "fee_type": "quadratic",
+      "last_updated_ts": "2026-11-20T10:30:58.962445Z",
+      "contract_terms_url": "https://assets.kalshi.com/contract_terms/.pdf",
+      "settlement_sources": "",
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Crypto&include_volume=true",
+      "verified": false,
+      "flag": "Perpetual-style product in the Crypto event-contract list; contract_url is empty, tags/settlement sources are null, and the terms URL is malformed (see F-04)."
+    },
+    {
+      "topic": "elections",
+      "ticker": "HOUSEAKAL",
+      "title": "House Alaska at-large",
+      "category": "Elections",
+      "tags": [
+        "House"
+      ],
+      "frequency": "custom",
+      "volume_contracts": "64255.00",
+      "fee_type": "quadratic",
+      "last_updated_ts": "2026-11-20T11:18:59.086146Z",
+      "contract_terms_url": "https://assets.kalshi.com/contract_terms/HOUSEPARTY.pdf",
+      "settlement_sources": "Library of Congress (congress.gov)",
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Elections&include_volume=true",
+      "verified": true,
+      "flag": ""
+    },
+    {
+      "topic": "elections",
+      "ticker": "KXPOLANDSEJM",
+      "title": "Poland Sejm election",
+      "category": "Elections",
+      "tags": [
+        "International elections"
+      ],
+      "frequency": "one_off",
+      "volume_contracts": "72810.00",
+      "fee_type": "quadratic",
+      "last_updated_ts": "2026-11-20T11:01:01.466902Z",
+      "contract_terms_url": "https://assets.kalshi.com/contract_terms/ELECTION.pdf",
+      "settlement_sources": "National Electoral Commission (wybory.gov.pl)",
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Elections&include_volume=true",
+      "verified": true,
+      "flag": ""
+    },
+    {
+      "topic": "elections",
+      "ticker": "PRESPARTYAZ",
+      "title": "Arizona presidential winner",
+      "category": "Elections",
+      "tags": [
+        "US Elections"
+      ],
+      "frequency": "custom",
+      "volume_contracts": "0.00",
+      "fee_type": "quadratic",
+      "last_updated_ts": "2026-11-20T08:52:42.105315Z",
+      "contract_terms_url": "https://assets.kalshi.com/contract_terms/PRESPARTYSTATE.pdf",
+      "settlement_sources": "Library of Congress (congress.gov)",
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Elections&include_volume=true",
+      "verified": true,
+      "flag": ""
+    },
+    {
+      "topic": "elections",
+      "ticker": "KXLEAVEKARKI",
+      "title": "Sushila Karki leave office",
+      "category": "Elections",
+      "tags": [
+        "International"
+      ],
+      "frequency": "one_off",
+      "volume_contracts": "0.00",
+      "fee_type": "quadratic",
+      "last_updated_ts": "2026-11-20T08:23:52.028578Z",
+      "contract_terms_url": "https://assets.kalshi.com/contract_terms/LEAVEOFFICE.pdf",
+      "settlement_sources": "ABC, Fox News, MSNBC, WSJ, Semafor, Bloomberg, The Information, CBS, NBC, Washington Post, Axios, CNN, NYT, Politico, AP, Reuters (listed URLs)",
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Elections&include_volume=true",
+      "verified": true,
+      "flag": "Listed as an Elections series but the title is about leaving office; topic placement to be confirmed (see F-10)."
+    },
+    {
+      "topic": "culture",
+      "ticker": "KXXBANNEDGROK",
+      "title": "Will Grok be banned this year",
+      "category": "Culture",
+      "tags": [
+        "AI"
+      ],
+      "frequency": "one_off",
+      "volume_contracts": "0.00",
+      "fee_type": "quadratic",
+      "last_updated_ts": "2026-11-20T09:57:29.442797Z",
+      "contract_terms_url": "https://assets.kalshi.com/contract_terms/XBANNED.pdf",
+      "settlement_sources": "ABC, Fox News, MSNBC, WSJ, Semafor, Barchart ($INX page), Ars Technica, NYT, CBS, WaPo, Axios, CNN, Engadget, Reuters, Mashable, Bloomberg, Elon Musk (x.com/elonmusk), AP, Energy Information Administration, Politico, TechCrunch, Verge",
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Culture&include_volume=true",
+      "verified": true,
+      "flag": "Settlement source list includes sources unrelated to a Grok ban (Barchart $INX page, EIA) (see F-11)."
+    },
+    {
+      "topic": "culture",
+      "ticker": "KXXBANNEDMURRAYHILLGUY1",
+      "title": "Will @MurrayHillGuy1 get banned from X this year?",
+      "category": "Culture",
+      "tags": [],
+      "frequency": "one_off",
+      "volume_contracts": "0.00",
+      "fee_type": "quadratic",
+      "last_updated_ts": "2026-11-20T10:00:16.115208Z",
+      "contract_terms_url": "https://assets.kalshi.com/contract_terms/XBANNED.pdf",
+      "settlement_sources": "Same source list as the Grok series (see F-11)",
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Culture&include_volume=true",
+      "verified": true,
+      "flag": "Same settlement-source list as the Grok series, which includes unrelated sources (see F-11)."
+    },
+    {
+      "topic": "gas",
+      "ticker": "DIESEL",
+      "title": "Diesel price this week",
+      "category": "Economics",
+      "tags": [
+        "Gas"
+      ],
+      "frequency": "weekly",
+      "volume_contracts": "0.00",
+      "fee_type": "quadratic",
+      "last_updated_ts": "2026-11-02T23:01:44.546938Z",
+      "contract_terms_url": "https://assets.kalshi.com/contract_terms/DIESEL.pdf",
+      "settlement_sources": "U.S. Energy Information Administration (eia.gov/dnav/pet/PET_PRI_SPT_S1_D.htm)",
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/series?tags=Gas&include_volume=true",
+      "verified": true,
+      "flag": ""
+    },
+    {
+      "topic": "gas",
+      "ticker": "DIESELM",
+      "title": "Diesel price this month",
+      "category": "Economics",
+      "tags": [
+        "Gas"
+      ],
+      "frequency": "monthly",
+      "volume_contracts": "0.00",
+      "fee_type": "quadratic",
+      "last_updated_ts": "2026-11-02T23:01:43.132803Z",
+      "contract_terms_url": "https://assets.kalshi.com/contract_terms/DIESEL.pdf",
+      "settlement_sources": "U.S. Energy Information Administration (eia.gov/dnav/pet/PET_PRI_SPT_S1_D.htm)",
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/series?tags=Gas&include_volume=true",
+      "verified": true,
+      "flag": ""
+    }
+  ],
+  "events": [
+    {
+      "topic": "golf",
+      "ticker": "KXPGATOP40-THOC26",
+      "title": "The Open Championship: Top 40 Finishers",
+      "series_ticker": "KXPGATOP40",
+      "sub_title": "2026 The Open Championship",
+      "last_updated_ts": "2026-08-25T18:11:10.451919Z",
+      "markets_open_found": 0,
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/events?series_ticker=KXPGATOP40&limit=2",
+      "verified": true,
+      "flag": ""
+    },
+    {
+      "topic": "golf",
+      "ticker": "KXPGATOP40-USO26",
+      "title": "U.s. Open: Top 40 Finishers",
+      "series_ticker": "KXPGATOP40",
+      "sub_title": "2026 U.S. Open",
+      "last_updated_ts": "2026-08-26T05:32:10.44882Z",
+      "markets_open_found": 0,
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/events?series_ticker=KXPGATOP40&limit=2",
+      "verified": true,
+      "flag": ""
+    }
+  ],
+  "markets": [
+    {
+      "topic": "elections",
+      "ticker": "HOUSEAKAL-26-BHIL",
+      "title": "Will Bill Hill win the House race for AK-AL?",
+      "event_ticker": "HOUSEAKAL-26",
+      "status": "finalized",
+      "result": "no",
+      "last_price_dollars": "0.0300",
+      "yes_bid_dollars": "0.0000",
+      "yes_ask_dollars": "1.0000",
+      "volume_contracts": "30581.45",
+      "open_interest_contracts": "30577.29",
+      "close_time": "2026-11-19T02:38:25Z",
+      "settlement_ts": "2026-11-19T02:41:44.814215Z",
+      "settlement_value_dollars": "0.0000",
+      "rules_primary": "If Bill Hill is sworn in for AK-AL for the term beginning in 2027, then the market resolves to Yes.",
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/markets?series_ticker=HOUSEAKAL&limit=3",
+      "verified": true,
+      "flag": ""
+    },
+    {
+      "topic": "elections",
+      "ticker": "HOUSEAKAL-26-R",
+      "title": "Will Republican win the House race for AK-AL?",
+      "event_ticker": "HOUSEAKAL-26",
+      "status": "finalized",
+      "result": "yes",
+      "last_price_dollars": "0.9900",
+      "yes_bid_dollars": "0.0000",
+      "yes_ask_dollars": "1.0000",
+      "volume_contracts": "17196.49",
+      "open_interest_contracts": "8168.33",
+      "close_time": "2026-11-19T02:38:25Z",
+      "settlement_ts": "2026-11-19T02:41:44.814215Z",
+      "settlement_value_dollars": "1.0000",
+      "rules_primary": "If the House member sworn in for AK-AL for the term beginning in 2027 is a member of Republican, then the market resolves to Yes.",
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/markets?series_ticker=HOUSEAKAL&limit=3",
+      "verified": true,
+      "flag": ""
+    },
+    {
+      "topic": "elections",
+      "ticker": "HOUSEAKAL-26-D",
+      "title": "Will Democratic win the House race for AK-AL?",
+      "event_ticker": "HOUSEAKAL-26",
+      "status": "finalized",
+      "result": "no",
+      "last_price_dollars": "0.9900",
+      "yes_bid_dollars": "0.0000",
+      "yes_ask_dollars": "1.0000",
+      "volume_contracts": "16477.18",
+      "open_interest_contracts": "5338.02",
+      "close_time": "2026-11-19T02:38:25Z",
+      "settlement_ts": "2026-11-19T02:41:44.814215Z",
+      "settlement_value_dollars": "0.0000",
+      "rules_primary": "If the House member sworn in for AK-AL for the term beginning in 2027 is a member of Democratic, then the market resolves to Yes.",
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/markets?series_ticker=HOUSEAKAL&limit=3",
+      "verified": true,
+      "flag": "Last traded price 0.99 before a result of 'no'; see F-12 for how settlement is documented."
+    },
+    {
+      "topic": "elections",
+      "ticker": "KXPOLANDSEJM-27-THIRD",
+      "title": "Who will win the next Polish general election?",
+      "event_ticker": "KXPOLANDSEJM-27",
+      "status": "active",
+      "result": "",
+      "last_price_dollars": "0.0400",
+      "yes_bid_dollars": "0.0200",
+      "yes_ask_dollars": "0.9700",
+      "volume_contracts": "12322.17",
+      "open_interest_contracts": "3495.01",
+      "close_time": "2028-11-10T15:00:00Z",
+      "settlement_ts": "",
+      "settlement_value_dollars": "",
+      "rules_primary": "If the winner of the next Polish general election in 2027 is Third Way, then the market resolves to Yes.",
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/markets?series_ticker=KXPOLANDSEJM&status=open&limit=3",
+      "verified": true,
+      "flag": "custom_strike field reads 'demo strike' (placeholder) (see F-03).",
+      "option": "Third Way"
+    },
+    {
+      "topic": "elections",
+      "ticker": "KXPOLANDSEJM-27-PIS",
+      "title": "Who will win the next Polish general election?",
+      "event_ticker": "KXPOLANDSEJM-27",
+      "status": "active",
+      "result": "",
+      "last_price_dollars": "0.9800",
+      "yes_bid_dollars": "0.0200",
+      "yes_ask_dollars": "0.9900",
+      "volume_contracts": "21294.17",
+      "open_interest_contracts": "8481.01",
+      "close_time": "2028-11-10T15:00:00Z",
+      "settlement_ts": "",
+      "settlement_value_dollars": "",
+      "rules_primary": "If the winner of the next Polish general election in 2027 is Law and Justice, then the market resolves to Yes.",
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/markets?series_ticker=KXPOLANDSEJM&status=open&limit=3",
+      "verified": true,
+      "flag": "custom_strike field reads 'demo strike' (placeholder) (see F-03).",
+      "option": "Law and Justice"
+    },
+    {
+      "topic": "elections",
+      "ticker": "KXPOLANDSEJM-27-LEFT",
+      "title": "Who will win the next Polish general election?",
+      "event_ticker": "KXPOLANDSEJM-27",
+      "status": "active",
+      "result": "",
+      "last_price_dollars": "0.0400",
+      "yes_bid_dollars": "0.0200",
+      "yes_ask_dollars": "0.9700",
+      "volume_contracts": "1589.17",
+      "open_interest_contracts": "1588.01",
+      "close_time": "2028-11-10T15:00:00Z",
+      "settlement_ts": "",
+      "settlement_value_dollars": "",
+      "rules_primary": "If the winner of the next Polish general election in 2027 is The Left, then the market resolves to Yes.",
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/markets?series_ticker=KXPOLANDSEJM&status=open&limit=3",
+      "verified": true,
+      "flag": "custom_strike field reads 'demo strike' (placeholder) (see F-03).",
+      "option": "The Left"
+    },
+    {
+      "topic": "golf",
+      "ticker": "KXPGARYDER-RC27-USA",
+      "title": "Will Team USA win the Ryder Cup?",
+      "event_ticker": "KXPGARYDER-RC27",
+      "status": "active",
+      "result": "",
+      "last_price_dollars": "0.9000",
+      "yes_bid_dollars": "0.0000",
+      "yes_ask_dollars": "1.0000",
+      "volume_contracts": "1.18",
+      "open_interest_contracts": "0.02",
+      "close_time": "2027-10-03T23:00:00Z",
+      "settlement_ts": "",
+      "settlement_value_dollars": "",
+      "rules_primary": "If Team USA wins the 2027 Ryder Cup, then the market resolves to Yes.",
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/markets?series_ticker=KXPGARYDER&status=open&limit=3",
+      "verified": true,
+      "flag": "No yes bid, last update 2026-04-28 — last price 0.90 is stale (see F-13)."
+    },
+    {
+      "topic": "golf",
+      "ticker": "KXPGARYDER-RC27-TIE",
+      "title": "Will Team USA and Team Europe tie in the Ryder Cup?",
+      "event_ticker": "KXPGARYDER-RC27",
+      "status": "active",
+      "result": "",
+      "last_price_dollars": "0.0200",
+      "yes_bid_dollars": "0.0000",
+      "yes_ask_dollars": "1.0000",
+      "volume_contracts": "1.17",
+      "open_interest_contracts": "0.01",
+      "close_time": "2027-10-03T23:00:00Z",
+      "settlement_ts": "",
+      "settlement_value_dollars": "",
+      "rules_primary": "If Team USA and Team Europe tie in the 2027 Ryder Cup, then the market resolves to Yes.",
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/markets?series_ticker=KXPGARYDER&status=open&limit=3",
+      "verified": true,
+      "flag": "No yes bid, last update 2026-04-28 (see F-13)."
+    },
+    {
+      "topic": "golf",
+      "ticker": "KXPGARYDER-RC27-EUR",
+      "title": "Will Team Europe win the Ryder Cup?",
+      "event_ticker": "KXPGARYDER-RC27",
+      "status": "active",
+      "result": "",
+      "last_price_dollars": "0.0200",
+      "yes_bid_dollars": "0.0000",
+      "yes_ask_dollars": "1.0000",
+      "volume_contracts": "1.17",
+      "open_interest_contracts": "0.01",
+      "close_time": "2027-10-03T23:00:00Z",
+      "settlement_ts": "",
+      "settlement_value_dollars": "",
+      "rules_primary": "If Team Europe wins the 2027 Ryder Cup, then the market resolves to Yes.",
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/markets?series_ticker=KXPGARYDER&status=open&limit=3",
+      "verified": true,
+      "flag": "No yes bid, last update 2026-04-28 (see F-13)."
+    },
+    {
+      "topic": "golf",
+      "ticker": "KXPGAH2H-THRC26R2APUTDWU-DWU",
+      "title": "Will Dylan Wu beat Andrew Putnam in the 2nd round of the The RSM Classic?",
+      "event_ticker": "KXPGAH2H-THRC26R2APUTDWU",
+      "status": "active",
+      "result": "",
+      "last_price_dollars": "0.0000",
+      "yes_bid_dollars": "0.0100",
+      "yes_ask_dollars": "1.0000",
+      "volume_contracts": "0.00",
+      "open_interest_contracts": "0.00",
+      "close_time": "2026-12-04T14:47:00Z",
+      "settlement_ts": "",
+      "settlement_value_dollars": "",
+      "rules_primary": "If Dylan Wu wins the head-to-head matchup against Andrew Putnam in the 2nd round of the 2026 The RSM Classic, then the market resolves to Yes.",
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/markets?series_ticker=KXPGAH2H&status=open&limit=3",
+      "verified": true,
+      "flag": "Zero volume and 0.99-wide spread (see F-14)."
+    },
+    {
+      "topic": "golf",
+      "ticker": "KXPGAH2H-THRC26R2APUTDWU-APUT",
+      "title": "Will Andrew Putnam beat Dylan Wu in the 2nd round of the The RSM Classic?",
+      "event_ticker": "KXPGAH2H-THRC26R2APUTDWU",
+      "status": "active",
+      "result": "",
+      "last_price_dollars": "0.0000",
+      "yes_bid_dollars": "0.0100",
+      "yes_ask_dollars": "1.0000",
+      "volume_contracts": "0.00",
+      "open_interest_contracts": "0.00",
+      "close_time": "2026-12-04T14:47:00Z",
+      "settlement_ts": "",
+      "settlement_value_dollars": "",
+      "rules_primary": "If Andrew Putnam wins the head-to-head matchup against Dylan Wu in the 2nd round of the 2026 The RSM Classic, then the market resolves to Yes.",
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/markets?series_ticker=KXPGAH2H&status=open&limit=3",
+      "verified": true,
+      "flag": "Zero volume and 0.99-wide spread (see F-14)."
+    },
+    {
+      "topic": "golf",
+      "ticker": "KXPGAH2H-THRC26R2TDUNMMEI-TDUN",
+      "title": "Will Tyler Duncan beat Mac Meissner in the 2nd round of the The RSM Classic?",
+      "event_ticker": "KXPGAH2H-THRC26R2TDUNMMEI",
+      "status": "active",
+      "result": "",
+      "last_price_dollars": "0.0000",
+      "yes_bid_dollars": "0.0000",
+      "yes_ask_dollars": "0.0000",
+      "volume_contracts": "0.00",
+      "open_interest_contracts": "0.00",
+      "close_time": "2026-12-04T15:20:00Z",
+      "settlement_ts": "",
+      "settlement_value_dollars": "",
+      "rules_primary": "If Tyler Duncan wins the head-to-head matchup against Mac Meissner in the 2nd round of the 2026 The RSM Classic, then the market resolves to Yes.",
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/markets?series_ticker=KXPGAH2H&status=open&limit=3",
+      "verified": true,
+      "flag": "No bid and no ask (both 0.00) — no liquidity (see F-14)."
+    }
+  ],
+  "orderbooks": [
+    {
+      "ticker": "KXPOLANDSEJM-27-PIS",
+      "captured_from": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPOLANDSEJM-27-PIS/orderbook",
+      "yes_bids": [
+        [
+          "0.0100",
+          "1.00"
+        ],
+        [
+          "0.0200",
+          "1.00"
+        ]
+      ],
+      "no_bids": [
+        [
+          "0.0100",
+          "1.00"
+        ]
+      ],
+      "verified": true,
+      "flag": "Depth of only two YES bid levels and one NO bid level."
+    }
+  ],
+  "unchecked": [
+    {
+      "item": "Gasoline price series (no series was returned under tags=Gas; only DIESEL and DIESELM)",
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/series?tags=Gas&include_volume=true"
+    },
+    {
+      "item": "DIESELM markets (market list not requested)",
+      "source_api": ""
+    },
+    {
+      "item": "Open markets for KXETHATH, KXDOGEPERP, KXSUIATH, KXAIRDROPPUMPFUN, KXAIRDROPHYPE, KXPGAEAGLE, KXLEAVEKARKI, PRESPARTYAZ, KXXBANNEDMURRAYHILLGUY1 (not requested)",
+      "source_api": ""
+    },
+    {
+      "item": "Series in each category beyond the first chunk of the category list (Golf 27 pages, Crypto 36 pages, Elections 529 pages; Culture list was complete at 2 series)",
+      "source_api": "https://external-api.demo.kalshi.co/trade-api/v2/series?category=Elections&include_volume=true"
+    },
+    {
+      "item": "Dollar-value volume (Kalshi API reports contract counts, not dollars)",
+      "source_api": "https://docs.kalshi.com/api-reference/market/get-series-list.md"
+    }
+  ]
+}

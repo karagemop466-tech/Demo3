@@ -138,3 +138,38 @@ Session 6908a11a:
 - Pages after PR #9: status `built` at commit ed51f19; live-verified by fetching `https://karagemop466-tech.github.io/Demo3/EXECUTIVE_SUMMARY.md` (served correctly).
 - Correction commit: EXECUTIVE_SUMMARY.md landing-page description updated after PR #4's root landing page replaced the earlier redirect.
 - PR #8 (open, another session) was not created or merged by 6908a11a; left for its owner.
+
+---
+
+## Session e2aacbd6 — Kalshi Demo Tracker (`docs/tracker/`) — added 2026-11-20
+
+Branch: `arena/e2aacbd6-demo3` (PR #8 → `main`). Scope is limited to `docs/tracker/**`, `scripts/tracker_build.py`, `scripts/tracker_check.py`, and `docs/tracker/README.md`. Nothing outside this scope was edited except this board (appended only).
+
+Why a separate folder: `main` already holds `docs/` (session 00a943bd) and root-level pages (session 7f1ef378). Several filenames overlap with mine (index, dashboard, flagged, questions, suggestions, sources). I did not overwrite or delete their files; the tracker lives under `docs/tracker/` instead.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|------|--------|-------|-----------|------------------------|----------------|
+| T1 Repo review (line by line) | done | e2aacbd6 | `docs/tracker/data/flags.json` | Kalshi docs + `git`/`gh` checks | F-01, F-02, F-21 |
+| T2 Kalshi API verification + demo data snapshot | done | e2aacbd6 | `docs/tracker/data/snapshot.json`, `sources.json` | Official docs (docs.kalshi.com) + demo REST responses (`source_api` on every row) | F-03…F-09, F-11, F-13…F-15, F-21 |
+| T3 Executive summary + findings | done | e2aacbd6 | `docs/tracker/index.html`, `findings.html` | Same as T2 | F-16, F-17 |
+| T4 Live dashboard (chart windows 1h–30d, orderbook liquidity) | done | e2aacbd6 | `docs/tracker/dashboard.html`, `assets/live.js` | Public demo endpoints, called from the browser; snapshot fallback | F-19, F-20 |
+| T5 Category subpages (gas, elections, culture, crypto, golf) | done | e2aacbd6 | `docs/tracker/categories/*.html` | Same as T2 | F-18 |
+| T6 Resolutions (YES/NO results) | done | e2aacbd6 | `docs/tracker/resolutions.html` | Demo API `markets?series_ticker=HOUSEAKAL`; settlement doc | F-12 |
+| T7 Portfolio, trades, strategy analysis | blocked (needs review) | e2aacbd6 | `docs/tracker/portfolio.html` | Kalshi API-key doc; no key available to session | F-22 (Q-01) |
+| T8 Suggestions decision board | done | e2aacbd6 | `docs/tracker/suggestions.html`, `data/suggestions.json` | Derived from flags; nothing implemented | — |
+| T9 Questions / gaps | done | e2aacbd6 | `docs/tracker/questions.html`, `data/questions.json` | Sources cited per question | Q-01…Q-14 |
+| T10 Build + link/source check + DOM test | done | e2aacbd6 | `scripts/tracker_build.py`, `scripts/tracker_check.py` | `tracker_check.py` OK; jsdom loaded all 14 pages, 0 errors | — |
+| T11 PR → merge → Pages check | in progress | e2aacbd6 | — | See log below | — |
+
+Change requests (logged, not edited — shared files):
+- CR-e2aacbd6-1: `README.md` (shared) should link the tracker: `docs/tracker/index.html`. Layout and checks are described in `docs/tracker/README.md`.
+- CR-e2aacbd6-2: root/landing `index.html` (shared) may link `docs/tracker/` as a new "Kalshi Demo Tracker" entry.
+- CR-e2aacbd6-3: Pages source is `main /` (legacy). Changing to `/docs` returned 403 for this session as well; the tracker works at `/docs/tracker/` without changing the setting.
+
+Verification (e2aacbd6):
+- Kalshi official docs read: demo_env, api_keys, openapi.yaml (first chunk), get-series-list, get-markets, get-market-orderbook, get-market-candlesticks, market_settlement, llms.txt, welcome.
+- Demo REST responses read (2026-11-20): `series?tags=Golf|Gas`, `series?category=Crypto|Elections|Culture`, `markets?series_ticker=…&status=open` for POLANDSEJM, PGAH2H, PGARYDER, AVAXMINY, BTC75VS100, XBANNEDGROK; `markets?series_ticker=HOUSEAKAL`; `events?series_ticker=KXPGATOP40`; one orderbook; one candlestick call (empty window).
+- Irregularities: F-01…F-22 (`docs/tracker/data/flags.json`, published on the Flagged for Review page).
+
+Log:
+- 2026-11-20 e2aacbd6 — Claimed T1–T11 on `arena/e2aacbd6-demo3`. Built the tracker, verified it, opened PR #8. The merge was blocked because `main` had moved (DIRTY, add/add on overlapping filenames). Resolved by moving the tracker into `docs/tracker/` and merging `main`; no other session's file was changed (COORDINATION kept with appended section).
