@@ -1128,28 +1128,92 @@ Coordination notes for the integrator:
   or a `KD.onSelect` hook) so the price chart can mark the ≥ $0.10 jumps with the same official
   settlement-source links the chat rows already show.
 
-### Session 7b47094a — merge and deployment record
 
-* **PR #60 merged into `main`** at 2026-11-20 20:00:26 UTC, merge commit `75cc16d`
-  (https://github.com/karagemop466-tech/Demo3/pull/60). `git ls-tree origin/main` confirms the delivered
-  files: `assets/roi-model.js`, `model/build_roi_model.py`, `data/latest/roi_model.json`,
-  `requirements.html`, `model.html`, `tests/alerts_resolution.test.js`, `scripts/tests/test_roi_model.py`.
-* Merged content reconciled with session `5bc43641`'s PR #57 (the `roiModel` score + 9-column chat):
-  one chat implementation, main's architecture kept, the resolution watcher and the published screen
-  added on top; the ROI score cell now prints which rule admitted the row, and the row link uses the
-  documented `GET /markets/{ticker}` route (the previous `/series/{s}/markets/{t}` form is not a
-  documented endpoint).
-* Re-verification on the merged branch before the PR: `node --test` 39/39;
-  `python3 scripts/tests/test_roi_model.py` 8/8; `model/build_roi_model.py --check` OK against the
-  19:55Z snapshot; `verify_root_site.py` 0 failures; `verify_site.py` PASSED; `check_site.py` passed.
-* **GitHub Pages:** the API shows builds for `10fd1b2` (19:56:34Z), `6414ce3` (19:58:45Z) and this
-  merge `75cc16d` (20:00:28Z) each `errored — "Page build failed."`, while the following build
-  (`2430d9a`, 20:03:39Z) was still `building` minutes later. The live root site keeps serving the last
-  successful artefact (verified by fetching https://karagemop466-tech.github.io/Demo3/ — landing,
-  executive-summary table and topic links render), so this is deployment lag/build churn under the
-  repo's ~10-minute collector pushes plus concurrent session merges, not a missing site. Recorded as
-  **F-7b-08** on the Flagged for Review page so the owner can re-run the Pages build once the queue
-  settles; the Pages configuration itself was not touched (legacy build, `main` `/`, HTTPS enforced —
-  https://api.github.com/repos/karagemop466-tech/Demo3/pages).
-* Follow-up board-only PR from this session records the merge above; no site, data or script file is
-  changed by it.
+---
+
+## Session eb2af75b — automated simulated (paper) trading desk + strategy analytics (branch `arena/eb2af75b-demo3`) — claimed 2026-11-20 19:20 UTC
+
+Base `b3b2b23` (= `main` at claim time). Protocol note: the platform binds this session to
+`arena/eb2af75b-demo3`, so the brief's `session-<id>/<task>` branch naming is not possible (same
+irregularity already recorded as R-04).
+
+**Gap identified (audited against `main` at `b3b2b23`).** The brief requires "Automate simulated
+trades to test different strategies", "Execute trades on events and track the performance", "Track
+the portfolio performance … on the site", "analyze the results of the trades and categorize trades
+and create strategies based on the type of trade", and "no manual input on my part". What exists:
+- `trading/kalshi_trade.py` + `.github/workflows/trade.yml` — order placement and portfolio pull,
+  but **credential-gated** (exits code 3 with no demo secrets) and **manual-dispatch only**
+  (`on: workflow_dispatch`). No scheduled automation, no strategy loop, no persisted ledger.
+- `assets/trade.js` — in-browser paper fills, but stored in `localStorage`: per-visitor, not
+  persisted to the repo, not automated, invisible to the deployed site's other pages.
+- `data/latest/portfolio.json` — `status: credentials_missing`, all account fields blank.
+So no automated simulated-trading pipeline exists. This session delivers exactly that.
+
+**Non-overlapping scope (new files only — no shared file edited except this board, append-only):**
+| Path | Owner |
+|---|---|
+| `trading/paper_engine.py`, `trading/paper_strategies.py`, `trading/test_paper_engine.py` | eb2af75b |
+| `.github/workflows/paper-desk.yml` | eb2af75b |
+| `scripts/build_paper_desk.py`, `data/paper/**` | eb2af75b |
+| `paper-desk/**` (self-contained subsite) | eb2af75b |
+
+**Not touched (claimed by others):** `alerts.html`, `assets/alerts*.js`, `assets/roi.js`,
+`scripts/scan_swings.py`, `scripts/build_root_site.py`, `scripts/verify_root_site.py`,
+`assets/style.css`, `assets/dashboard.js`, `assets/app.js`, `assets/trade.js`, root `*.html`,
+`docs/**`, `analysis/**`, `demo-desk/**`, `demo-monitor/**`, `collector/**`, `scripts/collect_kalshi_data.py`,
+`data/latest/**`, `data/events.json`, `.github/workflows/collect.yml`, `check.yml`. Root-site nav
+entry for this subsite is logged as change request **CR-eb2af75b-1** for the integration session.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| P1 Paper-trading engine (deterministic strategies, taker fills sized by live orderbook depth, mark-to-market, settlement sweep) | done (code + offline tests; live cycle pending merge) | eb2af75b | `trading/paper_engine.py`, `trading/paper_strategies.py` | Live demo responses + official docs fetched this session (register in `paper-desk/SOURCES.md`) | F-EB2-01 (simulated, not account-backed) |
+| P2 Scheduled automation with no manual input | done (workflow on branch; cron registers only after merge) | eb2af75b | `.github/workflows/paper-desk.yml` | GitHub Actions scheduled-workflow doc; run evidence recorded here | F-EB2-02 (first scheduled run only after merge to `main`) |
+| P3 Trade journal + portfolio analytics + categorization (topic × side × price band × strategy) | done | eb2af75b | `data/paper/**`, `scripts/build_paper_desk.py` | every row carries the exact demo-API URL it came from | F-EB2-03 (no fee model — disclosed) |
+| P4 Self-contained `paper-desk/` subsite (tables, equity chart, per-row sources) | done | eb2af75b | `paper-desk/**` | `scripts/verify_paper_desk.py` link + source check | — |
+| P5 Offline tests (mock API, no network) | done (25 tests) | eb2af75b | `trading/test_paper_engine.py` | run recorded below | — |
+| P6 PR → merge → Pages check → record | in progress | eb2af75b | — | Pages API + live fetch after merge | — |
+
+Claim pushed immediately per board rules. Nothing is marked verified until the official-source check
+is recorded in this section.
+
+**Verification recorded 2026-11-20 (all commands run in the repo root):**
+- `python3 trading/test_paper_engine.py` → `Ran 25 tests … OK` (offline, `FixtureClient`; covers
+  fill sizing, zero-liquidity rejection, off-grid maker rejection, settlement payout, swing rule
+  thresholds, batched-quote parsing, batched orderbook parsing + error accounting).
+- `python3 scripts/build_paper_desk.py` → `built 7 pages + assets in paper-desk/ (ledger: empty)`;
+  two consecutive runs are byte-identical (7/7 `md5sum -c` OK), so the generator is deterministic.
+- `python3 scripts/verify_paper_desk.py` → `result: PASS (0 failures, 40 notes)`; 130 links checked,
+  every table row carries a source anchor or an explicit `unverified` pill; notes are all
+  "`data/paper/*.json` not present yet (written by the next cycle)".
+- `node --test paper-desk/tests/dom.test.mjs` → `# pass 2 / # fail 0` (jsdom, mocked `fetch`):
+  renders the sourced rows, flags a ≥$0.10 move with the desk pill, and on a rejected request shows
+  "Could not reach the demo API from this browser" with no invented prices.
+- Regressions on other owners' files (read-only, all pass): `python3 trading/test_trading.py` →
+  `Ran 9 tests … OK`; `python3 collector/test_collect.py` → `Ran 2 tests … OK`;
+  `python3 scripts/verify_root_site.py` → `verify_root_site: 0 failures`;
+  `python3 scripts/check_site.py` → `site checks passed`.
+- Live API evidence collected with an HTTP page fetch (the sandbox has no shell egress):
+  `GET /events/KXPRESNOMD-28` → 200 with `series_ticker`, `category`, `rules_primary`,
+  `price_ranges`/`price_level_structure`; `GET /series/KXPRESNOMD/markets/KXPRESNOMD-28-AOC/candlesticks?start_ts=1795182000&end_ts=1795203600&period_interval=60`
+  → 200 with 6 candles; the same window a year earlier → 200 with `{"candlesticks":[]}` (recorded as
+  a legitimate empty answer in `paper-desk/SOURCES.md`, not an error).
+- `paper-desk/SOURCES.md` is the claim→source register (23 numbered rows, verbatim doc language,
+  plus the live captures and an "Explicitly NOT claimed" list).
+
+**Additional flags raised by this session (details in `paper-desk/methodology.html`).**
+- F-EB2-08 — GitHub registers a workflow's `schedule`/`workflow_dispatch` only from the default
+  branch: on this branch `gh workflow run .github/workflows/paper-desk.yml --ref …` returned
+  HTTP 404 and `gh workflow list` does not show it, so the first real cycle can only run after
+  merge. Consequence for the board: `paper-desk/` shows the empty-state banner, not stale numbers.
+- F-EB2-09 — `data/latest/top_events.json` rows carry no `series_ticker` (verified by reading the
+  committed snapshot), so anything drawing candlesticks must resolve it via
+  `GET /events/{event_ticker}` first; `paper-desk/assets/paper.js` does exactly that. Affects any
+  session charting from that snapshot (`collector/**`, root `dashboard.js`), so it is a board note,
+  not a silent workaround.
+- F-EB2-10 — `trading/paper_engine.py` reads only documented `*_dollars` / `*_size_fp` field names
+  and never falls back to the legacy integer-cent fields; a fixture or replay file written with
+  short names (`yes_ask`, `last`) silently parses to a stale quote. Anyone replaying fixtures should
+  copy the field names from `test_paper_engine.py::market()`.
+- Change request **CR-eb2af75b-2** (for the integration session, not done here): add a
+  `series_ticker` key to `top_events.json` market rows in the collector so consumers do not need an
+  extra API round-trip.
