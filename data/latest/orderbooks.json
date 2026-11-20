@@ -12,7 +12,7 @@
      ]
     ]
    },
-   "retrieved_at": "2026-11-20T11:41:08+00:00",
+   "retrieved_at": "2026-11-20T11:43:48+00:00",
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXDEMOFUTHOURLY-26NOV20H12-UP/orderbook?depth=25"
   },
   "KXSOLE-26NOV2102-B97.875": {
@@ -21,7 +21,7 @@
     "no_dollars": [],
     "yes_dollars": []
    },
-   "retrieved_at": "2026-11-20T11:41:08+00:00",
+   "retrieved_at": "2026-11-20T11:43:48+00:00",
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXSOLE-26NOV2102-B97.875/orderbook?depth=25"
   },
   "KXSOLE-26NOV2102-B98.125": {
@@ -30,7 +30,7 @@
     "no_dollars": [],
     "yes_dollars": []
    },
-   "retrieved_at": "2026-11-20T11:41:08+00:00",
+   "retrieved_at": "2026-11-20T11:43:48+00:00",
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXSOLE-26NOV2102-B98.125/orderbook?depth=25"
   },
   "KXSOLE-26NOV2102-B98.375": {
@@ -39,7 +39,7 @@
     "no_dollars": [],
     "yes_dollars": []
    },
-   "retrieved_at": "2026-11-20T11:41:08+00:00",
+   "retrieved_at": "2026-11-20T11:43:48+00:00",
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXSOLE-26NOV2102-B98.375/orderbook?depth=25"
   },
   "KXSOLE-26NOV2102-B98.625": {
@@ -48,7 +48,7 @@
     "no_dollars": [],
     "yes_dollars": []
    },
-   "retrieved_at": "2026-11-20T11:41:08+00:00",
+   "retrieved_at": "2026-11-20T11:43:48+00:00",
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXSOLE-26NOV2102-B98.625/orderbook?depth=25"
   },
   "KXSOLE-26NOV2102-B98.875": {
@@ -57,7 +57,7 @@
     "no_dollars": [],
     "yes_dollars": []
    },
-   "retrieved_at": "2026-11-20T11:41:08+00:00",
+   "retrieved_at": "2026-11-20T11:43:48+00:00",
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXSOLE-26NOV2102-B98.875/orderbook?depth=25"
   },
   "KXSOLE-26NOV2102-B99.125": {
@@ -66,7 +66,7 @@
     "no_dollars": [],
     "yes_dollars": []
    },
-   "retrieved_at": "2026-11-20T11:41:08+00:00",
+   "retrieved_at": "2026-11-20T11:43:48+00:00",
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXSOLE-26NOV2102-B99.125/orderbook?depth=25"
   },
   "KXSOLE-26NOV2102-B99.375": {
@@ -75,7 +75,7 @@
     "no_dollars": [],
     "yes_dollars": []
    },
-   "retrieved_at": "2026-11-20T11:41:08+00:00",
+   "retrieved_at": "2026-11-20T11:43:48+00:00",
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXSOLE-26NOV2102-B99.375/orderbook?depth=25"
   },
   "KXSOLE-26NOV2102-B99.625": {
@@ -84,7 +84,7 @@
     "no_dollars": [],
     "yes_dollars": []
    },
-   "retrieved_at": "2026-11-20T11:41:08+00:00",
+   "retrieved_at": "2026-11-20T11:43:48+00:00",
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXSOLE-26NOV2102-B99.625/orderbook?depth=25"
   },
   "KXSOLE-26NOV2102-B99.875": {
@@ -93,7 +93,7 @@
     "no_dollars": [],
     "yes_dollars": []
    },
-   "retrieved_at": "2026-11-20T11:41:08+00:00",
+   "retrieved_at": "2026-11-20T11:43:48+00:00",
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXSOLE-26NOV2102-B99.875/orderbook?depth=25"
   },
   "KXSOLE-26NOV2102-T107.2499": {
@@ -102,7 +102,7 @@
     "no_dollars": [],
     "yes_dollars": []
    },
-   "retrieved_at": "2026-11-20T11:41:08+00:00",
+   "retrieved_at": "2026-11-20T11:43:48+00:00",
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXSOLE-26NOV2102-T107.2499/orderbook?depth=25"
   },
   "KXSOLE-26NOV2102-T32.75": {
@@ -111,9 +111,9 @@
     "no_dollars": [],
     "yes_dollars": []
    },
-   "retrieved_at": "2026-11-20T11:41:08+00:00",
+   "retrieved_at": "2026-11-20T11:43:48+00:00",
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXSOLE-26NOV2102-T32.75/orderbook?depth=25"
   }
  },
- "retrieved_at": "2026-11-20T11:41:08+00:00"
+ "retrieved_at": "2026-11-20T11:43:48+00:00"
 }

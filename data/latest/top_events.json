@@ -5,20 +5,20 @@
     "category": "",
     "event_ticker": "KXDEMOFUTHOURLY-26NOV20H12",
     "market_count": 1,
-    "open_interest_dollars_derived": 45.0,
+    "open_interest_dollars_derived": 35.0,
     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?event_ticker=KXDEMOFUTHOURLY-26NOV20H12",
     "title": "Demo BTC at or above 61985.83 USD",
     "top_markets": [
      {
-      "last_price_dollars": "0.4500",
+      "last_price_dollars": "0.3500",
       "ticker": "KXDEMOFUTHOURLY-26NOV20H12-UP",
       "title": "Demo BTC at or above 61985.83 USD",
-      "volume_dollars_derived": 6085.0
+      "volume_dollars_derived": 6475.0
      }
     ],
     "topic": "crypto",
     "volume_24h_dollars_derived": 5985.0,
-    "volume_dollars_derived": 6085.0
+    "volume_dollars_derived": 6475.0
    },
    {
     "category": "",
@@ -633,20 +633,172 @@
    "category": "",
    "event_ticker": "KXDEMOFUTHOURLY-26NOV20H12",
    "market_count": 1,
-   "open_interest_dollars_derived": 45.0,
+   "open_interest_dollars_derived": 35.0,
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?event_ticker=KXDEMOFUTHOURLY-26NOV20H12",
    "title": "Demo BTC at or above 61985.83 USD",
    "top_markets": [
     {
-     "last_price_dollars": "0.4500",
+     "last_price_dollars": "0.3500",
      "ticker": "KXDEMOFUTHOURLY-26NOV20H12-UP",
      "title": "Demo BTC at or above 61985.83 USD",
-     "volume_dollars_derived": 6085.0
+     "volume_dollars_derived": 6475.0
     }
    ],
    "topic": "crypto",
    "volume_24h_dollars_derived": 5985.0,
-   "volume_dollars_derived": 6085.0
+   "volume_dollars_derived": 6475.0
+  },
+  {
+   "category": "",
+   "event_ticker": "KXMVECROSSCATEGORY-S2026VE4JOX36GW7IRREK",
+   "market_count": 1,
+   "open_interest_dollars_derived": 100.0,
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?event_ticker=KXMVECROSSCATEGORY-S2026VE4JOX36GW7IRREK",
+   "title": "yes Espanyol,yes Sabah Masazir",
+   "top_markets": [
+    {
+     "last_price_dollars": "0.4500",
+     "ticker": "KXMVECROSSCATEGORY-S2026VE4JOX36GW7IRREK-MQUUDZWEB",
+     "title": "yes Espanyol,yes Sabah Masazir",
+     "volume_dollars_derived": 100.0
+    }
+   ],
+   "topic": "other",
+   "volume_24h_dollars_derived": 0.0,
+   "volume_dollars_derived": 100.0
+  },
+  {
+   "category": "",
+   "event_ticker": "KXMVECROSSCATEGORY-S2026E2MFCVHGOI7LBZNB",
+   "market_count": 1,
+   "open_interest_dollars_derived": 100.0,
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?event_ticker=KXMVECROSSCATEGORY-S2026E2MFCVHGOI7LBZNB",
+   "title": "yes Trabzonspor Basketbol,yes Tie",
+   "top_markets": [
+    {
+     "last_price_dollars": "0.4500",
+     "ticker": "KXMVECROSSCATEGORY-S2026E2MFCVHGOI7LBZNB-HBYREV4ND",
+     "title": "yes Trabzonspor Basketbol,yes Tie",
+     "volume_dollars_derived": 100.0
+    }
+   ],
+   "topic": "other",
+   "volume_24h_dollars_derived": 0.0,
+   "volume_dollars_derived": 100.0
+  },
+  {
+   "category": "",
+   "event_ticker": "KXMVECROSSCATEGORY-S2026IIKDDUPB3XSMSQVL",
+   "market_count": 1,
+   "open_interest_dollars_derived": 100.0,
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?event_ticker=KXMVECROSSCATEGORY-S2026IIKDDUPB3XSMSQVL",
+   "title": "yes Chicago Fire,yes Montana",
+   "top_markets": [
+    {
+     "last_price_dollars": "0.4500",
+     "ticker": "KXMVECROSSCATEGORY-S2026IIKDDUPB3XSMSQVL-RI3QSTMFK",
+     "title": "yes Chicago Fire,yes Montana",
+     "volume_dollars_derived": 100.0
+    }
+   ],
+   "topic": "other",
+   "volume_24h_dollars_derived": 0.0,
+   "volume_dollars_derived": 100.0
+  },
+  {
+   "category": "",
+   "event_ticker": "KXMVECROSSCATEGORY-S2026ARAHZDHOAENT4CR7",
+   "market_count": 1,
+   "open_interest_dollars_derived": 100.0,
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?event_ticker=KXMVECROSSCATEGORY-S2026ARAHZDHOAENT4CR7",
+   "title": "yes Loyola Marymount,yes Buffalo",
+   "top_markets": [
+    {
+     "last_price_dollars": "0.4500",
+     "ticker": "KXMVECROSSCATEGORY-S2026ARAHZDHOAENT4CR7-YTOY3VGU7",
+     "title": "yes Loyola Marymount,yes Buffalo",
+     "volume_dollars_derived": 100.0
+    }
+   ],
+   "topic": "other",
+   "volume_24h_dollars_derived": 0.0,
+   "volume_dollars_derived": 100.0
+  },
+  {
+   "category": "",
+   "event_ticker": "KXMVECROSSCATEGORY-S2026WIOCSXPUGED4IHHJ",
+   "market_count": 1,
+   "open_interest_dollars_derived": 100.0,
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?event_ticker=KXMVECROSSCATEGORY-S2026WIOCSXPUGED4IHHJ",
+   "title": "yes Galatasaray SK,yes Galatasaray",
+   "top_markets": [
+    {
+     "last_price_dollars": "0.4500",
+     "ticker": "KXMVECROSSCATEGORY-S2026WIOCSXPUGED4IHHJ-AOFVLZ6SJ",
+     "title": "yes Galatasaray SK,yes Galatasaray",
+     "volume_dollars_derived": 100.0
+    }
+   ],
+   "topic": "other",
+   "volume_24h_dollars_derived": 0.0,
+   "volume_dollars_derived": 100.0
+  },
+  {
+   "category": "",
+   "event_ticker": "KXMVECROSSCATEGORY-S20263DXJGSNTDRTO2GUU",
+   "market_count": 1,
+   "open_interest_dollars_derived": 100.0,
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?event_ticker=KXMVECROSSCATEGORY-S20263DXJGSNTDRTO2GUU",
+   "title": "yes Stony Brook,yes Sacramento St.",
+   "top_markets": [
+    {
+     "last_price_dollars": "0.4500",
+     "ticker": "KXMVECROSSCATEGORY-S20263DXJGSNTDRTO2GUU-4CRA37RZL",
+     "title": "yes Stony Brook,yes Sacramento St.",
+     "volume_dollars_derived": 100.0
+    }
+   ],
+   "topic": "other",
+   "volume_24h_dollars_derived": 0.0,
+   "volume_dollars_derived": 100.0
+  },
+  {
+   "category": "",
+   "event_ticker": "KXMVECROSSCATEGORY-S2026V45SH4KOTBMOB6B7",
+   "market_count": 1,
+   "open_interest_dollars_derived": 100.0,
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?event_ticker=KXMVECROSSCATEGORY-S2026V45SH4KOTBMOB6B7",
+   "title": "yes Dartmouth,yes Nevada",
+   "top_markets": [
+    {
+     "last_price_dollars": "0.4500",
+     "ticker": "KXMVECROSSCATEGORY-S2026V45SH4KOTBMOB6B7-VXIDQYRIP",
+     "title": "yes Dartmouth,yes Nevada",
+     "volume_dollars_derived": 100.0
+    }
+   ],
+   "topic": "other",
+   "volume_24h_dollars_derived": 0.0,
+   "volume_dollars_derived": 100.0
+  },
+  {
+   "category": "",
+   "event_ticker": "KXMVECROSSCATEGORY-S2026AOP6GMUSALVU73VI",
+   "market_count": 1,
+   "open_interest_dollars_derived": 100.0,
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?event_ticker=KXMVECROSSCATEGORY-S2026AOP6GMUSALVU73VI",
+   "title": "yes Watford,yes Delaware",
+   "top_markets": [
+    {
+     "last_price_dollars": "0.4500",
+     "ticker": "KXMVECROSSCATEGORY-S2026AOP6GMUSALVU73VI-7FEZCEXX6",
+     "title": "yes Watford,yes Delaware",
+     "volume_dollars_derived": 100.0
+    }
+   ],
+   "topic": "other",
+   "volume_24h_dollars_derived": 0.0,
+   "volume_dollars_derived": 100.0
   },
   {
    "category": "",
@@ -1236,160 +1388,8 @@
    "topic": "other",
    "volume_24h_dollars_derived": 0.0,
    "volume_dollars_derived": 100.0
-  },
-  {
-   "category": "",
-   "event_ticker": "KXMVECROSSCATEGORY-S2026KSXKRJBROUYY6O3W",
-   "market_count": 1,
-   "open_interest_dollars_derived": 100.0,
-   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?event_ticker=KXMVECROSSCATEGORY-S2026KSXKRJBROUYY6O3W",
-   "title": "yes Tie,yes San Jose",
-   "top_markets": [
-    {
-     "last_price_dollars": "0.4500",
-     "ticker": "KXMVECROSSCATEGORY-S2026KSXKRJBROUYY6O3W-AZKXZAJWZ",
-     "title": "yes Tie,yes San Jose",
-     "volume_dollars_derived": 100.0
-    }
-   ],
-   "topic": "other",
-   "volume_24h_dollars_derived": 0.0,
-   "volume_dollars_derived": 100.0
-  },
-  {
-   "category": "",
-   "event_ticker": "KXMVECROSSCATEGORY-S2026TD67365RSXMAXPKP",
-   "market_count": 1,
-   "open_interest_dollars_derived": 100.0,
-   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?event_ticker=KXMVECROSSCATEGORY-S2026TD67365RSXMAXPKP",
-   "title": "yes Georgia,yes UC Davis",
-   "top_markets": [
-    {
-     "last_price_dollars": "0.4500",
-     "ticker": "KXMVECROSSCATEGORY-S2026TD67365RSXMAXPKP-BZZEDXCEP",
-     "title": "yes Georgia,yes UC Davis",
-     "volume_dollars_derived": 100.0
-    }
-   ],
-   "topic": "other",
-   "volume_24h_dollars_derived": 0.0,
-   "volume_dollars_derived": 100.0
-  },
-  {
-   "category": "",
-   "event_ticker": "KXMVECROSSCATEGORY-S2026H3DQJXKW5DPTWTYL",
-   "market_count": 1,
-   "open_interest_dollars_derived": 100.0,
-   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?event_ticker=KXMVECROSSCATEGORY-S2026H3DQJXKW5DPTWTYL",
-   "title": "yes Northwestern St.,yes North Carolina A&T",
-   "top_markets": [
-    {
-     "last_price_dollars": "0.4500",
-     "ticker": "KXMVECROSSCATEGORY-S2026H3DQJXKW5DPTWTYL-O72ZALTER",
-     "title": "yes Northwestern St.,yes North Carolina A&T",
-     "volume_dollars_derived": 100.0
-    }
-   ],
-   "topic": "other",
-   "volume_24h_dollars_derived": 0.0,
-   "volume_dollars_derived": 100.0
-  },
-  {
-   "category": "",
-   "event_ticker": "KXMVECROSSCATEGORY-S2026PZXXKARJMLHD7S3P",
-   "market_count": 1,
-   "open_interest_dollars_derived": 100.0,
-   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?event_ticker=KXMVECROSSCATEGORY-S2026PZXXKARJMLHD7S3P",
-   "title": "yes Eastern Illinois,yes St. Bonaventure",
-   "top_markets": [
-    {
-     "last_price_dollars": "0.4500",
-     "ticker": "KXMVECROSSCATEGORY-S2026PZXXKARJMLHD7S3P-JM7IRCW42",
-     "title": "yes Eastern Illinois,yes St. Bonaventure",
-     "volume_dollars_derived": 100.0
-    }
-   ],
-   "topic": "other",
-   "volume_24h_dollars_derived": 0.0,
-   "volume_dollars_derived": 100.0
-  },
-  {
-   "category": "",
-   "event_ticker": "KXMVECROSSCATEGORY-S202623VCEVNVVUMWJ34K",
-   "market_count": 1,
-   "open_interest_dollars_derived": 100.0,
-   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?event_ticker=KXMVECROSSCATEGORY-S202623VCEVNVVUMWJ34K",
-   "title": "yes Orlando,yes Oregon",
-   "top_markets": [
-    {
-     "last_price_dollars": "0.4500",
-     "ticker": "KXMVECROSSCATEGORY-S202623VCEVNVVUMWJ34K-IXWLGDS6D",
-     "title": "yes Orlando,yes Oregon",
-     "volume_dollars_derived": 100.0
-    }
-   ],
-   "topic": "other",
-   "volume_24h_dollars_derived": 0.0,
-   "volume_dollars_derived": 100.0
-  },
-  {
-   "category": "",
-   "event_ticker": "KXMVECROSSCATEGORY-S2026ADPKN7N7W5VGW3AU",
-   "market_count": 1,
-   "open_interest_dollars_derived": 100.0,
-   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?event_ticker=KXMVECROSSCATEGORY-S2026ADPKN7N7W5VGW3AU",
-   "title": "yes Detroit Mercy,yes Cleveland St.",
-   "top_markets": [
-    {
-     "last_price_dollars": "0.4500",
-     "ticker": "KXMVECROSSCATEGORY-S2026ADPKN7N7W5VGW3AU-CI4ZZOIAY",
-     "title": "yes Detroit Mercy,yes Cleveland St.",
-     "volume_dollars_derived": 100.0
-    }
-   ],
-   "topic": "other",
-   "volume_24h_dollars_derived": 0.0,
-   "volume_dollars_derived": 100.0
-  },
-  {
-   "category": "",
-   "event_ticker": "KXMVECROSSCATEGORY-S2026QEEXGUBLWTTEVJIG",
-   "market_count": 1,
-   "open_interest_dollars_derived": 100.0,
-   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?event_ticker=KXMVECROSSCATEGORY-S2026QEEXGUBLWTTEVJIG",
-   "title": "yes Brooklyn,yes Baltimore",
-   "top_markets": [
-    {
-     "last_price_dollars": "0.4500",
-     "ticker": "KXMVECROSSCATEGORY-S2026QEEXGUBLWTTEVJIG-PLWTBVVZZ",
-     "title": "yes Brooklyn,yes Baltimore",
-     "volume_dollars_derived": 100.0
-    }
-   ],
-   "topic": "other",
-   "volume_24h_dollars_derived": 0.0,
-   "volume_dollars_derived": 100.0
-  },
-  {
-   "category": "",
-   "event_ticker": "KXMVECROSSCATEGORY-S2026AKUO4EKZ6IMH32EA",
-   "market_count": 1,
-   "open_interest_dollars_derived": 100.0,
-   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?event_ticker=KXMVECROSSCATEGORY-S2026AKUO4EKZ6IMH32EA",
-   "title": "yes Tigres wins by more than 1.5 goals,yes Miami (OH)",
-   "top_markets": [
-    {
-     "last_price_dollars": "0.4500",
-     "ticker": "KXMVECROSSCATEGORY-S2026AKUO4EKZ6IMH32EA-DLRVOCBOB",
-     "title": "yes Tigres wins by more than 1.5 goals,yes Miami (OH)",
-     "volume_dollars_derived": 100.0
-    }
-   ],
-   "topic": "other",
-   "volume_24h_dollars_derived": 0.0,
-   "volume_dollars_derived": 100.0
   }
  ],
  "ranking_metric": "volume_dollars_derived = volume_fp x notional_value_dollars (arithmetic on API fields)",
- "retrieved_at": "2026-11-20T11:41:08+00:00"
+ "retrieved_at": "2026-11-20T11:43:48+00:00"
 }

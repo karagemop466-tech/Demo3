@@ -7,7 +7,7 @@
     "1h_7d": {
      "candlesticks": [],
      "period_interval_minutes": 60,
-     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXDEMOFUTHOURLY-26NOV20H12/markets/KXDEMOFUTHOURLY-26NOV20H12-UP/candlesticks?start_ts=1794570113&end_ts=1795174913&period_interval=60"
+     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXDEMOFUTHOURLY-26NOV20H12/markets/KXDEMOFUTHOURLY-26NOV20H12-UP/candlesticks?start_ts=1794570264&end_ts=1795175064&period_interval=60"
     },
     "1m_2h": {
      "candlesticks": [
@@ -1034,10 +1034,85 @@
         "low_dollars": "0.0100",
         "open_dollars": "0.0100"
        }
+      },
+      {
+       "end_period_ts": 1795174920,
+       "open_interest_fp": "30.00",
+       "price": {
+        "close_dollars": "0.6500",
+        "high_dollars": "0.6500",
+        "low_dollars": "0.3500",
+        "mean_dollars": "0.5500",
+        "open_dollars": "0.3500",
+        "previous_dollars": "0.6500"
+       },
+       "volume_fp": "150.00",
+       "yes_ask": {
+        "close_dollars": "1.0000",
+        "high_dollars": "1.0000",
+        "low_dollars": "0.3500",
+        "open_dollars": "1.0000"
+       },
+       "yes_bid": {
+        "close_dollars": "0.0100",
+        "high_dollars": "0.6500",
+        "low_dollars": "0.0100",
+        "open_dollars": "0.0100"
+       }
+      },
+      {
+       "end_period_ts": 1795174980,
+       "open_interest_fp": "50.00",
+       "price": {
+        "close_dollars": "0.6500",
+        "high_dollars": "0.6500",
+        "low_dollars": "0.3500",
+        "mean_dollars": "0.5500",
+        "open_dollars": "0.3500",
+        "previous_dollars": "0.6500"
+       },
+       "volume_fp": "150.00",
+       "yes_ask": {
+        "close_dollars": "1.0000",
+        "high_dollars": "1.0000",
+        "low_dollars": "0.3500",
+        "open_dollars": "1.0000"
+       },
+       "yes_bid": {
+        "close_dollars": "0.0100",
+        "high_dollars": "0.6500",
+        "low_dollars": "0.0100",
+        "open_dollars": "0.0100"
+       }
+      },
+      {
+       "end_period_ts": 1795175040,
+       "open_interest_fp": "30.00",
+       "price": {
+        "close_dollars": "0.6500",
+        "high_dollars": "0.6500",
+        "low_dollars": "0.3500",
+        "mean_dollars": "0.5500",
+        "open_dollars": "0.3500",
+        "previous_dollars": "0.6500"
+       },
+       "volume_fp": "150.00",
+       "yes_ask": {
+        "close_dollars": "1.0000",
+        "high_dollars": "1.0000",
+        "low_dollars": "0.3500",
+        "open_dollars": "1.0000"
+       },
+       "yes_bid": {
+        "close_dollars": "0.0100",
+        "high_dollars": "0.6500",
+        "low_dollars": "0.0100",
+        "open_dollars": "0.0100"
+       }
       }
      ],
      "period_interval_minutes": 1,
-     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXDEMOFUTHOURLY-26NOV20H12/markets/KXDEMOFUTHOURLY-26NOV20H12-UP/candlesticks?start_ts=1795167713&end_ts=1795174913&period_interval=1"
+     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXDEMOFUTHOURLY-26NOV20H12/markets/KXDEMOFUTHOURLY-26NOV20H12-UP/candlesticks?start_ts=1795167864&end_ts=1795175064&period_interval=1"
     }
    }
   },
@@ -1048,12 +1123,12 @@
     "1h_7d": {
      "candlesticks": [],
      "period_interval_minutes": 60,
-     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B97.875/candlesticks?start_ts=1794570113&end_ts=1795174913&period_interval=60"
+     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B97.875/candlesticks?start_ts=1794570264&end_ts=1795175064&period_interval=60"
     },
     "1m_2h": {
      "candlesticks": [],
      "period_interval_minutes": 1,
-     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B97.875/candlesticks?start_ts=1795167713&end_ts=1795174913&period_interval=1"
+     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B97.875/candlesticks?start_ts=1795167864&end_ts=1795175064&period_interval=1"
     }
    }
   },
@@ -1064,12 +1139,12 @@
     "1h_7d": {
      "candlesticks": [],
      "period_interval_minutes": 60,
-     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B98.125/candlesticks?start_ts=1794570113&end_ts=1795174913&period_interval=60"
+     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B98.125/candlesticks?start_ts=1794570264&end_ts=1795175064&period_interval=60"
     },
     "1m_2h": {
      "candlesticks": [],
      "period_interval_minutes": 1,
-     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B98.125/candlesticks?start_ts=1795167713&end_ts=1795174913&period_interval=1"
+     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B98.125/candlesticks?start_ts=1795167864&end_ts=1795175064&period_interval=1"
     }
    }
   },
@@ -1080,12 +1155,12 @@
     "1h_7d": {
      "candlesticks": [],
      "period_interval_minutes": 60,
-     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B98.375/candlesticks?start_ts=1794570113&end_ts=1795174913&period_interval=60"
+     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B98.375/candlesticks?start_ts=1794570264&end_ts=1795175064&period_interval=60"
     },
     "1m_2h": {
      "candlesticks": [],
      "period_interval_minutes": 1,
-     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B98.375/candlesticks?start_ts=1795167713&end_ts=1795174913&period_interval=1"
+     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B98.375/candlesticks?start_ts=1795167864&end_ts=1795175064&period_interval=1"
     }
    }
   },
@@ -1096,12 +1171,12 @@
     "1h_7d": {
      "candlesticks": [],
      "period_interval_minutes": 60,
-     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B98.625/candlesticks?start_ts=1794570113&end_ts=1795174913&period_interval=60"
+     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B98.625/candlesticks?start_ts=1794570264&end_ts=1795175064&period_interval=60"
     },
     "1m_2h": {
      "candlesticks": [],
      "period_interval_minutes": 1,
-     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B98.625/candlesticks?start_ts=1795167713&end_ts=1795174913&period_interval=1"
+     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B98.625/candlesticks?start_ts=1795167864&end_ts=1795175064&period_interval=1"
     }
    }
   },
@@ -1112,12 +1187,12 @@
     "1h_7d": {
      "candlesticks": [],
      "period_interval_minutes": 60,
-     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B98.875/candlesticks?start_ts=1794570113&end_ts=1795174913&period_interval=60"
+     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B98.875/candlesticks?start_ts=1794570264&end_ts=1795175064&period_interval=60"
     },
     "1m_2h": {
      "candlesticks": [],
      "period_interval_minutes": 1,
-     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B98.875/candlesticks?start_ts=1795167713&end_ts=1795174913&period_interval=1"
+     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B98.875/candlesticks?start_ts=1795167864&end_ts=1795175064&period_interval=1"
     }
    }
   },
@@ -1128,12 +1203,12 @@
     "1h_7d": {
      "candlesticks": [],
      "period_interval_minutes": 60,
-     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B99.125/candlesticks?start_ts=1794570113&end_ts=1795174913&period_interval=60"
+     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B99.125/candlesticks?start_ts=1794570264&end_ts=1795175064&period_interval=60"
     },
     "1m_2h": {
      "candlesticks": [],
      "period_interval_minutes": 1,
-     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B99.125/candlesticks?start_ts=1795167713&end_ts=1795174913&period_interval=1"
+     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B99.125/candlesticks?start_ts=1795167864&end_ts=1795175064&period_interval=1"
     }
    }
   },
@@ -1144,12 +1219,12 @@
     "1h_7d": {
      "candlesticks": [],
      "period_interval_minutes": 60,
-     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B99.375/candlesticks?start_ts=1794570113&end_ts=1795174913&period_interval=60"
+     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B99.375/candlesticks?start_ts=1794570264&end_ts=1795175064&period_interval=60"
     },
     "1m_2h": {
      "candlesticks": [],
      "period_interval_minutes": 1,
-     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B99.375/candlesticks?start_ts=1795167713&end_ts=1795174913&period_interval=1"
+     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B99.375/candlesticks?start_ts=1795167864&end_ts=1795175064&period_interval=1"
     }
    }
   },
@@ -1160,12 +1235,12 @@
     "1h_7d": {
      "candlesticks": [],
      "period_interval_minutes": 60,
-     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B99.625/candlesticks?start_ts=1794570113&end_ts=1795174913&period_interval=60"
+     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B99.625/candlesticks?start_ts=1794570264&end_ts=1795175064&period_interval=60"
     },
     "1m_2h": {
      "candlesticks": [],
      "period_interval_minutes": 1,
-     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B99.625/candlesticks?start_ts=1795167713&end_ts=1795174913&period_interval=1"
+     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B99.625/candlesticks?start_ts=1795167864&end_ts=1795175064&period_interval=1"
     }
    }
   },
@@ -1176,12 +1251,12 @@
     "1h_7d": {
      "candlesticks": [],
      "period_interval_minutes": 60,
-     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B99.875/candlesticks?start_ts=1794570113&end_ts=1795174913&period_interval=60"
+     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B99.875/candlesticks?start_ts=1794570264&end_ts=1795175064&period_interval=60"
     },
     "1m_2h": {
      "candlesticks": [],
      "period_interval_minutes": 1,
-     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B99.875/candlesticks?start_ts=1795167713&end_ts=1795174913&period_interval=1"
+     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-B99.875/candlesticks?start_ts=1795167864&end_ts=1795175064&period_interval=1"
     }
    }
   },
@@ -1192,12 +1267,12 @@
     "1h_7d": {
      "candlesticks": [],
      "period_interval_minutes": 60,
-     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-T107.2499/candlesticks?start_ts=1794570113&end_ts=1795174913&period_interval=60"
+     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-T107.2499/candlesticks?start_ts=1794570264&end_ts=1795175064&period_interval=60"
     },
     "1m_2h": {
      "candlesticks": [],
      "period_interval_minutes": 1,
-     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-T107.2499/candlesticks?start_ts=1795167713&end_ts=1795174913&period_interval=1"
+     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-T107.2499/candlesticks?start_ts=1795167864&end_ts=1795175064&period_interval=1"
     }
    }
   },
@@ -1208,17 +1283,17 @@
     "1h_7d": {
      "candlesticks": [],
      "period_interval_minutes": 60,
-     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-T32.75/candlesticks?start_ts=1794570113&end_ts=1795174913&period_interval=60"
+     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-T32.75/candlesticks?start_ts=1794570264&end_ts=1795175064&period_interval=60"
     },
     "1m_2h": {
      "candlesticks": [],
      "period_interval_minutes": 1,
-     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-T32.75/candlesticks?start_ts=1795167713&end_ts=1795174913&period_interval=1"
+     "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXSOLE-26NOV2102/markets/KXSOLE-26NOV2102-T32.75/candlesticks?start_ts=1795167864&end_ts=1795175064&period_interval=1"
     }
    }
   }
  },
  "count": 12,
  "doc": "https://docs.kalshi.com/api-reference/market/get-market-candlesticks",
- "retrieved_at": "2026-11-20T11:41:08+00:00"
+ "retrieved_at": "2026-11-20T11:43:48+00:00"
 }

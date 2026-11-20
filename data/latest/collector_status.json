@@ -1,6 +1,4 @@
 {
- "error": "[Errno 2] No such file or directory: 'data/history/prices.jsonl'",
- "finished_at": "2026-11-20T11:42:03+00:00",
- "status": "error",
- "traceback": "Traceback (most recent call last):\n  File \"/home/runner/work/Demo3/Demo3/scripts/collect_kalshi_data.py\", line 489, in <module>\n    rc = main()\n         ^^^^^^\n  File \"/home/runner/work/Demo3/Demo3/scripts/collect_kalshi_data.py\", line 459, in main\n    with open(f\"{REPO_DATA}/history/prices.jsonl\", \"a\", encoding=\"utf-8\") as f:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: 'data/history/prices.jsonl'\n"
+ "finished_at": "2026-11-20T11:44:32+00:00",
+ "status": "ok"
 }
