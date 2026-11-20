@@ -3502,7 +3502,7 @@
   },
   {
    "check": "orderbook KXPRESNOMD-28-BS structure",
-   "detail": "{\"no_dollars\": [[\"0.0300\", \"10.00\"], [\"0.9930\", \"47619.04\"], [\"0.9940\", \"55555.54\"], [\"0.9950\", \"66210.14\"]], \"yes_dolla",
+   "detail": "{\"no_dollars\": [[\"0.0300\", \"10.00\"], [\"0.9930\", \"47619.04\"], [\"0.9940\", \"55555.54\"], [\"0.9950\", \"66193.57\"]], \"yes_dolla",
    "ok": true
   },
   {
@@ -3512,7 +3512,7 @@
   },
   {
    "check": "orderbook KXPRESNOMD-28-EWAR structure",
-   "detail": "{\"no_dollars\": [[\"0.9700\", \"5555.55\"], [\"0.9800\", \"8333.33\"], [\"0.9900\", \"16638.23\"]], \"yes_dollars\": []}",
+   "detail": "{\"no_dollars\": [], \"yes_dollars\": []}",
    "ok": true
   },
   {
@@ -3523,16 +3523,6 @@
   {
    "check": "orderbook KXPRESNOMD-28-GW structure",
    "detail": "{\"no_dollars\": [[\"0.1200\", \"1589.00\"], [\"0.1210\", \"1665.00\"], [\"0.1220\", \"1688.00\"], [\"0.1230\", \"1699.00\"], [\"0.1240\", \"",
-   "ok": true
-  },
-  {
-   "check": "event KXMIDTERMVOTETURN-TX31 exists+title",
-   "detail": "title live='Texas 31 House General Election: voter turnout'",
-   "ok": true
-  },
-  {
-   "check": "event KXSTATELEGME-28NOV07MEH080 exists+title",
-   "detail": "title live='Maine House District 80 winner? (2028)'",
    "ok": true
   },
   {
@@ -3552,8 +3542,8 @@
   },
   {
    "check": "event KXSTATELEGMN-28NOV07MNH41A exists+title",
-   "detail": "missing",
-   "ok": false
+   "detail": "title live='Minnesota House District 41A winner? (2028)'",
+   "ok": true
   },
   {
    "check": "event KXSTATELEGMA-28NOV07MAH005 exists+title",
@@ -3562,8 +3552,8 @@
   },
   {
    "check": "event KXSTATELEGLA-27OCT09LAH081 exists+title",
-   "detail": "missing",
-   "ok": false
+   "detail": "title live='Louisiana House District 81 winner? (2027)'",
+   "ok": true
   },
   {
    "check": "event KXMASTATELEG-28SEN exists+title",
@@ -3572,8 +3562,8 @@
   },
   {
    "check": "event KXHOUSERACE-TN05-28 exists+title",
-   "detail": "missing",
-   "ok": false
+   "detail": "title live='TN-05 House winner? (2028)'",
+   "ok": true
   },
   {
    "check": "event KXSTATELEGMA-28NOV07MAH113 exists+title",
@@ -3582,8 +3572,8 @@
   },
   {
    "check": "event KXSTATELEGMA-28NOV07MAH014 exists+title",
-   "detail": "missing",
-   "ok": false
+   "detail": "title live='Massachusetts House 5th Bristol District winner? (2028)'",
+   "ok": true
   },
   {
    "check": "event KXCPIPARTYCOMBO-30MAR exists+title",
@@ -3592,8 +3582,8 @@
   },
   {
    "check": "event KXSTATELEGVA-27NOV02VAH072 exists+title",
-   "detail": "missing",
-   "ok": false
+   "detail": "title live='Virginia House of Delegates District 72 winner? (2027)'",
+   "ok": true
   },
   {
    "check": "event KXLTGOVRACE-NC-28 exists+title",
@@ -3602,8 +3592,8 @@
   },
   {
    "check": "event KXSTATELEGOK-28NOV07OKH089 exists+title",
-   "detail": "missing",
-   "ok": false
+   "detail": "title live='Oklahoma House District 89 winner? (2028)'",
+   "ok": true
   },
   {
    "check": "event KXSTATELEGIN-28NOV07INH080 exists+title",
@@ -3612,8 +3602,8 @@
   },
   {
    "check": "event KXMAKERFIELDBY-27JAN01 exists+title",
-   "detail": "missing",
-   "ok": false
+   "detail": "title live='Makerfield by-election winner?'",
+   "ok": true
   },
   {
    "check": "event KXILSTATELEG-28SEN exists+title",
@@ -3622,52 +3612,22 @@
   },
   {
    "check": "event KXSTATELEGMO-28NOV07MOS025 exists+title",
-   "detail": "missing",
-   "ok": false
+   "detail": "title live='Missouri Senate District 25 winner? (2028)'",
+   "ok": true
+  },
+  {
+   "check": "event KXSTATELEGNM-28NOV07NMH052 exists+title",
+   "detail": "title live='New Mexico House District 52 winner? (2028)'",
+   "ok": true
+  },
+  {
+   "check": "event KXBTCD-28JAN1222 exists+title",
+   "detail": "title live='Bitcoin price on Jan 12, 2028 at 10pm EST?'",
+   "ok": true
   }
  ],
- "drift_notices": [
-  {
-   "field": "status",
-   "live": "closed",
-   "row": "KXETHD-26NOV2016-T1284.99",
-   "stored": "active"
-  }
- ],
- "hard_failures": [
-  {
-   "check": "event KXSTATELEGMN-28NOV07MNH41A exists+title",
-   "detail": "missing"
-  },
-  {
-   "check": "event KXSTATELEGLA-27OCT09LAH081 exists+title",
-   "detail": "missing"
-  },
-  {
-   "check": "event KXHOUSERACE-TN05-28 exists+title",
-   "detail": "missing"
-  },
-  {
-   "check": "event KXSTATELEGMA-28NOV07MAH014 exists+title",
-   "detail": "missing"
-  },
-  {
-   "check": "event KXSTATELEGVA-27NOV02VAH072 exists+title",
-   "detail": "missing"
-  },
-  {
-   "check": "event KXSTATELEGOK-28NOV07OKH089 exists+title",
-   "detail": "missing"
-  },
-  {
-   "check": "event KXMAKERFIELDBY-27JAN01 exists+title",
-   "detail": "missing"
-  },
-  {
-   "check": "event KXSTATELEGMO-28NOV07MOS025 exists+title",
-   "detail": "missing"
-  }
- ],
+ "drift_notices": [],
+ "hard_failures": [],
  "policy": {
   "dynamic_fields": "drift tolerated (live market), reported only",
   "source_urls": "must resolve and contain the row ticker",
@@ -3675,10 +3635,10 @@
  },
  "summary": {
   "checked": 725,
-  "drift_notices": 1,
-  "hard_failures": 8,
-  "passed": 717
+  "drift_notices": 0,
+  "hard_failures": 0,
+  "passed": 725
  },
  "tool": "scripts/verify_rows.py v1",
- "verified_at": "2026-11-20T20:59:11+00:00"
+ "verified_at": "2026-11-20T21:02:04+00:00"
 }
