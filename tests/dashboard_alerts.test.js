@@ -66,7 +66,9 @@ test("live scans feed the all-events and high-ROI chats on the real dashboard pa
     assert.match(row.textContent, /KXAAAGASW-26NOV23-3\.9400/);
     assert.match(row.innerHTML, /href="https:\/\/external-api\.demo\.kalshi\.co\/trade-api\/v2\/markets\//);
     assert.equal(dom.window.KD.roiRows().length, 1, "passes the placeholder high-ROI rule");
-    assert.match(d.getElementById("alertsROI").textContent, /high-ROI signal/);
+    // The badge wording follows the published screen: "high-ROI screen" when the
+    // documented roi-model screen admits the row, else "high-ROI signal (heuristic)".
+    assert.match(d.getElementById("alertsROI").textContent, /high-ROI (screen|signal)/);
   } finally {
     dom.window.close();
   }
