@@ -1214,7 +1214,7 @@ is recorded in this section.
   and never falls back to the legacy integer-cent fields; a fixture or replay file written with
   short names (`yes_ask`, `last`) silently parses to a stale quote. Anyone replaying fixtures should
   copy the field names from `test_paper_engine.py::market()`.
-- Follow-up commit after PR #58 merged (same branch, PR #61): a **populated-ledger** pass was run in
+- Follow-up commit after PR #58 merged (same branch, PR #65 — https://github.com/karagemop466-tech/Demo3/pull/65): a **populated-ledger** pass was run in
   a throwaway `git worktree` (9 replayed cycles through `FixtureClient`, never committed) and it
   found two real defects that the empty ledger could not surface — analysis aggregate rows had no
   source cell, and `paper-desk/tests/dom.test.mjs` skipped silently when `jsdom`/a built page was
