@@ -803,10 +803,17 @@ def build_methodology(data: dict) -> str:
                     ("public data needs no auth", docs.get("public_data_no_auth"),
                      "why this desk runs credential-free"),
                 ]]
+    def inline_doc(key, label, fallback=None):
+        """Anchor used inside prose: never emits href=\"None\" when the register lacks the key."""
+        url = docs.get(key) or fallback
+        if not url or str(url).lower() == "none":
+            return '<span class="pill unv">unverified</span>'
+        return f'<a href="{esc(url)}" target="_blank" rel="noopener">{label}</a>'
+
     limits = [
         ("F-EB2-01", "The ledger is simulated, not the user&rsquo;s demo account.",
          "Demo-account balance, positions and fills require an authenticated API key "
-         f"(<a href=\"{docs.get('demo_env')}\" target=\"_blank\" rel=\"noopener\">demo_env</a>); "
+         f"({inline_doc('demo_env', 'demo_env', DOC_ROOT + '/getting_started/demo_env.md')}); "
          "none exists in this repository, so "
          "<span class=\"mono\">data/latest/portfolio.json</span> stays "
          "<span class=\"mono\">credentials_missing</span> and the account tables stay blank. "
@@ -819,17 +826,17 @@ def build_methodology(data: dict) -> str:
         ("F-EB2-03", "No fee model.",
          "Trading fees are not applied to simulated fills, so realized P&amp;L is gross. "
          "Kalshi&rsquo;s settlement doc confirms a zero settlement fee for simple yes/no "
-         f"markets (<a href=\"{docs.get('market_settlement')}\" target=\"_blank\" rel=\"noopener\">source</a>); "
+         f"markets ({inline_doc('market_settlement', 'source', DOC_ROOT + '/getting_started/market_settlement.md')}); "
          "per-trade maker/taker fees are deliberately not modeled here rather than guessed."),
         ("F-EB2-04", "The API has no sub-minute history.",
-         f"Candlesticks are published at 1 / 60 / 1440 minutes only "
-         f"(<a href=\"{docs.get('get_markets')}\" target=\"_blank\" rel=\"noopener\">Get Market "
-         "Candlesticks</a>), so a seconds-granularity x-axis can only come from the "
+         "Candlesticks are published at 1 / 60 / 1440 minutes only "
+         f"({inline_doc('candlesticks', 'Get Market Candlesticks', DOC_ROOT + '/api-reference/market/get-market-candlesticks.md')}), "
+         "so a seconds-granularity x-axis can only come from the "
          "browser&rsquo;s own live polling, not from history; the chart selector says so."),
         ("F-EB2-05", "Quotes can lag by seconds.",
          "The markets endpoint documents short response caching, so a cycle-to-cycle delta is a "
          "lower bound on the true move "
-         f"(<a href=\"{docs.get('get_markets')}\" target=\"_blank\" rel=\"noopener\">doc text</a>). "
+         f"({inline_doc('get_markets', 'doc text', DOC_ROOT + '/api-reference/market/get-markets.md')}). "
          "WebSocket streaming would remove the lag but needs signed handshake headers a browser "
          "cannot attach (<a href=\"https://github.com/karagemop466-tech/Demo3/blob/main/COORDINATION.md\" "
          "target=\"_blank\" rel=\"noopener\">board flag I-13</a>)."),
@@ -855,8 +862,8 @@ def build_methodology(data: dict) -> str:
          "<span class=\"mono\">data/latest/top_events.json</span> market rows carry no "
          "<span class=\"mono\">series_ticker</span>, which the candlestick endpoint requires, so the "
          "live panel resolves it from "
-         f"<a href=\"{docs.get('get_event') or DOC_ROOT + '/api-reference/events/get-event.md'}\" "
-         "target=\"_blank\" rel=\"noopener\">GET /events/{event_ticker}</a> before drawing a chart "
+         f"{inline_doc('get_event', 'GET /events/{event_ticker}', DOC_ROOT + '/api-reference/events/get-event.md')} "
+         "before drawing a chart "
          "(logged as CR-eb2af75b-2 for the collector owner)."),
         ("F-EB2-10", "Field names are load-bearing.",
          "The engine reads only the documented <span class=\"mono\">*_dollars</span> / "
