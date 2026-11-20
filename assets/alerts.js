@@ -58,7 +58,7 @@
   var ROI_THRESHOLD = 0.5;
   function clamp(x, lo, hi) { return Math.max(lo, Math.min(hi, x)); }
   function roiModel(oldP, newP, oi) {
-    var change = Number(newP) - Number(oldP);
+    var change = (Math.round(Number(newP) * 100) - Math.round(Number(oldP) * 100)) / 100;
     var swingC = Math.abs(change) * 100;                 // cents
     var swingNorm = clamp(swingC / 50, 0, 1);
     var pct = Number(oldP) ? Math.abs(change) / Number(oldP) : 0;
@@ -129,7 +129,10 @@
   };
 
   function pushAlert(m, oldP, newP) {
-    var change = Number(newP) - Number(oldP);
+    // change in integer cents (float-safe: 0.60 - 0.50 = 0.0999… in binary float,
+    // which would display 9.99¢ for an exact 10¢ move). Detection already uses
+    // an epsilon above; this makes the recorded/displayed move exact as well.
+    var change = (Math.round(Number(newP) * 100) - Math.round(Number(oldP) * 100)) / 100;
     var dir = change > 0 ? "up" : change < 0 ? "down" : "flat";
     var series = m.series_ticker || "";
     var eventTicker = m.event_ticker || "";
