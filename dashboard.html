@@ -108,15 +108,15 @@ if the browser blocks the request the tables fall back to the snapshot links in
   <div id="strategyBody"></div>
 </div>
 
-<div class="card">
+<div class="card" id="alerts">
   <h2>6 · Price-swing alerts &mdash; scrolling chat (&ge; $0.10)</h2>
   <p class="small muted">Live alerts for contract price swings of <strong>&ge; $0.10 in either direction</strong>,
      detected from the dashboard's live market samples (GET /markets, demo API, no key). Two scrolling chats:
      <em>All events</em> shows every swing; <em>High ROI model</em> shows a selective, labeled placeholder
      heuristic (no real model is defined yet &mdash; flagged F-alert-01, never presented as verified ROI).
      Each row links its exact market API URL and, in <em>Context</em>, the event's official <code>settlement_sources</code> (Get Event).
-     Those are resolution sources, not proof of cause: each row says "Cause not verified". Alerts persist in this browser only;
-     the market response does not verify an external news cause &mdash; see Flagged item I-13.</p>
+     Those are resolution sources, not proof of cause: each row says "Cause not verified". Alerts persist in this browser only.
+     The market response does not verify an external news cause &mdash; see Flagged item I-13.</p>
   <div class="alert-controls">
     <label><input type="checkbox" id="alertsEnabled" checked> Alerts enabled</label>
     <label><input type="checkbox" id="autoTrade" disabled> Automated paper trades on swing (paper/SIMULATED only)</label>
@@ -132,7 +132,7 @@ if the browser blocks the request the tables fall back to the snapshot links in
   </div>
   <div class="chat-wrap" id="chatROI" style="display:none">
     <div id="alertsROI"></div>
-    <p class="small muted">High-ROI placeholder rule: swing &ge; $0.10 AND move &ge; 10% of prior price. Not a real model.</p>
+    <p class="small muted">High-ROI placeholder rule: swing &ge; $0.10, price 5&cent;&ndash;95&cent;, traded and open contracts &gt; 0. Not a real model (flagged F-alert-01).</p>
   </div>
 </div>
 

@@ -24,6 +24,8 @@
   var ALERT_KEY = "kd_alerts_v1";
   var SWING = 0.10;                 // dollars = 10 cents, the alert threshold
   var MAX_ALERTS = 300;
+  var ROI_MIN_PRICE = 0.05;         // placeholder high-ROI rule: skip prices pinned at the extremes
+  var ROI_MAX_PRICE = 0.95;
 
   var state = {
     alerts: [],                     // all swing alerts (newest first)
@@ -46,12 +48,15 @@
     var d = new Date(ts * 1000);
     return d.toLocaleTimeString("en-GB");
   }
-  function apiUrl(ticker, series) {
-    var path = series
-      ? "/series/" + encodeURIComponent(series) + "/markets/" + encodeURIComponent(ticker)
-      : "/markets/" + encodeURIComponent(ticker);
-    return "https://external-api.demo.kalshi.co/trade-api/v2" + path;
+  // Official Get Market endpoint: GET /markets/{ticker}
+  // (https://docs.kalshi.com/api-reference/market/get-market). The series-scoped path
+  // /series/{s}/markets/{t} is the candlestick route and returned an error for this record.
+  function apiUrl(ticker) {
+    return "https://external-api.demo.kalshi.co/trade-api/v2/markets/" + encodeURIComponent(ticker);
   }
+  // Float-safe rounding: 0.6 - 0.5 is 0.09999999999999998 in IEEE doubles, which would drop an
+  // exact $0.10 swing. Round to 4 decimals (the API's dollar precision).
+  function round4(x) { return Math.round(Number(x) * 10000) / 10000; }
 
   /* ---------- swing detection ---------- */
   KD.onSample = function (m, sample) {
@@ -60,10 +65,11 @@
     if (cur === null || cur === undefined) return;
     var prev = state.lastPrice[m.ticker];
     if (prev && prev.price !== null && prev.price !== undefined) {
-      var change = cur - prev.price;
+      var change = round4(cur - prev.price);
       // Tolerate floating-point representation error at the inclusive boundary.
       if (Math.abs(change) + 1e-12 >= SWING) {
-        var a = pushAlert(m.ticker, m.title, m.topic, m.series_ticker, prev.price, cur);
+        var a = pushAlert(m.ticker, m.title, m.topic, m.series_ticker, prev.price, cur,
+          { vol: m.vol, oi: m.oi });
         if (a) { a.event = m.event_ticker || ""; a.rules = m.rules_primary || ""; persist(); loadEvent(a.event); }
       }
     }
@@ -80,8 +86,8 @@
     });
   };
 
-  function pushAlert(ticker, title, topic, series, oldP, newP) {
-    var change = Number(newP) - Number(oldP);
+  function pushAlert(ticker, title, topic, series, oldP, newP, liq) {
+    var change = round4(Number(newP) - Number(oldP));
     var dir = change > 0 ? "up" : change < 0 ? "down" : "flat";
     var alert = {
       id: "a" + Date.now() + Math.random().toString(36).slice(2, 6),
@@ -94,12 +100,15 @@
       newPrice: Number(newP),
       change: change,
       dir: dir,
-      api: apiUrl(ticker, series)
+      api: apiUrl(ticker)
     };
-    // High-ROI placeholder heuristic: swing >= $0.10 AND the move is at least 10%
-    // of the prior price. NOT a real model — labeled, unverified, flagged F-alert-01.
-    var pct = Number(oldP) ? Math.abs(change) / Number(oldP) : 0;
-    alert.roiSignal = Math.abs(change) + 1e-12 >= SWING && pct >= 0.10;
+    // High-ROI PLACEHOLDER heuristic (NOT a real model; flagged F-alert-01): swing >= $0.10,
+    // price between $0.05 and $0.95, and traded and open contracts > 0 (volume_fp, open_interest_fp
+    // from the official Get Market record). A bare "$0.10 swing" test would always pass at these
+    // price scales, so the band and liquidity terms are what actually filter.
+    var liqOk = !!liq && Number(liq.vol) > 0 && Number(liq.oi) > 0;
+    alert.roiSignal = Math.abs(change) >= SWING && Number(newP) >= ROI_MIN_PRICE &&
+      Number(newP) <= ROI_MAX_PRICE && liqOk;
     state.alerts.unshift(alert);
     if (state.alerts.length > MAX_ALERTS) state.alerts.length = MAX_ALERTS;
     persist();
@@ -185,7 +194,7 @@
       "<td>" + esc(a.title) + "</td>" +
       "<td class='num'>" + cents(a.oldPrice) + " &rarr; " + cents(a.newPrice) + "</td>" +
       "<td class='num " + esc(dirLabel) + "'>" + arrow + " " + cents(Math.abs(a.change)) + "</td>" +
-      "<td><a class='src' href='" + esc(a.api) + "' target='_blank' rel='noopener'>market API</a>" + esc(roiBadge) + "</td>" +
+      "<td><a class='src' href='" + esc(a.api) + "' target='_blank' rel='noopener'>market API</a>" + roiBadge + "</td>" +
       "<td class='ctx'>" + contextCell(a) + "<div class='small muted'>Cause not verified: a listed source is not proof that it moved the price.</div>" + rulesCell(a) + "</td></tr>";
   }
   function renderPanel(el, rows, label, emptyHint) {

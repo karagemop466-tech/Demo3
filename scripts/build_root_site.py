@@ -275,6 +275,14 @@ def consolidated_questions():
             [q.get("source", "")] + citations(q.get("q", ""), q.get("known", ""),
                                               q.get("missing", "")),
             "00a943bd docs")
+    add("5125-Q1", "Which model criteria define a 'high ROI' event? (the live dashboard's second feed)",
+        "The 'High ROI model' chat on the live dashboard is a visible PLACEHOLDER rule: a swing of at least "
+        "$0.10, a price between $0.05 and $0.95, and traded and open contracts above zero. It is not a model.",
+        "The owner's model (inputs, thresholds, and whether fees and spread are included) was not supplied. "
+        "No model-based ROI can be verified until it is.",
+        "Send the rule (or model code) to the repo owner; replace the ROI_MIN_PRICE / ROI_MAX_PRICE constants and the roiSignal line in assets/alerts.js.",
+        [f"{DOCS}/getting_started/terms", "https://news.kalshi.com/p/what-are-event-contracts"],
+        "5125afd8 alerts")
     return rows
 
 
@@ -385,6 +393,24 @@ def consolidated_flags():
         "query string. Fixed in assets/app.js at integration (would otherwise 401 on every "
         "authenticated call).",
         [f"{DOCS}/getting_started/api_keys"], "resolved", "3a22fb0f")
+    add("F-alert-01", "Live alerts", "High-ROI chat uses a placeholder heuristic, not a model",
+        "The 'High ROI model' chat applies a labeled placeholder rule (swing >= $0.10, price 5c-95c, traded "
+        "and open contracts > 0). No model is defined in this repo, so its output is not a verified ROI signal. "
+        "Gross ROI, where shown, ignores fees and spread. Replace with the owner's model (question 5125-Q1).",
+        [f"{DOCS}/api-reference/market/get-market", "https://news.kalshi.com/p/what-are-event-contracts"],
+        "open", "6ebc1cb7 / 5125afd8")
+    add("A-02", "Live alerts", "Alert causes are not available from the API",
+        "The alert feed shows that a price moved, not why. The Kalshi Trade API has no cause field, so no "
+        "cause is inferred. The 'Context' column lists the event's official settlement_sources (Get Event) "
+        "as resolution sources only, not as evidence of what moved the price. Per-alert links go to the exact API record.",
+        [f"{DOCS}/api-reference/market/get-market"], "open", "5125afd8")
+    add("A-03", "Live alerts", "Alerts sample REST once per scan, not a tick stream",
+        "Moves are detected between dashboard scans (about every 20 s, scan depth set on the page). "
+        "Brief moves that revert between two scans are missed, and the scan covers only the series "
+        "selected by the depth setting. The official WebSocket requires signed handshake headers that "
+        "a browser page cannot attach, so a true stream needs a signed server-side proxy.",
+        [f"{DOCS}/getting_started/quick_start_websockets", f"{DOCS}/getting_started/quick_start_market_data"],
+        "open", "5125afd8")
     return rows
 
 
@@ -423,6 +449,12 @@ def consolidated_sources():
         f"{DEMO}/markets", "Status, prices (dollars), volume_fp, open_interest_fp.")
     add("LIVE-OB", "Demo orderbook (live)",
         f"{DEMO}/markets/KXPGATOP40-26NOV22-LUDVIC/orderbook", "orderbook_fp price/size levels.")
+    add("5125-S1", "Get Market (fields: last_price_dollars, yes_bid/ask_dollars, volume_fp, open_interest_fp, previous_price_dollars)",
+        f"{DOCS}/api-reference/market/get-market", "Alert price fields and the per-alert API record link")
+    add("5125-S2", "Kalshi News: contracts settle to $1 if right, $0 otherwise",
+        "https://news.kalshi.com/p/what-are-event-contracts", "Payout rule behind gross ROI-if-right")
+    add("5125-S3", "Kalshi Glossary: category, series, event, market",
+        f"{DOCS}/getting_started/terms", "Object model used for topic and event grouping of alerts")
     return rows
 
 
@@ -534,6 +566,7 @@ questions and suggestions before making decisions.</p>
 <h2>How to use this site</h2>
 <table><thead><tr><th>Goal</th><th>Page</th><th>Source</th></tr></thead><tbody>
 <tr><td>Track highest-dollar live events, price chart (seconds/minutes/hours), orderbook liquidity, resolutions</td><td><a href="dashboard.html">Live dashboard</a></td><td><a class="src" href="https://docs.kalshi.com/getting_started/quick_start_market_data" target="_blank" rel="noopener">source</a></td></tr>
+<tr><td>Live alerts for price swings ≥ $0.10 (either direction) in two scrolling feeds: all swings, and a high-ROI filter (placeholder rule until the owner supplies the model)</td><td><a href="dashboard.html#alerts">Live alerts</a></td><td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-market" target="_blank" rel="noopener">source</a></td></tr>
 <tr><td>Execute trades (demo key or labeled paper mode), analyze performance, categorize trades, build strategies</td><td><a href="portfolio.html">Portfolio</a> · <a href="trades.html">Trades</a></td><td><a class="src" href="https://docs.kalshi.com/api-reference/orders/create-order-v2" target="_blank" rel="noopener">source</a></td></tr>
 <tr><td>Decide before changing anything: questions, missing information, discovery steps</td><td><a href="questions.html">Questions</a> · <a href="suggestions.html">Suggestions</a></td><td><a class="src" href="https://docs.kalshi.com/getting_started/demo_env" target="_blank" rel="noopener">source</a></td></tr>
 <tr><td>Verify every value: per-row sources, flagged items, repo review</td><td><a href="sources.html">Sources</a> · <a href="flagged.html">Flagged</a> · <a href="repo-review.html">Repo review</a></td><td><a class="src" href="https://docs.kalshi.com/getting_started/quick_start_market_data" target="_blank" rel="noopener">source</a></td></tr>
@@ -649,14 +682,15 @@ if the browser blocks the request the tables fall back to the snapshot links in
   <div id="strategyBody"></div>
 </div>
 
-<div class="card">
+<div class="card" id="alerts">
   <h2>6 · Price-swing alerts &mdash; scrolling chat (&ge; $0.10)</h2>
   <p class="small muted">Live alerts for contract price swings of <strong>&ge; $0.10 in either direction</strong>,
      detected from the dashboard's live market samples (GET /markets, demo API, no key). Two scrolling chats:
      <em>All events</em> shows every swing; <em>High ROI model</em> shows a selective, labeled placeholder
      heuristic (no real model is defined yet &mdash; flagged F-alert-01, never presented as verified ROI).
-     Each row links its exact market API URL. Alerts persist in this browser only. The market response
-     does not verify an external news cause; see Flagged item I-13.</p>
+     Each row links its exact market API URL and, in <em>Context</em>, the event's official <code>settlement_sources</code> (Get Event).
+     Those are resolution sources, not proof of cause: each row says "Cause not verified". Alerts persist in this browser only.
+     The market response does not verify an external news cause &mdash; see Flagged item I-13.</p>
   <div class="alert-controls">
     <label><input type="checkbox" id="alertsEnabled" checked> Alerts enabled</label>
     <label><input type="checkbox" id="autoTrade" disabled> Automated paper trades on swing (paper/SIMULATED only)</label>
@@ -672,7 +706,7 @@ if the browser blocks the request the tables fall back to the snapshot links in
   </div>
   <div class="chat-wrap" id="chatROI" style="display:none">
     <div id="alertsROI"></div>
-    <p class="small muted">High-ROI placeholder rule: swing &ge; $0.10 AND move &ge; 10% of prior price. Not a real model.</p>
+    <p class="small muted">High-ROI placeholder rule: swing &ge; $0.10, price 5&cent;&ndash;95&cent;, traded and open contracts &gt; 0. Not a real model (flagged F-alert-01).</p>
   </div>
 </div>
 """
