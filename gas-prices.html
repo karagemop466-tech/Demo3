@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gas Prices — Kalshi Demo Dashboard</title>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#content">Skip to content</a>
+
+<header>
+  <div class="header-inner">
+    <div class="brand"><div class="mark">K</div><div>Kalshi Demo Dashboard</div></div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="dashboard.html">Live Dashboard</a></li>
+        <li><a href="gas-prices.html" class="active">Gas Prices</a></li>
+        <li><a href="elections.html">Elections</a></li>
+        <li><a href="culture.html">Culture</a></li>
+        <li><a href="crypto.html">Crypto</a></li>
+        <li><a href="golf.html">Golf</a></li>
+        <li><a href="portfolio.html">Portfolio</a></li>
+        <li><a href="trades.html">Trades</a></li>
+        <li><a href="suggestions.html">Suggestions</a></li>
+        <li><a href="questions.html">Questions &amp; Answers</a></li>
+        <li><a href="flagged.html">Flagged for Review</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <h1>Gas Prices</h1>
+      <p>Tracking live Kalshi events related to gas prices (highest-dollar events), until each event resolves to
+      yes or no. Current contract price and liquidity (contracts available at a given price) are shown on the
+      <a href="dashboard.html">live dashboard</a>.</p>
+      <div class="alert alert-warn">
+        <strong>Unverified — no data returned.</strong> The official Kalshi demo API (<code>/events</code>,
+        <code>/markets</code>) returned no gas-price or energy-category events or markets in the pages sampled for
+        this build. Per the verification rules, all gas-price values are intentionally left <strong>blank</strong>
+        and flagged <strong>unverified</strong>. Nothing is inferred or filled in.
+      </div>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">Suggested next step</h3>
+      <p>Query the demo API directly for energy/gas series (e.g. <code>/events?category=Energy</code> if supported,
+      or page through <code>/events</code> and <code>/markets</code>) and add any gas-price markets here with their
+      official <code>/events</code> and <code>/markets</code> source links.</p>
+    </div>
+  </div>
+</header>
+
+<div class="container" id="content">
+  <section class="section">
+    <h2 class="section-title"><span class="kicker">Verified gas-price events</span> Table</h2>
+    <div id="gas-events" data-category="Gas"></div>
+  </section>
+
+  <section class="section sources">
+    <h4>Official sources</h4>
+    <ul>
+      <li><a href="https://external-api.demo.kalshi.co/trade-api/v2/events" target="_blank" rel="noopener">GET /events — Kalshi demo Trade API v2</a></li>
+      <li><a href="https://external-api.demo.kalshi.co/trade-api/v2/markets" target="_blank" rel="noopener">GET /markets — Kalshi demo Trade API v2</a></li>
+      <li><a href="flagged.html">Flagged for Review — gas prices</a></li>
+    </ul>
+  </section>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div><strong>Kalshi Demo Dashboard</strong> — Gas prices category.</div>
+    <div class="disclaimer">No gas-price events were found in the sampled demo-API pages. Values are blank and flagged unverified — see <a href="flagged.html">Flagged for Review</a>.</div>
+  </div>
+</footer>
+
+<script src="assets/js/app.js"></script>
+</body>
+</html>
