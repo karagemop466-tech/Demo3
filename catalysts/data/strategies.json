@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-20T20:24:00Z",
+ "generated_at": "2026-11-20T20:25:13Z",
  "threshold_dollars": "0.10",
  "skipped_observations": {
   "s1_hold_to_resolution": 2,
@@ -41,6 +41,24 @@
      "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXDEMOFUTHOURLY-26NOV20H12-UP"
     }
    ]
+  },
+  {
+   "strategy": "s2_flat_at_next_sample",
+   "category": "elections/up-follow",
+   "n": 1,
+   "wins": 0,
+   "losses": 0,
+   "pushes": 1,
+   "net_pnl_dollars_per_contract": "0.0000",
+   "mean_pnl_dollars_per_contract": "0.0000",
+   "evaluable": false,
+   "markets": [
+    {
+     "ticker": "KXPRESNOMD-28-HBID",
+     "pnl_dollars": "0.0000",
+     "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPRESNOMD-28-HBID"
+    }
+   ]
   }
  ],
  "portfolio": {
@@ -48,7 +66,7 @@
   "note": "Simulated demo-account trading driven by the alert rules \u2014 no order is sent to Kalshi and no live account is touched. Gross of fees/spread. Numbers below the evaluation floor are published for transparency, not as a result.",
   "books": {
    "s2_flat_at_next_sample": {
-    "n": 1,
+    "n": 2,
     "deduped_duplicates": 0,
     "starting_bankroll_dollars": "1000.0000",
     "contracts_per_trade": "100",
@@ -57,13 +75,17 @@
     "return_on_bankroll_pct": "1.00",
     "wins": 1,
     "losses": 0,
-    "win_rate": "100.0",
+    "win_rate": "50.0",
     "max_drawdown_dollars": "0.0000",
     "evaluable": false,
     "by_topic": {
      "crypto": {
       "n": 1,
       "pnl_dollars": "10.0000"
+     },
+     "elections": {
+      "n": 1,
+      "pnl_dollars": "0.0000"
      }
     },
     "equity_curve": [
@@ -74,11 +96,19 @@
       "stake_dollars": "55.0000",
       "ticker": "KXDEMOFUTHOURLY-26NOV20H12-UP",
       "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXDEMOFUTHOURLY-26NOV20H12-UP"
+     },
+     {
+      "ts": "2026-11-20T19:39:57Z",
+      "equity_dollars": "1010.0000",
+      "pnl_dollars": "0.0000",
+      "stake_dollars": "81.1000",
+      "ticker": "KXPRESNOMD-28-HBID",
+      "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPRESNOMD-28-HBID"
      }
     ]
    }
   }
  },
- "trade_count": 1,
+ "trade_count": 2,
  "disclaimer": "Simulated trades on demo prices. Gross of fees, spread and slippage: the public API publishes no fee estimate for a hypothetical order, so none is assumed. Entry is a trade print, not a book quote \u2014 a real order would cross the spread. Not evidence of profitability."
 }

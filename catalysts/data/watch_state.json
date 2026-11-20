@@ -1,6 +1,6 @@
 {
  "markets": {
-  "KXPRESNOMD-28-BOBA": {
+  "KXPRESNOMD-28-HBID": {
    "topic": "elections",
    "resolved": false
   },
@@ -8,10 +8,10 @@
    "resolved": true,
    "topic": "crypto",
    "result": "no",
-   "checked_at": "2026-11-20T20:14:47Z",
+   "checked_at": "2026-11-20T20:25:13Z",
    "tracking": "stopped_resolved"
   }
  },
- "updated_at": "2026-11-20T20:24:00Z",
+ "updated_at": "2026-11-20T20:25:13Z",
  "policy": "A market is polled until the API reports it settled/finalized with a result; then tracking stops and the yes/no outcome is kept."
 }

@@ -1,11 +1,11 @@
-recorded_at=2026-11-20T20:11:42Z
-job_status=seeded
+recorded_at=2026-11-20T20:25:13Z
+job_status=pre-merge (offline over main's refreshed tape)
 workflow=local
 event=local
 ref=local
 sha=local
 run_url=https://github.com/local/actions/runs/n/a
-status.json: mode=offline finished_at=2026-11-20T20:11:41Z requests=0 errors=0 deadline_reached=False tape_rows=156 swings_total=3 simulated_trades=1
+status.json: mode=offline finished_at=2026-11-20T20:25:13Z requests=0 errors=0 deadline_reached=False tape_rows=168 swings_total=3 simulated_trades=2
 swings.json: 3 swings, 0 with candidate links, 2 resolved; threshold >= $0.10 from=https://external-api.demo.kalshi.co/trade-api/v2
 feed_health.json: 0 of 17 feeds usable (mode=offline, checked_at=2026-11-20T19:46:25Z)
   not usable: AP News (hub RSS is not published; homepage listed for manual review) — skipped_offline
@@ -27,4 +27,4 @@ feed_health.json: 0 of 17 feeds usable (mode=offline, checked_at=2026-11-20T19:4
   not usable: Variety — skipped_offline
 endpoints.json: 0 probed, 0 returned HTTP 200 (probed_at=2026-11-20T19:46:25Z)
   note: skipped: this runner has no egress to the demo API (the build sandbox allowlists github.com / npmjs / pypi only). The scheduled GitHub Actions run rewrites this file with real HTTP statuses.
-strategies.json: 1 simulated trade(s), 1 categor(y/ies), 0 above the n>=30 floor
+strategies.json: 2 simulated trade(s), 2 categor(y/ies), 0 above the n>=30 floor
