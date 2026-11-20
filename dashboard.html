@@ -9,7 +9,7 @@
 <body>
 <header class="top"><div class="wrap"><nav class="main">
 <a class="brand" href="index.html">Kalshi Demo Tracker</a>
-<a href="index.html">Home</a><a href="dashboard.html" class="active">Live dashboard</a><a href="alerts.html">Swing alerts</a><a href="data-tracking.html">Data tracking</a><a href="gas-prices.html">Gas prices</a><a href="elections.html">Elections</a><a href="culture.html">Culture</a><a href="crypto.html">Crypto</a><a href="golf.html">Golf</a><a href="portfolio.html">Portfolio</a><a href="trades.html">Trades</a><a href="questions.html">Questions</a><a href="suggestions.html">Suggestions</a><a href="flagged.html">Flagged for review</a><a href="sources.html">Sources</a><a href="repo-review.html">Repo review</a><a href="methodology.html">Methodology</a><a href="api-reference.html">API reference</a>
+<a href="index.html">Home</a><a href="dashboard.html" class="active">Live dashboard</a><a href="alerts.html">Swing alerts</a><a href="data-tracking.html">Data tracking</a><a href="gas-prices.html">Gas prices</a><a href="elections.html">Elections</a><a href="culture.html">Culture</a><a href="crypto.html">Crypto</a><a href="golf.html">Golf</a><a href="portfolio.html">Portfolio</a><a href="strategy.html">Strategy lab</a><a href="trades.html">Trades</a><a href="questions.html">Questions</a><a href="suggestions.html">Suggestions</a><a href="flagged.html">Flagged for review</a><a href="sources.html">Sources</a><a href="repo-review.html">Repo review</a><a href="methodology.html">Methodology</a><a href="api-reference.html">API reference</a>
 </nav></div></header>
 <main class="wrap">
 
@@ -114,14 +114,11 @@ if the browser blocks the request the tables fall back to the snapshot links in
      detected from the dashboard&rsquo;s live market samples (GET /markets, demo API, no key). Two scrolling chats:
      <em>All events</em> shows every swing; <em>High ROI model</em> shows a selective, labeled placeholder
      heuristic (no real model is defined yet &mdash; flagged F-alert-01, never presented as verified ROI).
-<<<<<<< HEAD
-     Each row links its exact market API URL. Alerts persist in this browser only. The dedicated
+     Each row links its exact market API URL and, in <em>Context</em>, the event&rsquo;s official
+     <code>settlement_sources</code> (Get Event). Those are resolution sources, not proof of cause: each row
+     says &ldquo;Cause not verified&rdquo;. Alerts persist in this browser only. The dedicated
      <a href="alerts.html">Swing alerts page</a> adds the yes/no resolution feed, the official event
      settlement-source links and the committed snapshot swings.</p>
-=======
-     Each row links its exact market API URL and, in <em>Context</em>, the event's official <code>settlement_sources</code> (Get Event).
-     Those are resolution sources, not proof of cause: each row says "Cause not verified". Alerts persist in this browser only.</p>
->>>>>>> origin/main
   <div class="alert-controls">
     <label><input type="checkbox" id="alertsEnabled" checked> Alerts enabled</label>
     <label><input type="checkbox" id="autoTrade" disabled> Automated paper trades on swing (paper/SIMULATED only)</label>

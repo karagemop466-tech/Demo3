@@ -743,7 +743,9 @@ if the browser blocks the request the tables fall back to the snapshot links in
      detected from the dashboard&rsquo;s live market samples (GET /markets, demo API, no key). Two scrolling chats:
      <em>All events</em> shows every swing; <em>High ROI model</em> shows a selective, labeled placeholder
      heuristic (no real model is defined yet &mdash; flagged F-alert-01, never presented as verified ROI).
-     Each row links its exact market API URL. Alerts persist in this browser only. The dedicated
+     Each row links its exact market API URL and, in <em>Context</em>, the event&rsquo;s official
+     <code>settlement_sources</code> (Get Event). Those are resolution sources, not proof of cause: each row
+     says &ldquo;Cause not verified&rdquo;. Alerts persist in this browser only. The dedicated
      <a href="alerts.html">Swing alerts page</a> adds the yes/no resolution feed, the official event
      settlement-source links and the committed snapshot swings.</p>
   <div class="alert-controls">
@@ -1301,7 +1303,11 @@ def build_wrapped(name, title):
 
 # Pages whose live markup is maintained outside this generator (added by other sessions).
 # Regenerating them here would drop that work, so the generator leaves them untouched.
-EXTERNALLY_MAINTAINED = {"dashboard.html"}
+# session 13603ac5: the generator now reproduces dashboard.html in full (the price-swing
+# chat panel is part of build_dashboard()), so the page is generated again instead of being
+# maintained by hand - that hand-maintenance is what lost the panel on earlier rebuilds
+# (see the board entry for session df50b92f, generator drift R-07).
+EXTERNALLY_MAINTAINED = set()
 
 
 def main():
