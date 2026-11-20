@@ -10,8 +10,12 @@
    "result": "no",
    "checked_at": "2026-11-20T20:25:13Z",
    "tracking": "stopped_resolved"
+  },
+  "KXPRESNOMD-28-BOBA": {
+   "topic": "elections",
+   "resolved": false
   }
  },
- "updated_at": "2026-11-20T20:25:13Z",
+ "updated_at": "2026-11-20T20:26:44Z",
  "policy": "A market is polled until the API reports it settled/finalized with a result; then tracking stops and the yes/no outcome is kept."
 }
