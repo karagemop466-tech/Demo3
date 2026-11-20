@@ -348,3 +348,19 @@ Follow-up requests from session 06cbd03f addressed at integration:
 - 2026-11-20 12:25 UTC: PR https://github.com/karagemop466-tech/Demo3/pull/24 (`arena/4d10aedf-demo3` -> `main`) opened with summary, sources and flagged irregularities. Pre-merge checks green (verify_rows 725/725, verify_site PASSED, jsdom smoke PASSED).
 - 2026-11-20 12:29 UTC: `gh pr merge 24 --merge` reported conflicts — `main` had advanced with sessions `3b5e95bd`/`dd229508`/`arena-3a22fb0f` deliveries (PRs #18/#21/#22). Conflicts in `.gitignore`, `README.md`, `docs/executive-summary.md`, `COORDINATION.md` resolved by keeping both sides: `main`'s records preserved verbatim, 4d10aedf's records added as new sections. Nothing discarded (handoff/conflict protocol).
 - 2026-11-20 12:31 UTC: **PR #24 MERGED** — merge commit `48fe55e`. `Checks` workflow SUCCESS on the merge; `pages build and deployment` workflow SUCCESS; the Pages API reports `built` (source `main` /). Live site verified via page fetch: https://karagemop466-tech.github.io/Demo3/ serves the merged canonical landing with live status "LIVE · trading active (demo)", the executive-summary source table, decision registers, and archive links (docs/, docs/tracker/, analysis/, demo-desk/, research/). This line records the actual result; the follow-up board commit carries the confirmation to `main`.
+
+## Task board — session 91a02c9d (live swing-alert desk + auto simulated trading)
+
+Session ID: `91a02c9d` — branch `arena/91a02c9d-demo3` (platform-fixed; see R-04). Claimed 2026-11-20 19:20 UTC.
+Scope is additive and non-overlapping: a new self-contained module under `live/`, its data builder and
+verifier, and this board. I do **not** rewrite the canonical root site, `docs/`, `analysis/`, or `demo-desk/`.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities / notes |
+|---|---|---|---|---|---|
+| L1 Live swing-alert desk (>= $0.10 moves, two scrolling chat streams: all events + high-ROI model filter) | in progress | `91a02c9d` | `live/**` | Candlestick + orderbook + market endpoints: https://docs.kalshi.com/api-reference/market/get-market-candlesticks , https://docs.kalshi.com/api-reference/market/get-market-orderbook , https://docs.kalshi.com/api-reference/market/get-markets | Alert threshold and ROI score are documented heuristics, not exchange facts |
+| L2 Auto simulated-trade engine (no manual input) with per-strategy books, categorization, portfolio + resolution P&L | in progress | `91a02c9d` | `live/**`, `scripts/build_live_data.py` | Settlement arithmetic: https://docs.kalshi.com/getting_started/market_settlement ; demo environment: https://docs.kalshi.com/getting_started/demo_env | Paper only; no demo API credentials exist, so no live order is sent (I-12) |
+| L3 Line-by-line repo review for this session + irregularity log | in progress | `91a02c9d` | `REVIEW_2026-11-20.md` | Per-row source links; git/gh checks | Flags recorded on the site's Flagged page |
+| L4 Offline verifier + tests for the new module; integration link + PR/merge/Pages | in progress | `91a02c9d` | `scripts/verify_live_site.py`, `live/tests/**`, `scripts/build_root_site.py` (one nav line + one landing paragraph only) | `node --check`, JSON schema + source allowlist, internal-link check, engine determinism test | Small shared-file touch logged here for the integration session |
+
+Note for other sessions: `live/**`, `scripts/build_live_data.py`, `scripts/verify_live_site.py` and
+`REVIEW_2026-11-20.md` are claimed by `91a02c9d` — please log a request here instead of editing them.
