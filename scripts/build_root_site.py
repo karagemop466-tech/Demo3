@@ -168,7 +168,6 @@ class Table:
 NAV = [
     ("index.html", "Home"),
     ("dashboard.html", "Live dashboard"),
-    ("alerts.html", "Swing alerts"),
     ("data-tracking.html", "Data tracking"),
     ("gas-prices.html", "Gas prices"),
     ("elections.html", "Elections"),
@@ -379,42 +378,57 @@ def consolidated_flags():
         "query string. Fixed in assets/app.js at integration (would otherwise 401 on every "
         "authenticated call).",
         [f"{DOCS}/getting_started/api_keys"], "resolved", "3a22fb0f")
-    # session 6d201d19 — swing alerts (scripts/price_alerts.py, alerts.html)
+    # session 6d201d19 — snapshot swing detector (scripts/price_alerts.py -> data/latest/alerts.json).
+    # The live two-chat alert page is the merged feature in dashboard.html (PR #28, session 6ebc1cb7);
+    # this session's duplicate page was withdrawn (see COORDINATION.md, session 6d201d19).
     add("F-6D-01", "Alerts / high-ROI", "High-ROI screen is a placeholder, not the user's model",
-        "The 'high-ROI' chat applies a published arithmetic screen (gross payout multiple (1-p)/p >= 1.00, "
-        "volume > 0, not a synthetic series) because the model's rules were not supplied. Replace it with "
-        "the user's model output; the screen is in scripts/price_alerts.py and assets/alerts-core.js.",
+        "The high-ROI screen (scripts/price_alerts.py, and the live chat in dashboard.html) is arithmetic on "
+        "official prices: buy the side the move made cheaper, gross payout multiple (1 - p) / p >= 1.00, volume "
+        "> 0, not a synthetic series. The user's model was not supplied, so this is not a forecast. Replace it "
+        "with the user's model output.",
         [f"{DOCS}/api-reference/market/get-markets.md"], "open - user to supply model rules", "6d201d19")
     add("F-6D-02", "Alerts / cause links", "Website/event links behind sharp price jumps are not verified",
-        "The Kalshi market API returns prices and volume but no news or cause field. Cause-link cells are "
-        "left blank and flagged; nothing is inferred from news or timing.",
+        "The Kalshi market API returns prices, volume and bid/ask but no news or cause field. Cause-link cells "
+        "are left blank and labelled unverified; nothing is inferred from news or timing.",
         [f"{DOCS}/api-reference/market/get-markets.md"], "open - needs an external, verified news source", "6d201d19")
     add("F-6D-03", "Alerts / snapshot", "Snapshot swings are in a synthetic exchange-test series",
-        "Both swings in data/history/prices.jsonl are in KXDEMOFUTHOURLY-26NOV20H12-UP (repo finding I-15). "
-        "The official demo page says demo prices and behavior may not reflect real markets. The market title "
-        "is not in the committed snapshot, so it is shown as unverified.",
+        "Both early swings in data/history/prices.jsonl are in KXDEMOFUTHOURLY-26NOV20H12-UP (repo finding I-15). "
+        "The official demo page says demo prices and behavior may not reflect real markets. The market title is "
+        "not in any committed market file, so it is shown as unverified.",
         [f"{DOCS}/getting_started/demo_env"], "disclosed", "6d201d19")
     add("F-6D-04", "Alerts / live browser", "Live polling depends on browser access to the demo API",
-        "The page reads GET /markets?tickers= from the browser. Access was recorded as allowed in "
-        "data/cors_test.json (12:14:51Z, repo artifact). The page shows a warning and falls back to snapshot "
-        "alerts when a read fails. The official docs say market responses are cached briefly, so prices can "
-        "lag the exchange by several seconds.",
+        "The live chat in dashboard.html reads GET /markets?tickers= from the browser. Access was recorded as allowed "
+        "in data/cors_test.json (12:14:51Z, repo artifact). The official docs say market responses are cached "
+        "briefly, so prices can lag the exchange by several seconds. Re-check at runtime.",
         [f"{DOCS}/getting_started/demo_env", f"{DOCS}/api-reference/market/get-markets.md"],
         "open - re-verify at runtime", "6d201d19")
     add("F-6D-05", "Alerts / cadence", "Snapshot history is sparse; live polling is the real-time path",
-        "prices.jsonl gets one row per market per collector run (about every 30 minutes per the "
-        "kalshi-data.yml schedule), so snapshot swings are coarse. The live page polls every 10-60 s "
-        "(default 15 s) for its watchlist of 40 top markets. Swings between polls can be missed.",
+        "prices.jsonl gets one row per market per kalshi-data.yml run (twice hourly, plus pushes), so snapshot "
+        "swings are coarse. The live chat is the real-time path. Swings between polls can be missed.",
         [f"{DOCS}/api-reference/market/get-markets.md"], "disclosed", "6d201d19")
     add("F-6D-07", "Alerts / single prints", "A single last-trade print can look like a swing",
         "On 2026-11-20 KXPRESNOMD-28-HBID printed last_price 0.8110 at 19:14:49Z while yes_bid was 0.0020 and "
         "yes_ask 0.8110 (208 contracts offered). A later live read (about 19:25Z) showed last_price 0.0030. A "
-        "last-trade price can be one print, so the page marks a swing whose next reading moves back toward the "
-        "old price as a single print. Swings with no later reading show 'no later reading yet'. Bid and ask "
-        "are shown next to each swing.",
+        "last-trade price can be one print. scripts/price_alerts.py therefore marks a swing whose next reading "
+        "moves back toward the old price as a single print, and shows 'no later reading yet' when there is none. "
+        "The 19:14:49Z evidence row was written on branch arena/6d201d19-demo3 (commit 7d06a79) and is absent "
+        "from main's later prices.jsonl (see F-6D-08). The live chat does not yet do this (CR-6D-2 in COORDINATION.md).",
         ["https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-HBID",
          f"{DOCS}/api-reference/market/get-markets.md"],
-        "open - review whether alerts should use bid/ask midpoint or require confirmation", "6d201d19")
+        "open - owner of the live chat to add the persistence check", "6d201d19")
+    add("F-6D-08", "Data pipeline", "Concurrent collector runs from several branches rewrite the same rolling history",
+        "data/history/prices.jsonl is appended by kalshi-data.yml on every branch that pushes, and the workflow "
+        "trims it to 20000 lines. Each branch then commits its own copy. Rows written on one branch (e.g. the "
+        "19:14:49Z KXPRESNOMD-28-HBID row on arena/6d201d19-demo3) can be lost when another branch's copy is taken. "
+        "Snapshot history is therefore not a complete record. Owner: pipeline. Fix: write the history from main only, or key rows by a unique id.",
+        ["https://docs.kalshi.com/api-reference/market/get-markets.md", f"{DOCS}/getting_started/demo_env"],
+        "open - pipeline owner to decide", "6d201d19")
+    add("F-6D-09", "Generator / dashboard", "build_root_site.py overwrites dashboard.html and drops the live alert cards",
+        "build_dashboard() writes dashboard.html from its own template. The live two-chat alert cards merged in PR #28 "
+        "(session 6ebc1cb7) were added to dashboard.html by hand, so running this generator on main removes them. "
+        "CI runs only verify_root_site.py, so nothing breaks today. Owner: the integration session. Fix: move the alert "
+        "cards into build_dashboard() before any future regeneration.",
+        [f"{DOCS}/getting_started/demo_env"], "open - integration owner", "6d201d19")
     add("F-6D-06", "Trading / portfolio", "Demo account portfolio and live trades still blocked",
         "Portfolio, fills and order placement need a Kalshi demo API key. The demo key is created by a "
         "person at demo.kalshi.co; this agent cannot create one. Until a key is provided, trade rows stay "
@@ -687,79 +701,6 @@ if the browser blocks the request the tables fall back to the snapshot links in
 """
     write_page("dashboard.html", "Live dashboard", "dashboard.html", body,
                scripts=("assets/app.js", "assets/trade.js", "assets/dashboard.js", "assets/site.js"))
-
-
-def build_alerts():
-    """Live swing alerts (>= $0.10) with two scrolling chats (session 6d201d19)."""
-    body = """
-<h1>Live swing alerts (&ge; $0.10)</h1>
-<p>Two scrolling chats show contract-price swings of <strong>$0.10 or more in either direction</strong>.
-<strong>All swings</strong> lists every swing. <strong>High-ROI screen</strong> lists only swings that pass a
-<em>placeholder</em> screen (the user&rsquo;s model was not supplied &mdash; see
-<a href="flagged.html">Flagged for review</a> F-6D-01). The browser polls the official demo REST endpoint
-<span class="mono">GET /markets?tickers=</span> (<a href="https://docs.kalshi.com/api-reference/market/get-markets.md"
-target="_blank" rel="noopener">docs</a>); the first reading of a market sets its baseline, and a swing is a later
-change of at least $0.10. Nothing here is inferred: cause links are left blank and flagged.</p>
-<div class="card">
-  <p class="small"><span id="alertStatus" class="pill">loading</span></p>
-  <p>
-    <button class="btn secondary" id="pauseBtn">Pause live polling</button>
-    <label>Poll every <select id="intervalSel">
-      <option value="10">10 s</option><option value="15" selected>15 s</option>
-      <option value="30">30 s</option><option value="60">60 s</option></select></label>
-    <label>Topic <select id="topicSel">
-      <option value="all">All topics</option><option value="gas">Gas prices</option>
-      <option value="elections">Elections</option><option value="culture">Culture</option>
-      <option value="crypto">Crypto</option><option value="golf">Golf</option></select></label>
-  </p>
-</div>
-<style>
-  .chats { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  @media (max-width: 860px) { .chats { grid-template-columns: 1fr; } }
-  .chat { height: 460px; overflow-y: auto; border: 1px solid var(--line, #d9dee5); border-radius: 8px;
-          padding: 8px 12px; background: #fff; }
-  .chat .msg { border-bottom: 1px dashed #e3e7ec; padding: 6px 0; font-size: .92rem; }
-  .chat .msg.up { border-left: 4px solid #1e8e3e; padding-left: 8px; }
-  .chat .msg.down { border-left: 4px solid #c5221f; padding-left: 8px; }
-  .chat .msg.synthetic { opacity: .75; }
-  .chat .empty { color: #5f6b7a; }
-  .pill.ok { background: #e6f4ea; color: #137333; }
-</style>
-<div class="chats">
-  <div class="card">
-    <h2>All swings <span class="small muted">(<span id="countAll">0</span>)</span></h2>
-    <div class="chat" id="chatAll" role="log" aria-live="polite" aria-label="All swings">
-      <div class="empty">Waiting for swings of at least $0.10&hellip;</div></div>
-  </div>
-  <div class="card">
-    <h2>High-ROI screen <span class="small muted">(<span id="countRoi">0</span>, placeholder rule)</span></h2>
-    <div class="chat" id="chatRoi" role="log" aria-live="polite" aria-label="High-ROI swings">
-      <div class="empty">No swing has passed the placeholder high-ROI screen yet.</div></div>
-  </div>
-</div>
-<div class="card">
-  <h2>Snapshot swings (committed collector data)</h2>
-  <p class="small muted" id="snapMeta">Loading data/latest/alerts.json&hellip;</p>
-  <div class="tablewrap"><table><thead><tr>
-    <th>Snapshot time (UTC)</th><th>Topic</th><th>Market</th><th>Price (from &rarr; to)</th>
-    <th>Change</th><th>Bid / ask at swing</th><th>Next reading (persistence)</th><th>High-ROI screen</th><th>Source</th><th>Cause link</th>
-  </tr></thead><tbody id="snapRows"></tbody></table></div>
-  <p class="small muted">Rule: two consecutive snapshots of the same market with last prices differing by at least
-  $0.10. Sources: <a href="https://docs.kalshi.com/api-reference/market/get-markets.md" target="_blank" rel="noopener">get-markets</a>,
-  <a href="https://docs.kalshi.com/getting_started/demo_env" target="_blank" rel="noopener">demo environment</a>.
-  The two swings in the snapshot are in the synthetic exchange-test series KXDEMOFUTHOURLY (repo finding I-15).
-  Titles missing from the committed snapshot are shown as unverified.</p>
-</div>
-<div class="card">
-  <h2>How the high-ROI screen works (placeholder)</h2>
-  <p class="small">For an upward swing the screen buys YES at the new price; for a downward swing it buys NO at
-  1 &minus; new price. Gross payout multiple = (1 &minus; bought price) / bought price. It passes at a multiple of
-  at least 1.00, with volume above zero, outside synthetic exchange-test series. This is arithmetic on official
-  prices before fees; it is <strong>not a forecast</strong> and not the user&rsquo;s model.</p>
-</div>
-"""
-    write_page("alerts.html", "Swing alerts", "alerts.html", body,
-               scripts=("assets/alerts-core.js", "assets/alerts.js"))
 
 
 def build_portfolio():
@@ -1190,7 +1131,6 @@ def build_wrapped(name, title):
 def main():
     build_index()
     build_dashboard()
-    build_alerts()
     build_portfolio()
     build_trades()
     for tid, label, page, desc in TOPICS:
