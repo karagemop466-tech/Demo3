@@ -366,6 +366,13 @@ def consolidated_flags():
         "Cells found without an official source during the per-row verification pass are left "
         "blank and flagged; never inferred.",
         [f"{DOCS}/getting_started/quick_start_market_data"], "open", "3a22fb0f")
+    add("I-13", "Alerts", "Price swings do not establish an external-news cause",
+        "Live alerts detect a qualifying price change from market observations only. The public "
+        "market data response does not verify which external article or event caused that move, so "
+        "the dashboard leaves catalyst attribution unverified rather than inventing a link. A news "
+        "source integration and a verified event-to-market attribution method remain open.",
+        [f"{DOCS}/api-reference/market/get-markets"],
+        "open — catalyst source integration not implemented", "arena/09824fd8-demo3")
     add("R-06", "Documentation", "Archive pages use the production API base",
         "docs/ and analysis/ fetch public data from api.elections.kalshi.com while the brief "
         "specifies the demo endpoints. The canonical root site uses the demo API. Archives are "
@@ -641,9 +648,36 @@ if the browser blocks the request the tables fall back to the snapshot links in
   <h2>5 · Trade categorization &amp; strategy analysis</h2>
   <div id="strategyBody"></div>
 </div>
+
+<div class="card">
+  <h2>6 · Price-swing alerts &mdash; scrolling chat (&ge; $0.10)</h2>
+  <p class="small muted">Live alerts for contract price swings of <strong>&ge; $0.10 in either direction</strong>,
+     detected from the dashboard's live market samples (GET /markets, demo API, no key). Two scrolling chats:
+     <em>All events</em> shows every swing; <em>High ROI model</em> shows a selective, labeled placeholder
+     heuristic (no real model is defined yet &mdash; flagged F-alert-01, never presented as verified ROI).
+     Each row links its exact market API URL. Alerts persist in this browser only. The market response
+     does not verify an external news cause; see Flagged item I-13.</p>
+  <div class="alert-controls">
+    <label><input type="checkbox" id="alertsEnabled" checked> Alerts enabled</label>
+    <label><input type="checkbox" id="autoTrade" disabled> Automated paper trades on swing (paper/SIMULATED only)</label>
+    <button class="btn secondary" id="clearAlertsBtn">Clear alerts</button>
+    <span class="alert-pill" id="alertCount">0 alerts</span>
+  </div>
+  <div class="chat-tabs">
+    <button class="chat-tab active" id="tabAll" data-chat="all">All events</button>
+    <button class="chat-tab" id="tabROI" data-chat="roi">High ROI model</button>
+  </div>
+  <div class="chat-wrap" id="chatAll">
+    <div id="alertsAll"></div>
+  </div>
+  <div class="chat-wrap" id="chatROI" style="display:none">
+    <div id="alertsROI"></div>
+    <p class="small muted">High-ROI placeholder rule: swing &ge; $0.10 AND move &ge; 10% of prior price. Not a real model.</p>
+  </div>
+</div>
 """
     write_page("dashboard.html", "Live dashboard", "dashboard.html", body,
-               scripts=("assets/app.js", "assets/trade.js", "assets/dashboard.js", "assets/site.js"))
+               scripts=("assets/app.js", "assets/trade.js", "assets/dashboard.js", "assets/alerts.js", "assets/site.js"))
 
 
 def build_portfolio():

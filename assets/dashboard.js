@@ -13,7 +13,7 @@
     samples: {}, candles: [], orderbook: null, trades: [],
     windowSec: 3600, scanSec: 20, obSec: 10,
     timers: [], resolutions: [], fills: [],
-    connected: false, lastScan: null, errors: 0
+    connected: false, lastScan: null, errors: 0, scanInProgress: false
   };
   try { state.resolutions = JSON.parse(localStorage.getItem("kd_resolutions") || "[]"); }
   catch (e) { state.resolutions = []; }
@@ -101,6 +101,8 @@
 
   /* ---------- 2. Market scan + ranking ---------- */
   async function scan() {
+    if (state.scanInProgress) return;
+    state.scanInProgress = true;
     try {
       var markets = [];
       var depthSel = $("scanDepth");
@@ -143,6 +145,7 @@
         " — " + state.markets.length + " open markets (coverage: " + capNote + ").";
       banner("", "");
     } catch (e) { showError(e); }
+    finally { state.scanInProgress = false; }
   }
   function renderRanking() {
     if (!$("rankingTable")) return;
