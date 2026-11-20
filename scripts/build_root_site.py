@@ -1145,6 +1145,9 @@ def with_row_sources(inner):
 
 def build_wrapped(name, title):
     inner = with_row_sources(extract_body(name))
+    # normalization so repeated builds are byte-stable (each wrap cycle used to
+    # accumulate blank lines between the shell and the extracted body)
+    inner = "\n" + inner.strip("\n") + "\n"
     if not inner:
         print("WARN no body in", name)
         return
