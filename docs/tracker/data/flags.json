@@ -16,7 +16,7 @@
       "id": "F-02",
       "area": "Repo",
       "item": "README.md is a single line ('# Demo3'); no license, no build tooling, no existing site",
-      "irregularity": "No license file is present, so reuse terms are unspecified. GitHub Pages was already enabled on the repo, built from main / (legacy build). This work moves the site to /docs; the Pages source setting was changed to main /docs in the same step.",
+      "irregularity": "No license file is present, so reuse terms are unspecified. GitHub Pages was already enabled on the repo, built from main / (legacy build). Changing the source to /docs returned 403 for this session (admin needed), so the Pages source was NOT changed. The tracker is served under docs/tracker/ from the existing root source.",
       "source": "https://github.com/karagemop466-tech/Demo3",
       "status": "Flagged"
     },

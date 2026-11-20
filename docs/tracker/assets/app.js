@@ -3,7 +3,8 @@
   var ROOT = document.body.getAttribute('data-root') || '';
   var PAGE = document.body.getAttribute('data-page') || '';
   var NAV = [
-    ['index.html', 'Home', 'home'],
+    ['../index.html', 'Main site', 'main'],
+    ['index.html', 'Tracker home', 'home'],
     ['dashboard.html', 'Live dashboard', 'dashboard'],
     ['categories/gas.html', 'Gas', 'gas'],
     ['categories/elections.html', 'Elections', 'elections'],

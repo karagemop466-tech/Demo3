@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-"""Generate the static HTML shells for the GitHub Pages site in docs/.
+"""Generate the static HTML shells for the Kalshi Demo Tracker (docs/tracker/).
 
-The page content is rendered in the browser from docs/data/*.json by docs/assets/app.js
-and docs/assets/live.js, so the JSON files are the single source of truth.
+The page content is rendered in the browser from docs/tracker/data/*.json by
+docs/tracker/assets/app.js and docs/tracker/assets/live.js, so the JSON files are the single source of truth.
 
-Usage:  python3 scripts/build_site.py
+Usage:  python3 scripts/tracker_build.py
 """
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-DOCS = ROOT / "docs"
+DOCS = ROOT / "docs" / "tracker"
 
 HEAD = """<!doctype html>
 <html lang="en">
@@ -109,7 +109,6 @@ def render(path, root, page, title, desc, topic):
 
 def main():
     written = [render(*p) for p in PAGES]
-    (DOCS / ".nojekyll").write_text("", encoding="utf-8")
     for w in written:
         print("wrote", w.relative_to(ROOT))
 
