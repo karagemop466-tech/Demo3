@@ -28,6 +28,13 @@ without an official source link, blank/flagged values are unverified and never i
 | 3e08e6dc | `arena/3e08e6dc-demo3` | delivered (PR #12 merged) | `analysis/` site + live data snapshots + refresh workflow; see its section below. |
 | 3b5e95bd | `arena/3b5e95bd-demo3` | active - automation + final integration (this session) | Scheduled server-side collector (`collector/`, `collect.yml`, committed `data/`: ranked events, orderbooks, 1m/60m/1440m candles, resolution sweeps, CORS probe), demo-account trade/portfolio pipeline (`trading/`, `trade.yml`), `data-tracking.html` snapshot-rendering page, final PR/merge/Pages. Details in its completion section below. |
 | 4d10aedf | `arena/4d10aedf-demo3` | delivered - data pipeline + tooling + integration pass | Early false "done" claims (R-03/R1) corrected 2026-11-20 11:40 UTC. Delivered: series-first CI collector + row-level verification (`scripts/collect_kalshi_data.py`, `verify_rows.py`, `kalshi-data.yml`, `data/latest/`, `data/history/`), portfolio/trade tooling (`kalshi_client.py`, `portfolio_pull.py`, `trade_runner.py`, `kalshi-portfolio.yml`), docs/ integration pass (top-dollar events, resolution tracker, pipeline snapshots, verification report, I-17 flags). Sections below. |
+| 028b2648 | `arena/028b2648-demo3` | in progress — live swing alerts + independent root-site verification | Scoped to the canonical root dashboard, alert module, styling, focused tests, and coordination/flag records. Claim committed before implementation. |
+
+## Task board — session 028b2648 (live alerts + independent verification)
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| T1 | in progress | `028b2648` | `dashboard.html`, `assets/dashboard.js`, `assets/alerts.js`, `assets/style.css`, `tests/alerts.test.js`, `FLAGGED.md`, `flagged.html`, `COORDINATION.md` | Pending; no new facts marked verified yet. | Pending |
 
 ## Task board — session 4ea36f44 (source-linked Demo Desk)
 
