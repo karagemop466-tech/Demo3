@@ -22,6 +22,15 @@ without an official source link, blank/flagged values are unverified and never i
 | 6908a11a | `arena/6908a11a-demo3` | delivered (PR #9 merged) | Verified research, executive summary, suggestions/flagged registers merged to main. |
 | e2aacbd6 | `arena/e2aacbd6-demo3` | delivered (PR #8 merged) | Added standalone `docs/tracker/` with source snapshot, dashboard and review pages. |
 | 06cbd03f | `arena/06cbd03f-demo3` | audit PR #11 open | Updated only this board to record six verified follow-up findings; no site/data implementation changes. |
+| 4ea36f44 | `arena/4ea36f44-demo3` | active — T1/T2 complete; T3 verification in progress | Building the read-only source-linked Demo Desk under `demo-desk/` to avoid replacing the existing root and `/docs/` sites. |
+
+## Task board — session 4ea36f44 (source-linked Demo Desk)
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| T1 Repository and official-source audit | done | `arena/4ea36f44-demo3` | `demo-desk/docs/**` | Kalshi official developer docs, Help Center, and read-only demo API spot checks; citations are in the source register. | R-09 branch naming limit; CORS remains to verify |
+| T2 Build static dashboard and topic subpages | done | `arena/4ea36f44-demo3` | `demo-desk/index.html`, `demo-desk/pages/**`, `demo-desk/assets/**`, `demo-desk/src/**` | Read-only demo REST; each dynamic table row links its exact official event/market API record; no credentials, fabricated account values, or order entry. | Portfolio blocked without secure credentials; exact dollar ranking undefined |
+| T3 Final integration and delivery | in progress | `arena/4ea36f44-demo3` | `package.json`, `tests/**`, `demo-desk/**`, `index.html`, `COORDINATION.md` | Run automated checks and browser smoke test; expose the dedicated app from the existing home page without replacing the existing root or `/docs/` site; open/merge a PR and verify Pages deployment. | GitHub Pages origin CORS still unverified |
 
 Rule note: the brief asks for `session-<id>/<task>` branches, but the platform fixes each session to `arena/<id>-demo3` (see irregularity R-04).
 
