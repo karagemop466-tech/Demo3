@@ -1,66 +1,6 @@
 {
  "checks": [
   {
-   "check": "resolution KXQUICKSETTLE-20NOV26H1420-2 result",
-   "detail": "stored='yes' live='yes'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXQUICKSETTLE-20NOV26H1420-2 settlement_value_dollars",
-   "detail": "stored='1.0000' live='1.0000'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXQUICKSETTLE-20NOV26H1420-2 ticker",
-   "detail": "stored='KXQUICKSETTLE-20NOV26H1420-2' live='KXQUICKSETTLE-20NOV26H1420-2'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXQUICKSETTLE-20NOV26H1420-3 result",
-   "detail": "stored='no' live='no'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXQUICKSETTLE-20NOV26H1420-3 settlement_value_dollars",
-   "detail": "stored='0.0000' live='0.0000'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXQUICKSETTLE-20NOV26H1420-3 ticker",
-   "detail": "stored='KXQUICKSETTLE-20NOV26H1420-3' live='KXQUICKSETTLE-20NOV26H1420-3'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXQUICKSETTLE-20NOV26H1410-2 result",
-   "detail": "stored='yes' live='yes'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXQUICKSETTLE-20NOV26H1410-2 settlement_value_dollars",
-   "detail": "stored='1.0000' live='1.0000'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXQUICKSETTLE-20NOV26H1410-2 ticker",
-   "detail": "stored='KXQUICKSETTLE-20NOV26H1410-2' live='KXQUICKSETTLE-20NOV26H1410-2'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXQUICKSETTLE-20NOV26H1410-3 result",
-   "detail": "stored='no' live='no'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXQUICKSETTLE-20NOV26H1410-3 settlement_value_dollars",
-   "detail": "stored='0.0000' live='0.0000'",
-   "ok": true
-  },
-  {
-   "check": "resolution KXQUICKSETTLE-20NOV26H1410-3 ticker",
-   "detail": "stored='KXQUICKSETTLE-20NOV26H1410-3' live='KXQUICKSETTLE-20NOV26H1410-3'",
-   "ok": true
-  },
-  {
    "check": "resolution KXDOGE-26NOV2013-T0.2349999 result",
    "detail": "stored='no' live='no'",
    "ok": true
@@ -3001,6 +2941,66 @@
    "ok": true
   },
   {
+   "check": "resolution KXXRPD-26NOV2013-T0.1599 result",
+   "detail": "stored='no' live='no'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXXRPD-26NOV2013-T0.1599 settlement_value_dollars",
+   "detail": "stored='0.0000' live='0.0000'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXXRPD-26NOV2013-T0.1599 ticker",
+   "detail": "stored='KXXRPD-26NOV2013-T0.1599' live='KXXRPD-26NOV2013-T0.1599'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXDOGE-26NOV2014-T0.2349999 result",
+   "detail": "stored='no' live='no'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXDOGE-26NOV2014-T0.2349999 settlement_value_dollars",
+   "detail": "stored='0.0000' live='0.0000'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXDOGE-26NOV2014-T0.2349999 ticker",
+   "detail": "stored='KXDOGE-26NOV2014-T0.2349999' live='KXDOGE-26NOV2014-T0.2349999'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXDOGE-26NOV2014-T0.0100000 result",
+   "detail": "stored='no' live='no'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXDOGE-26NOV2014-T0.0100000 settlement_value_dollars",
+   "detail": "stored='0.0000' live='0.0000'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXDOGE-26NOV2014-T0.0100000 ticker",
+   "detail": "stored='KXDOGE-26NOV2014-T0.0100000' live='KXDOGE-26NOV2014-T0.0100000'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXDOGE-26NOV2014-B0.232 result",
+   "detail": "stored='no' live='no'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXDOGE-26NOV2014-B0.232 settlement_value_dollars",
+   "detail": "stored='0.0000' live='0.0000'",
+   "ok": true
+  },
+  {
+   "check": "resolution KXDOGE-26NOV2014-B0.232 ticker",
+   "detail": "stored='KXDOGE-26NOV2014-B0.232' live='KXDOGE-26NOV2014-B0.232'",
+   "ok": true
+  },
+  {
    "check": "top_event KXPRESNOMD-28 market KXPRESNOMD-28-HBID exists",
    "detail": "live query returned 1 markets",
    "ok": true
@@ -3296,31 +3296,6 @@
    "ok": true
   },
   {
-   "check": "top_event KXWTIMAX-26DEC31 market KXWTIMAX-26DEC31-T180 exists",
-   "detail": "live query returned 1 markets",
-   "ok": true
-  },
-  {
-   "check": "top_event KXWTIMAX-26DEC31 market KXWTIMAX-26DEC31-T160 exists",
-   "detail": "live query returned 1 markets",
-   "ok": true
-  },
-  {
-   "check": "top_event KXWTIMAX-26DEC31 market KXWTIMAX-26DEC31-T150 exists",
-   "detail": "live query returned 1 markets",
-   "ok": true
-  },
-  {
-   "check": "top_event KXWTIMAX-26DEC31 market KXWTIMAX-26DEC31-T130 exists",
-   "detail": "live query returned 1 markets",
-   "ok": true
-  },
-  {
-   "check": "top_event KXWTIMAX-26DEC31 market KXWTIMAX-26DEC31-T140 exists",
-   "detail": "live query returned 1 markets",
-   "ok": true
-  },
-  {
    "check": "top_event KXBTCMINY-27JAN01 market KXBTCMINY-27JAN01-45000.00 exists",
    "detail": "live query returned 1 markets",
    "ok": true
@@ -3367,31 +3342,6 @@
   },
   {
    "check": "top_event KXTIME-26 market KXTIME-26-LIO exists",
-   "detail": "live query returned 1 markets",
-   "ok": true
-  },
-  {
-   "check": "top_event KXTXERCOTPEAK-27JAN01 market KXTXERCOTPEAK-27JAN01-T91500 exists",
-   "detail": "live query returned 1 markets",
-   "ok": true
-  },
-  {
-   "check": "top_event KXTXERCOTPEAK-27JAN01 market KXTXERCOTPEAK-27JAN01-T92500 exists",
-   "detail": "live query returned 1 markets",
-   "ok": true
-  },
-  {
-   "check": "top_event KXTXERCOTPEAK-27JAN01 market KXTXERCOTPEAK-27JAN01-T93000 exists",
-   "detail": "live query returned 1 markets",
-   "ok": true
-  },
-  {
-   "check": "top_event KXTXERCOTPEAK-27JAN01 market KXTXERCOTPEAK-27JAN01-T96000 exists",
-   "detail": "live query returned 1 markets",
-   "ok": true
-  },
-  {
-   "check": "top_event KXTXERCOTPEAK-27JAN01 market KXTXERCOTPEAK-27JAN01-T94000 exists",
    "detail": "live query returned 1 markets",
    "ok": true
   },
@@ -3496,13 +3446,63 @@
    "ok": true
   },
   {
+   "check": "top_event KXRT-HUN market KXRT-HUN-90 exists",
+   "detail": "live query returned 1 markets",
+   "ok": true
+  },
+  {
+   "check": "top_event KXRT-HUN market KXRT-HUN-77 exists",
+   "detail": "live query returned 1 markets",
+   "ok": true
+  },
+  {
+   "check": "top_event KXRT-HUN market KXRT-HUN-72 exists",
+   "detail": "live query returned 1 markets",
+   "ok": true
+  },
+  {
+   "check": "top_event KXRT-HUN market KXRT-HUN-65 exists",
+   "detail": "live query returned 1 markets",
+   "ok": true
+  },
+  {
+   "check": "top_event KXRT-HUN market KXRT-HUN-75 exists",
+   "detail": "live query returned 1 markets",
+   "ok": true
+  },
+  {
+   "check": "top_event KXAAAGASW-26NOV23 market KXAAAGASW-26NOV23-3.6400 exists",
+   "detail": "live query returned 1 markets",
+   "ok": true
+  },
+  {
+   "check": "top_event KXAAAGASW-26NOV23 market KXAAAGASW-26NOV23-3.6600 exists",
+   "detail": "live query returned 1 markets",
+   "ok": true
+  },
+  {
+   "check": "top_event KXAAAGASW-26NOV23 market KXAAAGASW-26NOV23-3.6200 exists",
+   "detail": "live query returned 1 markets",
+   "ok": true
+  },
+  {
+   "check": "top_event KXAAAGASW-26NOV23 market KXAAAGASW-26NOV23-3.6000 exists",
+   "detail": "live query returned 1 markets",
+   "ok": true
+  },
+  {
+   "check": "top_event KXAAAGASW-26NOV23 market KXAAAGASW-26NOV23-3.6800 exists",
+   "detail": "live query returned 1 markets",
+   "ok": true
+  },
+  {
    "check": "orderbook KXPRESNOMD-28-BOBA structure",
-   "detail": "{\"no_dollars\": [[\"0.1140\", \"250.00\"], [\"0.1150\", \"180.00\"], [\"0.1160\", \"163.00\"], [\"0.1170\", \"150.00\"], [\"0.1180\", \"179.",
+   "detail": "{\"no_dollars\": [[\"0.1130\", \"181.00\"], [\"0.1140\", \"250.00\"], [\"0.1150\", \"180.00\"], [\"0.1160\", \"163.00\"], [\"0.1170\", \"150.",
    "ok": true
   },
   {
    "check": "orderbook KXPRESNOMD-28-BS structure",
-   "detail": "{\"no_dollars\": [[\"0.0300\", \"10.00\"], [\"0.9930\", \"47619.04\"], [\"0.9940\", \"55555.54\"], [\"0.9950\", \"66601.63\"]], \"yes_dolla",
+   "detail": "{\"no_dollars\": [[\"0.0300\", \"10.00\"], [\"0.9930\", \"47619.04\"], [\"0.9940\", \"55555.54\"], [\"0.9950\", \"66425.59\"]], \"yes_dolla",
    "ok": true
   },
   {
@@ -3512,7 +3512,7 @@
   },
   {
    "check": "orderbook KXPRESNOMD-28-EWAR structure",
-   "detail": "{\"no_dollars\": [[\"0.9700\", \"5555.55\"], [\"0.9800\", \"8333.33\"], [\"0.9900\", \"16649.04\"]], \"yes_dollars\": []}",
+   "detail": "{\"no_dollars\": [[\"0.9700\", \"5555.55\"], [\"0.9800\", \"8333.33\"], [\"0.9900\", \"16663.43\"]], \"yes_dollars\": []}",
    "ok": true
   },
   {
@@ -3526,68 +3526,63 @@
    "ok": true
   },
   {
-   "check": "event KXDANIELLESMITHOUT-28 exists+title",
-   "detail": "title live='Danielle Smith announces departure as Alberta UCP leader?'",
+   "check": "event KXMIDTERMVOTETURN-TX31 exists+title",
+   "detail": "title live='Texas 31 House General Election: voter turnout'",
    "ok": true
   },
   {
-   "check": "event KXMIDTERMVOTETURN-TX29 exists+title",
-   "detail": "title live='Texas 29 House General Election: voter turnout'",
+   "check": "event KXSTATELEGME-28NOV07MEH080 exists+title",
+   "detail": "title live='Maine House District 80 winner? (2028)'",
    "ok": true
   },
   {
-   "check": "event KXSTATELEGME-28NOV07MEH079 exists+title",
-   "detail": "title live='Maine House District 79 winner? (2028)'",
+   "check": "event KXSTATELEGOH-28NOV07OHS022 exists+title",
+   "detail": "title live='Ohio Senate District 22 winner? (2028)'",
    "ok": true
   },
   {
-   "check": "event KXSTATELEGOH-28NOV07OHS002 exists+title",
-   "detail": "title live='Ohio Senate District 2 winner? (2028)'",
+   "check": "event KXSTATELEGWI-28NOV07WIS006 exists+title",
+   "detail": "title live='Wisconsin Senate District 6 winner? (2028)'",
    "ok": true
   },
   {
-   "check": "event KXSTATELEGWI-28NOV07WIS026 exists+title",
-   "detail": "title live='Wisconsin Senate District 26 winner? (2028)'",
+   "check": "event KXSTATELEGVA-27NOV02VAS030 exists+title",
+   "detail": "title live='Virginia Senate District 30 winner? (2027)'",
    "ok": true
   },
   {
-   "check": "event KXSTATELEGVA-27NOV02VAS029 exists+title",
-   "detail": "title live='Virginia Senate District 29 winner? (2027)'",
+   "check": "event KXSTATELEGMN-28NOV07MNH41A exists+title",
+   "detail": "title live='Minnesota House District 41A winner? (2028)'",
    "ok": true
   },
   {
-   "check": "event KXSTATELEGMN-28NOV07MNH40A exists+title",
-   "detail": "title live='Minnesota House District 40A winner? (2028)'",
+   "check": "event KXSTATELEGMA-28NOV07MAH005 exists+title",
+   "detail": "title live='Massachusetts House 5th Barnstable District winner? (2028)'",
    "ok": true
   },
   {
-   "check": "event KXSTATELEGMA-28NOV07MAH126 exists+title",
-   "detail": "title live='Massachusetts House 4th Suffolk District winner? (2028)'",
+   "check": "event KXSTATELEGLA-27OCT09LAH081 exists+title",
+   "detail": "title live='Louisiana House District 81 winner? (2027)'",
    "ok": true
   },
   {
-   "check": "event KXSTATELEGLA-27OCT09LAH008 exists+title",
-   "detail": "title live='Louisiana House District 8 winner? (2027)'",
+   "check": "event KXMASTATELEG-28SEN exists+title",
+   "detail": "title live='Massachusetts State Senate winner? (2028)'",
    "ok": true
   },
   {
-   "check": "event KXSTATELEGMA-28NOV07MASD10 exists+title",
-   "detail": "title live='Massachusetts Senate Worcester and Middlesex District winner? (2028)'",
+   "check": "event KXHOUSERACE-TN05-28 exists+title",
+   "detail": "title live='TN-05 House winner? (2028)'",
    "ok": true
   },
   {
-   "check": "event KXHOUSERACE-TN03-28 exists+title",
-   "detail": "title live='TN-03 House winner? (2028)'",
+   "check": "event KXSTATELEGMA-28NOV07MAH113 exists+title",
+   "detail": "title live='Massachusetts House 3rd Plymouth District winner? (2028)'",
    "ok": true
   },
   {
-   "check": "event KXSTATELEGMA-28NOV07MAH061 exists+title",
-   "detail": "title live='Massachusetts House 3rd Middlesex District winner? (2028)'",
-   "ok": true
-  },
-  {
-   "check": "event KXSTATELEGMA-28NOV07MAH145 exists+title",
-   "detail": "title live='Massachusetts House 4th Worcester District winner? (2028)'",
+   "check": "event KXSTATELEGMA-28NOV07MAH014 exists+title",
+   "detail": "title live='Massachusetts House 5th Bristol District winner? (2028)'",
    "ok": true
   },
   {
@@ -3596,33 +3591,38 @@
    "ok": true
   },
   {
-   "check": "event KXSTATELEGVA-27NOV02VAH070 exists+title",
-   "detail": "title live='Virginia House of Delegates District 70 winner? (2027)'",
+   "check": "event KXSTATELEGVA-27NOV02VAH072 exists+title",
+   "detail": "title live='Virginia House of Delegates District 72 winner? (2027)'",
    "ok": true
   },
   {
-   "check": "event KXINSCOMMRACE-NC-28 exists+title",
-   "detail": "title live='North Carolina Insurance Commissioner winner? (2028)'",
+   "check": "event KXLTGOVRACE-NC-28 exists+title",
+   "detail": "title live='North Carolina Lieutenant Governor winner? (2028)'",
    "ok": true
   },
   {
-   "check": "event KXSTATELEGOK-28NOV07OKH087 exists+title",
-   "detail": "title live='Oklahoma House District 87 winner? (2028)'",
+   "check": "event KXSTATELEGOK-28NOV07OKH089 exists+title",
+   "detail": "title live='Oklahoma House District 89 winner? (2028)'",
    "ok": true
   },
   {
-   "check": "event KXSTATELEGIN-28NOV07INH008 exists+title",
-   "detail": "title live='Indiana House District 8 winner? (2028)'",
+   "check": "event KXSTATELEGIN-28NOV07INH080 exists+title",
+   "detail": "title live='Indiana House District 80 winner? (2028)'",
    "ok": true
   },
   {
-   "check": "event KXMESTATELEG-28SEN exists+title",
-   "detail": "title live='Maine State Senate winner? (2028)'",
+   "check": "event KXMAKERFIELDBY-27JAN01 exists+title",
+   "detail": "title live='Makerfield by-election winner?'",
    "ok": true
   },
   {
-   "check": "event KXILSTATELEG-28HOUSE exists+title",
-   "detail": "title live='Illinois State House winner? (2028)'",
+   "check": "event KXILSTATELEG-28SEN exists+title",
+   "detail": "title live='Illinois State Senate winner? (2028)'",
+   "ok": true
+  },
+  {
+   "check": "event KXSTATELEGMO-28NOV07MOS025 exists+title",
+   "detail": "title live='Missouri Senate District 25 winner? (2028)'",
    "ok": true
   }
  ],
@@ -3640,5 +3640,5 @@
   "passed": 725
  },
  "tool": "scripts/verify_rows.py v1",
- "verified_at": "2026-11-20T19:54:02+00:00"
+ "verified_at": "2026-11-20T20:22:36+00:00"
 }
