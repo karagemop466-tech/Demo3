@@ -1,0 +1,218 @@
+{
+ "by_series": {
+  "KXBTCY": {
+   "categories": [
+    "Crypto"
+   ],
+   "category": "Crypto",
+   "contract_terms_url": "https://assets.kalshi.com/contract_terms/CRYPTO.pdf",
+   "expected_volume_initial": null,
+   "fee_multiplier": 1,
+   "fee_type": "quadratic",
+   "frequency": "annual",
+   "series_ticker": "KXBTCY",
+   "settlement_sources": [
+    {
+     "name": "CF Benchmarks",
+     "url": "https://www.cfbenchmarks.com/"
+    }
+   ],
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXBTCY",
+   "tags": [
+    "Bitcoin",
+    "Crypto"
+   ],
+   "title": "BTC price range EOY"
+  },
+  "KXDANCINGWITHTHESTARS": {
+   "categories": [
+    "Entertainment"
+   ],
+   "category": "Entertainment",
+   "contract_terms_url": "https://assets.kalshi.com/contract_terms/COMPETITIONREALITYWIN.pdf",
+   "expected_volume_initial": null,
+   "fee_multiplier": 1,
+   "fee_type": "quadratic",
+   "frequency": "one_off",
+   "series_ticker": "KXDANCINGWITHTHESTARS",
+   "settlement_sources": [
+    {
+     "name": "\ue907the official broadcaster or streaming platform of <competition> (e",
+     "url": "https://kalshi.com/"
+    },
+    {
+     "name": "The Source Agencies are",
+     "url": "https://kalshi.com/"
+    },
+    {
+     "name": "in hierarchical order",
+     "url": "https://kalshi.com/"
+    }
+   ],
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXDANCINGWITHTHESTARS",
+   "tags": [
+    "Television",
+    "Dancing with the Stars"
+   ],
+   "title": "Who will win dancing with the stars?"
+  },
+  "KXOSCARPIC": {
+   "categories": [
+    "Entertainment"
+   ],
+   "category": "Entertainment",
+   "contract_terms_url": "https://assets.kalshi.com/contract_terms/OSCARS.pdf",
+   "expected_volume_initial": null,
+   "fee_multiplier": 1,
+   "fee_type": "quadratic",
+   "frequency": "annual",
+   "series_ticker": "KXOSCARPIC",
+   "settlement_sources": [
+    {
+     "name": "Academy of Motion Picture Arts and Sciences",
+     "url": "https://www.oscars.org/oscars"
+    }
+   ],
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXOSCARPIC",
+   "tags": [
+    "Oscars",
+    "Awards"
+   ],
+   "title": "Oscar for Best Picture"
+  },
+  "KXPGATOUR": {
+   "categories": [
+    "Sports"
+   ],
+   "category": "Sports",
+   "contract_terms_url": "https://assets.kalshi.com/contract_terms/PGATOUR.pdf",
+   "expected_volume_initial": null,
+   "fee_multiplier": 1,
+   "fee_type": "quadratic",
+   "frequency": "custom",
+   "series_ticker": "KXPGATOUR",
+   "settlement_sources": [
+    {
+     "name": "Fox Sports",
+     "url": "https://www.foxsports.com"
+    },
+    {
+     "name": "ESPN",
+     "url": "https://www.espn.com/"
+    },
+    {
+     "name": "the Governing League",
+     "url": "https://www.pgatour.com/"
+    }
+   ],
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPGATOUR",
+   "tags": [
+    "Golf"
+   ],
+   "title": "PGA Tour"
+  },
+  "KXPRESNOMD": {
+   "categories": [
+    "Elections"
+   ],
+   "category": "Elections",
+   "contract_terms_url": "https://assets.kalshi.com/contract_terms/PRESNOM.pdf",
+   "expected_volume_initial": null,
+   "fee_multiplier": 1,
+   "fee_type": "quadratic",
+   "frequency": "custom",
+   "series_ticker": "KXPRESNOMD",
+   "settlement_sources": [
+    {
+     "name": "Republican Party",
+     "url": "https://gop.com/"
+    },
+    {
+     "name": "Democratic Party",
+     "url": "https://democrats.org/"
+    }
+   ],
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD",
+   "tags": [
+    "2028",
+    "US Elections"
+   ],
+   "title": "Democratic Primary winner"
+  },
+  "KXPRESPERSON": {
+   "categories": [
+    "Elections"
+   ],
+   "category": "Elections",
+   "contract_terms_url": "https://assets.kalshi.com/contract_terms/PRESPERSON.pdf",
+   "expected_volume_initial": null,
+   "fee_multiplier": 1,
+   "fee_type": "quadratic",
+   "frequency": "custom",
+   "series_ticker": "KXPRESPERSON",
+   "settlement_sources": [
+    {
+     "name": "Office of the Presidency",
+     "url": "https://www.whitehouse.gov/administration/executive-office-of-the-president/"
+    }
+   ],
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESPERSON",
+   "tags": [
+    "2028",
+    "US Elections"
+   ],
+   "title": "Pres person"
+  },
+  "KXTXERCOTPEAK": {
+   "categories": [
+    "Economics"
+   ],
+   "category": "Economics",
+   "contract_terms_url": "https://assets.kalshi.com/contract_terms/ECONSTATE.pdf",
+   "expected_volume_initial": null,
+   "fee_multiplier": 1,
+   "fee_type": "quadratic",
+   "frequency": "one_off",
+   "series_ticker": "KXTXERCOTPEAK",
+   "settlement_sources": [
+    {
+     "name": "Federal Reserve Bank of New York",
+     "url": "https://www.newyorkfed.org/markets/reference-rates/sofr"
+    }
+   ],
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXTXERCOTPEAK",
+   "tags": [
+    "Oil and energy"
+   ],
+   "title": "Texas ERCOT peak electricity demand"
+  },
+  "KXWTIMAX": {
+   "categories": [
+    "Commodities"
+   ],
+   "category": "Commodities",
+   "contract_terms_url": "https://assets.kalshi.com/contract_terms/WTIMINMAX.pdf",
+   "expected_volume_initial": null,
+   "fee_multiplier": 1,
+   "fee_type": "quadratic",
+   "frequency": "annual",
+   "series_ticker": "KXWTIMAX",
+   "settlement_sources": [
+    {
+     "name": "ICE",
+     "url": "https://www.ice.com/report/10"
+    }
+   ],
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXWTIMAX",
+   "tags": [
+    "Oil & Gas"
+   ],
+   "title": "WTI oil high"
+  }
+ },
+ "meta": {
+  "doc": "https://docs.kalshi.com/api-reference/market/get-series.md",
+  "endpoint": "https://external-api.demo.kalshi.co/trade-api/v2/series/{series_ticker}",
+  "generated_at": "2026-11-20T20:54:26Z"
+ }
+}

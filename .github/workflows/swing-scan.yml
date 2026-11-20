@@ -1,0 +1,136 @@
+name: Swing scan (alert console data)
+
+# Produces the files the live alert console reads:
+#   data/swings/{swings,strategies,events,meta}.json  and  alerts/model.json
+# Everything is fetched from the official Kalshi DEMO REST root
+# (https://external-api.demo.kalshi.co/trade-api/v2 -- recommended per
+# https://docs.kalshi.com/getting_started/api_environments.md). GitHub Actions runners have
+# unrestricted egress; this repo's dev sandbox does not, which is why the scan lives here.
+# Read-only: no order endpoints, no credentials, nothing written to a Kalshi account.
+
+on:
+  workflow_dispatch:
+    inputs:
+      per_topic:
+        description: "Top-dollar open markets per topic to scan"
+        required: false
+        default: "12"
+      hours_1m:
+        description: "Hours of 1-minute candlesticks to pull"
+        required: false
+        default: "48"
+      window_minutes:
+        description: "Swing lookback window in minutes"
+        required: false
+        default: "60"
+  schedule:
+    - cron: '*/30 * * * *'      # every 30 minutes (only fires from the default branch)
+  push:
+    branches: ['**']
+    paths:
+      - 'scripts/scan_swings.py'
+      - 'alerts/**'
+      - 'assets/swing-core.js'
+      - 'assets/alert-console.js'
+      - 'tests/swing_core.test.js'
+      - 'tests/alert_console.test.js'
+      - '.github/workflows/swing-scan.yml'
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: swing-scan-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Alert-core unit tests (rule shared with the backtest)
+        run: |
+          node --check assets/swing-core.js
+          node --test tests/swing_core.test.js
+
+      - name: Offline self-test against the committed snapshot (no network)
+        run: |
+          python3 scripts/scan_swings.py --offline --out /tmp/swings_selftest
+          # never let the offline artefacts leak into the published files
+          git checkout -- alerts/model.json 2>/dev/null || true
+          git status --porcelain | grep -q 'data/swings\|alerts/model.json' && \
+            { echo "::error::offline self-test dirtied the working tree"; exit 1; } || true
+
+      - name: Live scan of demo candlesticks (>= $0.10 swing study + strategy backtest)
+        env:
+          KALSHI_API_ROOT: https://external-api.demo.kalshi.co/trade-api/v2
+        run: |
+          set -o pipefail
+          python3 scripts/scan_swings.py \
+            --per-topic "${{ github.event.inputs.per_topic || 12 }}" \
+            --hours-1m "${{ github.event.inputs.hours_1m || 48 }}" \
+            --window-minutes "${{ github.event.inputs.window_minutes || 60 }}" \
+            --interval-seconds 0.3 --fail-on-empty 2>&1 | tee swing-scan.log
+          status=${PIPESTATUS[0]}
+          if [ "$status" -ne 0 ]; then
+            echo "::error::scan failed (exit $status)"; tail -30 swing-scan.log; exit "$status"
+          fi
+
+      - name: Publish run summary
+        run: |
+          python3 - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json
+          m = json.load(open("data/swings/meta.json"))
+          st = json.load(open("data/swings/strategies.json"))
+          print("### Swing scan (demo exchange)")
+          print(f"- mode **{m['stats']['mode']}** · markets {m['markets_scanned']} · "
+                f"swings >= ${m['threshold_dollars']:.2f}: **{m['swings_found']}** across "
+                f"{m['events_with_swings']} events")
+          print(f"- window {m['window_minutes']} min · requests {m['stats'].get('requests')} · "
+                f"errors {m['stats'].get('errors')}")
+          p = m["event_page_probe"]
+          print(f"- event-page probe: status {p.get('status_code')} · ticker echoed "
+                f"{p.get('ticker_echoed')} (event links only if both are good)")
+          print("\n| strategy | n | quotable | mean net $/contract | hit rate | mean ROI on paid |")
+          print("|---|---|---|---|---|---|")
+          for name, s in sorted(st["strategies"].items()):
+              o = s["overall"]
+              print(f"| {name} | {o['n']} | {o['n_quotable']} | {o['mean_net_dollars']} | "
+                    f"{o['hit_rate']} | {o['mean_roi_on_paid']} |")
+          PY
+
+      - name: Commit scan outputs
+        run: |
+          git config user.name "swing-scan-bot"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git pull --rebase origin "$GITHUB_REF_NAME" || echo "::warning::rebase skipped"
+          git add data/swings alerts/model.json
+          if git diff --cached --quiet; then
+            echo "No scan changes to commit"
+          else
+            git commit -m "data: swing scan $(date -u '+%Y-%m-%dT%H:%M:%SZ') [skip ci]"
+            for i in 1 2 3; do
+              git pull --rebase origin "$GITHUB_REF_NAME" && git push origin "HEAD:$GITHUB_REF_NAME" && break
+              echo "::warning::push attempt $i failed"; sleep $((i * 6))
+            done
+          fi
+
+      - name: Request Pages rebuild (GITHUB_TOKEN pushes do not trigger it)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          code=$(curl -s -o /tmp/pages_build.json -w "%{http_code}" -X POST \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/pages/builds")
+          echo "pages build request HTTP $code"

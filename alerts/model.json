@@ -1,0 +1,326 @@
+{
+ "alert_rule": {
+  "definition": "up_move = close[i] - min(close over the previous window) (the leg is measured OFF THE WINDOW LOW); down_move = max(close over the previous window) - close[i] (measured off the window HIGH). Fire 'up' when up_move >= max(down_move, threshold); otherwise fire 'down' when down_move >= max(up_move, threshold) - the stronger leg of the two wins, so one run in one direction prints one alert. Re-arm once |close[i] - anchor| <= the re-arm band. The window is measured in MINUTES and converted to candles per candle interval, and windows that start at or after index i are skipped. (An earlier copy of this string described a breakout off the prior extreme, which is not what the code does; both runtimes are pinned by the same reference vectors.)",
+  "directions": [
+   "up",
+   "down"
+  ],
+  "fields_doc": "https://docs.kalshi.com/api-reference/market/get-markets.md",
+  "live_price_field": "last_price_dollars (with yes_bid_dollars/yes_ask_dollars for the executable path)",
+  "rearm_band_dollars": 0.05,
+  "source_of_truth": "scripts/scan_swings.py::detect_swings mirrored by assets/swing-core.js::detectSwings",
+  "threshold_dollars": 0.1,
+  "window_minutes_default": 60,
+  "window_minutes_options": [
+   5,
+   10,
+   30,
+   60,
+   180,
+   360,
+   1440
+  ]
+ },
+ "api_root": "https://external-api.demo.kalshi.co/trade-api/v2",
+ "generated_at": "2026-11-20T20:54:26Z",
+ "link_rules": {
+  "api_record": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers={ticker}",
+  "event_page_linked_only_if_probe_200_and_echoed": true,
+  "event_page_probe": {
+   "attempted": true,
+   "attempts": [
+    {
+     "body_bytes": 0,
+     "checked_at": "2026-11-20T20:55:09Z",
+     "error": "HTTP 429",
+     "site_root": "https://kalshi.com",
+     "status_code": 429,
+     "ticker_echoed": false,
+     "title_echoed": false,
+     "url": "https://kalshi.com/event/KXBTCY-27JAN0100"
+    },
+    {
+     "body_bytes": 0,
+     "checked_at": "2026-11-20T20:55:11Z",
+     "error": "HTTP 404",
+     "site_root": "https://demo.kalshi.co",
+     "status_code": 404,
+     "ticker_echoed": false,
+     "title_echoed": false,
+     "url": "https://demo.kalshi.co/event/KXBTCY-27JAN0100"
+    }
+   ],
+   "checked_at": "2026-11-20T20:55:11Z",
+   "status_code": 429,
+   "ticker_echoed": false,
+   "verified_root": null
+  },
+  "news_link_policy": "search deep-link labelled as a candidate, never a proven cause"
+ },
+ "mode": "live",
+ "roi_model": {
+  "buckets": {
+   "crypto|0-5c|>40c|>14d": {
+    "best_mean_net_dollars": -0.9628,
+    "best_strategy": "momo60",
+    "evidence": "insufficient",
+    "evidence_rule": "n_swings >= 8 and n_markets >= 3",
+    "fade_hit_rate": null,
+    "fade_hit_rate_shrunk": null,
+    "fade_mean_net_dollars": null,
+    "fade_n_quotable": null,
+    "n_markets": 2,
+    "n_swings": 13,
+    "resolved_no": 0,
+    "resolved_yes": 0,
+    "reversion_rate": 0.923077,
+    "reversion_rate_ever": 1.0,
+    "reversion_rate_shrunk": 0.916169,
+    "reversion_rate_within_horizon_minutes": 60,
+    "strategies": {
+     "momo60": {
+      "hit_rate": 0.0,
+      "hit_rate_shrunk": 0.4,
+      "mean_gross_dollars": -0.96,
+      "mean_net_dollars": -0.9628,
+      "n_quotable": 1
+     }
+    },
+    "unresolved": 13
+   },
+   "crypto|5-20c|>40c|>14d": {
+    "best_mean_net_dollars": -0.0174,
+    "best_strategy": "fade15",
+    "evidence": "insufficient",
+    "evidence_rule": "n_swings >= 8 and n_markets >= 3",
+    "fade_hit_rate": 0.0,
+    "fade_hit_rate_shrunk": 0.4,
+    "fade_mean_net_dollars": -0.0174,
+    "fade_n_quotable": 1,
+    "n_markets": 1,
+    "n_swings": 2,
+    "resolved_no": 0,
+    "resolved_yes": 0,
+    "reversion_rate": 1.0,
+    "reversion_rate_ever": 1.0,
+    "reversion_rate_shrunk": 0.929147,
+    "reversion_rate_within_horizon_minutes": 60,
+    "strategies": {
+     "fade15": {
+      "hit_rate": 0.0,
+      "hit_rate_shrunk": 0.4,
+      "mean_gross_dollars": -0.01,
+      "mean_net_dollars": -0.0174,
+      "n_quotable": 1
+     },
+     "fade60": {
+      "hit_rate": 0.0,
+      "hit_rate_shrunk": 0.4,
+      "mean_gross_dollars": -0.01,
+      "mean_net_dollars": -0.0174,
+      "n_quotable": 1
+     },
+     "fade_settle": {
+      "hit_rate": 0.0,
+      "hit_rate_shrunk": 0.4,
+      "mean_gross_dollars": -0.01,
+      "mean_net_dollars": -0.0174,
+      "n_quotable": 1
+     },
+     "momo60": {
+      "hit_rate": 0.0,
+      "hit_rate_shrunk": 0.333333,
+      "mean_gross_dollars": -0.47,
+      "mean_net_dollars": -0.4761,
+      "n_quotable": 2
+     }
+    },
+    "unresolved": 2
+   },
+   "crypto|95-100c|>40c|>14d": {
+    "best_mean_net_dollars": -0.0121,
+    "best_strategy": "fade15",
+    "evidence": "insufficient",
+    "evidence_rule": "n_swings >= 8 and n_markets >= 3",
+    "fade_hit_rate": 0.0,
+    "fade_hit_rate_shrunk": 0.4,
+    "fade_mean_net_dollars": -0.0121,
+    "fade_n_quotable": 1,
+    "n_markets": 1,
+    "n_swings": 18,
+    "resolved_no": 0,
+    "resolved_yes": 0,
+    "reversion_rate": 0.888889,
+    "reversion_rate_ever": 1.0,
+    "reversion_rate_shrunk": 0.889767,
+    "reversion_rate_within_horizon_minutes": 60,
+    "strategies": {
+     "fade15": {
+      "hit_rate": 0.0,
+      "hit_rate_shrunk": 0.4,
+      "mean_gross_dollars": -0.01,
+      "mean_net_dollars": -0.0121,
+      "n_quotable": 1
+     },
+     "fade60": {
+      "hit_rate": 0.0,
+      "hit_rate_shrunk": 0.4,
+      "mean_gross_dollars": -0.01,
+      "mean_net_dollars": -0.0121,
+      "n_quotable": 1
+     },
+     "momo60": {
+      "hit_rate": 0.0,
+      "hit_rate_shrunk": 0.4,
+      "mean_gross_dollars": -0.01,
+      "mean_net_dollars": -0.0121,
+      "n_quotable": 1
+     }
+    },
+    "unresolved": 18
+   },
+   "elections|0-5c|>40c|>14d": {
+    "best_mean_net_dollars": -0.020613,
+    "best_strategy": "fade_settle",
+    "evidence": "sufficient",
+    "evidence_rule": "n_swings >= 8 and n_markets >= 3",
+    "fade_hit_rate": 0.0,
+    "fade_hit_rate_shrunk": 0.039216,
+    "fade_mean_net_dollars": -0.262885,
+    "fade_n_quotable": 47,
+    "n_markets": 7,
+    "n_swings": 88,
+    "resolved_no": 0,
+    "resolved_yes": 0,
+    "reversion_rate": 0.863636,
+    "reversion_rate_ever": 0.965909,
+    "reversion_rate_shrunk": 0.864944,
+    "reversion_rate_within_horizon_minutes": 60,
+    "strategies": {
+     "fade15": {
+      "hit_rate": 0.0,
+      "hit_rate_shrunk": 0.039216,
+      "mean_gross_dollars": -0.276553,
+      "mean_net_dollars": -0.280643,
+      "n_quotable": 47
+     },
+     "fade60": {
+      "hit_rate": 0.0,
+      "hit_rate_shrunk": 0.039216,
+      "mean_gross_dollars": -0.259,
+      "mean_net_dollars": -0.262885,
+      "n_quotable": 47
+     },
+     "fade_settle": {
+      "hit_rate": 0.0,
+      "hit_rate_shrunk": 0.039216,
+      "mean_gross_dollars": -0.019851,
+      "mean_net_dollars": -0.020613,
+      "n_quotable": 47
+     },
+     "momo60": {
+      "hit_rate": 0.0,
+      "hit_rate_shrunk": 0.028571,
+      "mean_gross_dollars": -0.488985,
+      "mean_net_dollars": -0.495921,
+      "n_quotable": 66
+     }
+    },
+    "unresolved": 88
+   },
+   "elections|80-95c|>40c|>14d": {
+    "best_mean_net_dollars": -0.236607,
+    "best_strategy": "fade15",
+    "evidence": "sufficient",
+    "evidence_rule": "n_swings >= 8 and n_markets >= 3",
+    "fade_hit_rate": 0.0,
+    "fade_hit_rate_shrunk": 0.029412,
+    "fade_mean_net_dollars": -0.268858,
+    "fade_n_quotable": 64,
+    "n_markets": 5,
+    "n_swings": 86,
+    "resolved_no": 0,
+    "resolved_yes": 0,
+    "reversion_rate": 0.918605,
+    "reversion_rate_ever": 0.94186,
+    "reversion_rate_shrunk": 0.917499,
+    "reversion_rate_within_horizon_minutes": 60,
+    "strategies": {
+     "fade15": {
+      "hit_rate": 0.0,
+      "hit_rate_shrunk": 0.031746,
+      "mean_gross_dollars": -0.233,
+      "mean_net_dollars": -0.236607,
+      "n_quotable": 59
+     },
+     "fade60": {
+      "hit_rate": 0.0,
+      "hit_rate_shrunk": 0.029412,
+      "mean_gross_dollars": -0.264812,
+      "mean_net_dollars": -0.268858,
+      "n_quotable": 64
+     },
+     "fade_settle": {
+      "hit_rate": 0.0,
+      "hit_rate_shrunk": 0.022472,
+      "mean_gross_dollars": -0.246624,
+      "mean_net_dollars": -0.250435,
+      "n_quotable": 85
+     },
+     "momo60": {
+      "hit_rate": 0.0,
+      "hit_rate_shrunk": 0.029412,
+      "mean_gross_dollars": -0.251406,
+      "mean_net_dollars": -0.255323,
+      "n_quotable": 64
+     }
+    },
+    "unresolved": 86
+   }
+  },
+  "edge_definition": "max over the measured strategies of the bucket's mean net $/contract (best_strategy / best_mean_net_dollars); a bucket with no positive strategy is not a pick",
+  "excluded_reason": "demo synthetic exchange-test series and MVE combos (COORDINATION.md I-15; /markets mve_filter docs)",
+  "excluded_series_prefixes": [
+   "KXDEMOFUTHOURLY",
+   "KXQUICKSETTLE",
+   "KXMVE"
+  ],
+  "fee_model": {
+   "formula": "ceil(0.07 * C * P * (1-P)) dollars per round-trip leg",
+   "rounding_doc": "https://docs.kalshi.com/getting_started/fee_rounding.md",
+   "source": "https://kalshi.com/docs/kalshi-fee-schedule.pdf",
+   "taker_rate_multiplier": 0.07
+  },
+  "global_fade_hit_rate": 0.0,
+  "global_reversion_rate": 0.89372,
+  "min_bucket_markets": 3,
+  "min_bucket_n": 8,
+  "pass_threshold_score": 0.6,
+  "reversion_horizon_minutes": 60,
+  "shrinkage_pseudo_count": 4,
+  "strategy_names": [
+   "fade15",
+   "fade60",
+   "momo60",
+   "fade_settle"
+  ],
+  "weights": {
+   "calibrated_edge": 0.35,
+   "executability": 0.2,
+   "liquidity_depth": 0.15,
+   "relative_move": 0.2,
+   "time_to_resolution": 0.1
+  }
+ },
+ "sources": [
+  "https://docs.kalshi.com/getting_started/api_environments.md",
+  "https://docs.kalshi.com/getting_started/demo_env.md",
+  "https://docs.kalshi.com/api-reference/market/get-market-candlesticks.md",
+  "https://docs.kalshi.com/api-reference/market/get-markets.md",
+  "https://docs.kalshi.com/api-reference/market/get-multiple-market-orderbooks.md",
+  "https://docs.kalshi.com/getting_started/orderbook_responses.md",
+  "https://docs.kalshi.com/getting_started/pagination.md",
+  "https://docs.kalshi.com/getting_started/market_settlement.md",
+  "https://kalshi.com/docs/kalshi-fee-schedule.pdf"
+ ]
+}

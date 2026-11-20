@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-20T20:36:51Z",
+ "generated_at": "2026-11-20T20:59:08Z",
  "threshold_dollars": "0.10",
  "skipped_observations": {
   "s1_hold_to_resolution": 2,
@@ -68,18 +68,23 @@
   {
    "strategy": "s2_flat_at_next_sample",
    "category": "elections/up-follow",
-   "n": 4,
+   "n": 5,
    "wins": 0,
    "losses": 2,
-   "pushes": 2,
+   "pushes": 3,
    "net_pnl_dollars_per_contract": "-1.6160",
-   "mean_pnl_dollars_per_contract": "-0.4040",
+   "mean_pnl_dollars_per_contract": "-0.3232",
    "evaluable": false,
    "markets": [
     {
      "ticker": "KXPRESNOMD-28-BOBA",
      "pnl_dollars": "0.0000",
      "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPRESNOMD-28-BOBA"
+    },
+    {
+     "ticker": "KXPRESNOMD-28-HBID",
+     "pnl_dollars": "0.0000",
+     "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPRESNOMD-28-HBID"
     },
     {
      "ticker": "KXPRESNOMD-28-HBID",
@@ -105,7 +110,7 @@
   "books": {
    "s2_flat_at_next_sample": {
     "n": 3,
-    "deduped_duplicates": 4,
+    "deduped_duplicates": 5,
     "starting_bankroll_dollars": "1000.0000",
     "contracts_per_trade": "100",
     "realized_pnl_dollars": "10.0000",
@@ -155,6 +160,6 @@
    }
   }
  },
- "trade_count": 7,
+ "trade_count": 8,
  "disclaimer": "Simulated trades on demo prices. Gross of fees, spread and slippage: the public API publishes no fee estimate for a hypothetical order, so none is assumed. Entry is a trade print, not a book quote \u2014 a real order would cross the spread. Not evidence of profitability."
 }

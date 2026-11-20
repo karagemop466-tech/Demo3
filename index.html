@@ -9,7 +9,7 @@
 <body>
 <header class="top"><div class="wrap"><nav class="main">
 <a class="brand" href="index.html">Kalshi Demo Tracker</a>
-<a href="index.html" class="active">Home</a><a href="dashboard.html">Live dashboard</a><a href="live/index.html">Alert desk (live)</a><a href="data-tracking.html">Data tracking</a><a href="gas-prices.html">Gas prices</a><a href="elections.html">Elections</a><a href="culture.html">Culture</a><a href="crypto.html">Crypto</a><a href="golf.html">Golf</a><a href="portfolio.html">Portfolio</a><a href="strategy.html">Strategy lab</a><a href="trades.html">Trades</a><a href="questions.html">Questions</a><a href="suggestions.html">Suggestions</a><a href="flagged.html">Flagged for review</a><a href="sources.html">Sources</a><a href="repo-review.html">Repo review</a><a href="methodology.html">Methodology</a><a href="api-reference.html">API reference</a><a href="requirements.html">Requirements</a><a href="model.html">High-ROI model</a>
+<a href="index.html" class="active">Home</a><a href="dashboard.html">Live dashboard</a><a href="alerts.html">Swing alerts</a><a href="live/index.html">Alert desk (live)</a><a href="data-tracking.html">Data tracking</a><a href="gas-prices.html">Gas prices</a><a href="elections.html">Elections</a><a href="culture.html">Culture</a><a href="crypto.html">Crypto</a><a href="golf.html">Golf</a><a href="portfolio.html">Portfolio</a><a href="strategy.html">Strategy lab</a><a href="trades.html">Trades</a><a href="questions.html">Questions</a><a href="suggestions.html">Suggestions</a><a href="flagged.html">Flagged for review</a><a href="sources.html">Sources</a><a href="repo-review.html">Repo review</a><a href="methodology.html">Methodology</a><a href="api-reference.html">API reference</a><a href="requirements.html">Requirements</a><a href="model.html">High-ROI model</a>
 </nav></div></header>
 <main class="wrap">
 
@@ -22,9 +22,10 @@ questions and suggestions before making decisions.</p>
   <div class="card"><div class="muted">Live market status</div><div class="stat" id="liveStatus">checking…</div>
   <p class="small muted">Checked in your browser from <span class="mono">/exchange/status</span>.</p></div>
   <div class="card"><div class="muted">Decision registers</div><div class="stat">58 decision questions</div>
-  <p class="small muted">58 decision questions · 49 suggestions (review workflow) · 107 flagged items · 80 sources</p></div>
+  <p class="small muted">58 decision questions · 49 suggestions (review workflow) · 114 flagged items · 80 sources</p></div>
   <div class="card"><div class="muted">Start here</div>
   <p><a class="btn" href="dashboard.html">Live dashboard</a>
+  <a class="btn secondary" href="alerts.html">Swing alerts</a>
   <a class="btn secondary" href="portfolio.html">Portfolio &amp; strategies</a></p></div>
 </div>
 
@@ -45,6 +46,7 @@ questions and suggestions before making decisions.</p>
 <tr><td><strong>Live alert desk (new)</strong>: two scrolling streams (all swings ≥ $0.10 / high-ROI model filter), auto-simulated strategies, event resolution, 30 s–30 d price graphs</td><td><a href="live/index.html">/live alert desk</a></td><td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-market-candlesticks" target="_blank" rel="noopener">source</a></td></tr>
 <tr><td>Track highest-dollar live events, price chart (seconds/minutes/hours), orderbook liquidity, resolutions</td><td><a href="dashboard.html">Live dashboard</a></td><td><a class="src" href="https://docs.kalshi.com/getting_started/quick_start_market_data" target="_blank" rel="noopener">source</a></td></tr>
 <tr><td>Live alerts for price swings ≥ $0.10 (either direction) in two scrolling feeds: all swings, and a high-ROI filter (placeholder rule until the owner supplies the model)</td><td><a href="dashboard.html#alerts">Live alerts</a></td><td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-market" target="_blank" rel="noopener">source</a></td></tr>
+<tr><td>Get a chat-style alert on every &ge; $0.10 price swing, and only the swings the backtest says clear their own cost (calibrated ROI gate, fee-exact)</td><td><a href="alerts.html">Swing alerts</a></td><td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-market-candlesticks" target="_blank" rel="noopener">source</a></td></tr>
 <tr><td>Execute trades (demo key or labeled paper mode), analyze performance, categorize trades, build strategies</td><td><a href="portfolio.html">Portfolio</a> · <a href="trades.html">Trades</a></td><td><a class="src" href="https://docs.kalshi.com/api-reference/orders/create-order-v2" target="_blank" rel="noopener">source</a></td></tr>
 <tr><td>Decide before changing anything: questions, missing information, discovery steps</td><td><a href="questions.html">Questions</a> · <a href="suggestions.html">Suggestions</a></td><td><a class="src" href="https://docs.kalshi.com/getting_started/demo_env" target="_blank" rel="noopener">source</a></td></tr>
 <tr><td>Verify every value: per-row sources, flagged items, repo review</td><td><a href="sources.html">Sources</a> · <a href="flagged.html">Flagged</a> · <a href="repo-review.html">Repo review</a></td><td><a class="src" href="https://docs.kalshi.com/getting_started/quick_start_market_data" target="_blank" rel="noopener">source</a></td></tr>
