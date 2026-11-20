@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-20T20:26:44Z",
+ "generated_at": "2026-11-20T20:39:21Z",
  "api_root": "https://external-api.demo.kalshi.co/trade-api/v2",
  "threshold_dollars": "0.10",
  "threshold_note": ">= $0.10 (10 cents) per contract between consecutive samples, either direction; exact decimal arithmetic.",
@@ -7,7 +7,7 @@
   "pre": 180,
   "post": 60
  },
- "mode": "offline",
+ "mode": "live",
  "swings": [
   {
    "id": "2e8d377ff94885a9",

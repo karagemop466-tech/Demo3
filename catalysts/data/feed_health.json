@@ -1,6 +1,6 @@
 {
- "checked_at": "2026-11-20T19:46:25Z",
- "mode": "offline",
+ "checked_at": "2026-11-20T20:39:27Z",
+ "mode": "live",
  "feeds": [
   {
    "name": "AP News (hub RSS is not published; homepage listed for manual review)",
@@ -15,8 +15,8 @@
    "items_parsed": 0,
    "http_status": null,
    "ok": false,
-   "error": "skipped_offline",
-   "checked_at": "2026-11-20T19:46:25Z"
+   "error": "HTTP 403",
+   "checked_at": "2026-11-20T20:39:24Z"
   },
   {
    "name": "Reuters",
@@ -29,8 +29,8 @@
    "items_parsed": 0,
    "http_status": null,
    "ok": false,
-   "error": "skipped_offline",
-   "checked_at": "2026-11-20T19:46:25Z"
+   "error": "HTTP 404",
+   "checked_at": "2026-11-20T20:39:24Z"
   },
   {
    "name": "BBC News \u2014 World",
@@ -39,11 +39,11 @@
     "elections",
     "culture"
    ],
-   "items_parsed": 0,
-   "http_status": null,
-   "ok": false,
-   "error": "skipped_offline",
-   "checked_at": "2026-11-20T19:46:25Z"
+   "items_parsed": 25,
+   "http_status": 200,
+   "ok": true,
+   "error": "",
+   "checked_at": "2026-11-20T20:39:24Z"
   },
   {
    "name": "BBC News \u2014 Business",
@@ -52,11 +52,11 @@
     "gas",
     "crypto"
    ],
-   "items_parsed": 0,
-   "http_status": null,
-   "ok": false,
-   "error": "skipped_offline",
-   "checked_at": "2026-11-20T19:46:25Z"
+   "items_parsed": 57,
+   "http_status": 200,
+   "ok": true,
+   "error": "",
+   "checked_at": "2026-11-20T20:39:24Z"
   },
   {
    "name": "BBC News \u2014 Entertainment & Arts",
@@ -64,11 +64,11 @@
    "topics": [
     "culture"
    ],
-   "items_parsed": 0,
-   "http_status": null,
-   "ok": false,
-   "error": "skipped_offline",
-   "checked_at": "2026-11-20T19:46:25Z"
+   "items_parsed": 20,
+   "http_status": 200,
+   "ok": true,
+   "error": "",
+   "checked_at": "2026-11-20T20:39:24Z"
   },
   {
    "name": "NPR \u2014 News Topics",
@@ -78,11 +78,11 @@
     "gas",
     "culture"
    ],
-   "items_parsed": 0,
-   "http_status": null,
-   "ok": false,
-   "error": "skipped_offline",
-   "checked_at": "2026-11-20T19:46:25Z"
+   "items_parsed": 10,
+   "http_status": 200,
+   "ok": true,
+   "error": "",
+   "checked_at": "2026-11-20T20:39:24Z"
   },
   {
    "name": "NPR \u2014 Politics",
@@ -90,11 +90,11 @@
    "topics": [
     "elections"
    ],
-   "items_parsed": 0,
-   "http_status": null,
-   "ok": false,
-   "error": "skipped_offline",
-   "checked_at": "2026-11-20T19:46:25Z"
+   "items_parsed": 10,
+   "http_status": 200,
+   "ok": true,
+   "error": "",
+   "checked_at": "2026-11-20T20:39:25Z"
   },
   {
    "name": "NPR \u2014 Business",
@@ -103,11 +103,11 @@
     "gas",
     "crypto"
    ],
-   "items_parsed": 0,
-   "http_status": null,
-   "ok": false,
-   "error": "skipped_offline",
-   "checked_at": "2026-11-20T19:46:25Z"
+   "items_parsed": 10,
+   "http_status": 200,
+   "ok": true,
+   "error": "",
+   "checked_at": "2026-11-20T20:39:25Z"
   },
   {
    "name": "CoinDesk",
@@ -115,11 +115,11 @@
    "topics": [
     "crypto"
    ],
-   "items_parsed": 0,
-   "http_status": null,
-   "ok": false,
-   "error": "skipped_offline",
-   "checked_at": "2026-11-20T19:46:25Z"
+   "items_parsed": 25,
+   "http_status": 200,
+   "ok": true,
+   "error": "",
+   "checked_at": "2026-11-20T20:39:25Z"
   },
   {
    "name": "The Block",
@@ -127,11 +127,11 @@
    "topics": [
     "crypto"
    ],
-   "items_parsed": 0,
-   "http_status": null,
-   "ok": false,
-   "error": "skipped_offline",
-   "checked_at": "2026-11-20T19:46:25Z"
+   "items_parsed": 20,
+   "http_status": 200,
+   "ok": true,
+   "error": "",
+   "checked_at": "2026-11-20T20:39:25Z"
   },
   {
    "name": "ESPN \u2014 Sports Top News",
@@ -141,10 +141,10 @@
     "culture"
    ],
    "items_parsed": 0,
-   "http_status": null,
+   "http_status": "parse_empty",
    "ok": false,
-   "error": "skipped_offline",
-   "checked_at": "2026-11-20T19:46:25Z"
+   "error": "fetched but no items parsed",
+   "checked_at": "2026-11-20T20:39:25Z"
   },
   {
    "name": "PGA Tour \u2014 News",
@@ -153,10 +153,10 @@
     "golf"
    ],
    "items_parsed": 0,
-   "http_status": null,
+   "http_status": "parse_empty",
    "ok": false,
-   "error": "skipped_offline",
-   "checked_at": "2026-11-20T19:46:25Z"
+   "error": "fetched but no items parsed",
+   "checked_at": "2026-11-20T20:39:26Z"
   },
   {
    "name": "Golf Digest",
@@ -167,8 +167,8 @@
    "items_parsed": 0,
    "http_status": null,
    "ok": false,
-   "error": "skipped_offline",
-   "checked_at": "2026-11-20T19:46:25Z"
+   "error": "HTTP 404",
+   "checked_at": "2026-11-20T20:39:26Z"
   },
   {
    "name": "AAA \u2014 Gas Prices (publisher page; no RSS published)",
@@ -176,11 +176,11 @@
    "topics": [
     "gas"
    ],
-   "items_parsed": 0,
-   "http_status": null,
-   "ok": false,
-   "error": "skipped_offline",
-   "checked_at": "2026-11-20T19:46:25Z"
+   "items_parsed": 10,
+   "http_status": 200,
+   "ok": true,
+   "error": "",
+   "checked_at": "2026-11-20T20:39:26Z"
   },
   {
    "name": "U.S. EIA \u2014 Petroleum (official government statistics feed)",
@@ -191,8 +191,8 @@
    "items_parsed": 0,
    "http_status": null,
    "ok": false,
-   "error": "skipped_offline",
-   "checked_at": "2026-11-20T19:46:25Z"
+   "error": "HTTP 404",
+   "checked_at": "2026-11-20T20:39:26Z"
   },
   {
    "name": "The Guardian \u2014 World",
@@ -201,11 +201,11 @@
     "elections",
     "culture"
    ],
-   "items_parsed": 0,
-   "http_status": null,
-   "ok": false,
-   "error": "skipped_offline",
-   "checked_at": "2026-11-20T19:46:25Z"
+   "items_parsed": 45,
+   "http_status": 200,
+   "ok": true,
+   "error": "",
+   "checked_at": "2026-11-20T20:39:26Z"
   },
   {
    "name": "Variety",
@@ -213,11 +213,11 @@
    "topics": [
     "culture"
    ],
-   "items_parsed": 0,
-   "http_status": null,
-   "ok": false,
-   "error": "skipped_offline",
-   "checked_at": "2026-11-20T19:46:25Z"
+   "items_parsed": 10,
+   "http_status": 200,
+   "ok": true,
+   "error": "",
+   "checked_at": "2026-11-20T20:39:27Z"
   }
  ],
  "docs": {
