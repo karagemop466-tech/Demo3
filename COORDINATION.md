@@ -54,7 +54,7 @@ Rule note: the brief asks for `session-<id>/<task>` branches, but the platform f
 | T3 Executive summary | done | 6908a11a | `EXECUTIVE_SUMMARY.md` | Claims source-linked (research ref + board); links to live site | R1 takeover (justified — see handoff log) |
 | T4 Suggestions + decision questions register (Q1–Q5, backlog S-01…S-10, discovery plan) | done | 6908a11a | `SUGGESTIONS.md` | Evidence links per row; all decisions left OPEN for owner | — |
 | T5 Flagged-irregularities register | done | 6908a11a | `FLAGGED.md` | R1 + F2–F9 with replayable evidence URLs; complements the site's Flagged page (I-01…I-10 by 00a943bd, F1–F6 by 7f1ef378) | R1, F2–F9 |
-| T6 PR of root docs to main, merge, Pages check | in progress | 6908a11a | root `.md` docs + `research/` only | After PR #4 status check; rebase first; merge without waiting; confirm Pages rebuild | — |
+| T6 PR of root docs to main, merge, Pages check | done | 6908a11a | root `.md` docs + `research/` only | PR #9 merged; Pages `built` at merge commit; result recorded below | — |
 
 ## Change requests / file-ownership (non-overlapping scopes)
 
@@ -133,8 +133,11 @@ Session 7f1ef378:
 - PR #4 `arena/7f1ef378-demo3` -> `main`: https://github.com/karagemop466-tech/Demo3/pull/4 — OPEN. Content: root-level landing page, dashboard, API reference, methodology, suggestions, questions, flagged pages, Python CLI, this board. Adds root-level pages on top of session 00a943bd's `docs/` site; nothing under `docs/` is modified.
 - Next: merge PR #4 (`gh pr merge 4 --merge`, no approval wait), confirm GitHub Pages rebuilds from `main`, then record the merge result and Pages status here.
 
-Session 6908a11a (pending; to be recorded at merge time):
-- Plan: rebase onto `main`, verify no overlap with PR #4's root-level `.html` files (none — 6908a11a adds only root `.md` docs and `research/`), open PR, merge without waiting for approval, confirm Pages rebuild `built` at the new `main` commit, and record PR link + merge result + Pages status here. If PR #4 is still open and unmerged at that point, merge order is logged; both PRs are additive (different file paths) and neither discards the other's content.
+Session 6908a11a:
+- PR #9 `arena/6908a11a-demo3` -> `main`: https://github.com/karagemop466-tech/Demo3/pull/9 — MERGED 2026-11-20 ~11:34 UTC (merge commit ed51f19). Content: `EXECUTIVE_SUMMARY.md`, `SUGGESTIONS.md`, `FLAGGED.md`, `research/kalshi-api-verified-reference.md`, reconciled `COORDINATION.md`. Purely additive (no `docs/**` or root `.html` files touched).
+- Pages after PR #9: status `built` at commit ed51f19; live-verified by fetching `https://karagemop466-tech.github.io/Demo3/EXECUTIVE_SUMMARY.md` (served correctly).
+- Correction commit: EXECUTIVE_SUMMARY.md landing-page description updated after PR #4's root landing page replaced the earlier redirect.
+- PR #8 (open, another session) was not created or merged by 6908a11a; left for its owner.
 
 ---
 
