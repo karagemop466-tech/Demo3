@@ -1,5 +1,5 @@
-// Temporary smoke test: verifies GitHub Actions runners can reach the Kalshi demo API
-// before the real collector is built. Removed after the check passes.
+# Temporary smoke test: verifies GitHub Actions runners can reach the Kalshi demo API
+# before the real collector is built. Removed after the check passes.
 name: smoke-kalshi-egress
 on:
   workflow_dispatch:
