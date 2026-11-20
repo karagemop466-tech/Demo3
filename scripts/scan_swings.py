@@ -751,6 +751,17 @@ def run(args) -> int:
         units, stats, client = live_units(args)
         root = stats.pop("api_root")
         stats["mode"] = "live"
+        reqs = stats.get("requests") or 0
+        if not units or (reqs and stats.get("errors") == reqs):
+            # A run that could not read the API must not blank the published calibration:
+            # exit before any file is written (the dev sandbox has no direct route to the
+            # demo host, so this also protects `python3 scripts/scan_swings.py` from here).
+            print("FAIL: live scan produced no usable market data "
+                  f"(units={len(units)}, requests={reqs}, errors={stats.get('errors')}) - "
+                  "refusing to overwrite data/swings/*.json or alerts/model.json", file=sys.stderr)
+            for w in (stats.get("warnings") or [])[:5]:
+                print("   ", w, file=sys.stderr)
+            return 2
     stats["universe_units"] = len(units)
     probe = stats.get("event_page_probe") or {}
 
@@ -1092,7 +1103,10 @@ def run(args) -> int:
     })
     write(os.path.join(outdir, "events.json"), {"meta": payload_meta, "events": event_rows})
     write(os.path.join(outdir, "meta.json"), payload_meta)
-    write(os.path.join(ROOT, "alerts", "model.json"), model)
+    # the browser console reads alerts/model.json; a run pointed at another --out (the CI
+    # offline self-test uses /tmp) must leave the committed file alone
+    if args.out == "data/swings":
+        write(os.path.join(ROOT, "alerts", "model.json"), model)
 
     print(f"[scan_swings] mode={stats['mode']} units={len(units)} swings={len(swings_out)} "
           f"events={len(event_rows)} rows={len(strat_rows)} requests={stats.get('requests')} "

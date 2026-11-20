@@ -168,6 +168,7 @@ class Table:
 NAV = [
     ("index.html", "Home"),
     ("dashboard.html", "Live dashboard"),
+    ("alerts.html", "Swing alerts"),
     ("data-tracking.html", "Data tracking"),
     ("gas-prices.html", "Gas prices"),
     ("elections.html", "Elections"),
@@ -188,7 +189,7 @@ NAV = [
 EXTRA_HEAD = ""
 
 
-def shell(title, active, body, scripts=()):
+def shell(title, active, body, scripts=(), extra_head=""):
     parts = []
     for href, lbl in NAV:
         cls = ' class="active"' if href == active else ""
@@ -202,7 +203,7 @@ def shell(title, active, body, scripts=()):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{esc(title)} — Kalshi Demo Tracker</title>
 <link rel="stylesheet" href="assets/style.css">
-</head>
+{extra_head}</head>
 <body>
 <header class="top"><div class="wrap"><nav class="main">
 <a class="brand" href="index.html">Kalshi Demo Tracker</a>
@@ -221,8 +222,8 @@ Every table row links its source; blank cells are flagged on <a href="flagged.ht
 """
 
 
-def write_page(name, title, active, body, scripts=()):
-    (ROOT / name).write_text(shell(title, active, body, scripts))
+def write_page(name, title, active, body, scripts=(), extra_head=""):
+    (ROOT / name).write_text(shell(title, active, body, scripts, extra_head))
     print("wrote", name)
 
 
@@ -461,6 +462,30 @@ def legacy_table(file, page, caption):
     return ("<details><summary class='muted'>Preserved reference rows from session cde2ae63 "
             "(kept verbatim for review — verify against current V2 endpoints)</summary>"
             + t.render(caption=caption) + "</details>")
+
+
+def build_alerts():
+    """Live swing-alert console (session 5ab18dc3).
+
+    The page body lives in alerts/page-body.html because it is a static application shell:
+    every number on it is rendered at run time by assets/alerts.js from the live demo API
+    plus the CI-published backtest files, so there is nothing for this generator to fill in.
+    Wrapping it here keeps the navigation, footer and stylesheet identical to every other page
+    (hand-written root pages caused add/add conflicts before -- see COORDINATION.md).
+    """
+    body_path = ROOT / "alerts" / "page-body.html"
+    if not body_path.exists():
+        BUILD_ERRORS.append("alerts/page-body.html missing")
+        return
+    body = body_path.read_text().strip()
+    write_page(
+        "alerts.html", "Live swing alerts", "alerts.html", body,
+        scripts=("assets/swing-core.js", "assets/alerts.js"),
+        extra_head='<link rel="stylesheet" href="assets/alerts.css">\n'
+                   '<meta name="description" content="Two live scrolling alert chats over '
+                   'Kalshi demo markets: every &gt;= $0.10 price swing, and only the swings a '
+                   'backtested ROI model likes.">',
+    )
 
 
 def build_index():
@@ -1073,6 +1098,7 @@ def build_wrapped(name, title):
 
 def main():
     build_index()
+    build_alerts()
     build_dashboard()
     build_portfolio()
     build_trades()

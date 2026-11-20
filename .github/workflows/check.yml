@@ -29,8 +29,19 @@ jobs:
       - name: Site and data checks (sources, JSON, internal links)
         run: python3 scripts/check_site.py
 
-      - name: JavaScript syntax
-        run: node --check assets/app.js
+      - name: Swing scanner + backtest tests (same rule as the browser engine)
+        run: |
+          python3 scripts/tests/test_scan_swings.py
+          python3 scripts/scan_swings.py --offline --out /tmp/swings_check
+          git status --porcelain | grep -q "data/swings\|alerts/model.json" && {
+            echo "::error::offline scan must not touch the published files"; exit 1; } || true
+
+      - name: Alert-core + console tests (shared rule, fee model, ROI gate, jsdom smoke)
+        run: |
+          node --check assets/swing-core.js
+          node --check assets/alerts.js
+          npm ci --no-audit --no-fund
+          node --test tests/swing_core.test.js tests/alert_console.test.js
 
       - name: Canonical root site checks (links, per-row sources, syntax)
         run: python3 scripts/verify_root_site.py
