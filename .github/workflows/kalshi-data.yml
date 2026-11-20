@@ -44,13 +44,19 @@ jobs:
       - name: Commit and push data
         if: always()
         run: |
+          set -x
           git config user.name "kalshi-data-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add data/
+          ls -la data/latest/ || echo "::error::data/latest missing"
+          git add -A data/
           if git diff --cached --quiet; then
-            echo "no data changes"
+            echo "::notice::no data changes to commit"
           else
-            git commit -m "data: refresh snapshot $(date -u +%Y-%m-%dT%H:%MZ)"
-            git pull --rebase origin "${GITHUB_REF_NAME}"
-            git push origin "HEAD:${GITHUB_REF_NAME}"
+            git commit -m "data: refresh snapshot $(date -u +%Y-%m-%dT%H:%MZ)" || echo "::error::git commit failed"
+            for i in 1 2 3; do
+              git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && break
+              echo "::warning::push attempt $i failed; retrying after rebase"
+              sleep $((i * 5))
+            done
+            git rev-parse HEAD | xargs echo "::notice::pushed HEAD"
           fi

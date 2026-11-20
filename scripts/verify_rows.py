@@ -85,13 +85,17 @@ def main() -> int:
         report["checks"].append({"check": name, "ok": ok, "detail": detail})
 
     def compare_market(stored: dict, live: dict, label: str) -> None:
+        settled = str(stored.get("result", "")) in ("yes", "no")
         for f in STATIC_MARKET_FIELDS:
             sv, lv = str(stored.get(f, "")), str(live.get(f, ""))
-            if sv != lv:
-                # an empty stored value that the API later populated is drift of a
-                # final field only when the market has settled since collection
-                check(f"{label} static:{f}", False,
-                      f"stored={sv!r} live={lv!r}")
+            if sv == lv:
+                continue
+            if f in ("status", "result", "settlement_ts", "settlement_value_dollars") and not settled:
+                # a live market may legitimately settle between collect and verify
+                report["drift_notices"].append(
+                    {"row": stored.get("ticker", ""), "field": f, "stored": sv, "live": lv})
+                continue
+            check(f"{label} static:{f}", False, f"stored={sv!r} live={lv!r}")
         for f in DYNAMIC_MARKET_FIELDS:
             sv, lv = str(stored.get(f, "")), str(live.get(f, ""))
             if sv != lv:
@@ -195,4 +199,19 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    import traceback
+    try:
+        sys.exit(main())
+    except SystemExit:
+        raise
+    except Exception as e:  # noqa: BLE001 — always leave a report behind
+        err = {"verified_at": now_iso(), "tool": "scripts/verify_rows.py v1",
+               "summary": {"checked": -1, "passed": -1, "hard_failures": 1, "drift_notices": 0},
+               "hard_failures": [{"check": "verify_rows crashed", "detail": f"{e}"}],
+               "checks": [], "drift_notices": [],
+               "traceback": traceback.format_exc()[-4000:]}
+        os.makedirs(DATA, exist_ok=True)
+        with open(os.path.join(DATA, "verification_report.json"), "w", encoding="utf-8") as f:
+            json.dump(err, f, indent=1, sort_keys=True)
+            f.write("\n")
+        raise
