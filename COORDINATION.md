@@ -597,7 +597,52 @@ Scope: **`COORDINATION.md` (this section only)**. No site page, data file, scrip
 
 | Task | Status | Owner | File scope | Sources / verification | Irregularities |
 |---|---|---|---|---|---|
-| D1 Verify, field by field, which official Kalshi fields are contract counts, prices, or dollar amounts; state whether any official field gives total dollar volume; check each dollar-ranking claim in the repo against that | in progress | f2b0808f | `COORDINATION.md` (this section) | See log below | pending |
-| D2 Live demo sample (fetch of the recommended REST root) for the same fields, with dated replayable URLs | in progress | f2b0808f | `COORDINATION.md` (this section) | See log below | pending |
+| D1 Verify, field by field, which official Kalshi fields are contract counts, prices, or dollar amounts; state whether any official field gives total dollar volume; check each dollar-ranking claim in the repo against that | done | f2b0808f | `COORDINATION.md` (this section) | See findings below (rows 1–13) | F-F2-01 to F-F2-06, CR-F2-1 to CR-F2-3 |
+| D2 Live demo sample (fetch of the recommended REST root) for the same fields, with dated replayable URLs | done | f2b0808f | `COORDINATION.md` (this section) | See findings below (live samples, D2 list) | F-F2-01 to F-F2-06, CR-F2-1 to CR-F2-3 |
 
 Why: the brief asks for the highest-dollar live events. Open items: `analysis/` marks `volume_fp` as "unit not confirmed"; `collector/collect.py` and the dashboard rank by `volume_fp × last_price_dollars` (labelled "estimated"); board item F4 (7f1ef378) and change request 2 (edf/d7d7a733) ask for an approved definition.
+
+### Session f2b0808f — findings, sources and verification (D1, D2)
+
+Method: official field descriptions read from the docs' OpenAPI markdown sources (`…/get-markets.md`, `…/get-trades.md`, `…/get-market-candlesticks.md`) and the fixed-point page; live samples taken from the recommended demo REST root (`https://external-api.demo.kalshi.co/trade-api/v2`) during this session. Sandbox bash cannot reach Kalshi hosts; samples were taken with the page-fetch tool, so each URL below is replayable.
+
+**D1 — official unit and definition of each field used for the "highest dollar" ranking**
+
+| # | Field (object) | Official definition (quoted or closely paraphrased) | Official source | Live demo sample (2026-11-20) | Where the repo uses it | Status |
+|---|---|---|---|---|---|---|
+| 1 | `volume_fp` (Market) | "String representation of the market volume in contracts" | [get-markets.md](https://docs.kalshi.com/api-reference/market/get-markets.md) | `"100.00"` on `KXMVECROSSCATEGORY-S202645JFKJGFDTQ2PVGY-GPYN6URVW` ([sample](https://external-api.demo.kalshi.co/trade-api/v2/markets?limit=2&status=open)) | `collector/collect.py:160`, `assets/dashboard.js:50` | verified: unit = contracts |
+| 2 | `volume_24h_fp` (Market) | "String representation of the 24h market volume in contracts" | [get-markets.md](https://docs.kalshi.com/api-reference/market/get-markets.md) | `"0.00"` (same sample) | `collector/collect.py:161` | verified: unit = contracts |
+| 3 | `open_interest_fp` (Market) | "String representation of the number of contracts bought on this market …" (wording cut off in the fetched copy after "disconsidering netti") | [get-markets.md](https://docs.kalshi.com/api-reference/market/get-markets.md) | `"100.00"` (same sample) | `collector/collect.py:162`, `assets/dashboard.js:51,57` | unit verified (contracts); full wording not re-verified |
+| 4 | `last_price_dollars` (Market) | "Price for the last traded YES contract on this market in dollars" | [get-markets.md](https://docs.kalshi.com/api-reference/market/get-markets.md) | `"0.4500"` (same sample) | `collector/collect.py:159`, `assets/dashboard.js:47` | verified: dollars per YES contract |
+| 5 | `notional_value_dollars` (Market) | "The total value of a single contract at settlement in dollars" | [get-markets.md, schema chunk 2](https://docs.kalshi.com/api-reference/market/get-markets.md) | `"1.0000"` (same sample) | not used for ranking | verified: a per-contract settlement value, **not** a traded-dollar total |
+| 6 | Total dollar-volume or liquidity-dollar field (Market) | None in the documented Market schema (required and optional properties listed in get-markets.md) or in the response example; none among the sample's keys | [get-markets.md](https://docs.kalshi.com/api-reference/market/get-markets.md) | Keys of the 2 sampled markets: no volume-dollar field | — | verified absent in documented schema and sample |
+| 7 | Event object: volume fields | Sample returns event keys only (`category`, `collateral_return_type`, `event_ticker`, `exchange_index`, `last_updated_ts`, `mutually_exclusive`, `series_ticker`, `settlement_sources`, `strike_period`, `sub_title`, `title`) plus `milestones` | [live events sample](https://external-api.demo.kalshi.co/trade-api/v2/events?limit=1&status=open) (Kalshi host) | no volume field | — | verified absent in sample; event-doc schema not re-read this session |
+| 8 | Candlestick `volume_fp` | "String representation of the number of contracts bought on the market during the candlestick period" | [get-market-candlesticks.md](https://docs.kalshi.com/api-reference/market/get-market-candlesticks.md) | not re-sampled this session | `collector/collect.py:481` | verified: contracts (docs only) |
+| 9 | Trade `count_fp` | "String representation of the number of contracts bought or sold in this trade" | [get-trades.md](https://docs.kalshi.com/api-reference/market/get-trades.md) | `0.15`, `1.88`, `0.27` ([sample](https://external-api.demo.kalshi.co/trade-api/v2/markets/trades?limit=3)) | `assets/dashboard.js:334` | verified (fractional contracts occur) |
+| 10 | Trade `yes_price_dollars` | "Yes price for this trade in dollars" | [get-trades.md](https://docs.kalshi.com/api-reference/market/get-trades.md) | `0.1100`, `0.0050`, `0.0600` (same sample) | `assets/dashboard.js:334` | verified |
+| 11 | Get Trades paging | `limit` default 100, maximum 1000; cursor pagination; `min_ts`/`max_ts` in **seconds** (milliseconds rejected with 400) | [get-trades.md](https://docs.kalshi.com/api-reference/market/get-trades.md) | — | not used for ranking yet | verified (docs) |
+| 12 | Unit convention | `_fp` = fixed-point string; `_dollars` = fixed-point dollar string; "the `_fp` suffix alone does not distinguish contract quantities from dollar amounts"; the Clearing Member API's `balance_available_fp` is a **dollar** string | [fixed_point_migration](https://docs.kalshi.com/getting_started/fixed_point_migration) | — | all `_fp` reads in the repo | verified: units must be read from each field's description |
+| 13 | Demo caveat | "The price and behavior of markets in the demo environment may not be reflective of those in real markets" | [demo_env](https://docs.kalshi.com/getting_started/demo_env) | — | all demo figures | verified |
+
+**Conclusion (D1).** The documents read define no official total-dollar-volume field, and none appeared in the live samples. Kalshi's own fields give contracts (`volume_fp`), a per-contract last price (`last_price_dollars`) and per-contract settlement value (`notional_value_dollars`). The repo's "Est. $ volume" (`Σ volume_fp × last_price_dollars`, `collector/collect.py:149-160`) is therefore an approximation and is correctly labelled "estimate" in the collector and on the dashboard (`dashboard.html:38-39`, `assets/dashboard.js:153,175`). A trade-level figure built only from official fields is possible: `Σ count_fp × yes_price_dollars` over the trades in a stated `min_ts`–`max_ts` window (row 9–11). That is a convention this project would define, not an official Kalshi dollar metric.
+
+**D2 — live demo checks (same session, replayable URLs)**
+- `GET /exchange/status` → `exchange_active: true`, `trading_active: true` on all demo shards: [sample](https://external-api.demo.kalshi.co/trade-api/v2/exchange/status).
+- `GET /markets?limit=2&status=open` → 2 markets; keys match the Market schema in row 1–6; `volume_fp` = `"100.00"`, `notional_value_dollars` = `"1.0000"`.
+- `GET /markets/trades?limit=3` → 3 trades. Arithmetic on these 3 sample rows only (not a market total): 0.15 × 0.1100 = 0.0165; 1.88 × 0.0050 = 0.0094; 0.27 × 0.0600 = 0.0162; sum 0.0421.
+- `GET /events?limit=1&status=open` → 1 event, no volume field.
+
+**Flags for review (publish on the Flagged for Review page, with the links above)**
+- **F-F2-01 (medium):** the displayed "Est. $ volume" uses one last traded price times cumulative contracts. It is not a sum of traded prices and can differ from dollars actually traded. Labelled as an estimate (correct), but sorted on as if it were a dollar ranking.
+- **F-F2-02 (medium):** "Est. $ OI" (`assets/dashboard.js:57`) multiplies `open_interest_fp` by last price. The definition's netting wording is cut off in our copy, so this is an approximation to be re-read in full before any use.
+- **F-F2-03 (low):** the analysis register still reads "volume_fp, unit not confirmed" (`analysis/data/findings.json`, answers near lines 709 and 724; `analysis/assets/app.js:283`). Row 1 above now confirms the unit from official text.
+- **F-F2-04 (low):** a trade-level dollar total needs one paginated Get Trades pass per market over a time window. Request cost and rate-limit behaviour were not measured here (see F-B13-05).
+- **F-F2-05 (info):** `_fp` does not identify units by itself (row 12). Code must read each field's description; the repo's `volume_fp` reads as contracts, which matches the official text.
+- **F-F2-06 (info):** every demo value above is demo data; demo prices may not match real markets (row 13).
+
+**Change requests (owners are delivered sessions; if a file owner is closed, the final integrator applies them)**
+- **CR-F2-1 (for `collector/collect.py` owner 3b5e95bd and `assets/dashboard.js` owner 7f1ef378):** keep the "Est. $ volume" label as an estimate, with its formula and a link to get-markets.md. Optionally add a trade-level metric `Σ count_fp × yes_price_dollars` over a stated window, from get-trades.md, labelled as this project's definition. Do not present either as an official Kalshi dollar figure.
+- **CR-F2-2 (for the analysis register owner 3e08e6dc or the final integrator):** replace "unit not confirmed" with the official text for `volume_fp` from [get-markets.md](https://docs.kalshi.com/api-reference/market/get-markets.md), keeping the unit as contracts.
+- **CR-F2-3 (for the final integrator):** publish F-F2-01 to F-F2-06 on the Flagged for Review page with the links in this section.
+
+**Verification performed:** every official definition quoted above was read in the fetched copy on 2026-11-20. Live samples were fetched on the same day. No value was inferred, no site page or data file was changed, and no other session's file was edited.
