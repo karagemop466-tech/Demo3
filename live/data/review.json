@@ -1,0 +1,169 @@
+{
+ "count": 13,
+ "flags": [
+  {
+   "area": "Data freshness",
+   "detail": "The desk renders the last committed collector snapshot plus in-browser REST polling. As of this build the newest snapshot is 2026-11-20T12:38:54+00:00. Browser polling hits the demo API directly; if the browser or the API blocks the request the page says so instead of showing stale numbers as live.",
+   "id": "L-01",
+   "item": "Live snapshots are refreshed by a scheduled collector, not a streaming feed",
+   "sources": [
+    "https://docs.kalshi.com/getting_started/quick_start_market_data",
+    "https://docs.kalshi.com/getting_started/rate_limits"
+   ],
+   "status": "needs review"
+  },
+  {
+   "area": "Synthetic demo series",
+   "detail": "Series such as KXDEMOFUTHOURLY (hourly 'Demo BTC' markets) and KXQUICKSETTLE exist only on the demo exchange for testing. They rank high by volume and are excluded from the tracked/ranked tables here so they are not read as real markets.",
+   "id": "L-02",
+   "item": "Some demo series are exchange self-tests and are excluded from tracking",
+   "sources": [
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXDEMOFUTHOURLY",
+    "https://external-api.demo.kalshi.co/trade-api/v2/series/KXQUICKSETTLE"
+   ],
+   "status": "needs review"
+  },
+  {
+   "area": "Derived metric",
+   "detail": "The trade API has no dollar-volume field. The ranking uses volume_fp x notional_value_dollars and is labelled derived on every page. The definition of 'highest dollar amount' remains an open question.",
+   "id": "L-03",
+   "item": "'Highest dollar amount' is derived, not published",
+   "sources": [
+    "https://docs.kalshi.com/api-reference/market/get-markets"
+   ],
+   "status": "needs review"
+  },
+  {
+   "area": "Model",
+   "detail": "p_hat is built from the quoted midpoint, one hour of price momentum and the spread. The formula is published on the page; it is a way to prioritise what to look at and makes no claim about realised returns.",
+   "id": "L-04",
+   "item": "The ROI score is a heuristic, not a measured return",
+   "sources": [
+    "https://docs.kalshi.com/api-reference/market/get-market-candlesticks",
+    "https://docs.kalshi.com/api-reference/market/get-market-orderbook"
+   ],
+   "status": "needs review"
+  },
+  {
+   "area": "Simulation",
+   "detail": "Every simulated trade fills as a taker at the candlestick's quoted side price, exits at +$0.10, -$0.10 or resolution, and pays $1 per winning contract per the settlement docs. Exchange fees are not modelled because the demo fee schedule was not verified for this environment.",
+   "id": "L-05",
+   "item": "Simulated fills are modelled at quoted prices and fees are not included",
+   "sources": [
+    "https://docs.kalshi.com/getting_started/market_settlement",
+    "https://docs.kalshi.com/getting_started/demo_env"
+   ],
+   "status": "needs review"
+  },
+  {
+   "area": "Fees",
+   "detail": "No fee schedule for the demo exchange was confirmed from an official Kalshi page during this build, so fees are recorded as 0.00 and labelled, never estimated.",
+   "id": "L-06",
+   "item": "Fee model absent (unverified for the demo environment)",
+   "sources": [
+    "https://docs.kalshi.com/getting_started/demo_env"
+   ],
+   "status": "needs review"
+  },
+  {
+   "area": "Credentials",
+   "detail": "Portfolio reads and live demo order entry need a demo API key (KALSHI_DEMO_API_KEY_ID / KALSHI_DEMO_PRIVATE_KEY). They are not present, so the desk runs paper/simulated only: no order is ever sent and no account balance is displayed. Account values are blank, not estimated.",
+   "id": "L-07",
+   "item": "No demo API credentials are configured in this repository",
+   "sources": [
+    "https://docs.kalshi.com/getting_started/demo_env",
+    "https://docs.kalshi.com/api-reference/portfolio/get-balance"
+   ],
+   "status": "needs review"
+  },
+  {
+   "area": "Causation",
+   "detail": "Each alert shows an official source link for the price data and a search link for headlines around that timestamp. A headline is never asserted to have caused the move; the page says the association is unverified.",
+   "id": "L-08",
+   "item": "News attribution is a link, not a proven cause",
+   "sources": [
+    "https://docs.kalshi.com/api-reference/market/get-market-candlesticks"
+   ],
+   "status": "needs review"
+  },
+  {
+   "area": "Coverage",
+   "detail": "46 contracts have committed candlestick history; others are tracked by quote only. Coverage is stated on the page rather than implied.",
+   "id": "L-09",
+   "item": "Candlestick history is limited to the tracked lines",
+   "sources": [
+    "https://docs.kalshi.com/api-reference/market/get-market-candlesticks"
+   ],
+   "status": "needs review"
+  },
+  {
+   "area": "Coverage",
+   "detail": "Alerts are only ever produced from committed official candlesticks. Gas, crypto and golf contracts in the archive traded in increments smaller than $0.10 over the collected windows, so they appear on the topic pages with their quotes and candles but with no swing alerts. Nothing is invented to fill the gap; the scheduled collector widens the history over time.",
+   "id": "L-12",
+   "item": "Some topics had no committed $0.10 swing during the collected windows",
+   "sources": [
+    "https://docs.kalshi.com/api-reference/market/get-market-candlesticks"
+   ],
+   "status": "needs review"
+  },
+  {
+   "area": "Environment mixing",
+   "detail": "data/latest/candles.json and data/history/ hold demo-exchange payloads. Gas, crypto and golf hourly history in analysis/data/live/candles.json was collected from the production endpoint (api.elections.kalshi.com). Those contracts are copied read-only and carry environment='production' in every table and chart caption so demo and production data are never confused.",
+   "id": "L-11",
+   "item": "Some candlestick history comes from the production API archive, labelled",
+   "sources": [
+    "https://docs.kalshi.com/getting_started/api_environments"
+   ],
+   "status": "needs review"
+  },
+  {
+   "area": "Data quality",
+   "detail": "A swing where the exchange reported zero volume in the period is a quote move, not a trade. Those alerts carry a 'no trades in window' badge and are not presented as executed price moves.",
+   "id": "L-13",
+   "item": "Quote-only moves are labelled",
+   "sources": [
+    "https://docs.kalshi.com/api-reference/market/get-market-candlesticks",
+    "https://docs.kalshi.com/api-reference/market/get-trades"
+   ],
+   "status": "needs review"
+  },
+  {
+   "area": "WebSockets",
+   "detail": "WS handshakes require KALSHI-ACCESS-* signature headers, which a static page cannot attach. The desk therefore polls REST and labels the transport.",
+   "id": "L-10",
+   "item": "The browser cannot open an authenticated Kalshi WebSocket",
+   "sources": [
+    "https://docs.kalshi.com/getting_started/quick_start_websockets"
+   ],
+   "status": "needs review"
+  }
+ ],
+ "generated_at": "2026-11-20T19:22:18.442395+00:00",
+ "verified": [
+  {
+   "item": "Demo REST base URL",
+   "source": "https://docs.kalshi.com/getting_started/api_environments",
+   "value": "https://external-api.demo.kalshi.co/trade-api/v2"
+  },
+  {
+   "item": "Public market data without auth",
+   "source": "https://docs.kalshi.com/getting_started/quick_start_market_data",
+   "value": "supported"
+  },
+  {
+   "item": "Candlestick path",
+   "source": "https://docs.kalshi.com/api-reference/market/get-market-candlesticks",
+   "value": "/series/{series_ticker}/markets/{ticker}/candlesticks ?start_ts&end_ts&period_interval(1|60|1440)"
+  },
+  {
+   "item": "Orderbook response",
+   "source": "https://docs.kalshi.com/api-reference/market/get-market-orderbook",
+   "value": "orderbook_fp.{yes_dollars,no_dollars} = [[price_dollars, contract_count], ...]"
+  },
+  {
+   "item": "Settlement payout",
+   "source": "https://docs.kalshi.com/getting_started/market_settlement",
+   "value": "$1 per winning contract"
+  }
+ ]
+}

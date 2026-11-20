@@ -1,0 +1,154 @@
+{
+ "alerts_by_environment": {
+  "demo": 204,
+  "production": 0
+ },
+ "alerts_by_topic": {
+  "crypto": 0,
+  "culture": 4,
+  "elections": 200,
+  "gas": 0,
+  "golf": 0
+ },
+ "api_base": "https://external-api.demo.kalshi.co/trade-api/v2",
+ "bankroll": 10000.0,
+ "candle_coverage": {
+  "crypto": 3,
+  "culture": 5,
+  "elections": 31,
+  "gas": 4,
+  "golf": 3
+ },
+ "counts": {
+  "alerts": 204,
+  "alerts_high_roi": 12,
+  "candle_markets": 46,
+  "resolved_markets": 20065,
+  "simulated_trades": 1386,
+  "tracked": 66
+ },
+ "demo_only": true,
+ "formulas": {
+  "derived_volume": "volume_fp x notional_value_dollars (the API publishes no dollar-volume field — derived, labelled)",
+  "mid_price": "yes_bid_dollars/yes_ask_dollars midpoint; falls back to last_price_dollars when a side is missing",
+  "roi_model": "p_hat = clamp(mid + 0.5*momentum_1h - 0.15*spread, 0.02, 0.98); edge_yes = p_hat - yes_ask; edge_no = (1-p_hat) - (1-yes_bid); edge = max(edge_yes, edge_no); high ROI if edge >= $0.03",
+  "simulated_trade": "taker fills at the candle's quoted side price; exits at +$0.10, -$0.10, or resolution; $1 payout for the winning side per market settlement docs; fees not modelled",
+  "swing_alert": "alert when |close(i) - close(i-w)| >= $0.10 (step) or (high - low) >= $0.10 in one candle (intrabar)"
+ },
+ "generated_at": "2026-11-20T19:22:18.442395+00:00",
+ "largest_move_by_topic": {
+  "crypto": {
+   "abs_move": 0.01,
+   "delta": -0.01,
+   "environment": "production",
+   "from_price": 0.04,
+   "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXETHMAXY/markets/KXETHMAXY-27JAN01-3500.00/candlesticks?start_ts=1794915623&end_ts=1795174823&period_interval=60",
+   "ticker": "KXETHMAXY-27JAN01-3500.00",
+   "to_price": 0.03,
+   "topic": "crypto",
+   "ts": "2026-11-18T22:00:00Z",
+   "window": "1 hour"
+  },
+  "culture": {
+   "abs_move": 0.98,
+   "delta": -0.98,
+   "environment": "demo",
+   "from_price": 0.99,
+   "source_url": "https://docs.kalshi.com/api-reference/market/get-market-candlesticks",
+   "ticker": "KXSHOWENDSIMPSONS-30",
+   "to_price": 0.01,
+   "topic": "culture",
+   "ts": "2026-10-30T12:00:00Z",
+   "window": "1 hour"
+  },
+  "elections": {
+   "abs_move": 0.987,
+   "delta": 0.987,
+   "environment": "demo",
+   "from_price": 0.003,
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMR/markets/KXPRESNOMR-28-NMIN/candlesticks",
+   "ticker": "KXPRESNOMR-28-NMIN",
+   "to_price": 0.99,
+   "topic": "elections",
+   "ts": "2026-10-23T09:00:00Z",
+   "window": "1 hour"
+  },
+  "gas": {
+   "abs_move": 0.03,
+   "delta": 0.03,
+   "environment": "production",
+   "from_price": 0.07,
+   "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXAAAGASM/markets/KXAAAGASM-26NOV30-3.70/candlesticks?start_ts=1794915623&end_ts=1795174823&period_interval=60",
+   "ticker": "KXAAAGASM-26NOV30-3.70",
+   "to_price": 0.1,
+   "topic": "gas",
+   "ts": "2026-11-17T17:00:00Z",
+   "window": "1 hour"
+  },
+  "golf": {
+   "abs_move": 0.035,
+   "delta": -0.035,
+   "environment": "production",
+   "from_price": 0.04,
+   "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXPGATOUR/markets/KXPGATOUR-THRC26-BBRO/candlesticks?start_ts=1794915623&end_ts=1795174823&period_interval=60",
+   "ticker": "KXPGATOUR-THRC26-BBRO",
+   "to_price": 0.005,
+   "topic": "golf",
+   "ts": "2026-11-19T16:00:00Z",
+   "window": "1 hour"
+  }
+ },
+ "risk_per_trade": 10.0,
+ "roi_min_ev": 0.03,
+ "roi_min_roi_pct": 10.0,
+ "snapshots": {
+  "events_retrieved_at": "2026-11-20T12:38:54+00:00",
+  "markets_open_count": 16062,
+  "markets_open_retrieved_at": "2026-11-20T12:38:54+00:00",
+  "markets_settled_count": 22065,
+  "markets_settled_retrieved_at": "2026-11-20T12:38:54+00:00"
+ },
+ "sources": {
+  "api_environments": "https://docs.kalshi.com/getting_started/api_environments",
+  "create_order": "https://docs.kalshi.com/api-reference/orders/create-order-v2",
+  "demo_env": "https://docs.kalshi.com/getting_started/demo_env",
+  "fixed_point": "https://docs.kalshi.com/getting_started/fixed_point_migration",
+  "get_balance": "https://docs.kalshi.com/api-reference/portfolio/get-balance",
+  "get_candlesticks": "https://docs.kalshi.com/api-reference/market/get-market-candlesticks",
+  "get_events": "https://docs.kalshi.com/api-reference/events/get-events",
+  "get_market": "https://docs.kalshi.com/api-reference/market/get-market",
+  "get_markets": "https://docs.kalshi.com/api-reference/market/get-markets",
+  "get_orderbook": "https://docs.kalshi.com/api-reference/market/get-market-orderbook",
+  "get_positions": "https://docs.kalshi.com/api-reference/portfolio/get-positions",
+  "get_trades": "https://docs.kalshi.com/api-reference/market/get-trades",
+  "market_data_no_auth": "https://docs.kalshi.com/getting_started/quick_start_market_data",
+  "market_settlement": "https://docs.kalshi.com/getting_started/market_settlement",
+  "rate_limits": "https://docs.kalshi.com/getting_started/rate_limits",
+  "websockets_auth": "https://docs.kalshi.com/getting_started/quick_start_websockets"
+ },
+ "stop_distance": 0.1,
+ "threshold_dollars": 0.1,
+ "topics": [
+  {
+   "id": "gas",
+   "label": "Gas prices"
+  },
+  {
+   "id": "elections",
+   "label": "Elections"
+  },
+  {
+   "id": "culture",
+   "label": "Culture"
+  },
+  {
+   "id": "crypto",
+   "label": "Crypto"
+  },
+  {
+   "id": "golf",
+   "label": "Golf"
+  }
+ ],
+ "tracked_per_topic": 5
+}

@@ -1,0 +1,605 @@
+{
+ "count": 48,
+ "doc": "https://docs.kalshi.com/api-reference/market/get-market-candlesticks",
+ "environments": {
+  "demo": "https://external-api.demo.kalshi.co/trade-api/v2",
+  "production": "https://api.elections.kalshi.com/trade-api/v2"
+ },
+ "generated_from": [
+  "data/latest/candles.json",
+  "data/history/<ticker>.json"
+ ],
+ "markets": {
+  "BEYONCEGENRE-30-TRA": {
+   "environment": "demo",
+   "first_ts": 1780632000,
+   "intervals": {
+    "1440": 8,
+    "60": 1
+   },
+   "last_ts": 1793419200,
+   "path": "data/candles/BEYONCEGENRE-30-TRA.json",
+   "series_ticker": "BEYONCEGENRE",
+   "source_url": "https://docs.kalshi.com/api-reference/market/get-market-candlesticks"
+  },
+  "KXAAAGASM-26NOV30-3.40": {
+   "environment": "production",
+   "first_ts": 1793505600,
+   "intervals": {
+    "1440": 20,
+    "60": 60
+   },
+   "last_ts": 1795172400,
+   "path": "data/candles/KXAAAGASM-26NOV30-3.40.json",
+   "series_ticker": "KXAAAGASM",
+   "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXAAAGASM/markets/KXAAAGASM-26NOV30-3.40/candlesticks?start_ts=1794915623&end_ts=1795174823&period_interval=60",
+   "topic_hint": "gas"
+  },
+  "KXAAAGASM-26NOV30-3.70": {
+   "environment": "production",
+   "first_ts": 1793505600,
+   "intervals": {
+    "1440": 20,
+    "60": 66
+   },
+   "last_ts": 1795172400,
+   "path": "data/candles/KXAAAGASM-26NOV30-3.70.json",
+   "series_ticker": "KXAAAGASM",
+   "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXAAAGASM/markets/KXAAAGASM-26NOV30-3.70/candlesticks?start_ts=1794915623&end_ts=1795174823&period_interval=60",
+   "topic_hint": "gas"
+  },
+  "KXAAAGASM-26NOV30-4.00": {
+   "environment": "production",
+   "first_ts": 1793505600,
+   "intervals": {
+    "1440": 20,
+    "60": 45
+   },
+   "last_ts": 1795172400,
+   "path": "data/candles/KXAAAGASM-26NOV30-4.00.json",
+   "series_ticker": "KXAAAGASM",
+   "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXAAAGASM/markets/KXAAAGASM-26NOV30-4.00/candlesticks?start_ts=1794915623&end_ts=1795174823&period_interval=60",
+   "topic_hint": "gas"
+  },
+  "KXARTISTCOLLABDRAKEKENDRICK-30": {
+   "environment": "demo",
+   "first_ts": 1780632000,
+   "intervals": {
+    "1440": 8
+   },
+   "last_ts": 1789531200,
+   "path": "data/candles/KXARTISTCOLLABDRAKEKENDRICK-30.json",
+   "series_ticker": "KXARTISTCOLLABDRAKEKENDRICK",
+   "source_url": "https://docs.kalshi.com/api-reference/market/get-market-candlesticks"
+  },
+  "KXBRUVSEAT-35": {
+   "environment": "demo",
+   "first_ts": 1780632000,
+   "intervals": {
+    "1440": 56
+   },
+   "last_ts": 1789531200,
+   "path": "data/candles/KXBRUVSEAT-35.json",
+   "series_ticker": "KXBRUVSEAT",
+   "source_url": "https://docs.kalshi.com/api-reference/market/get-market-candlesticks"
+  },
+  "KXDEMOFUTHOURLY-26NOV20H12-UP": {
+   "environment": "demo",
+   "first_ts": 1795172460,
+   "intervals": {
+    "1": 55
+   },
+   "last_ts": 1795175700,
+   "path": "data/candles/KXDEMOFUTHOURLY-26NOV20H12-UP.json",
+   "series_ticker": "KXDEMOFUTHOURLY",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXDEMOFUTHOURLY/markets/KXDEMOFUTHOURLY-26NOV20H12-UP/candlesticks"
+  },
+  "KXECCOMPACT-30": {
+   "environment": "demo",
+   "first_ts": 1779681600,
+   "intervals": {
+    "1": 863,
+    "1440": 180,
+    "60": 719
+   },
+   "last_ts": 1795175340,
+   "path": "data/candles/KXECCOMPACT-30.json",
+   "series_ticker": "KXECCOMPACT",
+   "source_url": "https://docs.kalshi.com/api-reference/market/get-market-candlesticks"
+  },
+  "KXETHMAXY-27JAN01-3500.00": {
+   "environment": "production",
+   "first_ts": 1792641600,
+   "intervals": {
+    "1440": 30,
+    "60": 66
+   },
+   "last_ts": 1795172400,
+   "path": "data/candles/KXETHMAXY-27JAN01-3500.00.json",
+   "series_ticker": "KXETHMAXY",
+   "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXETHMAXY/markets/KXETHMAXY-27JAN01-3500.00/candlesticks?start_ts=1794915623&end_ts=1795174823&period_interval=60",
+   "topic_hint": "crypto"
+  },
+  "KXETHMAXY-27JAN01-5000.00": {
+   "environment": "production",
+   "first_ts": 1792641600,
+   "intervals": {
+    "1440": 30,
+    "60": 23
+   },
+   "last_ts": 1795150800,
+   "path": "data/candles/KXETHMAXY-27JAN01-5000.00.json",
+   "series_ticker": "KXETHMAXY",
+   "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXETHMAXY/markets/KXETHMAXY-27JAN01-5000.00/candlesticks?start_ts=1794915623&end_ts=1795174823&period_interval=60",
+   "topic_hint": "crypto"
+  },
+  "KXETHMAXY-27JAN01-6000.00": {
+   "environment": "production",
+   "first_ts": 1792641600,
+   "intervals": {
+    "1440": 30,
+    "60": 15
+   },
+   "last_ts": 1795161600,
+   "path": "data/candles/KXETHMAXY-27JAN01-6000.00.json",
+   "series_ticker": "KXETHMAXY",
+   "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXETHMAXY/markets/KXETHMAXY-27JAN01-6000.00/candlesticks?start_ts=1794915623&end_ts=1795174823&period_interval=60",
+   "topic_hint": "crypto"
+  },
+  "KXEUEXITCOUNTRY-30-HUN": {
+   "environment": "demo",
+   "first_ts": 1780632000,
+   "intervals": {
+    "1440": 9
+   },
+   "last_ts": 1787457600,
+   "path": "data/candles/KXEUEXITCOUNTRY-30-HUN.json",
+   "series_ticker": "KXEUEXITCOUNTRY",
+   "source_url": "https://docs.kalshi.com/api-reference/market/get-market-candlesticks"
+  },
+  "KXEUEXITCOUNTRY-30-POL": {
+   "environment": "demo",
+   "first_ts": 1785556800,
+   "intervals": {
+    "1440": 3
+   },
+   "last_ts": 1789531200,
+   "path": "data/candles/KXEUEXITCOUNTRY-30-POL.json",
+   "series_ticker": "KXEUEXITCOUNTRY",
+   "source_url": "https://docs.kalshi.com/api-reference/market/get-market-candlesticks"
+  },
+  "KXJOHNNYDEPP-35-JOH": {
+   "environment": "demo",
+   "first_ts": 1782705600,
+   "intervals": {
+    "1440": 6
+   },
+   "last_ts": 1789531200,
+   "path": "data/candles/KXJOHNNYDEPP-35-JOH.json",
+   "series_ticker": "KXJOHNNYDEPP",
+   "source_url": "https://docs.kalshi.com/api-reference/market/get-market-candlesticks"
+  },
+  "KXNEWPOPE-70-LANT": {
+   "environment": "production",
+   "first_ts": 1792641600,
+   "intervals": {
+    "1440": 24
+   },
+   "last_ts": 1794805200,
+   "path": "data/candles/KXNEWPOPE-70-LANT.json",
+   "series_ticker": "KXNEWPOPE",
+   "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXNEWPOPE/markets/KXNEWPOPE-70-LANT/candlesticks?start_ts=1794915623&end_ts=1795174823&period_interval=60",
+   "topic_hint": "elections"
+  },
+  "KXNEWPOPE-70-PERD": {
+   "environment": "production",
+   "first_ts": 1792728000,
+   "intervals": {
+    "1440": 5
+   },
+   "last_ts": 1794632400,
+   "path": "data/candles/KXNEWPOPE-70-PERD.json",
+   "series_ticker": "KXNEWPOPE",
+   "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXNEWPOPE/markets/KXNEWPOPE-70-PERD/candlesticks?start_ts=1794915623&end_ts=1795174823&period_interval=60",
+   "topic_hint": "elections"
+  },
+  "KXNEWPOPE-70-PPAR": {
+   "environment": "production",
+   "first_ts": 1792728000,
+   "intervals": {
+    "1440": 8
+   },
+   "last_ts": 1794632400,
+   "path": "data/candles/KXNEWPOPE-70-PPAR.json",
+   "series_ticker": "KXNEWPOPE",
+   "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXNEWPOPE/markets/KXNEWPOPE-70-PPAR/candlesticks?start_ts=1794915623&end_ts=1795174823&period_interval=60",
+   "topic_hint": "elections"
+  },
+  "KXNEXTSPEAKER-31-HJEF": {
+   "environment": "demo",
+   "first_ts": 1780632000,
+   "intervals": {
+    "1": 1080,
+    "1440": 54,
+    "60": 114
+   },
+   "last_ts": 1795173420,
+   "path": "data/candles/KXNEXTSPEAKER-31-HJEF.json",
+   "series_ticker": "KXNEXTSPEAKER",
+   "source_url": "https://docs.kalshi.com/api-reference/market/get-market-candlesticks"
+  },
+  "KXPGATOUR-THRC26-BBRO": {
+   "environment": "production",
+   "first_ts": 1794805200,
+   "intervals": {
+    "1440": 5,
+    "60": 70
+   },
+   "last_ts": 1795172400,
+   "path": "data/candles/KXPGATOUR-THRC26-BBRO.json",
+   "series_ticker": "KXPGATOUR",
+   "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXPGATOUR/markets/KXPGATOUR-THRC26-BBRO/candlesticks?start_ts=1794915623&end_ts=1795174823&period_interval=60",
+   "topic_hint": "golf"
+  },
+  "KXPGATOUR-THRC26-BKOH": {
+   "environment": "production",
+   "first_ts": 1794805200,
+   "intervals": {
+    "1440": 5,
+    "60": 70
+   },
+   "last_ts": 1795172400,
+   "path": "data/candles/KXPGATOUR-THRC26-BKOH.json",
+   "series_ticker": "KXPGATOUR",
+   "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXPGATOUR/markets/KXPGATOUR-THRC26-BKOH/candlesticks?start_ts=1794915623&end_ts=1795174823&period_interval=60",
+   "topic_hint": "golf"
+  },
+  "KXPGATOUR-THRC26-JKOI": {
+   "environment": "production",
+   "first_ts": 1794805200,
+   "intervals": {
+    "1440": 5,
+    "60": 70
+   },
+   "last_ts": 1795172400,
+   "path": "data/candles/KXPGATOUR-THRC26-JKOI.json",
+   "series_ticker": "KXPGATOUR",
+   "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXPGATOUR/markets/KXPGATOUR-THRC26-JKOI/candlesticks?start_ts=1794915623&end_ts=1795174823&period_interval=60",
+   "topic_hint": "golf"
+  },
+  "KXPRESNOMD-28-AOC": {
+   "environment": "demo",
+   "first_ts": 1779681600,
+   "intervals": {
+    "1": 1436,
+    "1440": 180,
+    "60": 673
+   },
+   "last_ts": 1795176900,
+   "path": "data/candles/KXPRESNOMD-28-AOC.json",
+   "series_ticker": "KXPRESNOMD",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-AOC/candlesticks"
+  },
+  "KXPRESNOMD-28-BOBA": {
+   "environment": "demo",
+   "first_ts": 1794574800,
+   "intervals": {
+    "1": 120,
+    "60": 168
+   },
+   "last_ts": 1795178460,
+   "path": "data/candles/KXPRESNOMD-28-BOBA.json",
+   "series_ticker": "KXPRESNOMD",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-BOBA/candlesticks?start_ts=1794573674&end_ts=1795178474&period_interval=60"
+  },
+  "KXPRESNOMD-28-BS": {
+   "environment": "demo",
+   "first_ts": 1794574800,
+   "intervals": {
+    "1": 119,
+    "60": 168
+   },
+   "last_ts": 1795178460,
+   "path": "data/candles/KXPRESNOMD-28-BS.json",
+   "series_ticker": "KXPRESNOMD",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-BS/candlesticks?start_ts=1794573674&end_ts=1795178474&period_interval=60"
+  },
+  "KXPRESNOMD-28-ESLO": {
+   "environment": "demo",
+   "first_ts": 1794574800,
+   "intervals": {
+    "1": 120,
+    "60": 168
+   },
+   "last_ts": 1795178460,
+   "path": "data/candles/KXPRESNOMD-28-ESLO.json",
+   "series_ticker": "KXPRESNOMD",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-ESLO/candlesticks?start_ts=1794573674&end_ts=1795178474&period_interval=60"
+  },
+  "KXPRESNOMD-28-EWAR": {
+   "environment": "demo",
+   "first_ts": 1794574800,
+   "intervals": {
+    "1": 120,
+    "60": 168
+   },
+   "last_ts": 1795178460,
+   "path": "data/candles/KXPRESNOMD-28-EWAR.json",
+   "series_ticker": "KXPRESNOMD",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-EWAR/candlesticks?start_ts=1794573674&end_ts=1795178474&period_interval=60"
+  },
+  "KXPRESNOMD-28-GPLA": {
+   "environment": "demo",
+   "first_ts": 1779681600,
+   "intervals": {
+    "1440": 174,
+    "60": 522
+   },
+   "last_ts": 1794718800,
+   "path": "data/candles/KXPRESNOMD-28-GPLA.json",
+   "series_ticker": "KXPRESNOMD",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-GPLA/candlesticks"
+  },
+  "KXPRESNOMD-28-GW": {
+   "environment": "demo",
+   "first_ts": 1794574800,
+   "intervals": {
+    "1": 119,
+    "60": 168
+   },
+   "last_ts": 1795178460,
+   "path": "data/candles/KXPRESNOMD-28-GW.json",
+   "series_ticker": "KXPRESNOMD",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-GW/candlesticks?start_ts=1794573674&end_ts=1795178474&period_interval=60"
+  },
+  "KXPRESNOMD-28-HBID": {
+   "environment": "demo",
+   "first_ts": 1794574800,
+   "intervals": {
+    "1": 120,
+    "60": 168
+   },
+   "last_ts": 1795178460,
+   "path": "data/candles/KXPRESNOMD-28-HBID.json",
+   "series_ticker": "KXPRESNOMD",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-HBID/candlesticks?start_ts=1794573674&end_ts=1795178474&period_interval=60"
+  },
+  "KXPRESNOMD-28-HCLI": {
+   "environment": "demo",
+   "first_ts": 1779681600,
+   "intervals": {
+    "1440": 155,
+    "60": 7
+   },
+   "last_ts": 1794805200,
+   "path": "data/candles/KXPRESNOMD-28-HCLI.json",
+   "series_ticker": "KXPRESNOMD",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-HCLI/candlesticks"
+  },
+  "KXPRESNOMD-28-JOSS": {
+   "environment": "demo",
+   "first_ts": 1779681600,
+   "intervals": {
+    "1": 1433,
+    "1440": 179,
+    "60": 669
+   },
+   "last_ts": 1795176900,
+   "path": "data/candles/KXPRESNOMD-28-JOSS.json",
+   "series_ticker": "KXPRESNOMD",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-JOSS/candlesticks"
+  },
+  "KXPRESNOMD-28-JP": {
+   "environment": "demo",
+   "first_ts": 1779681600,
+   "intervals": {
+    "1": 1426,
+    "1440": 180,
+    "60": 691
+   },
+   "last_ts": 1795176900,
+   "path": "data/candles/KXPRESNOMD-28-JP.json",
+   "series_ticker": "KXPRESNOMD",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-JP/candlesticks"
+  },
+  "KXPRESNOMD-28-JSTE": {
+   "environment": "demo",
+   "first_ts": 1794574800,
+   "intervals": {
+    "1": 120,
+    "60": 168
+   },
+   "last_ts": 1795178460,
+   "path": "data/candles/KXPRESNOMD-28-JSTE.json",
+   "series_ticker": "KXPRESNOMD",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-JSTE/candlesticks?start_ts=1794573674&end_ts=1795178474&period_interval=60"
+  },
+  "KXPRESNOMD-28-JTAL": {
+   "environment": "demo",
+   "first_ts": 1794574800,
+   "intervals": {
+    "1": 120,
+    "60": 168
+   },
+   "last_ts": 1795178460,
+   "path": "data/candles/KXPRESNOMD-28-JTAL.json",
+   "series_ticker": "KXPRESNOMD",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-JTAL/candlesticks?start_ts=1794573674&end_ts=1795178474&period_interval=60"
+  },
+  "KXPRESNOMD-28-KH": {
+   "environment": "demo",
+   "first_ts": 1779681600,
+   "intervals": {
+    "1": 1436,
+    "1440": 180,
+    "60": 659
+   },
+   "last_ts": 1795176900,
+   "path": "data/candles/KXPRESNOMD-28-KH.json",
+   "series_ticker": "KXPRESNOMD",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-KH/candlesticks"
+  },
+  "KXPRESNOMD-28-MK": {
+   "environment": "demo",
+   "first_ts": 1779681600,
+   "intervals": {
+    "1": 1436,
+    "1440": 180,
+    "60": 677
+   },
+   "last_ts": 1795176900,
+   "path": "data/candles/KXPRESNOMD-28-MK.json",
+   "series_ticker": "KXPRESNOMD",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-MK/candlesticks"
+  },
+  "KXPRESNOMD-28-PB": {
+   "environment": "demo",
+   "first_ts": 1779681600,
+   "intervals": {
+    "1": 1427,
+    "1440": 180,
+    "60": 656
+   },
+   "last_ts": 1795176900,
+   "path": "data/candles/KXPRESNOMD-28-PB.json",
+   "series_ticker": "KXPRESNOMD",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-PB/candlesticks"
+  },
+  "KXPRESNOMD-28-RW": {
+   "environment": "demo",
+   "first_ts": 1779681600,
+   "intervals": {
+    "1": 1456,
+    "1440": 180,
+    "60": 684
+   },
+   "last_ts": 1795178460,
+   "path": "data/candles/KXPRESNOMD-28-RW.json",
+   "series_ticker": "KXPRESNOMD",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-RW/candlesticks"
+  },
+  "KXPRESNOMD-28-SAS": {
+   "environment": "demo",
+   "first_ts": 1794574800,
+   "intervals": {
+    "1": 120,
+    "60": 153
+   },
+   "last_ts": 1795178460,
+   "path": "data/candles/KXPRESNOMD-28-SAS.json",
+   "series_ticker": "KXPRESNOMD",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMD/markets/KXPRESNOMD-28-SAS/candlesticks?start_ts=1794573674&end_ts=1795178474&period_interval=60"
+  },
+  "KXPRESNOMR-28-MG": {
+   "environment": "demo",
+   "first_ts": 1779681600,
+   "intervals": {
+    "1440": 72,
+    "60": 19
+   },
+   "last_ts": 1793854800,
+   "path": "data/candles/KXPRESNOMR-28-MG.json",
+   "series_ticker": "KXPRESNOMR",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMR/markets/KXPRESNOMR-28-MG/candlesticks"
+  },
+  "KXPRESNOMR-28-NMIN": {
+   "environment": "demo",
+   "first_ts": 1779681600,
+   "intervals": {
+    "1440": 125,
+    "60": 302
+   },
+   "last_ts": 1794027600,
+   "path": "data/candles/KXPRESNOMR-28-NMIN.json",
+   "series_ticker": "KXPRESNOMR",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESNOMR/markets/KXPRESNOMR-28-NMIN/candlesticks"
+  },
+  "KXPRESPERSON-28-GABB": {
+   "environment": "demo",
+   "first_ts": 1779768000,
+   "intervals": {
+    "1": 1238,
+    "1440": 160,
+    "60": 639
+   },
+   "last_ts": 1795175940,
+   "path": "data/candles/KXPRESPERSON-28-GABB.json",
+   "series_ticker": "KXPRESPERSON",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESPERSON/markets/KXPRESPERSON-28-GABB/candlesticks"
+  },
+  "KXPRESPERSON-28-JOSS": {
+   "environment": "demo",
+   "first_ts": 1779768000,
+   "intervals": {
+    "1": 1098,
+    "1440": 157,
+    "60": 513
+   },
+   "last_ts": 1795176900,
+   "path": "data/candles/KXPRESPERSON-28-JOSS.json",
+   "series_ticker": "KXPRESPERSON",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESPERSON/markets/KXPRESPERSON-28-JOSS/candlesticks"
+  },
+  "KXPRESPERSON-28-VRAM": {
+   "environment": "demo",
+   "first_ts": 1794574800,
+   "intervals": {
+    "1": 120,
+    "60": 168
+   },
+   "last_ts": 1795178460,
+   "path": "data/candles/KXPRESPERSON-28-VRAM.json",
+   "series_ticker": "KXPRESPERSON",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXPRESPERSON/markets/KXPRESPERSON-28-VRAM/candlesticks?start_ts=1794573674&end_ts=1795178474&period_interval=60"
+  },
+  "KXPRIMEENGCONSUMPTION-30-SOLAR": {
+   "environment": "demo",
+   "first_ts": 1780977600,
+   "intervals": {
+    "1440": 4
+   },
+   "last_ts": 1789531200,
+   "path": "data/candles/KXPRIMEENGCONSUMPTION-30-SOLAR.json",
+   "series_ticker": "KXPRIMEENGCONSUMPTION",
+   "source_url": "https://docs.kalshi.com/api-reference/market/get-market-candlesticks"
+  },
+  "KXSHOWENDSIMPSONS-30": {
+   "environment": "demo",
+   "first_ts": 1781496000,
+   "intervals": {
+    "1440": 16,
+    "60": 6
+   },
+   "last_ts": 1794546000,
+   "path": "data/candles/KXSHOWENDSIMPSONS-30.json",
+   "series_ticker": "KXSHOWENDSIMPSONS",
+   "source_url": "https://docs.kalshi.com/api-reference/market/get-market-candlesticks"
+  },
+  "KXTVSEASONRELEASEACOURTOFTHORNSANDROSES-30-JAN": {
+   "environment": "demo",
+   "first_ts": 1785556800,
+   "intervals": {
+    "1": 9,
+    "1440": 3,
+    "60": 2
+   },
+   "last_ts": 1795150800,
+   "path": "data/candles/KXTVSEASONRELEASEACOURTOFTHORNSANDROSES-30-JAN.json",
+   "series_ticker": "KXTVSEASONRELEASEACOURTOFTHORNSANDROSES",
+   "source_url": "https://docs.kalshi.com/api-reference/market/get-market-candlesticks"
+  },
+  "KXTVSEASONRELEASETHELASTOFUS-27-JAN": {
+   "environment": "demo",
+   "first_ts": 1782705600,
+   "intervals": {
+    "1": 1,
+    "1440": 19,
+    "60": 14
+   },
+   "last_ts": 1795150800,
+   "path": "data/candles/KXTVSEASONRELEASETHELASTOFUS-27-JAN.json",
+   "series_ticker": "KXTVSEASONRELEASETHELASTOFUS",
+   "source_url": "https://docs.kalshi.com/api-reference/market/get-market-candlesticks"
+  }
+ }
+}
