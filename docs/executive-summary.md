@@ -2,7 +2,7 @@
 
 **Project:** Demo3 (repo `karagemop466-tech/Demo3`)
 **Date:** 2026-11-20
-**Status:** Site live at https://karagemop466-tech.github.io/Demo3/ · automated demo-API data pipeline active (twice hourly) · row-level re-verification passing (925/925 checks, 0 hard failures on the latest CI run) · portfolio/trade execution staged behind demo credentials (not provided — flagged, never inferred)
+**Status:** Site live at https://karagemop466-tech.github.io/Demo3/ · automated demo-API data pipeline active (twice hourly) · row-level re-verification passing (latest CI run: 725/725 checks, 0 hard failures — `data/latest/verification_report.json`) · portfolio/trade execution staged behind demo credentials (not provided — flagged, never inferred)
 
 ## Goal
 
