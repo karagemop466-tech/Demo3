@@ -49,8 +49,9 @@ If the browser blocks a request, the tables fall back to the snapshot links in
   when a valid bid/ask pair exists; otherwise it uses the last traded price. The first scan seeds a
   baseline. This is REST polling, not a continuous tick feed; the elapsed time between observations is
   shown. Coverage follows the scan-depth selection above and is limited to the five tracked topics.
-  Each alert links to the official Kalshi market record. That link is context only: no causal news source
-  is verified or implied (see <a href="flagged.html">I-19</a>). Feed history is stored in this browser only.</p>
+  Each alert links to the official Kalshi market and event records. Where returned, Kalshi-listed
+  settlement-source websites and market resolution rules are shown as context; they are not evidence
+  that a site caused the price move (see <a href="flagged.html">I-19</a>). Feed history is stored in this browser only.</p>
   <p class="small"><button class="btn secondary" id="clearSwingAlerts">Clear alert history on this browser</button>
      <span id="alertStatus" class="pill warn">Waiting for first scan</span></p>
   <div class="alert-columns">

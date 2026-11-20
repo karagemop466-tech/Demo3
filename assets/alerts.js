@@ -82,6 +82,7 @@
           current.price.toFixed(6),
         ticker: ticker,
         eventTicker: market.event_ticker ? String(market.event_ticker) : "",
+        rulesPrimary: String(market.rules_primary || ""),
         title: String(market.title || ticker),
         topic: String(market.topic || "unclassified"),
         previousPrice: previousPrice,
@@ -157,12 +158,30 @@
     return history.slice();
   }
 
+  function normalizeEventContext(event) {
+    var sources = Array.isArray(event && event.settlement_sources) ?
+      event.settlement_sources.filter(function (source) {
+        return source && typeof source.url === "string" &&
+          /^https:\/\//i.test(source.url);
+      }).map(function (source) {
+        return {
+          name: String(source.name || source.url),
+          url: String(source.url)
+        };
+      }) : [];
+    return {
+      title: String(event && event.title || ""),
+      sources: sources
+    };
+  }
+
   root.KalshiAlerts = {
     threshold: DELTA_THRESHOLD,
     screenMaxSpread: SCREEN_MAX_SPREAD,
     observe: observe,
     append: append,
     history: getHistory,
-    clearHistory: clearHistory
+    clearHistory: clearHistory,
+    normalizeEventContext: normalizeEventContext
   };
 })(typeof window !== "undefined" ? window : globalThis);

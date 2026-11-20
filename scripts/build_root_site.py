@@ -372,12 +372,13 @@ def consolidated_flags():
         "validated backtest. Treat it as exploratory until tested against settled outcomes.",
         [f"{DOCS}/api-reference/market/get-markets", f"{DOCS}/getting_started/demo_env"],
         "open — validate before strategy use", "028b2648")
-    add("I-19", "News attribution", "Price jumps have no verified causal news link",
-        "Alert rows link to the official Kalshi market record only. This project does not ingest "
-        "or validate an external news source for a given move; cause remains unverified and no "
-        "causal claim is made.",
-        [f"{DOCS}/api-reference/market/get-market", f"{DOCS}/getting_started/quick_start_market_data"],
-        "unverified — no validated attribution source", "028b2648")
+    add("I-19", "News attribution", "Settlement-source links are not verified as price-move causes",
+        "Alert rows link to the official Kalshi market and event records. Kalshi-listed "
+        "settlement_sources and market resolution rules are shown when available, but they are "
+        "resolution context, not evidence that a source caused the price move. This project does "
+        "not validate external news attribution and makes no causal claim.",
+        [f"{DOCS}/api-reference/events/get-event", f"{DOCS}/api-reference/market/get-market"],
+        "unverified — causal attribution not established", "028b2648")
     add("I-20", "Paper trading", "Automated strategy results are browser-local simulations",
         "The baseline assumes one contract at the displayed YES ask, marks at the displayed YES "
         "bid (or last trade when the bid is unavailable), omits fees and slippage, and stores "
@@ -427,6 +428,9 @@ def consolidated_sources():
     add("DOCS-GET-MARKET", "Kalshi docs — Get Market",
         f"{DOCS}/api-reference/market/get-market",
         "Official per-market response schema with quote, volume, and resolution fields.")
+    add("DOCS-GET-EVENT", "Kalshi docs — Get Event",
+        f"{DOCS}/api-reference/events/get-event",
+        "Event response schema documents settlement_sources (name and URL); displayed as context, not price-move causation.")
     add("DOCS-SETTLE", "Kalshi docs — Market settlement",
         f"{DOCS}/getting_started/market_settlement", "Yes/No resolution, $1/contract payout.")
     add("DOCS-RATE", "Kalshi docs — Rate limits",
@@ -606,8 +610,9 @@ If the browser blocks a request, the tables fall back to the snapshot links in
   when a valid bid/ask pair exists; otherwise it uses the last traded price. The first scan seeds a
   baseline. This is REST polling, not a continuous tick feed; the elapsed time between observations is
   shown. Coverage follows the scan-depth selection above and is limited to the five tracked topics.
-  Each alert links to the official Kalshi market record. That link is context only: no causal news source
-  is verified or implied (see <a href="flagged.html">I-19</a>). Feed history is stored in this browser only.</p>
+  Each alert links to the official Kalshi market and event records. Where returned, Kalshi-listed
+  settlement-source websites and market resolution rules are shown as context; they are not evidence
+  that a site caused the price move (see <a href="flagged.html">I-19</a>). Feed history is stored in this browser only.</p>
   <p class="small"><button class="btn secondary" id="clearSwingAlerts">Clear alert history on this browser</button>
      <span id="alertStatus" class="pill warn">Waiting for first scan</span></p>
   <div class="alert-columns">

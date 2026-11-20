@@ -16,7 +16,7 @@
     windowSec: 3600, scanSec: 20, obSec: 10,
     timers: [], resolutions: [], fills: [],
     connected: false, lastScan: null, errors: 0, scanning: false,
-    paperResolveCursor: 0, paperResolving: false
+    paperResolveCursor: 0, paperResolving: false, eventContexts: Object.create(null)
   };
   try { state.resolutions = JSON.parse(localStorage.getItem("kd_resolutions") || "[]"); }
   catch (e) { state.resolutions = []; }
@@ -59,6 +59,7 @@
       last: last, yb: yb, ya: ya, vol: vol, oi: oi,
       volDollars: K.estDollars(vol, last), oiDollars: K.estDollars(oi, last),
       close_time: m.close_time, series_ticker: m.series_ticker || "",
+      rules_primary: m.rules_primary || "",
       topic: m._topic || ""
     };
   }
@@ -137,7 +138,10 @@
       });
       state.lastScan = Date.now();
       var newAlerts = A ? A.observe(state.markets, state.lastScan) : [];
-      if (A && newAlerts.length) A.append(newAlerts);
+      if (A && newAlerts.length) {
+        A.append(newAlerts);
+        newAlerts.forEach(loadAlertEventContext);
+      }
       if (P) {
         P.processAlerts(newAlerts);
         P.markToMarket(state.markets, state.lastScan);
@@ -147,7 +151,6 @@
       renderRanking();
       recordSamples();
       trackResolutions();
-      if (window.KD && window.KD.onMarkets) { try { window.KD.onMarkets(state.markets); } catch (e) { /* alert sink must not break the scan */ } }
       var capNote = depth > 0 ? ("top " + depth + " matched series per topic") : "ALL matched series";
       var partialNote = failedSeries ? "; partial scan — " + failedSeries +
         " series request(s) failed" : "";
@@ -213,6 +216,47 @@
     var secs = Math.round(n % 60);
     return mins + " min " + secs + " sec";
   }
+  function loadAlertEventContext(alert) {
+    var ticker = alert && String(alert.eventTicker || "");
+    if (!ticker || state.eventContexts[ticker]) return;
+    state.eventContexts[ticker] = { status: "loading", sources: [], title: "" };
+    K.apiGet("/events/" + encodeURIComponent(ticker), {}).then(function (response) {
+      var event = response && response.event ? response.event : {};
+      state.eventContexts[ticker] = Object.assign(
+        { status: "ok" }, A.normalizeEventContext(event));
+      renderSwingAlerts();
+    }).catch(function () {
+      state.eventContexts[ticker] = { status: "error", sources: [], title: "" };
+      renderSwingAlerts();
+    });
+  }
+  function alertContextMarkup(alert) {
+    var ticker = String(alert.eventTicker || "");
+    var html = "<p class='small'>Context: ";
+    if (!ticker) {
+      return html + "event ticker unavailable; no event-source attribution inferred.</p>";
+    }
+    var path = "/events/" + encodeURIComponent(ticker);
+    var recordLink = K.srcLink(path, "official event record");
+    var context = state.eventContexts[ticker];
+    if (!context) {
+      return html + recordLink + " · settlement-source links are available from the event record. " +
+        "No cause is verified.</p>";
+    }
+    if (context.status === "loading") {
+      return html + recordLink + " · loading Kalshi-listed settlement sources…</p>";
+    }
+    if (context.status === "error") {
+      return html + recordLink + " · event record unavailable in this browser; no links inferred.</p>";
+    }
+    var sources = (context.sources || []).map(function (source) {
+      return "<a href='" + K.esc(source.url) + "' target='_blank' rel='noopener'>" +
+        K.esc(source.name || source.url) + "</a>";
+    });
+    return html + recordLink + (sources.length ? " · API-listed settlement sources: " +
+      sources.join(" · ") : " · Kalshi returned no HTTPS settlement-source links") +
+      ". Listed sources are resolution context, not proven price-move causes.</p>";
+  }
   function renderAlertMessage(alert, candidate) {
     var date = new Date(alert.observedAt);
     var time = isNaN(date.getTime()) ? "time unavailable" : date.toLocaleTimeString();
@@ -241,7 +285,10 @@
       K.esc(screenText) + ". Cause is unverified; no external news attribution is provided.</p>" +
       "<p class='small'>Source: " +
       K.srcLink("/markets/" + encodeURIComponent(alert.ticker), "official Kalshi market record") +
-      "</p></article>";
+      "</p>" + alertContextMarkup(alert) +
+      (alert.rulesPrimary ? "<details class='rules'><summary class='small'>Market resolution rules (Get Market rules_primary)</summary><div class='small'>" +
+        K.esc(alert.rulesPrimary) + "</div></details>" : "") +
+      "</article>";
   }
   function renderSwingAlerts() {
     if (!A || !$("allAlerts") || !$("roiAlerts")) return;
@@ -364,7 +411,6 @@
         var sample = { t: now, price: m.last, bid: m.yb, ask: m.ya };
         arr.push(sample);
         if (arr.length > 4000) arr.splice(0, arr.length - 4000);
-        if (window.KD && window.KD.onSample) { try { window.KD.onSample(m, sample); } catch (e) { /* alert sink must not break sampling */ } }
       }
     });
   }

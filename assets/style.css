@@ -119,3 +119,8 @@ summary { cursor: pointer; font-weight: 600; }
   .alert-feed { height: 300px; }
   .alert-meta { align-items: flex-start; }
 }
+
+/* sharp-jump context (df50b92f) */
+.chat-wrap table.alerts td.ctx { min-width: 220px; }
+.chat-wrap table.alerts details.rules { margin-top: 4px; }
+.chat-wrap table.alerts details.rules div { max-width: 360px; white-space: normal; }

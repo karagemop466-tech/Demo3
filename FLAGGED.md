@@ -127,14 +127,16 @@ no backtest has validated it. Treat it as exploratory triage only.
 market price/volume fields; [Demo environment](https://docs.kalshi.com/getting_started/demo_env)
 for Kalshi's warning that demo prices and behavior may not reflect real markets.
 
-### I-19 — No verified news-cause attribution
+### I-19 — Settlement-source links are not verified as price-move causes
 
-Swing messages link to the official Kalshi market record for context. This repo does not ingest or
-verify external news links for individual jumps. A market record is not evidence of what caused a
-price movement; any causal website attribution remains unverified.
+Swing messages link to the official Kalshi market and event records. Where the event endpoint
+returns HTTPS `settlement_sources`, those links are shown with the market's `rules_primary` as
+resolution context. The listed websites are not evidence that they caused the price move; their
+contents are not independently validated here. Causal attribution remains unverified.
 
-**Official references:** [Get Market](https://docs.kalshi.com/api-reference/market/get-market) and
-[Quick start: market data](https://docs.kalshi.com/getting_started/quick_start_market_data).
+**Official references:** [Get Event](https://docs.kalshi.com/api-reference/events/get-event) documents
+`settlement_sources`; [Get Market](https://docs.kalshi.com/api-reference/market/get-market) documents
+`rules_primary` and market fields.
 
 ### I-20 — Automated strategy results are browser-local simulations
 
