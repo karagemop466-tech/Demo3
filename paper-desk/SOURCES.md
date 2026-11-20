@@ -12,7 +12,7 @@ data/latest/top_events.json      (collector snapshot; five focus topics)
         │  universe: top events per topic × top markets per event
         ▼
 trading/paper_engine.py ── GET /markets?tickers=…  (live demo quotes, batched)
-        │                   GET /markets/{ticker}/orderbook?depth=6 (at decision time)
+        │                   GET /markets/orderbooks?tickers=…&depth=6 (at decision time, ≤100/book batch)
         ├── trading/paper_strategies.py  (five deterministic rules + exits)
         ▼
 data/paper/{state,trades,equity,analysis,resolutions,runs,books,sources}.json
@@ -23,8 +23,9 @@ scripts/verify_paper_desk.py  (links, per-row sources, JS syntax)
 paper-desk/tests/dom.test.mjs (jsdom + mocked fetch: the live panel never invents values)
 ```
 
-Automation: `.github/workflows/paper-desk.yml` (cron `*/20 * * * *` on the default branch,
-plus `workflow_dispatch`).
+Automation: `.github/workflows/paper-desk.yml` (cron `*/20 * * * *` plus `workflow_dispatch`).
+GitHub only registers a workflow from the default branch, so the schedule and the manual run become
+available once this file lands on `main` (flagged F-EB2-08).
 
 ## Official sources for every mechanic (all fetched 2026-11-20)
 
@@ -42,7 +43,7 @@ plus `workflow_dispatch`).
 | 10 | YES-bid ⇄ NO-ask reciprocity (used to size NO entries) | <https://docs.kalshi.com/getting_started/orderbook_responses.md> | "A **YES BID** at price X is equivalent to a **NO ASK** at price (\$1.00 − X)"; "Best YES ask: \$1.00 − (Highest price in the `no_dollars` array)" |
 | 11 | Settlement payout rule | <https://docs.kalshi.com/getting_started/market_settlement.md> | "Yes outcome: Yes contract holders receive \$1 per contract. No outcome: No contract holders receive \$1 per contract." / "Settlement fees are zero for simple yes/no determinations" |
 | 12 | `notional_value_dollars`, `settlement_value_dollars`, `settlement_ts` | <https://docs.kalshi.com/api-reference/market/get-market.md> | "The total value of a single contract at settlement in dollars" / "The settlement value of the YES/LONG side … Only filled after determination" |
-| 13 | Contract/price number format | <https://docs.kalshi.com/getting_started/fixed_point_migration.md> via the schemas in <https://docs.kalshi.com/api-reference/market/get-market.md> | `FixedPointDollars`: string, "responses emit up to 6" decimals; `FixedPointCount`: "responses always emit 2 decimals … minimum granularity is 0.01 contracts" |
+| 13 | Contract/price number format | <https://docs.kalshi.com/getting_started/fixed_point_migration.md> (Last Updated: November 5, 2026) | Prices: "`*_dollars` price fields are fixed-point dollar strings with up to 4 decimal places (e.g., `"0.1200"`)". Quantities: "Contract quantity `*_fp` fields are strings … Accept 0-2 decimal places on input (responses always emit 2 decimals) … Minimum granularity is 0.01 contracts". The 6-decimal allowance is scoped to margin/PnL/funding/notional amounts for perpetual markets, not to market prices, so the desk parses everything as a decimal string and never rounds a price it read. |
 | 14 | Valid order prices per market | <https://docs.kalshi.com/api-reference/market/get-markets.md> | `price_ranges` — "Valid price ranges for orders on this market"; a price off that grid would be rejected as `invalid_price` (<https://docs.kalshi.com/getting_started/quick_start_create_order.md>) |
 | 15 | Candlestick path, granularity, limits | <https://docs.kalshi.com/api-reference/market/get-market-candlesticks.md> | `/series/{series_ticker}/markets/{ticker}/candlesticks`; `period_interval` "Valid values: 1 (1 minute), 60 (1 hour), 1440 (1 day)"; "One request can span at most 5,000 periods"; `start_ts`/`end_ts` in **seconds** |
 | 16 | `series_ticker` needed for candles comes from the event | <https://external-api.demo.kalshi.co/trade-api/v2/events/KXPRESNOMD-28> (live response, 2026-11-20) | `event.series_ticker: "KXPRESNOMD"`, `event.category: "Elections"`, `settlement_sources[].url` |
@@ -51,6 +52,9 @@ plus `workflow_dispatch`).
 | 19 | Demo account creation / keys (why account data is still blank) | <https://docs.kalshi.com/getting_started/demo_env.md>, <https://help.kalshi.com/en/articles/13823775-creating-and-using-a-demo-account>, <https://docs.kalshi.com/getting_started/api_keys.md> | Demo account + API key are created by a person in the demo site; "credentials are not shared between this environment and production" |
 | 20 | GitHub: scheduled workflows run on the default branch | <https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#onworkflow_callsschedule-cron> | "The `schedule` workflow triggers on the default branch" |
 | 21 | GitHub: Pages rebuild request after a bot push | <https://docs.github.com/en/rest/pages/pages#request-a-github-pages-build> | `POST /repos/{owner}/{repo}/pages/builds` (used because `GITHUB_TOKEN` pushes do not trigger the legacy Pages build) |
+
+| 22 | Orderbook endpoint contract (single) | <https://docs.kalshi.com/api-reference/market/get-market-orderbook.md> | "It returns yes bids and no bids only (no asks are returned) … a bid for yes at price X is equivalent to an ask for no at price (100-X)"; "Each side lists price levels as [price, quantity] pairs sorted by price in ascending order, so the best (highest) bid is the last element"; "A ticker that has no order book … returns 200 with empty arrays rather than 404"; `depth` "pass 1-100 for a specific depth" |
+| 23 | Batched orderbook endpoint the desk actually calls | <https://docs.kalshi.com/api-reference/market/get-multiple-market-orderbooks.md> | `GET /markets/orderbooks` with `tickers` "minItems: 1, maxItems: 100"; "Returns one orderbook per requested market ticker, in request order. A ticker that has no order book … is returned with empty arrays."; each level is `PriceLevelDollarsCountFp` = `["0.1500", "100.00"]` — "The second element is the contract quantity (not price)" |
 
 ## Live captures taken while building this (replayable)
 

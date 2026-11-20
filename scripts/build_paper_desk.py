@@ -719,31 +719,40 @@ def build_methodology(data: dict) -> str:
     cfg = state.get("config") or {}
     src = data.get("sources") or {}
     docs = src.get("docs") or {}
-    cfg_rows = [row([f'<span class="mono">{esc(k)}</span>', esc(v), note,
+    cfg_specs = [
+        ("starting_cash_dollars", cfg.get("starting_cash_dollars"),
+         "simulated cash only; not a Kalshi balance"),
+        ("risk_per_trade_dollars", cfg.get("risk_per_trade_dollars"),
+         "caps the notional of one simulated order"),
+        ("max_contracts_per_trade", cfg.get("max_contracts_per_trade"),
+         "also limited by contracts resting at the touch"),
+        ("max_open_notional_per_market_dollars", cfg.get("max_open_notional_per_market_dollars"),
+         "per-market exposure cap"),
+        ("max_open_positions", cfg.get("max_open_positions"), "portfolio size cap"),
+        ("max_new_orders_per_run", cfg.get("max_new_orders_per_run"),
+         "orders the desk may act on per cycle"),
+        ("max_orderbook_tickers_per_run", cfg.get("max_orderbook_tickers_per_run"),
+         "how many markets get an orderbook snapshot per cycle (API politeness)"),
+        ("orderbook_batch_size", cfg.get("orderbook_batch_size"),
+         "tickers per GET /markets/orderbooks call (100 is the documented max)"),
+        ("max_resting_runs", cfg.get("max_resting_runs"),
+         "unfilled resting orders expire; no phantom fills"),
+        ("ticker_batch_size", cfg.get("ticker_batch_size"),
+         "tickers per GET /markets?tickers= request"),
+        ("swing_threshold_dollars", cfg.get("swing_threshold_dollars"),
+         "brief's $0.10 swing definition, used by the fade/momentum rules"),
+        ("fees_modeled", cfg.get("fees_modeled"),
+         "no fee model: P&L is gross of fees (flagged)"),
+    ]
+    # any config key the engine adds that this list does not name is still rendered,
+    # so the table can never go stale against trading/paper_engine.py
+    named = {k for k, _, _ in cfg_specs}
+    cfg_specs += sorted((k, v, "engine config key; not described above")
+                        for k, v in cfg.items() if k not in named)
+    cfg_rows = [row([f'<span class="mono">{esc(k)}</span>', esc(v), esc(note),
                      file_link("data/paper/state.json", "config in force")])
-                for k, v, note in [
-                    ("starting_cash_dollars", cfg.get("starting_cash_dollars"),
-                     "simulated cash only; not a Kalshi balance"),
-                    ("risk_per_trade_dollars", cfg.get("risk_per_trade_dollars"),
-                     "caps the notional of one simulated order"),
-                    ("max_contracts_per_trade", cfg.get("max_contracts_per_trade"),
-                     "also limited by contracts resting at the touch"),
-                    ("max_open_notional_per_market_dollars",
-                     cfg.get("max_open_notional_per_market_dollars"), "per-market exposure cap"),
-                    ("max_open_positions", cfg.get("max_open_positions"), "portfolio size cap"),
-                    ("max_new_orders_per_run", cfg.get("max_new_orders_per_run"),
-                     "orders the desk may act on per cycle"),
-                    ("max_orderbook_lookups_per_run", cfg.get("max_orderbook_lookups_per_run"),
-                     "API politeness"),
-                    ("max_resting_runs", cfg.get("max_resting_runs"),
-                     "unfilled resting orders expire; no phantom fills"),
-                    ("ticker_batch_size", cfg.get("ticker_batch_size"),
-                     "tickers per GET /markets?tickers= request"),
-                    ("swing_threshold_dollars", cfg.get("swing_threshold_dollars"),
-                     "brief's $0.10 swing definition, used by the fade/momentum rules"),
-                    ("fees_modeled", cfg.get("fees_modeled"),
-                     "no fee model: P&L is gross of fees (flagged)"),
-                ]]
+                for k, v, note in cfg_specs]
+
     doc_rows = [row([f'<span class="mono">{esc(k)}</span>', doc_link(v, str(v)),
                      esc(what)])
                 for k, v, what in [
@@ -857,9 +866,16 @@ def build_sources(data: dict) -> str:
          "the field set this desk consumes"),
         ("exchange status", f"{api_root}/exchange/status", f"{api_root}/exchange/status",
          "exchange/trading active flags"),
-        ("orderbook at decision time", f"{api_root}/markets/&lt;ticker&gt;/orderbook?depth=6",
+        ("orderbooks at decision time",
+         f"{api_root}/markets/orderbooks?tickers=&lt;t1&gt;&amp;tickers=&lt;t2&gt;&amp;depth=6",
          f"{api_root}/markets/KXPRESNOMD-28-AOC/orderbook?depth=4",
-         "contracts resting at each price"),
+         "contracts resting at each price, one request per &le;100 tickers; the replay column is "
+         "the single-market form of the same payload (verified live), while the batched form is "
+         "verified against its endpoint doc and a unit test, not claimed as a live capture"),
+        ("event record (topic + series ticker for the chart)",
+         f"{api_root}/events/&lt;event_ticker&gt;", f"{api_root}/events/KXPRESNOMD-28",
+         "supplies series_ticker (absent from the collector snapshot), category and "
+         "settlement_sources[].url for the per-row source links"),
         ("candlesticks for the live chart",
          f"{api_root}/series/&lt;series&gt;/markets/&lt;ticker&gt;/candlesticks?start_ts&end_ts&period_interval",
          f"{api_root}/series/KXPRESNOMD/markets/KXPRESNOMD-28-AOC/candlesticks?start_ts=1763654400&end_ts=1763740800&period_interval=60",
