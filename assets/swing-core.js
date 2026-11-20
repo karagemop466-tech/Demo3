@@ -63,7 +63,9 @@ var KalshiSwingCore = (function () {
   function createTracker(windowMinutes, opts) {
     var o = opts || {};
     return {
-      windowMs: Math.max(30, windowMinutes || 10) * 60 * 1000,
+      // floor is 30 *seconds*, not 30 minutes: Math.max(30, minutes) * 60000 would make a
+      // 5-minute selection silently behave like 30 minutes (caught by tests/alert_console.test.js)
+      windowMs: Math.max(30 * 1000, (windowMinutes || 10) * 60 * 1000),
       thresholdBits: o.thresholdBits === undefined ? THRESHOLD_BITS : o.thresholdBits,
       rearmBits: o.rearmBits === undefined ? REARM_BITS : o.rearmBits,
       maxSamples: o.maxSamples || 2000,
@@ -230,17 +232,32 @@ var KalshiSwingCore = (function () {
     var cal = (roi.buckets || {})[bucket] || null;
     var reasons = [];
 
-    var edge = 0.5;
+    var edge = 0.5, bestNet = null, bestName = null;
     if (cal && cal.evidence === "sufficient") {
-      var fadeNet = cal.fade_mean_net_dollars;
-      var fadeComp = fadeNet === null || fadeNet === undefined
-        ? 0.5 : clamp01(0.5 + fadeNet / 0.2);
+      // The backtest measures four exits; the edge is the BEST one this bucket supports,
+      // so a bucket where momentum works and fading does not is still a pick (for momentum).
+      bestNet = cal.best_mean_net_dollars;
+      bestName = cal.best_strategy || "fade60";
+      if ((cal.strategies && cal.strategies[bestName]) || bestNet !== null && bestNet !== undefined) {
+        // direction only pays if the model takes the side the measured strategy takes
+        var wantsUp = bestName.indexOf("momo") === 0;
+        var aligned = wantsUp ? alert.direction === "up" : alert.direction === "down" ||
+          alert.direction === "up";   // fades work from either side
+        if (!aligned) reasons.push(bestName + " is the measured edge but not for this direction");
+      }
+      var fadeComp = (bestNet === null || bestNet === undefined) ? 0.5 : clamp01(0.5 + bestNet / 0.2);
       var revComp = cal.reversion_rate_shrunk === null || cal.reversion_rate_shrunk === undefined
         ? 0.5 : clamp01(cal.reversion_rate_shrunk);
       edge = clamp01(0.6 * fadeComp + 0.4 * revComp);
-      reasons.push("bucket n=" + cal.n_swings + "/" + cal.n_markets + "m, fade EV=" +
-        (fadeNet === null || fadeNet === undefined ? "n/a" : "$" + fadeNet.toFixed(4)) +
-        "/contract, reversion=" + (cal.reversion_rate * 100).toFixed(0) + "%");
+      if (bestNet !== null && bestNet !== undefined && bestNet <= 0) {
+        reasons.push("no measured strategy has positive expectancy after fees in this bucket (" +
+          bestName + " " + (bestNet >= 0 ? "+" : "") + bestNet.toFixed(4) + "$/contract), so this is not a pick");
+      } else {
+        reasons.push("bucket n=" + cal.n_swings + "/" + cal.n_markets + "m | best=" + bestName +
+          " " + (bestNet === null || bestNet === undefined ? "n/a" : (bestNet >= 0 ? "+$" : "-$") +
+          Math.abs(bestNet).toFixed(4) + "/contract") + " | reversion<=60m " +
+          (cal.reversion_rate * 100).toFixed(0) + "%");
+      }
     } else {
       reasons.push(cal ? "bucket evidence insufficient (n=" + cal.n_swings + "/" +
         cal.n_markets + "m)" : "no calibrated bucket for this setup");
@@ -273,11 +290,14 @@ var KalshiSwingCore = (function () {
 
     var excluded = isExcluded(market, roi.excluded_series_prefixes || []);
     if (excluded) reasons.push("excluded series (" + excluded + ") — demo synthetic/combo");
+    var hasEdge = bestNet !== null && bestNet !== undefined && bestNet > 0;
     var pass = score >= (roi.pass_threshold_score === undefined ? 0.6 : roi.pass_threshold_score)
-      && exec > 0 && depth > 0 && !excluded && (!cal || cal.evidence === "sufficient");
+      && exec > 0 && depth > 0 && !excluded
+      && !!cal && cal.evidence === "sufficient" && hasEdge;
 
     return {
       score: score, pass: pass, bucket: bucket, evidence: cal ? cal.evidence : "none",
+      best_strategy: bestName, best_net_dollars: bestNet, calibrated_edge: r3(edge),
       hoursToClose: hoursToClose === null ? null : Math.round(hoursToClose * 10) / 10,
       components: {
         calibrated_edge: r3(edge), relative_move: r3(relScore), executability: r3(exec),

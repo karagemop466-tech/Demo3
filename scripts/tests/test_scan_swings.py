@@ -103,15 +103,20 @@ class TestOutcomes(unittest.TestCase):
         hits = S.detect_swings(rows, 3600)
         out = S.measure(rows, hits[0], interval_min=10)
         self.assertIn(out["reversion_hit"], (True, False))
-        for name in ("fade", "fade15", "momo60", "fade_settle"):
+        self.assertEqual(out["horizon_minutes"], 60)
+        # every strategy key always exists -- a missing measurement is stated, not omitted
+        self.assertEqual(set(out["strategies"]), set(S.STRATEGY_NAMES))
+        for name in S.STRATEGY_NAMES:
             s = out["strategies"][name]
             if s["status"] == "simulated-fill":
                 self.assertIsNotNone(s["net_dollars"])
-                self.assertIn("fees_dollars", s)
+                self.assertIn("fees_dollars", s)          # per contract, like net_dollars
+                self.assertIn("fees_block_dollars", s)   # per 100-contract block
+                self.assertIn("gross_dollars", s)
                 self.assertGreaterEqual(s["horizon_minutes_actual"], 1)
             else:
-                # never a silent zero: an unquotable leg is reported as such
-                self.assertEqual(s["status"], "not-quotable")
+                # never a silent zero: unquotable / unmeasurable legs are reported as such
+                self.assertIn(s["status"], ("not-quotable", "not-measurable"))
                 self.assertIn("note", s)
 
     def test_binary_mirror_legs(self):
@@ -165,6 +170,25 @@ class TestParityWithBrowser(unittest.TestCase):
 
 
 class TestOfflineEndToEnd(unittest.TestCase):
+    def test_reversion_is_horizon_bounded(self):
+        """A later drift must not count as a 60-minute reversion (that bug inflated the rate)."""
+        def row(ts, close, bid, ask):
+            return {"ts": ts, "close": close, "open": close, "high": close, "low": close,
+                    "yes_bid_close": bid, "yes_bid_open": bid, "yes_ask_close": ask,
+                    "yes_ask_open": ask, "volume_fp": 1.0, "open_interest_fp": 1.0}
+        rows = [row(0, 5000, 4900, 5100)]
+        # spike prints at t=60s, holds high through t=900s, reverts only from t=960s.
+        # With a 1-minute measurement horizon the reversion must NOT count; "ever" must.
+        rows += [row(60 * k, 6200, 6100, 6300) for k in range(1, 16)]        # t=60..900
+        rows += [row(60 * k, 5100, 5000, 5200) for k in range(16, 24)]        # t=960..1380
+        sw = {"index": 1, "direction": "up", "anchor": 5000, "delta_bits": 1200,
+              "from": 5000, "to": 6200, "anchor_index": 0}
+        out = S.measure(rows, sw, interval_min=1, horizon_min=1)   # 1-minute horizon
+        self.assertEqual(out["candles_in_horizon"], 1)
+        self.assertIs(out["reversion_hit"], False)                 # not inside the horizon
+        self.assertIs(out["reversion_hit_ever"], True)             # but it did come back
+        self.assertGreater(out["retrace_dollars_ever"], out["retrace_dollars_horizon"] or 0)
+
     def test_offline_run_outputs(self):
         with tempfile.TemporaryDirectory() as d:
             out = subprocess.run(
@@ -188,9 +212,14 @@ class TestOfflineEndToEnd(unittest.TestCase):
                 self.assertIn("candidate-news-search", kinds)
                 news = [l for l in row["links"] if l["kind"] == "candidate-news-search"][0]
                 self.assertIs(news["verified"], False, "news links must never be marked verified")
+                self.assertEqual(set(row["strategies"]), set(S.STRATEGY_NAMES))
                 for s in row["strategies"].values():
-                    self.assertIn(s["status"], ("simulated-fill", "not-quotable"))
-            self.assertIn("fade", strat["strategies"])
+                    self.assertIn(s["status"], ("simulated-fill", "not-quotable", "not-measurable"))
+            self.assertIn("fade60", strat["strategies"])
+            for key, b in strat["buckets"].items():
+                self.assertIn("best_strategy", b)
+                self.assertIn("reversion_rate_within_horizon_minutes", b)
+                self.assertEqual(b["reversion_rate_within_horizon_minutes"], 60)
             for key, b in strat["buckets"].items():
                 self.assertEqual(key.count("|"), 3)
                 self.assertIn(b["evidence"], ("sufficient", "insufficient"))

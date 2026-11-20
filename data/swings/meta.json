@@ -3,23 +3,22 @@
  "caveats": [
   "Demo exchange: prices, volumes and liquidity are simulated test data, not real markets (https://docs.kalshi.com/getting_started/demo_env.md).",
   "Candlestick OHLC is the per-period trade price plus the quoted YES bid/ask at the period open/close; fills assume the taker crosses that quote exactly and ignore book depth -- optimistic, see alerts/SPEC.md 'Fill model'.",
+  "Reversion is measured within a stated 60-minute horizon; the '*_ever' fields show what happens over the rest of the available series. Reading the ever-variant as a tradeable edge would be wrong -- that is why both are published.",
+  "Block size for fees and PnL is 100 contracts; net figures are per contract so they scale, and the fee alignment matches Kalshi's published schedule exactly.",
   "Strategies are simulated trades; no order was sent to Kalshi (no demo API credentials exist in this repo -- COORDINATION.md I-12).",
   "External news links are search deep-links offered as candidate catalysts; timing proximity is not evidence of causation."
  ],
  "event_page_probe": {
-  "attempted": true,
-  "checked_at": "2026-11-20T19:37:34Z",
-  "error": null,
-  "site_root": "https://kalshi.com",
-  "status_code": 429,
-  "ticker_echoed": false,
-  "url": "https://kalshi.com/event/KXBTCY-27JAN0100"
+  "attempted": false,
+  "error": "offline mode does not probe (no route from the dev sandbox)",
+  "status_code": null,
+  "ticker_echoed": false
  },
- "events_with_swings": 3,
- "generated_at": "2026-11-20T19:36:22Z",
+ "events_with_swings": 2,
+ "generated_at": "2026-11-20T19:43:18Z",
  "hours_1m": 48,
  "hours_60m": 168,
- "markets_scanned": 60,
+ "markets_scanned": 12,
  "per_topic_markets": 12,
  "rearm_band_dollars": 0.05,
  "sources": [
@@ -36,27 +35,18 @@
  "stats": {
   "errors": 0,
   "event_page_probe": {
-   "attempted": true,
-   "checked_at": "2026-11-20T19:37:34Z",
-   "error": null,
-   "site_root": "https://kalshi.com",
-   "status_code": 429,
-   "ticker_echoed": false,
-   "url": "https://kalshi.com/event/KXBTCY-27JAN0100"
+   "attempted": false,
+   "error": "offline mode does not probe (no route from the dev sandbox)",
+   "status_code": null,
+   "ticker_echoed": false
   },
-  "mode": "live",
-  "requests": 122,
-  "universe_counts": {
-   "crypto": 12,
-   "culture": 12,
-   "elections": 12,
-   "gas": 12,
-   "golf": 12
-  },
-  "universe_units": 60,
+  "mode": "offline",
+  "requests": 0,
+  "series_meta_source": "committed data/swings/series_meta.json (from a live run)",
+  "universe_units": 12,
   "warnings": []
  },
- "swings_found": 148,
+ "swings_found": 64,
  "threshold_dollars": 0.1,
  "window_minutes": 60
 }

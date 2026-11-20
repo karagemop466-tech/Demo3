@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live swing alerts — Kalshi Demo Tracker</title>
+<meta name="description" content="Two live scrolling alert chats for Kalshi demo markets: every >= $0.10 price swing, and only the swings a backtested ROI model likes.">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/alerts.css">
+</head>
+<body>
+<header class="top"><div class="wrap"><nav class="main">
+<a class="brand" href="index.html">Kalshi Demo Tracker</a>
+<a href="index.html">Home</a><a href="dashboard.html">Live dashboard</a><a href="alerts.html" class="active">Swing alerts</a><a href="data-tracking.html">Data tracking</a><a href="gas-prices.html">Gas prices</a><a href="elections.html">Elections</a><a href="culture.html">Culture</a><a href="crypto.html">Crypto</a><a href="golf.html">Golf</a><a href="portfolio.html">Portfolio</a><a href="trades.html">Trades</a><a href="questions.html">Questions</a><a href="suggestions.html">Suggestions</a><a href="flagged.html">Flagged for review</a><a href="sources.html">Sources</a>
+</nav></div></header>
+<main class="wrap">
+
+<h1>Live swing alerts</h1>
+<p>Two scrolling chat feeds over the highest-dollar live events in the five tracked topics
+(gas prices, elections, culture, crypto, golf). The rule is exactly the brief's: a contract
+price that moves <strong>&ge; $0.10 in either direction</strong> inside the lookback window is
+one alert. The left chat shows <strong>every</strong> alert; the right chat shows only the
+alerts the ROI model likes, where "likes" means the bucket this setup belongs to has a
+<strong>positive measured expectancy after fees</strong> in the backtest below.
+Data is read <strong>live in your browser</strong> from the Kalshi demo REST API
+(<span class="mono">https://external-api.demo.kalshi.co/trade-api/v2</span>); nothing here
+sends an order. Demo prices and liquidity are simulated
+(<a href="https://docs.kalshi.com/getting_started/demo_env.md" target="_blank" rel="noopener">official demo notice</a>).</p>
+<div id="banner" style="display:none"></div>
+
+<div class="card">
+  <h2>1 · Console</h2>
+  <p class="statusline">
+    <button class="btn" id="runBtn">Start</button>
+    <span id="engineStatus" class="pill warn">STOPPED</span>
+    <span id="counts" class="muted"></span>
+    <span id="lastPoll" class="muted"></span>
+    <span id="pollNote" class="muted">idle</span>
+    <button class="btn secondary" id="jumpLatest">Jump to latest</button>
+    <button class="btn secondary" id="exportBtn">Export session JSON</button>
+    <button class="btn secondary" id="copyBtn">Copy last 50</button>
+    <button class="btn secondary" id="clearBtn">Clear feeds</button>
+  </p>
+  <p class="controls">
+    <label>Poll every
+      <select id="pollSel">
+        <option value="5000">5 s</option><option value="10000" selected>10 s</option>
+        <option value="15000">15 s</option><option value="30000">30 s</option>
+        <option value="60000">60 s</option>
+      </select></label>
+    <label>Swing window
+      <select id="windowSel">
+        <option value="5">5 min</option><option value="10" selected>10 min</option>
+        <option value="30">30 min</option><option value="60">1 h</option>
+        <option value="180">3 h</option><option value="360">6 h</option>
+        <option value="1440">24 h</option>
+      </select></label>
+    <label>Alert threshold
+      <select id="thresholdSel">
+        <option value="0.05">$0.05</option><option value="0.10" selected>$0.10 (brief)</option>
+        <option value="0.20">$0.20</option>
+      </select></label>
+    <label>Markets per topic
+      <select id="depthSel">
+        <option value="5">5</option><option value="10" selected>10</option>
+        <option value="20">20</option><option value="30">30</option>
+      </select></label>
+    <label>Chart window
+      <select id="chartWin">
+        <option value="60">1 min</option><option value="300">5 min</option>
+        <option value="900">15 min</option><option value="3600" selected>1 h</option>
+        <option value="21600">6 h</option><option value="86400">24 h</option>
+        <option value="604800">7 d</option>
+      </select></label>
+  </p>
+  <p class="controls">
+    <label><input type="checkbox" id="soundChk"> sound</label>
+    <label><input type="checkbox" id="notifyChk"> desktop notifications</label>
+    <label><input type="checkbox" id="seedChk"> seed from 1-minute candles</label>
+    <label><input type="checkbox" id="tradableChk"> only two-sided books</label>
+    <label><input type="checkbox" id="followChk"> auto-scroll</label>
+    <button class="btn secondary" id="rebuildUniverseBtn">Rebuild universe from live /markets</button>
+    <span id="universeStatus" class="muted small"></span>
+  </p>
+  <p class="small muted" id="modelStatus"></p>
+  <p class="small muted" id="catalystStatus"></p>
+  <div class="ticker" id="ticker"></div>
+  <p class="small muted">Live cadence: unauthenticated public requests have their own,
+  unpublished limits (<a href="https://docs.kalshi.com/getting_started/rate_limits.md" target="_blank" rel="noopener">rate limits</a>:
+  token buckets are documented for authenticated traffic; on <span class="mono">429</span> this page
+  backs off exponentially and pauses while the tab is hidden). WebSocket streaming is not used
+  because the handshake requires <span class="mono">KALSHI-ACCESS-*</span> headers a browser cannot
+  attach (<a href="https://docs.kalshi.com/getting_started/quick_start_websockets.md" target="_blank" rel="noopener">WebSockets quick start</a>).</p>
+</div>
+
+<div class="card">
+  <h2>2 · The two chats</h2>
+  <div class="console-grid">
+    <section class="chat">
+      <h3>All events <span class="count" id="countAll">0 alerts</span></h3>
+      <ol class="feed" id="feedAll" aria-live="polite"></ol>
+      <button class="newcount" hidden>new messages</button>
+    </section>
+    <section class="chat">
+      <h3>Model high-ROI picks <span class="count" id="countRoi">0 picks</span></h3>
+      <ol class="feed" id="feedRoi" aria-live="polite"></ol>
+      <button class="newcount" hidden>new messages</button>
+      <p class="small muted">A row is a <em>pick</em> only when the backtest shows the best measured
+      exit in that bucket earning something after Kalshi's published taker fee, the book is
+      two-sided, and there is size at the touch. Rows that score &ge; 0.5 but fail one of those
+      gates are shown dimmed with the reason, because "why not" is usually the useful answer.</p>
+    </section>
+  </div>
+</div>
+
+<div class="card" id="detail" hidden>
+  <h2>3 · Selected market</h2>
+  <p class="muted" id="detailTitle"></p>
+  <p class="small muted" id="detailMeta"></p>
+  <canvas id="chart" height="260" aria-label="Contract price over time"></canvas>
+  <p class="small muted" id="chartNote"></p>
+  <h3>Liquidity — contracts available at each price</h3>
+  <canvas id="depth" height="230" aria-label="Order book depth"></canvas>
+  <div id="depthTable"></div>
+  <p class="small muted" id="depthNote"></p>
+  <h3>Recent fills</h3>
+  <div id="tradesTable"></div>
+  <h3>Catalysts and settlement rule</h3>
+  <div id="catalysts"></div>
+</div>
+
+<div class="card">
+  <h2>4 · Tracked universe (highest-dollar live events, grouped by topic)</h2>
+  <p class="small muted">Ranking uses an <strong>estimate</strong>: contracts traded &times; the market's
+  notional, because the API publishes no dollar-volume field (labelled everywhere; see
+  <a href="methodology.html">methodology</a>). Click any row to load its chart, book and catalysts.
+  Alert counts are per browser session and persist in localStorage.</p>
+  <div id="universeTables"></div>
+</div>
+
+<div class="card">
+  <h2>5 · Resolution tracking (yes / no, until the event resolves)</h2>
+  <p class="small muted">While this page is open, each tracked market is re-polled with the same
+  batch request that drives the alerts; when it stops being open or carries a result, the outcome
+  is posted to the chat and recorded here with its API source. Historical settlements for all five
+  topics are collected continuously by the
+  <a href="data-tracking.html">collector</a> (<a href="data/latest/resolutions.json">data/latest/resolutions.json</a>).</p>
+  <div id="resolutionTable"></div>
+</div>
+
+<div class="card">
+  <h2>6 · Why the model likes what it likes — backtest</h2>
+  <p class="small muted" id="ciStatus"></p>
+  <div id="backtestTable"></div>
+  <h3>The score, component by component</h3>
+  <div id="modelSpec"></div>
+  <h3>Verified swing history by event</h3>
+  <div id="ciEvents"></div>
+  <p class="small muted">Full specification, endpoint-by-endpoint evidence and the review trail:
+  <a href="alerts/SPEC.md">alerts/SPEC.md</a> · <a href="alerts/FINDINGS.md">alerts/FINDINGS.md</a> ·
+  <a href="alerts/UX-ROADMAP.md">alerts/UX-ROADMAP.md</a> · <a href="flagged.html">Flagged for review</a>.</p>
+</div>
+
+</main>
+<footer class="wrap"><p class="small muted">Kalshi Demo Tracker — built from verified sources only. Demo environment
+(mock funds): <span class="mono">https://external-api.demo.kalshi.co/trade-api/v2</span> ·
+Docs: <a href="https://docs.kalshi.com" target="_blank" rel="noopener">docs.kalshi.com</a> ·
+Simulated trading research only; not investment advice. Every table row links its source; blank
+cells are flagged on <a href="flagged.html">Flagged for review</a>.</p></footer>
+<script src="assets/swing-core.js"></script><script src="assets/alerts.js"></script>
+</body>
+</html>

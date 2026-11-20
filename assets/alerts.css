@@ -1,0 +1,71 @@
+/* Live alert console styles (session 5ab18dc3). Layered on assets/style.css. */
+:root { --msg-up: #0f9d6e; --msg-down: #d64545; --msg-pick: #d4a017; }
+.console-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 980px) { .console-grid { grid-template-columns: 1fr; } }
+
+.chat { position: relative; }
+.chat h3 { margin: 0 0 6px; display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.chat .count { font: 600 12px/1.2 ui-monospace, monospace; color: #6b7280; }
+.chat ol.feed {
+  list-style: none; margin: 0; padding: 8px; height: 460px; overflow-y: auto;
+  border: 1px solid #2a2f3a; border-radius: 10px; background: #0d1017;
+  scroll-behavior: smooth;
+}
+.newcount {
+  position: absolute; left: 50%; transform: translateX(-50%); bottom: 14px; z-index: 3;
+  background: #4f6df5; color: #fff; border: 0; border-radius: 999px; padding: 5px 12px;
+  font: 600 12px/1 system-ui; cursor: pointer;
+}
+li.msg {
+  border-left: 4px solid #3a4150; background: #151a24; border-radius: 8px;
+  padding: 8px 10px; margin: 0 0 8px; animation: slidein .18s ease-out;
+}
+li.msg.up { border-left-color: var(--msg-up); }
+li.msg.down { border-left-color: var(--msg-down); }
+li.msg.pick { box-shadow: inset 0 0 0 1px rgba(212,160,23,.55); }
+li.msg.nearmiss { opacity: .62; }
+li.msg.res { border-left-color: #7c4dff; background: #141327; }
+@keyframes slidein { from { transform: translateY(6px); opacity: 0; } to { transform: none; opacity: 1; } }
+.msg-head { display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; font-size: 13px; }
+.msg-head .time { color: #8b93a7; }
+.msg-head .badge { color: #fff; border-radius: 4px; padding: 1px 6px; font-size: 11px; font-weight: 700; }
+.msg-head .arrow { font-weight: 800; }
+.msg-head .arrow.up, .msg-head .delta { color: var(--msg-up); }
+li.msg.down .msg-head .arrow, li.msg.down .delta { color: var(--msg-down); }
+.msg-head .score { margin-left: auto; font: 700 12px/1 ui-monospace, monospace; color: #cbd5e1; }
+.msg-head .score.pass { color: #ffd166; }
+.msg-body { margin-top: 4px; }
+.msg-body .title { font-size: 14px; font-weight: 600; }
+.msg-body .sub { font-size: 11px; color: #8b93a7; }
+.msg-body .reasons { color: #a7b0c0; }
+.msg-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 5px; }
+.msg-links a { font-size: 11px; color: #7ea2ff; text-decoration: none; border-bottom: 1px dotted #46506a; }
+.msg-links a:hover { color: #b9ccff; }
+.msg-links a.cand { color: #c8a06a; }
+
+.controls { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; }
+.controls label { font-size: 12px; color: #9aa4b2; display: inline-flex; gap: 6px; align-items: center; }
+.controls select, .controls input[type=text] { font: inherit; font-size: 12px; padding: 2px 4px; }
+#runBtn { min-width: 92px; font-weight: 700; }
+.statusline { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; font-size: 12px; color: #9aa4b2; }
+.ticker { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 0; }
+.ticker .tick { font: 600 11px/1.6 ui-monospace, monospace; padding: 1px 6px; border-radius: 4px; background: #151a24; border: 1px solid #2a2f3a; }
+.ticker .tick.up { color: var(--msg-up); }
+.ticker .tick.down { color: var(--msg-down); }
+
+canvas { width: 100%; display: block; background: #0d1017; border: 1px solid #2a2f3a; border-radius: 10px; }
+.topic-block { margin: 14px 0 4px; }
+.topic-block h3 { padding-left: 8px; margin-bottom: 4px; }
+tr.has-alert { background: rgba(212,160,23,.07); }
+tr.selected { outline: 1px solid #4f6df5; }
+table.compact { font-size: 12px; }
+table.compact th, table.compact td { padding: 4px 6px; vertical-align: top; }
+.rules { border: 1px solid #2a2f3a; border-radius: 8px; padding: 8px; margin: 8px 0; background: #101521; }
+ul.src-list, ul.jump-list { margin: 6px 0 0; padding-left: 18px; font-size: 12px; }
+a.src { color: #7ea2ff; text-decoration: none; }
+a.src:hover { text-decoration: underline; }
+.pill.unverified, .pill.warn { background: #3a2a12; color: #f0b95f; border-radius: 999px; padding: 1px 8px; font-size: 11px; }
+.pill.ok { background: #123125; color: #63d3a4; border-radius: 999px; padding: 1px 8px; font-size: 11px; }
+.mono { font-family: ui-monospace, SFMono-Regular, monospace; }
+.small { font-size: 12px; }
+.muted { color: #8b93a7; }

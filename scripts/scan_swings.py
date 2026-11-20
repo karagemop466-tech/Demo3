@@ -142,26 +142,33 @@ _FEE_SCALE = 10 ** 10
 _CENT_SCALE = 10 ** 8      # dollars*1e10 -> cents*1e8
 
 
-def _num_units(price_b: int, contracts: int, sign: int) -> int:
-    """Numerator (over 1e10 dollars) of C*P + sign*0.07*C*P*(1-P), exact integers."""
-    return contracts * price_b * 10 ** 6 + sign * 7 * contracts * price_b * (10 ** 4 - price_b)
+def _num_units(price_b: int, contracts: int, sign: int, multiplier: float = 1.0) -> int:
+    """Numerator (over 1e10 dollars) of C*P + sign*0.07*mult*C*P*(1-P), exact integers.
+
+    `multiplier` is the series' own `fee_multiplier` from GET /series/{ticker} (observed
+    1 with `fee_type: quadratic` on KXWTIMAX); 0.07 x P x (1-P) is the general quadratic
+    formula in the published schedule, so a non-default multiplier scales it.
+    """
+    base = contracts * price_b * (10 ** 4 - price_b)
+    extra = round(7 * base * (multiplier - 1.0)) if multiplier != 1.0 else 0
+    return contracts * price_b * 10 ** 6 + sign * (7 * base + extra)
 
 
-def _model_fee(price_b: int, contracts: int) -> float:
-    """0.07 x C x P x (1-P) -- the published general taker formula (fee schedule PDF)."""
-    return 7 * contracts * price_b * (10 ** 4 - price_b) / _FEE_SCALE
+def _model_fee(price_b: int, contracts: int, multiplier: float = 1.0) -> float:
+    """0.07 x mult x C x P x (1-P) -- the published general taker formula (fee schedule PDF)."""
+    return 7 * contracts * price_b * (10 ** 4 - price_b) / _FEE_SCALE * multiplier
 
 
-def buy_cost_dollars(price_b: int, contracts: int = CONTRACTS) -> float:
+def buy_cost_dollars(price_b: int, contracts: int = CONTRACTS, multiplier: float = 1.0) -> float:
     """Debit for a taker buy: the buyer's balance change is aligned DOWN, so the cost
     (a positive debit) is ceil_cent(C*P + model_fee) -- fee_rounding.md `aligned_change`."""
-    num = _num_units(price_b, contracts, +1)
+    num = _num_units(price_b, contracts, +1, multiplier)
     return -((-num) // _CENT_SCALE) / 100.0     # integer ceiling, then cents -> dollars
 
 
-def sell_proceeds_dollars(price_b: int, contracts: int = CONTRACTS) -> float:
+def sell_proceeds_dollars(price_b: int, contracts: int = CONTRACTS, multiplier: float = 1.0) -> float:
     """Credit for a taker sell: floor_cent(C*P - model_fee) (same doc, seller direction)."""
-    num = _num_units(price_b, contracts, -1)
+    num = _num_units(price_b, contracts, -1, multiplier)
     return (num // _CENT_SCALE) / 100.0
 
 
@@ -267,46 +274,75 @@ def detect_swings(rows: list[dict], window_seconds: int, threshold_bits: int = T
 
 
 # ------------------------------------------------------------------ outcomes
-def measure(rows: list[dict], sw: dict, interval_min: int) -> dict:
-    """Post-swing outcome + per-strategy fills, using only candle-quoted levels."""
+STRATEGY_NAMES = ("fade15", "fade60", "momo60", "fade_settle")
+
+
+def _no_data(reason: str) -> dict:
+    """Explicit 'we could not measure this' record -- never a silent 0."""
+    return {"status": "not-measurable", "note": reason}
+
+
+def measure(rows: list[dict], sw: dict, interval_min: int, horizon_min: int = 60,
+            multiplier: float = 1.0) -> dict:
+    """Post-swing outcome, measured inside a stated horizon (and 'ever' for reference).
+
+    reversion_hit  = within `horizon_min` minutes of the alert, the price gave back at
+                     least half the move (the classic mean-reversion test)
+    continuation   = the extra distance beyond the swing print inside the same horizon
+    Both are also computed over all remaining candles (`*_ever`) so the reader can see how
+    much of the 'reversion' is simply the market drifting later. Nothing is extrapolated:
+    when the series ends before the horizon, the row says so.
+    """
     i = sw["index"]
     delta = sw["delta_bits"]
-    horizon_candles = {k: max(1, int(round(v / interval_min))) for k, v in EXIT_HORIZONS.items()}
     end = len(rows) - 1
-    win = rows[i + 1:end + 1]
-    res = {"retrace_bits": None, "reversion_hit": None, "continuation_bits": None,
-           "candles_after": len(win), "strategies": {}}
-    if not win:
+    k = max(1, int(round(horizon_min / max(1, interval_min))))
+    fwd = rows[i + 1:min(i + 1 + k, end + 1)]
+    ever = rows[i + 1:end + 1]
+    res = {"retrace_dollars_horizon": None, "reversion_hit": None, "continuation_dollars": None,
+           "retrace_dollars_ever": None, "reversion_hit_ever": None,
+           "candles_in_horizon": len(fwd), "candles_after": len(ever),
+           "horizon_minutes": horizon_min, "strategies": {n: _no_data("no forward candles")
+                                                           for n in STRATEGY_NAMES}}
+    if not ever:
         return res
-    if sw["direction"] == "up":
-        peak = sw["to"]
-        trough_after = min(r["close"] for r in win)
-        res["retrace_bits"] = max(0, peak - trough_after)
-        high_after = max(r["close"] for r in win)
-        res["continuation_bits"] = max(0, high_after - peak)
-    else:
-        trough = sw["to"]
-        peak_after = max(r["close"] for r in win)
-        res["retrace_bits"] = max(0, peak_after - trough)
-        low_after = min(r["close"] for r in win)
-        res["continuation_bits"] = max(0, trough - low_after)
-    res["reversion_hit"] = (res["retrace_bits"] or 0) >= delta // 2
 
-    entry = rows[i + 1]
-    for label, horizon in (("fade", "60"), ("fade15", "15"), ("momo60", "60")):
-        pass
-    for label, horizon in (("fade", "60"), ("fade15", "15")):
-        k = horizon_candles[horizon]
-        exit_row = rows[min(i + k, end)]
-        res["strategies"][label] = simulate_fade(sw["direction"], entry, exit_row)
-        res["strategies"][label]["horizon_minutes_requested"] = EXIT_HORIZONS[horizon]
-        res["strategies"][label]["horizon_minutes_actual"] = k * interval_min
-    k60 = horizon_candles["60"]
-    res["strategies"]["momo60"] = simulate_momo(sw["direction"], entry, rows[min(i + k60, end)])
-    res["strategies"]["momo60"]["horizon_minutes_requested"] = 60
-    res["strategies"]["momo60"]["horizon_minutes_actual"] = k60 * interval_min
-    res["strategies"]["fade_settle"] = simulate_fade(sw["direction"], entry, rows[end])
-    res["strategies"]["fade_settle"]["horizon_minutes_actual"] = (end - i) * interval_min
+    def _retrace(window, direction, peak_or_trough):
+        if not window:
+            return None, None
+        if direction == "up":
+            back = max(0, peak_or_trough - min(r["close"] for r in window))
+            cont = max(0, max(r["close"] for r in window) - peak_or_trough)
+        else:
+            back = max(0, max(r["close"] for r in window) - peak_or_trough)
+            cont = max(0, peak_or_trough - min(r["close"] for r in window))
+        return back, cont
+
+    hb, hc = _retrace(fwd or [rows[i]], sw["direction"], sw["to"])
+    eb, ec = _retrace(ever, sw["direction"], sw["to"])
+    res["retrace_dollars_horizon"] = dollars(hb)
+    res["reversion_hit"] = (hb or 0) >= delta // 2 if fwd else None
+    res["continuation_dollars"] = dollars(hc)
+    res["retrace_dollars_ever"] = dollars(eb)
+    res["reversion_hit_ever"] = (eb or 0) >= delta // 2
+    if not fwd:
+        res["strategies_note"] = "series ended before the 60-minute horizon"
+
+    entry = rows[i + 1] if i + 1 <= end else None
+    if entry is None:
+        return res
+    plan = {"fade15": ("fade", 15), "fade60": ("fade", 60), "momo60": ("momo", 60)}
+    for name, (kind, minutes) in plan.items():
+        kk = max(1, int(round(minutes / max(1, interval_min))))
+        exit_row = rows[min(i + kk, end)]
+        rec = simulate_fade(sw["direction"], entry, exit_row, multiplier) if kind == "fade" \
+            else simulate_momo(sw["direction"], entry, exit_row, multiplier)
+        rec["horizon_minutes_requested"] = minutes
+        rec["horizon_minutes_actual"] = kk * interval_min
+        res["strategies"][name] = rec
+    rec = simulate_fade(sw["direction"], entry, rows[end])
+    rec["horizon_minutes_actual"] = (end - i) * interval_min
+    res["strategies"]["fade_settle"] = rec
     return res
 
 
@@ -327,15 +363,15 @@ def _fill_legs(direction: str, row_in: dict, row_out: dict, side: str) -> tuple 
     return pin, pout
 
 
-def _net(pay_b: int, recv_b: int, contracts: int = CONTRACTS) -> dict:
+def _net(pay_b: int, recv_b: int, contracts: int = CONTRACTS, multiplier: float = 1.0) -> dict:
     """Round trip on a `contracts`-contract block, priced from the aligned cash flows.
 
     net_dollars is PER CONTRACT (size-invariant, so the site can scale it); net_block_dollars
     is the cash result of the block actually modelled. Fees come from the published formula
     plus the documented cent alignment -- see buy_cost_dollars/sell_proceeds_dollars.
     """
-    cost = buy_cost_dollars(pay_b, contracts)
-    proceeds = sell_proceeds_dollars(recv_b, contracts)
+    cost = buy_cost_dollars(pay_b, contracts, multiplier)
+    proceeds = sell_proceeds_dollars(recv_b, contracts, multiplier)
     gross_block = contracts * (recv_b - pay_b) / BIT
     fees = round(cost - contracts * (pay_b / BIT) + contracts * (recv_b / BIT) - proceeds, 6)
     net_block = round(proceeds - cost, 6)
@@ -344,13 +380,16 @@ def _net(pay_b: int, recv_b: int, contracts: int = CONTRACTS) -> dict:
             "proceeds_block_dollars": round(proceeds, 4),
             "gross_dollars": round(gross_block / contracts, 6),
             "gross_block_dollars": round(gross_block, 6),
-            "fees_dollars": fees, "net_dollars": round(net_block / contracts, 6),
+            "contracts": contracts,
+            "fees_dollars": round(fees / contracts, 6), "fees_block_dollars": fees,
+            "fee_multiplier_used": multiplier,
+            "net_dollars": round(net_block / contracts, 6),
             "net_block_dollars": net_block,
             "roi_on_paid": round(net_block / cost, 6) if cost > 0 else None,
             "status": "simulated-fill"}
 
 
-def simulate_fade(direction: str, row_in: dict, row_out: dict) -> dict:
+def simulate_fade(direction: str, row_in: dict, row_out: dict, multiplier: float = 1.0) -> dict:
     """Fade = take the OTHER side of the move (buy NO after an up-swing, buy YES after a
     down-swing) and exit at the horizon. Returns a `not-quotable` record when the candle
     has no bid/ask on the needed side -- never a zeroed fake trade."""
@@ -358,12 +397,12 @@ def simulate_fade(direction: str, row_in: dict, row_out: dict) -> dict:
     legs = _fill_legs(direction, row_in, row_out, side)
     if legs is None:
         return {"status": "not-quotable", "note": "no bid/ask in candle data for that side"}
-    out = _net(*legs)
+    out = _net(*legs, multiplier=multiplier)
     out["side"] = side
     return out
 
 
-def simulate_momo(direction: str, row_in: dict, row_out: dict) -> dict:
+def simulate_momo(direction: str, row_in: dict, row_out: dict, multiplier: float = 1.0) -> dict:
     """Momentum = take the SAME side as the move."""
     side = "yes" if direction == "up" else "no"
     legs = _fill_legs(direction, row_in, row_out, side)
@@ -376,23 +415,31 @@ def simulate_momo(direction: str, row_in: dict, row_out: dict) -> dict:
 
 # --------------------------------------------------------------- aggregates
 def agg(rows: list[dict]) -> dict:
+    """Aggregate a strategy's per-swing results. Units: dollars PER CONTRACT throughout."""
     ok = [r for r in rows if r.get("net_dollars") is not None]
     n = len(rows)
     if not ok:
         return {"n": n, "n_quotable": 0, "mean_net_dollars": None, "median_net_dollars": None,
-                "hit_rate": None, "mean_roi_on_paid": None, "mean_fees_dollars": None,
-                "total_net_dollars": None, "unquotable": n}
+                "mean_gross_dollars": None, "hit_rate": None, "hit_rate_gross": None,
+                "mean_roi_on_paid": None, "mean_fees_dollars": None,
+                "total_net_dollars": None, "unquotable": n, "not_measurable": n - len(ok)}
+    if not any("gross_dollars" in r for r in ok):
+        pass
     nets = sorted(r["net_dollars"] for r in ok)
     wins = [r for r in ok if r["net_dollars"] > 0]
     rois = [r["roi_on_paid"] for r in ok if r.get("roi_on_paid") is not None]
     mid = nets[len(nets) // 2] if len(nets) % 2 else (nets[len(nets) // 2 - 1] + nets[len(nets) // 2]) / 2
+    gross = [r["gross_dollars"] for r in ok if r.get("gross_dollars") is not None]
     return {"n": n, "n_quotable": len(ok),
             "mean_net_dollars": round(sum(nets) / len(nets), 6),
             "median_net_dollars": round(mid, 6),
+            "mean_gross_dollars": round(sum(gross) / len(gross), 6) if gross else None,
             "hit_rate": round(len(wins) / len(ok), 4),
+            "hit_rate_gross": round(len([g for g in gross if g > 0]) / len(gross), 4) if gross else None,
             "mean_roi_on_paid": round(sum(rois) / len(rois), 6) if rois else None,
-            "mean_fees_dollars": round(sum(r["fees_dollars"] for r in ok) / len(ok), 6),
-            "total_net_dollars": round(sum(nets), 4), "unquotable": n - len(ok)}
+            "mean_fees_dollars": round(sum(r.get("fees_dollars") or 0 for r in ok) / len(ok), 6),
+            "total_net_dollars": round(sum(nets), 4), "unquotable": n - len(ok),
+            "not_measurable": 0}
 
 
 def bucket_key(topic: str, from_d: float | None, move_bits: int, ttc_hours: float | None) -> str:
@@ -435,17 +482,20 @@ def build_links(api_root: str, market_ticker: str, event_ticker: str | None,
     """
     links = [{"kind": "official-api", "label": "API record for this market (source of the row)",
               "url": f"{api_root}/markets?tickers={market_ticker}", "verified": True}]
-    probe_ok = bool(probe and probe.get("status_code") == 200 and probe.get("ticker_echoed"))
+    verified_root = (probe or {}).get("verified_root")
     if event_ticker:
-        if probe_ok:
+        if verified_root:
             links.append({"kind": "official-site", "label": "Kalshi event page",
-                          "url": f"{probe['site_root']}/event/{event_ticker}",
-                          "verified": True, "probe": probe.get("checked_at")})
+                          "url": f"{verified_root}/event/{event_ticker}", "verified": True,
+                          "note": f"CI probe returned 200 with the ticker echoed at "
+                                  f"{(probe or {}).get('checked_at')}"})
         else:
-            links.append({"kind": "unverified-site", "label": "Kalshi event page (URL pattern not confirmed)",
+            detail = ", ".join(f"{a['site_root']} -> {a.get('status_code') or a.get('error')}"
+                               for a in (probe or {}).get("attempts", [])) or "no probe"
+            links.append({"kind": "unverified-site", "label": "Kalshi event page (not confirmed)",
                           "url": None, "verified": False,
-                          "note": "probe from CI did not return 200 with the ticker echoed; "
-                                  "see the Flagged register"})
+                          "note": f"probe did not confirm the route ({detail}); "
+                                  "see the Flagged register instead of guessing a URL"})
     if title:
         links.append({"kind": "candidate-news-search", "verified": False,
                       "label": "Candidate catalyst search (last 24h) - a lookup link, not a proven cause",
@@ -453,32 +503,53 @@ def build_links(api_root: str, market_ticker: str, event_ticker: str | None,
     return links
 
 
-def probe_event_page(event_ticker: str | None, timeout: float = 15.0) -> dict:
-    """Check whether Kalshi's public event page resolves for a tracked event.
+SITE_ROOTS = ("https://kalshi.com", "https://demo.kalshi.co")
 
-    Run from CI (the dev sandbox has no route to kalshi.com). Recorded on every scan so
-    the console only links what was actually observed to work.
-    """
-    out = {"attempted": bool(event_ticker), "status_code": None, "ticker_echoed": False,
-           "site_root": "https://kalshi.com", "checked_at": None, "error": None}
-    if not event_ticker:
-        out["error"] = "no event ticker in the snapshot to probe"
-        return out
+
+def _probe_one(site_root: str, event_ticker: str, timeout: float = 20.0) -> dict:
     import urllib.error
     import urllib.request
-    url = f"{out['site_root']}/event/{event_ticker}"
+    out = {"site_root": site_root, "url": f"{site_root}/event/{event_ticker}",
+           "status_code": None, "body_bytes": 0, "ticker_echoed": False, "title_echoed": False,
+           "error": None}
     try:
-        req = urllib.request.Request(url, headers={"User-Agent": "kalshi-demo-tracker/1.0 (verification probe)"})
+        req = urllib.request.Request(out["url"], headers={
+            "User-Agent": "Mozilla/5.0 (compatible; kalshi-demo-tracker/1.0 verification probe)"})
         with urllib.request.urlopen(req, timeout=timeout) as resp:
-            body = resp.read(400_000).decode("utf-8", "replace")
+            body = resp.read(600_000).decode("utf-8", "replace")
             out["status_code"] = resp.status
+            out["body_bytes"] = len(body)
             out["ticker_echoed"] = event_ticker in body
     except urllib.error.HTTPError as exc:
         out["status_code"] = exc.code
-    except Exception as exc:  # noqa: BLE001 - probe failure is recorded, not fatal
+        out["error"] = f"HTTP {exc.code}"
+    except Exception as exc:  # noqa: BLE001 - a probe failure is recorded, never fatal
         out["error"] = f"{type(exc).__name__}: {exc}"[:200]
     out["checked_at"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    out["url"] = url
+    return out
+
+
+def probe_event_page(event_ticker: str | None, timeout: float = 20.0) -> dict:
+    """Does Kalshi's public event page actually resolve for a tracked event?
+
+    Run from CI (the dev sandbox has no route to kalshi hosts). The console only renders an
+    event-page link when a probe returned HTTP 200 AND echoed the ticker; anything else
+    (404, 429, blocked, SPA with no server HTML) is recorded as unverified and the link is
+    omitted rather than guessed. Each attempt is kept so the Flagged page can show why.
+    """
+    out = {"attempted": bool(event_ticker), "attempts": [], "verified_root": None}
+    if not event_ticker:
+        out["error"] = "no event ticker in the snapshot to probe"
+        return out
+    for root in SITE_ROOTS:
+        att = _probe_one(root, event_ticker, timeout)
+        out["attempts"].append(att)
+        time.sleep(2.0)
+        if att["status_code"] == 200 and att["ticker_echoed"] and not out["verified_root"]:
+            out["verified_root"] = root
+    out["status_code"] = out["attempts"][0]["status_code"]
+    out["ticker_echoed"] = bool(out["verified_root"])
+    out["checked_at"] = out["attempts"][-1]["checked_at"]
     return out
 
 
@@ -506,6 +577,51 @@ def poll_resolutions(client, api_root: str, tickers: list[str]) -> dict:
                       "last_price_dollars": m.get("last_price_dollars"),
                       "resolution_source_url": f"{api_root}/markets?tickers={t}"}
     return out
+
+
+def fetch_series_meta(client, root: str, series_list) -> dict:
+    """GET /series/{series_ticker} for each series in the universe.
+
+    The response carries the exchange's own answer to "what moves/ settles this market":
+    `settlement_sources[].{name,url}`, `fee_type`, `fee_multiplier`, `contract_terms_url`,
+    `categories`, `tags`. Shape verified live 2026-11-20 against
+    https://external-api.demo.kalshi.co/trade-api/v2/series/KXWTIMAX (ICE, quadratic, 1)
+    and documented on https://docs.kalshi.com/api-reference/market/get-series.md
+    """
+    meta = {}
+    for series in sorted({s for s in series_list if s}):
+        try:
+            data = client.request("GET", f"/series/{series}")
+            entry = data.get("series") or {}
+            meta[series] = {
+                "series_ticker": series,
+                "title": entry.get("title"),
+                "category": entry.get("category"),
+                "categories": entry.get("categories"),
+                "tags": entry.get("tags"),
+                "frequency": entry.get("frequency"),
+                "fee_type": entry.get("fee_type"),
+                "fee_multiplier": entry.get("fee_multiplier"),
+                "settlement_sources": entry.get("settlement_sources") or [],
+                "contract_terms_url": entry.get("contract_terms_url"),
+                "expected_volume_initial": entry.get("expected_volume_initial"),
+                "source_url": f"{root}/series/{series}",
+            }
+        except Exception as exc:  # noqa: BLE001
+            meta[series] = {"series_ticker": series, "error": str(exc)[:160],
+                            "source_url": f"{root}/series/{series}"}
+    return meta
+
+
+def offline_series_meta() -> dict:
+    """Series metadata committed by an earlier live run, if any."""
+    path = os.path.join(ROOT, "data", "swings", "series_meta.json")
+    if os.path.exists(path):
+        try:
+            return json.load(open(path)).get("by_series", {})
+        except Exception:
+            return {}
+    return {}
 
 
 # ------------------------------------------------------------------- offline
@@ -618,12 +734,13 @@ def live_units(args) -> tuple[list[dict], dict]:
              "event_page_probe": probe,
              "warnings": warnings[-40:], "api_root": root,
              "universe_counts": {t: len(v) for t, v in sorted(universe.items())}}
-    return units, stats
+    return units, stats, client
 
 
 # ------------------------------------------------------------------ main
 def run(args) -> int:
     started = datetime.now(timezone.utc)
+    client = None
     if args.offline:
         units, stats = load_offline(), {"mode": "offline", "requests": 0, "errors": 0,
                                        "warnings": [], "event_page_probe": {"attempted": False,
@@ -631,11 +748,25 @@ def run(args) -> int:
                                        "error": "offline mode does not probe (no route from the dev sandbox)"}}
         root = "https://external-api.demo.kalshi.co/trade-api/v2"
     else:
-        units, stats = live_units(args)
+        units, stats, client = live_units(args)
         root = stats.pop("api_root")
         stats["mode"] = "live"
     stats["universe_units"] = len(units)
     probe = stats.get("event_page_probe") or {}
+
+    series_list = [u.get("series_ticker") or (u["ticker"].split("-", 1)[0] if u.get("ticker") else None)
+                   for u in units]
+    if args.offline:
+        series_meta = offline_series_meta()
+        stats["series_meta_source"] = "committed data/swings/series_meta.json (from a live run)"
+    else:
+        series_meta = fetch_series_meta(client, root, series_list)
+        stats["series_meta_source"] = "fetched this run"
+    write(os.path.join(ROOT, args.out, "series_meta.json"),
+          {"meta": {"generated_at": started.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                    "endpoint": f"{root}/series/{{series_ticker}}",
+                    "doc": "https://docs.kalshi.com/api-reference/market/get-series.md"},
+           "by_series": series_meta})
 
     swings_out, strat_rows = [], []
     for unit in units:
@@ -650,6 +781,10 @@ def run(args) -> int:
                 ttc_hours = (ct - started).total_seconds() / 3600.0
             except ValueError:
                 ttc_hours = None
+        series_key = unit.get("series_ticker") or (unit["ticker"].split("-", 1)[0] if unit.get("ticker") else "")
+        smeta = series_meta.get(series_key) or {}
+        fee_mult = smeta.get("fee_multiplier")
+        fee_mult = float(fee_mult) if isinstance(fee_mult, (int, float)) else 1.0
         for window in unit["windows"]:
             interval = int(window.get("interval_minutes") or 1)
             window_seconds = args.window_minutes * 60
@@ -660,7 +795,7 @@ def run(args) -> int:
             src = window.get("source_url") or unit.get("source_url") or candle_source_url(
                 root, unit.get("series_ticker"), unit["ticker"])
             for sw in detect_swings(rows, window_seconds, args.threshold_bits, args.rearm_bits):
-                outcome = measure(rows, sw, interval)
+                outcome = measure(rows, sw, interval, multiplier=fee_mult)
                 from_d, to_d = dollars(sw["from"]), dollars(sw["to"])
                 key = bucket_key(topic, from_d, sw["delta_bits"], ttc_hours)
                 settle_ts = resolution.get("settlement_ts")
@@ -707,10 +842,14 @@ def run(args) -> int:
                     "resolved_after_swing": resolved_after,
                     "close_time": close_time,
                     "hours_to_close": round(ttc_hours, 3) if ttc_hours is not None else None,
-                    "retrace_dollars": dollars(outcome["retrace_bits"]),
+                    "retrace_dollars": outcome["retrace_dollars_horizon"],
                     "reversion_hit": outcome["reversion_hit"],
-                    "continuation_dollars": dollars(outcome["continuation_bits"]),
+                    "retrace_dollars_ever": outcome["reversion_hit_ever"],
+                    "reversion_hit_ever": outcome["reversion_hit_ever"],
+                    "continuation_dollars": outcome["continuation_dollars"],
+                    "candles_in_horizon": outcome["candles_in_horizon"],
                     "candles_after": outcome["candles_after"],
+                    "horizon_minutes": outcome["horizon_minutes"],
                     "strategies": outcome["strategies"],
                     "bucket": key,
                     "bucket_price_band": band(from_d, BUCKETS_PRICE),
@@ -720,6 +859,12 @@ def run(args) -> int:
                     "source_url": src,
                     "resolution_source_url": resolution.get("resolution_source_url"),
                     "rules_primary": m.get("rules_primary"),
+                    "settlement_sources": smeta.get("settlement_sources") or [],
+                    "series_category": smeta.get("category"),
+                    "series_tags": smeta.get("tags"),
+                    "fee_type": smeta.get("fee_type"),
+                    "fee_multiplier": smeta.get("fee_multiplier"),
+                    "contract_terms_url": smeta.get("contract_terms_url"),
                     "links": build_links(root, unit["ticker"], m.get("event_ticker"),
                                          m.get("title") or m.get("yes_sub_title"), probe),
                     "flag": None if m.get("event_ticker") else "no-event-ticker-in-snapshot",
@@ -739,15 +884,22 @@ def run(args) -> int:
         strategies[sname] = {"overall": a,
                              "by_topic": {t: agg([r for r in rows if r.get("topic") == t])
                                           for t in sorted({r.get("topic") for r in rows} if rows else [])}}
-    fade = [r for r in strat_rows if r["strategy"] == "fade"]
     global_rev = round(len([s for s in swings_out if s["reversion_hit"]]) / len(swings_out), 6) if swings_out else None
-    global_fade_hit = round(len([r for r in fade if (r.get("net_dollars") or 0) > 0]) / len(fade), 6) if fade else None
+    _hit_cache = {}
+
+    def global_hit_rate(name: str):
+        """Global post-fee win rate for a strategy -- the shrinkage prior for its buckets."""
+        if name not in _hit_cache:
+            rows = [r for r in strat_rows if r["strategy"] == name and r.get("net_dollars") is not None]
+            _hit_cache[name] = round(len([r for r in rows if r["net_dollars"] > 0]) / len(rows), 6) if rows else None
+        return _hit_cache[name]
+
+    global_fade_hit = global_hit_rate("fade60")
 
     buckets = {}
     for s in swings_out:
-        b = buckets.setdefault(s["bucket"], {"n": 0, "reversion_hits": 0, "fade_n": 0,
-                                             "fade_wins": 0, "fade_net_sum": 0.0,
-                                             "markets": set(), "tickers": set(),
+        b = buckets.setdefault(s["bucket"], {"n": 0, "reversion_hits": 0, "reversion_hits_ever": 0,
+                                             "strat": {}, "markets": set(),
                                              "mean_delta_dollars": 0.0, "resolved_yes": 0,
                                              "resolved_no": 0, "unresolved": 0})
         b["n"] += 1
@@ -755,18 +907,23 @@ def run(args) -> int:
         b["mean_delta_dollars"] += s["delta_dollars"]
         if s["reversion_hit"]:
             b["reversion_hits"] += 1
+        if s.get("reversion_hit_ever"):
+            b["reversion_hits_ever"] += 1
         if s.get("result") == "yes":
             b["resolved_yes"] += 1
         elif s.get("result") == "no":
             b["resolved_no"] += 1
         else:
             b["unresolved"] += 1
-        f = (s["strategies"].get("fade") or {})
-        if f.get("net_dollars") is not None:
-            b["fade_n"] += 1
-            b["fade_net_sum"] += f["net_dollars"]
-            if f["net_dollars"] > 0:
-                b["fade_wins"] += 1
+        for name, rec in (s["strategies"] or {}).items():
+            if rec.get("net_dollars") is None:
+                continue
+            acc = b["strat"].setdefault(name, {"n": 0, "wins": 0, "net_sum": 0.0, "gross_sum": 0.0})
+            acc["n"] += 1
+            acc["net_sum"] += rec["net_dollars"]
+            acc["gross_sum"] += rec.get("gross_dollars") or 0.0
+            if rec["net_dollars"] > 0:
+                acc["wins"] += 1
     calib = {}
     for key, b in sorted(buckets.items()):
         n_markets = len(b["markets"])
@@ -774,18 +931,35 @@ def run(args) -> int:
         b["n_markets"] = n_markets
         b.pop("markets")
         rev_rate = round(b["reversion_hits"] / b["n"], 6)
-        fade_rate = round(b["fade_wins"] / b["fade_n"], 6) if b["fade_n"] else None
         enough = b["n"] >= args.min_bucket_n and n_markets >= args.min_bucket_markets
+        per_strat = {}
+        for name, acc in sorted(b["strat"].items()):
+            per_strat[name] = {
+                "n_quotable": acc["n"],
+                "hit_rate": round(acc["wins"] / acc["n"], 6),
+                "hit_rate_shrunk": shrink(acc["wins"], acc["n"], global_hit_rate(name) or 0.5),
+                "mean_net_dollars": round(acc["net_sum"] / acc["n"], 6),
+                "mean_gross_dollars": round(acc["gross_sum"] / acc["n"], 6),
+            }
+        best_name, best_net = None, None
+        for name, v in per_strat.items():
+            if best_net is None or v["mean_net_dollars"] > best_net:
+                best_name, best_net = name, v["mean_net_dollars"]
+        fade = per_strat.get("fade60") or per_strat.get("fade15")
         calib[key] = {
             "n_swings": b["n"], "n_markets": n_markets,
             "resolved_yes": b["resolved_yes"], "resolved_no": b["resolved_no"],
             "unresolved": b["unresolved"],
             "reversion_rate": rev_rate,
+            "reversion_rate_within_horizon_minutes": 60,
             "reversion_rate_shrunk": shrink(b["reversion_hits"], b["n"], global_rev or 0.5),
-            "fade_n_quotable": b["fade_n"], "fade_hit_rate": fade_rate,
-            "fade_hit_rate_shrunk": shrink(b["fade_wins"], b["fade_n"], global_fade_hit or 0.5)
-            if b["fade_n"] else None,
-            "fade_mean_net_dollars": round(b["fade_net_sum"] / b["fade_n"], 6) if b["fade_n"] else None,
+            "reversion_rate_ever": round(b["reversion_hits_ever"] / b["n"], 6),
+            "fade_n_quotable": (fade or {}).get("n_quotable"),
+            "fade_hit_rate": (fade or {}).get("hit_rate"),
+            "fade_hit_rate_shrunk": (fade or {}).get("hit_rate_shrunk"),
+            "fade_mean_net_dollars": (fade or {}).get("mean_net_dollars"),
+            "strategies": per_strat,
+            "best_strategy": best_name, "best_mean_net_dollars": best_net,
             "evidence": "sufficient" if enough else "insufficient",
             "evidence_rule": f"n_swings >= {args.min_bucket_n} and n_markets >= {args.min_bucket_markets}",
         }
@@ -863,6 +1037,11 @@ def run(args) -> int:
             "excluded_series_prefixes": list(EXCLUDED_SERIES_PREFIX),
             "excluded_reason": "demo synthetic exchange-test series and MVE combos "
                                "(COORDINATION.md I-15; /markets mve_filter docs)",
+            "strategy_names": list(STRATEGY_NAMES),
+            "reversion_horizon_minutes": 60,
+            "edge_definition": "max over the measured strategies of the bucket's mean net "
+                               "$/contract (best_strategy / best_mean_net_dollars); a bucket "
+                               "with no positive strategy is not a pick",
             "fee_model": {"taker_rate_multiplier": FEE_RATE,
                           "formula": "ceil(0.07 * C * P * (1-P)) dollars per round-trip leg",
                           "source": "https://kalshi.com/docs/kalshi-fee-schedule.pdf",
@@ -893,6 +1072,11 @@ def run(args) -> int:
             "Candlestick OHLC is the per-period trade price plus the quoted YES bid/ask at the "
             "period open/close; fills assume the taker crosses that quote exactly and ignore "
             "book depth -- optimistic, see alerts/SPEC.md 'Fill model'.",
+            "Reversion is measured within a stated 60-minute horizon; the '*_ever' fields show "
+            "what happens over the rest of the available series. Reading the ever-variant as a "
+            "tradeable edge would be wrong -- that is why both are published.",
+            "Block size for fees and PnL is 100 contracts; net figures are per contract so they "
+            "scale, and the fee alignment matches Kalshi's published schedule exactly.",
             "Strategies are simulated trades; no order was sent to Kalshi (no demo API "
             "credentials exist in this repo -- COORDINATION.md I-12).",
             "External news links are search deep-links offered as candidate catalysts; timing "

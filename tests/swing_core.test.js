@@ -128,8 +128,21 @@ test("roiScore: calibrated bucket + tradable book can pass; a locked book cannot
       buckets: {
         "crypto|20-50c|10-20c|2-24h": {
           n_swings: 40, n_markets: 12, evidence: "sufficient", reversion_rate: 0.7,
-          reversion_rate_shrunk: 0.68, fade_mean_net_dollars: 0.021,
-          fade_hit_rate: 0.6, fade_n_quotable: 30,
+          reversion_rate_shrunk: 0.68, reversion_rate_within_horizon_minutes: 60,
+          fade_mean_net_dollars: 0.021, fade_hit_rate: 0.6, fade_n_quotable: 30,
+          // the CI scan publishes the best measured exit per bucket; the gate uses it
+          best_strategy: "fade60", best_mean_net_dollars: 0.021,
+          strategies: {
+            fade15: { n_quotable: 28, mean_net_dollars: 0.008, hit_rate: 0.54, mean_gross_dollars: 0.03 },
+            fade60: { n_quotable: 30, mean_net_dollars: 0.021, hit_rate: 0.6, mean_gross_dollars: 0.044 },
+            momo60: { n_quotable: 30, mean_net_dollars: -0.013, hit_rate: 0.4, mean_gross_dollars: 0.01 },
+          },
+        },
+        // a bucket where swings happen but no measured exit earns its cost back
+        "golf|20-50c|10-20c|2-24h": {
+          n_swings: 22, n_markets: 9, evidence: "sufficient", reversion_rate: 0.9,
+          reversion_rate_shrunk: 0.88, best_strategy: "fade60", best_mean_net_dollars: -0.04,
+          strategies: { fade60: { n_quotable: 20, mean_net_dollars: -0.04, hit_rate: 0.2 } },
         },
       },
       excluded_series_prefixes: ["KXDEMOFUTHOURLY", "KXQUICKSETTLE", "KXMVE"],
@@ -156,6 +169,12 @@ test("roiScore: calibrated bucket + tradable book can pass; a locked book cannot
   assert.equal(bad.pass, false);
   assert.equal(bad.components.executability, 0);
   assert.ok(bad.reasons.length >= 1);
+
+  // negative post-fee expectancy in the bucket => never a pick, however big the move
+  const golf = Object.assign({}, market, { __topic: "golf", series_ticker: "KXGOLFMAJOR" });
+  const noEdge = C.roiScore(golf, alert, model, now);
+  assert.equal(noEdge.pass, false, "a bucket whose best strategy loses money cannot be a pick");
+  assert.ok(noEdge.reasons.join(" ").indexOf("positive expectancy") >= 0);
 
   const demoSynthetic = Object.assign({}, market, { series_ticker: "KXDEMOFUTHOURLY" });
   const flagged = C.roiScore(demoSynthetic, alert, model, now);
