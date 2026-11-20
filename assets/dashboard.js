@@ -198,6 +198,9 @@
   async function selectMarket(ticker) {
     state.selected = ticker;
     renderRanking();
+    if (window.KalshiAlerts && window.KalshiAlerts.onSelected) {
+      window.KalshiAlerts.onSelected(ticker);
+    }
     var m = state.markets.find(function (x) { return x.ticker === ticker; });
     if ($("detailTitle")) {
       $("detailTitle").textContent = m ? (m.title + " (" + ticker + ")") : ticker;
@@ -254,8 +257,11 @@
   function drawChart() {
     if (!$("priceChart")) return;
     var pts = state.candles || [];
-    K.drawPriceChart($("priceChart"), pts,
-      { windowLabel: "window: " + windowLabel(), spanSec: state.windowSec });
+    var A = window.KalshiAlerts;
+    K.drawPriceChart($("priceChart"), pts, {
+      windowLabel: "window: " + windowLabel(), spanSec: state.windowSec,
+      annotations: (A && A.annotationsFor) ? A.annotationsFor(state.selected) : []
+    });
   }
   function windowLabel() {
     var s = state.windowSec;
@@ -600,4 +606,8 @@
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", init);
   } else { init(); }
+  /* Shared handle for assets/alerts.js (swing-alert engine): the live market
+   * list for its watch set + a redraw hook so chart annotations refresh as
+   * alerts arrive. Read-only for the alerts layer. */
+  window.KalshiDash = { state: state, drawChart: drawChart };
 })();

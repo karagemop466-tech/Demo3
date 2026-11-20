@@ -60,6 +60,11 @@ if the browser blocks the request the tables fall back to the snapshot links in
   <p class="small muted">X axis: time (labels switch to seconds/minutes/hours with the window).
   Y axis: current contract price (cents). Live samples merge with 1-minute candlesticks
   (<span class="mono">/series/{series}/markets/{ticker}/candlesticks</span>).</p>
+  <h3 id="alerts">Jump events for this market (≥ $0.10 swings, ≥ markers on the chart)</h3>
+  <div id="chartAnnotations"><p class="muted small">Select a market to see its
+  ≥ $0.10 jumps here (swings ≥ $0.10 draw ▲/▼ markers on the chart above; each jump
+  links its exact API row and a generated news-search link for possible causes —
+  causation unverified).</p></div>
   <h3>Orderbook depth — contracts available at each price</h3>
   <canvas id="depthChart" height="220" aria-label="Orderbook depth"></canvas>
   <p class="small" id="obSummary"></p>
@@ -108,11 +113,50 @@ if the browser blocks the request the tables fall back to the snapshot links in
   <div id="strategyBody"></div>
 </div>
 
+<div class="card">
+  <h2>6 · Live swing alerts (chat feeds)</h2>
+  <p class="small muted">Simplified scrolling chats that alert <strong>sudden YES-price swings
+  ≥ $0.10 (10¢) in either direction</strong> on the markets in the current scan (top-ranked by
+  estimated dollar volume, up to 80 markets; polled every 10 s from
+  <span class="mono">GET /markets?tickers=…</span> — no key needed; official filter semantics:
+  <a href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noopener">Get Markets</a>).
+  Tracked price = YES bid/ask mid when a two-sided book exists, otherwise the last trade
+  (<span class="mono">last_price_dollars</span>). The exchange caches responses, so alerts can lag
+  by several seconds; the browser cannot attach the signed headers the
+  <a href="https://docs.kalshi.com/getting_started/quick_start_websockets" target="_blank" rel="noopener">WebSocket API</a>
+  requires (flag I-13), so this layer polls. Resolution notices (yes/no) join the All-events feed.
+  Auto-scroll pauses while you scroll up. Alerts persist in this browser only (localStorage) —
+  export them for records.</p>
+  <p class="small"><span id="alertStatus">starting…</span></p>
+  <p><button class="btn secondary" id="pauseAlertsBtn" type="button">⏸ Pause alerts</button>
+     <button class="btn secondary" id="exportAlertsBtn" type="button">Export alerts (JSON)</button>
+     <button class="btn secondary" id="clearAlertsBtn" type="button">Clear alerts (this browser)</button></p>
+  <div class="chatwrap">
+    <div class="chatcol">
+      <div class="chathead"><h3>All events</h3>
+        <span class="muted small"><span id="alertCountAll">0</span> swings this session</span></div>
+      <div class="chat" id="chatAll" role="log" aria-live="polite"></div>
+    </div>
+    <div class="chatcol">
+      <div class="chathead"><h3>High-ROI model picks</h3>
+        <span class="muted small"><span id="alertCountRoi">0</span> picks this session</span></div>
+      <div class="chat" id="chatRoi" role="log" aria-live="polite"></div>
+    </div>
+  </div>
+  <p class="small muted"><strong>High-ROI screen (heuristic — not validated alpha; definition in
+  <a href="methodology.html">Methodology</a>):</strong> a swing enters the right-hand feed only if all
+  five rules pass — HR-1 two-sided book exists · HR-1b ask &gt; bid · HR-2 quoted spread ≤ $0.10 ·
+  HR-3 at least one trade (volume ≥ 1 contract) · HR-4 post-move price inside 2¢–98¢ (event not decided).
+  Every alert shows which rules passed (✓) or failed (✗). The <em>news search?</em> link is a query
+  generated from the market title so a trader can look for a cause — <strong>causation is never
+  asserted</strong> (the API exposes no attribution field; see <a href="flagged.html">Flagged</a>).</p>
+</div>
+
 </main>
 <footer class="wrap"><p class="small muted">Kalshi Demo Tracker — built from verified sources only. Demo environment
 (mock funds): <span class="mono">https://external-api.demo.kalshi.co/trade-api/v2</span> ·
 Docs: <a href="https://docs.kalshi.com" target="_blank" rel="noopener">docs.kalshi.com</a> ·
 Every table row links its source; blank cells are flagged on <a href="flagged.html">Flagged for review</a>.</p></footer>
-<script src="assets/app.js"></script><script src="assets/trade.js"></script><script src="assets/dashboard.js"></script><script src="assets/site.js"></script>
+<script src="assets/app.js"></script><script src="assets/trade.js"></script><script src="assets/dashboard.js"></script><script src="assets/alerts.js"></script><script src="assets/site.js"></script>
 </body>
 </html>

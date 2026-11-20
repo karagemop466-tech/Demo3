@@ -67,3 +67,35 @@ pre { background: #f0f2f6; padding: 12px; border-radius: 8px; overflow-x: auto;
   font-size: .85rem; }
 details { margin: 8px 0; }
 summary { cursor: pointer; font-weight: 600; }
+
+/* ---- live swing-alert chats (assets/alerts.js) ---- */
+.chatwrap { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); }
+.chatcol { border: 1px solid var(--line); border-radius: 10px; background: #fff; overflow: hidden; }
+.chathead { display: flex; justify-content: space-between; align-items: baseline; gap: 8px;
+  padding: 10px 12px; border-bottom: 1px solid var(--line); background: #f7f8fb; }
+.chathead h3 { margin: 0; font-size: .95rem; }
+.chat { height: 340px; overflow-y: auto; padding: 10px 12px; scroll-behavior: smooth; }
+.msg { border-left: 4px solid var(--line); border-radius: 6px; padding: 7px 9px; margin: 0 0 8px;
+  background: #f7f8fb; font-size: .9rem; }
+.msg.up { border-left-color: #0a7a4b; background: #eef8f1; }
+.msg.down { border-left-color: #b3261e; background: #fdefee; }
+.msg.sys { border-left-color: var(--accent); background: #eef3fb; }
+.msg.note { color: var(--muted); background: #fff; }
+.msgtop { font-size: .78rem; color: var(--muted); margin-bottom: 2px; }
+.msgtime { font-weight: 700; }
+.msgarrow { font-size: .85rem; }
+.mtag { display: inline-block; border: 1px solid var(--line); border-radius: 999px;
+  padding: 0 7px; font-size: .72rem; background: #fff; text-transform: lowercase; }
+.monosm { font-family: var(--mono, ui-monospace, monospace); font-size: .74rem; }
+.msgmeta { font-size: .82rem; color: #333; margin-top: 2px; }
+.msgroi { font-size: .76rem; margin-top: 3px; }
+.msglinks { font-size: .78rem; margin-top: 3px; }
+.msglinks a { margin-right: 2px; }
+a.unv { text-decoration-style: dashed; }
+.hrpass { color: #0a7a4b; }
+.hrfail { color: #b3261e; opacity: .75; }
+.pill.roi { background: #0a7a4b; color: #fff; border-color: #0a7a4b; }
+.jumprow { border-bottom: 1px dashed var(--line); padding: 5px 0; font-size: .85rem; }
+.jumprow:last-of-type { border-bottom: none; }
+span.up { color: #0a7a4b; font-weight: 700; }
+span.down { color: #b3261e; font-weight: 700; }

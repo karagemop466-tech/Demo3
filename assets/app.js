@@ -214,6 +214,23 @@
     }
     line("bid", "#9db8d2", 1); line("ask", "#9db8d2", 1);
     line("price", "#0a7a4b", 2);
+    // swing annotations (>= threshold moves, supplied by assets/alerts.js)
+    if (opts.annotations && opts.annotations.length) {
+      opts.annotations.slice(0, 12).forEach(function (a) {
+        if (!a || a.t < t0 || a.t > t1 || a.price === null || a.price === undefined) return;
+        var x = X(a.t);
+        ctx.strokeStyle = "rgba(201,123,94,.55)";
+        ctx.beginPath(); ctx.moveTo(x, padT); ctx.lineTo(x, padT + ph); ctx.stroke();
+        var y = Y(Math.max(yMin, Math.min(yMax, a.price)));
+        ctx.fillStyle = a.dir === "down" ? "#b3261e" : "#0a7a4b";
+        ctx.beginPath();
+        if (a.dir === "down") { ctx.moveTo(x - 5, y - 9); ctx.lineTo(x + 5, y - 9); ctx.lineTo(x, y - 2); }
+        else { ctx.moveTo(x - 5, y + 9); ctx.lineTo(x + 5, y + 9); ctx.lineTo(x, y + 2); }
+        ctx.closePath(); ctx.fill();
+      });
+      ctx.fillStyle = "#5b6577";
+      ctx.fillText("▲▼ ≥$0.10 swings this window", padL + 4, padT + 24);
+    }
     // last point dot + label
     var last = points[points.length - 1];
     ctx.fillStyle = "#0a7a4b";

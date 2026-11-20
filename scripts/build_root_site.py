@@ -527,6 +527,7 @@ questions and suggestions before making decisions.</p>
 <h2>How to use this site</h2>
 <table><thead><tr><th>Goal</th><th>Page</th><th>Source</th></tr></thead><tbody>
 <tr><td>Track highest-dollar live events, price chart (seconds/minutes/hours), orderbook liquidity, resolutions</td><td><a href="dashboard.html">Live dashboard</a></td><td><a class="src" href="https://docs.kalshi.com/getting_started/quick_start_market_data" target="_blank" rel="noopener">source</a></td></tr>
+<tr><td>Live alerting: two scrolling chats (all events · high-ROI model picks) on YES-price swings ≥ $0.10 either direction, with jump annotations and links on the chart</td><td><a href="dashboard.html#alerts">Live dashboard — card 6</a></td><td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noopener">source</a></td></tr>
 <tr><td>Execute trades (demo key or labeled paper mode), analyze performance, categorize trades, build strategies</td><td><a href="portfolio.html">Portfolio</a> · <a href="trades.html">Trades</a></td><td><a class="src" href="https://docs.kalshi.com/api-reference/orders/create-order-v2" target="_blank" rel="noopener">source</a></td></tr>
 <tr><td>Decide before changing anything: questions, missing information, discovery steps</td><td><a href="questions.html">Questions</a> · <a href="suggestions.html">Suggestions</a></td><td><a class="src" href="https://docs.kalshi.com/getting_started/demo_env" target="_blank" rel="noopener">source</a></td></tr>
 <tr><td>Verify every value: per-row sources, flagged items, repo review</td><td><a href="sources.html">Sources</a> · <a href="flagged.html">Flagged</a> · <a href="repo-review.html">Repo review</a></td><td><a class="src" href="https://docs.kalshi.com/getting_started/quick_start_market_data" target="_blank" rel="noopener">source</a></td></tr>
@@ -594,6 +595,11 @@ if the browser blocks the request the tables fall back to the snapshot links in
   <p class="small muted">X axis: time (labels switch to seconds/minutes/hours with the window).
   Y axis: current contract price (cents). Live samples merge with 1-minute candlesticks
   (<span class="mono">/series/{series}/markets/{ticker}/candlesticks</span>).</p>
+  <h3 id="alerts">Jump events for this market (≥ $0.10 swings, ≥ markers on the chart)</h3>
+  <div id="chartAnnotations"><p class="muted small">Select a market to see its
+  ≥ $0.10 jumps here (swings ≥ $0.10 draw ▲/▼ markers on the chart above; each jump
+  links its exact API row and a generated news-search link for possible causes —
+  causation unverified).</p></div>
   <h3>Orderbook depth — contracts available at each price</h3>
   <canvas id="depthChart" height="220" aria-label="Orderbook depth"></canvas>
   <p class="small" id="obSummary"></p>
@@ -641,9 +647,49 @@ if the browser blocks the request the tables fall back to the snapshot links in
   <h2>5 · Trade categorization &amp; strategy analysis</h2>
   <div id="strategyBody"></div>
 </div>
+
+<div class="card">
+  <h2>6 · Live swing alerts (chat feeds)</h2>
+  <p class="small muted">Simplified scrolling chats that alert <strong>sudden YES-price swings
+  ≥ $0.10 (10¢) in either direction</strong> on the markets in the current scan (top-ranked by
+  estimated dollar volume, up to 80 markets; polled every 10 s from
+  <span class="mono">GET /markets?tickers=…</span> — no key needed; official filter semantics:
+  <a href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noopener">Get Markets</a>).
+  Tracked price = YES bid/ask mid when a two-sided book exists, otherwise the last trade
+  (<span class="mono">last_price_dollars</span>). The exchange caches responses, so alerts can lag
+  by several seconds; the browser cannot attach the signed headers the
+  <a href="https://docs.kalshi.com/getting_started/quick_start_websockets" target="_blank" rel="noopener">WebSocket API</a>
+  requires (flag I-13), so this layer polls. Resolution notices (yes/no) join the All-events feed.
+  Auto-scroll pauses while you scroll up. Alerts persist in this browser only (localStorage) —
+  export them for records.</p>
+  <p class="small"><span id="alertStatus">starting…</span></p>
+  <p><button class="btn secondary" id="pauseAlertsBtn" type="button">⏸ Pause alerts</button>
+     <button class="btn secondary" id="exportAlertsBtn" type="button">Export alerts (JSON)</button>
+     <button class="btn secondary" id="clearAlertsBtn" type="button">Clear alerts (this browser)</button></p>
+  <div class="chatwrap">
+    <div class="chatcol">
+      <div class="chathead"><h3>All events</h3>
+        <span class="muted small"><span id="alertCountAll">0</span> swings this session</span></div>
+      <div class="chat" id="chatAll" role="log" aria-live="polite"></div>
+    </div>
+    <div class="chatcol">
+      <div class="chathead"><h3>High-ROI model picks</h3>
+        <span class="muted small"><span id="alertCountRoi">0</span> picks this session</span></div>
+      <div class="chat" id="chatRoi" role="log" aria-live="polite"></div>
+    </div>
+  </div>
+  <p class="small muted"><strong>High-ROI screen (heuristic — not validated alpha; definition in
+  <a href="methodology.html">Methodology</a>):</strong> a swing enters the right-hand feed only if all
+  five rules pass — HR-1 two-sided book exists · HR-1b ask &gt; bid · HR-2 quoted spread ≤ $0.10 ·
+  HR-3 at least one trade (volume ≥ 1 contract) · HR-4 post-move price inside 2¢–98¢ (event not decided).
+  Every alert shows which rules passed (✓) or failed (✗). The <em>news search?</em> link is a query
+  generated from the market title so a trader can look for a cause — <strong>causation is never
+  asserted</strong> (the API exposes no attribution field; see <a href="flagged.html">Flagged</a>).</p>
+</div>
 """
     write_page("dashboard.html", "Live dashboard", "dashboard.html", body,
-               scripts=("assets/app.js", "assets/trade.js", "assets/dashboard.js", "assets/site.js"))
+               scripts=("assets/app.js", "assets/trade.js", "assets/dashboard.js",
+                        "assets/alerts.js", "assets/site.js"))
 
 
 def build_portfolio():
@@ -990,6 +1036,7 @@ def build_repo_review():
         ("index.html … api-reference.html", "Canonical root site (this UI), generated by scripts/build_root_site.py", "OK — built + link-checked", "https://github.com/karagemop466-tech/Demo3/tree/main"),
         ("assets/app.js", "Shared API client, charts, request signing (fixed at integration: signature path includes /trade-api/v2 — see R-07)", "OK — node --check", f"{DOCS}/getting_started/api_keys"),
         ("assets/dashboard.js", "Live dashboard engine (discovery, ranking, chart, orderbook, resolutions, portfolio, trading, strategy)", "OK — node --check", f"{DOCS}/getting_started/quick_start_market_data"),
+        ("assets/alerts.js", "Live swing-alert engine: ≥$0.10 detection, two scrolling chats (all events · high-ROI heuristic HR-1…HR-4), chart jump annotations with per-alert API links", "OK — node --check", f"{DOCS}/api-reference/market/get-markets"),
         ("assets/trade.js", "Trade ticket, paper/live trading store, categorization, strategy stats", "OK — node --check", f"{DOCS}/api-reference/orders/create-order-v2"),
         ("docs/", "Session 00a943bd archive (own build/verify scripts)", "kept intact", "https://github.com/karagemop466-tech/Demo3/tree/main/docs"),
         ("docs/tracker/", "Session e2aacbd6 archive (snapshot.json per-row source_api)", "kept intact", "https://github.com/karagemop466-tech/Demo3/tree/main/docs/tracker"),
