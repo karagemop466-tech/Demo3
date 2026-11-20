@@ -1,10 +1,19 @@
 {
-  "generated_at": "2026-11-20 ~11:30 UTC (manual re-fetch)",
+  "generated_at": "2026-11-20T11:40:23Z",
   "api_base": "https://api.elections.kalshi.com/trade-api/v2",
   "docs": "https://docs.kalshi.com/llms.txt",
-  "status": "manual snapshot; the scheduled refresh job overwrites these files",
-  "calls_ok": null,
-  "calls_failed": null,
-  "note": "Every value in these files was copied from an official API response read on 2026-11-20. Values not present in a response are left blank.",
-  "errors": []
+  "calls_ok": 66,
+  "calls_failed": 0,
+  "open_markets_per_topic": {
+    "gas": 29,
+    "elections": 15,
+    "culture": 0,
+    "crypto": 253,
+    "golf": 197
+  },
+  "resolved_markets_stored": 695,
+  "orderbooks_stored": 12,
+  "candle_series_stored": 12,
+  "errors": [],
+  "status": "ok"
 }
