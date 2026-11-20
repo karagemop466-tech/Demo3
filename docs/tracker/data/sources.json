@@ -1,0 +1,31 @@
+{
+  "meta": {
+    "page": "Sources",
+    "note": "Official pages read for this site. 'Fetched' means the page text was read on 2026-11-20. Items marked 'Referenced' are linked by an official page but were not read."
+  },
+  "sources": [
+    {"id": "S-01", "title": "Kalshi API — Welcome (docs index)", "url": "https://docs.kalshi.com/welcome", "owner": "Kalshi", "status": "Fetched"},
+    {"id": "S-02", "title": "Kalshi API — Demo environment (REST and WebSocket endpoints)", "url": "https://docs.kalshi.com/getting_started/demo_env", "owner": "Kalshi", "status": "Fetched"},
+    {"id": "S-03", "title": "Kalshi API — API keys and request signing", "url": "https://docs.kalshi.com/getting_started/api_keys", "owner": "Kalshi", "status": "Fetched"},
+    {"id": "S-04", "title": "Kalshi API — OpenAPI specification (v3.37.0)", "url": "https://docs.kalshi.com/openapi.yaml", "owner": "Kalshi", "status": "Fetched (first chunk of 52)"},
+    {"id": "S-05", "title": "Kalshi API — Documentation index (llms.txt)", "url": "https://docs.kalshi.com/llms.txt", "owner": "Kalshi", "status": "Fetched"},
+    {"id": "S-06", "title": "Kalshi API — Get Series List", "url": "https://docs.kalshi.com/api-reference/market/get-series-list.md", "owner": "Kalshi", "status": "Fetched"},
+    {"id": "S-07", "title": "Kalshi API — Get Markets", "url": "https://docs.kalshi.com/api-reference/market/get-markets.md", "owner": "Kalshi", "status": "Fetched"},
+    {"id": "S-08", "title": "Kalshi API — Get Market Orderbook", "url": "https://docs.kalshi.com/api-reference/market/get-market-orderbook.md", "owner": "Kalshi", "status": "Fetched"},
+    {"id": "S-09", "title": "Kalshi API — Get Market Candlesticks", "url": "https://docs.kalshi.com/api-reference/market/get-market-candlesticks.md", "owner": "Kalshi", "status": "Fetched"},
+    {"id": "S-10", "title": "Kalshi docs — Market Settlement", "url": "https://docs.kalshi.com/getting_started/market_settlement.md", "owner": "Kalshi", "status": "Fetched"},
+    {"id": "S-11", "title": "Kalshi API — Demo REST: series list (category Elections, Crypto, Culture; tags Golf, Gas)", "url": "https://external-api.demo.kalshi.co/trade-api/v2/series?include_volume=true", "owner": "Kalshi (demo API)", "status": "Fetched (see snapshot.json source_api per row)"},
+    {"id": "S-12", "title": "Kalshi API — Demo REST: markets and events (per series)", "url": "https://external-api.demo.kalshi.co/trade-api/v2/markets", "owner": "Kalshi (demo API)", "status": "Fetched (see snapshot.json source_api per row)"},
+    {"id": "S-13", "title": "Kalshi API — Demo REST: market orderbook (KXPOLANDSEJM-27-PIS)", "url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPOLANDSEJM-27-PIS/orderbook", "owner": "Kalshi (demo API)", "status": "Fetched"},
+    {"id": "S-14", "title": "Kalshi — Developer / contract terms PDFs listed by the series API (e.g. assets.kalshi.com/contract_terms/…)", "url": "https://assets.kalshi.com/contract_terms/HOUSEPARTY.pdf", "owner": "Kalshi", "status": "Referenced (URLs from API; PDFs not read)"},
+    {"id": "S-15", "title": "Kalshi fee schedule (referenced by the Series API fee_type field)", "url": "https://kalshi.com/docs/kalshi-fee-schedule.pdf", "owner": "Kalshi", "status": "Referenced (not read)"},
+    {"id": "S-16", "title": "Kalshi — Rate limits and tiers", "url": "https://docs.kalshi.com/getting_started/rate_limits", "owner": "Kalshi", "status": "Referenced (not read)"},
+    {"id": "S-17", "title": "Kalshi — Glossary", "url": "https://docs.kalshi.com/getting_started/terms", "owner": "Kalshi", "status": "Referenced (not read)"},
+    {"id": "S-18", "title": "Kalshi — Market lifecycle", "url": "https://docs.kalshi.com/getting_started/market_lifecycle", "owner": "Kalshi", "status": "Referenced (not read)"},
+    {"id": "S-19", "title": "Kalshi — Historical data", "url": "https://docs.kalshi.com/getting_started/historical_data", "owner": "Kalshi", "status": "Referenced (not read)"},
+    {"id": "S-20", "title": "Kalshi — WebSocket connection (for sub-minute data)", "url": "https://docs.kalshi.com/websockets/websocket-connection", "owner": "Kalshi", "status": "Referenced (not read)"},
+    {"id": "S-21", "title": "Kalshi — Create a demo account (help article)", "url": "https://help.kalshi.com/en/articles/13823775-creating-and-using-a-demo-account", "owner": "Kalshi", "status": "Referenced (not read)"},
+    {"id": "S-22", "title": "U.S. EIA — Weekly retail on-highway diesel prices (settlement source for DIESEL series)", "url": "https://www.eia.gov/dnav/pet/PET_PRI_SPT_S1_D.htm", "owner": "U.S. Energy Information Administration", "status": "Referenced by the Kalshi series API (not read)"},
+    {"id": "S-23", "title": "Repository (this site)", "url": "https://github.com/karagemop466-tech/Demo3", "owner": "Repo owner", "status": "Fetched via git"}
+  ]
+}

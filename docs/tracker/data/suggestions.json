@@ -1,0 +1,98 @@
+{
+  "meta": {
+    "page": "Suggestions — decision board",
+    "note": "Nothing on this list is implemented. Pick an option for each item; choices are stored only in this browser (localStorage) and are not sent anywhere. The owner decides which changes go ahead."
+  },
+  "suggestions": [
+    {
+      "id": "SG-01",
+      "title": "Rank by dollar value, not contract count",
+      "detail": "The API reports contracts (flag F-16). Options: keep contracts (verified); add a labelled dollar estimate from trades (needs trades endpoint reading); or defer.",
+      "impact": "Matches the brief's wording",
+      "effort": "Medium",
+      "risk": "Any dollar figure is an estimate unless Kalshi publishes one",
+      "options": ["Keep contracts (verified)", "Add labelled dollar estimate from trades", "Defer"]
+    },
+    {
+      "id": "SG-02",
+      "title": "Sub-minute price feed",
+      "detail": "REST candlesticks stop at 1 minute (Q-08). Options: keep REST polling every 15 s; add a WebSocket feed for seconds-level ticks; or hours/days only.",
+      "impact": "Better timing for trades",
+      "effort": "High (WebSocket client, reconnect logic)",
+      "risk": "Connection limits and rate limits (rate_limits doc, not read)",
+      "options": ["Keep REST polling", "Add WebSocket for seconds", "Hours and days only"]
+    },
+    {
+      "id": "SG-03",
+      "title": "Liquidity warnings",
+      "detail": "Flag markets with zero volume, a spread wider than a set amount, or no bids (see F-14, F-15). Options: warning badge; hide illiquid markets; both.",
+      "impact": "Stops decisions on thin prices",
+      "effort": "Low",
+      "risk": "The threshold is a judgment call",
+      "options": ["Warning badge", "Hide illiquid markets", "Both"]
+    },
+    {
+      "id": "SG-04",
+      "title": "Trade execution with risk caps",
+      "detail": "Place demo orders only after a key is provided (Q-01), with per-order and per-day caps and a confirmation step. Options: manual confirm each order; auto within caps; defer until strategy is set.",
+      "impact": "Enables the trade and performance sections",
+      "effort": "Medium",
+      "risk": "Orders in the demo still use mock money but need correct signing and limits",
+      "options": ["Manual confirm each order", "Auto within caps", "Defer"]
+    },
+    {
+      "id": "SG-05",
+      "title": "Stale-quote detection",
+      "detail": "Mark markets whose last update is more than a set number of days old (e.g. the Ryder Cup markets, F-13).",
+      "impact": "Avoids acting on old prices",
+      "effort": "Low",
+      "risk": "Threshold choice",
+      "options": ["Mark as stale (30 days)", "Mark as stale (7 days)", "Skip"]
+    },
+    {
+      "id": "SG-06",
+      "title": "Automatic settlement-source check",
+      "detail": "Flag settlement sources whose publisher name and URL do not match, or that are search links (F-05, F-06, F-11). Options: report only; block those markets from the dashboard; both.",
+      "impact": "Protects resolution analysis",
+      "effort": "Low",
+      "risk": "Some links may be legitimate aliases",
+      "options": ["Report only", "Block from dashboard", "Both"]
+    },
+    {
+      "id": "SG-07",
+      "title": "Full category pagination",
+      "detail": "The snapshot covers only the first chunk of golf, crypto and elections lists (F-21). Options: page everything on a schedule; page on demand in the dashboard; keep the partial list.",
+      "impact": "Complete coverage",
+      "effort": "Medium",
+      "risk": "Large requests; rate limits",
+      "options": ["Schedule full paging", "Page on demand", "Keep partial"]
+    },
+    {
+      "id": "SG-08",
+      "title": "Pre-trade decision checklist",
+      "detail": "Before any trade, show: settlement source (official?), liquidity, last update, fee type, and the question list item it depends on.",
+      "impact": "Makes decisions traceable",
+      "effort": "Low",
+      "risk": "None significant",
+      "options": ["Add checklist", "Skip"]
+    },
+    {
+      "id": "SG-09",
+      "title": "Use production public data as a benchmark",
+      "detail": "Demo prices may differ from real markets (F-17, Q-06). Options: read public production data for the same tickers as a read-only benchmark; stay demo-only.",
+      "impact": "Tests whether demo prices are a useful guide",
+      "effort": "Medium",
+      "risk": "Mixing environments can mislead; label clearly",
+      "options": ["Add production benchmark", "Demo only"]
+    },
+    {
+      "id": "SG-10",
+      "title": "Scheduled snapshot refresh",
+      "detail": "Refresh the verified snapshot on a schedule (GitHub Actions cron) and re-run the link and source check. Options: daily; weekly; manual only.",
+      "impact": "Keeps the static tables current",
+      "effort": "Low",
+      "risk": "Automated commits to main; needs approval",
+      "options": ["Daily", "Weekly", "Manual only"]
+    }
+  ]
+}

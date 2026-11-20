@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kalshi Demo Tracker — Executive Summary</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="top"><div class="wrap"><nav class="main">
+<a class="brand" href="index.html">Kalshi Demo Tracker</a>
+<a href="dashboard.html">Dashboard</a>
+<a href="api-reference.html">API Reference</a>
+<a href="methodology.html">Methodology</a>
+<a href="suggestions.html">Suggestions</a>
+<a href="questions.html">Open Questions</a>
+<a href="flagged.html">Flagged for Review</a>
+</nav></div></header>
+<main class="wrap">
+<h1>Kalshi Demo Tracker</h1>
+<p>Collect, organize, and analyze the highest-dollar live events on Kalshi's
+<strong>demo environment</strong> — focused on five topics only:
+<strong>gas prices, elections, culture, crypto, and golf</strong>.</p>
+<p><a class="btn" href="dashboard.html">Open the live dashboard</a></p>
+
+<section class="card">
+<h2>Executive summary</h2>
+<table>
+<thead><tr><th>Item</th><th>Detail</th><th>Source</th></tr></thead>
+<tbody>
+<tr><td>Recommended demo REST endpoint</td>
+<td class="mono">https://external-api.demo.kalshi.co/trade-api/v2</td>
+<td><a href="https://docs.kalshi.com/getting_started/demo_env">Demo Environment</a></td></tr>
+<tr><td>Also-supported demo REST endpoint</td>
+<td class="mono">https://demo-api.kalshi.co/trade-api/v2</td>
+<td><a href="https://docs.kalshi.com/getting_started/demo_env">Demo Environment</a></td></tr>
+<tr><td>Demo WebSocket (recommended)</td>
+<td class="mono">wss://external-api-ws.demo.kalshi.co/trade-api/ws/v2</td>
+<td><a href="https://docs.kalshi.com/getting_started/demo_env">Demo Environment</a></td></tr>
+<tr><td>Demo WebSocket (also supported)</td>
+<td class="mono">wss://demo-api.kalshi.co/trade-api/ws/v2</td>
+<td><a href="https://docs.kalshi.com/getting_started/demo_env">Demo Environment</a></td></tr>
+<tr><td>Demo account</td>
+<td>Mock funds. Credentials are <strong>not</strong> shared with production.
+Prices/behavior may not reflect real markets.</td>
+<td><a href="https://docs.kalshi.com/getting_started/demo_env">Demo Environment</a></td></tr>
+<tr><td>Public market data</td>
+<td>No API key needed for markets, order books, events, series, trades,
+candlesticks.</td>
+<td><a href="https://docs.kalshi.com/getting_started/quick_start_market_data">Quick Start: Market Data</a></td></tr>
+<tr><td>Authenticated endpoints</td>
+<td>Balance, positions, fills, orders, order placement. Ed25519 (default) or
+RSA-2048 PSS; sign <code>timestamp+METHOD+path</code> (no query); timestamp
+within 30s.</td>
+<td><a href="https://docs.kalshi.com/getting_started/api_keys">API Keys</a></td></tr>
+<tr><td>Settlement</td>
+<td>Yes outcome → YES holders get $1/contract; No outcome → NO holders get
+$1/contract. Timing varies by market.</td>
+<td><a href="https://docs.kalshi.com/getting_started/market_settlement">Market Settlement</a></td></tr>
+<tr><td>Rate limits</td>
+<td>Token buckets (default 10 tokens/request); separate Read/Write budgets;
+429 on exceed — back off. Unauthenticated requests have separate limits.</td>
+<td><a href="https://docs.kalshi.com/getting_started/rate_limits">Rate Limits and Tiers</a></td></tr>
+<tr><td>Order placement (current)</td>
+<td><code>POST /portfolio/events/orders</code> (V2). Legacy
+<code>/portfolio/orders</code> writes return 410 Gone.</td>
+<td><a href="https://docs.kalshi.com/api-reference/orders/create-order-v2">Create Order (V2)</a></td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="card">
+<h2>What the dashboard does</h2>
+<table>
+<thead><tr><th>Capability</th><th>How it works</th><th>Source</th></tr></thead>
+<tbody>
+<tr><td>Topic discovery</td>
+<td>Fetches all series via <code>GET /series</code>, classifies into the 5 topics
+by keyword match on title/tags/categories. No hard-coded tickers.</td>
+<td><a href="https://docs.kalshi.com/api-reference/market/get-series-list">Get Series List</a></td></tr>
+<tr><td>Highest-dollar ranking</td>
+<td>Open markets per series (<code>GET /markets?series_ticker=&amp;status=open</code>),
+ranked by estimated $ volume = contracts × last price.</td>
+<td><a href="https://docs.kalshi.com/api-reference/market/get-markets">Get Markets</a></td></tr>
+<tr><td>Price chart</td>
+<td>X = time, Y = contract price. Windows: 60s → 24h. Live poll samples +
+1-min candlesticks (<code>period_interval=1</code>).</td>
+<td><a href="https://docs.kalshi.com/api-reference/market/get-market-candlesticks">Get Market Candlesticks</a></td></tr>
+<tr><td>Liquidity / depth</td>
+<td>Order book bids per price level (contracts available at each price),
+spread, resting liquidity. Bids only — YES bid X ≡ NO ask (1−X).</td>
+<td><a href="https://docs.kalshi.com/getting_started/orderbook_responses">Orderbook Responses</a></td></tr>
+<tr><td>Resolution tracking</td>
+<td>Logs markets as they close/settle with <code>result</code> = yes/no.</td>
+<td><a href="https://docs.kalshi.com/getting_started/market_settlement">Market Settlement</a></td></tr>
+<tr><td>Portfolio &amp; trading</td>
+<td>Optional demo key: balance, positions, fills, orders; place/cancel V2 orders;
+fills categorized by topic × side × price band × maker/taker for strategy review.</td>
+<td><a href="https://docs.kalshi.com/api-reference/portfolio/get-balance">Get Balance</a></td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="card">
+<h2>How to use</h2>
+<ol>
+<li>Open the <a href="dashboard.html">dashboard</a> — market data loads with no key.</li>
+<li>Review discovery (Section 1) and the ranked table (Section 2).</li>
+<li>Click <strong>Track</strong> on a market for its chart, order book, and trades (Section 3).</li>
+<li>To trade: create a demo account at <a href="https://demo.kalshi.co/">demo.kalshi.co</a>,
+generate an API key, then connect in Section 5. Demo funds only.</li>
+<li>Review <a href="suggestions.html">Suggestions</a> and
+<a href="questions.html">Open Questions</a> before changing strategy.</li>
+</ol>
+<p class="muted">Every static value on this site links to an official source.
+Anything that could not be confirmed is left blank and listed on the
+<a href="flagged.html">Flagged for Review</a> page. No values are inferred.</p>
+</section>
+</main>
+<footer><div class="wrap">
+<p>Kalshi Demo Tracker — demo environment only. Not financial advice.
+Built with vanilla HTML/CSS/JS; no third-party libraries. Data © Kalshi (demo API).</p>
+</div></footer>
+</body>
+</html>

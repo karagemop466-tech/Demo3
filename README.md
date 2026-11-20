@@ -1,11 +1,39 @@
-# Demo3 — Kalshi market dashboard
+# Demo3 - Kalshi demo dashboard
 
-Read-only analysis of public Kalshi markets (gas prices, elections, culture, crypto, golf), published with GitHub Pages from `main`.
+Static GitHub Pages site with verified Kalshi market data, a live in-browser dashboard, category pages, resolved results, findings, questions, suggestions, and a Flagged for Review page.
 
-- Site: `index.html` (overview and executive summary), `pages/*.html` (categories, resolutions, price history, liquidity, demo portfolio, strategies, suggestions, questions, repo review, Flagged for Review, sources).
-- Data: `data/live/*.json` (market snapshot from the Kalshi public API; every row links to its query), `data/findings.json` (sources, repo review, flagged items, questions, suggestions).
-- Refresh: `python3 scripts/refresh_kalshi.py` (stdlib only; writes `data/live`). Scheduled hourly by `.github/workflows/refresh.yml`.
-- Build the pages: `python3 scripts/build_site.py`.
-- Checks: `python3 scripts/tests/test_refresh_offline.py` and `python3 scripts/check_site.py`.
+- Live site: https://karagemop466-tech.github.io/Demo3/ (Pages serves `main` at `/`; the root `index.html` redirects to `docs/index.html`)
+- Coordination board: [COORDINATION.md](COORDINATION.md)
 
-Coordination for parallel work is in `COORDINATION.md`. Values that cannot be confirmed from an official response are left blank and flagged.
+## Layout
+
+| Path | What it is |
+|---|---|
+| `docs/` | The published site (HTML pages, `assets/app.js`, `assets/style.css`) |
+| `docs/data/verified.json` | Single source of verified data. Every row has a source URL. |
+| `scripts/build_site.py` | Generates the HTML page shells in `docs/` |
+| `scripts/verify_site.py` | Checks sources, internal links, and JS syntax |
+
+## Rebuild and verify
+
+```bash
+python3 scripts/build_site.py
+python3 scripts/verify_site.py
+```
+
+## Data sources
+
+Kalshi documentation at https://docs.kalshi.com (the `llms.txt` index lists every page) and the public Kalshi Trade API at https://external-api.kalshi.com/trade-api/v2. The live dashboard calls the public endpoints from the browser. If the browser cannot reach them, the page says so and shows the verified snapshot. Demo-account portfolio data needs an API key and is not connected.
+
+## Not included
+
+No trading or order placement. No credentials are stored in this repo.
+
+## Analysis site (session 3e08e6dc) — `analysis/`
+
+A second, self-contained dashboard lives in `analysis/` (it does not replace `docs/` or the root pages). It covers gas prices, elections, culture, crypto and golf, with a landing page, category subpages, resolutions, price history, liquidity, a flagged page, sources and repo review.
+
+- Open: `analysis/index.html` on Pages at `https://karagemop466-tech.github.io/Demo3/analysis/`
+- Data: `analysis/data/live/*.json` (Kalshi public API snapshot; each row links to its query) and `analysis/data/findings.json` (sources, repo review, flagged items, questions, suggestions).
+- Refresh (stdlib): `python3 scripts/refresh_kalshi.py`, scheduled hourly by `.github/workflows/refresh.yml`. It does not overwrite data when no API call succeeds.
+- Rebuild pages: `python3 scripts/build_analysis_site.py`. Checks: `python3 scripts/check_site.py` and `python3 scripts/tests/test_refresh_offline.py`.

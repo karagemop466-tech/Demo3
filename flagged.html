@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flagged for Review — Kalshi Demo Dashboard</title>
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#content">Skip to content</a>
+
+<header>
+  <div class="header-inner">
+    <div class="brand"><div class="mark">K</div><div>Kalshi Demo Dashboard</div></div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="dashboard.html">Live Dashboard</a></li>
+        <li><a href="gas-prices.html">Gas Prices</a></li>
+        <li><a href="elections.html">Elections</a></li>
+        <li><a href="culture.html">Culture</a></li>
+        <li><a href="crypto.html">Crypto</a></li>
+        <li><a href="golf.html">Golf</a></li>
+        <li><a href="portfolio.html">Portfolio</a></li>
+        <li><a href="trades.html">Trades</a></li>
+        <li><a href="suggestions.html">Suggestions</a></li>
+        <li><a href="questions.html">Questions &amp; Answers</a></li>
+        <li><a href="flagged.html" class="active">Flagged for Review</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <h1>Flagged for Review</h1>
+      <p>Unverified items, blank values, and irregularities found while building this site. Every value on the site
+      either carries a link to an official Kalshi demo API source or appears here, blank and flagged. Nothing was
+      inferred or filled in. Review these items after the site is live and request changes as needed.</p>
+    </div>
+  </div>
+</header>
+
+<div class="container" id="content">
+  <section class="section">
+    <h2 class="section-title"><span class="kicker">Unverified items (left blank — no inferred values)</span></h2>
+    <table class="data">
+      <thead><tr><th>#</th><th>Item</th><th>Category</th><th>Why unverified</th><th>Official source checked</th><th>Needed to resolve</th></th></thead>
+      <tbody>
+        <tr>
+          <td>F1</td>
+          <td>Gas-price events and markets (highest-dollar)</td>
+          <td>Gas prices</td>
+          <td>No gas / energy events or markets returned in sampled pages of GET /events and GET /markets</td>
+          <td><a href="https://external-api.demo.kalshi.co/trade-api/v2/events" target="_blank" rel="noopener">GET /events</a>, <a href="https://external-api.demo.kalshi.co/trade-api/v2/markets" target="_blank" rel="noopener">GET /markets</a></td>
+          <td>Page through the demo API or WebSocket for energy/gas series; add with source links</td>
+        </tr>
+        <tr>
+          <td>F2</td>
+          <td>Golf events and markets (highest-dollar)</td>
+          <td>Golf</td>
+          <td>No golf-category events or markets returned in sampled pages</td>
+          <td><a href="https://external-api.demo.kalshi.co/trade-api/v2/events" target="_blank" rel="noopener">GET /events</a>, <a href="https://external-api.demo.kalshi.co/trade-api/v2/markets" target="_blank" rel="noopener">GET /markets</a></td>
+          <td>Page through the demo API or WebSocket for golf series; add with source links</td>
+        </tr>
+        <tr>
+          <td>F3</td>
+          <td>Dollar amount (volume × $1 notional) per event</td>
+          <td>All categories</td>
+          <td>Sampled market data returned volume for only a few cross-category markets; most event tickers had no volume</td>
+          <td><a href="https://external-api.demo.kalshi.co/trade-api/v2/markets" target="_blank" rel="noopener">GET /markets</a></td>
+          <td>Full market dump; sum volume_fp per event_ticker; link each row</td>
+        </tr>
+        <tr>
+          <td>F4</td>
+          <td>Current liquidity (contracts available at a given price)</td>
+          <td>All categories</td>
+          <td>Bid/ask sizes mostly 0.00 in the sampled snapshot</td>
+          <td><a href="https://external-api.demo.kalshi.co/trade-api/v2/markets" target="_blank" rel="noopener">GET /markets</a></td>
+          <td>Live market fetch returning yes_bid_size_fp / yes_ask_size_fp</td>
+        </tr>
+        <tr>
+          <td>F5</td>
+          <td>Event resolution outcome (Yes / No)</td>
+          <td>All categories</td>
+          <td>All sampled events are still open; none have resolved yet</td>
+          <td><a href="https://external-api.demo.kalshi.co/trade-api/v2/events" target="_blank" rel="noopener">GET /events</a> (result field empty)</td>
+          <td>Wait for events to close; read result field and linked settlement source</td>
+        </tr>
+        <tr>
+          <td>F6</td>
+          <td>Demo account portfolio balance and P&amp;L</td>
+          <td>Portfolio</td>
+          <td>Requires authenticated GET /portfolio; no API key provided or stored</td>
+          <td><a href="https://docs.kalshi.io" target="_blank" rel="noopener">Kalshi API docs — portfolio endpoint</a></td>
+          <td>Signed demo API key added locally (never committed)</td>
+        </tr>
+        <tr>
+          <td>F7</td>
+          <td>Trade execution</td>
+          <td>Trades</td>
+          <td>Requires authenticated POST /trade and POST /order; no API key provided or stored</td>
+          <td><a href="https://docs.kalshi.io" target="_blank" rel="noopener">Kalshi API docs — trade / order endpoints</a></td>
+          <td>Signed demo API key added locally (never committed)</td>
+        </tr>
+        <tr>
+          <td>F8</td>
+          <td>Live cross-origin data from GitHub Pages</td>
+          <td>Dashboard</td>
+          <td>CORS / network reachability of external-api.demo.kalshi.co from a github.io origin not yet confirmed</td>
+          <td><a href="https://external-api.demo.kalshi.co/trade-api/v2" target="_blank" rel="noopener">Kalshi demo API</a></td>
+          <td>Deploy to GitHub Pages; test browser fetch to /markets</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title"><span class="kicker">Irregularities found during repo review</span></h2>
+    <table class="data">
+      <thead><tr><th>#</th><th>Irregularity</th><th>Location</th><th>Detail</th><th>Disposition</th></th></thead>
+      <tbody>
+        <tr>
+          <td>I1</td>
+          <td>Repository was essentially empty</td>
+          <td>Repo root</td>
+          <td><code>/home/user/Demo3</code> contained only <code>README.md</code> with content <code># Demo3</code>. No existing code, config, or data to preserve or conflict with.</td>
+          <td>New site built from scratch on branch <code>arena/cde2ae63-demo3</code>; nothing deleted or moved.</td>
+        </tr>
+        <tr>
+          <td>I2</td>
+          <td>COORDINATION.md did not exist</td>
+          <td>Repo root</td>
+          <td>Required shared task board was missing.</td>
+          <td>Created COORDINATION.md with the full task board and this session's claims.</td>
+        </tr>
+        <tr>
+          <td>I3</td>
+          <td>Direct bash access to kalshi.co is blocked</td>
+          <td>Sandbox network</td>
+          <td><code>curl</code> to external-api.demo.kalshi.co returns HTTP 000 (DNS resolves, no TCP). Outbound internet is limited to github.com, npm, pypi, etc. Official data was gathered with the <code>fetch_page</code> tool instead.</td>
+          <td>All verified data links cite the official demo API URLs for manual re-verification.</td>
+        </tr>
+        <tr>
+          <td>I4</td>
+          <td>Demo API data is synthetic / dated</td>
+          <td>external-api.demo.kalshi.co</td>
+          <td>Returned markets are stamped 2026-11-20 (the sandbox "today") and include synthetic cross-category and eSports markets; volumes are small or zero.</td>
+          <td>Flagged F1–F5; treated as demo snapshot, not production data.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section sources">
+    <h4>Official sources used for verification</h4>
+    <ul>
+      <li><a href="https://external-api.demo.kalshi.co/trade-api/v2" target="_blank" rel="noopener">Kalshi demo Trade API v2 (recommended)</a> — events and markets endpoints</li>
+      <li><a href="https://demo-api.kalshi.co/trade-api/v2" target="_blank" rel="noopener">Kalshi demo Trade API v2 (alternate host)</a></li>
+      <li><a href="https://external-api-ws.demo.kalshi.co/trade-api/ws/v2" target="_blank" rel="noopener">Kalshi demo WebSocket API v2</a></li>
+      <li><a href="https://demo-api.kalshi.co/trade-api/ws/v2" target="_blank" rel="noopener">Kalshi demo WebSocket API v2 (alternate host)</a></li>
+      <li><a href="https://docs.kalshi.io" target="_blank" rel="noopener">Kalshi API documentation</a></li>
+    </ul>
+  </section>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div><strong>Kalshi Demo Dashboard</strong> — Flagged for review.</div>
+    <div class="disclaimer">Flagged irregularities and unverified items do not block the site going live; they are published here for your review.</div>
+  </div>
+</footer>
+
+<script src="assets/js/app.js"></script>
+</body>
+</html>
