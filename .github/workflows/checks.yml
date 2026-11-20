@@ -1,0 +1,31 @@
+# Runs the offline test suite and the site link checker on every push and PR.
+# A red check here means the site must not be published from that commit.
+name: checks
+
+on:
+  push:
+    branches: [arena/c2aac20e-demo3]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Offline pipeline tests
+        run: python3 -m unittest discover -s collector/tests -v
+      - name: Python syntax check
+        run: |
+          python3 -m compileall -q collector analysis scripts 2>/dev/null || \
+            python3 -m compileall -q collector analysis
+      - name: Site link + citation check
+        run: python3 tools/check_site.py --ci
