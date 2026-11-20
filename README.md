@@ -130,3 +130,21 @@ Kalshi documentation at https://docs.kalshi.com (the `llms.txt` index lists ever
 [API Environments and Endpoints](https://docs.kalshi.com/getting_started/api_environments).
 The live dashboard calls the public endpoints from the browser (market data needs no key); if the
 browser cannot reach them, the page says so and shows the pipeline/verified snapshots instead.
+
+## Snapshot swing detector ≥ $0.10 (session 6d201d19)
+
+- **Live two-chat alert feed:** the *dashboard* (`dashboard.html`, merged in PR #28 by session 6ebc1cb7).
+  The duplicate page built on this branch was withdrawn so the repo keeps one canonical alert feed (see
+  COORDINATION.md, session 6d201d19).
+- **Snapshot detector:** [`scripts/price_alerts.py`](scripts/price_alerts.py) reads the committed collector
+  history (`data/history/prices.jsonl`) and writes `data/latest/alerts.json`. Run by `kalshi-data.yml` after each snapshot.
+  - A swing is a change of at least $0.10 in `last_price_dollars` between consecutive readings of the same
+    market, in either direction (exact decimal arithmetic). The first reading only sets a baseline.
+  - Persistence check: a swing whose next reading moves back toward the old price is marked
+    `reverted_next_reading` (a single last-trade print). The bid and ask at the swing are recorded too.
+  - Quote check: `last_supported_by_quote` is true when the bid/ask midpoint at the swing is within $0.05 of the
+    printed last price, false when it is not, and unknown when a quote is missing (never inferred).
+  - High-ROI screen is a **placeholder** (user's model not supplied): gross payout multiple `(1 − p) / p ≥ 1.00`,
+    volume > 0, not a synthetic exchange-test series. It is arithmetic on official prices, not a forecast (F-6D-01).
+  - Cause links are never inferred; they are left blank and flagged (F-6D-02).
+- **Tests:** `python3 scripts/tests/test_price_alerts.py` (run in `check.yml` and `kalshi-data.yml`).

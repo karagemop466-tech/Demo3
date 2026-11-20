@@ -41,6 +41,11 @@ jobs:
             if [ -f "$f" ]; then tail -n 20000 "$f" > "$f.tmp" && mv "$f.tmp" "$f"; fi
           done
 
+      - name: Swing alerts (>= $0.10) from committed snapshots (session 6d201d19)
+        run: |
+          python3 scripts/tests/test_price_alerts.py
+          python3 scripts/price_alerts.py
+
       - name: Commit and push data
         if: always()
         run: |
