@@ -365,11 +365,17 @@ Scope: root `dashboard.html`, `assets/style.css`, new `assets/alerts.js`, `asset
 
 | Task | Status | Owner | File scope | Sources / verification | Irregularities |
 |---|---|---|---|---|---|
-| T1 Two scrolling chat alert panels: price-swing detection (>= $0.10 either direction), "All events" chat + "High ROI model" filter chat, real-time scrolling | in progress | 6ebc1cb7 | `dashboard.html`, `assets/style.css`, `assets/alerts.js` | Demo REST polling (no key) for market data; swing computed from live last_price vs prior sample; each alert row links its market API URL; high-ROI filter is a labeled model heuristic (flagged as unverified until a model is defined) | F-alert-01 (high-ROI model not defined — labeled heuristic), F-alert-02 (CORS to demo API from Pages unverified — page fails closed to snapshots) |
-| T2 Automated simulated trades: paper strategies fire on swing signals, execution + PnL tracked, categorized by type, results analyzed | in progress | 6ebc1cb7 | `assets/trade.js` | Paper mode = labeled SIMULATED, nothing sent to Kalshi; settlement semantics per Market Settlement doc | F-trade-01 (no live demo credentials — paper mode only, labeled) |
-| T3 Final integration: verify root site line by line (per-row sources, no broken links, JS syntax), open PR `arena/6ebc1cb7-demo3` -> main, merge, confirm GitHub Pages deploy | unclaimed | 6ebc1cb7 | `scripts/verify_root_site.py`, `.github/`, PR to main | `verify_root_site.py` 0 failures; `node --check`; whole-site internal link crawl; Pages API `built` | none yet |
+| T1 Two scrolling chat alert panels: price-swing detection (>= $0.10 either direction), "All events" chat + "High ROI model" filter chat, real-time scrolling | done | 6ebc1cb7 | `dashboard.html`, `assets/style.css`, `assets/alerts.js` | Demo REST polling (no key) for market data; swing computed from live last_price vs prior sample; each alert row links its market API URL; high-ROI filter is a labeled model heuristic (flagged as unverified until a model is defined) | F-alert-01 (high-ROI model not defined — labeled heuristic), F-alert-02 (CORS to demo API from Pages unverified — page fails closed to snapshots) |
+| T2 Automated simulated trades: paper strategies fire on swing signals, execution + PnL tracked, categorized by type, results analyzed | done | 6ebc1cb7 | `assets/trade.js` | Paper mode = labeled SIMULATED, nothing sent to Kalshi; settlement semantics per Market Settlement doc | F-trade-01 (no live demo credentials — paper mode only, labeled) |
+| T3 Final integration: verify root site line by line (per-row sources, no broken links, JS syntax), open PR `arena/6ebc1cb7-demo3` -> main, merge, confirm GitHub Pages deploy | in progress | 6ebc1cb7 | `scripts/verify_root_site.py`, `.github/`, PR to main | `verify_root_site.py` 0 failures; `node --check`; whole-site internal link crawl; Pages API `built` | none yet |
 
 ### Session 6ebc1cb7 claim (per protocol)
 
 Claimed 2026-11-20: tasks T1–T3, session `6ebc1cb7`, branch `arena/6ebc1cb7-demo3`, file scope as above. No other session's files are in scope. This claim is committed and pushed immediately; progress logged below as work completes.
+
+Progress log:
+- 2026-11-20: claim committed & pushed (a49b1a4).
+- 2026-11-20: T1 implemented (assets/alerts.js + dashboard.html cards + style.css + dashboard.js hooks). Verified: node --check OK; verify_root_site.py 0 failures.
+- 2026-11-20: T2 implemented (assets/trade.js automation engine, OFF by default, paper/SIMULATED only, automated fills tagged 'auto'). Verified: node --check OK; verify_root_site.py 0 failures.
+- 2026-11-20: feature commit f1c872f pushed to arena/6ebc1cb7-demo3. T3 in progress: final re-verification, PR, merge, Pages deploy confirmation.
 
