@@ -120,15 +120,22 @@ jobs:
             git push origin "HEAD:$GITHUB_REF_NAME"
           fi
 
-      - name: Request Pages rebuild (bot pushes do not trigger the legacy Pages workflow)
+      - name: Dispatch the Pages deploy (pages.yml) after a data commit
         if: github.ref == 'refs/heads/main' && job.status == 'success'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          code=$(curl -s -o /tmp/pages_build.json -w "%{http_code}" \
+          # Same convention collect.yml uses: a push made with GITHUB_TOKEN does not trigger
+          # other workflows, so pages.yml (Actions-based deploy) is dispatched explicitly.
+          # The legacy `POST /pages/builds` endpoint is NOT used: branch-built Pages has a soft
+          # limit of 10 builds/hour and was failing here before the repo moved to pages.yml
+          # (https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits).
+          code=$(curl -s -o /tmp/pages_dispatch.out -w "%{http_code}" \
             -X POST \
-            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Authorization: Bearer $GH_TOKEN" \
             -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/$GITHUB_REPOSITORY/pages/builds")
-          echo "pages build request HTTP $code"
-          head -c 300 /tmp/pages_build.json
+            -d '{"ref":"main"}' \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/workflows/pages.yml/dispatches")
+          echo "pages.yml dispatch HTTP $code"
+          head -c 300 /tmp/pages_dispatch.out
+          test "$code" = "204"
