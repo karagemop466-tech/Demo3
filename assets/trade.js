@@ -9,7 +9,7 @@
   "use strict";
   var K = window.KalshiDemo;
   var $ = function (id) { return document.getElementById(id); };
-  var FILL_KEY = "kd_fills_v1", JOURNAL_KEY = "kd_journal";
+  var FILL_KEY = "kd_fills_v1", JOURNAL_KEY = "kd_journal", AUTO_KEY = "kd_automation_v1";
 
   function load(key, def) {
     try { return JSON.parse(localStorage.getItem(key) || "null") || def; }
@@ -23,6 +23,10 @@
     fills: load(FILL_KEY, []),
     journal: load(JOURNAL_KEY, []),
     live: false,
+    /* Automation runs in paper/SIMULATED mode only and is OFF by default.
+     * It is a mechanism demo, not a verified strategy: no model is defined in
+     * this repo, so nothing here is presented as profitable or as ROI. */
+    automation: load(AUTO_KEY, { enabled: false, rule: "momentum", maxPerDay: 20, fired: 0, day: "" }),
 
     /* ---------- ticket ---------- */
     mountTicket: function (el, opts) {
@@ -112,16 +116,7 @@
         return;
       }
       // Paper mode — simulated fill at the limit price against live quotes (labeled).
-      var fill = {
-        id: "P" + Date.now(), ts: Math.floor(Date.now() / 1000),
-        ticker: b.ticker, side: b.side, action: b.action,
-        count: b.count, price: price, role: b.post_only ? "maker" : b.role,
-        mode: "paper", fee: 0, result: ""
-      };
-      Trade.fills.push(fill);
-      save(FILL_KEY, Trade.fills);
-      Trade.journal.push({ ts: fill.ts, kind: "paper-fill", body: b, response: { fill_id: fill.id } });
-      save(JOURNAL_KEY, Trade.journal);
+      var fill = Trade._addPaperFill(b, false);
       Trade.result("ok", "<strong>SIMULATED fill (paper mode)</strong> — " +
         esc(b.action + " " + b.count + " × " + b.side.toUpperCase() + " @ " + b.priceCents + "¢ " + b.ticker) +
         ". Nothing was sent to Kalshi. Connect a demo key for live execution.");
@@ -144,6 +139,55 @@
         Trade.result("ok", "<strong>Paper mode:</strong> no server-side order exists to cancel " +
           "(simulated fills are immediate).");
       }
+    },
+
+    /* ---------- automated simulated trades (paper only) ---------- */
+    setAutomation: function (on) {
+      this.automation.enabled = !!on;
+      save(AUTO_KEY, this.automation);
+      this.renderAll();
+      return this.automation.enabled;
+    },
+    _addPaperFill: function (b, automated) {
+      var price = b.priceCents / 100;
+      var fill = {
+        id: (automated ? "A" : "P") + Date.now(), ts: Math.floor(Date.now() / 1000),
+        ticker: b.ticker, side: b.side, action: b.action,
+        count: b.count, price: price, role: b.post_only ? "maker" : b.role,
+        mode: "paper", fee: 0, result: "", automated: !!automated
+      };
+      Trade.fills.push(fill);
+      save(FILL_KEY, Trade.fills);
+      Trade.journal.push({ ts: fill.ts, kind: automated ? "auto-paper-fill" : "paper-fill",
+        body: b, response: { fill_id: fill.id, automated: !!automated } });
+      save(JOURNAL_KEY, Trade.journal);
+      return fill;
+    },
+    onSwingAlert: function (alert) {
+      // Entry point called by alerts.js when a >= $0.10 swing fires.
+      // Paper/SIMULATED only. Example momentum rule (unverified, labeled).
+      var a = this.automation;
+      if (!a || !a.enabled) return;
+      var today = new Date().toISOString().slice(0, 10);
+      if (a.day !== today) { a.day = today; a.fired = 0; }
+      if (a.fired >= (a.maxPerDay || 20)) return;
+      var side = "yes";
+      var action = alert.dir === "up" ? "buy" : alert.dir === "down" ? "sell" : null;
+      if (!action) return;
+      var b = {
+        ticker: alert.ticker, side: side, action: action,
+        count: 10, priceCents: Math.round(alert.newPrice * 100),
+        tif: "ioc", post_only: false, role: "taker"
+      };
+      this._addPaperFill(b, true);
+      a.fired += 1;
+      save(AUTO_KEY, this.automation);
+      this.renderAll();
+    },
+    automationStatus: function () {
+      var a = this.automation || {};
+      return { enabled: !!a.enabled, rule: a.rule || "momentum",
+        fired: a.fired || 0, maxPerDay: a.maxPerDay || 20 };
     },
 
     /* ---------- analysis ---------- */
@@ -295,7 +339,7 @@
       rows.forEach(function (f) {
         var p = Trade.pnl(f);
         html += "<tr><td>" + K.timeStr(f.ts) + "</td><td>" +
-          (f.mode === "paper" ? "<span class='pill warn'>SIMULATED</span>" :
+          (f.mode === "paper" ? "<span class='pill warn'>SIMULATED" + (f.automated ? " &middot; auto" : "") + "</span>" :
             "<span class='pill'>live</span>") + "</td><td class='mono'>" + K.esc(f.ticker) +
           "</td><td>" + K.esc(f.action) + "</td><td>" + K.esc(f.side) + "</td><td class='num'>" +
           K.num(f.count, 0) + "</td><td class='num'>" + K.cents(f.price) + "</td><td>" +

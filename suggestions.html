@@ -9,7 +9,7 @@
 <body>
 <header class="top"><div class="wrap"><nav class="main">
 <a class="brand" href="index.html">Kalshi Demo Tracker</a>
-<a href="index.html">Home</a><a href="dashboard.html">Live dashboard</a><a href="alerts.html">Live alerts</a><a href="data-tracking.html">Data tracking</a><a href="gas-prices.html">Gas prices</a><a href="elections.html">Elections</a><a href="culture.html">Culture</a><a href="crypto.html">Crypto</a><a href="golf.html">Golf</a><a href="portfolio.html">Portfolio</a><a href="trades.html">Trades</a><a href="questions.html">Questions</a><a href="suggestions.html" class="active">Suggestions</a><a href="flagged.html">Flagged for review</a><a href="sources.html">Sources</a><a href="repo-review.html">Repo review</a><a href="methodology.html">Methodology</a><a href="api-reference.html">API reference</a>
+<a href="index.html">Home</a><a href="dashboard.html">Live dashboard</a><a href="data-tracking.html">Data tracking</a><a href="gas-prices.html">Gas prices</a><a href="elections.html">Elections</a><a href="culture.html">Culture</a><a href="crypto.html">Crypto</a><a href="golf.html">Golf</a><a href="portfolio.html">Portfolio</a><a href="trades.html">Trades</a><a href="questions.html">Questions</a><a href="suggestions.html" class="active">Suggestions</a><a href="flagged.html">Flagged for review</a><a href="sources.html">Sources</a><a href="repo-review.html">Repo review</a><a href="methodology.html">Methodology</a><a href="api-reference.html">API reference</a>
 </nav></div></header>
 <main class="wrap">
 
@@ -529,40 +529,7 @@ implemented</strong>. Set a decision and note per row — they are saved in this
   <option>Proposed</option><option>Approved</option><option>Rejected</option>
   <option>Deferred</option><option>Implemented</option></select><br>
   <input class="decision-note" data-sid="S-07" placeholder="reviewer note (saved locally)"></td>
-<td><a class="src" href="https://docs.kalshi.com/getting_started/demo_env.md" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="S-A1-1">
-<td><span class="mono">S-A1-1</span></td>
-<td><strong>Replace the rule-based ROI screen with the owner&#x27;s model output</strong><br><span class='small'>Chat 2 currently uses a visible rule screen because no model exists in the repository (Flagged A1-01). Supplying the model, its inputs and its validation would let chat 2 match the brief&#x27;s &#x27;model likes&#x27; wording.</span>
-<ul class='small'><li>Keep rule screen</li><li>Replace with model</li><li>Show both</li></ul></td>
-<td>Meets the brief&#x27;s high-ROI requirement with a real signal</td>
-<td>Owner supplies model + definition</td>
-<td>Unvalidated model signals; must be back-tested before use</td>
-<td><select class="decision" data-sid="S-A1-1">
-  <option>Proposed</option><option>Approved</option><option>Rejected</option>
-  <option>Deferred</option><option>Implemented</option></select><br>
-  <input class="decision-note" data-sid="S-A1-1" placeholder="reviewer note (saved locally)"></td>
-<td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="S-A1-2">
-<td><span class="mono">S-A1-2</span></td>
-<td><strong>Per-topic swing thresholds</strong><br><span class='small'>Use one $0.10 threshold for all topics today. Per-topic thresholds (for example gas vs crypto) would reduce noise once the owner has observed typical moves in the collector history.</span>
-<ul class='small'><li>Keep $0.10</li><li>Per-topic table</li></ul></td>
-<td>Fewer false alarms per topic</td>
-<td>Low (config change after review)</td>
-<td>Thresholds are assumptions until reviewed</td>
-<td><select class="decision" data-sid="S-A1-2">
-  <option>Proposed</option><option>Approved</option><option>Rejected</option>
-  <option>Deferred</option><option>Implemented</option></select><br>
-  <input class="decision-note" data-sid="S-A1-2" placeholder="reviewer note (saved locally)"></td>
-<td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noopener">source</a></td></tr><tr data-sid="S-A1-3">
-<td><span class="mono">S-A1-3</span></td>
-<td><strong>Push alerts over the WebSocket API once a demo key is configured</strong><br><span class='small'>The page polls REST every 15-60 seconds. The official WebSocket API provides streamed ticker updates, but its official quick start says WebSocket connections &quot;require authentication during the connection handshake&quot;, even for public channels. A server-side relay would keep the key off the browser.</span>
-<ul class='small'><li>Stay on polling</li><li>Relay with key</li></ul></td>
-<td>Lower latency than polling</td>
-<td>Medium to high (key management, relay hosting)</td>
-<td>Key exposure if handled in the browser; hosting outside Pages</td>
-<td><select class="decision" data-sid="S-A1-3">
-  <option>Proposed</option><option>Approved</option><option>Rejected</option>
-  <option>Deferred</option><option>Implemented</option></select><br>
-  <input class="decision-note" data-sid="S-A1-3" placeholder="reviewer note (saved locally)"></td>
-<td><a class="src" href="https://docs.kalshi.com/getting_started/quick_start_websockets" target="_blank" rel="noopener">source</a></td></tr></tbody></table></div>
+<td><a class="src" href="https://docs.kalshi.com/getting_started/demo_env.md" target="_blank" rel="noopener">source</a></td></tr></tbody></table></div>
 <p class="small muted">Consolidated from every session's suggestion registers; each row links its evidence.</p>
 </div>
 
