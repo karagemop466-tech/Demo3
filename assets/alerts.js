@@ -3,19 +3,33 @@
  * Detects live contract price swings >= $0.10 (10 cents) in either direction
  * and publishes them to two scrolling chats:
  *   - "All events": every swing alert
- *   - "High ROI model": a selective, labeled heuristic filter (NOT a real model)
+ *   - "High ROI model": a selective filter using a documented, transparent
+ *     multi-factor score (NOT a trained model — no model exists in this repo).
+ *
+ * Each alert row links official sources:
+ *   - the exact market API URL (GET /markets/{ticker})
+ *   - the event API URL (GET /events/{event_ticker}) and the event's official
+ *     Kalshi "settlement_sources" website links (fetched on demand), shown under
+ *     "Context". These are Kalshi's official resolution sources for the event; they
+ *     are listed for context and are NOT verified as the cause of any swing
+ *     (labeled "Cause not verified" on every row). Only https URLs the API actually
+ *     returns are rendered — never inferred.
+ *
+ * The "High ROI model" score is a documented, transparent heuristic built only
+ * from verified API fields (swing size, relative move, open interest). No trained
+ * model exists in this repo, so it is labeled an unverified model heuristic
+ * (F-5B-02) and is never presented as verified ROI or investment advice.
  *
  * Data: reuses the dashboard's live market samples (GET /markets, demo API,
- * no key needed). No extra network requests. Each alert links its exact market
- * API URL. Values the exchange does not report are left blank — never inferred.
+ * no key needed); the event context is one extra GET /events/{event_ticker}
+ * per new swing. Values the exchange does not report are left blank — never
+ * inferred.
  *
- * The high-ROI rule below is a transparent placeholder heuristic. No model is
- * defined in this repo, so nothing is presented as a verified ROI signal. It is
- * flagged for review (F-alert-01) until a real model is specified.
- *
- * Source: https://docs.kalshi.com/getting_started/quick_start_market_data
- *         https://docs.kalshi.com/api-reference/market/get-markets
- *         https://docs.kalshi.com/getting_started/demo_env
+ * Sources:
+ *   https://docs.kalshi.com/getting_started/quick_start_market_data
+ *   https://docs.kalshi.com/api-reference/market/get-markets
+ *   https://docs.kalshi.com/api-reference/events/get-event
+ *   https://docs.kalshi.com/getting_started/demo_env
  */
 (function () {
   "use strict";
@@ -24,6 +38,32 @@
   var ALERT_KEY = "kd_alerts_v1";
   var SWING = 0.10;                 // dollars = 10 cents, the alert threshold
   var MAX_ALERTS = 300;
+
+  /* ---------- documented ROI heuristic (unverified model) ----------
+   * No trained model exists in this repo, so this is a transparent, deterministic
+   * heuristic built only from verified API fields. It is labeled everywhere as an
+   * unverified model heuristic (F-5B-02) and is never presented as a verified ROI
+   * signal or as investment advice.
+   *   swingNorm = clamp(|Δprice| cents / 50¢, 0, 1)       bigger swings score higher
+   *   pctNorm   = clamp(|Δprice| / priorPrice / 50%, 0, 1)  bigger relative moves higher
+   *   liqNorm   = clamp(log10(1 + open_interest_fp) / 6, 0, 1)  1M contracts = 1.0
+   *   score     = 0.4*swingNorm + 0.3*pctNorm + 0.3*liqNorm
+   *   high-ROI signal when score >= 0.5
+   */
+  var ROI_THRESHOLD = 0.5;
+  function clamp(x, lo, hi) { return Math.max(lo, Math.min(hi, x)); }
+  function roiModel(oldP, newP, oi) {
+    var change = Number(newP) - Number(oldP);
+    var swingC = Math.abs(change) * 100;                 // cents
+    var swingNorm = clamp(swingC / 50, 0, 1);
+    var pct = Number(oldP) ? Math.abs(change) / Number(oldP) : 0;
+    var pctNorm = clamp(pct / 0.5, 0, 1);
+    var oiNum = Number(oi) || 0;
+    var liqNorm = clamp(Math.log10(1 + oiNum) / 6, 0, 1);
+    var score = 0.4 * swingNorm + 0.3 * pctNorm + 0.3 * liqNorm;
+    return { swingC: swingC, pct: pct, oi: oiNum, swingNorm: swingNorm,
+      pctNorm: pctNorm, liqNorm: liqNorm, score: score };
+  }
 
   var state = {
     alerts: [],                     // all swing alerts (newest first)
@@ -35,11 +75,11 @@
 
   function esc(s) {
     return String(s === null || s === undefined ? "" : s)
-      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;");
   }
   function cents(x) {
     if (x === null || x === undefined || x === "" || isNaN(Number(x))) return "—";
-    return (Number(x) * 100).toFixed(2) + "\u00a2";
+    return (Number(x) * 100).toFixed(2) + "¢";
   }
   function fmtTs(ts) {
     if (!ts) return "—";
@@ -61,8 +101,10 @@
     var prev = state.lastPrice[m.ticker];
     if (prev && prev.price !== null && prev.price !== undefined) {
       var change = cur - prev.price;
-      if (Math.abs(change) >= SWING) {
-        var a = pushAlert(m.ticker, m.title, m.topic, m.series_ticker, prev.price, cur);
+      // Float-safe: an exact 10¢ move (0.60 - 0.50) is 0.0999… in binary, so
+      // compare with a tiny epsilon rather than dropping boundary swings.
+      if (Math.abs(change) >= SWING - 1e-9) {
+        var a = pushAlert(m, prev.price, cur);
         if (a) { a.event = m.event_ticker || ""; a.rules = m.rules_primary || ""; persist(); loadEvent(a.event); }
       }
     }
@@ -79,26 +121,29 @@
     });
   };
 
-  function pushAlert(ticker, title, topic, series, oldP, newP) {
+  function pushAlert(m, oldP, newP) {
     var change = Number(newP) - Number(oldP);
     var dir = change > 0 ? "up" : change < 0 ? "down" : "flat";
+    var series = m.series_ticker || "";
+    var eventTicker = m.event_ticker || "";
+    var model = roiModel(oldP, newP, m.oi);
     var alert = {
       id: "a" + Date.now() + Math.random().toString(36).slice(2, 6),
       ts: Math.floor(Date.now() / 1000),
-      ticker: ticker,
-      title: title || ticker,
-      topic: topic || "",
-      series: series || "",
+      ticker: m.ticker,
+      title: m.title || m.ticker,
+      topic: m.topic || "",
+      series: series,
+      event: eventTicker,
       oldPrice: Number(oldP),
       newPrice: Number(newP),
       change: change,
       dir: dir,
-      api: apiUrl(ticker, series)
+      oi: model.oi,
+      api: apiUrl(m.ticker, series),
+      roi: model,                   // documented model output
+      roiSignal: model.score >= ROI_THRESHOLD
     };
-    // High-ROI placeholder heuristic: swing >= $0.10 AND the move is at least 10%
-    // of the prior price. NOT a real model — labeled, unverified, flagged F-alert-01.
-    var pct = Number(oldP) ? Math.abs(change) / Number(oldP) : 0;
-    alert.roiSignal = Math.abs(change) >= SWING && pct >= 0.10;
     state.alerts.unshift(alert);
     if (state.alerts.length > MAX_ALERTS) state.alerts.length = MAX_ALERTS;
     persist();
@@ -173,33 +218,42 @@
   KD.toggle = function () { state.enabled = !state.enabled; render(); };
 
   /* ---------- rendering (two scrolling chats) ---------- */
+  function roiCell(a) {
+    if (!a.roi) return "—";
+    var badge = a.roiSignal ? " <span class='roi'>· signal</span>" : "";
+    return "<span class='mono'>" + a.roi.score.toFixed(2) + "</span>" + badge;
+  }
   function alertRow(a) {
     var cls = "alert " + (a.dir === "up" ? "up" : a.dir === "down" ? "down" : "flat");
-    var arrow = a.dir === "up" ? "\u25b2" : a.dir === "down" ? "\u25bc" : "\u25b6";
+    var arrow = a.dir === "up" ? "▲" : a.dir === "down" ? "▼" : "▶";
     var dirLabel = a.dir === "up" ? "up" : a.dir === "down" ? "down" : "flat";
-    var roiBadge = a.roiSignal ? " <span class='roi'>&middot; high-ROI signal (heuristic)</span>" : "";
-    return "<tr class='" + esc(cls) + "'><td class='mono small muted'>" + fmtTs(a.ts) + "</td>" +
+    var roiBadge = a.roiSignal ? " <span class='roi'>· high-ROI signal (heuristic)</span>" : "";
+    return "<tr class='" + esc(cls) + "'>" +
+      "<td class='mono small muted'>" + fmtTs(a.ts) + "</td>" +
       "<td><span class='pill topic'>" + esc(a.topic) + "</span></td>" +
       "<td class='mono'>" + esc(a.ticker) + "</td>" +
-      "<td>" + esc(a.title) + "</td>" +
-      "<td class='num'>" + cents(a.oldPrice) + " &rarr; " + cents(a.newPrice) + "</td>" +
+      "<td>" + esc(a.title) + roiBadge + "</td>" +
+      "<td class='num'>" + cents(a.oldPrice) + " → " + cents(a.newPrice) + "</td>" +
       "<td class='num " + esc(dirLabel) + "'>" + arrow + " " + cents(Math.abs(a.change)) + "</td>" +
-      "<td><a class='src' href='" + esc(a.api) + "' target='_blank' rel='noopener'>market API</a>" + esc(roiBadge) + "</td>" +
+      "<td class='num'>" + roiCell(a) + "</td>" +
+      "<td><a class='src' href='" + esc(a.api) + "' target='_blank' rel='noopener'>market API</a></td>" +
       "<td class='ctx'>" + contextCell(a) + "<div class='small muted'>Cause not verified: a listed source is not proof that it moved the price.</div>" + rulesCell(a) + "</td></tr>";
   }
   function renderPanel(el, rows, label, emptyHint) {
     if (!el) return;
     var rowsHtml = rows.map(alertRow).join("");
-    var empty = rows.length ? "" : "<tr><td colspan='8' class='muted'>No " + label + " swing alerts yet. " + emptyHint + "</td></tr>";
+    var empty = rows.length ? "" :
+      "<tr><td colspan='9' class='muted'>No " + label + " swing alerts yet. " + emptyHint + "</td></tr>";
     el.innerHTML =
       "<table class='alerts'><thead><tr><th>Time</th><th>Topic</th><th>Ticker</th><th>Event</th>" +
-      "<th>Price move</th><th>Swing</th><th>Source</th><th>Context (official links)</th></tr></thead><tbody>" + rowsHtml + empty + "</tbody></table>";
+      "<th>Price move</th><th>Swing</th><th>ROI score</th><th>Source</th><th>Context (official links)</th></tr></thead><tbody>" +
+      rowsHtml + empty + "</tbody></table>";
   }
   function render() {
     renderPanel(document.getElementById("alertsAll"), KD.allRows(), "all",
       "Swing a tracked market price by >= $0.10 to see alerts here.");
     renderPanel(document.getElementById("alertsROI"), KD.roiRows(), "high-ROI",
-      "The high-ROI chat applies a labeled placeholder rule — no real model is defined yet.");
+      "The high-ROI chat applies a labeled placeholder model — no trained model exists yet.");
   }
 
   /* public */
