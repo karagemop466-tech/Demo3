@@ -1,0 +1,93 @@
+{
+ "alert_rule": {
+  "definition": "close[i] - max(close over the previous window) >= threshold (up), or min(...) - close[i] >= threshold (down); re-arm once the price returns within the re-arm band of the anchor. Window is measured in MINUTES and converted to candles per candle interval.",
+  "directions": [
+   "up",
+   "down"
+  ],
+  "fields_doc": "https://docs.kalshi.com/api-reference/market/get-markets.md",
+  "live_price_field": "last_price_dollars (with yes_bid_dollars/yes_ask_dollars for the executable path)",
+  "rearm_band_dollars": 0.05,
+  "source_of_truth": "scripts/scan_swings.py::detect_swings mirrored by assets/swing-core.js::detectSwings",
+  "threshold_dollars": 0.1,
+  "window_minutes_default": 60,
+  "window_minutes_options": [
+   5,
+   10,
+   30,
+   60,
+   180,
+   360,
+   1440
+  ]
+ },
+ "api_root": "https://external-api.demo.kalshi.co/trade-api/v2",
+ "generated_at": "2026-11-20T19:31:58Z",
+ "link_rules": {
+  "api_record": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers={ticker}",
+  "event_page_linked_only_if_probe_200_and_echoed": true,
+  "event_page_probe": {
+   "attempted": false,
+   "error": "offline mode does not probe (no route from the dev sandbox)",
+   "status_code": null,
+   "ticker_echoed": false
+  },
+  "news_link_policy": "search deep-link labelled as a candidate, never a proven cause"
+ },
+ "mode": "offline",
+ "roi_model": {
+  "buckets": {
+   "elections|0-5c|>40c|>14d": {
+    "evidence": "sufficient",
+    "evidence_rule": "n_swings >= 8 and n_markets >= 3",
+    "fade_hit_rate": 0.0,
+    "fade_hit_rate_shrunk": 0.133333,
+    "fade_mean_net_dollars": -0.303664,
+    "fade_n_quotable": 11,
+    "n_markets": 7,
+    "n_swings": 24,
+    "resolved_no": 0,
+    "resolved_yes": 0,
+    "reversion_rate": 1.0,
+    "reversion_rate_shrunk": 1.0,
+    "unresolved": 24
+   }
+  },
+  "excluded_reason": "demo synthetic exchange-test series and MVE combos (COORDINATION.md I-15; /markets mve_filter docs)",
+  "excluded_series_prefixes": [
+   "KXDEMOFUTHOURLY",
+   "KXQUICKSETTLE",
+   "KXMVE"
+  ],
+  "fee_model": {
+   "formula": "ceil(0.07 * C * P * (1-P)) dollars per round-trip leg",
+   "rounding_doc": "https://docs.kalshi.com/getting_started/fee_rounding.md",
+   "source": "https://kalshi.com/docs/kalshi-fee-schedule.pdf",
+   "taker_rate_multiplier": 0.07
+  },
+  "global_fade_hit_rate": 0.0,
+  "global_reversion_rate": 1.0,
+  "min_bucket_markets": 3,
+  "min_bucket_n": 8,
+  "pass_threshold_score": 0.6,
+  "shrinkage_pseudo_count": 4,
+  "weights": {
+   "calibrated_edge": 0.35,
+   "executability": 0.2,
+   "liquidity_depth": 0.15,
+   "relative_move": 0.2,
+   "time_to_resolution": 0.1
+  }
+ },
+ "sources": [
+  "https://docs.kalshi.com/getting_started/api_environments.md",
+  "https://docs.kalshi.com/getting_started/demo_env.md",
+  "https://docs.kalshi.com/api-reference/market/get-market-candlesticks.md",
+  "https://docs.kalshi.com/api-reference/market/get-markets.md",
+  "https://docs.kalshi.com/api-reference/market/get-multiple-market-orderbooks.md",
+  "https://docs.kalshi.com/getting_started/orderbook_responses.md",
+  "https://docs.kalshi.com/getting_started/pagination.md",
+  "https://docs.kalshi.com/getting_started/market_settlement.md",
+  "https://kalshi.com/docs/kalshi-fee-schedule.pdf"
+ ]
+}

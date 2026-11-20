@@ -1,0 +1,210 @@
+{
+ "bucket_detail": {
+  "elections|0-5c|>40c|>14d": {
+   "fade_n": 11,
+   "fade_net_sum": -3.3403,
+   "fade_wins": 0,
+   "mean_delta_dollars": 0.81075,
+   "n": 24,
+   "n_markets": 7,
+   "resolved_no": 0,
+   "resolved_yes": 0,
+   "reversion_hits": 24,
+   "tickers": [],
+   "unresolved": 24
+  }
+ },
+ "buckets": {
+  "elections|0-5c|>40c|>14d": {
+   "evidence": "sufficient",
+   "evidence_rule": "n_swings >= 8 and n_markets >= 3",
+   "fade_hit_rate": 0.0,
+   "fade_hit_rate_shrunk": 0.133333,
+   "fade_mean_net_dollars": -0.303664,
+   "fade_n_quotable": 11,
+   "n_markets": 7,
+   "n_swings": 24,
+   "resolved_no": 0,
+   "resolved_yes": 0,
+   "reversion_rate": 1.0,
+   "reversion_rate_shrunk": 1.0,
+   "unresolved": 24
+  }
+ },
+ "counts": {
+  "events": 2,
+  "strategy_rows": 96,
+  "swings": 24
+ },
+ "meta": {
+  "api_root": "https://external-api.demo.kalshi.co/trade-api/v2",
+  "caveats": [
+   "Demo exchange: prices, volumes and liquidity are simulated test data, not real markets (https://docs.kalshi.com/getting_started/demo_env.md).",
+   "Candlestick OHLC is the per-period trade price plus the quoted YES bid/ask at the period open/close; fills assume the taker crosses that quote exactly and ignore book depth -- optimistic, see alerts/SPEC.md 'Fill model'.",
+   "Strategies are simulated trades; no order was sent to Kalshi (no demo API credentials exist in this repo -- COORDINATION.md I-12).",
+   "External news links are search deep-links offered as candidate catalysts; timing proximity is not evidence of causation."
+  ],
+  "event_page_probe": {
+   "attempted": false,
+   "error": "offline mode does not probe (no route from the dev sandbox)",
+   "status_code": null,
+   "ticker_echoed": false
+  },
+  "events_with_swings": 2,
+  "generated_at": "2026-11-20T19:31:58Z",
+  "hours_1m": 48,
+  "hours_60m": 168,
+  "markets_scanned": 12,
+  "per_topic_markets": 12,
+  "rearm_band_dollars": 0.05,
+  "sources": [
+   "https://docs.kalshi.com/getting_started/api_environments.md",
+   "https://docs.kalshi.com/getting_started/demo_env.md",
+   "https://docs.kalshi.com/api-reference/market/get-market-candlesticks.md",
+   "https://docs.kalshi.com/api-reference/market/get-markets.md",
+   "https://docs.kalshi.com/api-reference/market/get-multiple-market-orderbooks.md",
+   "https://docs.kalshi.com/getting_started/orderbook_responses.md",
+   "https://docs.kalshi.com/getting_started/pagination.md",
+   "https://docs.kalshi.com/getting_started/market_settlement.md",
+   "https://kalshi.com/docs/kalshi-fee-schedule.pdf"
+  ],
+  "stats": {
+   "errors": 0,
+   "event_page_probe": {
+    "attempted": false,
+    "error": "offline mode does not probe (no route from the dev sandbox)",
+    "status_code": null,
+    "ticker_echoed": false
+   },
+   "mode": "offline",
+   "requests": 0,
+   "universe_units": 12,
+   "warnings": []
+  },
+  "swings_found": 24,
+  "threshold_dollars": 0.1,
+  "window_minutes": 60
+ },
+ "strategies": {
+  "fade": {
+   "by_topic": {
+    "elections": {
+     "hit_rate": 0.0,
+     "mean_fees_dollars": 0.43,
+     "mean_net_dollars": -0.303664,
+     "mean_roi_on_paid": -0.304375,
+     "median_net_dollars": -0.0015,
+     "n": 24,
+     "n_quotable": 11,
+     "total_net_dollars": -3.3403,
+     "unquotable": 13
+    }
+   },
+   "overall": {
+    "direction_split": {
+     "down": 0,
+     "up": 24
+    },
+    "hit_rate": 0.0,
+    "mean_fees_dollars": 0.43,
+    "mean_net_dollars": -0.303664,
+    "mean_roi_on_paid": -0.304375,
+    "median_net_dollars": -0.0015,
+    "n": 24,
+    "n_quotable": 11,
+    "total_net_dollars": -3.3403,
+    "unquotable": 13
+   }
+  },
+  "fade15": {
+   "by_topic": {
+    "elections": {
+     "hit_rate": 0.0,
+     "mean_fees_dollars": 0.43,
+     "mean_net_dollars": -0.303664,
+     "mean_roi_on_paid": -0.304375,
+     "median_net_dollars": -0.0015,
+     "n": 24,
+     "n_quotable": 11,
+     "total_net_dollars": -3.3403,
+     "unquotable": 13
+    }
+   },
+   "overall": {
+    "direction_split": {
+     "down": 0,
+     "up": 24
+    },
+    "hit_rate": 0.0,
+    "mean_fees_dollars": 0.43,
+    "mean_net_dollars": -0.303664,
+    "mean_roi_on_paid": -0.304375,
+    "median_net_dollars": -0.0015,
+    "n": 24,
+    "n_quotable": 11,
+    "total_net_dollars": -3.3403,
+    "unquotable": 13
+   }
+  },
+  "fade_settle": {
+   "by_topic": {
+    "elections": {
+     "hit_rate": 0.0,
+     "mean_fees_dollars": 0.072727,
+     "mean_net_dollars": -0.003273,
+     "mean_roi_on_paid": -0.003286,
+     "median_net_dollars": -0.0025,
+     "n": 24,
+     "n_quotable": 11,
+     "total_net_dollars": -0.036,
+     "unquotable": 13
+    }
+   },
+   "overall": {
+    "direction_split": {
+     "down": 0,
+     "up": 24
+    },
+    "hit_rate": 0.0,
+    "mean_fees_dollars": 0.072727,
+    "mean_net_dollars": -0.003273,
+    "mean_roi_on_paid": -0.003286,
+    "median_net_dollars": -0.0025,
+    "n": 24,
+    "n_quotable": 11,
+    "total_net_dollars": -0.036,
+    "unquotable": 13
+   }
+  },
+  "momo60": {
+   "by_topic": {
+    "elections": {
+     "hit_rate": 0.0,
+     "mean_fees_dollars": 0.855556,
+     "mean_net_dollars": -0.640333,
+     "mean_roi_on_paid": -0.876015,
+     "median_net_dollars": -0.819,
+     "n": 24,
+     "n_quotable": 18,
+     "total_net_dollars": -11.526,
+     "unquotable": 6
+    }
+   },
+   "overall": {
+    "direction_split": {
+     "down": 0,
+     "up": 24
+    },
+    "hit_rate": 0.0,
+    "mean_fees_dollars": 0.855556,
+    "mean_net_dollars": -0.640333,
+    "mean_roi_on_paid": -0.876015,
+    "median_net_dollars": -0.819,
+    "n": 24,
+    "n_quotable": 18,
+    "total_net_dollars": -11.526,
+    "unquotable": 6
+   }
+  }
+ }
+}

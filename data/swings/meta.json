@@ -1,0 +1,49 @@
+{
+ "api_root": "https://external-api.demo.kalshi.co/trade-api/v2",
+ "caveats": [
+  "Demo exchange: prices, volumes and liquidity are simulated test data, not real markets (https://docs.kalshi.com/getting_started/demo_env.md).",
+  "Candlestick OHLC is the per-period trade price plus the quoted YES bid/ask at the period open/close; fills assume the taker crosses that quote exactly and ignore book depth -- optimistic, see alerts/SPEC.md 'Fill model'.",
+  "Strategies are simulated trades; no order was sent to Kalshi (no demo API credentials exist in this repo -- COORDINATION.md I-12).",
+  "External news links are search deep-links offered as candidate catalysts; timing proximity is not evidence of causation."
+ ],
+ "event_page_probe": {
+  "attempted": false,
+  "error": "offline mode does not probe (no route from the dev sandbox)",
+  "status_code": null,
+  "ticker_echoed": false
+ },
+ "events_with_swings": 2,
+ "generated_at": "2026-11-20T19:31:58Z",
+ "hours_1m": 48,
+ "hours_60m": 168,
+ "markets_scanned": 12,
+ "per_topic_markets": 12,
+ "rearm_band_dollars": 0.05,
+ "sources": [
+  "https://docs.kalshi.com/getting_started/api_environments.md",
+  "https://docs.kalshi.com/getting_started/demo_env.md",
+  "https://docs.kalshi.com/api-reference/market/get-market-candlesticks.md",
+  "https://docs.kalshi.com/api-reference/market/get-markets.md",
+  "https://docs.kalshi.com/api-reference/market/get-multiple-market-orderbooks.md",
+  "https://docs.kalshi.com/getting_started/orderbook_responses.md",
+  "https://docs.kalshi.com/getting_started/pagination.md",
+  "https://docs.kalshi.com/getting_started/market_settlement.md",
+  "https://kalshi.com/docs/kalshi-fee-schedule.pdf"
+ ],
+ "stats": {
+  "errors": 0,
+  "event_page_probe": {
+   "attempted": false,
+   "error": "offline mode does not probe (no route from the dev sandbox)",
+   "status_code": null,
+   "ticker_echoed": false
+  },
+  "mode": "offline",
+  "requests": 0,
+  "universe_units": 12,
+  "warnings": []
+ },
+ "swings_found": 24,
+ "threshold_dollars": 0.1,
+ "window_minutes": 60
+}
