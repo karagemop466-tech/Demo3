@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-20T20:35:11Z",
+ "generated_at": "2026-11-20T20:46:56Z",
  "api_root": "https://external-api.demo.kalshi.co/trade-api/v2",
  "rule": {
   "threshold_dollars": "0.10",
@@ -19,11 +19,11 @@
    "KXQUICKSETTLE"
   ]
  },
- "snapshot_samples": 276,
+ "snapshot_samples": 288,
  "snapshot_tickers": 24,
  "counts": {
-  "alerts": 7,
-  "up": 5,
+  "alerts": 8,
+  "up": 6,
   "down": 2,
   "high_roi": 0,
   "reverted_next_reading": 2,
@@ -225,6 +225,34 @@
    "roi_side": "NO",
    "roi_bought_price_dollars": "0.9970",
    "roi_multiple": "0.0030",
+   "cause_link": "",
+   "cause_status": "unverified - not inferred"
+  },
+  {
+   "ts": "2026-11-20T20:43:46+00:00",
+   "prev_ts": "2026-11-20T20:32:01+00:00",
+   "ticker": "KXPRESNOMD-28-JSTE",
+   "event_ticker": "KXPRESNOMD-28",
+   "title": "Will Jon Stewart be the nominee for the Presidency for the Democratic party?",
+   "topic": "elections",
+   "from_dollars": "0.0030",
+   "to_dollars": "0.8210",
+   "delta_dollars": "+0.8180",
+   "direction": "up",
+   "to_bid_dollars": "",
+   "to_ask_dollars": "0.8210",
+   "next_reading_dollars": "",
+   "next_reading_ts": "",
+   "reverted_next_reading": false,
+   "quote_mid_dollars": "",
+   "last_supported_by_quote": null,
+   "volume_fp": "292805543.0000",
+   "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-JSTE",
+   "synthetic": false,
+   "high_roi": false,
+   "roi_side": "YES",
+   "roi_bought_price_dollars": "0.8210",
+   "roi_multiple": "0.2180",
    "cause_link": "",
    "cause_status": "unverified - not inferred"
   }
