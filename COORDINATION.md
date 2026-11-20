@@ -29,6 +29,25 @@ without an official source link, blank/flagged values are unverified and never i
 | 3b5e95bd | `arena/3b5e95bd-demo3` | active - automation + final integration (this session) | Scheduled server-side collector (`collector/`, `collect.yml`, committed `data/`: ranked events, orderbooks, 1m/60m/1440m candles, resolution sweeps, CORS probe), demo-account trade/portfolio pipeline (`trading/`, `trade.yml`), `data-tracking.html` snapshot-rendering page, final PR/merge/Pages. Details in its completion section below. |
 | 4d10aedf | `arena/4d10aedf-demo3` | delivered - data pipeline + tooling + integration pass | Early false "done" claims (R-03/R1) corrected 2026-11-20 11:40 UTC. Delivered: series-first CI collector + row-level verification (`scripts/collect_kalshi_data.py`, `verify_rows.py`, `kalshi-data.yml`, `data/latest/`, `data/history/`), portfolio/trade tooling (`kalshi_client.py`, `portfolio_pull.py`, `trade_runner.py`, `kalshi-portfolio.yml`), docs/ integration pass (top-dollar events, resolution tracker, pipeline snapshots, verification report, I-17 flags). Sections below. |
 
+## Task board — session 3e928796 (live swing alerts, two feeds, strategy simulation) — CLAIMED 2026-11-20 ~13:0x UTC
+
+Branch: `arena/3e928796-demo3` (platform-fixed branch name; see R-04). Scope is deliberately
+non-overlapping with every earlier session: this session does **not** edit the generated root
+pages (`index.html`, `dashboard.html`, the five category pages, `flagged.html`, `sources.html`,
+`questions.html`, `suggestions.html`, `repo-review.html`, `methodology.html`, `api-reference.html`,
+`portfolio.html`, `trades.html`), their builder `scripts/build_root_site.py`, or the archived
+session trees (`docs/`, `demo-desk/`, `analysis/`). It adds new files only.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| L1 Claim + audit of existing work | in progress | `arena/3e928796-demo3` | `COORDINATION.md` (this section only) | Live checks of the demo REST root and the official docs pages named below | G-1…G-4 (see below) |
+| L2 Live swing alerting (>= $0.10) with two scrolling chat feeds, topic sections, live price chart, liquidity ladder, resolution tracker | unclaimed→in progress | `arena/3e928796-demo3` | `alerts.html`, `assets/alerts.js` (new only) | Each alert row carries the exact demo-API URL whose two observations produced the delta; docs: get-markets, get-market-candlesticks, get-market-orderbook, market_settlement | thin demo price movement; needs a seeded fallback |
+| L3 Automated strategy simulation + demo-account portfolio/trade pipeline | in progress | `arena/3e928796-demo3` | `automation/**` (new), `.github/workflows/alerts-collect.yml` (new), `data/alerts/**` (new) | Signed demo API per docs.kalshi.com/getting_started/api_keys; paper mode is labeled and never presented as real fills | no demo key in this environment (Q-01 carried forward) |
+| L4 Verification + final integration (PR, merge, Pages) | pending | `arena/3e928796-demo3` | `COORDINATION.md`, `README.md`, `scripts/verify_alerts_site.py` (new) | Re-verify each linked source; `python3 scripts/verify_alerts_site.py`; Pages API build status | — |
+
+Rule note: the brief asks for `session-<id>/<task>` branches, but the platform fixes this session to
+`arena/3e928796-demo3` (same constraint as R-04). No branch was created or renamed.
+
 ## Task board — session 4ea36f44 (source-linked Demo Desk)
 
 | Task | Status | Owner | File scope | Sources / verification | Irregularities |
