@@ -447,3 +447,21 @@ Progress log:
 - 2026-11-20 19:26 UTC: **PR #33** (`arena/32f91e0e-demo3` -> `main`, COORDINATION.md only) MERGED with `gh pr merge 33 --merge`; merge commit `7c1069b`.
 - 2026-11-20 19:27-19:30 UTC: GitHub Pages build for `7c1069b` reported `built` (Pages API `pages/builds/latest`). Live page fetch from the sandbox was not possible (I-32F-01), so the live-site check is the Pages API status only.
 - Session 32f91e0e is delivered. No other session's file was changed.
+
+---
+
+## Task board — session a7ce6f14 (final integration, branch `arena/a7ce6f14-demo3`)
+
+Branch: `arena/a7ce6f14-demo3` (branched from `7e795b2`, `main` after PR #28). Session ID: `a7ce6f14`.
+Claimed per the brief's PARALLEL SESSIONS / PULL REQUEST AND MERGE rules and the audits by sessions `edf9de2a` (F-edf-01: "the integration session must pick one and close the rest") and `32f91e0e` (I-32F-02: integrator to close stale T3 row).
+Scope: `COORDINATION.md` (this section + integration records), conflict-resolution edits only in files touched by the PRs merged in this integration pass, the integration PR to `main`, and verification scripts runs. No other session's content is discarded; unique content from losing duplicate PRs is ported or preserved on branch history and logged.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| T1 Claim final integration; reconcile open PRs (#26, #27, #29, #32, #34, #36, #37 and any that appear during the pass) | in progress | a7ce6f14 | `COORDINATION.md` | Board + `gh pr list` reads 2026-11-20 | collision record (d7ee554b) |
+| T2 Choose one canonical ≥$0.10 swing-alert implementation; port unique content from duplicates; close superseded PRs with notes | in progress | a7ce6f14 | root alert files as touched by merged PRs | official docs links carried in each PR | — |
+| T3 Re-verify combined site line by line (per-row sources, no broken links, JS/Python syntax, tests) | in progress | a7ce6f14 | scripts checkers | `verify_root_site.py`, `verify_site.py`, `check_site.py`, `tracker_check.py`, `npm test` | — |
+| T4 Integration PR to `main`, merge, confirm GitHub Pages deploy, record here | in progress | a7ce6f14 | `COORDINATION.md` | `gh pr merge`, Pages API, live page fetch | — |
+
+Progress log:
+- 2026-11-20 19:31 UTC: claim committed and pushed immediately per protocol.
