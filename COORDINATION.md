@@ -348,3 +348,22 @@ Follow-up requests from session 06cbd03f addressed at integration:
 - 2026-11-20 12:25 UTC: PR https://github.com/karagemop466-tech/Demo3/pull/24 (`arena/4d10aedf-demo3` -> `main`) opened with summary, sources and flagged irregularities. Pre-merge checks green (verify_rows 725/725, verify_site PASSED, jsdom smoke PASSED).
 - 2026-11-20 12:29 UTC: `gh pr merge 24 --merge` reported conflicts — `main` had advanced with sessions `3b5e95bd`/`dd229508`/`arena-3a22fb0f` deliveries (PRs #18/#21/#22). Conflicts in `.gitignore`, `README.md`, `docs/executive-summary.md`, `COORDINATION.md` resolved by keeping both sides: `main`'s records preserved verbatim, 4d10aedf's records added as new sections. Nothing discarded (handoff/conflict protocol).
 - 2026-11-20 12:31 UTC: **PR #24 MERGED** — merge commit `48fe55e`. `Checks` workflow SUCCESS on the merge; `pages build and deployment` workflow SUCCESS; the Pages API reports `built` (source `main` /). Live site verified via page fetch: https://karagemop466-tech.github.io/Demo3/ serves the merged canonical landing with live status "LIVE · trading active (demo)", the executive-summary source table, decision registers, and archive links (docs/, docs/tracker/, analysis/, demo-desk/, research/). This line records the actual result; the follow-up board commit carries the confirmation to `main`.
+
+---
+
+## Session b13c6a8d — live price-swing alerts + scrolling chats (`arena/b13c6a8d-demo3`) — claimed 2026-11-20
+
+Scope claim (non-overlapping; no shared file edited except this board):
+- A1 Live alert engine: browser polls the official demo REST API (`GET /markets?tickers=`, verified in docs) for a watchlist taken from the committed snapshot `data/events.json`; flags any consecutive-sample move of ≥ $0.10 in either direction. Files: `alerts/**`.
+- A2 Two scrolling chats: "All events" feed and "High-ROI screen" (stand-in rule set, pluggable). Resolution feed (yes/no) for tracked markets. Files: `alerts/**`.
+- A3 Tests (`alerts/tests/**`, mocked API, offline) and a per-row source check. Files: `alerts/**`.
+- A4 Integration: PR `arena/b13c6a8d-demo3` → `main`, merge, Pages check, record here. Root navigation entry is NOT edited by this session; logged as change request CR-b13c6a8d-1 for the root-site owner.
+
+Not claimed (already owned / open PRs): root dashboard (#23 open), paper trading and resolution tracking (#19 open), demo-monitor (#17 open), portfolio credentials (blocked, no keys in sandbox).
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| A1 Live ≥$0.10 move alert engine | in progress | b13c6a8d | `alerts/assets/alerts.js` | Official `get-markets` (status, `tickers`, `limit`); live market object fetched 2026-11-20 (`KXPRESNOMD-28-GPLA`) | F-B13-01 (no open gas markets in snapshot) |
+| A2 Scrolling chats + ROI stand-in + resolution feed | in progress | b13c6a8d | `alerts/index.html`, `alerts/assets/model.js` | Same as A1 | F-B13-02 (ROI rules are placeholders, not the user's model), F-B13-03 (news links are searches, not verified causes) |
+| A3 Offline tests | in progress | b13c6a8d | `alerts/tests/**` | — | — |
+| A4 PR, merge, Pages | pending | b13c6a8d | — | — | — |
