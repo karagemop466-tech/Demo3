@@ -1,8 +1,8 @@
 {
- "generated_at_utc": "2026-11-20T12:02:12+00:00",
+ "generated_at_utc": "2026-11-20T12:09:14+00:00",
  "inputs": {
-  "demo_run_id": "20261120T115918Z",
-  "prod_run_id": "20261120T120117Z"
+  "demo_run_id": "20261120T120655Z",
+  "prod_run_id": "20261120T120745Z"
  },
  "definitions": {
   "contracts_traded": "Kalshi `volume_fp` \u2014 contracts exchanged on the market. Source: GET /markets.",
@@ -16,50 +16,50 @@
  "per_topic_demo": {
   "crypto": {
    "open_markets": 5217,
-   "sum_contracts_traded": 2223100260.09,
-   "sum_open_interest_contracts": 414526990.83,
-   "sum_traded_notional_dollars_derived": 253015378.99,
-   "sum_open_interest_dollars_derived": 49553049.79,
+   "sum_contracts_traded": 2223100064.09,
+   "sum_open_interest_contracts": 414526788.83,
+   "sum_traded_notional_dollars_derived": 253015280.03,
+   "sum_open_interest_dollars_derived": 49552950.77,
    "sum_resting_liquidity_dollars": 30055.54,
    "median_last_price": 0.0,
    "markets_with_missing_price": 0
   },
   "elections": {
    "open_markets": 267,
-   "sum_contracts_traded": 11026203134.84,
-   "sum_open_interest_contracts": 3708366895.35,
-   "sum_traded_notional_dollars_derived": 1190552459.6,
-   "sum_open_interest_dollars_derived": 321947164.53,
-   "sum_resting_liquidity_dollars": 2537118.37,
+   "sum_contracts_traded": 11026208255.47,
+   "sum_open_interest_contracts": 3708369323.68,
+   "sum_traded_notional_dollars_derived": 1189797102.78,
+   "sum_open_interest_dollars_derived": 321662407.68,
+   "sum_resting_liquidity_dollars": 2376214.59,
    "median_last_price": 0.005,
    "markets_with_missing_price": 0
   },
   "culture": {
    "open_markets": 254,
-   "sum_contracts_traded": 34463746.36,
-   "sum_open_interest_contracts": 23028325.58,
-   "sum_traded_notional_dollars_derived": 3687524.81,
-   "sum_open_interest_dollars_derived": 2001295.3,
+   "sum_contracts_traded": 34463863.71,
+   "sum_open_interest_contracts": 23028432.93,
+   "sum_traded_notional_dollars_derived": 3687551.29,
+   "sum_open_interest_dollars_derived": 2001321.48,
    "sum_resting_liquidity_dollars": null,
    "median_last_price": 0.02,
    "markets_with_missing_price": 0
   },
   "golf": {
    "open_markets": 1171,
-   "sum_contracts_traded": 18369763.98,
-   "sum_open_interest_contracts": 16907205.87,
-   "sum_traded_notional_dollars_derived": 203346.96,
-   "sum_open_interest_dollars_derived": 183906.46,
+   "sum_contracts_traded": 18373255.64,
+   "sum_open_interest_contracts": 16909634.84,
+   "sum_traded_notional_dollars_derived": 208033.42,
+   "sum_open_interest_dollars_derived": 188558.17,
    "sum_resting_liquidity_dollars": null,
    "median_last_price": 0.0,
    "markets_with_missing_price": 0
   },
   "gas": {
    "open_markets": 126,
-   "sum_contracts_traded": 576633.6,
-   "sum_open_interest_contracts": 521618.44,
-   "sum_traded_notional_dollars_derived": 88413.9,
-   "sum_open_interest_dollars_derived": 70255.25,
+   "sum_contracts_traded": 576745.9,
+   "sum_open_interest_contracts": 521678.13,
+   "sum_traded_notional_dollars_derived": 86010.91,
+   "sum_open_interest_dollars_derived": 68420.88,
    "sum_resting_liquidity_dollars": null,
    "median_last_price": 0.02,
    "markets_with_missing_price": 0
@@ -69,9 +69,13 @@
   "formula": "Count of settled markets per topic by Kalshi `result` (yes/no/scalar/blank). Input: data/resolutions.json (GET /markets?status=settled).",
   "total_rows": 12567,
   "by_topic": {
+   "gas": {
+    "yes": 796,
+    "no": 2595
+   },
    "crypto": {
-    "no": 3391,
-    "yes": 1023
+    "no": 3398,
+    "yes": 1016
    },
    "golf": {
     "no": 3538,
@@ -81,10 +85,6 @@
    "elections": {
     "yes": 73,
     "no": 166
-   },
-   "gas": {
-    "yes": 796,
-    "no": 2595
    },
    "culture": {
     "no": 383,
@@ -108,10 +108,166 @@
  "liquidity_snapshot": {
   "formula": "Per tracked market: total resting dollars and derived YES spread from the orderbook.",
   "markets_sampled": 34,
-  "median_resting_dollars": 1084947.76,
+  "median_resting_dollars": 1084837.97,
   "max_resting_dollars": 4238772.37,
   "min_resting_dollars": 0,
   "median_yes_spread": 0.001
+ },
+ "resolution_study": {
+  "formula": "yes_expectancy = win_rate_yes - avg_yes_price; no_expectancy = (1 - win_rate_yes) - (1 - avg_yes_price). Both in dollars per contract, fees excluded.",
+  "input": "data/resolutions-compact.json (settled markets with a result and a last price)",
+  "rows_usable": 12521,
+  "rows_excluded": {
+   "no_result": 0,
+   "no_price": 0,
+   "scalar_result": 46
+  },
+  "buckets": [
+   {
+    "bucket": "<=0.10",
+    "n": 10467,
+    "yes": 808,
+    "no": 9659,
+    "win_rate_yes": 0.0772,
+    "avg_yes_price": 0.0039,
+    "yes_expectancy_per_contract": 0.0733,
+    "no_expectancy_per_contract": -0.0733,
+    "volume_weighted_win_rate": 0.0017,
+    "contracts_traded": 1922784727.21
+   },
+   {
+    "bucket": "0.10-0.20",
+    "n": 145,
+    "yes": 6,
+    "no": 139,
+    "win_rate_yes": 0.0414,
+    "avg_yes_price": 0.1368,
+    "yes_expectancy_per_contract": -0.0954,
+    "no_expectancy_per_contract": 0.0954,
+    "volume_weighted_win_rate": 0.0711,
+    "contracts_traded": 8431106.1
+   },
+   {
+    "bucket": "0.20-0.40",
+    "n": 78,
+    "yes": 11,
+    "no": 67,
+    "win_rate_yes": 0.141,
+    "avg_yes_price": 0.2864,
+    "yes_expectancy_per_contract": -0.1454,
+    "no_expectancy_per_contract": 0.1454,
+    "volume_weighted_win_rate": 0.084,
+    "contracts_traded": 1276982.87
+   },
+   {
+    "bucket": "0.40-0.60",
+    "n": 41,
+    "yes": 19,
+    "no": 22,
+    "win_rate_yes": 0.4634,
+    "avg_yes_price": 0.4768,
+    "yes_expectancy_per_contract": -0.0134,
+    "no_expectancy_per_contract": 0.0134,
+    "volume_weighted_win_rate": 0.7854,
+    "contracts_traded": 839347.92
+   },
+   {
+    "bucket": "0.60-0.80",
+    "n": 35,
+    "yes": 15,
+    "no": 20,
+    "win_rate_yes": 0.4286,
+    "avg_yes_price": 0.682,
+    "yes_expectancy_per_contract": -0.2534,
+    "no_expectancy_per_contract": 0.2534,
+    "volume_weighted_win_rate": 0.9373,
+    "contracts_traded": 1815189.81
+   },
+   {
+    "bucket": "0.80-0.90",
+    "n": 47,
+    "yes": 35,
+    "no": 12,
+    "win_rate_yes": 0.7447,
+    "avg_yes_price": 0.8598,
+    "yes_expectancy_per_contract": -0.1151,
+    "no_expectancy_per_contract": 0.1151,
+    "volume_weighted_win_rate": 0.8946,
+    "contracts_traded": 32339.27
+   },
+   {
+    "bucket": "0.90-0.99",
+    "n": 276,
+    "yes": 197,
+    "no": 79,
+    "win_rate_yes": 0.7138,
+    "avg_yes_price": 0.9613,
+    "yes_expectancy_per_contract": -0.2475,
+    "no_expectancy_per_contract": 0.2475,
+    "volume_weighted_win_rate": 0.2321,
+    "contracts_traded": 96238600.24
+   },
+   {
+    "bucket": ">=0.99",
+    "n": 1432,
+    "yes": 1357,
+    "no": 75,
+    "win_rate_yes": 0.9476,
+    "avg_yes_price": 0.9951,
+    "yes_expectancy_per_contract": -0.0475,
+    "no_expectancy_per_contract": 0.0475,
+    "volume_weighted_win_rate": 0.9996,
+    "contracts_traded": 673702239.68
+   }
+  ],
+  "favourite_band_0_80_to_0_99": {
+   "n": 936,
+   "win_rate_yes": 0.8226,
+   "avg_yes_price": 0.975,
+   "yes_expectancy_per_contract": -0.1523,
+   "no_expectancy_per_contract": 0.1523
+  },
+  "longshot_band_0_01_to_0_20": {
+   "n": 1817,
+   "win_rate_yes": 0.0165,
+   "avg_yes_price": 0.0323,
+   "yes_expectancy_per_contract": -0.0158,
+   "no_expectancy_per_contract": 0.0158
+  },
+  "all_rows": {
+   "n": 12521,
+   "win_rate_yes": 0.1955,
+   "avg_yes_price": 0.1483,
+   "yes_expectancy_per_contract": 0.0472,
+   "no_expectancy_per_contract": -0.0472
+  },
+  "caveats": [
+   "last_price_dollars is the last traded price, not the average price paid by holders.",
+   "Fees are excluded; Kalshi series carry fee_type (quadratic/flat) and a fee_multiplier.",
+   "Only markets that settled inside the collection window are counted.",
+   "Historical expectancy does not predict future results."
+  ]
+ },
+ "strategy_candidates": {
+  "policy": {
+   "longshot_max_yes": 0.2,
+   "min_volume_24h": 1.0,
+   "max_price": 0.99,
+   "max_spread": 0.04,
+   "min_resting_depth_dollars": 50.0,
+   "size_contracts": 10,
+   "where": "docs/portfolio/STRATEGY.md"
+  },
+  "count": 2,
+  "simulation": {
+   "candidates": 2,
+   "simulated": 2,
+   "total_cost_dollars": 19.52,
+   "median_breakeven_probability": 0.976
+  },
+  "skipped": 50,
+  "measured_skips": 0,
+  "disclaimer": "Simulation, not a forecast or backtest. It answers 'what would these orders cost right now given the visible book' and nothing more. The probability that the market resolves in your favour is not knowable from this dataset."
  },
  "data_quality": {
   "markets_with_missing_fields": 0,

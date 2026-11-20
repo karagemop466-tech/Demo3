@@ -1,6 +1,6 @@
 {
  "meta": {
-  "built_at_utc": "2026-11-20T12:04:23+00:00",
+  "built_at_utc": "2026-11-20T12:09:15+00:00",
   "rows": 12567,
   "sources": {
    "settled_markets": "GET https://external-api.kalshi.com/trade-api/v2/markets?status=settled&series_ticker=...",
@@ -10,10 +10,15 @@
   "note": "Counts of Kalshi's own `result` field per topic. `blank` means the API returned an empty result (typically a scalar or voided market); it is never guessed into yes/no."
  },
  "by_topic": {
+  "gas": {
+   "label": "Gas prices",
+   "yes": 796,
+   "no": 2595
+  },
   "crypto": {
    "label": "Crypto",
-   "no": 3391,
-   "yes": 1023
+   "no": 3398,
+   "yes": 1016
   },
   "golf": {
    "label": "Golf",
@@ -26,11 +31,6 @@
    "yes": 73,
    "no": 166
   },
-  "gas": {
-   "label": "Gas prices",
-   "yes": 796,
-   "no": 2595
-  },
   "culture": {
    "label": "Culture",
    "no": 383,
@@ -38,8 +38,8 @@
   }
  },
  "totals": {
-  "no": 10073,
-  "yes": 2448,
+  "yes": 2441,
+  "no": 10080,
   "scalar": 46
  },
  "by_month": {
@@ -48,17 +48,33 @@
    "no": 400
   },
   "2026-11": {
-   "no": 9673,
-   "yes": 2285,
+   "yes": 2278,
+   "no": 9680,
    "scalar": 46
   }
  },
  "top_series": [
   {
+   "series_ticker": "KXAAAGASD",
+   "counts": {
+    "yes": 80,
+    "no": 320
+   },
+   "settled": 400
+  },
+  {
+   "series_ticker": "KXBTC",
+   "counts": {
+    "no": 399,
+    "yes": 1
+   },
+   "settled": 400
+  },
+  {
    "series_ticker": "KXBTCD",
    "counts": {
-    "no": 321,
-    "yes": 79
+    "yes": 77,
+    "no": 323
    },
    "settled": 400
   },
@@ -73,16 +89,8 @@
   {
    "series_ticker": "KXETHD",
    "counts": {
-    "no": 358,
-    "yes": 42
-   },
-   "settled": 400
-  },
-  {
-   "series_ticker": "KXBTC",
-   "counts": {
-    "no": 399,
-    "yes": 1
+    "yes": 40,
+    "no": 360
    },
    "settled": 400
   },
@@ -146,14 +154,6 @@
    "settled": 400
   },
   {
-   "series_ticker": "KXAAAGASD",
-   "counts": {
-    "yes": 80,
-    "no": 320
-   },
-   "settled": 400
-  },
-  {
    "series_ticker": "KXDPWORLDTOUR",
    "counts": {
     "no": 394,
@@ -210,6 +210,14 @@
    "settled": 223
   },
   {
+   "series_ticker": "KXSOLD",
+   "counts": {
+    "yes": 86,
+    "no": 114
+   },
+   "settled": 200
+  },
+  {
    "series_ticker": "KXETH15M",
    "counts": {
     "no": 105,
@@ -246,14 +254,6 @@
    "counts": {
     "no": 111,
     "yes": 89
-   },
-   "settled": 200
-  },
-  {
-   "series_ticker": "KXBTC15M",
-   "counts": {
-    "yes": 85,
-    "no": 115
    },
    "settled": 200
   }

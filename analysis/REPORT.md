@@ -1,6 +1,6 @@
 # Analysis report
 
-Generated 2026-11-20T12:02:12+00:00 from demo run `20261120T115918Z` and production run `20261120T120117Z`.
+Generated 2026-11-20T12:09:14+00:00 from demo run `20261120T120655Z` and production run `20261120T120745Z`.
 
 Every figure below is an aggregation of API fields listed in *Definitions*;
 nothing is estimated. Where data is unavailable it says so instead of showing zero.
@@ -19,11 +19,11 @@ nothing is estimated. Where data is unavailable it says so instead of showing ze
 
 | Topic | Open markets | Contracts traded | Open interest (contracts) | Traded notional $ (derived) | Open-interest $ (derived) | Resting liquidity $ | Median price |
 |---|---|---|---|---|---|---|---|
-| crypto | 5217 | 2,223,100,260.09 | 414,526,990.83 | 253,015,378.99 | 49,553,049.79 | 30,055.54 | 0.0 |
-| elections | 267 | 11,026,203,134.84 | 3,708,366,895.35 | 1,190,552,459.60 | 321,947,164.53 | 2,537,118.37 | 0.005 |
-| culture | 254 | 34,463,746.36 | 23,028,325.58 | 3,687,524.81 | 2,001,295.30 | — | 0.02 |
-| golf | 1171 | 18,369,763.98 | 16,907,205.87 | 203,346.96 | 183,906.46 | — | 0.0 |
-| gas | 126 | 576,633.60 | 521,618.44 | 88,413.90 | 70,255.25 | — | 0.02 |
+| crypto | 5217 | 2,223,100,064.09 | 414,526,788.83 | 253,015,280.03 | 49,552,950.77 | 30,055.54 | 0.0 |
+| elections | 267 | 11,026,208,255.47 | 3,708,369,323.68 | 1,189,797,102.78 | 321,662,407.68 | 2,376,214.59 | 0.005 |
+| culture | 254 | 34,463,863.71 | 23,028,432.93 | 3,687,551.29 | 2,001,321.48 | — | 0.02 |
+| golf | 1171 | 18,373,255.64 | 16,909,634.84 | 208,033.42 | 188,558.17 | — | 0.0 |
+| gas | 126 | 576,745.90 | 521,678.13 | 86,010.91 | 68,420.88 | — | 0.02 |
 
 ## Resolution outcomes
 
@@ -31,11 +31,50 @@ _Count of settled markets per topic by Kalshi `result` (yes/no/scalar/blank). In
 
 | Topic | yes | no | scalar | blank |
 |---|---|---|---|---|
-| crypto | 1023 | 3391 | 0 | 0 |
+| gas | 796 | 2595 | 0 | 0 |
+| crypto | 1016 | 3398 | 0 | 0 |
 | golf | 332 | 3538 | 46 | 0 |
 | elections | 73 | 166 | 0 | 0 |
-| gas | 796 | 2595 | 0 | 0 |
 | culture | 224 | 383 | 0 | 0 |
+
+## Resolution study: realised outcome vs. price
+
+_yes_expectancy = win_rate_yes - avg_yes_price; no_expectancy = (1 - win_rate_yes) - (1 - avg_yes_price). Both in dollars per contract, fees excluded._
+
+Input: data/resolutions-compact.json (settled markets with a result and a last price) — usable rows 12,521, excluded {'no_result': 0, 'no_price': 0, 'scalar_result': 46}.
+
+| YES price band | n | resolved yes | win rate | avg YES price | YES expectancy / contract | NO expectancy / contract |
+|---|---|---|---|---|---|---|
+| <=0.10 | 10,467 | 808 | 7.72% | 0.0039 | +0.0733 | -0.0733 |
+| 0.10-0.20 | 145 | 6 | 4.14% | 0.1368 | -0.0954 | +0.0954 |
+| 0.20-0.40 | 78 | 11 | 14.10% | 0.2864 | -0.1454 | +0.1454 |
+| 0.40-0.60 | 41 | 19 | 46.34% | 0.4768 | -0.0134 | +0.0134 |
+| 0.60-0.80 | 35 | 15 | 42.86% | 0.6820 | -0.2534 | +0.2534 |
+| 0.80-0.90 | 47 | 35 | 74.47% | 0.8598 | -0.1151 | +0.1151 |
+| 0.90-0.99 | 276 | 197 | 71.38% | 0.9613 | -0.2475 | +0.2475 |
+| >=0.99 | 1,432 | 1,357 | 94.76% | 0.9951 | -0.0475 | +0.0475 |
+
+**0.80-0.99 favourite band**: n=936, win rate 82.26%, avg price 0.9750, YES expectancy -0.1523/contract, NO expectancy +0.1523/contract.
+
+**0.01-0.20 longshot band**: n=1,817, win rate 1.65%, avg price 0.0323, YES expectancy -0.0158/contract, NO expectancy +0.0158/contract.
+
+**all settled rows**: n=12,521, win rate 19.55%, avg price 0.1483, YES expectancy +0.0472/contract, NO expectancy -0.0472/contract.
+
+Caveats:
+- last_price_dollars is the last traded price, not the average price paid by holders.
+- Fees are excluded; Kalshi series carry fee_type (quadratic/flat) and a fee_multiplier.
+- Only markets that settled inside the collection window are counted.
+- Historical expectancy does not predict future results.
+
+## Strategy candidates from the current order book
+
+Policy: `{"longshot_max_yes": 0.2, "min_volume_24h": 1.0, "max_price": 0.99, "max_spread": 0.04, "min_resting_depth_dollars": 50.0, "size_contracts": 10, "where": "docs/portfolio/STRATEGY.md"}`
+
+- candidates that survived the rules: **2**
+- markets skipped, including 0 rejected because they sit in the measured negative-expectancy favourite band
+- simulation: `{"candidates": 2, "simulated": 2, "total_cost_dollars": 19.52, "median_breakeven_probability": 0.976}`
+
+Simulation, not a forecast or backtest. It answers 'what would these orders cost right now given the visible book' and nothing more. The probability that the market resolves in your favour is not knowable from this dataset.
 
 ## Settlement timing
 
@@ -52,7 +91,7 @@ _(settlement_ts - close_time) in hours, for rows where both timestamps exist._
 _Per tracked market: total resting dollars and derived YES spread from the orderbook._
 
 - markets sampled: 34
-- median resting dollars: 1084947.76
+- median resting dollars: 1084837.97
 - median derived YES spread: 0.001
 
 ## Data quality

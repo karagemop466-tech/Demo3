@@ -1,23 +1,70 @@
 === build.py ===
 {
- "dashboard_bytes": 1928777,
+ "<=0.10": {
+  "n": 10467,
+  "win_rate_yes": 0.0772,
+  "avg_yes_price": 0.0039
+ },
+ "0.10-0.20": {
+  "n": 145,
+  "win_rate_yes": 0.0414,
+  "avg_yes_price": 0.1368
+ },
+ "0.20-0.40": {
+  "n": 78,
+  "win_rate_yes": 0.141,
+  "avg_yes_price": 0.2864
+ },
+ "0.40-0.60": {
+  "n": 41,
+  "win_rate_yes": 0.4634,
+  "avg_yes_price": 0.4768
+ },
+ "0.60-0.80": {
+  "n": 35,
+  "win_rate_yes": 0.4286,
+  "avg_yes_price": 0.682
+ },
+ "0.80-0.90": {
+  "n": 47,
+  "win_rate_yes": 0.7447,
+  "avg_yes_price": 0.8598
+ },
+ "0.90-0.99": {
+  "n": 276,
+  "win_rate_yes": 0.7138,
+  "avg_yes_price": 0.9613
+ },
+ ">=0.99": {
+  "n": 1432,
+  "win_rate_yes": 0.9476,
+  "avg_yes_price": 0.9951
+ }
+}
+{
+ "dashboard_bytes": 1959719,
  "resolutions_rows": 12567,
- "resolutions_bytes": 6364802
+ "resolutions_bytes": 6364934
 }
 === strategies.py ===
 {
- "candidates": 10,
- "simulated": 10,
+ "candidates": 2,
+ "simulated": 2,
  "skipped": 50
 }
 === settle_check.py ===
 {
  "rows": 12567,
  "by_topic": {
+  "gas": {
+   "label": "Gas prices",
+   "yes": 796,
+   "no": 2595
+  },
   "crypto": {
    "label": "Crypto",
-   "no": 3391,
-   "yes": 1023
+   "no": 3398,
+   "yes": 1016
   },
   "golf": {
    "label": "Golf",
@@ -30,11 +77,6 @@
    "yes": 73,
    "no": 166
   },
-  "gas": {
-   "label": "Gas prices",
-   "yes": 796,
-   "no": 2595
-  },
   "culture": {
    "label": "Culture",
    "no": 383,
@@ -44,11 +86,13 @@
  "reconciled_orders": 0
 }
 === artifacts ===
--rw-r--r-- 1 runner runner  1928777 Nov 20 12:02 data/dashboard.json
--rw-r--r-- 1 runner runner 11375027 Nov 20 12:02 data/live-prod.json
--rw-r--r-- 1 runner runner 26504582 Nov 20 12:01 data/live.json
--rw-r--r-- 1 runner runner    23514 Nov 20 12:02 data/meta.json
--rw-r--r-- 1 runner runner    22517 Nov 20 12:02 data/order-rules.json
--rw-r--r-- 1 runner runner  6364802 Nov 20 12:02 data/resolutions-compact.json
--rw-r--r-- 1 runner runner     3997 Nov 20 12:02 data/resolutions-summary.json
--rw-r--r-- 1 runner runner  7906321 Nov 20 12:02 data/resolutions.json
+-rw-r--r-- 1 runner runner  1959719 Nov 20 12:09 data/dashboard.json
+-rw-r--r-- 1 runner runner     3589 Nov 20 12:09 data/expectancy.json
+-rw-r--r-- 1 runner runner 11770194 Nov 20 12:09 data/live-prod.json
+-rw-r--r-- 1 runner runner 27341596 Nov 20 12:07 data/live.json
+-rw-r--r-- 1 runner runner    25186 Nov 20 12:09 data/meta.json
+-rw-r--r-- 1 runner runner    12002 Nov 20 12:09 data/order-rules.json
+-rw-r--r-- 1 runner runner      748 Nov 20 12:06 data/portfolio.json
+-rw-r--r-- 1 runner runner  6364934 Nov 20 12:09 data/resolutions-compact.json
+-rw-r--r-- 1 runner runner     3995 Nov 20 12:09 data/resolutions-summary.json
+-rw-r--r-- 1 runner runner  7906453 Nov 20 12:09 data/resolutions.json
