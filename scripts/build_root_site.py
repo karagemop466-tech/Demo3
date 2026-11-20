@@ -275,6 +275,15 @@ def consolidated_questions():
             [q.get("source", "")] + citations(q.get("q", ""), q.get("known", ""),
                                               q.get("missing", "")),
             "00a943bd docs")
+    add("5125-Q1", "Which model criteria define a 'high ROI' event? (the live dashboard's second feed)",
+        "The dashboard's second scrolling feed and its filter are implemented as a visible PLACEHOLDER rule: "
+        "a swing of at least $0.10, a price between $0.05 and $0.95, and traded and open contracts above zero. "
+        "Gross ROI if right = (1 − p)/p for YES and p/(1 − p) for NO, from the $1 payout rule.",
+        "The owner's model (inputs, thresholds, and whether fees and spread are included) was not supplied. "
+        "No model-based ROI can be verified until it is.",
+        "Send the rule (or model code) to the repo owner; edit CONFIG.roiRule in assets/alerts.js.",
+        [f"{DOCS}/getting_started/terms", "https://news.kalshi.com/p/what-are-event-contracts"],
+        "5125afd8 alerts")
     return rows
 
 
@@ -378,6 +387,24 @@ def consolidated_flags():
         "query string. Fixed in assets/app.js at integration (would otherwise 401 on every "
         "authenticated call).",
         [f"{DOCS}/getting_started/api_keys"], "resolved", "3a22fb0f")
+    add("A-01", "Live alerts", "High-ROI feed uses a placeholder rule",
+        "The second feed (high-ROI filter) is a visible placeholder (move ≥ $0.10, price 5¢–95¢, "
+        "volume_fp > 0, open_interest_fp > 0). It is not the owner's model, so its output is not a "
+        "recommendation. Gross ROI ignores fees and spread.",
+        [f"{DOCS}/api-reference/market/get-market", "https://news.kalshi.com/p/what-are-event-contracts"],
+        "open", "5125afd8")
+    add("A-02", "Live alerts", "Alert causes are not available from the API",
+        "The alert feed shows that a price moved, not why. No cause or news link is shown, because "
+        "the Kalshi Trade API response carries no cause field and none was inferred. Per-alert links "
+        "go to the exact API record.",
+        [f"{DOCS}/api-reference/market/get-market"], "open", "5125afd8")
+    add("A-03", "Live alerts", "Alerts sample REST once per scan, not a tick stream",
+        "Moves are detected between dashboard scans (about every 20 s, scan depth set on the page). "
+        "Brief moves that revert between two scans are missed, and the scan covers only the series "
+        "selected by the depth setting. The official WebSocket requires signed handshake headers that "
+        "a browser page cannot attach, so a true stream needs a signed server-side proxy.",
+        [f"{DOCS}/getting_started/quick_start_websockets", f"{DOCS}/getting_started/quick_start_market_data"],
+        "open", "5125afd8")
     return rows
 
 
@@ -416,6 +443,12 @@ def consolidated_sources():
         f"{DEMO}/markets", "Status, prices (dollars), volume_fp, open_interest_fp.")
     add("LIVE-OB", "Demo orderbook (live)",
         f"{DEMO}/markets/KXPGATOP40-26NOV22-LUDVIC/orderbook", "orderbook_fp price/size levels.")
+    add("5125-S1", "Get Market (fields: last_price_dollars, yes_bid/ask_dollars, volume_fp, open_interest_fp, previous_price_dollars)",
+        f"{DOCS}/api-reference/market/get-market", "Alert price fields and the per-alert API record link")
+    add("5125-S2", "Kalshi News: contracts settle to $1 if right, $0 otherwise",
+        "https://news.kalshi.com/p/what-are-event-contracts", "Payout rule behind gross ROI-if-right")
+    add("5125-S3", "Kalshi Glossary: category, series, event, market",
+        f"{DOCS}/getting_started/terms", "Object model used for topic and event grouping of alerts")
     return rows
 
 
@@ -527,6 +560,7 @@ questions and suggestions before making decisions.</p>
 <h2>How to use this site</h2>
 <table><thead><tr><th>Goal</th><th>Page</th><th>Source</th></tr></thead><tbody>
 <tr><td>Track highest-dollar live events, price chart (seconds/minutes/hours), orderbook liquidity, resolutions</td><td><a href="dashboard.html">Live dashboard</a></td><td><a class="src" href="https://docs.kalshi.com/getting_started/quick_start_market_data" target="_blank" rel="noopener">source</a></td></tr>
+<tr><td>Live alerts for price swings ≥ $0.10 (either direction) in two scrolling feeds: all swings, and a high-ROI filter (placeholder rule until the owner supplies the model)</td><td><a href="dashboard.html#alerts">Live alerts</a></td><td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-market" target="_blank" rel="noopener">source</a></td></tr>
 <tr><td>Execute trades (demo key or labeled paper mode), analyze performance, categorize trades, build strategies</td><td><a href="portfolio.html">Portfolio</a> · <a href="trades.html">Trades</a></td><td><a class="src" href="https://docs.kalshi.com/api-reference/orders/create-order-v2" target="_blank" rel="noopener">source</a></td></tr>
 <tr><td>Decide before changing anything: questions, missing information, discovery steps</td><td><a href="questions.html">Questions</a> · <a href="suggestions.html">Suggestions</a></td><td><a class="src" href="https://docs.kalshi.com/getting_started/demo_env" target="_blank" rel="noopener">source</a></td></tr>
 <tr><td>Verify every value: per-row sources, flagged items, repo review</td><td><a href="sources.html">Sources</a> · <a href="flagged.html">Flagged</a> · <a href="repo-review.html">Repo review</a></td><td><a class="src" href="https://docs.kalshi.com/getting_started/quick_start_market_data" target="_blank" rel="noopener">source</a></td></tr>
@@ -574,6 +608,25 @@ if the browser blocks the request the tables fall back to the snapshot links in
   <div id="discoveryTable"></div>
   <h3>Highest estimated dollar volume (live)</h3>
   <div id="rankingTable"></div>
+</div>
+
+<div class="card" id="alerts">
+  <h2>1b · Live swing alerts (move ≥ $0.10, either direction)</h2>
+  <p class="small muted">Two scrolling feeds, newest first, updated on every scan above
+  (<span id="alertCountAll">0</span> swings in <em>All events</em>; <span id="alertCountRoi">0</span> in the
+  <em>High-ROI filter</em>). Each move is measured against the market’s last alerted price (first
+  observation = anchor). Source field: <span class="mono">last_price_dollars</span> from
+  <a href="https://docs.kalshi.com/api-reference/market/get-market" target="_blank" rel="noopener">Get Market</a>.
+  The API does not report causes, so none are shown.
+  <strong>High-ROI filter is a placeholder rule</strong> (move ≥ $0.10, price 5¢–95¢, traded and open
+  contracts &gt; 0). Your model criteria were not supplied; see the open question in
+  <a href="questions.html">Questions</a>. Gross ROI ignores fees and spread.</p>
+  <p><button class="btn secondary" id="alertPauseBtn">Pause feeds</button>
+     <span class="small" id="alertPending"></span></p>
+  <div class="feed-grid">
+    <div><h3>All events (≥ $0.10 swings)</h3><ol class="feed" id="alertFeedAll"></ol></div>
+    <div><h3>High-ROI filter (placeholder rule)</h3><ol class="feed" id="alertFeedRoi"></ol></div>
+  </div>
 </div>
 
 <div class="card">
@@ -643,7 +696,7 @@ if the browser blocks the request the tables fall back to the snapshot links in
 </div>
 """
     write_page("dashboard.html", "Live dashboard", "dashboard.html", body,
-               scripts=("assets/app.js", "assets/trade.js", "assets/dashboard.js", "assets/site.js"))
+               scripts=("assets/app.js", "assets/trade.js", "assets/dashboard.js", "assets/alerts.js", "assets/site.js"))
 
 
 def build_portfolio():

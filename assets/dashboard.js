@@ -136,6 +136,7 @@
       renderRanking();
       recordSamples();
       trackResolutions();
+      if (window.KalshiAlerts) window.KalshiAlerts.onScan(state.markets);
       var capNote = depth > 0 ? ("top " + depth + " matched series per topic") : "ALL matched series";
       $("scanStatus").textContent = "Last scan: " + new Date().toLocaleTimeString() +
         " — " + state.markets.length + " open markets (coverage: " + capNote + ").";

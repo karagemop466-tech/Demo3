@@ -67,3 +67,13 @@ pre { background: #f0f2f6; padding: 12px; border-radius: 8px; overflow-x: auto;
   font-size: .85rem; }
 details { margin: 8px 0; }
 summary { cursor: pointer; font-weight: 600; }
+/* Live swing-alert feeds (session 5125afd8) */
+.feed-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+.feed { list-style: none; margin: 0; padding: 0; max-height: 380px; overflow-y: auto;
+  border: 1px solid var(--line); border-radius: 8px; background: #fff; }
+.feed li { padding: 8px 12px; border-bottom: 1px solid var(--line); font-size: .9rem; line-height: 1.45; }
+.feed li.up { border-left: 4px solid #1a7f37; }
+.feed li.down { border-left: 4px solid #b42318; }
+.delta { font-weight: 700; }
+.delta.up { color: #1a7f37; }
+.delta.down { color: #b42318; }

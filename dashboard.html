@@ -42,6 +42,25 @@ if the browser blocks the request the tables fall back to the snapshot links in
   <div id="rankingTable"></div>
 </div>
 
+<div class="card" id="alerts">
+  <h2>1b · Live swing alerts (move ≥ $0.10, either direction)</h2>
+  <p class="small muted">Two scrolling feeds, newest first, updated on every scan above
+  (<span id="alertCountAll">0</span> swings in <em>All events</em>; <span id="alertCountRoi">0</span> in the
+  <em>High-ROI filter</em>). Each move is measured against the market’s last alerted price (first
+  observation = anchor). Source field: <span class="mono">last_price_dollars</span> from
+  <a href="https://docs.kalshi.com/api-reference/market/get-market" target="_blank" rel="noopener">Get Market</a>.
+  The API does not report causes, so none are shown.
+  <strong>High-ROI filter is a placeholder rule</strong> (move ≥ $0.10, price 5¢–95¢, traded and open
+  contracts &gt; 0). Your model criteria were not supplied; see the open question in
+  <a href="questions.html">Questions</a>. Gross ROI ignores fees and spread.</p>
+  <p><button class="btn secondary" id="alertPauseBtn">Pause feeds</button>
+     <span class="small" id="alertPending"></span></p>
+  <div class="feed-grid">
+    <div><h3>All events (≥ $0.10 swings)</h3><ol class="feed" id="alertFeedAll"></ol></div>
+    <div><h3>High-ROI filter (placeholder rule)</h3><ol class="feed" id="alertFeedRoi"></ol></div>
+  </div>
+</div>
+
 <div class="card">
   <h2>2 · Selected market: price chart &amp; liquidity</h2>
   <p class="muted" id="detailTitle">Select a market above (Track).</p>
@@ -113,6 +132,6 @@ if the browser blocks the request the tables fall back to the snapshot links in
 (mock funds): <span class="mono">https://external-api.demo.kalshi.co/trade-api/v2</span> ·
 Docs: <a href="https://docs.kalshi.com" target="_blank" rel="noopener">docs.kalshi.com</a> ·
 Every table row links its source; blank cells are flagged on <a href="flagged.html">Flagged for review</a>.</p></footer>
-<script src="assets/app.js"></script><script src="assets/trade.js"></script><script src="assets/dashboard.js"></script><script src="assets/site.js"></script>
+<script src="assets/app.js"></script><script src="assets/trade.js"></script><script src="assets/dashboard.js"></script><script src="assets/alerts.js"></script><script src="assets/site.js"></script>
 </body>
 </html>
