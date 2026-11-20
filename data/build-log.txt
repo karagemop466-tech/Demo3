@@ -1,0 +1,54 @@
+=== build.py ===
+{
+ "dashboard_bytes": 1928777,
+ "resolutions_rows": 12567,
+ "resolutions_bytes": 6364802
+}
+=== strategies.py ===
+{
+ "candidates": 10,
+ "simulated": 10,
+ "skipped": 50
+}
+=== settle_check.py ===
+{
+ "rows": 12567,
+ "by_topic": {
+  "crypto": {
+   "label": "Crypto",
+   "no": 3391,
+   "yes": 1023
+  },
+  "golf": {
+   "label": "Golf",
+   "no": 3538,
+   "yes": 332,
+   "scalar": 46
+  },
+  "elections": {
+   "label": "Elections",
+   "yes": 73,
+   "no": 166
+  },
+  "gas": {
+   "label": "Gas prices",
+   "yes": 796,
+   "no": 2595
+  },
+  "culture": {
+   "label": "Culture",
+   "no": 383,
+   "yes": 224
+  }
+ },
+ "reconciled_orders": 0
+}
+=== artifacts ===
+-rw-r--r-- 1 runner runner  1928777 Nov 20 12:02 data/dashboard.json
+-rw-r--r-- 1 runner runner 11375027 Nov 20 12:02 data/live-prod.json
+-rw-r--r-- 1 runner runner 26504582 Nov 20 12:01 data/live.json
+-rw-r--r-- 1 runner runner    23514 Nov 20 12:02 data/meta.json
+-rw-r--r-- 1 runner runner    22517 Nov 20 12:02 data/order-rules.json
+-rw-r--r-- 1 runner runner  6364802 Nov 20 12:02 data/resolutions-compact.json
+-rw-r--r-- 1 runner runner     3997 Nov 20 12:02 data/resolutions-summary.json
+-rw-r--r-- 1 runner runner  7906321 Nov 20 12:02 data/resolutions.json
