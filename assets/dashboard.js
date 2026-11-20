@@ -7,13 +7,14 @@
   "use strict";
   var K = window.KalshiDemo;
   var T = window.KalshiTrade;
+  var A = window.KalshiAlerts;
   var $ = function (id) { return document.getElementById(id); };
   var state = {
     seriesByTopic: {}, markets: [], selected: null,
     samples: {}, candles: [], orderbook: null, trades: [],
     windowSec: 3600, scanSec: 20, obSec: 10,
-    timers: [], resolutions: [], fills: [],
-    connected: false, lastScan: null, errors: 0
+    timers: [], resolutions: [], fills: [], alerts: [], modelAlerts: [],
+    connected: false, lastScan: null, errors: 0, scanInProgress: false
   };
   try { state.resolutions = JSON.parse(localStorage.getItem("kd_resolutions") || "[]"); }
   catch (e) { state.resolutions = []; }
@@ -100,6 +101,8 @@
 
   /* ---------- 2. Market scan + ranking ---------- */
   async function scan() {
+    if (state.scanInProgress) return;
+    state.scanInProgress = true;
     try {
       var markets = [];
       var depthSel = $("scanDepth");
@@ -127,7 +130,9 @@
           mp.forEach(function (m) { m._topic = m._topic || "manual"; markets.push(m); });
         } catch (e) { /* ignore */ }
       }
+      var previousMarkets = state.markets;
       state.markets = markets.map(marketRow);
+      updatePriceAlerts(previousMarkets, state.markets);
       state.markets.sort(function (a, b) {
         return (b.volDollars || 0) - (a.volDollars || 0) ||
           (b.oiDollars || 0) - (a.oiDollars || 0);
@@ -142,6 +147,7 @@
         " — " + state.markets.length + " open markets (coverage: " + capNote + ").";
       banner("", "");
     } catch (e) { showError(e); }
+    finally { state.scanInProgress = false; }
   }
   function renderRanking() {
     if (!$("rankingTable")) return;
@@ -195,6 +201,51 @@
         if (window.KD && window.KD.onSample) { try { window.KD.onSample(m, sample); } catch (e) { /* alert sink must not break sampling */ } }
       }
     });
+  }
+
+  /* ---------- Live price-swing alerts ---------- */
+  function updatePriceAlerts(previous, current) {
+    if (!A || !$("allAlerts")) return;
+    var oldByTicker = {};
+    (previous || []).forEach(function (m) { oldByTicker[m.ticker] = m; });
+    var seen = {};
+    (current || []).forEach(function (m) {
+      if (seen[m.ticker]) return;
+      seen[m.ticker] = true;
+      var alert = A.compare(oldByTicker[m.ticker], m);
+      if (!alert) return; // initial quotes establish a baseline only
+      state.alerts.unshift(alert);
+      if (alert.modelWatch) state.modelAlerts.unshift(alert);
+    });
+    state.alerts = state.alerts.slice(0, 100);
+    state.modelAlerts = state.modelAlerts.slice(0, 100);
+    renderPriceAlerts();
+  }
+  function renderPriceAlerts() {
+    if (!$("allAlerts") || !$("modelAlerts")) return;
+    function card(a) {
+      var up = a.delta > 0;
+      var direction = up ? "up" : "down";
+      var sign = up ? "+" : "−";
+      var changed = (Math.abs(a.delta) * 100).toFixed(2) + "¢";
+      var path = "/markets/" + encodeURIComponent(a.ticker);
+      return "<article class='alert-item " + direction + "'><header><strong>" +
+        K.esc(a.topic) + " · " + K.esc(a.title) + "</strong><span class='alert-delta " +
+        direction + "'>" + sign + changed + "</span></header><p>" +
+        K.cents(a.before) + " → <strong>" + K.cents(a.after) + "</strong> · " +
+        K.esc(a.status) + " · " + new Date(a.timestamp).toLocaleTimeString() +
+        "</p><p class='alert-meta'>Catalyst: not verified from exchange data. " +
+        K.srcLink(path, "Official market API") + "</p></article>";
+    }
+    function fill(id, countId, list, empty) {
+      $(countId).textContent = String(list.length);
+      $(id).innerHTML = list.length ? list.map(card).join("") :
+        "<p class='alert-empty'>" + empty + "</p>";
+    }
+    fill("allAlerts", "allAlertCount", state.alerts,
+      "No ≥$0.10 change observed yet. First live quotes establish the baseline.");
+    fill("modelAlerts", "modelAlertCount", state.modelAlerts,
+      "No price swing currently meets the disclosed heuristic screen.");
   }
 
   /* ---------- 3. Detail: chart (seconds/minutes/hours) + orderbook + trades ---------- */
@@ -599,6 +650,7 @@
       }
     }
     renderResolutions();
+    renderPriceAlerts();
     loadSeededResolutions();
     startTimers();
     if ($("discoveryTable")) {

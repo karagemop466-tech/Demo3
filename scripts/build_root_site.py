@@ -366,6 +366,13 @@ def consolidated_flags():
         "Cells found without an official source during the per-row verification pass are left "
         "blank and flagged; never inferred.",
         [f"{DOCS}/getting_started/quick_start_market_data"], "open", "3a22fb0f")
+    add("I-13", "Alerts", "Price swings do not establish an external-news cause",
+        "Live alerts detect a qualifying price change from market observations only. The public "
+        "market data response does not verify which external article or event caused that move, so "
+        "the dashboard leaves catalyst attribution unverified rather than inventing a link. A news "
+        "source integration and a verified event-to-market attribution method remain open.",
+        [f"{DOCS}/api-reference/market/get-markets"],
+        "open — catalyst source integration not implemented", "arena/09824fd8-demo3")
     add("R-06", "Documentation", "Archive pages use the production API base",
         "docs/ and analysis/ fetch public data from api.elections.kalshi.com while the brief "
         "specifies the demo endpoints. The canonical root site uses the demo API. Archives are "
@@ -577,6 +584,27 @@ if the browser blocks the request the tables fall back to the snapshot links in
 </div>
 
 <div class="card">
+  <h2>Live price alerts</h2>
+  <p class="small muted">Both feeds update from successive open-market scans. A move of at least $0.10
+  per contract in either direction triggers an alert; the first observed quote is only a baseline.
+  The experimental Model Watch is a transparent screen (last price 5–95¢, displayed yes bid/ask
+  spread at most 10¢, and positive reported contract volume). This is not validated ROI, advice, or
+  an automated trade signal. The market API does not identify news causes: catalyst attribution is
+  unverified unless a linked source is actually supplied. REST polling follows the market scan;
+  no browser WebSocket authentication is attempted.</p>
+  <div class="alert-feeds">
+    <section aria-labelledby="allAlertsHeading">
+      <h3 id="allAlertsHeading">All qualifying price swings <span id="allAlertCount" class="pill">0</span></h3>
+      <div id="allAlerts" class="alert-log" role="log" aria-live="polite" aria-relevant="additions"></div>
+    </section>
+    <section aria-labelledby="modelAlertsHeading">
+      <h3 id="modelAlertsHeading">Model Watch · heuristic only <span id="modelAlertCount" class="pill">0</span></h3>
+      <div id="modelAlerts" class="alert-log" role="log" aria-live="polite" aria-relevant="additions"></div>
+    </section>
+  </div>
+</div>
+
+<div class="card">
   <h2>2 · Selected market: price chart &amp; liquidity</h2>
   <p class="muted" id="detailTitle">Select a market above (Track).</p>
   <p class="small muted" id="detailMeta"></p>
@@ -643,7 +671,7 @@ if the browser blocks the request the tables fall back to the snapshot links in
 </div>
 """
     write_page("dashboard.html", "Live dashboard", "dashboard.html", body,
-               scripts=("assets/app.js", "assets/trade.js", "assets/dashboard.js", "assets/site.js"))
+               scripts=("assets/app.js", "assets/alerts.js", "assets/trade.js", "assets/dashboard.js", "assets/site.js"))
 
 
 def build_portfolio():
