@@ -587,3 +587,25 @@ Change request for the final integration session: none.
 - 2026-11-20 b13c6a8d — merge record for the withdrawal. PR #29 (`arena/b13c6a8d-demo3`): its feature files were removed from the branch and the PR was retitled to the board-only withdrawal before merging. **Merged 2026-11-20 19:30:14 UTC, merge commit `0d4ab58`**, board only (COORDINATION.md, +12 lines). The live-alert feature was NOT merged from this session; the merged live-alert chat on the dashboard is from PR #28 (session 6ebc1cb7).
 - Pages after this merge: the build for `0d4ab58` reported `errored` ("Page build failed."), as did two overlapping builds (`df3bf70`, `5f0335f`). The next build, for `fa6525b`, also errored; the build for `04d1a4e` then reported `built` (2026-11-20 19:38:30 UTC). Live checks via page fetch: https://karagemop466-tech.github.io/Demo3/ (landing with executive summary) and https://karagemop466-tech.github.io/Demo3/dashboard.html (section 6 "Price-swing alerts — scrolling chat (≥ $0.10)"). The site is live at `main` `04d1a4e`. Pages failures for the superseded commits are not re-run; the latest commit built and serves.
 - Open items for the integration owner (not changed here): duplicate alert PRs #26 and #27 remain open; PR #36 and #34 (alert-related) remain open; the root alert chat lacks resolution rows (CR-b13c6a8d-3).
+
+---
+
+## Task board — session f91be339 (Collect-workflow CI repair + verification pass) — claimed 2026-11-20 19:50 UTC
+
+Branch: `arena/f91be339-demo3` (base `04d1a4e`, fast-forwarded to `main` `e2cfd3c` before work).
+Session ID: `f91be339`.
+
+Overlap check performed before claiming: `gh pr list --state open` (2026-11-20 19:41-19:49 UTC)
+shows PRs #26, #27, #36, #38, #39, #40, #41, #42, #43, #47, #48, #50 open. Alert/dashboard work is
+claimed by other sessions (5ab18dc3, 13603ac5, 004aa97a, 996e3e28, 1d7c7660, 5125afd8, 91a02c9d,
+028b2648, 09824fd8, 6d201d19); this session does NOT touch `assets/alerts.js`, `dashboard.html`,
+`assets/trade.js`, `assets/dashboard.js`, `alerts.html`, or any `data/**` snapshot. The broken
+Collect workflow was not claimed by any session section or open PR title on the board.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| T1 Repair red CI on `main`: `.github/workflows/collect.yml` rejects as invalid YAML (duplicate `if:` key at line 64; every Collect run fails with "This run likely failed because of a workflow file issue", e.g. runs 44804291212, 44804259549 on `main`) | claimed | f91be339 | `.github/workflows/collect.yml` (one line) | Strict duplicate-key YAML parse of all six workflow files (only `collect.yml` fails); GitHub's own run failure message; workflow syntax per https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions | I-F91-01 (dup `if:` introduced by data-refresh commit `04d1a4e`); PRs #26 and #40 carry the same one-line fix inside larger competing changes |
+| T2 Verification pass: run all repo checkers (`scripts/verify_root_site.py`, `scripts/check_site.py`, `scripts/verify_site.py`, `scripts/tracker_check.py`, `node --check`, workflow YAML strict parse) and record results | claimed | f91be339 | `COORDINATION.md` (this section only) | Checker outputs recorded in the log below | results as found |
+| T3 Delivery: PR `arena/f91be339-demo3` -> `main` with summary/sources/flags, merge without waiting, confirm GitHub Pages deploy, record PR link + merge result here | claimed | f91be339 | `COORDINATION.md` (this section), `.github/workflows/collect.yml` | PR + Pages API records below | — |
+
+Claim committed and pushed before any other work (protocol). Progress logged below as work completes.
