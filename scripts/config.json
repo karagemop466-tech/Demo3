@@ -1,0 +1,47 @@
+{
+  "api_base": "https://api.elections.kalshi.com/trade-api/v2",
+  "api_docs": "https://docs.kalshi.com/llms.txt",
+  "top_n": 15,
+  "orderbook_markets_per_topic": 3,
+  "candles_markets_per_topic": 3,
+  "orderbook_depth": 10,
+  "resolved_limit_per_series": 200,
+  "max_pages_per_series": 40,
+  "topics": [
+    {
+      "id": "gas",
+      "label": "Gas prices",
+      "series": ["KXAAAGASM", "KXAAAGASD"],
+      "series_verification": "KXAAAGASM: GET /series/KXAAAGASM (category Economics, settlement source AAA https://gasprices.aaa.com/). KXAAAGASD: settled markets returned by GET /markets?series_ticker=KXAAAGASD&status=settled.",
+      "settlement_source": "AAA national average (https://gasprices.aaa.com/)"
+    },
+    {
+      "id": "elections",
+      "label": "Elections",
+      "series": ["KXNEWPOPE", "KXNEXTNATOSECGEN", "KXBRPRES1MOV", "KXRECALLZIMMER", "KXGOVSENSPLIT"],
+      "series_verification": "Series tickers appear in GET /events and GET /series?category=Elections responses on the production host (retrieved 2026-11-20).",
+      "settlement_source": "Varies per market; see source notes on the Flagged for Review page"
+    },
+    {
+      "id": "culture",
+      "label": "Culture",
+      "series": ["KXXBANNEDGROK", "KXXBANNEDMURRAYHILLGUY1"],
+      "series_verification": "Series tickers appear in GET /series?category=Culture (production host, retrieved 2026-11-20). KXXBANNEDGROK had zero open markets at retrieval.",
+      "settlement_source": "Varies per market; see source notes on the Flagged for Review page"
+    },
+    {
+      "id": "crypto",
+      "label": "Crypto",
+      "series": ["KXBTCD", "KXSOLABOVE110BY", "KXETHMAXY", "KXXRPMAXMON"],
+      "series_verification": "Series tickers appear in GET /series?category=Crypto (production host, retrieved 2026-11-20). KXBTCD markets observed via GET /markets?series_ticker=KXBTCD.",
+      "settlement_source": "CF Benchmarks indices (https://www.cfbenchmarks.com/)"
+    },
+    {
+      "id": "golf",
+      "label": "Golf",
+      "series": ["KXPGATOUR"],
+      "series_verification": "KXPGATOUR observed via GET /events?series_ticker=KXPGATOUR (category Sports, production host, retrieved 2026-11-20).",
+      "settlement_source": "Varies per market (tournament results); see rules_primary on each market"
+    }
+  ]
+}

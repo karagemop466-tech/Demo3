@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>API reference — Kalshi Demo Tracker</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="top"><div class="wrap"><nav class="main">
+<a class="brand" href="index.html">Kalshi Demo Tracker</a>
+<a href="index.html">Home</a><a href="dashboard.html">Live dashboard</a><a href="data-tracking.html">Data tracking</a><a href="gas-prices.html">Gas prices</a><a href="elections.html">Elections</a><a href="culture.html">Culture</a><a href="crypto.html">Crypto</a><a href="golf.html">Golf</a><a href="portfolio.html">Portfolio</a><a href="trades.html">Trades</a><a href="questions.html">Questions</a><a href="suggestions.html">Suggestions</a><a href="flagged.html">Flagged for review</a><a href="sources.html">Sources</a><a href="repo-review.html">Repo review</a><a href="methodology.html">Methodology</a><a href="api-reference.html" class="active">API reference</a>
+</nav></div></header>
+<main class="wrap">
+
+
+
+
+
+
+
+
+
+
+<h1>API Reference (verified)</h1>
+<p class="muted">Every row below was checked line-by-line against the official
+Kalshi documentation. “Auth” = whether an API key is required. Demo base URL:
+<code>https://external-api.demo.kalshi.co/trade-api/v2</code>
+(<a href="https://docs.kalshi.com/getting_started/api_environments">API Environments and Endpoints</a>).</p>
+
+<section class="card">
+<h2>Environments</h2>
+<table>
+<thead><tr><th>Surface</th><th>Recommended demo endpoint</th><th>Also supported</th><th>Source</th></tr></thead>
+<tbody>
+<tr><td>REST Trade API</td><td class="mono">https://external-api.demo.kalshi.co/trade-api/v2</td>
+<td class="mono">https://demo-api.kalshi.co/trade-api/v2</td>
+<td><a href="https://docs.kalshi.com/getting_started/demo_env">Demo Environment</a></td></tr>
+<tr><td>WebSocket API</td><td class="mono">wss://external-api-ws.demo.kalshi.co/trade-api/ws/v2</td>
+<td class="mono">wss://demo-api.kalshi.co/trade-api/ws/v2</td>
+<td><a href="https://docs.kalshi.com/getting_started/demo_env">Demo Environment</a></td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="card">
+<h2>Public endpoints (no auth)</h2>
+<table>
+<thead><tr><th>Method &amp; path</th><th>Key parameters</th><th>Key response fields</th><th>Source</th></tr></thead>
+<tbody>
+<tr><td class="mono">GET /series</td>
+<td><code>category</code> (exact, case-sensitive; matches any entry in <code>categories</code>), <code>tags</code>, <code>include_volume</code></td>
+<td><code>series[]</code>: ticker, frequency, title, category, categories[], tags[], settlement_sources, fee_type, fee_multiplier, volume_fp</td>
+<td><a href="https://docs.kalshi.com/api-reference/market/get-series-list">Get Series List</a></td></tr>
+<tr><td class="mono">GET /series/{series_ticker}</td>
+<td><code>include_volume</code></td>
+<td><code>series</code> object (as above)</td>
+<td><a href="https://docs.kalshi.com/api-reference/market/get-series">Get Series</a></td></tr>
+<tr><td class="mono">GET /markets</td>
+<td><code>series_ticker</code>, <code>status</code> (unopened/open/closed/settled), <code>limit</code>, <code>cursor</code></td>
+<td><code>markets[]</code>: ticker, event_ticker, title, status, yes_bid_dollars, yes_ask_dollars, last_price_dollars, volume_fp, volume_24h_fp, open_interest_fp, result (yes/no/empty), close_time, rules_primary</td>
+<td><a href="https://docs.kalshi.com/api-reference/market/get-markets">Get Markets</a></td></tr>
+<tr><td class="mono">GET /markets/{ticker}</td>
+<td>—</td>
+<td>Single market object (as above)</td>
+<td><a href="https://docs.kalshi.com/api-reference/market/get-market">Get Market</a></td></tr>
+<tr><td class="mono">GET /markets/{ticker}/orderbook</td>
+<td><code>depth</code></td>
+<td><code>orderbook_fp.yes_dollars/no_dollars</code>: <code>[price_dollars, count_fp]</code> ascending, best last. Bids only.</td>
+<td><a href="https://docs.kalshi.com/getting_started/orderbook_responses">Orderbook Responses</a></td></tr>
+<tr><td class="mono">GET /markets/trades</td>
+<td><code>ticker</code>, <code>limit</code> (1–1000, default 100), <code>cursor</code>, <code>min_ts</code>/<code>max_ts</code> (seconds)</td>
+<td><code>trades[]</code>: trade_id, ticker, count_fp, yes_price_dollars, no_price_dollars, taker_outcome_side, taker_book_side, created_time, is_block_trade</td>
+<td><a href="https://docs.kalshi.com/api-reference/market/get-trades">Get Trades</a></td></tr>
+<tr><td class="mono">GET /series/{series_ticker}/markets/{ticker}/candlesticks</td>
+<td><code>start_ts</code>, <code>end_ts</code> (seconds, required), <code>period_interval</code> ∈ {1, 60, 1440} minutes (required), max 5000 periods/request</td>
+<td><code>candlesticks[]</code>: end_period_ts, yes_bid/yes_ask/price OHLC (dollars), volume_fp, open_interest_fp</td>
+<td><a href="https://docs.kalshi.com/api-reference/market/get-market-candlesticks">Get Market Candlesticks</a></td></tr>
+<tr><td class="mono">GET /events</td>
+<td><code>series_ticker</code>, <code>status</code>, <code>with_nested_markets</code>, <code>limit</code> (max 200), <code>cursor</code>. No category filter (event category deprecated).</td>
+<td><code>events[]</code>: event_ticker, series_ticker, title, sub_title, mutually_exclusive, collateral_return_type, settlement_sources</td>
+<td><a href="https://docs.kalshi.com/api-reference/events/get-events">Get Events</a></td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="card">
+<h2>Authenticated endpoints (demo API key required)</h2>
+<table>
+<thead><tr><th>Method &amp; path</th><th>Key parameters / body</th><th>Key response fields</th><th>Source</th></tr></thead>
+<tbody>
+<tr><td class="mono">GET /portfolio/balance</td>
+<td><code>subaccount</code>, <code>exchange_index</code>. Own bucket: 1/s (Basic/Advanced).</td>
+<td><code>balance</code> (cents), <code>balance_dollars</code>, <code>portfolio_value</code> (cents), <code>updated_ts</code></td>
+<td><a href="https://docs.kalshi.com/api-reference/portfolio/get-balance">Get Balance</a></td></tr>
+<tr><td class="mono">GET /portfolio/positions</td>
+<td><code>settlement_status</code> (unsettled/settled/all), <code>count_filter=position</code>, <code>limit</code>, <code>cursor</code></td>
+<td><code>market_positions[]</code>, <code>event_positions[]</code>, <code>cursor</code></td>
+<td><a href="https://docs.kalshi.com/api-reference/portfolio/get-positions">Get Positions</a></td></tr>
+<tr><td class="mono">GET /portfolio/fills</td>
+<td><code>ticker</code> (up to 100), <code>min_ts</code>/<code>max_ts</code>, <code>limit</code>, <code>cursor</code></td>
+<td><code>fills[]</code>: fill_id, ticker/market_ticker, outcome_side, book_side, count_fp, yes/no_price_dollars, is_taker, fee_cost</td>
+<td><a href="https://docs.kalshi.com/api-reference/portfolio/get-fills">Get Fills</a></td></tr>
+<tr><td class="mono">GET /portfolio/orders</td>
+<td><code>ticker</code>, <code>status</code> (resting/canceled/executed), <code>limit</code>, <code>cursor</code></td>
+<td><code>orders[]</code>: order_id, ticker, outcome_side, book_side, type, status, yes/no_price_dollars, fill/remaining/initial_count_fp, taker/maker_fees_dollars</td>
+<td><a href="https://docs.kalshi.com/api-reference/orders/get-orders">Get Orders</a></td></tr>
+<tr><td class="mono">POST /portfolio/events/orders</td>
+<td>Body: <code>ticker</code>, <code>side</code> (bid/ask), <code>count</code>, <code>price</code>, <code>time_in_force</code> (fill_or_kill/good_till_canceled/immediate_or_cancel), <code>self_trade_prevention_type</code> (taker_at_cross/maker), optional <code>client_order_id</code>, <code>post_only</code>. 201 = accepted (check <code>remaining_count</code>). Legacy <code>/portfolio/orders</code> writes → 410.</td>
+<td><code>order_id</code>, <code>fill_count</code>, <code>remaining_count</code>, <code>ts_ms</code></td>
+<td><a href="https://docs.kalshi.com/api-reference/orders/create-order-v2">Create Order (V2)</a></td></tr>
+<tr><td class="mono">DELETE /portfolio/events/orders/{order_id}</td>
+<td><code>market_ticker</code> (required for auto-routing), <code>exchange_index</code>, <code>subaccount</code></td>
+<td><code>order_id</code>, <code>reduced_by</code>, <code>ts_ms</code></td>
+<td><a href="https://docs.kalshi.com/api-reference/orders/cancel-order-v2">Cancel Order (V2)</a></td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="card">
+<h2>WebSocket (authenticated handshake)</h2>
+<table>
+<thead><tr><th>Item</th><th>Detail</th><th>Source</th></tr></thead>
+<tbody>
+<tr><td>URL (demo)</td><td class="mono">wss://external-api-ws.demo.kalshi.co/trade-api/ws/v2</td>
+<td><a href="https://docs.kalshi.com/getting_started/quick_start_websockets">Quick Start: WebSockets</a></td></tr>
+<tr><td>Auth</td><td>Same 3 headers as REST; sign <code>timestamp+"GET"+"/trade-api/ws/v2"</code>. Browsers cannot set WS handshake headers — see Flagged for Review.</td>
+<td><a href="https://docs.kalshi.com/getting_started/quick_start_websockets">Quick Start: WebSockets</a></td></tr>
+<tr><td>Subscribe</td><td class="mono">{"id":1,"cmd":"subscribe","params":{"channels":[...],"market_tickers":[...]}}</td>
+<td><a href="https://docs.kalshi.com/getting_started/quick_start_websockets">Quick Start: WebSockets</a></td></tr>
+<tr><td>Private channels</td><td><code>orderbook_delta</code>, <code>fill</code>, <code>market_positions</code>, <code>communications</code>, <code>order_group_updates</code>, <code>user_orders</code></td>
+<td><a href="https://docs.kalshi.com/getting_started/quick_start_websockets">Quick Start: WebSockets</a></td></tr>
+<tr><td>Public channels</td><td><code>ticker</code>, <code>trade</code>, <code>market_lifecycle_v2</code>, <code>multivariate_market_lifecycle</code></td>
+<td><a href="https://docs.kalshi.com/getting_started/quick_start_websockets">Quick Start: WebSockets</a></td></tr>
+<tr><td>Keep-alive</td><td>Server Ping after 10s without a data message; Pong in reply.</td>
+<td><a href="https://docs.kalshi.com/getting_started/quick_start_websockets">Quick Start: WebSockets</a></td></tr>
+</tbody>
+</table>
+</section>
+
+<section class="card">
+<h2>Auth &amp; signing</h2>
+<table>
+<thead><tr><th>Item</th><th>Detail</th><th>Source</th></tr></thead>
+<tbody>
+<tr><td>Key types</td><td>Ed25519 (recommended, default) or RSA-2048 PSS SHA-256. Same headers/pre-sign text for both.</td>
+<td><a href="https://docs.kalshi.com/getting_started/api_keys">API Keys</a></td></tr>
+<tr><td>Headers</td><td><code>KALSHI-ACCESS-KEY</code>, <code>KALSHI-ACCESS-TIMESTAMP</code> (ms), <code>KALSHI-ACCESS-SIGNATURE</code> (base64).</td>
+<td><a href="https://docs.kalshi.com/getting_started/api_keys">API Keys</a></td></tr>
+<tr><td>Pre-sign text</td><td><code>timestamp + METHOD + path</code>, path <strong>without</strong> query params. Timestamp within 30s of server clock.</td>
+<td><a href="https://docs.kalshi.com/getting_started/api_keys">API Keys</a></td></tr>
+<tr><td>Rate limits</td><td>Token buckets; default 10 tokens/request; Read/Write buckets; 429 → back off. Unauthenticated requests have separate limits.</td>
+<td><a href="https://docs.kalshi.com/getting_started/rate_limits">Rate Limits and Tiers</a></td></tr>
+</tbody>
+</table>
+</section>
+
+
+
+
+
+
+
+
+
+
+</main>
+<footer class="wrap"><p class="small muted">Kalshi Demo Tracker — built from verified sources only. Demo environment
+(mock funds): <span class="mono">https://external-api.demo.kalshi.co/trade-api/v2</span> ·
+Docs: <a href="https://docs.kalshi.com" target="_blank" rel="noopener">docs.kalshi.com</a> ·
+Every table row links its source; blank cells are flagged on <a href="flagged.html">Flagged for review</a>.</p></footer>
+<script src="assets/app.js"></script><script src="assets/site.js"></script>
+</body>
+</html>
