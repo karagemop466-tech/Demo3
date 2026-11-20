@@ -811,7 +811,9 @@
       ['I-15', 'Demo data', 'The demo exchange contains synthetic exchange-test series (for example KXDEMOFUTHOURLY hourly BTC demo markets and KXQUICKSETTLE test markets such as "1+1 = 2"). They rank high by volume in demo snapshots and must not be read as real-world markets.', 'medium',
         'https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXQUICKSETTLE-20NOV26H0530-2'],
       ['I-16', 'Ranking metric', 'The brief asks for highest dollar amount. The API publishes no dollar-volume field. The dashboard shows both the verbatim contracts ranking (verified snapshot) and a clearly labelled derived dollar volume (volume_fp x notional_value_dollars). The intended definition is an open question (Q on the Questions page).', 'medium',
-        'https://docs.kalshi.com/api-reference/market/get-market-candlesticks']
+        'https://docs.kalshi.com/api-reference/market/get-market-candlesticks'],
+      ['I-17', 'Repository', 'The repo root carries a second, older set of dashboard pages (dashboard.html, portfolio.html, trades.html, category pages, assets/) from an earlier session build. The published entry point (root index.html) redirects to the integrated docs/ site, so visitors land on the current site, but the root copies remain reachable by direct URL and may drift. Recommendation for the owner: delete the root-level duplicates or switch GitHub Pages to /docs and remove them; kept in place here rather than deleting another session\'s files.', 'low',
+        'https://github.com/karagemop466-tech/Demo3']
     ];
     return table(['ID', 'Area', 'Finding', 'Severity', 'Source'], rows.map(function (r) {
       return [esc(r[0]), esc(r[1]), esc(r[2]), sevFlag(r[3]), link(r[4], 'source')];
