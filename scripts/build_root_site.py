@@ -356,6 +356,19 @@ def consolidated_flags():
         "content was ported into the canonical site and the duplicate engine removed "
         "(originals remain in git history at 45bde12). See COORDINATION.md.",
         ["https://github.com/karagemop466-tech/Demo3/commits/main"], "resolved", "3a22fb0f")
+    # session df50b92f: sharp-jump context links
+    add("F-df-01", "Alerts", "Settlement-source links are not proof of a price-move cause",
+        "Sharp-jump alert rows (>= $0.10) show each event's official settlement_sources from "
+        "GET /events/{event_ticker}. These are the sources the exchange resolves the event with. "
+        "They do not show what caused a move; each row says 'Cause not verified'. No news feed "
+        "is in this repo and none is claimed.",
+        [f"{DOCS}/api-reference/events/get-event", f"{DOCS}/api-reference/market/get-market"],
+        "open — labelled in UI", "df50b92f")
+    add("F-df-02", "Alerts", "Browser access to the demo event endpoint is unverified from the build sandbox",
+        "The sandbox cannot reach the demo API host, so the live event fetch from GitHub Pages is "
+        "not verified here. On failure the UI shows 'event record unavailable' and never guesses.",
+        [f"{DOCS}/getting_started/demo_env"],
+        "open — fails closed", "df50b92f")
     add("I-11", "Trading", "No demo-account API credentials were provided",
         "Live order execution needs a Kalshi demo API key (created at demo.kalshi.co). Until one is "
         "supplied, the Trade pages run in clearly labeled paper-trading mode against live demo "
