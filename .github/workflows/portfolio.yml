@@ -1,0 +1,104 @@
+# Portfolio + demo trade execution against the Kalshi DEMO account.
+#
+# This workflow is dormant until the account owner adds two repository secrets:
+#   KALSHI_DEMO_KEY_ID, KALSHI_DEMO_PRIVATE_KEY
+# Docs: https://docs.kalshi.com/getting_started/api_keys.md
+#
+# Until then it writes data/portfolio.json with configured:false, so the Portfolio page
+# shows a clear "not configured" state instead of invented numbers.
+#
+# Order placement is double-gated:
+#   * workflow input place_orders = true
+#   * each order spec in data/orders-to-place.json must contain
+#     "confirm": "I_ACCEPT_DEMO_MONEY_IS_FAKE"
+# Production orders are refused outright.
+name: portfolio
+
+on:
+  workflow_dispatch:
+    inputs:
+      place_orders:
+        description: "Place the demo orders listed in data/orders-to-place.json"
+        type: boolean
+        default: false
+  schedule:
+    - cron: "43 */6 * * *"   # refresh portfolio every 6 hours
+  push:
+    branches: [arena/c2aac20e-demo3]
+    paths:
+      - "collector/portfolio.py"
+      - "data/orders-to-place.json"
+      - ".github/workflows/portfolio.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: portfolio
+  cancel-in-progress: false
+
+jobs:
+  portfolio:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: arena/c2aac20e-demo3
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install signing dependency
+        run: python -m pip install --quiet cryptography
+
+      - name: Collect portfolio
+        env:
+          KALSHI_DEMO_KEY_ID: ${{ secrets.KALSHI_DEMO_KEY_ID }}
+          KALSHI_DEMO_PRIVATE_KEY: ${{ secrets.KALSHI_DEMO_PRIVATE_KEY }}
+          ALLOW_DEMO_TRADING: ${{ github.event.inputs.place_orders == 'true' && 'true' || 'false' }}
+        run: python3 collector/portfolio.py
+
+      - name: Rebuild analysis with portfolio data
+        run: python3 analysis/build.py
+
+      - name: Commit
+        run: |
+          git config user.name "kalshi-portfolio-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data analysis
+          if git diff --cached --quiet; then
+            echo "no changes"
+            exit 0
+          fi
+          git commit -m "data: portfolio snapshot $(date -u +%Y-%m-%dT%H:%MZ)"
+          for i in 1 2 3; do
+            if git pull --rebase --autostash origin arena/c2aac20e-demo3 && git push origin HEAD:arena/c2aac20e-demo3; then
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "push failed" >&2
+          exit 1
+
+      - name: Summary
+        if: always()
+        run: |
+          python3 - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json, pathlib
+          p = pathlib.Path("data/portfolio.json")
+          if not p.exists():
+              print("portfolio.json missing"); raise SystemExit
+          d = json.loads(p.read_text())
+          m = d.get("meta", {})
+          print(f"### portfolio: configured={m.get('configured')}")
+          if not m.get("configured"):
+              print(m.get("reason"))
+          else:
+              print(f"- balance status: {d.get('balance',{}).get('status') if d.get('balance') else None}")
+              print(f"- positions: {len(d.get('positions') or [])}")
+              print(f"- orders: {len(d.get('orders') or [])}")
+              print(f"- fills: {len(d.get('fills') or [])}")
+          PY
