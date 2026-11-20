@@ -348,3 +348,37 @@ Follow-up requests from session 06cbd03f addressed at integration:
 - 2026-11-20 12:25 UTC: PR https://github.com/karagemop466-tech/Demo3/pull/24 (`arena/4d10aedf-demo3` -> `main`) opened with summary, sources and flagged irregularities. Pre-merge checks green (verify_rows 725/725, verify_site PASSED, jsdom smoke PASSED).
 - 2026-11-20 12:29 UTC: `gh pr merge 24 --merge` reported conflicts — `main` had advanced with sessions `3b5e95bd`/`dd229508`/`arena-3a22fb0f` deliveries (PRs #18/#21/#22). Conflicts in `.gitignore`, `README.md`, `docs/executive-summary.md`, `COORDINATION.md` resolved by keeping both sides: `main`'s records preserved verbatim, 4d10aedf's records added as new sections. Nothing discarded (handoff/conflict protocol).
 - 2026-11-20 12:31 UTC: **PR #24 MERGED** — merge commit `48fe55e`. `Checks` workflow SUCCESS on the merge; `pages build and deployment` workflow SUCCESS; the Pages API reports `built` (source `main` /). Live site verified via page fetch: https://karagemop466-tech.github.io/Demo3/ serves the merged canonical landing with live status "LIVE · trading active (demo)", the executive-summary source table, decision registers, and archive links (docs/, docs/tracker/, analysis/, demo-desk/, research/). This line records the actual result; the follow-up board commit carries the confirmation to `main`.
+
+
+---
+
+## Session bf258546 — live swing alerts, two scrolling chats, final integration (added 2026-11-20)
+
+Branch: `arena/bf258546-demo3` (base `b3b2b23`). Scope owned by this session:
+`assets/alerts.js` (new), `alerts.html` (new, generated), `assets/style.css` (chat styles only),
+`scripts/build_root_site.py`, `scripts/verify_root_site.py`, `tests/alerts.test.js` (new),
+`methodology.html` (alert-model section), `.github/workflows/check.yml`, and this board (appended only).
+Everything else is read-only for this session.
+
+Protocol note: the platform binds a session to a single branch (`arena/<id>-demo3`), so the
+brief's `session-<id>/<task>` branch naming is not possible here (same irregularity as R-04).
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|------|--------|-------|-----------|------------------------|----------------|
+| T13 Live swing alert engine (>= $0.10 move, either direction) with two scrolling chats: "All swings" and "High-ROI model" filter | in progress | `bf258546` | `assets/alerts.js`, `alerts.html`, `assets/style.css` | Price deltas are computed from the tracker's own polling samples of the official `last_price_dollars` field; every alert row links the exact demo API request (`GET /markets?tickers=...`, `GET /markets/{ticker}/orderbook`, `GET /series/{s}/markets/{t}/candlesticks`). Field names checked against the official Get Markets response schema | I-18 (API responses are cached briefly, so poll-to-poll deltas can lag the exchange by seconds — surfaced in the UI) |
+| T14 Per-alert candidate driver links ("what may have caused the jump") without asserting causation | in progress | `bf258546` | `assets/alerts.js`, `alerts.html` | Kalshi publishes no news/causality feed (verified against the official API reference); each alert therefore shows the market's own `rules_primary` settlement text plus a **candidate** official reference page, labeled "candidate — cause not verified"; where no mapping matches, the cell is left blank and flagged | I-19 (causal attribution is not published by the exchange and is never inferred) |
+| T15 High-ROI scoring model (transparent, deterministic weights documented on the page and in Methodology) | in progress | `bf258546` | `assets/alerts.js`, `methodology.html` | Every component is arithmetic on official API fields (volume_fp, open_interest_fp, yes_bid/ask size, spread, price position, move size, recency); weights and formulas are printed in the UI so the score can be recomputed by hand | I-20 (heuristic model, not an official Kalshi metric and not a profit forecast) |
+| T16 Verification: page/link/source discipline + jsdom smoke test of the alert page | in progress | `bf258546` | `scripts/verify_root_site.py`, `tests/alerts.test.js`, `.github/workflows/check.yml` | `scripts/verify_root_site.py` extended with the new page/asset; node `--check`; jsdom render test with a mocked demo API | — |
+| T17 Final integration: reconcile the still-open rival PRs (#17, #19, #23), re-verify the combined data line by line, confirm the site builds with no broken links, PR -> main, merge, confirm Pages deploy | in progress | `bf258546` | whole repo (shared files only by append) | See the "Final integration record — session bf258546" section below | R-10 (three rival PRs from earlier sessions were left open and overlap the canonical root site; reconciliation is recorded rather than silently dropped) |
+
+### Log
+
+- 2026-11-20 bf258546 — reviewed the repo line by line (root site, `assets/`, `scripts/`, `data/latest/**`,
+  `docs/`, `analysis/`, `demo-desk/`, `collector/`, `trading/`, workflows), the board, the open PR list
+  (#17, #19, #23 still open) and the live site (https://karagemop466-tech.github.io/Demo3/ — reachable,
+  landing + dashboard served, dashboard reporting live demo-API data). Claimed T13-T17 and pushed this
+  claim immediately.
+- 2026-11-20 bf258546 — gap analysis against the brief: the canonical site covers the executive summary,
+  live dashboard, chart windows, orderbook depth, resolution tracking, trading/portfolio, and the registers,
+  but the **live alerting system with two scrolling chats** (all swings + high-ROI filter) and the
+  **per-jump candidate driver links** were not implemented anywhere in the tree. Those are T13-T15.
