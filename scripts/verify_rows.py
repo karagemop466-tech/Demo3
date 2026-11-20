@@ -43,17 +43,20 @@ def now_iso() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
 
-def fetch(path: str, params: dict | None = None) -> dict | None:
+def fetch(path: str, params: dict | None = None, retries: int = 1) -> dict | None:
     import urllib.request
     params = {k: v for k, v in (params or {}).items() if v is not None}
     url = BASE + path + ("?" + urllib.parse.urlencode(params) if params else "")
-    try:
-        req = urllib.request.Request(url, headers={"User-Agent": "kalshi-demo3-verify/1.0"})
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            return json.loads(resp.read().decode("utf-8"))
-    except Exception as e:  # noqa: BLE001
-        print(f"  FETCH FAIL {url}: {e}")
-        return None
+    for attempt in range(max(1, retries)):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "kalshi-demo3-verify/1.0"})
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                return json.loads(resp.read().decode("utf-8"))
+        except Exception as e:  # noqa: BLE001
+            print(f"  FETCH FAIL (attempt {attempt + 1}) {url}: {e}")
+            if attempt + 1 < retries:
+                time.sleep(3)
+    return None
 
 
 def load(name: str) -> dict:
@@ -102,42 +105,56 @@ def main() -> int:
                 report["drift_notices"].append(
                     {"row": stored.get("ticker", ""), "field": f, "stored": sv, "live": lv})
 
-    # 1. Resolutions: every row must keep its final result (settled = immutable)
+    # 1. Resolutions: every row must keep its final result (settled = immutable).
+    #    Settlement batches can briefly drop rows from the listing mid-transition
+    #    (observed 2026-11-20: the KXXRP 6am-EST ladder settled mid-verification),
+    #    so refetch retries twice before any failure is recorded.
     try:
         res = load("resolutions.json")["resolutions"]
     except Exception as e:  # noqa: BLE001
         res = []
         check("resolutions.json loadable", False, str(e))
     for row in res[:200]:  # up to 200 rows per run (rotating sample keeps load low)
-        body = fetch("/markets", {"tickers": row["ticker"]})
+        body = fetch("/markets", {"tickers": row["ticker"]}, retries=3)
         markets = (body or {}).get("markets", [])
         if not markets:
-            check(f"resolution {row['ticker']} refetch", False, "ticker not returned")
+            check(f"resolution {row['ticker']} refetch", False,
+                  "ticker not returned after 3 attempts (settlement transition or delisted)")
             continue
         live = markets[0]
         check(f"resolution {row['ticker']} result",
               live.get("result") == row.get("result"),
               f"stored={row.get('result')!r} live={live.get('result')!r}")
-        for f in ("settlement_ts", "settlement_value_dollars", "ticker"):
+        for f in ("settlement_value_dollars", "ticker"):
             check(f"resolution {row['ticker']} {f}",
                   str(live.get(f, "")) == str(row.get(f, "")),
                   f"stored={row.get(f)!r} live={live.get(f)!r}")
+        # settlement_ts may be stamped by the exchange after collection; exact when
+        # both sides carry one, otherwise recorded as drift
+        sv, lv = str(row.get("settlement_ts", "")), str(live.get("settlement_ts", ""))
+        if sv and lv and sv != lv:
+            check(f"resolution {row['ticker']} settlement_ts", False,
+                  f"stored={sv!r} live={lv!r}")
+        elif sv != lv:
+            report["drift_notices"].append({"row": row["ticker"], "field": "settlement_ts",
+                                            "stored": sv, "live": lv})
         time.sleep(0.12)
 
-    # 2. Top events: tickers must exist; titles must match
+    # 2. Top events: each named top market must exist (per-ticker refetch: large
+    #    events exceed any single event-scanned page)
     try:
         top = load("top_events.json")["overall"][:20]
     except Exception as e:  # noqa: BLE001
         top = []
         check("top_events.json loadable", False, str(e))
     for ev in top:
-        body = fetch("/markets", {"event_ticker": ev["event_ticker"], "limit": 100})
-        live_tickers = {m.get("ticker") for m in (body or {}).get("markets", [])}
         for tm in ev.get("top_markets", [])[:5]:
+            body = fetch("/markets", {"tickers": tm["ticker"]}, retries=2)
+            live_tickers = {m.get("ticker") for m in (body or {}).get("markets", [])}
             check(f"top_event {ev['event_ticker']} market {tm['ticker']} exists",
                   tm["ticker"] in live_tickers,
-                  f"live set has {len(live_tickers)} markets")
-        time.sleep(0.12)
+                  f"live query returned {len(live_tickers)} markets")
+            time.sleep(0.12)
 
     # 3. Market rows: random sample, static fields exact
     try:
@@ -147,7 +164,7 @@ def main() -> int:
         sample = []
         check("markets_open.json loadable", False, str(e))
     for row in sample:
-        body = fetch("/markets", {"tickers": row["ticker"]})
+        body = fetch("/markets", {"tickers": row["ticker"]}, retries=2)
         markets = (body or {}).get("markets", [])
         if not markets:
             check(f"market {row['ticker']} refetch", False, "ticker not returned")
