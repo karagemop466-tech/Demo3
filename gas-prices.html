@@ -3,80 +3,31 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Gas Prices — Kalshi Demo Dashboard</title>
-<link rel="stylesheet" href="assets/css/style.css">
+<title>Gas prices — Kalshi Demo Tracker</title>
+<link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-<a class="skip-link" href="#content">Skip to content</a>
+<header class="top"><div class="wrap"><nav class="main">
+<a class="brand" href="index.html">Kalshi Demo Tracker</a>
+<a href="index.html">Home</a><a href="dashboard.html">Live dashboard</a><a href="gas-prices.html" class="active">Gas prices</a><a href="elections.html">Elections</a><a href="culture.html">Culture</a><a href="crypto.html">Crypto</a><a href="golf.html">Golf</a><a href="portfolio.html">Portfolio</a><a href="trades.html">Trades</a><a href="questions.html">Questions</a><a href="suggestions.html">Suggestions</a><a href="flagged.html">Flagged for review</a><a href="sources.html">Sources</a><a href="repo-review.html">Repo review</a><a href="methodology.html">Methodology</a><a href="api-reference.html">API reference</a>
+</nav></div></header>
+<main class="wrap">
 
-<header>
-  <div class="header-inner">
-    <div class="brand"><div class="mark">K</div><div>Kalshi Demo Dashboard</div></div>
-    <nav>
-      <ul>
-        <li><a href="index.html">Home</a></li>
-        <li><a href="dashboard.html">Live Dashboard</a></li>
-        <li><a href="gas-prices.html" class="active">Gas Prices</a></li>
-        <li><a href="elections.html">Elections</a></li>
-        <li><a href="culture.html">Culture</a></li>
-        <li><a href="crypto.html">Crypto</a></li>
-        <li><a href="golf.html">Golf</a></li>
-        <li><a href="portfolio.html">Portfolio</a></li>
-        <li><a href="trades.html">Trades</a></li>
-        <li><a href="suggestions.html">Suggestions</a></li>
-        <li><a href="questions.html">Questions &amp; Answers</a></li>
-        <li><a href="flagged.html">Flagged for Review</a></li>
-      </ul>
-    </nav>
-  </div>
-</header>
-
-<section class="hero">
-  <div class="hero-inner">
-    <div>
-      <h1>Gas Prices</h1>
-      <p>Tracking live Kalshi events related to gas prices (highest-dollar events), until each event resolves to
-      yes or no. Current contract price and liquidity (contracts available at a given price) are shown on the
-      <a href="dashboard.html">live dashboard</a>.</p>
-      <div class="alert alert-warn">
-        <strong>Unverified — no data returned.</strong> The official Kalshi demo API (<code>/events</code>,
-        <code>/markets</code>) returned no gas-price or energy-category events or markets in the pages sampled for
-        this build. Per the verification rules, all gas-price values are intentionally left <strong>blank</strong>
-        and flagged <strong>unverified</strong>. Nothing is inferred or filled in.
-      </div>
-    </div>
-    <div class="card">
-      <h3 style="margin-top:0">Suggested next step</h3>
-      <p>Query the demo API directly for energy/gas series (e.g. <code>/events?category=Energy</code> if supported,
-      or page through <code>/events</code> and <code>/markets</code>) and add any gas-price markets here with their
-      official <code>/events</code> and <code>/markets</code> source links.</p>
-    </div>
-  </div>
-</header>
-
-<div class="container" id="content">
-  <section class="section">
-    <h2 class="section-title"><span class="kicker">Verified gas-price events</span> Table</h2>
-    <div id="gas-events" data-category="Gas"></div>
-  </section>
-
-  <section class="section sources">
-    <h4>Official sources</h4>
-    <ul>
-      <li><a href="https://external-api.demo.kalshi.co/trade-api/v2/events" target="_blank" rel="noopener">GET /events — Kalshi demo Trade API v2</a></li>
-      <li><a href="https://external-api.demo.kalshi.co/trade-api/v2/markets" target="_blank" rel="noopener">GET /markets — Kalshi demo Trade API v2</a></li>
-      <li><a href="flagged.html">Flagged for Review — gas prices</a></li>
-    </ul>
-  </section>
+<h1>Gas prices</h1>
+<p>Retail gasoline price markets (AAA averages per state, e.g. KXAAAGAS*). Settlement source: AAA.</p>
+<div class="card"><h2>Verified series snapshot</h2>
+<p class='muted'>Series matching this topic from the verified snapshot (2026-11-20). Each row links the exact API request URL. Live discovery runs on the dashboard.</p><div class='tablewrap'><table><thead><tr><th>Series ticker</th><th>Title</th><th>Category</th><th>Frequency</th><th>Volume (contracts)</th><th>Settlement source</th><th>Contract terms</th><th>Source</th></tr></thead><tbody><tr><td><span class="mono">DIESEL</span></td><td>Diesel price this week</td><td>Economics</td><td>weekly</td><td>0.00</td><td>U.S. Energy Information Administration (eia.gov/dnav/pet/PET_PRI_SPT_S1_D.htm)</td><td><a href="https://assets.kalshi.com/contract_terms/DIESEL.pdf" target="_blank" rel="noopener">terms</a></td><td><a class="src" href="https://external-api.demo.kalshi.co/trade-api/v2/series?tags=Gas&amp;include_volume=true" target="_blank" rel="noopener">source</a></td></tr><tr><td><span class="mono">DIESELM</span></td><td>Diesel price this month</td><td>Economics</td><td>monthly</td><td>0.00</td><td>U.S. Energy Information Administration (eia.gov/dnav/pet/PET_PRI_SPT_S1_D.htm)</td><td><a href="https://assets.kalshi.com/contract_terms/DIESEL.pdf" target="_blank" rel="noopener">terms</a></td><td><a class="src" href="https://external-api.demo.kalshi.co/trade-api/v2/series?tags=Gas&amp;include_volume=true" target="_blank" rel="noopener">source</a></td></tr><tr><td><span class="mono">KXAAAGASW</span></td><td>US gas price up</td><td>Economics</td><td>weekly</td><td></td><td>AAA</td><td><a href="https://gasprices.aaa.com/" target="_blank" rel="noopener">settlement</a></td><td><a class="src" href="https://external-api.kalshi.com/trade-api/v2/series/KXAAAGASW" target="_blank" rel="noopener">source</a></td></tr></tbody></table></div>
+</div>
+<div class="card"><h2>Markets — live &amp; resolved (yes/no)</h2>
+<p class='muted'>Open/active markets and settled results (result = yes/no). Settled winners pay $1/contract.</p><div class='tablewrap'><table><thead><tr><th>Market ticker</th><th>Title</th><th>Status</th><th>Result</th><th>Last price</th><th>Yes bid/ask</th><th>Volume (contracts)</th><th>Open interest</th><th>Closes / settled</th><th>Rules</th><th>Source</th></tr></thead><tbody><tr><td><span class="mono">KXAAAGASM-26NOV30-3.40</span></td><td>Will average gas prices be above $3.40?</td><td>active</td><td><span class="pill">—</span></td><td>0.98</td><td>0.98 / 1.0</td><td>237557.98</td><td>143342.97</td><td>2026-11-30T04:59:00Z</td><td>—</td><td><a class="src" href="https://api.elections.kalshi.com/trade-api/v2/markets?series_ticker=KXAAAGASM&amp;status=open&amp;limit=200" target="_blank" rel="noopener">source</a></td></tr><tr><td><span class="mono">KXAAAGASM-26NOV30-3.70</span></td><td>Will average gas prices be above $3.70?</td><td>active</td><td><span class="pill">—</span></td><td>0.01</td><td>0.0 / 0.01</td><td>211455.28</td><td>60118.3</td><td>2026-11-30T04:59:00Z</td><td>—</td><td><a class="src" href="https://api.elections.kalshi.com/trade-api/v2/markets?series_ticker=KXAAAGASM&amp;status=open&amp;limit=200" target="_blank" rel="noopener">source</a></td></tr><tr><td><span class="mono">KXAAAGASM-26NOV30-4.00</span></td><td>Will average gas prices be above $4.00?</td><td>active</td><td><span class="pill">—</span></td><td>0.01</td><td>0.0 / 0.01</td><td>208504.24</td><td>67228.4</td><td>2026-11-30T04:59:00Z</td><td>—</td><td><a class="src" href="https://api.elections.kalshi.com/trade-api/v2/markets?series_ticker=KXAAAGASM&amp;status=open&amp;limit=200" target="_blank" rel="noopener">source</a></td></tr><tr><td><span class="mono">KXAAAGASM-26NOV30-3.50</span></td><td>Will average gas prices be above $3.50?</td><td>active</td><td><span class="pill">—</span></td><td>0.5</td><td>0.49 / 0.5</td><td>158095.88</td><td>31749.44</td><td>2026-11-30T04:59:00Z</td><td>—</td><td><a class="src" href="https://api.elections.kalshi.com/trade-api/v2/markets?series_ticker=KXAAAGASM&amp;status=open&amp;limit=200" target="_blank" rel="noopener">source</a></td></tr><tr><td><span class="mono">KXAAAGASM-26NOV30-3.80</span></td><td>Will average gas prices be above $3.80?</td><td>active</td><td><span class="pill">—</span></td><td>0.02</td><td>0.0 / 0.01</td><td>146940.02</td><td>61365.21</td><td>2026-11-30T04:59:00Z</td><td>—</td><td><a class="src" href="https://api.elections.kalshi.com/trade-api/v2/markets?series_ticker=KXAAAGASM&amp;status=open&amp;limit=200" target="_blank" rel="noopener">source</a></td></tr><tr><td><span class="mono">KXAAAGASM-26NOV30-3.60</span></td><td>Will average gas prices be above $3.60?</td><td>active</td><td><span class="pill">—</span></td><td>0.05</td><td>0.04 / 0.05</td><td>146428.38</td><td>63054.24</td><td>2026-11-30T04:59:00Z</td><td>—</td><td><a class="src" href="https://api.elections.kalshi.com/trade-api/v2/markets?series_ticker=KXAAAGASM&amp;status=open&amp;limit=200" target="_blank" rel="noopener">source</a></td></tr><tr><td><span class="mono">KXAAAGASM-26NOV30-3.90</span></td><td>Will average gas prices be above $3.90?</td><td>active</td><td><span class="pill">—</span></td><td>0.01</td><td>0.0 / 0.01</td><td>143625.81</td><td>54316.61</td><td>2026-11-30T04:59:00Z</td><td>—</td><td><a class="src" href="https://api.elections.kalshi.com/trade-api/v2/markets?series_ticker=KXAAAGASM&amp;status=open&amp;limit=200" target="_blank" rel="noopener">source</a></td></tr><tr><td><span class="mono">KXAAAGASM-26NOV30-4.10</span></td><td>Will average gas prices be above $4.10?</td><td>active</td><td><span class="pill">—</span></td><td>0.01</td><td>0.0 / 0.01</td><td>109898.7</td><td>41745.19</td><td>2026-11-30T04:59:00Z</td><td>—</td><td><a class="src" href="https://api.elections.kalshi.com/trade-api/v2/markets?series_ticker=KXAAAGASM&amp;status=open&amp;limit=200" target="_blank" rel="noopener">source</a></td></tr><tr><td><span class="mono">KXAAAGASM-26NOV30-4.20</span></td><td>Will average gas prices be above $4.20?</td><td>active</td><td><span class="pill">—</span></td><td>0.01</td><td>0.0 / 0.01</td><td>73840.86</td><td>46011.53</td><td>2026-11-30T04:59:00Z</td><td>—</td><td><a class="src" href="https://api.elections.kalshi.com/trade-api/v2/markets?series_ticker=KXAAAGASM&amp;status=open&amp;limit=200" target="_blank" rel="noopener">source</a></td></tr><tr><td><span class="mono">KXAAAGASM-26NOV30-3.55</span></td><td>Will average gas prices be above $3.55?</td><td>active</td><td><span class="pill">—</span></td><td>0.13</td><td>0.17 / 0.18</td><td>58065.22</td><td>26979.85</td><td>2026-11-30T04:59:00Z</td><td>—</td><td><a class="src" href="https://api.elections.kalshi.com/trade-api/v2/markets?series_ticker=KXAAAGASM&amp;status=open&amp;limit=200" target="_blank" rel="noopener">source</a></td></tr><tr><td><span class="mono">KXAAAGASM-26NOV30-3.65</span></td><td>Will average gas prices be above $3.65?</td><td>active</td><td><span class="pill">—</span></td><td>0.02</td><td>0.01 / 0.02</td><td>52393.73</td><td>35555.97</td><td>2026-11-30T04:59:00Z</td><td>—</td><td><a class="src" href="https://api.elections.kalshi.com/trade-api/v2/markets?series_ticker=KXAAAGASM&amp;status=open&amp;limit=200" target="_blank" rel="noopener">source</a></td></tr><tr><td><span class="mono">KXAAAGASM-26NOV30-4.80</span></td><td>Will average gas prices be above $4.80?</td><td>active</td><td><span class="pill">—</span></td><td>0.01</td><td>0.0 / 0.01</td><td>41448.32</td><td>30903.31</td><td>2026-11-30T04:59:00Z</td><td>—</td><td><a class="src" href="https://api.elections.kalshi.com/trade-api/v2/markets?series_ticker=KXAAAGASM&amp;status=open&amp;limit=200" target="_blank" rel="noopener">source</a></td></tr><tr><td><span class="mono">KXAAAGASM-26NOV30-2.50</span></td><td>Will average gas prices be above $2.50?</td><td>active</td><td><span class="pill">—</span></td><td>0.99</td><td>0.99 / 1.0</td><td>28786.99</td><td>28786.99</td><td>2026-11-30T04:59:00Z</td><td>—</td><td><a class="src" href="https://api.elections.kalshi.com/trade-api/v2/markets?series_ticker=KXAAAGASM&amp;status=open&amp;limit=200" target="_blank" rel="noopener">source</a></td></tr><tr><td><span class="mono">KXAAAGASM-26NOV30-4.40</span></td><td>Will average gas prices be above $4.40?</td><td>active</td><td><span class="pill">—</span></td><td>0.01</td><td>0.0 / 0.01</td><td>28190.25</td><td>9779.92</td><td>2026-11-30T04:59:00Z</td><td>—</td><td><a class="src" href="https://api.elections.kalshi.com/trade-api/v2/markets?series_ticker=KXAAAGASM&amp;status=open&amp;limit=200" target="_blank" rel="noopener">source</a></td></tr><tr><td><span class="mono">KXAAAGASM-26NOV30-4.30</span></td><td>Will average gas prices be above $4.30?</td><td>active</td><td><span class="pill">—</span></td><td>0.01</td><td>0.0 / 0.01</td><td>25787.77</td><td>14829.61</td><td>2026-11-30T04:59:00Z</td><td>—</td><td><a class="src" href="https://api.elections.kalshi.com/trade-api/v2/markets?series_ticker=KXAAAGASM&amp;status=open&amp;limit=200" target="_blank" rel="noopener">source</a></td></tr><tr><td><span class="mono">KXAAAGASW-26NOV16-3.8100</span></td><td>Will average gas prices be above $3.8100?</td><td>finalized</td><td><span class="pill">yes</span></td><td>1.0000</td><td>—</td><td>425965.64</td><td>—</td><td>2026-11-16T13:58:49.582665Z</td><td>If average regular gas prices for United States are strictly greater than $3.8100 on Nov 16, 2026 according to AAA, then the market resolves to Yes.</td><td><a class="src" href="https://external-api.kalshi.com/trade-api/v2/markets?series_ticker=KXAAAGASW&amp;status=settled&amp;limit=3" target="_blank" rel="noopener">source</a></td></tr><tr><td><span class="mono">KXAAAGASW-26NOV16-3.7900</span></td><td>Will average gas prices be above $3.7900?</td><td>finalized</td><td><span class="pill">yes</span></td><td>1.0000</td><td>—</td><td>64168.16</td><td>—</td><td>2026-11-16T13:58:49.582665Z</td><td>If average regular gas prices for United States are strictly greater than $3.7900 on Nov 16, 2026 according to AAA, then the market resolves to Yes.</td><td><a class="src" href="https://external-api.kalshi.com/trade-api/v2/markets?series_ticker=KXAAAGASW&amp;status=settled&amp;limit=3" target="_blank" rel="noopener">source</a></td></tr><tr><td><span class="mono">KXAAAGASW-26NOV16-3.7700</span></td><td>Will average gas prices be above $3.7700?</td><td>finalized</td><td><span class="pill">yes</span></td><td>1.0000</td><td>—</td><td>6036.53</td><td>—</td><td>2026-11-16T13:58:49.582665Z</td><td>If average regular gas prices for United States are strictly greater than $3.7700 on Nov 16, 2026 according to AAA, then the market resolves to Yes.</td><td><a class="src" href="https://external-api.kalshi.com/trade-api/v2/markets?series_ticker=KXAAAGASW&amp;status=settled&amp;limit=3" target="_blank" rel="noopener">source</a></td></tr></tbody></table></div><p class='small muted'>Dollar figures shown are as returned by the API (dollars strings). Volume is contracts.</p>
+<p><a class="btn" href="dashboard.html">Track these live on the dashboard</a></p>
 </div>
 
-<footer>
-  <div class="footer-inner">
-    <div><strong>Kalshi Demo Dashboard</strong> — Gas prices category.</div>
-    <div class="disclaimer">No gas-price events were found in the sampled demo-API pages. Values are blank and flagged unverified — see <a href="flagged.html">Flagged for Review</a>.</div>
-  </div>
-</footer>
-
-<script src="assets/js/app.js"></script>
+</main>
+<footer class="wrap"><p class="small muted">Kalshi Demo Tracker — built from verified sources only. Demo environment
+(mock funds): <span class="mono">https://external-api.demo.kalshi.co/trade-api/v2</span> ·
+Docs: <a href="https://docs.kalshi.com" target="_blank" rel="noopener">docs.kalshi.com</a> ·
+Every table row links its source; blank cells are flagged on <a href="flagged.html">Flagged for review</a>.</p></footer>
+<script src="assets/app.js"></script><script src="assets/site.js"></script>
 </body>
 </html>

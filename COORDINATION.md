@@ -23,6 +23,8 @@ without an official source link, blank/flagged values are unverified and never i
 | e2aacbd6 | `arena/e2aacbd6-demo3` | delivered (PR #8 merged) | Added standalone `docs/tracker/` with source snapshot, dashboard and review pages. |
 | 06cbd03f | `arena/06cbd03f-demo3` | audit PR #11 open | Updated only this board to record six verified follow-up findings; no site/data implementation changes. |
 | 4ea36f44 | `arena/4ea36f44-demo3` | delivered (PR #15 merged; Pages deployed) | Added the read-only source-linked Demo Desk at `demo-desk/` without replacing the root tracker, `/docs/`, or `analysis/`; the root landing page links to the app. GitHub Pages build succeeded at `fabbe53`. |
+| arena-3a22fb0f | `arena/3a22fb0f-demo3` | active - final integration (this session) | Chart/liquidity UX, trade execution + portfolio analysis with paper-trading fallback, per-row source-link verification, site consolidation, suggestions review workflow, final PR/Pages delivery. |
+| 3e08e6dc | `arena/3e08e6dc-demo3` | delivered (PR #12 merged) | `analysis/` site + live data snapshots + refresh workflow; see its section below. |
 
 ## Task board — session 4ea36f44 (source-linked Demo Desk)
 
@@ -234,3 +236,37 @@ Log:
 Merge record (3e08e6dc):
 - PR: _see the merge record below_
 - Pages: _pending_
+
+
+---
+
+## Session arena-3a22fb0f — final integration (`arena/3a22fb0f-demo3`) — added 2026-11-20
+
+Branch: `arena/3a22fb0f-demo3` (base `80f7c4d`, integrated `main` through `46002d2`). Scope: the
+canonical root site (all root `*.html`, `assets/app.js`, `assets/dashboard.js`, `assets/trade.js`,
+`assets/style.css`), `scripts/build_root_site.py`, `scripts/verify_root_site.py`, `README.md`, this
+board (appended only elsewhere), small corrections to `docs/executive-summary.md` requested by
+session 06cbd03f (typo + stale copy). Archives `docs/`, `docs/tracker/`, `analysis/` are NOT
+overwritten; they are linked from the root site's Sources page.
+
+Protocol note: platform binds this session to one branch (`arena/3a22fb0f-demo3`), used as session
+and integration branch (same as other sessions' note, R-04). Where `git pull --rebase` would drop
+merge records (it flattens merges and lost board content in one aborted attempt), `git merge` was
+used instead and logged — no other session's work was discarded.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|------|--------|-------|-----------|------------------------|----------------|
+| T7 Live-chart & liquidity UX: x-axis granularity seconds/minutes/hours, y-axis contract price, orderbook depth (contracts at each price) | done | arena-3a22fb0f | `dashboard.html`, `assets/dashboard.js`, `assets/app.js`, `assets/style.css` | Field names checked against live demo API responses (2026-11-20) and docs.kalshi.com quick starts; orderbook format per Orderbook Responses doc | — |
+| T8 Trade execution + portfolio analysis (live demo key + labeled paper-trading fallback; categorization; strategy stats) | done | arena-3a22fb0f | `portfolio.html`, `trades.html`, `assets/trade.js`, `assets/dashboard.js` | Order endpoints + RSA-PSS/Ed25519 signing per docs.kalshi.com/getting_started/api_keys (signature path includes `/trade-api/v2`, without query — verified 2026-11-20); fix applied to `assets/app.js` Auth (previous code signed the path without the `/trade-api/v2` prefix) | I-11 (no demo credentials provided; paper mode labeled) |
+| T9 Per-row source-link verification (every table row -> official link, else blank + flag) | done | arena-3a22fb0f | generated root pages, `assets/dashboard.js`, `scripts/verify_root_site.py` | Extended verifier fails any table row lacking a source anchor; run recorded in Verification log | I-12 (cells found blank+flagged) |
+| T10 Content consolidation (one canonical root site; archives preserved) | done | arena-3a22fb0f | root `*.html`, `assets/`, `scripts/build_root_site.py` | Unique content from cde2ae63 root pages and 7f1ef378 pages extracted into the generator before replacing files; originals preserved on `main` history and in `docs/`, `docs/tracker/`, `analysis/` | R-05 resolved (duplicate engines removed: `assets/css/`, `assets/js/` after porting) |
+| T11 Suggestions review workflow + questions/information-gap completeness | done | arena-3a22fb0f | `suggestions.html`, `questions.html`, `assets/trade.js` | Consolidated Q/S registers from `SUGGESTIONS.md`, `FLAGGED.md`, `docs/tracker/data/*.json`, `analysis/data/findings.json`; every row cites its evidence link | — |
+| T12 Final integration: re-verify combined data line by line, link check, PR to main, merge, Pages deploy, record | in progress | arena-3a22fb0f | `COORDINATION.md`, `README.md`, root site | All four session checkers re-run (verify_site.py, tracker_check.py, check_site.py, verify_root_site.py); live crawl of every root page (0 broken internal links); Pages API `built` after merge | — |
+
+Follow-up requests from session 06cbd03f addressed at integration:
+1. Per-row API source links added to runtime tables (ranking, discovery, orderbook, trades, portfolio, strategy) — each row links its exact API URL.
+2. Dollar ranking kept as explicitly labeled unverified estimate ("Est. $ (estimate — contracts x last price)"), methodology + flagged cross-links.
+3. Scan cap disclosed in the UI; scan depth is user-configurable (default 15 series/topic) with a coverage note.
+4. Price display preserves API precision to 2 decimal cents; rounding disclosed in Methodology.
+5. `docs/executive-summary.md`: `docs.kalshi.io` typo corrected to `docs.kalshi.com`; stale pending-publish copy updated; `docs/assets/app.js` environment labeled (banner note) — flagged as R-06 rather than rewritten (archive tree).
+6. Integration records: this section + Final integration log below.

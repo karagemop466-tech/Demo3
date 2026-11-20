@@ -31,3 +31,6 @@ jobs:
 
       - name: JavaScript syntax
         run: node --check assets/app.js
+
+      - name: Canonical root site checks (links, per-row sources, syntax)
+        run: python3 scripts/verify_root_site.py

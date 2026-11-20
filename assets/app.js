@@ -122,9 +122,15 @@
     return "$" + Number(x).toLocaleString("en-US",
       { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   }
-  function cents(x) { // contract price dollars -> cents label
+  function cents(x) { // contract price dollars -> cents label (API precision kept to 0.01¢)
     if (x === null || x === undefined || x === "" || isNaN(Number(x))) return "—";
-    return (Number(x) * 100).toFixed(1) + "¢";
+    return (Number(x) * 100).toFixed(2) + "¢";
+  }
+  /* Per-row API source link (verification requirement): links the exact request URL. */
+  function srcLink(path, label) {
+    var href = path.indexOf("http") === 0 ? path : BASE + path;
+    return "<a class='src' href='" + esc(href) + "' target='_blank' rel='noopener'>" +
+      esc(label || "source") + "</a>";
   }
   function timeStr(ts) {
     if (!ts) return "—";
@@ -185,10 +191,15 @@
       ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(padL + pw, y); ctx.stroke();
       ctx.fillText((v * 100).toFixed(0) + "¢", 6, y + 4);
     }
-    // X labels (5 ticks)
+    // X labels (5 ticks) — format matches the window: seconds, minutes, or date
+    var span = t1 - t0;
     for (var k = 0; k <= 4; k++) {
       var t = t0 + (t1 - t0) * k / 4;
-      ctx.fillText(timeStr(t).slice(0, 8), X(t) - 14, H - 8);
+      var lbl;
+      if (span <= 3600) lbl = timeStr(t).slice(0, 8);        // HH:MM:SS
+      else if (span <= 86400) lbl = timeStr(t).slice(0, 5);  // HH:MM
+      else lbl = timeStr(t).slice(9).trim();                 // dd/mm/yyyy
+      ctx.fillText(lbl, X(t) - 14, H - 8);
     }
     // bid/ask band
     function line(key, color, width) {
@@ -255,8 +266,10 @@
   }
 
   /* ---------- authenticated client (optional demo API key) ----------
-   * Signs timestamp+METHOD+path per https://docs.kalshi.com/getting_started/api_keys
-   * Ed25519 (PKCS#8) preferred; RSA-PSS fallback. Key stays in this browser. */
+   * Signs timestamp+METHOD+fullPath (incl. /trade-api/v2, no query) per
+   * https://docs.kalshi.com/getting_started/api_keys
+   * Ed25519 (PKCS#8) preferred; RSA-PSS SHA-256 (salt = digest length) fallback.
+   * Key stays in this browser. */
   var Auth = {
     keyId: null, cryptoKey: null, alg: null,
     async load(keyId, pem) {
@@ -284,7 +297,12 @@
     },
     async headers(method, path) {
       var ts = String(Date.now());
-      var msg = new TextEncoder().encode(ts + method + path);
+      /* Official signing spec (docs.kalshi.com/getting_started/api_keys):
+       * base64(sign(timestamp + method + path)) where path is the FULL request
+       * path including /trade-api/v2, WITHOUT query parameters. */
+      var fullPath = path.indexOf("/trade-api/v2") === 0 ? path : "/trade-api/v2" + path;
+      fullPath = fullPath.split("?")[0];
+      var msg = new TextEncoder().encode(ts + method + fullPath);
       var sig;
       if (this.alg === "Ed25519") {
         sig = await window.crypto.subtle.sign("Ed25519", this.cryptoKey, msg);
@@ -345,7 +363,7 @@
     apiGet: apiGet, apiGetAll: apiGetAll,
     discoverSeries: discoverSeries, classifySeries: classifySeries,
     num: num, money: money, cents: cents, timeStr: timeStr, esc: esc,
-    estDollars: estDollars,
+    estDollars: estDollars, srcLink: srcLink,
     drawPriceChart: drawPriceChart, drawDepthChart: drawDepthChart,
     Auth: Auth
   };
