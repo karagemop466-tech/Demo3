@@ -90,6 +90,9 @@ summary { cursor: pointer; font-weight: 600; }
 .chat-wrap table.alerts tr.alert.up td { background: #eef7f0 !important; }
 .chat-wrap table.alerts tr.alert.down td { background: #fdf3f0 !important; }
 .chat-wrap table.alerts tr.alert.flat td { background: #f4f4f4 !important; }
+.chat-wrap table.alerts tr.alert.resolution td { background: #eaf2fb !important; }
+.pill.resolved-yes { background: #eef7f0; color: #1d6b3c; border: 1px solid #bfe3cc; }
+.pill.resolved-no { background: #fdecea; color: #a4321f; border: 1px solid #f0c4bc; }
 .num.up { color: #0d7a3c; font-weight: 700; }
 .num.down { color: #b3261e; font-weight: 700; }
 .roi { background: #fff7e6; color: #8a5b00; border: 1px solid #f0d48a; border-radius: 6px;

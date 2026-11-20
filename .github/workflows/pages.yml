@@ -1,0 +1,64 @@
+# Publishes the repository root as a GitHub Pages site through a custom Actions workflow.
+#
+# STATUS: manual only (workflow_dispatch). It runs only after the repository's Pages
+# source is switched to "GitHub Actions" (Settings > Pages > Build and deployment >
+# Source). The guard step below refuses to deploy while the source is still
+# "deploy from a branch", so a run can never publish a stale or partial site.
+#
+# Why this exists: legacy "deploy from branch" Pages builds are limited to a soft 10 builds
+# per hour (https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits).
+# Repository pushes from many sessions exceeded that limit on 2026-11-20 and builds from
+# 19:39Z errored ("Page build failed."). Actions-published sites are not subject to that limit.
+
+name: Deploy GitHub Pages site (manual; needs Pages source = GitHub Actions)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never cancel an in-flight Pages deployment.
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Guard - Pages source must be GitHub Actions
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          build_type=$(gh api "repos/$GITHUB_REPOSITORY/pages" -q .build_type 2>/dev/null || echo "unknown")
+          echo "Pages build_type: $build_type"
+          if [ "$build_type" != "workflow" ]; then
+            echo "::error::Pages build_type is '$build_type'. Set Settings > Pages > Source to 'GitHub Actions', then re-run this workflow."
+            exit 1
+          fi
+
+      - name: Stage site
+        run: |
+          rm -rf _site && mkdir _site
+          tar --exclude=./.git --exclude=./.github --exclude=./_site -cf - . | tar -xf - -C _site
+          test -f _site/index.html
+          test -f _site/.nojekyll
+          echo "staged files: $(find _site -type f | wc -l)"
+          du -sh _site
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
