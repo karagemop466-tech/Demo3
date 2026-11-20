@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-20T20:35:11Z",
+ "generated_at": "2026-11-20T20:58:50Z",
  "api_root": "https://external-api.demo.kalshi.co/trade-api/v2",
  "rule": {
   "threshold_dollars": "0.10",
@@ -19,7 +19,7 @@
    "KXQUICKSETTLE"
   ]
  },
- "snapshot_samples": 276,
+ "snapshot_samples": 312,
  "snapshot_tickers": 24,
  "counts": {
   "alerts": 7,
@@ -130,7 +130,7 @@
    "to_bid_dollars": "0.0020",
    "to_ask_dollars": "0.8110",
    "next_reading_dollars": "0.8110",
-   "next_reading_ts": "2026-11-20T19:39:29+00:00",
+   "next_reading_ts": "2026-11-20T19:34:30+00:00",
    "reverted_next_reading": true,
    "quote_mid_dollars": "0.4065",
    "last_supported_by_quote": false,
@@ -145,7 +145,7 @@
    "cause_status": "unverified - not inferred"
   },
   {
-   "ts": "2026-11-20T19:39:29+00:00",
+   "ts": "2026-11-20T19:34:30+00:00",
    "prev_ts": "2026-11-20T19:33:16+00:00",
    "ticker": "KXPRESNOMD-28-HBID",
    "event_ticker": "KXPRESNOMD-28",
@@ -156,13 +156,13 @@
    "delta_dollars": "+0.8080",
    "direction": "up",
    "to_bid_dollars": "0.0020",
-   "to_ask_dollars": "0.0030",
+   "to_ask_dollars": "0.8110",
    "next_reading_dollars": "0.8110",
-   "next_reading_ts": "2026-11-20T19:39:40+00:00",
+   "next_reading_ts": "2026-11-20T19:39:29+00:00",
    "reverted_next_reading": false,
-   "quote_mid_dollars": "0.0025",
+   "quote_mid_dollars": "0.4065",
    "last_supported_by_quote": false,
-   "volume_fp": "537225680.7700",
+   "volume_fp": "537225650.9800",
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-HBID",
    "synthetic": false,
    "high_roi": false,
