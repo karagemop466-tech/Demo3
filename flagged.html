@@ -16,6 +16,7 @@
       <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="dashboard.html">Live Dashboard</a></li>
+        <li><a href="data-tracking.html">Data Tracking</a></li>
         <li><a href="gas-prices.html">Gas Prices</a></li>
         <li><a href="elections.html">Elections</a></li>
         <li><a href="culture.html">Culture</a></li>
@@ -93,7 +94,7 @@
           <td>Demo account portfolio balance and P&amp;L</td>
           <td>Portfolio</td>
           <td>Requires authenticated GET /portfolio; no API key provided or stored</td>
-          <td><a href="https://docs.kalshi.io" target="_blank" rel="noopener">Kalshi API docs — portfolio endpoint</a></td>
+          <td><a href="https://docs.kalshi.com" target="_blank" rel="noopener">Kalshi API docs — portfolio endpoint</a></td>
           <td>Signed demo API key added locally (never committed)</td>
         </tr>
         <tr>
@@ -101,7 +102,7 @@
           <td>Trade execution</td>
           <td>Trades</td>
           <td>Requires authenticated POST /trade and POST /order; no API key provided or stored</td>
-          <td><a href="https://docs.kalshi.io" target="_blank" rel="noopener">Kalshi API docs — trade / order endpoints</a></td>
+          <td><a href="https://docs.kalshi.com" target="_blank" rel="noopener">Kalshi API docs — trade / order endpoints</a></td>
           <td>Signed demo API key added locally (never committed)</td>
         </tr>
         <tr>
@@ -153,6 +154,24 @@
     </table>
   </section>
 
+
+  <section class="section">
+    <h2 class="section-title"><span class="kicker">Session 3b5e95bd flags</span> Automation collector + demo trading, 2026-11-20</h2>
+    <table class="data">
+      <thead><tr><th>ID</th><th>Flag</th><th>Detail</th><th>Impact</th><th>Source</th></tr></thead>
+      <tbody>
+        <tr><td>F1-resolved</td><td>CORS — RESOLVED (was open)</td><td>Live probe shows the demo API returns <code>Access-Control-Allow-Origin: https://karagemop466-tech.github.io</code>; browser direct fetch is allowed.</td><td>Live dashboards work in-browser; recorded each run in <code>data/cors_test.json</code></td><td>Probe response (Origin header test), <code>data/cors_test.json</code></td></tr>
+        <tr><td>F7</td><td>Dev-sandbox egress limits</td><td>This session's sandbox cannot reach Kalshi hosts directly (only GitHub/npm/pypi egress). All live API verification used the platform page-fetch tool and GitHub Actions runners.</td><td>None for the site; affects only where code runs</td><td>COORDINATION.md T2 log</td></tr>
+        <tr><td>F8</td><td>Demo status enum differs from older docs</td><td>Live demo markets report <code>status:"active"</code>; older docs pages say <code>"open"</code>. Collector maps both, plus settled/finalized/closed.</td><td>None (defensively mapped); flagged for awareness</td><td>Live <a href="https://external-api.demo.kalshi.co/trade-api/v2/markets?limit=2&amp;status=open" target="_blank" rel="noopener">GET /markets</a> vs <a href="https://docs.kalshi.com/getting_started/quick_start_market_data" target="_blank" rel="noopener">docs quick start</a></td></tr>
+        <tr><td>F9</td><td>Demo-account credentials absent</td><td>No demo account/API keys exist in this environment (sign-up at demo.kalshi.co requires human registration). Portfolio and trade-execution pipelines are implemented + offline-tested but UNVERIFIED live; no portfolio or trade rows are produced and none were inferred.</td><td>Portfolio/Trades sections show "awaiting credentials" until secrets are added</td><td><a href="https://demo.kalshi.co/" target="_blank" rel="noopener">demo.kalshi.co</a>; <a href="https://docs.kalshi.com/getting_started/demo_env" target="_blank" rel="noopener">demo env docs</a></td></tr>
+        <tr><td>F10</td><td>Estimated dollar volume</td><td>The exchange does not report dollar volume; rankings use Σ(volume × last price) and every occurrence is labeled "estimated" (aligned with session 7f1ef378's F4).</td><td>Rankings are approximations, clearly labeled</td><td><a href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noopener">GET /markets field list</a></td></tr>
+        <tr><td>F11</td><td>Demo data anomalies</td><td>(a) Seeded demo volumes are very large (top election event estimates ≈ $900M — demo money, not real); (b) synthetic cross-category MVE events flood <code>/markets?status=open</code> newest-first, which broke naive market pagination (fixed via nested-events pagination); (c) at collection time there were no live gas/golf events on the demo exchange — their topics show resolutions/history only.</td><td>Numbers are demo-only; a warning appears wherever demo totals are shown</td><td>Live endpoints; collector logs in <code>data/meta.json</code></td></tr>
+        <tr><td>F12</td><td>Non-official docs links corrected</td><td>Some pre-existing pages linked <code>docs.kalshi.io</code>, which is not Kalshi's official documentation domain; replaced with <code>docs.kalshi.com</code> during integration.</td><td>None (link correctness)</td><td><a href="https://docs.kalshi.com/" target="_blank" rel="noopener">docs.kalshi.com</a></td></tr>
+        <tr><td>F13</td><td>Sub-minute chart granularity</td><td>REST candlesticks bottom out at 1 minute (1/60/1440 allowed). Seconds-level views would need the demo WebSocket feed; browser handshake with auth headers is unverified, so no seconds data is shown rather than faked.</td><td>Charts show 1m/60m/1440m only</td><td><a href="https://docs.kalshi.com/api-reference/market/get-market-candlesticks" target="_blank" rel="noopener">candlesticks endpoint</a></td></tr>
+      </tbody>
+    </table>
+  </section>
+
   <section class="section sources">
     <h4>Official sources used for verification</h4>
     <ul>
@@ -160,7 +179,7 @@
       <li><a href="https://demo-api.kalshi.co/trade-api/v2" target="_blank" rel="noopener">Kalshi demo Trade API v2 (alternate host)</a></li>
       <li><a href="https://external-api-ws.demo.kalshi.co/trade-api/ws/v2" target="_blank" rel="noopener">Kalshi demo WebSocket API v2</a></li>
       <li><a href="https://demo-api.kalshi.co/trade-api/ws/v2" target="_blank" rel="noopener">Kalshi demo WebSocket API v2 (alternate host)</a></li>
-      <li><a href="https://docs.kalshi.io" target="_blank" rel="noopener">Kalshi API documentation</a></li>
+      <li><a href="https://docs.kalshi.com" target="_blank" rel="noopener">Kalshi API documentation</a></li>
     </ul>
   </section>
 </div>

@@ -16,6 +16,7 @@
       <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="dashboard.html">Live Dashboard</a></li>
+        <li><a href="data-tracking.html">Data Tracking</a></li>
         <li><a href="gas-prices.html">Gas Prices</a></li>
         <li><a href="elections.html">Elections</a></li>
         <li><a href="culture.html">Culture</a></li>
@@ -121,6 +122,28 @@
       feature branch and merge through pull request. Suggestions are not implemented automatically — a reviewer
       must sign off before any change goes live.
     </div>
+  </section>
+
+
+  <section class="section">
+    <h2 class="section-title"><span class="kicker">Automation proposals</span> Session 3b5e95bd — review before further changes</h2>
+    <p>Proposals arising from building the scheduled collector, resolution tracking, and the demo-account trading
+    pipeline. Statuses: <em>Proposed</em> = needs your decision; <em>Implemented</em> = shipped in this session's PR
+    (you can request reversal here).</p>
+    <table class="data">
+      <thead><tr><th>#</th><th>Suggestion</th><th>Area</th><th>Expected benefit</th><th>Effort</th><th>Decision</th></tr></thead>
+      <tbody>
+        <tr><td>S-3b-1</td><td>Scheduled server-side snapshots (collector on GitHub Actions, committed under <code>data/</code>) so history and resolutions survive browser outages and API hiccups</td><td>Data pipeline</td><td>Decision-grade history: price movement over hours/days, resolutions kept permanently, rate-limit pressure moved off visitors' browsers</td><td>Done</td><td>Implemented (this PR) — reversible via workflow removal</td></tr>
+        <tr><td>S-3b-2</td><td>Resolution tracking with per-series quotas (newest 50 settled markets per series) so high-churn series (BTC hourly) do not evict gas/golf history</td><td>Data pipeline</td><td>Every topic keeps a verifiable yes/no resolution record</td><td>Done</td><td>Implemented (this PR)</td></tr>
+        <tr><td>S-3b-3</td><td>Collector cadence: 10 minutes today. Consider 15–30 minutes — demo markets move slowly and 429 budget is finite</td><td>Rate budget</td><td>Lower risk of API rate-limit errors during event floods</td><td>Trivial (one cron value)</td><td>Proposed — needs your call</td></tr>
+        <tr><td>S-3b-4</td><td>Sub-minute chart granularity via the demo WebSocket feed in the browser (REST candles only go down to 1 minute)</td><td>Charts</td><td>True seconds-level price movement view</td><td>Medium</td><td>Proposed — needs a live browser WS test first (auth headers in browser handshake unverified)</td></tr>
+        <tr><td>S-3b-5</td><td>Provide demo-account API credentials as repository secrets (<code>KALSHI_DEMO_API_KEY_ID</code>, <code>KALSHI_DEMO_PRIVATE_KEY</code>) to activate portfolio snapshots, demo trades, and PnL analytics</td><td>Portfolio/Trading</td><td>Turns the implemented-but-unverified trading pipeline into live tracked demo performance with categorized strategies</td><td>Requires your demo account at demo.kalshi.co</td><td>Proposed — blocked on credentials (F9)</td></tr>
+        <tr><td>S-3b-6</td><td>Mark estimated dollar volume explicitly on every chart/table and never rank on it silently</td><td>Trust/verification</td><td>Prevents mis-reading an approximation as an exchange-reported figure</td><td>Done</td><td>Implemented (est_ fields + labels)</td></tr>
+        <tr><td>S-3b-7</td><td>Add settlement-timer countdowns and "closes early" flags to event tables</td><td>Decision-making</td><td>Avoids trading into imminent settlement</td><td>Small</td><td>Proposed</td></tr>
+        <tr><td>S-3b-8</td><td>Cross-link category pages to the Data Tracking market detail (chart + ladder + liquidity) for one-click drill-down</td><td>Navigation</td><td>Shorter path from category view to decision data</td><td>Small</td><td>Proposed</td></tr>
+        <tr><td>S-3b-9</td><td>Archive data/ snapshots monthly (git tags) to bound repo growth from scheduled commits</td><td>Repo hygiene</td><td>Keeps Pages builds fast while retaining history</td><td>Small</td><td>Proposed</td></tr>
+      </tbody>
+    </table>
   </section>
 
   <section class="section sources">

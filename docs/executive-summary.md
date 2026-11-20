@@ -16,7 +16,7 @@ topics: **gas prices, elections, culture, crypto, and golf**, until each event r
 | Trade API REST (alternate) | https://demo-api.kalshi.co/trade-api/v2 |
 | WebSocket API | https://external-api-ws.demo.kalshi.co/trade-api/ws/v2 |
 | WebSocket API (alternate) | https://demo-api.kalshi.co/trade-api/ws/v2 |
-| API documentation | https://docs.kalshi.io |
+| API documentation | https://docs.kalshi.com |
 
 ## What the site contains
 

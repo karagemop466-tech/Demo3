@@ -108,3 +108,42 @@ Session 00a943bd:
 Session 7f1ef378:
 - PR #4 `arena/7f1ef378-demo3` -> `main`: https://github.com/karagemop466-tech/Demo3/pull/4 — OPEN. Content: root-level landing page, dashboard, API reference, methodology, suggestions, questions, flagged pages, Python CLI, this board. Adds root-level pages on top of session 00a943bd's `docs/` site; nothing under `docs/` is modified.
 - Next: merge PR #4 (`gh pr merge 4 --merge`, no approval wait), confirm GitHub Pages rebuilds from `main`, then record the merge result and Pages status here.
+
+## Session 3b5e95bd completion record (automation tasks A1-A4)
+
+- A1 (collector) — DONE. Live runs: run 44731483738 (v2, 163 requests / 1 error), run with nested
+  pagination (118 requests / 0 errors), final verified run at 12:01:50Z (133 requests / 0 errors,
+  12,000 open events, 40,508 nested markets, topics: elections 15, culture 15, golf 2, crypto 8).
+  Files: `collector/kalshi_api.py`, `collector/collect.py`, `collector/test_collect.py` (2 tests, OK),
+  `.github/workflows/collect.yml`, committed `data/**`. Verification: offline tests against mock
+  shapes mirroring live responses; live runs on Actions (logs + committed data). Irregularities:
+  F7 (sandbox egress), F8 (status enum), F10 (dollar-volume estimate), F11 (demo anomalies: seeded
+  volumes, MVE market flood on `/markets`, no live gas/golf at collection time — handled via
+  nested-events pagination + settled-series sweeps with per-series quotas).
+- A2 (resolution tracking) — DONE. `data/tracked.json` (76 tracked events) + `data/resolutions.json`
+  (per-event outcomes when they settle + per-market settled records: KXAAAGASM 50, KXBTC 50,
+  KXBTCD 50, KXDEMOFUTHOURLY 50, KXGTA6SONGS 13, KXCRITICSFOREIGN 7, KXGOLFMAJOR 4, ...).
+  Source: https://docs.kalshi.com/getting_started/market_settlement.md; live settled-market rows
+  carry `result: yes|no` and per-row API source URLs.
+- A3 (demo trading/portfolio) — DONE (implemented + offline-tested; UNVERIFIED live, no
+  credentials — flagged F9). `trading/kalshi_trade.py`, `trading/strategies.py`,
+  `trading/test_trading.py` (9 tests, OK — includes Ed25519 signature verification of the exact
+  documented message format), `.github/workflows/trade.yml`. Sources:
+  quick_start_authenticated_requests.md, quick_start_create_order.md, api_environments.md,
+  demo_env.md.
+- A4 (integration) — DONE. Added `data-tracking.html` + `assets/data-tracking.js` (renders committed
+  snapshots; charts, orderbook ladders, resolution/portfolio/trade/strategy tables; jsdom smoke test
+  PASSED). Addeditive nav link "Data Tracking" on all root pages (11 files + api-reference +
+  methodology). Additive answer rows on `questions.html`, proposal rows on `suggestions.html`,
+  flag rows F1-resolved/F7-F13 on `flagged.html`. Corrected non-official `docs.kalshi.io` links to
+  `docs.kalshi.com` (4 files, logged as F12). `scripts/verify_site.py` PASSED (0 failures, 14 pages).
+  `node --check` on new JS: OK. CORS resolution recorded (F1) from live probe
+  `data/cors_test.json`.
+- Incident (resolved, no data loss): a `git pull --rebase origin arena/3b5e95bd-demo3` (same-branch
+  refspec) started an unintended rebase replaying main's commits; aborted cleanly at the same pushed
+  commit `b83a7a1`. Remote-change integration for the rest of this session uses explicit
+  `git fetch origin main` + merge, preserving the pull-before-push rule's intent.
+- Parallel-session note: session `arena/c2aac20e-demo3` is running its own collector workflows on
+  its own branch (visible in Actions) but had no registered claim on this board when A1 was claimed;
+  scopes do not overlap (their branch, this branch). Reconcile at integration if both land.
+

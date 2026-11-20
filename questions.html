@@ -16,6 +16,7 @@
       <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="dashboard.html">Live Dashboard</a></li>
+        <li><a href="data-tracking.html">Data Tracking</a></li>
         <li><a href="gas-prices.html">Gas Prices</a></li>
         <li><a href="elections.html">Elections</a></li>
         <li><a href="culture.html">Culture</a></li>
@@ -115,8 +116,57 @@
       <tbody>
         <tr><td>Gas-price market volume / liquidity</td><td>Needed to rank "highest dollar amount" in the gas category</td><td>Page GET /markets; filter to energy/gas series; sort by volume_fp</td><td><a href="https://external-api.demo.kalshi.co/trade-api/v2/markets" target="_blank" rel="noopener">GET /markets</a></td></tr>
         <tr><td>Golf events / markets</td><td>Requested category with no demo data found</td><td>Page GET /events and GET /markets; inspect series_ticker for golf series</td><td><a href="https://external-api.demo.kalshi.co/trade-api/v2/events" target="_blank" rel="noopener">GET /events</a></td></tr>
-        <tr><td>Demo account API key</td><td>Needed for portfolio balance and trade execution</td><td>Sign up for a Kalshi demo account; generate API key; sign requests</td><td><a href="https://docs.kalshi.io" target="_blank" rel="noopener">Kalshi API docs</a></td></tr>
+        <tr><td>Demo account API key</td><td>Needed for portfolio balance and trade execution</td><td>Sign up for a Kalshi demo account; generate API key; sign requests</td><td><a href="https://docs.kalshi.com" target="_blank" rel="noopener">Kalshi API docs</a></td></tr>
         <tr><td>CORS behavior from github.io</td><td>Determines whether live browser fetch works</td><td>Deploy to GitHub Pages; test fetch to demo.kalshi.co</td><td><a href="https://external-api.demo.kalshi.co/trade-api/v2" target="_blank" rel="noopener">Kalshi demo API</a></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+
+  <section class="section">
+    <h2 class="section-title"><span class="kicker">Answers delivered by automation</span> Session 3b5e95bd — updated from live collector runs, 2026-11-20</h2>
+    <p>The scheduled collector (<code>collector/collect.py</code>, GitHub Actions every 10 minutes) now answers several
+    questions that were open when this register was written. Every answer below is backed by a live demo-API response
+    committed under <code>data/</code>; source links point at the exact endpoint queried.</p>
+    <table class="data">
+      <thead><tr><th>#</th><th>Question (from register above)</th><th>Answer / current status</th><th>Evidence &amp; source</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>A1</td>
+          <td>Q1 — Which live events have the highest dollar amount per category?</td>
+          <td>Answered per run: events are ranked by estimated dollar volume (Σ contracts × last price; the API reports contracts and prices, not dollars, so the figure is labeled an estimate). Current leaders in the latest snapshot are listed on the Data Tracking page.</td>
+          <td><a href="data-tracking.html">Data Tracking page</a>; <a href="https://external-api.demo.kalshi.co/trade-api/v2/events?status=open&amp;with_nested_markets=true" target="_blank" rel="noopener">GET /events?status=open&amp;with_nested_markets=true</a></td>
+        </tr>
+        <tr>
+          <td>A2</td>
+          <td>Q2 — Are there gas-price events on the demo exchange?</td>
+          <td>No live gas-price events existed at collection time (2026-11-20). The collector therefore also sweeps settled markets of the officially documented gas series (KXAAAGASM) and every tracked series, so gas resolutions (yes/no) are tracked even when nothing is live. If the demo exchange lists no settled gas markets either, the topic shows blank/flagged rather than an invented value.</td>
+          <td><a href="https://kalshi.com/docs/kalshi-fee-schedule.pdf" target="_blank" rel="noopener">Kalshi fee schedule (series KXAAAGASM)</a>; <a href="https://external-api.demo.kalshi.co/trade-api/v2/markets?series_ticker=KXAAAGASM&amp;status=settled" target="_blank" rel="noopener">GET /markets?series_ticker=KXAAAGASM&amp;status=settled</a>; collector log <code>data/meta.json</code></td>
+        </tr>
+        <tr>
+          <td>A3</td>
+          <td>Can the browser fetch the demo API directly (CORS)?</td>
+          <td>Yes — verified live: the demo API returns <code>Access-Control-Allow-Origin: https://karagemop466-tech.github.io</code> for this site's origin, so live in-browser dashboards and snapshot rendering both work.</td>
+          <td><code>data/cors_test.json</code> (probe recorded each run, sent with Origin header)</td>
+        </tr>
+        <tr>
+          <td>A4</td>
+          <td>Do the demo market objects report volume/liquidity fields?</td>
+          <td>Yes — <code>volume_fp</code>, <code>volume_24h_fp</code>, <code>open_interest_fp</code>, <code>yes_bid_size_fp</code>, <code>yes_ask_size_fp</code> (fixed-point strings) plus dollar-denominated bid/ask/last. Contract counts at each price come from the orderbook endpoint (bids-only book; a YES bid at $X equals a NO ask at 1−$X).</td>
+          <td><a href="https://docs.kalshi.com/getting_started/quick_start_market_data" target="_blank" rel="noopener">docs.kalshi.com quick start</a>; <a href="https://external-api.demo.kalshi.co/trade-api/v2/markets?limit=2&amp;status=open" target="_blank" rel="noopener">GET /markets (live sample)</a>; <a href="https://docs.kalshi.com/getting_started/orderbook_responses" target="_blank" rel="noopener">orderbook semantics</a></td>
+        </tr>
+        <tr>
+          <td>A5</td>
+          <td>How are events tracked until resolution?</td>
+          <td>Every in-scope live event enters <code>data/tracked.json</code> on first sighting and is re-polled on later runs; once all its markets are settled the outcome side (YES/NO), winning markets, and settlement sources are written to <code>data/resolutions.json</code> and shown on the Data Tracking page.</td>
+          <td><a href="https://docs.kalshi.com/getting_started/market_settlement" target="_blank" rel="noopener">market settlement (result = yes/no, $1 per winning contract)</a>; <a href="data-tracking.html">Data Tracking → Resolution tracking</a></td>
+        </tr>
+        <tr>
+          <td>A6</td>
+          <td>What can and cannot be verified about the demo portfolio and trading?</td>
+          <td>Cannot be verified yet: the pipeline (signed requests, portfolio snapshot, order placement, PnL on settlement) is implemented and offline-tested, but no demo-account credentials exist in this environment, so no portfolio or trade rows are produced. Nothing was inferred; see Flagged for Review item F9.</td>
+          <td><a href="https://demo.kalshi.co/" target="_blank" rel="noopener">demo.kalshi.co (account sign-up requires human registration)</a>; <a href="https://docs.kalshi.com/getting_started/quick_start_authenticated_requests" target="_blank" rel="noopener">signing spec</a>; <a href="flagged.html">Flagged F9</a></td>
+        </tr>
       </tbody>
     </table>
   </section>
@@ -126,7 +176,7 @@
     <ul>
       <li><a href="https://external-api.demo.kalshi.co/trade-api/v2/events" target="_blank" rel="noopener">GET /events — Kalshi demo Trade API v2</a></li>
       <li><a href="https://external-api.demo.kalshi.co/trade-api/v2/markets" target="_blank" rel="noopener">GET /markets — Kalshi demo Trade API v2</a></li>
-      <li><a href="https://docs.kalshi.io" target="_blank" rel="noopener">Kalshi API documentation</a></li>
+      <li><a href="https://docs.kalshi.com" target="_blank" rel="noopener">Kalshi API documentation</a></li>
       <li><a href="flagged.html">Flagged for Review</a></li>
     </ul>
   </section>
