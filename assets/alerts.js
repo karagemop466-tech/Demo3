@@ -43,8 +43,15 @@
   var KD = window.KD = window.KD || {};
   var ALERT_KEY = "kd_alerts_v1";
   var SWING = 0.10;                 // dollars = 10 cents, the alert threshold
-  var SWING_CENTS = 10;             // integer-cents threshold (float-safe at the $0.10 boundary)
+  var SWING_UNITS = 1000;           // $0.10 in 0.0001 units — prices carry up to 4 dp (deci-cent)
+                                    // per Get Markets; integer math is float-safe at the boundary
+                                    // and does not round 9.99c moves up to 10c
   var MAX_ALERTS = 300;
+  var API_BASE = "https://external-api.demo.kalshi.co/trade-api/v2";   // demo REST root (docs: demo_env)
+  var RES_KEY = "kd_resolutions_v1";    // resolutions logged for alerted markets
+  var MAX_RES = 200;
+  var POLL_MS = 20000;                  // one batched REST call per interval
+  var CHUNK = 100;                      // Get Markets `limit` for a ticker batch
 
   /* ---------- documented ROI heuristic (unverified model) ----------
    * No trained model exists in this repo, so this is a transparent, deterministic
@@ -61,7 +68,7 @@
   function clamp(x, lo, hi) { return Math.max(lo, Math.min(hi, x)); }
   function roiModel(oldP, newP, oi) {
     // Integer-cents change: exact $0.10 moves read as 0.1 (0.6-0.5 = 0.0999… in IEEE-754)
-    var change = (Math.round(Number(newP) * 100) - Math.round(Number(oldP) * 100)) / 100;
+    var change = (Math.round(Number(newP) * 10000) - Math.round(Number(oldP) * 10000)) / 10000;
     var swingC = Math.abs(change) * 100;                 // cents
     var swingNorm = clamp(swingC / 50, 0, 1);
     var pct = Number(oldP) ? Math.abs(change) / Number(oldP) : 0;
@@ -80,6 +87,7 @@
     enabled: true
   };
   try { state.alerts = JSON.parse(localStorage.getItem(ALERT_KEY) || "[]"); } catch (e) { state.alerts = []; }
+  try { state.resolutions = JSON.parse(localStorage.getItem(RES_KEY) || "[]"); } catch (e) { state.resolutions = []; }
 
   function esc(s) {
     return String(s === null || s === undefined ? "" : s)
@@ -95,10 +103,11 @@
     return d.toLocaleTimeString("en-GB");
   }
   function apiUrl(ticker, series) {
-    var path = series
-      ? "/series/" + encodeURIComponent(series) + "/markets/" + encodeURIComponent(ticker)
-      : "/markets/" + encodeURIComponent(ticker);
-    return "https://external-api.demo.kalshi.co/trade-api/v2" + path;
+    /* Get Market is addressed by ticker only — https://docs.kalshi.com/api-reference/market/get-market
+     * (verified against the live demo API on 2026-11-20: /markets/{ticker} returns the market
+     * with result/settlement_value_dollars/settlement_ts). The former "/series/{s}/markets/{t}"
+     * form is not a documented route, so it is no longer emitted as a row link. */
+    return API_BASE + "/markets/" + encodeURIComponent(ticker);
   }
 
   /* ---------- swing detection ---------- */
@@ -108,11 +117,11 @@
     if (cur === null || cur === undefined) return;
     var prev = state.lastPrice[m.ticker];
     if (prev && prev.price !== null && prev.price !== undefined) {
-      // Float-safe threshold: compare in integer cents so a move of exactly
-      // $0.10 alerts reliably (0.60 - 0.50 is 0.0999… in binary). Get Markets
-      // prices are decimal dollars with up to 4 dp, so cents are exact integers.
-      var changeCents = Math.round(cur * 100) - Math.round(prev.price * 100);
-      if (Math.abs(changeCents) >= SWING_CENTS) {
+      // Float-safe threshold: compare integer 0.0001 units so a move of exactly
+      // $0.10 alerts reliably (0.60 - 0.50 is 0.0999… in binary) while a 9.99c
+      // move does not (deci-cent prices like 0.5499 must not round up to 10c).
+      var changeUnits = Math.round(cur * 10000) - Math.round(prev.price * 10000);
+      if (Math.abs(changeUnits) >= SWING_UNITS) {
         var a = pushAlert(m, prev.price, cur);
         if (a) { a.event = m.event_ticker || ""; a.rules = m.rules_primary || ""; persist(); loadEvent(a.event); }
       }
@@ -131,8 +140,8 @@
   };
 
   function pushAlert(m, oldP, newP) {
-    // Float-safe: derive the change from integer cents so exactly $0.10 reads as 0.1
-    var change = (Math.round(Number(newP) * 100) - Math.round(Number(oldP) * 100)) / 100;
+    // Float-safe: derive the change from integer 0.0001 units so exactly $0.10 reads as 0.1
+    var change = (Math.round(Number(newP) * 10000) - Math.round(Number(oldP) * 10000)) / 10000;
     var dir = change > 0 ? "up" : change < 0 ? "down" : "flat";
     var series = m.series_ticker || "";
     var eventTicker = m.event_ticker || "";
@@ -155,6 +164,24 @@
       roi: model,                   // documented model output
       roiSignal: model.score >= ROI_THRESHOLD
     };
+    /* Admission to the High-ROI chat comes from the published screen in
+     * data/latest/roi_model.json (assets/roi-model.js -> KD.roiScore). When that file is
+     * not loaded, the documented heuristic above is used instead and the row says so —
+     * the chat never looks model-scored when it is not (board F-alert-01 / F-5B-02). */
+    alert.roiBasis = "heuristic score ≥ " + ROI_THRESHOLD + " (model file not loaded)";
+    if (typeof KD.roiScore === "function") {
+      try {
+        var sc = KD.roiScore(alert);
+        if (sc) {
+          alert.roiScreenApplied = true;
+          alert.roiSignal = !!sc.signal;
+          alert.roiBasis = sc.basis || ("screen " + (sc.id || ""));
+          alert.roiStats = sc.stats || null;
+        }
+      } catch (e) { /* the screen must never break the feed */ }
+    }
+    // Follow this market until the exchange reports a yes/no result (J1).
+    watchTicker(m.ticker, { series: series, title: alert.title, topic: alert.topic });
     state.alerts.unshift(alert);
     if (state.alerts.length > MAX_ALERTS) state.alerts.length = MAX_ALERTS;
     persist();
@@ -217,55 +244,159 @@
       esc(a.rules) + "</div></details>";
   }
 
-  /* ---------- resolution messages (yes / no) ----------
-   * Every tracked market is followed until the exchange settles it. The
-   * dashboard's resolution watcher reports each settlement here via
-   * KD.onResolution({ticker, result, ...}); `result` is the Get Markets /
-   * Market Settlement field with values "yes" or "no" — never inferred.
-   * A resolution message appears in "All events"; it also appears in the
-   * high-ROI chat when that ticker had a prior high-ROI swing alert.
-   * Sources: https://docs.kalshi.com/api-reference/market/get-markets (result)
+  /* ---------- yes/no resolution tracking (J1) ----------
+   * The brief asks the tracker to follow each alerted event until it resolves and to say
+   * HOW it resolved. Get Markets / Get Market report `result` ("yes" | "no", empty while
+   * unsettled), `settlement_value_dollars` and `settlement_ts`; a winning contract pays
+   * $1.00. While `result` is empty the market stays open — no outcome is inferred.
+   *   https://docs.kalshi.com/api-reference/market/get-markets  (tickers, limit, result)
+   *   https://docs.kalshi.com/api-reference/market/get-market
+   *   https://docs.kalshi.com/getting_started/market_settlement
+   */
+  var watch = {};                     // ticker -> {series, title, topic}
+  var pollBusy = false;
+
+  function watchTicker(ticker, meta) {
+    if (!ticker || watch[ticker]) return;
+    watch[ticker] = meta || {};
+  }
+  function chunk(a, n) {
+    var out = [];
+    for (var i = 0; i < a.length; i += n) out.push(a.slice(i, i + n));
+    return out;
+  }
+  function fetchBatch(tickers) {
+    var url = API_BASE + "/markets?tickers=" + tickers.map(encodeURIComponent).join(",") +
+      "&limit=" + CHUNK;
+    return fetch(url, { headers: { Accept: "application/json" } })
+      .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); });
+  }
+  function absorb(rows) {
+    var n = 0;
+    ((rows && rows.markets) || []).forEach(function (m) {
+      var res = String(m.result || "").toLowerCase();
+      if (res !== "yes" && res !== "no") return;
+      KD.noteResolution({
+        ticker: m.ticker, title: m.title, result: res, status: m.status,
+        settlement_value_dollars: m.settlement_value_dollars,
+        settlement_ts: m.settlement_ts, event_ticker: m.event_ticker,
+        series: (watch[m.ticker] || {}).series || "",
+        topic: (watch[m.ticker] || {}).topic || "",
+        source: "live poll (GET /markets?tickers=…)"
+      });
+      n++;
+    });
+    return n;
+  }
+  function pollOnce() {
+    if (pollBusy) return Promise.resolve(0);
+    var tickers = Object.keys(watch);
+    if (!tickers.length) { state.pollMsg = "resolution watch idle (no alerted markets yet)"; return Promise.resolve(0); }
+    pollBusy = true;
+    state.pollMsg = "checking " + tickers.length + " market(s)…";
+    render();
+    return chunk(tickers, CHUNK).reduce(function (prev, g) {
+      return prev.then(function (found) {
+        return fetchBatch(g).then(function (j) { return found + absorb(j); },
+          function (e) { state.pollErr = String(e && e.message || e); return found; });
+      });
+    }, Promise.resolve(0)).then(function (found) {
+      pollBusy = false;
+      state.pollMsg = "last check " + new Date().toLocaleTimeString("en-GB") + " · " +
+        tickers.length + " market(s) · " + found + " new resolution(s)";
+      render();
+      return found;
+    });
+  }
+
+  /** Record one resolution per ticker and link it back to the alert for that market. */
+  KD.noteResolution = function (r) {
+    if (!r || !r.ticker) return false;
+    var res = String(r.result || "").toLowerCase();
+    if (res !== "yes" && res !== "no") return false;
+    if (state.resolutions.some(function (x) { return x.ticker === r.ticker; })) return false;
+    var entry = {
+      id: "r" + Date.now() + Math.random().toString(36).slice(2, 6),
+      ts: Math.floor(Date.now() / 1000),
+      ticker: r.ticker,
+      title: r.title || (watch[r.ticker] || {}).title || r.ticker,
+      topic: r.topic || (watch[r.ticker] || {}).topic || "",
+      series: r.series || (watch[r.ticker] || {}).series || "",
+      result: res,
+      status: r.status || "finalized",
+      settlement_value_dollars: (r.settlement_value_dollars === undefined || r.settlement_value_dollars === null)
+        ? "" : r.settlement_value_dollars,
+      settlement_ts: r.settlement_ts || "",
+      event: r.event_ticker || "",
+      source: r.source || "reported by another module",
+      api: apiUrl(r.ticker, r.series || (watch[r.ticker] || {}).series)
+    };
+    state.resolutions.unshift(entry);
+    if (state.resolutions.length > MAX_RES) state.resolutions.length = MAX_RES;
+    state.alerts.forEach(function (a) {
+      if (a.ticker === entry.ticker) {
+        a.resolution = { result: entry.result, settlement_ts: entry.settlement_ts,
+                         settlement_value_dollars: entry.settlement_value_dollars };
+      }
+    });
+    try {
+      localStorage.setItem(RES_KEY, JSON.stringify(state.resolutions));
+      localStorage.setItem(ALERT_KEY, JSON.stringify(state.alerts));
+    } catch (e) {}
+    render();
+    return true;
+  };
+
+  // Alerts restored from localStorage stay under watch after a reload.
+  (state.alerts || []).forEach(function (a) {
+    if (a && a.ticker) watchTicker(a.ticker, { series: a.series, title: a.title, topic: a.topic });
+  });
+
+
+  /* ---------- dashboard watcher bridge ----------
+   * assets/dashboard.js follows EVERY market the dashboard has seen (not only
+   * alerted ones) until it resolves, and reports each settlement through
+   * KD.onResolution. One canonical record: KD.noteResolution stores it once and
+   * the chat feeds render RESOLVED · YES/NO rows from it. Values are the Get
+   * Markets `result` / settlement fields — never inferred.
+   * Sources: https://docs.kalshi.com/api-reference/market/get-markets
    *          https://docs.kalshi.com/getting_started/market_settlement
    */
   KD.onResolution = function (res) {
-    if (!res || !res.ticker) return;
-    var result = String(res.result || "").toLowerCase();
-    if (result !== "yes" && result !== "no") return;
-    var dup = state.alerts.some(function (a) {
-      return (a.kind || "swing") === "resolution" && a.ticker === res.ticker &&
-        a.result === result;
+    if (!res || !res.ticker) return false;
+    return KD.noteResolution({
+      ticker: res.ticker, title: res.title, topic: res.topic,
+      series: res.series, result: res.result, status: res.status,
+      settlement_value_dollars: (res.settlement_value_dollars === undefined ||
+        res.settlement_value_dollars === null) ? "" : res.settlement_value_dollars,
+      settlement_ts: res.settlement_ts || "",
+      event_ticker: res.event_ticker || "",
+      source: "dashboard resolution watcher (GET /markets?tickers=\u2026)"
     });
-    if (dup) return; // already posted (including rows restored from localStorage)
-    var roi = state.alerts.some(function (a) {
-      return (a.kind || "swing") === "swing" && a.ticker === res.ticker && a.roiSignal;
-    });
-    var alert = {
-      id: "r" + Date.now() + Math.random().toString(36).slice(2, 6),
-      kind: "resolution",
-      ts: res.ts || Math.floor(Date.now() / 1000),
-      ticker: res.ticker,
-      title: res.title || res.ticker,
-      topic: res.topic || "",
-      series: res.series || "",
-      event: res.event_ticker || "",
-      rules: res.rules_primary || "",
-      result: result,
-      status: res.status || "settled",
-      roiSignal: roi,
-      api: apiUrl(res.ticker, res.series),
-      dir: "flat",
-      change: 0
-    };
-    state.alerts.unshift(alert);
-    if (state.alerts.length > MAX_ALERTS) state.alerts.length = MAX_ALERTS;
-    persist();
-    render();
-    if (alert.event) loadEvent(alert.event);
   };
 
   /* ---------- chat row selection ---------- */
   KD.allRows = function () { return state.alerts; };
   KD.roiRows = function () { return state.alerts.filter(function (a) { return a.roiSignal; }); };
+  function resFor(tickers) {
+    return state.resolutions.filter(function (r) { return tickers[r.ticker]; });
+  }
+  function feed(swingRows, resolutions) {
+    var items = swingRows.map(function (a) { return { kind: "swing", ts: a.ts, row: a }; });
+    return items.concat((resolutions || []).map(function (r) { return { kind: "resolution", ts: r.ts, row: r }; }))
+      .sort(function (x, y) { return (y.ts || 0) - (x.ts || 0); });
+  }
+  /** All-events chat: every swing alert and every tracked market's resolution. */
+  KD.allFeed = function () {
+    return feed(KD.allRows(), state.resolutions);
+  };
+  /** High-ROI chat: screened swings plus those same markets' resolutions. */
+  KD.roiFeed = function () {
+    var rows = KD.roiRows(), keep = {};
+    rows.forEach(function (a) { keep[a.ticker] = 1; });
+    return feed(rows, resFor(keep));
+  };
+  KD.pollResolutions = pollOnce;
   KD.setFilter = function (v) { state.visible = v; render(); };
   KD.clear = function () {
     state.alerts = [];
@@ -278,32 +409,22 @@
   function roiCell(a) {
     if (!a.roi) return "—";
     var badge = a.roiSignal ? " <span class='roi'>· signal</span>" : "";
-    return "<span class='mono'>" + a.roi.score.toFixed(2) + "</span>" + badge;
-  }
-  function resolutionRow(a) {
-    var yes = a.result === "yes";
-    var roiBadge = a.roiSignal ? " <span class='roi'>· tracked by model screen</span>" : "";
-    return "<tr class='alert resolution'>" +
-      "<td class='mono small muted'>" + fmtTs(a.ts) + "</td>" +
-      "<td><span class='pill topic'>" + esc(a.topic) + "</span></td>" +
-      "<td class='mono'>" + esc(a.ticker) + "</td>" +
-      "<td>" + esc(a.title) + roiBadge + "</td>" +
-      "<td class='num'><span class='pill " + (yes ? "resolved-yes" : "resolved-no") +
-      "'>RESOLVED &middot; " + esc(String(a.result).toUpperCase()) + "</span></td>" +
-      "<td class='num'>&mdash;</td>" +
-      "<td class='num'>&mdash;</td>" +
-      "<td><a class='src' href='" + esc(a.api) + "' target='_blank' rel='noopener'>market API</a></td>" +
-      "<td class='ctx'>" + contextCell(a) +
-      "<div class='small muted'>Settlement result reported by the exchange" +
-      " (<a class='src' href='https://docs.kalshi.com/getting_started/market_settlement' target='_blank' rel='noopener'>Market Settlement</a>)." +
-      " Winning contracts pay $1 each.</div>" + rulesCell(a) + "</td></tr>";
+    // Which rule admitted this row? The published screen's own words are shown so the
+    // chat never blurs the documented heuristic and the published screen.
+    var basis = a.roiBasis ? "<div class='small muted'>" + esc(String(a.roiBasis).slice(0, 200)) + "</div>" : "";
+    return "<span class='mono'>" + a.roi.score.toFixed(2) + "</span>" + badge + basis;
   }
   function alertRow(a) {
-    if ((a.kind || "swing") === "resolution") return resolutionRow(a);
     var cls = "alert " + (a.dir === "up" ? "up" : a.dir === "down" ? "down" : "flat");
     var arrow = a.dir === "up" ? "▲" : a.dir === "down" ? "▼" : "▶";
     var dirLabel = a.dir === "up" ? "up" : a.dir === "down" ? "down" : "flat";
-    var roiBadge = a.roiSignal ? " <span class='roi'>· high-ROI signal (heuristic)</span>" : "";
+    var roiBadge = a.roiSignal
+      ? " <span class='roi'>· high-ROI " + (a.roiScreenApplied ? "screen" : "signal (heuristic)") + "</span>"
+      : "";
+    if (a.resolution) {
+      roiBadge += " <span class='pill resolved'>· resolved " +
+        esc(String(a.resolution.result).toUpperCase()) + "</span>";
+    }
     return "<tr class='" + esc(cls) + "'>" +
       "<td class='mono small muted'>" + fmtTs(a.ts) + "</td>" +
       "<td><span class='pill topic'>" + esc(a.topic) + "</span></td>" +
@@ -315,9 +436,31 @@
       "<td><a class='src' href='" + esc(a.api) + "' target='_blank' rel='noopener'>market API</a></td>" +
       "<td class='ctx'>" + contextCell(a) + "<div class='small muted'>Cause not verified: a listed source is not proof that it moved the price.</div>" + rulesCell(a) + "</td></tr>";
   }
-  function renderPanel(el, rows, label, emptyHint) {
+  function resRow(r) {
+    var yes = r.result === "yes";
+    var pay = (r.settlement_value_dollars === "" || r.settlement_value_dollars === undefined)
+      ? "payout not reported" : "settled at $" + esc(r.settlement_value_dollars);
+    return "<tr class='alert resolved-row'>" +
+      "<td class='mono small muted'>" + fmtTs(r.ts) + "</td>" +
+      "<td><span class='pill topic'>" + esc(r.topic) + "</span></td>" +
+      "<td class='mono'>" + esc(r.ticker) + "</td>" +
+      "<td><span class='pill " + (yes ? "up" : "down") + "'>RESOLVED " + (yes ? "YES" : "NO") + "</span> " +
+      esc(r.title) + "</td>" +
+      "<td class='num'>" + (yes ? "→ $1.00" : "→ $0.00") + "</td>" +
+      "<td class='num'>" + esc(r.status) + "</td>" +
+      "<td class='num muted'>n/a</td>" +
+      "<td><a class='src' href='" + esc(r.api) + "' target='_blank' rel='noopener'>market API</a> " +
+      "<span class='small muted'>" + esc(r.source) + "</span></td>" +
+      "<td class='ctx'><span class='small'>" + pay +
+      (r.settlement_ts ? " · settlement_ts " + esc(r.settlement_ts) : "") +
+      (r.event ? " · " + contextCell({ event: r.event }) : "") +
+      "</span><div class='small muted'>Official exchange record; not a price-cause claim.</div></td></tr>";
+  }
+  function feedRow(it) { return it.kind === "resolution" ? resRow(it.row) : alertRow(it.row); }
+  function renderPanel(el, items, label, emptyHint) {
     if (!el) return;
-    var rowsHtml = rows.map(alertRow).join("");
+    var rows = (items || []).map(feedRow);
+    var rowsHtml = rows.join("");
     var empty = rows.length ? "" :
       "<tr><td colspan='9' class='muted'>No " + label + " swing alerts yet. " + emptyHint + "</td></tr>";
     el.innerHTML =
@@ -326,10 +469,14 @@
       rowsHtml + empty + "</tbody></table>";
   }
   function render() {
-    renderPanel(document.getElementById("alertsAll"), KD.allRows(), "all",
+    renderPanel(document.getElementById("alertsAll"), KD.allFeed(), "all",
       "Swing a tracked market price by >= $0.10 to see alerts here.");
-    renderPanel(document.getElementById("alertsROI"), KD.roiRows(), "high-ROI",
-      "The high-ROI chat applies a labeled placeholder model — no trained model exists yet.");
+    renderPanel(document.getElementById("alertsROI"), KD.roiFeed(), "high-ROI",
+      "The high-ROI chat applies the published screen in data/latest/roi_model.json.");
+    var st = document.getElementById("resPollStatus");
+    if (st) st.textContent = (state.pollMsg || "resolution watch idle") +
+      (state.pollErr ? " · last error: " + state.pollErr : "") +
+      " · " + state.resolutions.length + " resolution(s) logged";
   }
 
   /* public */
@@ -375,4 +522,7 @@
   }
   wireUI();
   setInterval(render, 2000); // keep the chats current while the page is open
+  state.pollMsg = "resolution watch idle";
+  setTimeout(pollOnce, 4000);       // first check shortly after load
+  setInterval(pollOnce, POLL_MS);   // then every 20 s while the page is open
 })();

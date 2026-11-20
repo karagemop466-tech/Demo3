@@ -1,10 +1,14 @@
-/* Tests for the alert chat's swing detection and yes/no resolution messages.
+/* Tests for the alert chat's swing detection and yes/no resolution feed.
  *
  * Exercises assets/alerts.js in a stubbed browser environment:
- *   - >= $0.10 swing detection in either direction (docs: get-markets prices)
- *   - RESOLVED · YES/NO messages via KD.onResolution (docs: market_settlement)
- *   - dedupe of resolution messages, unknown results ignored
- *   - high-ROI chat receives resolutions only for model-screened tickers
+ *   - >= $0.10 swing detection in either direction, float-safe at the boundary
+ *     (0.60 - 0.50 is 0.0999… in IEEE-754; prices are decimal dollars with up
+ *     to 4 dp per Get Markets, so the code compares integer cents)
+ *   - RESOLVED · YES/NO rows via KD.onResolution -> KD.noteResolution
+ *     (Get Markets `result` "yes" | "no", Market Settlement payout semantics)
+ *   - dedupe of resolution rows; unknown/missing results ignored
+ *   - the All-events chat lists every tracked resolution; the model chat only
+ *     lists resolutions of high-ROI screened tickers
  *
  * Sources:
  *   https://docs.kalshi.com/api-reference/market/get-markets
@@ -38,7 +42,7 @@ function fakeEl(id) {
 function loadAlerts() {
   const els = {};
   for (const id of ["alertsAll", "alertsROI", "tabAll", "tabROI", "chatAll", "chatROI",
-    "alertsEnabled", "clearAlertsBtn", "alertCount"]) els[id] = fakeEl(id);
+    "alertsEnabled", "clearAlertsBtn", "alertCount", "resPollStatus"]) els[id] = fakeEl(id);
   const store = new Map();
   const sandbox = {
     console,
@@ -50,8 +54,8 @@ function loadAlerts() {
     Object,
     Array,
     isNaN,
-    setTimeout,
-    clearTimeout,
+    setTimeout: () => 0,          // never auto-run the resolution poll in tests
+    clearTimeout() {},
     setInterval: () => 0,
     clearInterval() {},
     fetch: () => Promise.resolve({ ok: false, status: 500, json: async () => ({}) }),
@@ -76,7 +80,7 @@ function loadAlerts() {
 
 test("swing detection fires at exactly $0.10 in either direction", () => {
   const { KD } = loadAlerts();
-  const m = { ticker: "T1", title: "Test market", topic: "crypto", series_ticker: "S1" };
+  const m = { ticker: "T1", title: "Test market", topic: "crypto", series_ticker: "S1", oi: 0 };
   KD.onMarkets([Object.assign({ last: 0.5 }, m)]);
   KD.onSample(m, { t: 1, price: 0.5 });
   KD.onSample(m, { t: 2, price: 0.6 }); // +$0.10 exactly -> alert (float-safe)
@@ -93,22 +97,21 @@ test("swing detection fires at exactly $0.10 in either direction", () => {
 
 test("resolution messages post RESOLVED yes/no rows and dedupe", () => {
   const { KD } = loadAlerts();
-  KD.onResolution({ ticker: "T2", title: "Resolves yes", topic: "golf",
-    result: "yes", status: "settled", ts: 100 });
-  KD.onResolution({ ticker: "T3", title: "Resolves no", topic: "elections",
-    result: "no", status: "settled", ts: 101 });
-  assert.equal(KD.allRows().length, 2);
-  const rows = KD.allRows();
-  assert.equal(rows[0].kind, "resolution");
-  assert.equal(rows[0].result, "no");
-  assert.equal(rows[1].result, "yes");
-  // duplicate + unknown results are ignored
-  KD.onResolution({ ticker: "T2", result: "yes" });
-  KD.onResolution({ ticker: "T4", result: "maybe" });
-  KD.onResolution({ ticker: "T5" });
-  assert.equal(KD.allRows().length, 2);
-  // rows are marked as resolutions for the chat renderer
-  assert.ok(KD.allRows().every((a) => a.kind === "resolution"));
+  assert.equal(KD.onResolution({ ticker: "T2", title: "Resolves yes", topic: "golf",
+    result: "yes", status: "finalized", settlement_value_dollars: "1.0000" }), true);
+  assert.equal(KD.onResolution({ ticker: "T3", title: "Resolves no", topic: "elections",
+    result: "no", status: "finalized", settlement_value_dollars: "0.0000" }), true);
+  const rows = KD.allFeed();
+  assert.equal(rows.length, 2);
+  assert.ok(rows.every((it) => it.kind === "resolution"));
+  const results = rows.map((it) => it.row.result).sort();
+  assert.deepEqual(results, ["no", "yes"]);
+  // dedupe + unknown/missing results are ignored
+  assert.equal(KD.onResolution({ ticker: "T2", result: "yes" }), false);
+  assert.equal(KD.onResolution({ ticker: "T4", result: "maybe" }), false);
+  assert.equal(KD.onResolution({ ticker: "T5" }), false);
+  assert.equal(KD.onResolution({}), false);
+  assert.equal(KD.allFeed().length, 2);
 });
 
 test("model chat receives resolutions only for high-ROI screened tickers", () => {
@@ -119,8 +122,8 @@ test("model chat receives resolutions only for high-ROI screened tickers", () =>
   assert.equal(KD.allRows().length, 1);
   assert.equal(KD.roiRows().length, 1);
   KD.onResolution({ ticker: "T6", result: "yes", topic: "gas" });
-  assert.equal(KD.roiRows().length, 2); // swing + resolution
+  assert.equal(KD.roiFeed().length, 2); // swing + resolution
   KD.onResolution({ ticker: "T7", result: "no", topic: "crypto" });
-  assert.equal(KD.roiRows().length, 2); // T7 never screened -> All chat only
-  assert.equal(KD.allRows().length, 3);
+  assert.equal(KD.roiFeed().length, 2); // T7 never screened -> All chat only
+  assert.equal(KD.allFeed().length, 3); // swing + both resolutions
 });
