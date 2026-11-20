@@ -1,0 +1,49 @@
+name: Deploy GitHub Pages
+
+# Publishes the static site through a custom Actions workflow.
+# Why: the legacy Pages builder has a soft limit of 10 builds per hour and this
+# repo pushes data snapshots to main every few minutes (collect.yml,
+# kalshi-data.yml), so legacy builds were erroring. The GitHub Pages limits
+# page says the limit does not apply to custom Actions workflows:
+# https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Stage site (repo root without git metadata or CI files)
+        run: |
+          rm -rf _site && mkdir _site
+          tar --exclude=./.git --exclude=./.github --exclude=./_site --exclude=./node_modules \
+            -cf - . | tar -xf - -C _site
+          test -f _site/index.html
+          test -f _site/.nojekyll
+          echo "staged $(find _site -type f | wc -l) files"
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
