@@ -5,7 +5,7 @@
   "type": "module",
   "description": "Source-linked, read-only GitHub Pages dashboard for Kalshi demo market data.",
   "scripts": {
-    "check": "node --check demo-desk/src/api.js && node --check demo-desk/src/chart.js && node --check demo-desk/src/content.js && node --check demo-desk/src/main.js && node --check demo-desk/src/metrics.js && node --check demo-desk/src/renderers.js && node --check demo-desk/src/shell.js && node --check demo-desk/src/topics.js && node --check demo-desk/src/utils.js && node --check assets/alerts.js && node --check assets/paper-strategy.js && node --check assets/dashboard.js",
+    "check": "node --check demo-desk/src/api.js && node --check demo-desk/src/chart.js && node --check demo-desk/src/content.js && node --check demo-desk/src/main.js && node --check demo-desk/src/metrics.js && node --check demo-desk/src/renderers.js && node --check demo-desk/src/shell.js && node --check demo-desk/src/topics.js && node --check demo-desk/src/utils.js && node --check assets/alerts.js && node --check assets/paper-strategy.js && node --check assets/strategy.js && node --check assets/dashboard.js",
     "test": "node --test"
   },
   "devDependencies": {

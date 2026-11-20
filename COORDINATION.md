@@ -35,16 +35,18 @@ without an official source link, blank/flagged values are unverified and never i
 
 | Task | Status | Owner | File scope | Sources / verification | Irregularities |
 |---|---|---|---|---|---|
-| T1 | in progress | `028b2648` | `scripts/build_root_site.py`, `scripts/verify_root_site.py`, generated `index.html`, `dashboard.html`, `flagged.html`, `api-reference.html`, `methodology.html`, `sources.html`, `assets/dashboard.js`, `assets/alerts.js`, `assets/paper-strategy.js`, `assets/style.css`, `package.json`, `tests/alerts.test.js`, `tests/paper-strategy.test.js`, `FLAGGED.md`, `COORDINATION.md` | Official Kalshi Get Market (`https://docs.kalshi.com/api-reference/market/get-market`), Get Markets (`https://docs.kalshi.com/api-reference/market/get-markets`), Get Event (`https://docs.kalshi.com/api-reference/events/get-event`), market settlement (`https://docs.kalshi.com/getting_started/market_settlement`), and demo environment (`https://docs.kalshi.com/getting_started/demo_env`); `python3 scripts/build_root_site.py`; `npm run check`; focused alert/paper tests plus full `npm test`; `python3 scripts/verify_root_site.py`; `git diff --check` clean. | I-18–I-20 published: ROI screen is heuristic, news-cause links unverified, paper results are browser-local estimates; no new live API/Pages check performed. |
+| T1 | in progress | `028b2648` | `scripts/build_root_site.py`, `scripts/verify_root_site.py`, generated `index.html`, `dashboard.html`, `flagged.html`, `api-reference.html`, `methodology.html`, `sources.html`, `assets/dashboard.js`, `assets/alerts.js`, `assets/paper-strategy.js`, `assets/style.css`, `package.json`, `tests/alerts.test.js`, `tests/paper-strategy.test.js`, `FLAGGED.md`, `COORDINATION.md` | Official Kalshi Get Market (`https://docs.kalshi.com/api-reference/market/get-market`), Get Markets (`https://docs.kalshi.com/api-reference/market/get-markets`), Get Event (`https://docs.kalshi.com/api-reference/events/get-event`), market settlement (`https://docs.kalshi.com/getting_started/market_settlement`), and demo environment (`https://docs.kalshi.com/getting_started/demo_env`); `python3 scripts/build_root_site.py`; `npm run check`; focused alert/paper tests plus full `npm test`; `python3 scripts/verify_root_site.py`; `git diff --check` clean. | I-18–I-20 published: ROI screen is heuristic, causal links unverified, paper results are browser-local estimates; no new live API/Pages check performed. The combined merge-base `git diff --check` also flags pre-existing trailing whitespace at `scripts/build_strategy_page.py:50` from main's strategy-page delivery; left unchanged (outside scope). |
 
 Conflict/handoff note — rebasing onto `origin/main` at `b1f1dfd` encountered overlapping `assets/alerts.js`, `assets/style.css`, and `dashboard.html` from the already-delivered session `6ebc1cb7` alert-chat implementation. Kept the latest dashboard engine integration and existing shared/base CSS from main; consolidated the older duplicated alert panel into this session's single sampled feed and paper-strategy lab. No `assets/trade.js` content or other session files were edited. Legacy alert feature history remains on main; new UI and storage behavior are covered by this session's tests.
-- After PR #34 merged into main (`5f0335f`), integrated its official-event context idea into this feed: new alerts look up `GET /events/{event_ticker}` once per event, display HTTPS Kalshi-listed settlement sources and `rules_primary` with exact API links when present, and explicitly state those links do not verify causation. Conflicts on generated dashboard/style/event code were merged into the new canonical feed; the data refresh from the session branch was retained. No external pages are represented as verified causes.
+- After PR #34 merged into main (`5f0335f`), integrated its official-event context idea into this feed: new alerts look up `GET /events/{event_ticker}` once per event, display HTTPS Kalshi-listed settlement sources and `rules_primary` with exact API links when present, and explicitly state those links do not verify causation. Conflicts on generated dashboard/style/event code were merged into the new canonical feed; no external pages are represented as verified causes.
+- After the measured-strategy PR #32 merged into main (`fa6525b`), preserved its strategy page, backtest scripts, tests, workflow, navigation entry, and newer published data snapshot. Resolved data collisions in favor of main's later snapshot (19:40 UTC) over the session branch's 19:33 bot refresh; no strategy/backtest files were edited.
 
 Verification notes — session 028b2648:
 - Market-row adapter in `assets/dashboard.js` maps official YES bid/ask dollars (or legacy cent fields), last price, `volume_fp`, and `open_interest_fp` to the alert engine's `yb`, `ya`, `last`, `vol`, and `oi` fields. The module's sampled midpoint/last-price comparison is not a tick-level feed.
 - All-event feed retains up to 120 browser-local alerts. Candidate feed is explicitly a spread/volume heuristic, not an ROI model. Automated lab executes no exchange orders and stores paper records in localStorage; it assumes one YES contract at displayed ask, marks at bid/last and resolves only from a settled/finalized market result.
 - Official source schema/settlement behavior references: `https://docs.kalshi.com/api-reference/market/get-market`, `https://docs.kalshi.com/api-reference/market/get-markets`, `https://docs.kalshi.com/api-reference/events/get-event`, `https://docs.kalshi.com/getting_started/market_settlement`, `https://docs.kalshi.com/getting_started/demo_env`. The fetched Get Event schema documents `settlement_sources` entries with `name` and `url`; alert rows display HTTPS links as settlement context only, not as causes. No live response was fetched in this session; the dashboard remains credential-free for public market reads and credential-gated for account trading/portfolio.
-- Local verification after merging main's Get Event context implementation: `npm ci` (39 dependencies, zero audit vulnerabilities); `npm run check`; `npm test` (40/40); root builder completed (16 pages); `python3 scripts/verify_root_site.py` (0 failures); `python3 scripts/verify_site.py` (PASSED; 28 pages, source-data/render checks); `python3 scripts/tracker_check.py` (OK; all rows source-linked, 14 pages); `python3 scripts/check_site.py` (passed); `git diff --check` clean. Live Pages and a new API probe were not run in this task; PR/deployment status remains pending.
+- Local verification after integrating main's Get Event and measured-strategy additions: `npm ci` (39 dependencies, zero audit vulnerabilities); `npm run check` (includes root `assets/strategy.js`); `npm test` (40/40); `python3 -m unittest discover -s scripts/tests -p 'test_backtest*.py' -v` (17/17); root builder completed (16 pages; dashboard is explicitly maintained outside the generator); `python3 scripts/verify_root_site.py` (0 failures); `python3 scripts/verify_site.py` (PASSED; 28 pages, source-data/render checks); `python3 scripts/tracker_check.py` (OK; all rows source-linked, 14 pages); `python3 scripts/check_site.py` (passed); `git diff --check` clean. Live Pages and a new API probe were not run in this task; PR/deployment status remains pending.
+| 26973298 | `arena/26973298-demo3` | claimed 2026-11-20 19:20 UTC - measured strategy backtest | `strategy.html`, `assets/strategy.js`, `strategy/**` (new files only), `scripts/backtest_strategies.py`, `tests/` additions, NAV/index entry at final integration | Data: committed demo snapshots only (`data/latest/markets_settled.json` 22,065 settled markets with `result`/`settlement_value_dollars`/`source_url`, `data/latest/candles.json`, `data/history/*.json`, `data/history/resolutions.jsonl`); field semantics from docs.kalshi.com | See section below |
 
 ## Task board — session d7ee554b (live ≥$0.10 swing alerts): WITHDRAWN as duplicate
 
@@ -497,3 +499,63 @@ Log (df50b92f):
 - Duplicates still open at the time of this note (for the integration owner; not closed by this session): PR #26 (`arena/6d201d19-demo3`), PR #27 (`arena/09824fd8-demo3`), PR #30 (`arena/d7ee554b-demo3`, which withdraws its own claim). PR #32 (`arena/26973298-demo3`) is a separate backtest feature.
 - Irregularities that stay on the record: F-B13-01 (no open gas markets in the snapshot), F-B13-02 (high-ROI rules are placeholders; no model defined), F-B13-03 (news links are searches, not causes), F-B13-04 (batch `tickers` works live; one ticker absent from the reply), F-B13-05 (rate-limit numbers unconfirmed), F-B13-06 (alert history is per tab), F-B13-07 (demo prices may differ from real markets). Where the merged feature repeats them, its own flags apply (F-alert-01, F-alert-02).
 - Lesson logged for the protocol: re-read the full board and open PR list before claiming a feature; `gh pr list --state open` shows duplicate work.
+
+
+## Task board — session 26973298 (measured strategy backtest, `arena/26973298-demo3`) — claimed 2026-11-20 19:20 UTC
+
+Branch: `arena/26973298-demo3` (base `b3b2b231`). Scope is **new files only** plus the final
+integration step (NAV entry + README link), logged here. No existing page, data file, or script is
+overwritten. Audit of `main` at `b3b2b231`: the brief asks to "automate simulated trades to test
+different strategies" and to "analyze the results of the trades and categorize trades and create
+strategies based on the type of trade". The site has a paper-trade engine and generic "candidate
+strategy" notes (`assets/trade.js` `strategyNotes()`), but **no measured backtest** of any strategy
+on recorded data. Session `5ab18dc3` has claimed the live swing-alert console (`alerts.html`,
+`assets/alerts.js`, `assets/roi.js`); this session does not touch those files.
+
+| # | Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|---|
+| S1 | Strategy backtest engine over committed demo data: entry/exit rules, fill model, fees (only if officially verified), per-strategy metrics | done | 26973298 | `scripts/backtest_strategies.py` | Field semantics from docs.kalshi.com; every simulated trade row carries the exact demo API URL of its market | demo-only data; no production inference |
+| S2 | Published strategy page with measured results, trade categorization, and per-row sources | done | 26973298 | `strategy.html`, `assets/strategy.js`, `strategy/data/backtest.json`, `strategy/SPEC.md` | Each row links the settled-market API URL it was computed from | unverified fields left blank + flagged |
+| S3 | Integration: NAV entry, README line, checks, PR, merge, Pages confirmation | in progress (PR pending) | 26973298 | `scripts/build_root_site.py` (NAV row + page generator only), `README.md` (one line), `COORDINATION.md` | `scripts/verify_root_site.py`, `scripts/verify_site.py`, `node --check` | none |
+
+### Session 26973298 — sources, verification performed, irregularities
+
+Sources read on 2026-11-20 while building this task (all linked from `strategy.html#sources`):
+`kalshi.com/docs/kalshi-fee-schedule.pdf` (fee formula + the 21-row table),
+`kalshi.com/fee-schedule`, `docs.kalshi.com/api-reference/market/get-market-candlesticks`
+(`period_interval` 1/60/1440, `price.close_dollars` = "last traded YES contract price"),
+`docs.kalshi.com/getting_started/orderbook_responses` (binary complement),
+`docs.kalshi.com/getting_started/fixed_point_migration`, `docs.kalshi.com/getting_started/market_settlement`,
+`docs.kalshi.com/getting_started/demo_env`, `docs.kalshi.com/api-reference/market/get-markets`,
+`docs.kalshi.com/api-reference/market/get-trades`.
+
+Verification performed:
+- Fee function reproduces **all 21 rows** of the official 100-contract fee table
+  (`FeeFormulaTest`, `strategy/data/backtest.json → fee_verification.all_match = true`).
+- 17 unit tests pass (`scripts/tests/test_backtest.py`), including: every trade carries its
+  source URL; metrics equal the recomputed sums; the resolved dataset contains settlement exits
+  only; the exploratory dataset never claims settlement.
+- Every recorded series was checked for a settlement with
+  `GET /markets?status=settled&tickers=…` in three batches; only `KXDEMOFUTHOURLY-26NOV20H12-UP`
+  returned a row, and the 37 `data/history` series returned `status: active`, `result: ""`.
+  This is why the resolved dataset has 2 markets and the exploratory set is marked, not settled.
+- Page verified in jsdom against a local server: 8 tables, 96 data rows, 119 in-row source links,
+  chart renders 2 paths (resolved) / 8 paths (exploratory) and both selects redraw; no console errors.
+- `python3 scripts/verify_root_site.py` → 0 failures; `scripts/verify_site.py` → PASSED;
+  `scripts/check_site.py` → passed; `node --check` on every root script.
+- CI (`.github/workflows/check.yml`) now rebuilds the backtest and fails if the committed
+  numbers drift from the committed data.
+
+Irregularities reported (published on `strategy.html` and in `strategy/SPEC.md` §7):
+- ST-U1 whether the demo environment charges fees (mock funds; fee behaviour not stated) — fees are
+  a modelling assumption.
+- ST-U2 candle closes are not guaranteed achievable fills.
+- ST-U3 no sub-minute candles (`period_interval` limited to 1/60/1440), so second-level strategies
+  cannot be backtested from candles.
+- ST-U4 per-series fee multipliers not applied (default `M = 1`).
+- ST-U5 the resolved sample is 2 markets / 4 trades — reported as too small to establish an edge.
+- Note: `scripts/build_root_site.py` regenerates `dashboard.html` and would drop the alert cards
+  added by session 6ebc1cb7; this session added `EXTERNALLY_MAINTAINED = {"dashboard.html"}` so the
+  generator preserves them. No other session's markup was changed.
+
+Change request for the final integration session: none.

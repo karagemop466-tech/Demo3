@@ -72,7 +72,7 @@ def main():
 
     # 3. syntax checks
     for js in ["assets/app.js", "assets/dashboard.js", "assets/trade.js", "assets/alerts.js",
-               "assets/paper-strategy.js", "assets/site.js"]:
+               "assets/paper-strategy.js", "assets/strategy.js", "assets/site.js"]:
         r = subprocess.run(["node", "--check", js], cwd=ROOT, capture_output=True, text=True)
         if r.returncode != 0:
             fail(f"node --check {js}: {r.stderr.strip()[:200]}")
