@@ -32,7 +32,10 @@ permissions:
   contents: write
 
 concurrency:
-  group: collect-kalshi
+  # Session-scoped group on purpose. Other sessions in this repo use the shared name
+  # "collect-kalshi"; a hung run there blocked every collection in the repo for 22+ minutes
+  # (see COORDINATION.md R6). Read-only public endpoints make parallel collection harmless.
+  group: collect-kalshi-c2aac20e
   cancel-in-progress: false
 
 jobs:
