@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Live swing alerts — Kalshi Demo Tracker</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="top"><div class="wrap"><nav class="main">
+<a class="brand" href="index.html">Kalshi Demo Tracker</a>
+<a href="index.html">Home</a><a href="dashboard.html">Live dashboard</a><a href="alerts.html" class="active">Live alerts</a><a href="data-tracking.html">Data tracking</a><a href="gas-prices.html">Gas prices</a><a href="elections.html">Elections</a><a href="culture.html">Culture</a><a href="crypto.html">Crypto</a><a href="golf.html">Golf</a><a href="portfolio.html">Portfolio</a><a href="trades.html">Trades</a><a href="questions.html">Questions</a><a href="suggestions.html">Suggestions</a><a href="flagged.html">Flagged for review</a><a href="sources.html">Sources</a><a href="repo-review.html">Repo review</a><a href="methodology.html">Methodology</a><a href="api-reference.html">API reference</a>
+</nav></div></header>
+<main class="wrap">
+
+<style>
+.grid2{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));}
+.chat h2{margin-top:0;}
+.chatbox{height:460px;overflow-y:auto;background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px;}
+.msg{border-left:4px solid var(--line);padding:6px 10px;margin:0 0 8px;background:#fafbfc;border-radius:6px;font-size:.92rem;}
+.msg.up{border-left-color:var(--accent);} .msg.down{border-left-color:var(--bad);}
+.msg.resolved{border-left-color:#7a5b00;}
+.msg .meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:.82rem;color:var(--muted);}
+.msg .move{font-variant-numeric:tabular-nums;font-weight:600;}
+.controls{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;}
+.controls label{margin:0;} .controls select{width:auto;}
+</style>
+<h1>Live swing alerts</h1>
+<p>Two scrolling chats, newest at the bottom. <strong>All swings</strong> lists every tracked market that moves by
+$0.10 or more (up or down) between observations. <strong>High-ROI screen</strong> lists only swings that pass a
+rule-based screen, plus resolutions. The chats are fed by the official Kalshi demo API from your browser
+(no key); if the browser is blocked, the collector's snapshot backfill still shows.</p>
+<div id="banner" style="display:none"></div>
+<div class="card">
+  <div class="controls">
+    <label>Topic <select id="topicSel"><option value="all">All topics</option><option value="gas">Gas prices</option><option value="elections">Elections</option><option value="culture">Culture</option><option value="crypto">Crypto</option><option value="golf">Golf</option></select></label>
+    <label>Refresh <select id="intervalSel"><option value="15">15 s</option><option value="30" selected>30 s</option><option value="60">60 s</option></select></label>
+    <button class="btn secondary" id="pauseBtn" type="button">Pause</button>
+  </div>
+  <p class="small muted" id="statusLine">Loading tracked markets…</p>
+  <p class="small muted" id="sourceNote"></p>
+  <p class="small muted">Demo environment caveat: demo prices may not reflect real markets
+  (<a href="https://docs.kalshi.com/getting_started/demo_env" target="_blank" rel="noopener">official demo_env</a>).</p>
+</div>
+<div class="grid2">
+  <section class="card chat"><h2>All swings (≥ $0.10) · <span id="countAll">0</span></h2>
+    <div class="chatbox" id="chatAll" role="log" aria-live="polite"></div></section>
+  <section class="card chat"><h2>High-ROI screen · <span id="countRoi">0</span></h2>
+    <div class="chatbox" id="chatRoi" role="log" aria-live="polite"></div></section>
+</div>
+<h2>Rules and sources</h2>
+<div class="card"><p class='muted'>Every rule row links its official source, or is flagged as unverified.</p><div class='tablewrap'><table><thead><tr><th>Rule / field</th><th>Value used</th><th>What it means</th><th>Source</th></tr></thead><tbody><tr><td>Contract price (y-axis, swing input)</td><td><span class='mono'>last_price_dollars</span></td><td>Dollar string per contract, 4 decimals (e.g. 0.3500 = $0.35). Compared in units of $0.0001.</td><td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noopener">source</a></td></tr><tr><td>Live request (browser)</td><td><span class='mono'>GET https://external-api.demo.kalshi.co/trade-api/v2/markets?limit=1000&amp;tickers=…</span></td><td>Tracked tickers in batches of 25 (about 3 requests per poll). No API key needed for market data.</td><td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noopener">source</a> · <a class="src" href="https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-JTAL,KXPRESNOMD-28-JSTE&amp;limit=5" target="_blank" rel="noopener">source</a></td></tr><tr><td>Tracked set</td><td>Top 5 events per topic × top 3 markets per event, from data/latest/top_events.json</td><td>Collector ranking uses an estimated dollar volume (contracts × price); the API publishes no dollar-volume field (see Flagged for review). Gas and golf are included when the collector returns them.</td><td><span class='pill warn'>unverified</span></td></tr><tr><td>Swing alert</td><td>|move| ≥ $0.10 per contract, either direction</td><td>Requirement from the brief (not an API fact). Compared with the previous poll (live) or the previous collector snapshot (backfill).</td><td><span class='pill warn'>unverified</span></td></tr><tr><td>Snapshot backfill</td><td>data/history/prices.jsonl (collector, about 10-minute cadence)</td><td>Consecutive snapshots per ticker. Each backfill alert shows its gap between snapshots.</td><td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noopener">source</a></td></tr><tr><td>Resolution (yes / no)</td><td><span class='mono'>result</span> field once a market settles</td><td>Reported once per ticker. A market still open shows no result.</td><td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noopener">source</a></td></tr><tr><td>High-ROI screen (chat 2)</td><td>spread (yes_ask − yes_bid) ≤ $0.02 and volume_fp > 0</td><td>Rule-based placeholder. No predictive model exists in the repository (Flagged A1-01).</td><td><span class='pill warn'>unverified</span></td></tr><tr><td>Payoff figure</td><td>(1 − yes_ask) / yes_ask, before fees</td><td>Arithmetic payoff if YES settles at $1.00. Not a probability forecast. The $1.00 notional is observed as notional_value_dollars 1.0000 on demo markets.</td><td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-markets" target="_blank" rel="noopener">source</a> · <a class="src" href="https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-JTAL,KXPRESNOMD-28-JSTE&amp;limit=5" target="_blank" rel="noopener">source</a></td></tr><tr><td>Fees</td><td>Not included</td><td>Fee schedule not verified in this session (Flagged A1-06).</td><td><span class='pill warn'>unverified</span></td></tr><tr><td>Cause / news link for a sharp move</td><td>None recorded</td><td>No official source links a move to a cause; left blank and flagged (Flagged A1-02).</td><td><span class='pill warn'>unverified</span></td></tr><tr><td>Real-time transport</td><td>REST polling (no WebSocket)</td><td>The WebSocket handshake requires auth even for public channels, so this page polls REST.</td><td><a class="src" href="https://docs.kalshi.com/getting_started/quick_start_websockets" target="_blank" rel="noopener">source</a></td></tr></tbody></table></div></div>
+<p class="small muted">Open items for review: <a href="flagged.html">Flagged for review</a> (A1-01 to A1-06).
+Trading is not part of this page; see <a href="trades.html">Trades</a>.</p>
+
+</main>
+<footer class="wrap"><p class="small muted">Kalshi Demo Tracker — built from verified sources only. Demo environment
+(mock funds): <span class="mono">https://external-api.demo.kalshi.co/trade-api/v2</span> ·
+Docs: <a href="https://docs.kalshi.com" target="_blank" rel="noopener">docs.kalshi.com</a> ·
+Every table row links its source; blank cells are flagged on <a href="flagged.html">Flagged for review</a>.</p></footer>
+<script src="assets/alerts-core.js"></script><script src="assets/alerts.js"></script>
+</body>
+</html>

@@ -168,6 +168,7 @@ class Table:
 NAV = [
     ("index.html", "Home"),
     ("dashboard.html", "Live dashboard"),
+    ("alerts.html", "Live alerts"),
     ("data-tracking.html", "Data tracking"),
     ("gas-prices.html", "Gas prices"),
     ("elections.html", "Elections"),
@@ -314,6 +315,26 @@ def consolidated_suggestions():
     for s in verified.get("suggestions", []):
         add(s.get("id", "VS"), s.get("title", ""), s.get("detail", ""), "",
             "", "", s.get("options", []), [s.get("source", "")], "00a943bd docs")
+    # ---- session d7ee554b: live swing alerts follow-ups (owner decisions; nothing implemented)
+    add("S-A1-1", "Replace the rule-based ROI screen with the owner's model output",
+        "Chat 2 currently uses a visible rule screen because no model exists in the repository (Flagged A1-01). "
+        "Supplying the model, its inputs and its validation would let chat 2 match the brief's 'model likes' wording.",
+        "Meets the brief's high-ROI requirement with a real signal", "Owner supplies model + definition",
+        "Unvalidated model signals; must be back-tested before use", ["Keep rule screen", "Replace with model", "Show both"],
+        [f"{DOCS}/api-reference/market/get-markets"], "d7ee554b alerts")
+    add("S-A1-2", "Per-topic swing thresholds",
+        "Use one $0.10 threshold for all topics today. Per-topic thresholds (for example gas vs crypto) would "
+        "reduce noise once the owner has observed typical moves in the collector history.",
+        "Fewer false alarms per topic", "Low (config change after review)",
+        "Thresholds are assumptions until reviewed", ["Keep $0.10", "Per-topic table"],
+        [f"{DOCS}/api-reference/market/get-markets"], "d7ee554b alerts")
+    add("S-A1-3", "Push alerts over the WebSocket API once a demo key is configured",
+        "The page polls REST every 15-60 seconds. The official WebSocket API provides streamed ticker updates, but "
+        "its official quick start says WebSocket connections \"require authentication during the connection handshake\", even for public channels. A server-side relay "
+        "would keep the key off the browser.",
+        "Lower latency than polling", "Medium to high (key management, relay hosting)",
+        "Key exposure if handled in the browser; hosting outside Pages", ["Stay on polling", "Relay with key"],
+        [f"{DOCS}/getting_started/quick_start_websockets"], "d7ee554b alerts")
     return rows
 
 
@@ -378,6 +399,36 @@ def consolidated_flags():
         "query string. Fixed in assets/app.js at integration (would otherwise 401 on every "
         "authenticated call).",
         [f"{DOCS}/getting_started/api_keys"], "resolved", "3a22fb0f")
+    # ---- session d7ee554b: live swing alerts (alerts.html)
+    add("A1-01", "Live alerts", "High-ROI screen is rule-based (no model in this repository)",
+        "The brief asks for swings that 'our model likes as high ROI'. No model, model output or model "
+        "specification was provided or found in the repository. The second chat therefore uses a visible rule "
+        "screen (two-sided quote with spread at most $0.02 and traded volume above zero). The owner must supply "
+        "the model or approve or replace these rules.",
+        [], "open — owner decision", "d7ee554b alerts")
+    add("A1-02", "Live alerts", "Cause / news links for sharp moves are not verified",
+        "No official source links a contract-price move to a news event or website. Every alert shows its cause "
+        "link as 'unverified — none recorded'; nothing is inferred. Demo prices may not reflect real markets "
+        "(official caveat).",
+        [f"{DOCS}/getting_started/demo_env"], "open — unverified", "d7ee554b alerts")
+    add("A1-03", "Live alerts", "Browser CORS for GET /markets?tickers= not verified from a browser",
+        "The collector's CORS probe (data/cors_test.json, 2026-11-20 12:14Z) checked GET /exchange/status only. "
+        "The alert page reads GET /markets?tickers= from the browser; if blocked it shows a banner and keeps the "
+        "collector backfill. Verify in a real browser after deploy.",
+        [f"{DOCS}/getting_started/api_environments"], "open — verify after deploy", "d7ee554b alerts")
+    add("A1-04", "Live alerts", "Poll interval and request rate limits not verified",
+        "The page sends up to three batched GET /markets requests per poll (15, 30 or 60 s; default 30 s). "
+        "Rate-limit values were not confirmed in this session; failed requests are counted in the status line.",
+        [f"{DOCS}/getting_started/rate_limits"], "open — verify", "d7ee554b alerts")
+    add("A1-05", "Live alerts", "Swing window is consecutive observations, not a fixed time window",
+        "Live swings compare each poll with the previous poll. Backfill swings compare consecutive collector "
+        "snapshots (about 10 minutes apart, shown with their gap). A move that reverses between two polls can be "
+        "missed; trade-level or order-book tick data is not used.",
+        [f"{DOCS}/api-reference/market/get-markets"], "disclosed", "d7ee554b alerts")
+    add("A1-06", "Live alerts", "Fees are excluded from the payoff figure",
+        "'Arithmetic payoff if YES at ask' is (1 − ask) / ask before fees. The fee schedule was not verified in "
+        "this session, so fees are excluded and labelled on every alert.",
+        [], "open — unverified", "d7ee554b alerts")
     return rows
 
 
@@ -900,6 +951,98 @@ implemented</strong>. Set a decision and note per row — they are saved in this
                scripts=("assets/app.js", "assets/site.js"))
 
 
+ALERTS_API = "https://external-api.demo.kalshi.co/trade-api/v2"
+
+
+def build_alerts():
+    """Live swing alerts page (session d7ee554b). The chats are filled by assets/alerts.js from
+    official demo API responses; this static part holds only the rules and their sources."""
+    t = Table(["Rule / field", "Value used", "What it means"], "alerts")
+    t.row(["Contract price (y-axis, swing input)", "<span class='mono'>last_price_dollars</span>",
+           "Dollar string per contract, 4 decimals (e.g. 0.3500 = $0.35). Compared in units of $0.0001."],
+          [f"{DOCS}/api-reference/market/get-markets"], label="A1-price-field")
+    t.row(["Live request (browser)",
+           f"<span class='mono'>GET {ALERTS_API}/markets?limit=1000&amp;tickers=…</span>",
+           "Tracked tickers in batches of 25 (about 3 requests per poll). No API key needed for market data."],
+          [f"{DOCS}/api-reference/market/get-markets",
+           "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-JTAL,KXPRESNOMD-28-JSTE&limit=5"],
+          label="A1-request")
+    t.row(["Tracked set", "Top 5 events per topic × top 3 markets per event, from data/latest/top_events.json",
+           "Collector ranking uses an estimated dollar volume (contracts × price); the API publishes no dollar-volume field (see Flagged for review). Gas and golf are included when the collector returns them."],
+          [], unverified=True, label="A1-tracked-set")
+    t.row(["Swing alert", "|move| ≥ $0.10 per contract, either direction",
+           "Requirement from the brief (not an API fact). Compared with the previous poll (live) or the previous collector snapshot (backfill)."],
+          [], unverified=True, label="A1-threshold")
+    t.row(["Snapshot backfill", "data/history/prices.jsonl (collector, about 10-minute cadence)",
+           "Consecutive snapshots per ticker. Each backfill alert shows its gap between snapshots."],
+          [f"{DOCS}/api-reference/market/get-markets"], label="A1-backfill")
+    t.row(["Resolution (yes / no)", "<span class='mono'>result</span> field once a market settles",
+           "Reported once per ticker. A market still open shows no result."],
+          [f"{DOCS}/api-reference/market/get-markets"], label="A1-result")
+    t.row(["High-ROI screen (chat 2)", "spread (yes_ask − yes_bid) ≤ $0.02 and volume_fp > 0",
+           "Rule-based placeholder. No predictive model exists in the repository (Flagged A1-01)."],
+          [], unverified=True, label="A1-roi")
+    t.row(["Payoff figure", "(1 − yes_ask) / yes_ask, before fees",
+           "Arithmetic payoff if YES settles at $1.00. Not a probability forecast. The $1.00 notional is observed as notional_value_dollars 1.0000 on demo markets."],
+          [f"{DOCS}/api-reference/market/get-markets",
+           "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-JTAL,KXPRESNOMD-28-JSTE&limit=5"],
+          label="A1-payoff")
+    t.row(["Fees", "Not included", "Fee schedule not verified in this session (Flagged A1-06)."],
+          [], unverified=True, label="A1-fees")
+    t.row(["Cause / news link for a sharp move", "None recorded",
+           "No official source links a move to a cause; left blank and flagged (Flagged A1-02)."],
+          [], unverified=True, label="A1-cause")
+    t.row(["Real-time transport", "REST polling (no WebSocket)",
+           "The WebSocket handshake requires auth even for public channels, so this page polls REST."],
+          [f"{DOCS}/getting_started/quick_start_websockets"], label="A1-transport")
+    options = "".join(f'<option value="{tid}">{esc(lbl)}</option>' for tid, lbl in
+                      [("gas", "Gas prices"), ("elections", "Elections"), ("culture", "Culture"),
+                       ("crypto", "Crypto"), ("golf", "Golf")])
+    body = f"""
+<style>
+.grid2{{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));}}
+.chat h2{{margin-top:0;}}
+.chatbox{{height:460px;overflow-y:auto;background:#fff;border:1px solid var(--line);border-radius:8px;padding:8px;}}
+.msg{{border-left:4px solid var(--line);padding:6px 10px;margin:0 0 8px;background:#fafbfc;border-radius:6px;font-size:.92rem;}}
+.msg.up{{border-left-color:var(--accent);}} .msg.down{{border-left-color:var(--bad);}}
+.msg.resolved{{border-left-color:#7a5b00;}}
+.msg .meta{{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:.82rem;color:var(--muted);}}
+.msg .move{{font-variant-numeric:tabular-nums;font-weight:600;}}
+.controls{{display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;}}
+.controls label{{margin:0;}} .controls select{{width:auto;}}
+</style>
+<h1>Live swing alerts</h1>
+<p>Two scrolling chats, newest at the bottom. <strong>All swings</strong> lists every tracked market that moves by
+$0.10 or more (up or down) between observations. <strong>High-ROI screen</strong> lists only swings that pass a
+rule-based screen, plus resolutions. The chats are fed by the official Kalshi demo API from your browser
+(no key); if the browser is blocked, the collector's snapshot backfill still shows.</p>
+<div id="banner" style="display:none"></div>
+<div class="card">
+  <div class="controls">
+    <label>Topic <select id="topicSel"><option value="all">All topics</option>{options}</select></label>
+    <label>Refresh <select id="intervalSel"><option value="15">15 s</option><option value="30" selected>30 s</option><option value="60">60 s</option></select></label>
+    <button class="btn secondary" id="pauseBtn" type="button">Pause</button>
+  </div>
+  <p class="small muted" id="statusLine">Loading tracked markets…</p>
+  <p class="small muted" id="sourceNote"></p>
+  <p class="small muted">Demo environment caveat: demo prices may not reflect real markets
+  (<a href="https://docs.kalshi.com/getting_started/demo_env" target="_blank" rel="noopener">official demo_env</a>).</p>
+</div>
+<div class="grid2">
+  <section class="card chat"><h2>All swings (≥ $0.10) · <span id="countAll">0</span></h2>
+    <div class="chatbox" id="chatAll" role="log" aria-live="polite"></div></section>
+  <section class="card chat"><h2>High-ROI screen · <span id="countRoi">0</span></h2>
+    <div class="chatbox" id="chatRoi" role="log" aria-live="polite"></div></section>
+</div>
+<h2>Rules and sources</h2>
+<div class="card">{t.render(caption="Every rule row links its official source, or is flagged as unverified.")}</div>
+<p class="small muted">Open items for review: <a href="flagged.html">Flagged for review</a> (A1-01 to A1-06).
+Trading is not part of this page; see <a href="trades.html">Trades</a>.</p>
+"""
+    write_page("alerts.html", "Live swing alerts", "alerts.html", body,
+               scripts=("assets/alerts-core.js", "assets/alerts.js"))
+
+
 def build_flagged():
     rows = consolidated_flags()
     t = Table(["ID", "Area", "Item", "Detail", "Status / action"], "flagged")
@@ -1074,6 +1217,7 @@ def build_wrapped(name, title):
 def main():
     build_index()
     build_dashboard()
+    build_alerts()
     build_portfolio()
     build_trades()
     for tid, label, page, desc in TOPICS:
