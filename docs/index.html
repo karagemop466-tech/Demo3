@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kalshi demo dashboard — overview</title>
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<header class="top"></header>
+
+<main class="wrap">
+  <h1>Highest-volume live events on Kalshi</h1>
+  <p class="lede">Five topics only — <strong>gas prices, elections, culture, crypto and golf</strong> — tracked from
+  the Kalshi demo API until each event resolves, with a labelled production comparison. Every row links to the API
+  request it came from; anything the API did not return is shown as <span class="blankcell">—</span>, never guessed.</p>
+
+  <div id="fresh"></div>
+
+  <section class="grid c4" id="kpis" aria-label="Headline figures">
+    <div class="kpi"><div class="label">Series in scope</div><div class="value loading">…</div></div>
+    <div class="kpi"><div class="label">Open markets</div><div class="value loading">…</div></div>
+    <div class="kpi"><div class="label">Settled tracked</div><div class="value loading">…</div></div>
+    <div class="kpi"><div class="label">Books sampled</div><div class="value loading">…</div></div>
+  </section>
+
+  <h2>Why there is no single "highest dollar amount"</h2>
+  <div class="banner warn">
+    <span class="t">Kalshi does not return a dollar-notional field.</span>
+    Ranking by traded contracts points at 1–5¢ longshots whose books are empty (0.00 bid / 1.00 ask); ranking by
+    resting liquidity points somewhere else entirely. Four metrics are published side by side instead of inventing
+    one. See <a href="questions.html">decision D1</a>.
+  </div>
+  <div class="tablewrap">
+    <table id="top-overall">
+      <thead><tr>
+        <th>#</th><th>Market</th><th>Topic</th><th class="num">Contracts traded</th>
+        <th class="num">Open interest</th><th class="num">Notional $ (derived)</th>
+        <th class="num">Resting $</th><th class="num">Last YES</th><th class="num">Spread</th><th>Source</th>
+      </tr></thead>
+      <tbody><tr><td colspan="10" class="loading">Loading snapshot…</td></tr></tbody>
+    </table>
+  </div>
+
+  <h2>Topics</h2>
+  <div class="grid c3" id="topic-cards"></div>
+
+  <h2>The headline finding</h2>
+  <div class="card">
+    <p>Across <strong id="exp-n">…</strong> settled markets, price has <em>not</em> behaved like a calibrated
+    probability. The 0.80–0.99 "favourite" band won <strong id="exp-win">…</strong> of the time but cost
+    <strong id="exp-px">…</strong> on average — a <strong id="exp-yes">…</strong> expectancy per YES contract. The cheap
+    side carried only a small positive residual.</p>
+    <div class="tablewrap">
+      <table id="exp-table">
+        <thead><tr><th>YES price band</th><th class="num">n</th><th class="num">Resolved YES</th>
+        <th class="num">Win rate</th><th class="num">Avg price</th><th class="num">YES expectancy</th>
+        <th class="num">NO expectancy</th></tr></thead>
+        <tbody><tr><td colspan="7" class="loading">Loading…</td></tr></tbody>
+      </table>
+    </div>
+    <p class="small dim">Fees excluded; <code>last_price_dollars</code> is the last trade, not the average price paid;
+    only markets that settled inside the collection window are counted; historical, not predictive. Full method in
+    <a href="strategy.html">Strategy</a>.</p>
+  </div>
+
+  <h2>Your demo portfolio</h2>
+  <div class="card" id="portfolio-state">
+    <p class="loading">Loading…</p>
+  </div>
+
+  <h2>Where things are</h2>
+  <div class="grid c2">
+    <div class="card">
+      <h3>Data &amp; analysis</h3>
+      <ul class="tight">
+        <li><a href="liquidity.html">Liquidity &amp; price charts</a> — time on X, contract price on Y, windows from
+          seconds to days; per-price contract counts from the live book.</li>
+        <li><a href="resolutions.html">Resolutions</a> — every tracked event until it settled, and whether it resolved
+          YES or NO.</li>
+        <li><a href="strategy.html">Strategy</a> — rule-based candidates, what the book could actually fill, and why the
+          obvious strategy was rejected.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Review &amp; decisions</h3>
+      <ul class="tight">
+        <li><a href="questions.html">Decision log</a> — 14 questions with what is known, what is missing, and what
+          would close each one.</li>
+        <li><a href="suggestions.html">Suggestions</a> — proposals with effort, dependency and reversibility.</li>
+        <li><a href="flagged.html">Flagged for review</a> — known gaps and irregularities, with evidence.</li>
+        <li><a href="sources.html">Sources</a> — every official page used, and what it established.</li>
+      </ul>
+    </div>
+  </div>
+</main>
+
+<footer class="foot"></footer>
+<script src="assets/app.js"></script>
+<script>
+(function () {
+  KD.renderChrome("index.html");
+
+  KD.loadJSON("dashboard.json").then(function (d) {
+    const meta = d.meta || {};
+    KD.freshBanner(document.getElementById("fresh"), meta);
+
+    const counts = (meta.demo_run && meta.demo_run.counts) || {};
+    const topicSeries = Object.keys(d.tables || {}).reduce(function (n, t) {
+      const sel = ((d.topics || {})[t] || {}).series_selected || [];
+      return n + sel.length;
+    }, 0);
+
+    document.getElementById("kpis").innerHTML = [
+      kpi("Series in scope", topicSeries, "top 14 per topic by series volume"),
+      kpi("Open markets", KD.num(counts.open_markets_in_scope), "in the five topics, this run"),
+      kpi("Settled tracked", KD.num(counts.settled_markets_in_scope), "accumulated across runs"),
+      kpi("Books sampled", KD.num(counts.orderbooks), "order books read this run"),
+    ].join("");
+
+    // ---- overall top table: merge the per-topic rankings, dedupe, sort by contracts traded
+    const seen = new Set();
+    const rows = [];
+    Object.keys(d.tables || {}).forEach(function (topic) {
+      (d.tables[topic].by_contracts_traded || []).forEach(function (r) {
+        if (seen.has(r.ticker)) return;
+        seen.add(r.ticker);
+        rows.push(r);
+      });
+    });
+    rows.sort(function (a, b) {
+      return ((b.metrics || {}).contracts_traded || 0) - ((a.metrics || {}).contracts_traded || 0);
+    });
+
+    document.querySelector("#top-overall tbody").innerHTML = rows.slice(0, 15).map(function (r, i) {
+      const m = r.metrics || {};
+      const book = (d.ladders || {})[r.ticker] || {};
+      return "<tr>" +
+        "<td class='num dim'>" + (i + 1) + "</td>" +
+        "<td><a href='liquidity.html?ticker=" + encodeURIComponent(r.ticker) + "'>" + KD.esc(shorten(r.title, 62)) +
+          "</a><div class='dim mono'>" + KD.esc(r.ticker) + "</div></td>" +
+        "<td>" + (r.topics || []).map(function (t) {
+          return "<span class='pill'>" + KD.esc(KD.topicLabel(t)) + "</span>";
+        }).join(" ") + "</td>" +
+        "<td class='num'>" + KD.num(m.contracts_traded) + "</td>" +
+        "<td class='num'>" + KD.num(m.open_interest_contracts) + "</td>" +
+        "<td class='num'>" + KD.money(m.traded_notional_dollars_derived) + "</td>" +
+        "<td class='num'>" + KD.money(m.resting_liquidity_dollars) + "</td>" +
+        "<td class='num'>" + KD.cents(r.last_price_dollars) + "</td>" +
+        "<td class='num'>" + (book.spread_yes_derived == null ? KD.dash("no two-sided book") :
+          (book.spread_yes_derived * 100).toFixed(1) + "¢") + "</td>" +
+        "<td>" + KD.src(r.source) + "</td>" +
+        "</tr>";
+    }).join("");
+
+    // ---- topic cards
+    document.getElementById("topic-cards").innerHTML = Object.keys(d.topics || {}).map(function (t) {
+      const topic = d.topics[t];
+      const groups = (d.tables || {})[t] || {};
+      const top = (groups.by_contracts_traded || [])[0];
+      const page = (t === "gas" ? "gas" : t) + ".html";
+      return "<div class='card'><h3><a href='categories/" + page + "'>" + KD.esc(topic.label) + "</a></h3>" +
+        "<p class='small muted'>" + KD.num(topic.series_matched_total) + " series matched · " +
+        ((topic.series_selected || []).length) + " tracked</p>" +
+        (top ? "<p class='small'>Largest by contracts traded:<br><strong>" + KD.esc(shorten(top.title, 70)) +
+          "</strong><br><span class='dim'>" + KD.num((top.metrics || {}).contracts_traded) +
+          " contracts · " + KD.money((top.metrics || {}).resting_liquidity_dollars) + " resting</span></p>"
+          : "<p class='small dim'>No markets in the latest snapshot.</p>") +
+        "</div>";
+    }).join("");
+
+    // ---- expectancy table
+    const study = (d.analysis || {}).resolution_study;
+    if (study && study.buckets) {
+      document.getElementById("exp-n").textContent = KD.num(study.rows_usable);
+      const fav = study.favourite_band_0_80_to_0_99 || {};
+      const lng = study.longshot_band_0_01_to_0_20 || {};
+      document.getElementById("exp-win").textContent = KD.pct(fav.win_rate_yes, 2);
+      document.getElementById("exp-px").textContent = KD.money(fav.avg_yes_price, 4);
+      document.getElementById("exp-yes").textContent =
+        (fav.yes_expectancy_per_contract == null ? "—" :
+          (fav.yes_expectancy_per_contract >= 0 ? "+" : "") +
+          (fav.yes_expectancy_per_contract * 100).toFixed(2) + "¢");
+      document.querySelector("#exp-table tbody").innerHTML = study.buckets.map(function (b) {
+        if (!b.n) return "<tr><td>" + KD.esc(b.bucket) + "</td><td class='num'>0</td><td colspan='5' class='dim'>no markets</td></tr>";
+        return "<tr><td>" + KD.esc(b.bucket) + "</td>" +
+          "<td class='num'>" + KD.num(b.n) + "</td>" +
+          "<td class='num'>" + KD.num(b.yes) + "</td>" +
+          "<td class='num'>" + KD.pct(b.win_rate_yes, 2) + "</td>" +
+          "<td class='num'>" + KD.money(b.avg_yes_price, 4) + "</td>" +
+          "<td class='num'>" + signed(b.yes_expectancy_per_contract) + "</td>" +
+          "<td class='num'>" + signed(b.no_expectancy_per_contract) + "</td></tr>";
+      }).join("");
+    } else {
+      document.getElementById("exp-table").outerHTML =
+        "<div class='banner warn'>The expectancy study has not been built yet. It is produced by " +
+        "<code>analysis/expectancy.py</code> on the next collection run.</div>";
+    }
+  }).catch(function (e) {
+    document.querySelector("#top-overall tbody").innerHTML =
+      "<tr><td colspan='10' class='error'>Could not load data/dashboard.json — " + KD.esc(e.message) + "</td></tr>";
+  });
+
+  KD.loadJSON("portfolio.json").then(function (p) {
+    const meta = p.meta || {};
+    const el = document.getElementById("portfolio-state");
+    if (!meta.configured) {
+      el.innerHTML = "<p><span class='pill blank'>not configured</span> No demo API key is present, so no balance, " +
+        "position, fill or P&amp;L figure is published. This is deliberate — see " +
+        "<a href='flagged.html'>F4</a>.</p>" +
+        "<details><summary>How to enable it (two repository secrets)</summary><ol class='tight'>" +
+        "<li>Create a demo API key — <a href='https://docs.kalshi.com/getting_started/api_keys.md' target='_blank' rel='noopener'>API Keys</a>.</li>" +
+        "<li>Add <code class='mono'>KALSHI_DEMO_KEY_ID</code> and <code class='mono'>KALSHI_DEMO_PRIVATE_KEY</code> under Settings → Secrets → Actions.</li>" +
+        "<li>Run the <strong>portfolio</strong> workflow.</li></ol></details>";
+    } else {
+      const bal = (p.balance && (p.balance.body || p.balance)) || {};
+      el.innerHTML = "<div class='grid c3'>" +
+        "<div class='kpi'><div class='label'>Balance</div><div class='value'>" + KD.money(bal.balance) + "</div></div>" +
+        "<div class='kpi'><div class='label'>Positions</div><div class='value'>" + KD.num((p.positions || []).length) + "</div></div>" +
+        "<div class='kpi'><div class='label'>Fills</div><div class='value'>" + KD.num((p.fills || []).length) + "</div></div>" +
+        "</div><p class='small'><a href='portfolio.html'>Open the portfolio →</a></p>";
+    }
+  }).catch(function () {
+    document.getElementById("portfolio-state").innerHTML =
+      "<p class='dim'>No portfolio artifact yet — it is written by the <code>portfolio</code> workflow.</p>";
+  });
+
+  function kpi(label, value, sub) {
+    return "<div class='kpi'><div class='label'>" + KD.esc(label) + "</div><div class='value'>" +
+      (value == null ? KD.dash() : value) + "</div><div class='sub'>" + KD.esc(sub || "") + "</div></div>";
+  }
+  function signed(v) {
+    if (v == null) return KD.dash();
+    return (v >= 0 ? "+" : "") + (v * 100).toFixed(2) + "¢";
+  }
+  function shorten(s, n) {
+    s = String(s || "");
+    return s.length > n ? s.slice(0, n - 1) + "…" : s;
+  }
+})();
+</script>
+</body>
+</html>

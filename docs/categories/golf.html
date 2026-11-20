@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Golf — Kalshi demo dashboard</title>
+<link rel="stylesheet" href="../assets/app.css">
+</head>
+<body>
+<header class="top"></header>
+
+<main class="wrap">
+  <h1 id="title">Golf</h1>
+  <p class="lede" id="lede">Loading…</p>
+  <div id="fresh"></div>
+  <div id="rule" class="card"></div>
+
+  <div class="tabs" role="tablist" aria-label="Ranking metric">
+    <button role="tab" data-metric="by_contracts_traded" aria-selected="true">Most contracts traded</button>
+    <button role="tab" data-metric="by_open_interest_dollars_derived" aria-selected="false">Largest open interest ($)</button>
+    <button role="tab" data-metric="by_resting_liquidity_dollars" aria-selected="false">Deepest resting book</button>
+    <button role="tab" data-metric="production_top_by_contracts" aria-selected="false">Production (labelled)</button>
+  </div>
+
+  <div class="tablewrap">
+    <table id="markets">
+      <thead><tr>
+        <th>#</th><th>Market</th><th class="num">Last YES</th><th class="num">Bid</th><th class="num">Ask</th>
+        <th class="num">Contracts</th><th class="num">24h</th><th class="num">Open interest</th>
+        <th class="num">Resting $</th><th>Closes</th><th>Source</th>
+      </tr></thead>
+      <tbody><tr><td colspan="11" class="loading">Loading snapshot…</td></tr></tbody>
+    </table>
+  </div>
+  <p class="small dim" id="metric-note"></p>
+
+  <h2>Tracked series</h2>
+  <div class="tablewrap">
+    <table id="series">
+      <thead><tr><th>Series</th><th>Title</th><th>Category</th><th>Tags</th><th class="num">Volume (contracts)</th>
+        <th>Settlement source</th><th>Matched by</th><th>Source</th></tr></thead>
+      <tbody><tr><td colspan="8" class="loading">Loading…</td></tr></tbody>
+    </table>
+  </div>
+
+  <h2>How events in this topic resolved</h2>
+  <p class="small dim">Counts of Kalshi's own <code>result</code> field on settled markets for the tracked series.</p>
+  <div class="grid c4" id="res-kpis"></div>
+</main>
+
+<footer class="foot"></footer>
+<script src="../assets/app.js"></script>
+<script>
+(function () {
+  const TOPIC = "golf";
+  KD.renderChrome("golf.html");
+  let data = null;
+
+  KD.loadJSON("dashboard.json").then(function (d) {
+    data = d;
+    KD.freshBanner(document.getElementById("fresh"), d.meta || {});
+    const topic = (d.topics || {})[TOPIC] || {};
+    const groups = ((d.tables || {})[TOPIC]) || {};
+    const all = groups.by_contracts_traded || [];
+
+    document.getElementById("title").textContent = (topic.label || "Golf") + " — live events";
+    document.getElementById("lede").innerHTML =
+      KD.num(topic.series_matched_total) + " series matched the topic rule; the " +
+      ((topic.series_selected || []).length) + " most-traded are tracked in full. " +
+      "Prices are Kalshi contract prices in dollars ($1.00 = certain YES, $0.00 = certain NO).";
+
+    const rule = topic.rule || {};
+    document.getElementById("rule").innerHTML =
+      "<h3 style='margin-top:0'>Why these series are in scope</h3>" +
+      "<p class='small'>" + KD.esc(rule.why || "") + "</p>" +
+      "<table class='small'><tbody>" +
+      row("Categories", (rule.categories || []).join(", ") || "(none — deliberately)") +
+      row("Tags", (rule.tags_any || []).join(", ") || "—") +
+      row("Ticker prefixes", (rule.ticker_prefixes || []).join(", ") || "—") +
+      row("Title fragments", (rule.title_contains || []).join(", ") || "—") +
+      "</tbody></table>" +
+      "<p class='small dim'>Rules are exact-match only and live in <code>collector/topics.json</code>; a series that " +
+      "matches nothing is excluded and counted, never guessed into a topic.</p>";
+
+    render("by_contracts_traded");
+    document.querySelectorAll(".tabs button").forEach(function (b) {
+      b.addEventListener("click", function () {
+        document.querySelectorAll(".tabs button").forEach(function (x) { x.setAttribute("aria-selected", "false"); });
+        b.setAttribute("aria-selected", "true");
+        render(b.dataset.metric);
+      });
+    });
+
+    document.querySelector("#series tbody").innerHTML = (topic.series_selected || []).map(function (s) {
+      return "<tr><td class='mono'>" + KD.esc(s.series_ticker) + "</td><td>" + KD.esc(s.title) + "</td>" +
+        "<td>" + KD.esc(s.category || "—") + "</td>" +
+        "<td class='small'>" + KD.esc((s.tags || []).join(", ") || "—") + "</td>" +
+        "<td class='num'>" + KD.num(s.volume_fp) + "</td>" +
+        "<td class='small'>" + KD.esc(s.matched_by) + "</td>" +
+        "<td>" + KD.src(s.source) + "</td></tr>";
+    }).join("").replace(/<td class='small'>(category=|tag|ticker_prefix|title)/g, "<td class='small dim'>$1");
+
+    // resolutions for this topic
+    KD.loadJSON("resolutions-summary.json").then(function (r) {
+      const c = (r.by_topic || {})[TOPIC] || {};
+      document.getElementById("res-kpis").innerHTML =
+        kpi("Resolved YES", c.yes, "result = yes") +
+        kpi("Resolved NO", c.no, "result = no") +
+        kpi("Scalar", c.scalar, "paid a settlement value, not yes/no") +
+        kpi("Total settled", (c.yes || 0) + (c.no || 0) + (c.scalar || 0), "in this topic");
+    }).catch(function () {
+      document.getElementById("res-kpis").innerHTML = "<div class='card dim'>resolutions-summary.json missing</div>";
+    });
+  }).catch(function (e) {
+    document.querySelector("#markets tbody").innerHTML =
+      "<tr><td colspan='11' class='error'>Could not load data — " + KD.esc(e.message) + "</td></tr>";
+  });
+
+  function render(metric) {
+    const groups = ((data.tables || {})[TOPIC]) || {};
+    const rows = groups[metric] || [];
+    const prod = metric === "production_top_by_contracts";
+    document.querySelector("#markets tbody").innerHTML = rows.length ? rows.map(function (r, i) {
+      const m = r.metrics || {};
+      return "<tr>" +
+        "<td class='num dim'>" + (i + 1) + "</td>" +
+        "<td>" + (prod ? "<span class='pill info'>prod</span> " : "") +
+          "<a href='../liquidity.html?ticker=" + encodeURIComponent(r.ticker) + "'>" + KD.esc(r.title) + "</a>" +
+          "<div class='dim mono'>" + KD.esc(r.ticker) + "</div></td>" +
+        "<td class='num'>" + KD.cents(r.last_price_dollars) + "</td>" +
+        "<td class='num'>" + KD.cents(r.yes_bid_dollars) + "</td>" +
+        "<td class='num'>" + KD.cents(r.yes_ask_dollars) + "</td>" +
+        "<td class='num'>" + KD.num(m.contracts_traded) + "</td>" +
+        "<td class='num'>" + KD.num(m.contracts_traded_24h) + "</td>" +
+        "<td class='num'>" + KD.num(m.open_interest_contracts) + "</td>" +
+        "<td class='num'>" + KD.money(m.resting_liquidity_dollars) + "</td>" +
+        "<td class='nowrap small'>" + KD.esc((r.close_time || "").slice(0, 16).replace("T", " ")) + "</td>" +
+        "<td>" + KD.src(r.source) + "</td></tr>";
+    }).join("") : "<tr><td colspan='11' class='dim'>No markets in this view for the latest snapshot.</td></tr>";
+
+    document.getElementById("metric-note").innerHTML = ({
+      by_contracts_traded: "Ranked by <code>volume_fp</code> (contracts traded). Exchanges do not return dollars traded, so this is the honest volume measure.",
+      by_open_interest_dollars_derived: "Ranked by <code>open_interest_fp × price</code>. <strong>Derived</strong>: Kalshi returns contracts, not dollars; the multiplier is the last trade (or the mid if there was none).",
+      by_resting_liquidity_dollars: "Ranked by resting order-book value, <code>Σ price × contracts</code> across both YES and NO bids. This is money actually available to trade against.",
+      production_top_by_contracts: "<strong>Production environment</strong> (external-api.kalshi.com), shown for comparison only. Kalshi states demo prices may not reflect real markets.",
+    })[metric] || "";
+  }
+
+  function row(k, v) { return "<tr><th style='width:180px'>" + KD.esc(k) + "</th><td>" + KD.esc(v) + "</td></tr>"; }
+  function kpi(label, value, sub) {
+    return "<div class='kpi'><div class='label'>" + KD.esc(label) + "</div><div class='value'>" +
+      (value == null ? KD.dash() : KD.num(value)) + "</div><div class='sub'>" + KD.esc(sub) + "</div></div>";
+  }
+})();
+</script>
+</body>
+</html>
