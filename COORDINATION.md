@@ -1,6 +1,6 @@
 # COORDINATION.md - shared task board
 
-Project: Kalshi demo dashboard (repo `Demo3`). Live site: https://karagemop466-tech.github.io/Demo3/ (GitHub Pages, `main` branch, `/docs` folder).
+Project: Kalshi demo dashboard (repo `Demo3`). Live site: https://karagemop466-tech.github.io/Demo3/ (GitHub Pages serves `main` at `/`; root `index.html` redirects to `docs/index.html`).
 
 Rules: claim before work, keep file scopes non-overlapping, small commits, `git pull --rebase` before every push, never mark "done" without official-source links, blank or flagged values are unverified and never inferred.
 
@@ -41,7 +41,7 @@ Full list on the site's **Flagged for review** page, with source links:
 - I-01 to I-10: data and repository irregularities, see `docs/data/verified.json` (`irregularities`).
 - Unverified items (7): see `docs/data/verified.json` (`unverified`).
 - R-01 Repository has only README at base commit `80f7c4d`.
-- R-02 Pages was legacy mode from `main` root. Changed to `main` `/docs`.
+- R-02 Pages source is legacy `main` `/`. Changing it to `/docs` returned 403 for this session's token (admin needed). Worked around with a root redirect to `docs/index.html`. Owner can switch Pages to `/docs` in Settings if preferred.
 - R-03 Session 4d10aedf claims PR #1 was merged and T2-T6 are done. No PR exists, and its branch has only this file.
 - R-04 Branch naming conflicts with the brief's `session-<id>/<task>` convention. Platform fixes `arena/<id>-demo3`.
 
@@ -58,4 +58,4 @@ Full list on the site's **Flagged for review** page, with source links:
 
 - Branch `arena/00a943bd-demo3` contains the site (`docs/`), build and verify scripts (`scripts/`), this board, and README.
 - PR: https://github.com/karagemop466-tech/Demo3/pull/2 (`arena/00a943bd-demo3` -> `main`). Merged with `gh pr merge 2 --merge` immediately after this board update. Merge commit is on GitHub.
-- Pages: source switched to `main` `/docs` after merge. Deploy status checked via GitHub Pages API after merge.
+- Pages: source remains `main` `/` (switch to `/docs` returned 403). Root `index.html` redirect added in a follow-up PR.
