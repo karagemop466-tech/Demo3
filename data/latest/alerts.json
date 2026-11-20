@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-20T19:46:02Z",
+ "generated_at": "2026-11-20T19:48:04Z",
  "api_root": "https://external-api.demo.kalshi.co/trade-api/v2",
  "rule": {
   "threshold_dollars": "0.10",
@@ -89,8 +89,8 @@
    "cause_status": "unverified - not inferred"
   },
   {
-   "ts": "2026-11-20T19:27:37+00:00",
-   "prev_ts": "2026-11-20T19:20:48+00:00",
+   "ts": "2026-11-20T19:39:40+00:00",
+   "prev_ts": "2026-11-20T19:33:16+00:00",
    "ticker": "KXPRESNOMD-28-HBID",
    "event_ticker": "KXPRESNOMD-28",
    "title": "Will Hunter Biden be the nominee for the Presidency for the Democratic party?",
@@ -101,12 +101,12 @@
    "direction": "up",
    "to_bid_dollars": "0.0020",
    "to_ask_dollars": "0.0030",
-   "next_reading_dollars": "0.8110",
-   "next_reading_ts": "2026-11-20T19:34:48+00:00",
+   "next_reading_dollars": "",
+   "next_reading_ts": "",
    "reverted_next_reading": false,
    "quote_mid_dollars": "0.0025",
    "last_supported_by_quote": false,
-   "volume_fp": "537225607.6900",
+   "volume_fp": "537225680.7700",
    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXPRESNOMD-28-HBID",
    "synthetic": false,
    "high_roi": false,
