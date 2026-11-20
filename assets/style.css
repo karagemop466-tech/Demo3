@@ -99,3 +99,8 @@ summary { cursor: pointer; font-weight: 600; }
 .chat-wrap > div { overflow-x: auto; }
 .chat-wrap table.alerts { min-width: 780px; }
 .chat-wrap table.alerts td.small, .chat-wrap table.alerts td a.src { word-break: break-word; }
+
+/* sharp-jump context (df50b92f) */
+.chat-wrap table.alerts td.ctx { min-width: 220px; }
+.chat-wrap table.alerts details.rules { margin-top: 4px; }
+.chat-wrap table.alerts details.rules div { max-width: 360px; white-space: normal; }

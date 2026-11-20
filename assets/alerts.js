@@ -8,30 +8,33 @@
  *
  * Each alert row links official sources:
  *   - the exact market API URL (GET /markets/{ticker})
- *   - the event API URL (GET /events/{event_ticker})
- *   - the series API URL (GET /series/{series_ticker})
- *   - the series' official Kalshi "settlement_sources" website links, when the
- *     API returns https URLs for them.
- * These settlement sources are Kalshi's official sources for the series. They are
- * listed for context and are NOT verified as the cause of any swing (flagged
- * F-5B-01). Only https URLs the API actually returns are rendered — never inferred.
+ *   - the event API URL (GET /events/{event_ticker}) and the event's official
+ *     Kalshi "settlement_sources" website links (fetched on demand), shown under
+ *     "Context". These are Kalshi's official resolution sources for the event; they
+ *     are listed for context and are NOT verified as the cause of any swing
+ *     (labeled "Cause not verified" on every row). Only https URLs the API actually
+ *     returns are rendered — never inferred.
+ *
+ * The "High ROI model" score is a documented, transparent heuristic built only
+ * from verified API fields (swing size, relative move, open interest). No trained
+ * model exists in this repo, so it is labeled an unverified model heuristic
+ * (F-5B-02) and is never presented as verified ROI or investment advice.
  *
  * Data: reuses the dashboard's live market samples (GET /markets, demo API,
- * no key needed). No extra network requests. Values the exchange does not report
- * are left blank — never inferred.
+ * no key needed); the event context is one extra GET /events/{event_ticker}
+ * per new swing. Values the exchange does not report are left blank — never
+ * inferred.
  *
  * Sources:
  *   https://docs.kalshi.com/getting_started/quick_start_market_data
  *   https://docs.kalshi.com/api-reference/market/get-markets
- *   https://docs.kalshi.com/api-reference/market/get-series-list
- *   https://docs.kalshi.com/api-reference/market/get-events
+ *   https://docs.kalshi.com/api-reference/events/get-event
  *   https://docs.kalshi.com/getting_started/demo_env
  */
 (function () {
   "use strict";
 
   var KD = window.KD = window.KD || {};
-  var K = window.KalshiDemo || {};
   var ALERT_KEY = "kd_alerts_v1";
   var SWING = 0.10;                 // dollars = 10 cents, the alert threshold
   var MAX_ALERTS = 300;
@@ -101,7 +104,8 @@
       // Float-safe: an exact 10¢ move (0.60 - 0.50) is 0.0999… in binary, so
       // compare with a tiny epsilon rather than dropping boundary swings.
       if (Math.abs(change) >= SWING - 1e-9) {
-        pushAlert(m, prev.price, cur);
+        var a = pushAlert(m, prev.price, cur);
+        if (a) { a.event = m.event_ticker || ""; a.rules = m.rules_primary || ""; persist(); loadEvent(a.event); }
       }
     }
     state.lastPrice[m.ticker] = { price: cur, ts: sample.t };
@@ -137,34 +141,69 @@
       dir: dir,
       oi: model.oi,
       api: apiUrl(m.ticker, series),
-      eventApi: eventTicker
-        ? "https://external-api.demo.kalshi.co/trade-api/v2/events/" +
-          encodeURIComponent(eventTicker)
-        : "",
-      seriesApi: series
-        ? "https://external-api.demo.kalshi.co/trade-api/v2/series/" +
-          encodeURIComponent(series)
-        : "",
-      sources: [],                  // official settlement-source website links
       roi: model,                   // documented model output
       roiSignal: model.score >= ROI_THRESHOLD
     };
-    // Official settlement-source website links for the series (https only).
-    var raw = (K.seriesSources && K.seriesSources(series)) || [];
-    raw.forEach(function (s) {
-      if (s && s.name) {
-        var u = (K.safeHttps && K.safeHttps(s.url)) || null;
-        alert.sources.push({ name: String(s.name), url: u });
-      }
-    });
     state.alerts.unshift(alert);
     if (state.alerts.length > MAX_ALERTS) state.alerts.length = MAX_ALERTS;
-    try { localStorage.setItem(ALERT_KEY, JSON.stringify(state.alerts)); } catch (e) {}
+    persist();
     render();
     if (window.KalshiTrade && window.KalshiTrade.onSwingAlert) {
       try { window.KalshiTrade.onSwingAlert(alert); } catch (e) { /* automation must not break alerts */ }
     }
     return alert;
+  }
+
+  function persist() {
+    try { localStorage.setItem(ALERT_KEY, JSON.stringify(state.alerts)); } catch (e) {}
+  }
+
+  /* ---------- sharp-jump context: official event record ----------
+   * GET /events/{event_ticker} (Get Event) returns settlement_sources[{name,url}]:
+   * the sources the exchange uses to resolve the event. These are shown as
+   * context links only. They do NOT prove what caused a price move.
+   * Source: https://docs.kalshi.com/api-reference/events/get-event
+   */
+  KD.events = {};                   // event_ticker -> {status, sources, title, api}
+  function loadEvent(evt) {
+    if (!evt || KD.events[evt]) return;
+    KD.events[evt] = { status: "loading", sources: [], title: "", api: eventUrl(evt) };
+    fetch(eventUrl(evt), { headers: { Accept: "application/json" } })
+      .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+      .then(function (j) {
+        var ev = j.event || {};
+        KD.events[evt] = {
+          status: "ok", title: ev.title || "", api: eventUrl(evt),
+          sources: (ev.settlement_sources || []).filter(function (s) {
+            return s && typeof s.url === "string" && /^https:\/\//.test(s.url);
+          })
+        };
+        render();
+      })
+      .catch(function () {
+        KD.events[evt] = { status: "error", sources: [], title: "", api: eventUrl(evt) };
+        render();
+      });
+  }
+  function eventUrl(evt) {
+    return "https://external-api.demo.kalshi.co/trade-api/v2/events/" + encodeURIComponent(evt);
+  }
+  function contextCell(a) {
+    if (!a.event) return "<span class='muted small'>event not recorded (older alert)</span>";
+    var ev = KD.events[a.event];
+    var out = "<a class='src' href='" + esc(eventUrl(a.event)) + "' target='_blank' rel='noopener'>event API</a>";
+    if (!ev || ev.status === "loading") return out + " <span class='muted small'>loading settlement sources&hellip;</span>";
+    if (ev.status === "error") return out + " <span class='muted small'>event record unavailable (browser/API blocked) &mdash; not inferred</span>";
+    if (!ev.sources.length) return out + " <span class='muted small'>API lists no settlement sources</span>";
+    out += ev.sources.map(function (s) {
+      return " <a class='src' href='" + esc(s.url) + "' target='_blank' rel='noopener'>" + esc(s.name || s.url) + "</a>";
+    }).join("");
+    return out;
+  }
+  function rulesCell(a) {
+    if (!a.rules) return "";
+    return "<details class='rules'><summary class='small'>rules (Get Market rules_primary)</summary><div class='small'>" +
+      esc(a.rules) + "</div></details>";
   }
 
   /* ---------- chat row selection ---------- */
@@ -179,24 +218,6 @@
   KD.toggle = function () { state.enabled = !state.enabled; render(); };
 
   /* ---------- rendering (two scrolling chats) ---------- */
-  function srcLink(href, label) {
-    if (!href) return "";
-    return "<a class='src' href='" + esc(href) + "' target='_blank' rel='noopener'>" +
-      esc(label) + "</a>";
-  }
-  function relatedLinks(a) {
-    var parts = [];
-    if (a.eventApi) parts.push(srcLink(a.eventApi, "event API"));
-    if (a.seriesApi) parts.push(srcLink(a.seriesApi, "series API"));
-    parts.push(srcLink(a.api, "market API"));
-    var named = (a.sources || []).filter(function (s) { return s.url; }).slice(0, 3);
-    named.forEach(function (s) {
-      parts.push("<a class='src' href='" + esc(s.url) + "' target='_blank' rel='noopener'>" +
-        esc(s.name) + "</a>");
-    });
-    if (!named.length) parts.push("<span class='muted small'>no official source URLs</span>");
-    return parts.join(" · ");
-  }
   function roiCell(a) {
     if (!a.roi) return "—";
     var badge = a.roiSignal ? " <span class='roi'>· signal</span>" : "";
@@ -215,16 +236,17 @@
       "<td class='num'>" + cents(a.oldPrice) + " → " + cents(a.newPrice) + "</td>" +
       "<td class='num " + esc(dirLabel) + "'>" + arrow + " " + cents(Math.abs(a.change)) + "</td>" +
       "<td class='num'>" + roiCell(a) + "</td>" +
-      "<td class='small'>" + relatedLinks(a) + "</td></tr>";
+      "<td><a class='src' href='" + esc(a.api) + "' target='_blank' rel='noopener'>market API</a></td>" +
+      "<td class='ctx'>" + contextCell(a) + "<div class='small muted'>Cause not verified: a listed source is not proof that it moved the price.</div>" + rulesCell(a) + "</td></tr>";
   }
   function renderPanel(el, rows, label, emptyHint) {
     if (!el) return;
     var rowsHtml = rows.map(alertRow).join("");
     var empty = rows.length ? "" :
-      "<tr><td colspan='8' class='muted'>No " + label + " swing alerts yet. " + emptyHint + "</td></tr>";
+      "<tr><td colspan='9' class='muted'>No " + label + " swing alerts yet. " + emptyHint + "</td></tr>";
     el.innerHTML =
       "<table class='alerts'><thead><tr><th>Time</th><th>Topic</th><th>Ticker</th><th>Event</th>" +
-      "<th>Price move</th><th>Swing</th><th>ROI score</th><th>Related official links</th></tr></thead><tbody>" +
+      "<th>Price move</th><th>Swing</th><th>ROI score</th><th>Source</th><th>Context (official links)</th></tr></thead><tbody>" +
       rowsHtml + empty + "</tbody></table>";
   }
   function render() {

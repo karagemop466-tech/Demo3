@@ -115,9 +115,9 @@ if the browser blocks the request the tables fall back to the snapshot links in
      <em>All events</em> shows every swing; <em>High ROI model</em> applies a documented, transparent score
      (0.4&middot;swing size + 0.3&middot;relative move + 0.3&middot;liquidity) shown in the score column
      &mdash; a labeled unverified heuristic (no trained model exists; flagged F-5B-02, never presented as verified ROI).
-     Each row links its official sources: the event / series / market API URLs and the series' Kalshi
-     settlement-source websites (listed for context, not verified as the cause of the swing &mdash; F-5B-01).
-     Alerts persist in this browser only.</p>
+     Each row links its official sources: the market API URL and, in <em>Context</em>, the event's official
+     <code>settlement_sources</code> (Get Event). Those are resolution sources, not proof of cause: each row
+     says "Cause not verified" (F-5B-01). Alerts persist in this browser only.</p>
   <div class="alert-controls">
     <label><input type="checkbox" id="alertsEnabled" checked> Alerts enabled</label>
     <label><input type="checkbox" id="autoTrade" disabled> Automated paper trades on swing (paper/SIMULATED only)</label>
