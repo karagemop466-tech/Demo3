@@ -499,14 +499,17 @@ def main():
         (dedup_res if r["exit_kind"] == "settlement" else dedup_exp).append(r)
     datasets["resolved"] = (dedup_res, meta_res)
     datasets["exploratory"] = (dedup_exp, [m for m in meta_exp if not m["settled"]])
-
-    # topic attribution for anything the sources left blank
     topic_by_ticker = {}
-    p = ROOT / "data" / "latest" / "markets_settled.json"
-    if p.exists():
-        for m in load("data/latest/markets_settled.json").get("markets", []):
-            if m.get("topic"):
-                topic_by_ticker[m["ticker"]] = m["topic"]
+    for rel in ("data/latest/markets_settled.json", "data/latest/markets_open.json"):
+        if (ROOT / rel).exists():
+            for m in load(rel).get("markets", []):
+                if m.get("topic") and m.get("ticker") not in topic_by_ticker:
+                    topic_by_ticker[m["ticker"]] = m["topic"]
+    for m in meta_exp:
+        if not m["topic"]:
+            m["topic"] = topic_by_ticker.get(m["ticker"], "unknown")
+
+    # topic attribution for anything the sources left blank (built above)
     for rows, _m in datasets.values():
         for r in rows:
             if not r["topic"]:
@@ -586,6 +589,11 @@ def main():
             "sources": [SETTLE_DOC, CANDLE_DOC],
         },
         "fee_verification": fee_table_check(),
+        "topic_attribution": {
+            "rule": "topic taken from the committed settled snapshot, else from the committed "
+                    "open-market snapshot; markets in neither stay 'unknown' (never inferred)",
+            "sources": ["data/latest/markets_settled.json", "data/latest/markets_open.json"],
+        },
         "inputs": {
             "resolved_candles": "strategy/data/raw/*.json",
             "candles": "data/latest/candles.json",

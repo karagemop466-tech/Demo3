@@ -175,6 +175,7 @@ NAV = [
     ("crypto.html", "Crypto"),
     ("golf.html", "Golf"),
     ("portfolio.html", "Portfolio"),
+    ("strategy.html", "Strategy lab"),
     ("trades.html", "Trades"),
     ("questions.html", "Questions"),
     ("suggestions.html", "Suggestions"),
