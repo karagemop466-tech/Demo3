@@ -486,3 +486,35 @@ Environment note: the platform binds each session to `arena/<id>-demo3`, so per-
   seeded swings prove the mechanism, not a market); F-cat-05 `/events?event_tickers=` filter ignored;
   F-cat-06 `/series?limit=` ignored; F-cat-07 nav/flagged-page integration deferred to the
   integration session (CR-22661044-1/2).
+- 2026-11-20 20:12 UTC: CI hardening — `catalysts/scan.py` gained a wall-clock budget
+  (`CATALYST_DEADLINE_SECONDS`, default 540 s; feeds/series/watch steps stop early and publish a
+  self-disclosed partial run instead of hanging), `catalysts/report_run.py` writes
+  `catalysts/data/last_run.txt` (per-artifact health, `MISSING` when a step did not complete) and the
+  workflow commits it **on every run, success or failure** — needed because this repo's shared API
+  token is rate-limited (403 `API rate limit exceeded for user ID 309443653`), so Actions logs are not
+  always readable from a session; the page renders the note under the status chips.
+- 2026-11-20 20:14 UTC: brief extension implemented (portfolio/performance lines): a simulated
+  demo-account **book per strategy** (`strategies.json → portfolio.books`) — bankroll → equity,
+  realized $, win/loss, max drawdown, per-topic split, equity curve, one position per market with
+  duplicate alerts counted, `evaluable` gated at n>=30, labelled gross of fees and explicitly "no order
+  is sent to Kalshi". `check_page.py` re-adds + re-derives every curve point from the published trades
+  (tamper test: editing equity/curve/`evaluable` produced 4 targeted failures, so the gate bites).
+- 2026-11-20 20:16 UTC: new live swing found by the refreshed tape —
+  `KXPRESNOMD-28-BOBA` 0.0050 → 0.8630 ($0.8580, 1498 s gap). Verified against the official record
+  `GET https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPRESNOMD-28-BOBA` → 200,
+  `previous_price_dollars "0.0050"`, `last_price_dollars "0.8630"`, `yes_bid_dollars "0.0010"`,
+  `yes_ask_dollars "0.8630"`, `price_level_structure "deci_cent"`, `volume_fp "418777737.24"`,
+  `volume_24h_fp "63615.71"`, `status "active"`, `close_time 2028-11-07T15:00:00Z`. This drove two
+  additions: **exchange corroboration** (a row's prices are confirmed against the market record's own
+  previous/last fields; the interval is never claimed — F-cat-08) and the
+  **thin-quote caveat** (a $0.858 "jump" printed against a 0.0010/0.8630 quote is not a tradable
+  signal — F-cat-10). `fetched_via` now records the exact request a value came from.
+- 2026-11-20 20:18 UTC: irregularity removed from my own code before merge — the per-event URL
+  `demo.kalshi.co/market/<event>` was **inferred** (undocumented pattern, SPA not loadable from this
+  environment; `fetch_page` on both `/market/…` and `/event/…` returned "Failed to fetch"). It is now
+  published empty with the reason in `kalshi_market_page_note`, `check_page.py` fails if such a URL
+  ever reappears, and the smoke test asserts no `demo.kalshi.co/market/` link renders (F-cat-09).
+- Verification now: `test_scan.py` **Ran 42 tests … OK** · `check_page.py` **PASSED** (3 swings, 3 rows
+  with an official source link, 21 local link targets exist) · `smoke.mjs` **39/39** · repo gates
+  `verify_root_site` / `verify_site` (28 pages) / `tracker_check` / `check_site` / `npm test` (26/26)
+  all **PASS** with this directory present.
