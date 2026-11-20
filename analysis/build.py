@@ -439,6 +439,10 @@ def build_report(demo, prod, rows, ladders, tables, topics_cfg) -> dict:
                       "channels, so it cannot be opened from an unauthenticated static page. The site "
                       "therefore polls committed REST snapshots (hourly, plus manual dispatch).",
             "source": "https://docs.kalshi.com/getting_started/quick_start_websockets.md",
+            "to_enable": "Add the same demo key secrets; collector/ws_stream.py can then keep a "
+                         "signed socket open and append tick-by-tick observations to "
+                         "data/history/. Until then the chart uses REST candlesticks and the "
+                         "hourly snapshot log, both of which are real API data.",
         },
     }
 
@@ -493,7 +497,7 @@ def render_md(report: dict) -> str:
               f"- markets with at least one missing field: {report['data_quality']['markets_with_missing_fields']}",
               "", "## Not available (and why)", ""]
     for k, v in report["not_available"].items():
-        lines += [f"### {k}", "", v["reason"], "", f"To enable: {v['to_enable']}", "",
+        lines += [f"### {k}", "", v["reason"], "", f"To enable: {v.get('to_enable', 'n/a')}", "",
                   f"Source: {v['source']}", ""]
     return "\n".join(lines) + "\n"
 
