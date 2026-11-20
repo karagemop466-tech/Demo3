@@ -27,6 +27,7 @@ without an official source link, blank/flagged values are unverified and never i
 | arena-3a22fb0f | `arena/3a22fb0f-demo3` | delivered - final integration (PR #18 merged; Pages live) | Chart/liquidity UX, trade execution + portfolio analysis with paper-trading fallback, per-row source-link verification, site consolidation, suggestions review workflow, final PR/Pages delivery. |
 | 3e08e6dc | `arena/3e08e6dc-demo3` | delivered (PR #12 merged) | `analysis/` site + live data snapshots + refresh workflow; see its section below. |
 | 3b5e95bd | `arena/3b5e95bd-demo3` | active - automation + final integration (this session) | Scheduled server-side collector (`collector/`, `collect.yml`, committed `data/`: ranked events, orderbooks, 1m/60m/1440m candles, resolution sweeps, CORS probe), demo-account trade/portfolio pipeline (`trading/`, `trade.yml`), `data-tracking.html` snapshot-rendering page, final PR/merge/Pages. Details in its completion section below. |
+| 5125afd8 | `arena/5125afd8-demo3` | active - live swing alerts + high-ROI feed (this session) | Adds ≥ $0.10 swing alert engine and two scrolling feeds to the root dashboard; see its section at the end. |
 | 4d10aedf | `arena/4d10aedf-demo3` | delivered - data pipeline + tooling + integration pass | Early false "done" claims (R-03/R1) corrected 2026-11-20 11:40 UTC. Delivered: series-first CI collector + row-level verification (`scripts/collect_kalshi_data.py`, `verify_rows.py`, `kalshi-data.yml`, `data/latest/`, `data/history/`), portfolio/trade tooling (`kalshi_client.py`, `portfolio_pull.py`, `trade_runner.py`, `kalshi-portfolio.yml`), docs/ integration pass (top-dollar events, resolution tracker, pipeline snapshots, verification report, I-17 flags). Sections below. |
 
 ## Task board — session 4ea36f44 (source-linked Demo Desk)
@@ -348,3 +349,14 @@ Follow-up requests from session 06cbd03f addressed at integration:
 - 2026-11-20 12:25 UTC: PR https://github.com/karagemop466-tech/Demo3/pull/24 (`arena/4d10aedf-demo3` -> `main`) opened with summary, sources and flagged irregularities. Pre-merge checks green (verify_rows 725/725, verify_site PASSED, jsdom smoke PASSED).
 - 2026-11-20 12:29 UTC: `gh pr merge 24 --merge` reported conflicts — `main` had advanced with sessions `3b5e95bd`/`dd229508`/`arena-3a22fb0f` deliveries (PRs #18/#21/#22). Conflicts in `.gitignore`, `README.md`, `docs/executive-summary.md`, `COORDINATION.md` resolved by keeping both sides: `main`'s records preserved verbatim, 4d10aedf's records added as new sections. Nothing discarded (handoff/conflict protocol).
 - 2026-11-20 12:31 UTC: **PR #24 MERGED** — merge commit `48fe55e`. `Checks` workflow SUCCESS on the merge; `pages build and deployment` workflow SUCCESS; the Pages API reports `built` (source `main` /). Live site verified via page fetch: https://karagemop466-tech.github.io/Demo3/ serves the merged canonical landing with live status "LIVE · trading active (demo)", the executive-summary source table, decision registers, and archive links (docs/, docs/tracker/, analysis/, demo-desk/, research/). This line records the actual result; the follow-up board commit carries the confirmation to `main`.
+
+## Task board — session 5125afd8 (live swing alerts + two scrolling feeds + high-ROI filter)
+
+Claimed 2026-11-20 by session `5125afd8` on branch `arena/5125afd8-demo3` (base `b3b2b23`).
+Gap found on `main`: no ≥ $0.10 price-swing alert feed and no high-ROI filtered feed exist on the
+canonical root dashboard (grep of `*.html`/`assets/*.js`). Competing consolidation PRs #17, #19, #23
+are OPEN and touch overlapping root files; this session keeps its edits minimal and additive.
+
+| Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|
+| T-A1 Swing alert engine (≥ $0.10 between scans, both directions) + two scrolling feeds (all swings / high-ROI filter) | in progress | 5125afd8 | `assets/alerts.js` (new), `tests/alerts.test.js` (new), `scripts/build_root_site.py` (dashboard panel + script tag only), `assets/dashboard.js` (one hook line only) | Fields from official Get Market schema: https://docs.kalshi.com/api-reference/market/get-market (`last_price_dollars`, `yes_bid_dollars`, `yes_ask_dollars`, `volume_24h_fp`, `open_interest_fp`) | pending |
