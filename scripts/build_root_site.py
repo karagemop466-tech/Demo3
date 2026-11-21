@@ -423,6 +423,52 @@ def consolidated_flags():
         [f"{DOCS}/api-reference/events/get-event", f"{DOCS}/changelog",
          "https://external-api.demo.kalshi.co/trade-api/v2/events?limit=1"],
         "Flagged — fails closed", "c75f4bf1")
+    # session 2a0ddd99: register rows delivered by merged PR #85, then lost to a later
+    # regeneration of flagged.html (same hazard as F-6D-09). Ported verbatim from the
+    # PR #85 diff by session 68f76339 (takeover of PR #86's promised content) so every
+    # future regeneration keeps them.
+    add("F-2a0-01", "CI / data pipeline",
+        "collect.yml was invalid YAML (duplicate if: key) — scheduled collector could not start",
+        "The merged .github/workflows/collect.yml carried two if: keys on one step (merge "
+        "artifact). GitHub parsed the file as invalid, failed every push run with zero jobs "
+        "(e.g. run 44804863000 on main), and the */10 schedule could not start, so "
+        "data/latest/ went stale. Session f2b0808f delivered the fix (I-F2-08, merged via "
+        "PR #51/#55); session a56b9e45 independently verified the parse (PR #56). Session "
+        "2a0ddd99 found the same defect independently at 19:47 UTC, repaired it, then "
+        "withdrew its duplicate edit when the merged fix was discovered (backup branch only) "
+        "and re-verified: all six workflow files parse with unique step conditions.",
+        ["https://github.com/karagemop466-tech/Demo3/blob/main/.github/workflows/collect.yml",
+         "https://github.com/karagemop466-tech/Demo3/actions/workflows/collect.yml"],
+        "resolved (fix by f2b0808f; verified by a56b9e45 + 2a0ddd99)", "2a0ddd99")
+    add("F-2a0-02", "Alerts",
+        "Exactly-$0.10 swings could be missed (float rounding) — boundary case now test-pinned",
+        "Raw float subtraction (0.8 − 0.9 = −0.09999…) can fail a naive ≥ $0.10 threshold. "
+        "main compares with a 1e-9 epsilon (PR #48 merge) and PR #60 added its own threshold "
+        "test; session 2a0ddd99 independently found the same defect and keeps regression pins "
+        "in tests/regressions-2a0ddd99.test.js.",
+        [f"{DOCS}/api-reference/market/get-markets",
+         "https://github.com/karagemop466-tech/Demo3/blob/main/tests/regressions-2a0ddd99.test.js"],
+        "resolved (fix on main; pins by 2a0ddd99)", "2a0ddd99")
+    add("F-2a0-03", "Data snapshots",
+        "A merge rolled data/latest/ back to an older snapshot while the collector was broken",
+        "Between 19:32 and 19:47 UTC the merge of PR #46 kept branch snapshots older than "
+        "main's latest refresh, while the collector schedule was down (F-2a0-01); main's "
+        "data/latest/meta.json briefly read generated_at 2026-11-20T19:32:01+00:00. Later "
+        "merges restored newer snapshots (generated_at 2026-11-20T19:39:40+00:00 at 8b42b06). "
+        "Recovery of the */10 schedule on main still needs post-fix confirmation.",
+        ["https://github.com/karagemop466-tech/Demo3/blob/main/data/latest/meta.json",
+         "https://github.com/karagemop466-tech/Demo3/pull/46"],
+        "superseded — schedule recovery confirmed after this row was written (a56b9e45 PR #76, "
+        "run 44809097574 success 2026-11-20T20:21Z; snapshot commits continue on main)",
+        "2a0ddd99")
+    add("F-2a0-04", "Process",
+        "GitHub REST rate limit exhausted mid-session (19:47 UTC)",
+        "The 2a0ddd99 session hit the authenticated REST rate limit while auditing Actions "
+        "runs (5,450/hr quota), pausing PR management until the quota reset (~20:11 UTC). "
+        "Local git push was unaffected. Recorded for transparency; no data values were "
+        "affected.",
+        ["https://docs.github.com/en/rest/using-the-rest-api/getting-started-with-the-rest-api#rate-limiting"],
+        "disclosed", "2a0ddd99")
     add("I-11", "Trading", "No demo-account API credentials were provided",
         "Live order execution needs a Kalshi demo API key (created at demo.kalshi.co). Until one is "
         "supplied, the Trade pages run in clearly labeled paper-trading mode against live demo "
