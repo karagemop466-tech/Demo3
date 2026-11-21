@@ -46,8 +46,14 @@ jobs:
           python3 scripts/tests/test_price_alerts.py
           python3 scripts/price_alerts.py
 
-      - name: Commit and push data
-        if: always()
+      # Snapshot commits happen on the default branch only (session 3528551d, F-3528-04).
+      # This job runs on every push to every branch; committing data/ there (as it did)
+      # rewrote the snapshots on each session branch, so pull requests arrived with data/
+      # conflicts against main and every session had to rebase mid-task. collect.yml was
+      # already limited the same way. Feature-branch runs still exercise the collector and
+      # the row-level verification above - they just do not write to the branch.
+      - name: Commit and push data (default branch only)
+        if: always() && github.ref_name == github.event.repository.default_branch
         run: |
           set -x
           git config user.name "kalshi-data-bot"
