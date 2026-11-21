@@ -2188,3 +2188,44 @@ I6 — Site checks: verify_root_site 0 failures; verify_site PASSED; check_site 
   (`ev_by_ticker[et]["title"]`) for `top_events.json` event titles.
 
 Claim pushed: 639664c.
+
+### Session c46ba25d — completion record (2026-11-21 ~07:2xZ)
+
+**Final statuses:** I1 done, I2 done, I3 done (V-A1 fixed), I4 done, I5 done (F-c46-01/02), I6 done, I7 done (recorded honestly — F-7b-08), I8 done (PRs #91/#92 merged).
+
+**PRs (no approval wait; merged):**
+- PR #91: https://github.com/karagemop466-tech/Demo3/pull/91 — "integration c46ba25d: fix V-A1 legacy tables in portfolio/trades + alert-console near-miss fix (integration audit pass)" — MERGED (merge commit `af5a1a1` on `main`; in main's history at the tip area).
+- PR #92: https://github.com/karagemop466-tech/Demo3/pull/92 — "integration: publish F-c46-01/02 (alert-console ROI-feed fix + collector title provenance) on Flagged page" — MERGED (merge commit `83da228`, main tip).
+- `main` is now at `83da228` (contains both merges + the bot data snapshots f7c8351/03fb49c/ea28d1d/6ff0065 and `d7c6ca6`).
+
+**Conflict resolution during the integration (per board rules — nothing discarded):**
+- Bot data-snapshot conflicts (alerts/model.json, data/latest/*.json, data/history/*.jsonl, data/swings/*): resolved newest-retrieved_at wins for JSON (compared stamps per file: e.g. data/latest/meta.json 2026-11-21T07:01:06+00:00 ours vs 06:59:07Z theirs), line-union for JSONL (420 unique lines in data/history/prices.jsonl).
+
+**Final local verification on main @ 83da228:**
+- `python3 scripts/verify_root_site.py` — 0 failures (0 broken internal links; every generated table row has an official source link or an unverified flag; F-c46-01/02 rows carry official source links).
+- `python3 scripts/verify_site.py` — PASSED (0 failures).
+- `python3 scripts/check_site.py` — passed.
+- `npm test` — 67/67 (includes the previously failing `tests/alert_console.test.js` now passing).
+- `git diff --check` — OK.
+
+**GitHub Pages (honest record — F-7b-08, inherited):**
+- Pages API (as accessible ~07:21Z): `status: built` (legacy deploy from `main` `/`); deploy runs: `44878060543` headSha af5a1a1 status `completed`; `44878592942` headSha ea28d1d status `queued` — legacy builds for the newest main tips are superseded by rapid data pushes (10-min collector + session merges), and builds that do complete are `errored` ("Page build failed") when superseded. I-F2-07 (open) and F-7b-08 (open) are the same phenomenon recorded earlier; `pages.yml` (Actions deploy) exists on main but cannot be activated from this token (PUT/POST /pages → 403, recorded by session f2b0808f).
+- Live site (verified via page fetch ~07:22Z — I-32F-01): root pages serve (index.html renders; the executive-summary executive tables with per-row sources; topic pages; dashboard; alerts). `portfolio.html` and `trades.html` still show the pre-fix literal (the last completed legacy artifact predates the V-A1 fix). The fix is on `main` (PR #91) — the deploy pipeline needs the Pages queue to settle; flagged per F-7b-08.
+- `gh api` was rate-limited during the poll (documented swarm behavior; core limit exhausted by concurrent sessions).
+
+**Irregularities published on the site's Flagged page:**
+- F-c46-01 (resolved, test-covered): alert-console ROI chat empty for uncalibrated alerts (fixed at integration; reproduced the 0.493 score; `npm test` 67/67).
+- F-c46-02 (open, collector owner 3b5e95bd): `data/latest/top_events.json` stores a nested market's title for `KXPGATOUR-MAST27` — live event title is "2027 The Masters Champion"; fix `market_row` in `scripts/collect_kalshi_data.py` to prefer the event title.
+- Inherited & retained: F-7b-08 (Pages deploy starvation), F-6D-06/I-11 (no demo API key — live trading/portfolio stays labeled paper/SIMULATED), demo-vs-production caveat, etc.
+
+**Verification log highlights (2026-11-21):** live API re-verified per the brief: /exchange/status (trading_active true); /markets?limit=3; /series?limit=3; /markets?tickers=KXPRESNOMD-28-HBID (live read 0.0050/0.0030/0.0020/0.0050 — matches committed open row); /markets?tickers=KXGOVCA-26-CBIA (live result "no", status "finalized", settlement_value_dollars "0.0000" — matches committed settled row); /markets?tickers=KXGOVCA-26-CBIA&status=settled; /markets/KXPRESNOMD-28-HBID/orderbook (best YES bid 0.0030@111111.10; NO-bid ladder ascending 0.1830→0.9950); /markets/trades?ticker=KXPRESNOMD-28-HBID&limit=5 (count_fp/yes_price_dollars/taker_outcome_side/created_time); /series/KXPRESNOMD/markets/KXPRESNOMD-28-HBID/candlesticks (new path, OHLC envelope matches dashboard parsing); /events/KXPRESNOMD-28 (settlement_sources → democrats.org); /markets?event_ticker=KXPRESNOMD-28&limit=3; /series/KXPGATOUR (settlement_sources ESPN/Fox Sports/PGATOUR); /markets?event_ticker=KXPGATOUR-MAST27&limit=2; /markets?series_ticker=KXBTC&status=open; /series/KXAAAGASW; /portfolio/balance (unauthenticated → error, no data). Docs re-fetched (2026-11-21): demo_env, api_keys, market_settlement, orderbook_responses, get-markets, get-market-candlesticks, create-order-v2, cancel-order-v2, get-balance, get-positions, get-fills, get-orders, get-series-list, get-event — all match the site's implementation (field names/semantics/signing spec).
+
+**Brief deliverables mapped to state (final):**
+1. Executive summary (`EXECUTIVE_SUMMARY.md` + root landing table): verified line-by-line vs official sources (I1).
+2. Live dashboard: highest-dollar live events, five topics; price chart (30s–24h, seconds/minutes/hours), orderbook depth (contracts at each price), trades, yes/no resolution tracking, per-row source links (I2).
+3. Live alerts: ≥$0.10 swings in two scrolling chats (All events / High-ROI model), resolutions posted when the exchange reports yes/no (canonical implementation on `main`; verified by tests) (I3).
+4. Portfolio/trades/strategies: paper mode (SIMULATED, labeled) with performance summary + categorization; live mode via demo key (I3 — live needs the key the user must create at demo.kalshi.co).
+5. Automation: paper desk (paper-desk.yml, every 20 min on main) + collector (collect.yml, every 10 min on main) + in-browser automation toggle (trade.js) — no manual input (I4).
+6. GitHub Pages site: live at https://karagemop466-tech.github.io/Demo3/ (served; deploy of the newest content pending per F-7b-08).
+
+This session's remaining unverified-but-honest notes: demo-account trading (no key — paper mode only), Pages deploy timing (F-7b-08).
