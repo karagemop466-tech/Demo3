@@ -238,6 +238,6 @@
  "meta": {
   "doc": "https://docs.kalshi.com/api-reference/market/get-series.md",
   "endpoint": "https://external-api.demo.kalshi.co/trade-api/v2/series/{series_ticker}",
-  "generated_at": "2026-11-21T06:40:52Z"
+  "generated_at": "2026-11-21T07:07:02Z"
  }
 }
