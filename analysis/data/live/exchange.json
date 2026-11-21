@@ -1,5 +1,5 @@
 {
-  "fetched_at": "2026-11-21T02:24:13Z",
+  "fetched_at": "2026-11-21T11:15:08Z",
   "source_url": "https://api.elections.kalshi.com/trade-api/v2/exchange/status",
   "response": {
     "exchange_active": true,

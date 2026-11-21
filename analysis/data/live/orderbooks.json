@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-21T02:24:13Z",
+  "generated_at": "2026-11-21T11:15:08Z",
   "api_base": "https://api.elections.kalshi.com/trade-api/v2",
   "books": {
     "KXAAAGASM-26NOV30-3.40": {
@@ -7,11 +7,11 @@
       "topic": "gas",
       "title": "Will average gas prices be above $3.40?",
       "source_url": "https://api.elections.kalshi.com/trade-api/v2/markets/KXAAAGASM-26NOV30-3.40/orderbook?depth=10",
-      "fetched_at": "2026-11-21T02:24:13Z",
+      "fetched_at": "2026-11-21T11:15:08Z",
       "yes_bids": [
         {
           "price": 0.98,
-          "contracts": 15885.75
+          "contracts": 15894.1
         },
         {
           "price": 0.97,
@@ -19,11 +19,11 @@
         },
         {
           "price": 0.96,
-          "contracts": 11285.0
+          "contracts": 11360.0
         },
         {
           "price": 0.95,
-          "contracts": 10984.0
+          "contracts": 10909.0
         },
         {
           "price": 0.94,
@@ -57,32 +57,37 @@
       "topic": "gas",
       "title": "Will average gas prices be above $3.70?",
       "source_url": "https://api.elections.kalshi.com/trade-api/v2/markets/KXAAAGASM-26NOV30-3.70/orderbook?depth=10",
-      "fetched_at": "2026-11-21T02:24:13Z",
-      "yes_bids": [],
+      "fetched_at": "2026-11-21T11:15:08Z",
+      "yes_bids": [
+        {
+          "price": 0.01,
+          "contracts": 2856.01
+        }
+      ],
       "no_bids": [
         {
-          "price": 0.99,
-          "contracts": 3715.69
-        },
-        {
           "price": 0.98,
-          "contracts": 2500.0
+          "contracts": 6076.0
         },
         {
           "price": 0.97,
-          "contracts": 892.0
+          "contracts": 805.0
         },
         {
           "price": 0.96,
-          "contracts": 213.0
+          "contracts": 340.0
         },
         {
           "price": 0.95,
-          "contracts": 150.0
+          "contracts": 3005.0
         },
         {
           "price": 0.92,
           "contracts": 40.0
+        },
+        {
+          "price": 0.86,
+          "contracts": 90.0
         },
         {
           "price": 0.85,
@@ -107,16 +112,16 @@
       "topic": "gas",
       "title": "Will average gas prices be above $4.00?",
       "source_url": "https://api.elections.kalshi.com/trade-api/v2/markets/KXAAAGASM-26NOV30-4.00/orderbook?depth=10",
-      "fetched_at": "2026-11-21T02:24:13Z",
+      "fetched_at": "2026-11-21T11:15:08Z",
       "yes_bids": [],
       "no_bids": [
         {
           "price": 0.99,
-          "contracts": 17833.62
+          "contracts": 17832.62
         },
         {
           "price": 0.98,
-          "contracts": 2800.0
+          "contracts": 2837.5
         },
         {
           "price": 0.96,
@@ -147,8 +152,8 @@
           "contracts": 40.0
         },
         {
-          "price": 0.75,
-          "contracts": 40.0
+          "price": 0.77,
+          "contracts": 100.0
         }
       ]
     },
@@ -157,7 +162,7 @@
       "topic": "elections",
       "title": "Who will the next Pope be?",
       "source_url": "https://api.elections.kalshi.com/trade-api/v2/markets/KXNEWPOPE-70-PPAR/orderbook?depth=10",
-      "fetched_at": "2026-11-21T02:24:13Z",
+      "fetched_at": "2026-11-21T11:15:08Z",
       "yes_bids": [
         {
           "price": 0.04,
@@ -170,6 +175,10 @@
         {
           "price": 0.026,
           "contracts": 500.0
+        },
+        {
+          "price": 0.011,
+          "contracts": 13.0
         },
         {
           "price": 0.01,
@@ -236,23 +245,27 @@
       "topic": "elections",
       "title": "Who will the next Pope be?",
       "source_url": "https://api.elections.kalshi.com/trade-api/v2/markets/KXNEWPOPE-70-LANT/orderbook?depth=10",
-      "fetched_at": "2026-11-21T02:24:13Z",
+      "fetched_at": "2026-11-21T11:15:08Z",
       "yes_bids": [
         {
           "price": 0.06,
           "contracts": 336.88
         },
         {
+          "price": 0.038,
+          "contracts": 133.18
+        },
+        {
+          "price": 0.037,
+          "contracts": 88.0
+        },
+        {
           "price": 0.036,
-          "contracts": 166.79
+          "contracts": 87.31
         },
         {
           "price": 0.035,
           "contracts": 500.0
-        },
-        {
-          "price": 0.031,
-          "contracts": 53.7
         },
         {
           "price": 0.03,
@@ -263,12 +276,8 @@
           "contracts": 331.0
         },
         {
-          "price": 0.004,
-          "contracts": 48.0
-        },
-        {
-          "price": 0.003,
-          "contracts": 3879.0
+          "price": 0.009,
+          "contracts": 1343.0
         },
         {
           "price": 0.002,
@@ -327,7 +336,7 @@
       "topic": "elections",
       "title": "Who will the next Pope be?",
       "source_url": "https://api.elections.kalshi.com/trade-api/v2/markets/KXNEWPOPE-70-PERD/orderbook?depth=10",
-      "fetched_at": "2026-11-21T02:24:13Z",
+      "fetched_at": "2026-11-21T11:15:08Z",
       "yes_bids": [
         {
           "price": 0.022,
@@ -385,15 +394,15 @@
         },
         {
           "price": 0.73,
-          "contracts": 101.0
+          "contracts": 88.0
+        },
+        {
+          "price": 0.65,
+          "contracts": 18.0
         },
         {
           "price": 0.64,
           "contracts": 44.0
-        },
-        {
-          "price": 0.63,
-          "contracts": 1825.0
         }
       ]
     },
@@ -402,33 +411,33 @@
       "topic": "crypto",
       "title": "Will Ethereum reach above $3500.00 by Jan 1, 2027 at 12:00AM?",
       "source_url": "https://api.elections.kalshi.com/trade-api/v2/markets/KXETHMAXY-27JAN01-3500.00/orderbook?depth=10",
-      "fetched_at": "2026-11-21T02:24:13Z",
+      "fetched_at": "2026-11-21T11:15:08Z",
       "yes_bids": [
         {
           "price": 0.02,
-          "contracts": 6292.86
+          "contracts": 3538.49
         },
         {
           "price": 0.01,
-          "contracts": 29471.87
+          "contracts": 29768.84
         }
       ],
       "no_bids": [
         {
           "price": 0.97,
-          "contracts": 2459.98
+          "contracts": 1199.7
         },
         {
           "price": 0.96,
-          "contracts": 7521.23
+          "contracts": 8011.03
         },
         {
           "price": 0.95,
-          "contracts": 3969.0
+          "contracts": 4719.0
         },
         {
           "price": 0.94,
-          "contracts": 1212.0
+          "contracts": 17.0
         },
         {
           "price": 0.93,
@@ -452,7 +461,7 @@
         },
         {
           "price": 0.85,
-          "contracts": 4354.0
+          "contracts": 1818.0
         }
       ]
     },
@@ -461,7 +470,7 @@
       "topic": "crypto",
       "title": "Will Ethereum reach above $6000.00 by Jan 1, 2027 at 12:00AM?",
       "source_url": "https://api.elections.kalshi.com/trade-api/v2/markets/KXETHMAXY-27JAN01-6000.00/orderbook?depth=10",
-      "fetched_at": "2026-11-21T02:24:13Z",
+      "fetched_at": "2026-11-21T11:15:08Z",
       "yes_bids": [],
       "no_bids": [
         {
@@ -470,11 +479,7 @@
         },
         {
           "price": 0.98,
-          "contracts": 8358.09
-        },
-        {
-          "price": 0.91,
-          "contracts": 260.2
+          "contracts": 8097.99
         },
         {
           "price": 0.88,
@@ -503,6 +508,10 @@
         {
           "price": 0.82,
           "contracts": 15.63
+        },
+        {
+          "price": 0.81,
+          "contracts": 28.0
         }
       ]
     },
@@ -511,20 +520,20 @@
       "topic": "crypto",
       "title": "Will Ethereum reach above $5000.00 by Jan 1, 2027 at 12:00AM?",
       "source_url": "https://api.elections.kalshi.com/trade-api/v2/markets/KXETHMAXY-27JAN01-5000.00/orderbook?depth=10",
-      "fetched_at": "2026-11-21T02:24:13Z",
+      "fetched_at": "2026-11-21T11:15:08Z",
       "yes_bids": [],
       "no_bids": [
         {
           "price": 0.99,
-          "contracts": 5154.92
+          "contracts": 8474.51
         },
         {
           "price": 0.98,
-          "contracts": 9180.09
+          "contracts": 8920.0
         },
         {
           "price": 0.97,
-          "contracts": 960.2
+          "contracts": 700.0
         },
         {
           "price": 0.94,
@@ -536,7 +545,7 @@
         },
         {
           "price": 0.85,
-          "contracts": 4253.0
+          "contracts": 2069.0
         },
         {
           "price": 0.84,
@@ -552,57 +561,7 @@
         },
         {
           "price": 0.12,
-          "contracts": 1340.3
-        }
-      ]
-    },
-    "KXPGATOUR-THRC26-BBRO": {
-      "ticker": "KXPGATOUR-THRC26-BBRO",
-      "topic": "golf",
-      "title": "The RSM Classic: Blades Brown wins",
-      "source_url": "https://api.elections.kalshi.com/trade-api/v2/markets/KXPGATOUR-THRC26-BBRO/orderbook?depth=10",
-      "fetched_at": "2026-11-21T02:24:13Z",
-      "yes_bids": [],
-      "no_bids": [
-        {
-          "price": 0.999,
-          "contracts": 39995.52
-        },
-        {
-          "price": 0.993,
-          "contracts": 10575.0
-        },
-        {
-          "price": 0.99,
-          "contracts": 2100.0
-        },
-        {
-          "price": 0.983,
-          "contracts": 11490.64
-        },
-        {
-          "price": 0.98,
-          "contracts": 41.0
-        },
-        {
-          "price": 0.979,
-          "contracts": 3000.0
-        },
-        {
-          "price": 0.973,
-          "contracts": 15750.0
-        },
-        {
-          "price": 0.969,
-          "contracts": 3750.0
-        },
-        {
-          "price": 0.96,
-          "contracts": 31.0
-        },
-        {
-          "price": 0.959,
-          "contracts": 4688.0
+          "contracts": 965.0
         }
       ]
     },
@@ -611,61 +570,57 @@
       "topic": "golf",
       "title": "The RSM Classic: Jackson Koivun wins",
       "source_url": "https://api.elections.kalshi.com/trade-api/v2/markets/KXPGATOUR-THRC26-JKOI/orderbook?depth=10",
-      "fetched_at": "2026-11-21T02:24:13Z",
+      "fetched_at": "2026-11-21T11:15:08Z",
       "yes_bids": [
         {
+          "price": 0.023,
+          "contracts": 806.86
+        },
+        {
+          "price": 0.022,
+          "contracts": 50.0
+        },
+        {
           "price": 0.021,
-          "contracts": 31.06
+          "contracts": 1008.81
         },
         {
           "price": 0.02,
-          "contracts": 14848.36
+          "contracts": 8723.99
         },
         {
           "price": 0.018,
-          "contracts": 9479.0
+          "contracts": 47.0
         },
         {
           "price": 0.017,
-          "contracts": 9564.0
+          "contracts": 9264.0
+        },
+        {
+          "price": 0.016,
+          "contracts": 10307.0
         },
         {
           "price": 0.015,
-          "contracts": 20893.0
+          "contracts": 10262.0
         },
         {
           "price": 0.014,
-          "contracts": 6070.0
+          "contracts": 11951.99
         },
         {
           "price": 0.013,
-          "contracts": 15638.0
-        },
-        {
-          "price": 0.012,
-          "contracts": 1250.0
-        },
-        {
-          "price": 0.011,
-          "contracts": 1363.0
-        },
-        {
-          "price": 0.01,
-          "contracts": 1500.0
+          "contracts": 15038.0
         }
       ],
       "no_bids": [
         {
-          "price": 0.977,
-          "contracts": 12713.01
-        },
-        {
           "price": 0.976,
-          "contracts": 177814.05
+          "contracts": 146815.78
         },
         {
           "price": 0.975,
-          "contracts": 191595.0
+          "contracts": 173645.0
         },
         {
           "price": 0.974,
@@ -673,27 +628,31 @@
         },
         {
           "price": 0.973,
-          "contracts": 5701.0
-        },
-        {
-          "price": 0.972,
-          "contracts": 5675.0
+          "contracts": 2800.0
         },
         {
           "price": 0.971,
-          "contracts": 2931.25
+          "contracts": 25.0
         },
         {
           "price": 0.97,
           "contracts": 158.0
         },
         {
-          "price": 0.968,
-          "contracts": 7079.0
+          "price": 0.965,
+          "contracts": 17101.0
         },
         {
           "price": 0.963,
           "contracts": 9000.0
+        },
+        {
+          "price": 0.955,
+          "contracts": 15000.0
+        },
+        {
+          "price": 0.953,
+          "contracts": 13500.0
         }
       ]
     },
@@ -702,27 +661,23 @@
       "topic": "golf",
       "title": "The RSM Classic: Michael Thorbjornsen wins",
       "source_url": "https://api.elections.kalshi.com/trade-api/v2/markets/KXPGATOUR-THRC26-MTHO/orderbook?depth=10",
-      "fetched_at": "2026-11-21T02:24:13Z",
+      "fetched_at": "2026-11-21T11:15:08Z",
       "yes_bids": [
         {
-          "price": 0.16,
-          "contracts": 5880.89
-        },
-        {
           "price": 0.15,
-          "contracts": 41533.42
+          "contracts": 39069.37
         },
         {
           "price": 0.14,
-          "contracts": 43783.0
+          "contracts": 40783.0
         },
         {
           "price": 0.13,
-          "contracts": 57413.0
+          "contracts": 51371.26
         },
         {
           "price": 0.12,
-          "contracts": 302.0
+          "contracts": 261.0
         },
         {
           "price": 0.11,
@@ -743,36 +698,44 @@
         {
           "price": 0.093,
           "contracts": 5000.0
+        },
+        {
+          "price": 0.09,
+          "contracts": 679.0
         }
       ],
       "no_bids": [
         {
+          "price": 0.84,
+          "contracts": 1334.63
+        },
+        {
           "price": 0.83,
-          "contracts": 77719.67
+          "contracts": 39796.86
         },
         {
           "price": 0.82,
-          "contracts": 56121.97
+          "contracts": 45044.97
         },
         {
           "price": 0.81,
-          "contracts": 67145.32
+          "contracts": 70803.32
         },
         {
           "price": 0.8,
-          "contracts": 10899.0
+          "contracts": 312.0
         },
         {
           "price": 0.79,
-          "contracts": 5041.0
+          "contracts": 12094.0
         },
         {
           "price": 0.78,
-          "contracts": 18600.0
+          "contracts": 18000.0
         },
         {
           "price": 0.77,
-          "contracts": 9550.0
+          "contracts": 9510.0
         },
         {
           "price": 0.76,
@@ -780,11 +743,57 @@
         },
         {
           "price": 0.75,
-          "contracts": 263.0
+          "contracts": 421.0
+        }
+      ]
+    },
+    "KXPGATOUR-THRC26-BBRO": {
+      "ticker": "KXPGATOUR-THRC26-BBRO",
+      "topic": "golf",
+      "title": "The RSM Classic: Blades Brown wins",
+      "source_url": "https://api.elections.kalshi.com/trade-api/v2/markets/KXPGATOUR-THRC26-BBRO/orderbook?depth=10",
+      "fetched_at": "2026-11-21T11:15:08Z",
+      "yes_bids": [],
+      "no_bids": [
+        {
+          "price": 0.999,
+          "contracts": 37995.52
         },
         {
-          "price": 0.71,
-          "contracts": 140.0
+          "price": 0.993,
+          "contracts": 9975.0
+        },
+        {
+          "price": 0.99,
+          "contracts": 2100.0
+        },
+        {
+          "price": 0.983,
+          "contracts": 11490.64
+        },
+        {
+          "price": 0.98,
+          "contracts": 47.0
+        },
+        {
+          "price": 0.979,
+          "contracts": 3000.0
+        },
+        {
+          "price": 0.973,
+          "contracts": 15750.0
+        },
+        {
+          "price": 0.969,
+          "contracts": 3750.0
+        },
+        {
+          "price": 0.96,
+          "contracts": 31.0
+        },
+        {
+          "price": 0.959,
+          "contracts": 4688.0
         }
       ]
     }

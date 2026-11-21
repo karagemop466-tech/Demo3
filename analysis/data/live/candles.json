@@ -1,85 +1,15 @@
 {
-  "generated_at": "2026-11-21T02:24:13Z",
+  "generated_at": "2026-11-21T11:15:08Z",
   "api_base": "https://api.elections.kalshi.com/trade-api/v2",
   "series": {
     "KXAAAGASM-26NOV30-3.40": {
       "topic": "gas",
       "series": "KXAAAGASM",
       "title": "Will average gas prices be above $3.40?",
-      "fetched_at": "2026-11-21T02:24:13Z",
+      "fetched_at": "2026-11-21T11:15:08Z",
       "60": {
-        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXAAAGASM/markets/KXAAAGASM-26NOV30-3.40/candlesticks?start_ts=1794968653&end_ts=1795227853&period_interval=60",
+        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXAAAGASM/markets/KXAAAGASM-26NOV30-3.40/candlesticks?start_ts=1795000508&end_ts=1795259708&period_interval=60",
         "candles": [
-          {
-            "end_period_ts": 1794974400,
-            "end_period_utc": "2026-11-18T04:00:00Z",
-            "price_open": null,
-            "price_high": null,
-            "price_low": null,
-            "price_close": null,
-            "volume_contracts": 0.0,
-            "open_interest_contracts": 134780.15
-          },
-          {
-            "end_period_ts": 1794978000,
-            "end_period_utc": "2026-11-18T05:00:00Z",
-            "price_open": null,
-            "price_high": null,
-            "price_low": null,
-            "price_close": null,
-            "volume_contracts": 0.0,
-            "open_interest_contracts": 134780.15
-          },
-          {
-            "end_period_ts": 1794985200,
-            "end_period_utc": "2026-11-18T07:00:00Z",
-            "price_open": null,
-            "price_high": null,
-            "price_low": null,
-            "price_close": null,
-            "volume_contracts": 0.0,
-            "open_interest_contracts": 134780.15
-          },
-          {
-            "end_period_ts": 1794988800,
-            "end_period_utc": "2026-11-18T08:00:00Z",
-            "price_open": null,
-            "price_high": null,
-            "price_low": null,
-            "price_close": null,
-            "volume_contracts": 0.0,
-            "open_interest_contracts": 134780.15
-          },
-          {
-            "end_period_ts": 1794992400,
-            "end_period_utc": "2026-11-18T09:00:00Z",
-            "price_open": 0.98,
-            "price_high": 0.98,
-            "price_low": 0.98,
-            "price_close": 0.98,
-            "volume_contracts": 233.95,
-            "open_interest_contracts": 134780.15
-          },
-          {
-            "end_period_ts": 1794996000,
-            "end_period_utc": "2026-11-18T10:00:00Z",
-            "price_open": null,
-            "price_high": null,
-            "price_low": null,
-            "price_close": null,
-            "volume_contracts": 0.0,
-            "open_interest_contracts": 134780.15
-          },
-          {
-            "end_period_ts": 1794999600,
-            "end_period_utc": "2026-11-18T11:00:00Z",
-            "price_open": null,
-            "price_high": null,
-            "price_low": null,
-            "price_close": null,
-            "volume_contracts": 0.0,
-            "open_interest_contracts": 134780.15
-          },
           {
             "end_period_ts": 1795003200,
             "end_period_utc": "2026-11-18T12:00:00Z",
@@ -569,11 +499,71 @@
             "price_close": null,
             "volume_contracts": 0.0,
             "open_interest_contracts": 143322.79
+          },
+          {
+            "end_period_ts": 1795237200,
+            "end_period_utc": "2026-11-21T05:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 143322.79
+          },
+          {
+            "end_period_ts": 1795240800,
+            "end_period_utc": "2026-11-21T06:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 143322.79
+          },
+          {
+            "end_period_ts": 1795244400,
+            "end_period_utc": "2026-11-21T07:00:00Z",
+            "price_open": 0.98,
+            "price_high": 0.98,
+            "price_low": 0.98,
+            "price_close": 0.98,
+            "volume_contracts": 19.65,
+            "open_interest_contracts": 143322.79
+          },
+          {
+            "end_period_ts": 1795248000,
+            "end_period_utc": "2026-11-21T08:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 143322.79
+          },
+          {
+            "end_period_ts": 1795251600,
+            "end_period_utc": "2026-11-21T09:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 143322.79
+          },
+          {
+            "end_period_ts": 1795258800,
+            "end_period_utc": "2026-11-21T11:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 143322.79
           }
         ]
       },
       "1440": {
-        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXAAAGASM/markets/KXAAAGASM-26NOV30-3.40/candlesticks?start_ts=1792635853&end_ts=1795227853&period_interval=1440",
+        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXAAAGASM/markets/KXAAAGASM-26NOV30-3.40/candlesticks?start_ts=1792667708&end_ts=1795259708&period_interval=1440",
         "candles": [
           {
             "end_period_ts": 1793505600,
@@ -774,6 +764,16 @@
             "price_close": 0.98,
             "volume_contracts": 1587.69,
             "open_interest_contracts": 143342.97
+          },
+          {
+            "end_period_ts": 1795237200,
+            "end_period_utc": "2026-11-21T05:00:00Z",
+            "price_open": 0.98,
+            "price_high": 0.98,
+            "price_low": 0.98,
+            "price_close": 0.98,
+            "volume_contracts": 108.6,
+            "open_interest_contracts": 143322.79
           }
         ]
       }
@@ -782,100 +782,10 @@
       "topic": "gas",
       "series": "KXAAAGASM",
       "title": "Will average gas prices be above $3.70?",
-      "fetched_at": "2026-11-21T02:24:13Z",
+      "fetched_at": "2026-11-21T11:15:08Z",
       "60": {
-        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXAAAGASM/markets/KXAAAGASM-26NOV30-3.70/candlesticks?start_ts=1794968653&end_ts=1795227853&period_interval=60",
+        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXAAAGASM/markets/KXAAAGASM-26NOV30-3.70/candlesticks?start_ts=1795000508&end_ts=1795259708&period_interval=60",
         "candles": [
-          {
-            "end_period_ts": 1794970800,
-            "end_period_utc": "2026-11-18T03:00:00Z",
-            "price_open": 0.03,
-            "price_high": 0.03,
-            "price_low": 0.02,
-            "price_close": 0.03,
-            "volume_contracts": 2870.59,
-            "open_interest_contracts": 55109.28
-          },
-          {
-            "end_period_ts": 1794974400,
-            "end_period_utc": "2026-11-18T04:00:00Z",
-            "price_open": 0.02,
-            "price_high": 0.02,
-            "price_low": 0.01,
-            "price_close": 0.02,
-            "volume_contracts": 6429.45,
-            "open_interest_contracts": 56108.75
-          },
-          {
-            "end_period_ts": 1794978000,
-            "end_period_utc": "2026-11-18T05:00:00Z",
-            "price_open": 0.04,
-            "price_high": 0.04,
-            "price_low": 0.04,
-            "price_close": 0.04,
-            "volume_contracts": 103.93,
-            "open_interest_contracts": 56159.75
-          },
-          {
-            "end_period_ts": 1794981600,
-            "end_period_utc": "2026-11-18T06:00:00Z",
-            "price_open": null,
-            "price_high": null,
-            "price_low": null,
-            "price_close": null,
-            "volume_contracts": 0.0,
-            "open_interest_contracts": 56159.75
-          },
-          {
-            "end_period_ts": 1794985200,
-            "end_period_utc": "2026-11-18T07:00:00Z",
-            "price_open": null,
-            "price_high": null,
-            "price_low": null,
-            "price_close": null,
-            "volume_contracts": 0.0,
-            "open_interest_contracts": 56159.75
-          },
-          {
-            "end_period_ts": 1794988800,
-            "end_period_utc": "2026-11-18T08:00:00Z",
-            "price_open": 0.04,
-            "price_high": 0.04,
-            "price_low": 0.02,
-            "price_close": 0.02,
-            "volume_contracts": 4000.21,
-            "open_interest_contracts": 56159.75
-          },
-          {
-            "end_period_ts": 1794992400,
-            "end_period_utc": "2026-11-18T09:00:00Z",
-            "price_open": 0.02,
-            "price_high": 0.02,
-            "price_low": 0.02,
-            "price_close": 0.02,
-            "volume_contracts": 187.16,
-            "open_interest_contracts": 56159.75
-          },
-          {
-            "end_period_ts": 1794996000,
-            "end_period_utc": "2026-11-18T10:00:00Z",
-            "price_open": null,
-            "price_high": null,
-            "price_low": null,
-            "price_close": null,
-            "volume_contracts": 0.0,
-            "open_interest_contracts": 56159.75
-          },
-          {
-            "end_period_ts": 1794999600,
-            "end_period_utc": "2026-11-18T11:00:00Z",
-            "price_open": null,
-            "price_high": null,
-            "price_low": null,
-            "price_close": null,
-            "volume_contracts": 0.0,
-            "open_interest_contracts": 56159.75
-          },
           {
             "end_period_ts": 1795003200,
             "end_period_utc": "2026-11-18T12:00:00Z",
@@ -1415,11 +1325,101 @@
             "price_close": null,
             "volume_contracts": 0.0,
             "open_interest_contracts": 60052.41
+          },
+          {
+            "end_period_ts": 1795230000,
+            "end_period_utc": "2026-11-21T03:00:00Z",
+            "price_open": 0.01,
+            "price_high": 0.01,
+            "price_low": 0.01,
+            "price_close": 0.01,
+            "volume_contracts": 4.99,
+            "open_interest_contracts": 60052.41
+          },
+          {
+            "end_period_ts": 1795233600,
+            "end_period_utc": "2026-11-21T04:00:00Z",
+            "price_open": 0.01,
+            "price_high": 0.01,
+            "price_low": 0.01,
+            "price_close": 0.01,
+            "volume_contracts": 349.08,
+            "open_interest_contracts": 60052.41
+          },
+          {
+            "end_period_ts": 1795237200,
+            "end_period_utc": "2026-11-21T05:00:00Z",
+            "price_open": 0.01,
+            "price_high": 0.01,
+            "price_low": 0.01,
+            "price_close": 0.01,
+            "volume_contracts": 5.0,
+            "open_interest_contracts": 60052.41
+          },
+          {
+            "end_period_ts": 1795240800,
+            "end_period_utc": "2026-11-21T06:00:00Z",
+            "price_open": 0.01,
+            "price_high": 0.01,
+            "price_low": 0.01,
+            "price_close": 0.01,
+            "volume_contracts": 132.05,
+            "open_interest_contracts": 60052.41
+          },
+          {
+            "end_period_ts": 1795244400,
+            "end_period_utc": "2026-11-21T07:00:00Z",
+            "price_open": 0.01,
+            "price_high": 0.01,
+            "price_low": 0.01,
+            "price_close": 0.01,
+            "volume_contracts": 171.66,
+            "open_interest_contracts": 60052.41
+          },
+          {
+            "end_period_ts": 1795248000,
+            "end_period_utc": "2026-11-21T08:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 60052.41
+          },
+          {
+            "end_period_ts": 1795251600,
+            "end_period_utc": "2026-11-21T09:00:00Z",
+            "price_open": 0.01,
+            "price_high": 0.01,
+            "price_low": 0.01,
+            "price_close": 0.01,
+            "volume_contracts": 933.0,
+            "open_interest_contracts": 60307.5
+          },
+          {
+            "end_period_ts": 1795255200,
+            "end_period_utc": "2026-11-21T10:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 60307.5
+          },
+          {
+            "end_period_ts": 1795258800,
+            "end_period_utc": "2026-11-21T11:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 60307.5
           }
         ]
       },
       "1440": {
-        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXAAAGASM/markets/KXAAAGASM-26NOV30-3.70/candlesticks?start_ts=1792635853&end_ts=1795227853&period_interval=1440",
+        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXAAAGASM/markets/KXAAAGASM-26NOV30-3.70/candlesticks?start_ts=1792667708&end_ts=1795259708&period_interval=1440",
         "candles": [
           {
             "end_period_ts": 1793505600,
@@ -1620,6 +1620,16 @@
             "price_close": 0.01,
             "volume_contracts": 28115.42,
             "open_interest_contracts": 60118.3
+          },
+          {
+            "end_period_ts": 1795237200,
+            "end_period_utc": "2026-11-21T05:00:00Z",
+            "price_open": 0.01,
+            "price_high": 0.01,
+            "price_low": 0.01,
+            "price_close": 0.01,
+            "volume_contracts": 2507.07,
+            "open_interest_contracts": 60052.41
           }
         ]
       }
@@ -1628,70 +1638,10 @@
       "topic": "gas",
       "series": "KXAAAGASM",
       "title": "Will average gas prices be above $4.00?",
-      "fetched_at": "2026-11-21T02:24:13Z",
+      "fetched_at": "2026-11-21T11:15:08Z",
       "60": {
-        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXAAAGASM/markets/KXAAAGASM-26NOV30-4.00/candlesticks?start_ts=1794968653&end_ts=1795227853&period_interval=60",
+        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXAAAGASM/markets/KXAAAGASM-26NOV30-4.00/candlesticks?start_ts=1795000508&end_ts=1795259708&period_interval=60",
         "candles": [
-          {
-            "end_period_ts": 1794981600,
-            "end_period_utc": "2026-11-18T06:00:00Z",
-            "price_open": null,
-            "price_high": null,
-            "price_low": null,
-            "price_close": null,
-            "volume_contracts": 0.0,
-            "open_interest_contracts": 67238.4
-          },
-          {
-            "end_period_ts": 1794985200,
-            "end_period_utc": "2026-11-18T07:00:00Z",
-            "price_open": null,
-            "price_high": null,
-            "price_low": null,
-            "price_close": null,
-            "volume_contracts": 0.0,
-            "open_interest_contracts": 67238.4
-          },
-          {
-            "end_period_ts": 1794988800,
-            "end_period_utc": "2026-11-18T08:00:00Z",
-            "price_open": null,
-            "price_high": null,
-            "price_low": null,
-            "price_close": null,
-            "volume_contracts": 0.0,
-            "open_interest_contracts": 67238.4
-          },
-          {
-            "end_period_ts": 1794992400,
-            "end_period_utc": "2026-11-18T09:00:00Z",
-            "price_open": 0.01,
-            "price_high": 0.01,
-            "price_low": 0.01,
-            "price_close": 0.01,
-            "volume_contracts": 10.0,
-            "open_interest_contracts": 67228.4
-          },
-          {
-            "end_period_ts": 1794996000,
-            "end_period_utc": "2026-11-18T10:00:00Z",
-            "price_open": null,
-            "price_high": null,
-            "price_low": null,
-            "price_close": null,
-            "volume_contracts": 0.0,
-            "open_interest_contracts": 67228.4
-          },
-          {
-            "end_period_ts": 1794999600,
-            "end_period_utc": "2026-11-18T11:00:00Z",
-            "price_open": null,
-            "price_high": null,
-            "price_low": null,
-            "price_close": null,
-            "volume_contracts": 0.0,
-            "open_interest_contracts": 67228.4
-          },
           {
             "end_period_ts": 1795003200,
             "end_period_utc": "2026-11-18T12:00:00Z",
@@ -2051,11 +2001,91 @@
             "price_close": null,
             "volume_contracts": 0.0,
             "open_interest_contracts": 67228.4
+          },
+          {
+            "end_period_ts": 1795233600,
+            "end_period_utc": "2026-11-21T04:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 67228.4
+          },
+          {
+            "end_period_ts": 1795237200,
+            "end_period_utc": "2026-11-21T05:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 67228.4
+          },
+          {
+            "end_period_ts": 1795240800,
+            "end_period_utc": "2026-11-21T06:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 67228.4
+          },
+          {
+            "end_period_ts": 1795244400,
+            "end_period_utc": "2026-11-21T07:00:00Z",
+            "price_open": 0.01,
+            "price_high": 0.01,
+            "price_low": 0.01,
+            "price_close": 0.01,
+            "volume_contracts": 1.0,
+            "open_interest_contracts": 67228.4
+          },
+          {
+            "end_period_ts": 1795248000,
+            "end_period_utc": "2026-11-21T08:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 67228.4
+          },
+          {
+            "end_period_ts": 1795251600,
+            "end_period_utc": "2026-11-21T09:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 67228.4
+          },
+          {
+            "end_period_ts": 1795255200,
+            "end_period_utc": "2026-11-21T10:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 67228.4
+          },
+          {
+            "end_period_ts": 1795258800,
+            "end_period_utc": "2026-11-21T11:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 67228.4
           }
         ]
       },
       "1440": {
-        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXAAAGASM/markets/KXAAAGASM-26NOV30-4.00/candlesticks?start_ts=1792635853&end_ts=1795227853&period_interval=1440",
+        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXAAAGASM/markets/KXAAAGASM-26NOV30-4.00/candlesticks?start_ts=1792667708&end_ts=1795259708&period_interval=1440",
         "candles": [
           {
             "end_period_ts": 1793505600,
@@ -2256,6 +2286,16 @@
             "price_close": 0.01,
             "volume_contracts": 600.19,
             "open_interest_contracts": 67228.4
+          },
+          {
+            "end_period_ts": 1795237200,
+            "end_period_utc": "2026-11-21T05:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 67228.4
           }
         ]
       }
@@ -2264,13 +2304,13 @@
       "topic": "elections",
       "series": "KXNEWPOPE",
       "title": "Who will the next Pope be?",
-      "fetched_at": "2026-11-21T02:24:13Z",
+      "fetched_at": "2026-11-21T11:15:08Z",
       "60": {
-        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXNEWPOPE/markets/KXNEWPOPE-70-PPAR/candlesticks?start_ts=1794968653&end_ts=1795227853&period_interval=60",
+        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXNEWPOPE/markets/KXNEWPOPE-70-PPAR/candlesticks?start_ts=1795000508&end_ts=1795259708&period_interval=60",
         "candles": []
       },
       "1440": {
-        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXNEWPOPE/markets/KXNEWPOPE-70-PPAR/candlesticks?start_ts=1792635853&end_ts=1795227853&period_interval=1440",
+        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXNEWPOPE/markets/KXNEWPOPE-70-PPAR/candlesticks?start_ts=1792667708&end_ts=1795259708&period_interval=1440",
         "candles": [
           {
             "end_period_ts": 1792728000,
@@ -2359,24 +2399,14 @@
       "topic": "elections",
       "series": "KXNEWPOPE",
       "title": "Who will the next Pope be?",
-      "fetched_at": "2026-11-21T02:24:13Z",
+      "fetched_at": "2026-11-21T11:15:08Z",
       "60": {
-        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXNEWPOPE/markets/KXNEWPOPE-70-LANT/candlesticks?start_ts=1794968653&end_ts=1795227853&period_interval=60",
+        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXNEWPOPE/markets/KXNEWPOPE-70-LANT/candlesticks?start_ts=1795000508&end_ts=1795259708&period_interval=60",
         "candles": []
       },
       "1440": {
-        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXNEWPOPE/markets/KXNEWPOPE-70-LANT/candlesticks?start_ts=1792635853&end_ts=1795227853&period_interval=1440",
+        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXNEWPOPE/markets/KXNEWPOPE-70-LANT/candlesticks?start_ts=1792667708&end_ts=1795259708&period_interval=1440",
         "candles": [
-          {
-            "end_period_ts": 1792641600,
-            "end_period_utc": "2026-10-22T04:00:00Z",
-            "price_open": null,
-            "price_high": null,
-            "price_low": null,
-            "price_close": null,
-            "volume_contracts": 0.0,
-            "open_interest_contracts": 6409.32
-          },
           {
             "end_period_ts": 1792728000,
             "end_period_utc": "2026-10-23T04:00:00Z",
@@ -2614,13 +2644,13 @@
       "topic": "elections",
       "series": "KXNEWPOPE",
       "title": "Who will the next Pope be?",
-      "fetched_at": "2026-11-21T02:24:13Z",
+      "fetched_at": "2026-11-21T11:15:08Z",
       "60": {
-        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXNEWPOPE/markets/KXNEWPOPE-70-PERD/candlesticks?start_ts=1794968653&end_ts=1795227853&period_interval=60",
+        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXNEWPOPE/markets/KXNEWPOPE-70-PERD/candlesticks?start_ts=1795000508&end_ts=1795259708&period_interval=60",
         "candles": []
       },
       "1440": {
-        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXNEWPOPE/markets/KXNEWPOPE-70-PERD/candlesticks?start_ts=1792635853&end_ts=1795227853&period_interval=1440",
+        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXNEWPOPE/markets/KXNEWPOPE-70-PERD/candlesticks?start_ts=1792667708&end_ts=1795259708&period_interval=1440",
         "candles": [
           {
             "end_period_ts": 1792728000,
@@ -2679,70 +2709,10 @@
       "topic": "crypto",
       "series": "KXETHMAXY",
       "title": "Will Ethereum reach above $3500.00 by Jan 1, 2027 at 12:00AM?",
-      "fetched_at": "2026-11-21T02:24:13Z",
+      "fetched_at": "2026-11-21T11:15:08Z",
       "60": {
-        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXETHMAXY/markets/KXETHMAXY-27JAN01-3500.00/candlesticks?start_ts=1794968653&end_ts=1795227853&period_interval=60",
+        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXETHMAXY/markets/KXETHMAXY-27JAN01-3500.00/candlesticks?start_ts=1795000508&end_ts=1795259708&period_interval=60",
         "candles": [
-          {
-            "end_period_ts": 1794970800,
-            "end_period_utc": "2026-11-18T03:00:00Z",
-            "price_open": null,
-            "price_high": null,
-            "price_low": null,
-            "price_close": null,
-            "volume_contracts": 0.0,
-            "open_interest_contracts": 196093.4
-          },
-          {
-            "end_period_ts": 1794974400,
-            "end_period_utc": "2026-11-18T04:00:00Z",
-            "price_open": null,
-            "price_high": null,
-            "price_low": null,
-            "price_close": null,
-            "volume_contracts": 0.0,
-            "open_interest_contracts": 196093.4
-          },
-          {
-            "end_period_ts": 1794978000,
-            "end_period_utc": "2026-11-18T05:00:00Z",
-            "price_open": 0.04,
-            "price_high": 0.04,
-            "price_low": 0.04,
-            "price_close": 0.04,
-            "volume_contracts": 265.17,
-            "open_interest_contracts": 196358.57
-          },
-          {
-            "end_period_ts": 1794981600,
-            "end_period_utc": "2026-11-18T06:00:00Z",
-            "price_open": null,
-            "price_high": null,
-            "price_low": null,
-            "price_close": null,
-            "volume_contracts": 0.0,
-            "open_interest_contracts": 196358.57
-          },
-          {
-            "end_period_ts": 1794988800,
-            "end_period_utc": "2026-11-18T08:00:00Z",
-            "price_open": null,
-            "price_high": null,
-            "price_low": null,
-            "price_close": null,
-            "volume_contracts": 0.0,
-            "open_interest_contracts": 196358.57
-          },
-          {
-            "end_period_ts": 1794992400,
-            "end_period_utc": "2026-11-18T09:00:00Z",
-            "price_open": null,
-            "price_high": null,
-            "price_low": null,
-            "price_close": null,
-            "volume_contracts": 0.0,
-            "open_interest_contracts": 196358.57
-          },
           {
             "end_period_ts": 1795006800,
             "end_period_utc": "2026-11-18T13:00:00Z",
@@ -3332,22 +3302,102 @@
             "price_close": 0.03,
             "volume_contracts": 14.04,
             "open_interest_contracts": 196960.08
+          },
+          {
+            "end_period_ts": 1795230000,
+            "end_period_utc": "2026-11-21T03:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 196960.08
+          },
+          {
+            "end_period_ts": 1795233600,
+            "end_period_utc": "2026-11-21T04:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 196960.08
+          },
+          {
+            "end_period_ts": 1795237200,
+            "end_period_utc": "2026-11-21T05:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 196960.08
+          },
+          {
+            "end_period_ts": 1795240800,
+            "end_period_utc": "2026-11-21T06:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 196960.08
+          },
+          {
+            "end_period_ts": 1795244400,
+            "end_period_utc": "2026-11-21T07:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 196960.08
+          },
+          {
+            "end_period_ts": 1795248000,
+            "end_period_utc": "2026-11-21T08:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 196960.08
+          },
+          {
+            "end_period_ts": 1795251600,
+            "end_period_utc": "2026-11-21T09:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 196960.08
+          },
+          {
+            "end_period_ts": 1795255200,
+            "end_period_utc": "2026-11-21T10:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 196960.08
+          },
+          {
+            "end_period_ts": 1795258800,
+            "end_period_utc": "2026-11-21T11:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 196960.08
           }
         ]
       },
       "1440": {
-        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXETHMAXY/markets/KXETHMAXY-27JAN01-3500.00/candlesticks?start_ts=1792635853&end_ts=1795227853&period_interval=1440",
+        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXETHMAXY/markets/KXETHMAXY-27JAN01-3500.00/candlesticks?start_ts=1792667708&end_ts=1795259708&period_interval=1440",
         "candles": [
-          {
-            "end_period_ts": 1792641600,
-            "end_period_utc": "2026-10-22T04:00:00Z",
-            "price_open": 0.16,
-            "price_high": 0.2,
-            "price_low": 0.16,
-            "price_close": 0.19,
-            "volume_contracts": 1742.77,
-            "open_interest_contracts": 131075.07
-          },
           {
             "end_period_ts": 1792728000,
             "end_period_utc": "2026-10-23T04:00:00Z",
@@ -3637,6 +3687,16 @@
             "price_close": 0.03,
             "volume_contracts": 333.1,
             "open_interest_contracts": 196914.83
+          },
+          {
+            "end_period_ts": 1795237200,
+            "end_period_utc": "2026-11-21T05:00:00Z",
+            "price_open": 0.03,
+            "price_high": 0.03,
+            "price_low": 0.03,
+            "price_close": 0.03,
+            "volume_contracts": 45.25,
+            "open_interest_contracts": 196960.08
           }
         ]
       }
@@ -3645,20 +3705,10 @@
       "topic": "crypto",
       "series": "KXETHMAXY",
       "title": "Will Ethereum reach above $6000.00 by Jan 1, 2027 at 12:00AM?",
-      "fetched_at": "2026-11-21T02:24:13Z",
+      "fetched_at": "2026-11-21T11:15:08Z",
       "60": {
-        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXETHMAXY/markets/KXETHMAXY-27JAN01-6000.00/candlesticks?start_ts=1794968653&end_ts=1795227853&period_interval=60",
+        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXETHMAXY/markets/KXETHMAXY-27JAN01-6000.00/candlesticks?start_ts=1795000508&end_ts=1795259708&period_interval=60",
         "candles": [
-          {
-            "end_period_ts": 1794974400,
-            "end_period_utc": "2026-11-18T04:00:00Z",
-            "price_open": null,
-            "price_high": null,
-            "price_low": null,
-            "price_close": null,
-            "volume_contracts": 0.0,
-            "open_interest_contracts": 180052.88
-          },
           {
             "end_period_ts": 1795028400,
             "end_period_utc": "2026-11-18T19:00:00Z",
@@ -3798,22 +3848,32 @@
             "price_close": null,
             "volume_contracts": 0.0,
             "open_interest_contracts": 180052.88
+          },
+          {
+            "end_period_ts": 1795233600,
+            "end_period_utc": "2026-11-21T04:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 180052.88
+          },
+          {
+            "end_period_ts": 1795255200,
+            "end_period_utc": "2026-11-21T10:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 180052.88
           }
         ]
       },
       "1440": {
-        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXETHMAXY/markets/KXETHMAXY-27JAN01-6000.00/candlesticks?start_ts=1792635853&end_ts=1795227853&period_interval=1440",
+        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXETHMAXY/markets/KXETHMAXY-27JAN01-6000.00/candlesticks?start_ts=1792667708&end_ts=1795259708&period_interval=1440",
         "candles": [
-          {
-            "end_period_ts": 1792641600,
-            "end_period_utc": "2026-10-22T04:00:00Z",
-            "price_open": 0.03,
-            "price_high": 0.03,
-            "price_low": 0.03,
-            "price_close": 0.03,
-            "volume_contracts": 12000.0,
-            "open_interest_contracts": 176069.9
-          },
           {
             "end_period_ts": 1792728000,
             "end_period_utc": "2026-10-23T04:00:00Z",
@@ -4103,6 +4163,16 @@
             "price_close": 0.01,
             "volume_contracts": 30.0,
             "open_interest_contracts": 180052.88
+          },
+          {
+            "end_period_ts": 1795237200,
+            "end_period_utc": "2026-11-21T05:00:00Z",
+            "price_open": 0.01,
+            "price_high": 0.01,
+            "price_low": 0.01,
+            "price_close": 0.01,
+            "volume_contracts": 5.0,
+            "open_interest_contracts": 180052.88
           }
         ]
       }
@@ -4111,30 +4181,10 @@
       "topic": "crypto",
       "series": "KXETHMAXY",
       "title": "Will Ethereum reach above $5000.00 by Jan 1, 2027 at 12:00AM?",
-      "fetched_at": "2026-11-21T02:24:13Z",
+      "fetched_at": "2026-11-21T11:15:08Z",
       "60": {
-        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXETHMAXY/markets/KXETHMAXY-27JAN01-5000.00/candlesticks?start_ts=1794968653&end_ts=1795227853&period_interval=60",
+        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXETHMAXY/markets/KXETHMAXY-27JAN01-5000.00/candlesticks?start_ts=1795000508&end_ts=1795259708&period_interval=60",
         "candles": [
-          {
-            "end_period_ts": 1794981600,
-            "end_period_utc": "2026-11-18T06:00:00Z",
-            "price_open": null,
-            "price_high": null,
-            "price_low": null,
-            "price_close": null,
-            "volume_contracts": 0.0,
-            "open_interest_contracts": 126956.86
-          },
-          {
-            "end_period_ts": 1794988800,
-            "end_period_utc": "2026-11-18T08:00:00Z",
-            "price_open": null,
-            "price_high": null,
-            "price_low": null,
-            "price_close": null,
-            "volume_contracts": 0.0,
-            "open_interest_contracts": 126956.86
-          },
           {
             "end_period_ts": 1795028400,
             "end_period_utc": "2026-11-18T19:00:00Z",
@@ -4334,22 +4384,52 @@
             "price_close": 0.01,
             "volume_contracts": 4845.08,
             "open_interest_contracts": 126956.86
+          },
+          {
+            "end_period_ts": 1795237200,
+            "end_period_utc": "2026-11-21T05:00:00Z",
+            "price_open": 0.01,
+            "price_high": 0.01,
+            "price_low": 0.01,
+            "price_close": 0.01,
+            "volume_contracts": 15.77,
+            "open_interest_contracts": 126956.86
+          },
+          {
+            "end_period_ts": 1795244400,
+            "end_period_utc": "2026-11-21T07:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 126956.86
+          },
+          {
+            "end_period_ts": 1795248000,
+            "end_period_utc": "2026-11-21T08:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 126956.86
+          },
+          {
+            "end_period_ts": 1795255200,
+            "end_period_utc": "2026-11-21T10:00:00Z",
+            "price_open": 0.01,
+            "price_high": 0.01,
+            "price_low": 0.01,
+            "price_close": 0.01,
+            "volume_contracts": 1664.64,
+            "open_interest_contracts": 128621.5
           }
         ]
       },
       "1440": {
-        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXETHMAXY/markets/KXETHMAXY-27JAN01-5000.00/candlesticks?start_ts=1792635853&end_ts=1795227853&period_interval=1440",
+        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXETHMAXY/markets/KXETHMAXY-27JAN01-5000.00/candlesticks?start_ts=1792667708&end_ts=1795259708&period_interval=1440",
         "candles": [
-          {
-            "end_period_ts": 1792641600,
-            "end_period_utc": "2026-10-22T04:00:00Z",
-            "price_open": 0.03,
-            "price_high": 0.03,
-            "price_low": 0.03,
-            "price_close": 0.03,
-            "volume_contracts": 880.34,
-            "open_interest_contracts": 112838.62
-          },
           {
             "end_period_ts": 1792728000,
             "end_period_utc": "2026-10-23T04:00:00Z",
@@ -4639,762 +4719,16 @@
             "price_close": null,
             "volume_contracts": 0.0,
             "open_interest_contracts": 126956.86
-          }
-        ]
-      }
-    },
-    "KXPGATOUR-THRC26-BBRO": {
-      "topic": "golf",
-      "series": "KXPGATOUR",
-      "title": "The RSM Classic: Blades Brown wins",
-      "fetched_at": "2026-11-21T02:24:13Z",
-      "60": {
-        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXPGATOUR/markets/KXPGATOUR-THRC26-BBRO/candlesticks?start_ts=1794968653&end_ts=1795227853&period_interval=60",
-        "candles": [
-          {
-            "end_period_ts": 1794970800,
-            "end_period_utc": "2026-11-18T03:00:00Z",
-            "price_open": 0.041,
-            "price_high": 0.043,
-            "price_low": 0.041,
-            "price_close": 0.042,
-            "volume_contracts": 1298.48,
-            "open_interest_contracts": 138825.3
           },
           {
-            "end_period_ts": 1794974400,
-            "end_period_utc": "2026-11-18T04:00:00Z",
-            "price_open": 0.041,
-            "price_high": 0.044,
-            "price_low": 0.039,
-            "price_close": 0.039,
-            "volume_contracts": 30226.26,
-            "open_interest_contracts": 169051.56
-          },
-          {
-            "end_period_ts": 1794978000,
-            "end_period_utc": "2026-11-18T05:00:00Z",
-            "price_open": 0.039,
-            "price_high": 0.039,
-            "price_low": 0.039,
-            "price_close": 0.039,
-            "volume_contracts": 8656.87,
-            "open_interest_contracts": 177708.43
-          },
-          {
-            "end_period_ts": 1794981600,
-            "end_period_utc": "2026-11-18T06:00:00Z",
-            "price_open": 0.039,
-            "price_high": 0.039,
-            "price_low": 0.039,
-            "price_close": 0.039,
-            "volume_contracts": 1625.83,
-            "open_interest_contracts": 179334.26
-          },
-          {
-            "end_period_ts": 1794985200,
-            "end_period_utc": "2026-11-18T07:00:00Z",
-            "price_open": 0.039,
-            "price_high": 0.045,
-            "price_low": 0.039,
-            "price_close": 0.045,
-            "volume_contracts": 28738.08,
-            "open_interest_contracts": 208072.34
-          },
-          {
-            "end_period_ts": 1794988800,
-            "end_period_utc": "2026-11-18T08:00:00Z",
-            "price_open": 0.045,
-            "price_high": 0.045,
-            "price_low": 0.045,
-            "price_close": 0.045,
-            "volume_contracts": 1950.46,
-            "open_interest_contracts": 210022.8
-          },
-          {
-            "end_period_ts": 1794992400,
-            "end_period_utc": "2026-11-18T09:00:00Z",
-            "price_open": 0.045,
-            "price_high": 0.045,
-            "price_low": 0.045,
-            "price_close": 0.045,
-            "volume_contracts": 45.41,
-            "open_interest_contracts": 210068.21
-          },
-          {
-            "end_period_ts": 1794996000,
-            "end_period_utc": "2026-11-18T10:00:00Z",
-            "price_open": 0.044,
-            "price_high": 0.044,
-            "price_low": 0.044,
-            "price_close": 0.044,
-            "volume_contracts": 25.0,
-            "open_interest_contracts": 210093.21
-          },
-          {
-            "end_period_ts": 1794999600,
-            "end_period_utc": "2026-11-18T11:00:00Z",
-            "price_open": 0.04,
-            "price_high": 0.042,
-            "price_low": 0.04,
-            "price_close": 0.042,
-            "volume_contracts": 1941.0,
-            "open_interest_contracts": 212034.21
-          },
-          {
-            "end_period_ts": 1795003200,
-            "end_period_utc": "2026-11-18T12:00:00Z",
-            "price_open": 0.042,
-            "price_high": 0.042,
-            "price_low": 0.038,
-            "price_close": 0.038,
-            "volume_contracts": 956.64,
-            "open_interest_contracts": 212957.85
-          },
-          {
-            "end_period_ts": 1795006800,
-            "end_period_utc": "2026-11-18T13:00:00Z",
-            "price_open": 0.039,
-            "price_high": 0.042,
-            "price_low": 0.039,
-            "price_close": 0.042,
-            "volume_contracts": 1031.38,
-            "open_interest_contracts": 213989.23
-          },
-          {
-            "end_period_ts": 1795010400,
-            "end_period_utc": "2026-11-18T14:00:00Z",
-            "price_open": 0.042,
-            "price_high": 0.042,
-            "price_low": 0.04,
-            "price_close": 0.04,
-            "volume_contracts": 3867.45,
-            "open_interest_contracts": 217856.68
-          },
-          {
-            "end_period_ts": 1795014000,
-            "end_period_utc": "2026-11-18T15:00:00Z",
-            "price_open": 0.038,
-            "price_high": 0.042,
-            "price_low": 0.038,
-            "price_close": 0.042,
-            "volume_contracts": 4415.77,
-            "open_interest_contracts": 222238.95
-          },
-          {
-            "end_period_ts": 1795017600,
-            "end_period_utc": "2026-11-18T16:00:00Z",
-            "price_open": 0.041,
-            "price_high": 0.042,
-            "price_low": 0.035,
-            "price_close": 0.042,
-            "volume_contracts": 9156.71,
-            "open_interest_contracts": 227730.6
-          },
-          {
-            "end_period_ts": 1795021200,
-            "end_period_utc": "2026-11-18T17:00:00Z",
-            "price_open": 0.042,
-            "price_high": 0.045,
-            "price_low": 0.04,
-            "price_close": 0.04,
-            "volume_contracts": 4841.97,
-            "open_interest_contracts": 232349.45
-          },
-          {
-            "end_period_ts": 1795024800,
-            "end_period_utc": "2026-11-18T18:00:00Z",
-            "price_open": 0.043,
-            "price_high": 0.045,
-            "price_low": 0.04,
-            "price_close": 0.045,
-            "volume_contracts": 51072.51,
-            "open_interest_contracts": 283293.26
-          },
-          {
-            "end_period_ts": 1795028400,
-            "end_period_utc": "2026-11-18T19:00:00Z",
-            "price_open": 0.042,
-            "price_high": 0.045,
-            "price_low": 0.042,
-            "price_close": 0.044,
-            "volume_contracts": 12258.67,
-            "open_interest_contracts": 295551.93
-          },
-          {
-            "end_period_ts": 1795032000,
-            "end_period_utc": "2026-11-18T20:00:00Z",
-            "price_open": 0.044,
-            "price_high": 0.044,
-            "price_low": 0.04,
-            "price_close": 0.043,
-            "volume_contracts": 6772.49,
-            "open_interest_contracts": 301888.52
-          },
-          {
-            "end_period_ts": 1795035600,
-            "end_period_utc": "2026-11-18T21:00:00Z",
-            "price_open": 0.042,
-            "price_high": 0.043,
-            "price_low": 0.035,
-            "price_close": 0.043,
-            "volume_contracts": 3477.21,
-            "open_interest_contracts": 305173.55
-          },
-          {
-            "end_period_ts": 1795039200,
-            "end_period_utc": "2026-11-18T22:00:00Z",
-            "price_open": 0.043,
-            "price_high": 0.044,
-            "price_low": 0.038,
-            "price_close": 0.039,
-            "volume_contracts": 27358.24,
-            "open_interest_contracts": 332337.82
-          },
-          {
-            "end_period_ts": 1795042800,
-            "end_period_utc": "2026-11-18T23:00:00Z",
-            "price_open": 0.039,
-            "price_high": 0.045,
-            "price_low": 0.035,
-            "price_close": 0.045,
-            "volume_contracts": 163002.92,
-            "open_interest_contracts": 495292.7
-          },
-          {
-            "end_period_ts": 1795046400,
-            "end_period_utc": "2026-11-19T00:00:00Z",
-            "price_open": 0.045,
-            "price_high": 0.045,
-            "price_low": 0.036,
-            "price_close": 0.037,
-            "volume_contracts": 5611.55,
-            "open_interest_contracts": 499851.01
-          },
-          {
-            "end_period_ts": 1795050000,
-            "end_period_utc": "2026-11-19T01:00:00Z",
-            "price_open": 0.044,
-            "price_high": 0.044,
-            "price_low": 0.037,
-            "price_close": 0.044,
-            "volume_contracts": 4520.02,
-            "open_interest_contracts": 504321.07
-          },
-          {
-            "end_period_ts": 1795053600,
-            "end_period_utc": "2026-11-19T02:00:00Z",
-            "price_open": 0.044,
-            "price_high": 0.044,
-            "price_low": 0.04,
-            "price_close": 0.044,
-            "volume_contracts": 9273.16,
-            "open_interest_contracts": 512935.13
-          },
-          {
-            "end_period_ts": 1795057200,
-            "end_period_utc": "2026-11-19T03:00:00Z",
-            "price_open": 0.044,
-            "price_high": 0.044,
-            "price_low": 0.037,
-            "price_close": 0.044,
-            "volume_contracts": 7845.78,
-            "open_interest_contracts": 520061.65
-          },
-          {
-            "end_period_ts": 1795060800,
-            "end_period_utc": "2026-11-19T04:00:00Z",
-            "price_open": 0.044,
-            "price_high": 0.045,
-            "price_low": 0.04,
-            "price_close": 0.04,
-            "volume_contracts": 26479.28,
-            "open_interest_contracts": 546099.87
-          },
-          {
-            "end_period_ts": 1795064400,
-            "end_period_utc": "2026-11-19T05:00:00Z",
-            "price_open": 0.043,
-            "price_high": 0.045,
-            "price_low": 0.04,
-            "price_close": 0.043,
-            "volume_contracts": 6549.78,
-            "open_interest_contracts": 552627.72
-          },
-          {
-            "end_period_ts": 1795068000,
-            "end_period_utc": "2026-11-19T06:00:00Z",
-            "price_open": 0.043,
-            "price_high": 0.046,
-            "price_low": 0.043,
-            "price_close": 0.044,
-            "volume_contracts": 34650.0,
-            "open_interest_contracts": 587277.72
-          },
-          {
-            "end_period_ts": 1795071600,
-            "end_period_utc": "2026-11-19T07:00:00Z",
-            "price_open": 0.044,
-            "price_high": 0.047,
-            "price_low": 0.044,
-            "price_close": 0.046,
-            "volume_contracts": 10270.7,
-            "open_interest_contracts": 597548.42
-          },
-          {
-            "end_period_ts": 1795075200,
-            "end_period_utc": "2026-11-19T08:00:00Z",
-            "price_open": 0.046,
-            "price_high": 0.046,
-            "price_low": 0.042,
-            "price_close": 0.046,
-            "volume_contracts": 3730.11,
-            "open_interest_contracts": 600556.08
-          },
-          {
-            "end_period_ts": 1795086000,
-            "end_period_utc": "2026-11-19T11:00:00Z",
-            "price_open": 0.046,
-            "price_high": 0.046,
-            "price_low": 0.046,
-            "price_close": 0.046,
-            "volume_contracts": 7787.26,
-            "open_interest_contracts": 608343.34
-          },
-          {
-            "end_period_ts": 1795089600,
-            "end_period_utc": "2026-11-19T12:00:00Z",
-            "price_open": 0.046,
-            "price_high": 0.047,
-            "price_low": 0.045,
-            "price_close": 0.047,
-            "volume_contracts": 2101.78,
-            "open_interest_contracts": 610212.73
-          },
-          {
-            "end_period_ts": 1795093200,
-            "end_period_utc": "2026-11-19T13:00:00Z",
-            "price_open": 0.046,
-            "price_high": 0.047,
-            "price_low": 0.039,
-            "price_close": 0.047,
-            "volume_contracts": 8162.73,
-            "open_interest_contracts": 617280.52
-          },
-          {
-            "end_period_ts": 1795096800,
-            "end_period_utc": "2026-11-19T14:00:00Z",
-            "price_open": 0.047,
-            "price_high": 0.052,
-            "price_low": 0.039,
-            "price_close": 0.048,
-            "volume_contracts": 16292.91,
-            "open_interest_contracts": 633243.98
-          },
-          {
-            "end_period_ts": 1795100400,
-            "end_period_utc": "2026-11-19T15:00:00Z",
-            "price_open": 0.048,
-            "price_high": 0.052,
-            "price_low": 0.04,
-            "price_close": 0.045,
-            "volume_contracts": 23128.85,
-            "open_interest_contracts": 654654.71
-          },
-          {
-            "end_period_ts": 1795104000,
-            "end_period_utc": "2026-11-19T16:00:00Z",
-            "price_open": 0.046,
-            "price_high": 0.046,
-            "price_low": 0.005,
-            "price_close": 0.017,
-            "volume_contracts": 86268.1,
-            "open_interest_contracts": 722573.21
-          },
-          {
-            "end_period_ts": 1795107600,
-            "end_period_utc": "2026-11-19T17:00:00Z",
-            "price_open": 0.02,
-            "price_high": 0.021,
-            "price_low": 0.002,
-            "price_close": 0.015,
-            "volume_contracts": 83665.8,
-            "open_interest_contracts": 796340.31
-          },
-          {
-            "end_period_ts": 1795111200,
-            "end_period_utc": "2026-11-19T18:00:00Z",
-            "price_open": 0.016,
-            "price_high": 0.034,
-            "price_low": 0.016,
-            "price_close": 0.019,
-            "volume_contracts": 35904.49,
-            "open_interest_contracts": 827834.58
-          },
-          {
-            "end_period_ts": 1795114800,
-            "end_period_utc": "2026-11-19T19:00:00Z",
-            "price_open": 0.017,
-            "price_high": 0.018,
-            "price_low": 0.006,
-            "price_close": 0.006,
-            "volume_contracts": 2191.02,
-            "open_interest_contracts": 828467.22
-          },
-          {
-            "end_period_ts": 1795118400,
-            "end_period_utc": "2026-11-19T20:00:00Z",
-            "price_open": 0.008,
-            "price_high": 0.014,
-            "price_low": 0.006,
-            "price_close": 0.014,
-            "volume_contracts": 8137.74,
-            "open_interest_contracts": 833589.26
-          },
-          {
-            "end_period_ts": 1795122000,
-            "end_period_utc": "2026-11-19T21:00:00Z",
-            "price_open": 0.014,
-            "price_high": 0.017,
-            "price_low": 0.013,
-            "price_close": 0.015,
-            "volume_contracts": 16883.52,
-            "open_interest_contracts": 849774.27
-          },
-          {
-            "end_period_ts": 1795125600,
-            "end_period_utc": "2026-11-19T22:00:00Z",
-            "price_open": 0.014,
-            "price_high": 0.015,
-            "price_low": 0.012,
-            "price_close": 0.012,
-            "volume_contracts": 11232.34,
-            "open_interest_contracts": 839483.86
-          },
-          {
-            "end_period_ts": 1795129200,
-            "end_period_utc": "2026-11-19T23:00:00Z",
-            "price_open": 0.013,
-            "price_high": 0.014,
-            "price_low": 0.012,
-            "price_close": 0.013,
-            "volume_contracts": 1800.97,
-            "open_interest_contracts": 839523.73
-          },
-          {
-            "end_period_ts": 1795132800,
-            "end_period_utc": "2026-11-20T00:00:00Z",
-            "price_open": 0.014,
-            "price_high": 0.014,
-            "price_low": 0.013,
-            "price_close": 0.013,
-            "volume_contracts": 8656.33,
-            "open_interest_contracts": 848026.81
-          },
-          {
-            "end_period_ts": 1795136400,
-            "end_period_utc": "2026-11-20T01:00:00Z",
-            "price_open": 0.013,
-            "price_high": 0.013,
-            "price_low": 0.013,
-            "price_close": 0.013,
-            "volume_contracts": 1371.45,
-            "open_interest_contracts": 848026.81
-          },
-          {
-            "end_period_ts": 1795140000,
-            "end_period_utc": "2026-11-20T02:00:00Z",
-            "price_open": 0.013,
-            "price_high": 0.013,
-            "price_low": 0.01,
-            "price_close": 0.01,
-            "volume_contracts": 24386.1,
-            "open_interest_contracts": 828171.22
-          },
-          {
-            "end_period_ts": 1795143600,
-            "end_period_utc": "2026-11-20T03:00:00Z",
-            "price_open": 0.012,
-            "price_high": 0.014,
-            "price_low": 0.012,
-            "price_close": 0.014,
-            "volume_contracts": 1486.45,
-            "open_interest_contracts": 829311.54
-          },
-          {
-            "end_period_ts": 1795147200,
-            "end_period_utc": "2026-11-20T04:00:00Z",
-            "price_open": 0.012,
-            "price_high": 0.014,
-            "price_low": 0.012,
-            "price_close": 0.012,
-            "volume_contracts": 7248.65,
-            "open_interest_contracts": 836136.42
-          },
-          {
-            "end_period_ts": 1795150800,
-            "end_period_utc": "2026-11-20T05:00:00Z",
-            "price_open": 0.012,
-            "price_high": 0.013,
-            "price_low": 0.012,
-            "price_close": 0.012,
-            "volume_contracts": 5181.47,
-            "open_interest_contracts": 841001.43
-          },
-          {
-            "end_period_ts": 1795154400,
-            "end_period_utc": "2026-11-20T06:00:00Z",
-            "price_open": 0.012,
-            "price_high": 0.014,
-            "price_low": 0.01,
-            "price_close": 0.01,
-            "volume_contracts": 13250.77,
-            "open_interest_contracts": 838578.29
-          },
-          {
-            "end_period_ts": 1795158000,
-            "end_period_utc": "2026-11-20T07:00:00Z",
+            "end_period_ts": 1795237200,
+            "end_period_utc": "2026-11-21T05:00:00Z",
             "price_open": 0.01,
-            "price_high": 0.013,
+            "price_high": 0.01,
             "price_low": 0.01,
-            "price_close": 0.012,
-            "volume_contracts": 785.67,
-            "open_interest_contracts": 838507.88
-          },
-          {
-            "end_period_ts": 1795161600,
-            "end_period_utc": "2026-11-20T08:00:00Z",
-            "price_open": 0.013,
-            "price_high": 0.013,
-            "price_low": 0.012,
-            "price_close": 0.013,
-            "volume_contracts": 537.39,
-            "open_interest_contracts": 839024.52
-          },
-          {
-            "end_period_ts": 1795165200,
-            "end_period_utc": "2026-11-20T09:00:00Z",
-            "price_open": 0.013,
-            "price_high": 0.013,
-            "price_low": 0.013,
-            "price_close": 0.013,
-            "volume_contracts": 791.46,
-            "open_interest_contracts": 839614.98
-          },
-          {
-            "end_period_ts": 1795168800,
-            "end_period_utc": "2026-11-20T10:00:00Z",
-            "price_open": 0.011,
-            "price_high": 0.013,
-            "price_low": 0.01,
-            "price_close": 0.013,
-            "volume_contracts": 952.14,
-            "open_interest_contracts": 840291.18
-          },
-          {
-            "end_period_ts": 1795172400,
-            "end_period_utc": "2026-11-20T11:00:00Z",
-            "price_open": 0.012,
-            "price_high": 0.014,
-            "price_low": 0.011,
-            "price_close": 0.011,
-            "volume_contracts": 1957.86,
-            "open_interest_contracts": 841446.0
-          },
-          {
-            "end_period_ts": 1795176000,
-            "end_period_utc": "2026-11-20T12:00:00Z",
-            "price_open": 0.012,
-            "price_high": 0.012,
-            "price_low": 0.012,
-            "price_close": 0.012,
-            "volume_contracts": 43.77,
-            "open_interest_contracts": 841443.66
-          },
-          {
-            "end_period_ts": 1795179600,
-            "end_period_utc": "2026-11-20T13:00:00Z",
-            "price_open": 0.013,
-            "price_high": 0.015,
-            "price_low": 0.012,
-            "price_close": 0.013,
-            "volume_contracts": 11509.05,
-            "open_interest_contracts": 851612.86
-          },
-          {
-            "end_period_ts": 1795183200,
-            "end_period_utc": "2026-11-20T14:00:00Z",
-            "price_open": 0.013,
-            "price_high": 0.013,
-            "price_low": 0.009,
-            "price_close": 0.009,
-            "volume_contracts": 124.0,
-            "open_interest_contracts": 851647.13
-          },
-          {
-            "end_period_ts": 1795186800,
-            "end_period_utc": "2026-11-20T15:00:00Z",
-            "price_open": 0.006,
-            "price_high": 0.006,
-            "price_low": 0.001,
-            "price_close": 0.002,
-            "volume_contracts": 27940.35,
-            "open_interest_contracts": 879136.56
-          },
-          {
-            "end_period_ts": 1795190400,
-            "end_period_utc": "2026-11-20T16:00:00Z",
-            "price_open": 0.001,
-            "price_high": 0.005,
-            "price_low": 0.001,
-            "price_close": 0.005,
-            "volume_contracts": 8127.93,
-            "open_interest_contracts": 887264.49
-          },
-          {
-            "end_period_ts": 1795194000,
-            "end_period_utc": "2026-11-20T17:00:00Z",
-            "price_open": 0.001,
-            "price_high": 0.001,
-            "price_low": 0.001,
-            "price_close": 0.001,
-            "volume_contracts": 2958.04,
-            "open_interest_contracts": 890222.53
-          },
-          {
-            "end_period_ts": 1795197600,
-            "end_period_utc": "2026-11-20T18:00:00Z",
-            "price_open": 0.001,
-            "price_high": 0.001,
-            "price_low": 0.001,
-            "price_close": 0.001,
-            "volume_contracts": 915.99,
-            "open_interest_contracts": 891138.52
-          },
-          {
-            "end_period_ts": 1795201200,
-            "end_period_utc": "2026-11-20T19:00:00Z",
-            "price_open": null,
-            "price_high": null,
-            "price_low": null,
-            "price_close": null,
-            "volume_contracts": 0.0,
-            "open_interest_contracts": 891138.52
-          },
-          {
-            "end_period_ts": 1795204800,
-            "end_period_utc": "2026-11-20T20:00:00Z",
-            "price_open": null,
-            "price_high": null,
-            "price_low": null,
-            "price_close": null,
-            "volume_contracts": 0.0,
-            "open_interest_contracts": 891138.52
-          },
-          {
-            "end_period_ts": 1795208400,
-            "end_period_utc": "2026-11-20T21:00:00Z",
-            "price_open": 0.001,
-            "price_high": 0.001,
-            "price_low": 0.001,
-            "price_close": 0.001,
-            "volume_contracts": 13281.95,
-            "open_interest_contracts": 901409.58
-          },
-          {
-            "end_period_ts": 1795212000,
-            "end_period_utc": "2026-11-20T22:00:00Z",
-            "price_open": 0.001,
-            "price_high": 0.001,
-            "price_low": 0.001,
-            "price_close": 0.001,
-            "volume_contracts": 915.99,
-            "open_interest_contracts": 902325.57
-          },
-          {
-            "end_period_ts": 1795215600,
-            "end_period_utc": "2026-11-20T23:00:00Z",
-            "price_open": null,
-            "price_high": null,
-            "price_low": null,
-            "price_close": null,
-            "volume_contracts": 0.0,
-            "open_interest_contracts": 902325.57
-          },
-          {
-            "end_period_ts": 1795219200,
-            "end_period_utc": "2026-11-21T00:00:00Z",
-            "price_open": 0.001,
-            "price_high": 0.001,
-            "price_low": 0.001,
-            "price_close": 0.001,
-            "volume_contracts": 93.49,
-            "open_interest_contracts": 902419.06
-          },
-          {
-            "end_period_ts": 1795222800,
-            "end_period_utc": "2026-11-21T01:00:00Z",
-            "price_open": null,
-            "price_high": null,
-            "price_low": null,
-            "price_close": null,
-            "volume_contracts": 0.0,
-            "open_interest_contracts": 902419.06
-          }
-        ]
-      },
-      "1440": {
-        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXPGATOUR/markets/KXPGATOUR-THRC26-BBRO/candlesticks?start_ts=1792635853&end_ts=1795227853&period_interval=1440",
-        "candles": [
-          {
-            "end_period_ts": 1794805200,
-            "end_period_utc": "2026-11-16T05:00:00Z",
-            "price_open": null,
-            "price_high": null,
-            "price_low": null,
-            "price_close": null,
-            "volume_contracts": 0.0,
-            "open_interest_contracts": 0.0
-          },
-          {
-            "end_period_ts": 1794891600,
-            "end_period_utc": "2026-11-17T05:00:00Z",
-            "price_open": 0.039,
-            "price_high": 0.052,
-            "price_low": 0.02,
-            "price_close": 0.042,
-            "volume_contracts": 28241.04,
-            "open_interest_contracts": 28241.04
-          },
-          {
-            "end_period_ts": 1794978000,
-            "end_period_utc": "2026-11-18T05:00:00Z",
-            "price_open": 0.042,
-            "price_high": 0.056,
-            "price_low": 0.031,
-            "price_close": 0.039,
-            "volume_contracts": 157064.7,
-            "open_interest_contracts": 177708.43
-          },
-          {
-            "end_period_ts": 1795064400,
-            "end_period_utc": "2026-11-19T05:00:00Z",
-            "price_open": 0.039,
-            "price_high": 0.045,
-            "price_low": 0.035,
-            "price_close": 0.043,
-            "volume_contracts": 382817.31,
-            "open_interest_contracts": 552627.72
-          },
-          {
-            "end_period_ts": 1795150800,
-            "end_period_utc": "2026-11-20T05:00:00Z",
-            "price_open": 0.043,
-            "price_high": 0.052,
-            "price_low": 0.002,
-            "price_close": 0.012,
-            "volume_contracts": 400538.77,
-            "open_interest_contracts": 841001.43
+            "price_close": 0.01,
+            "volume_contracts": 4860.85,
+            "open_interest_contracts": 126956.86
           }
         ]
       }
@@ -5403,90 +4737,10 @@
       "topic": "golf",
       "series": "KXPGATOUR",
       "title": "The RSM Classic: Jackson Koivun wins",
-      "fetched_at": "2026-11-21T02:24:13Z",
+      "fetched_at": "2026-11-21T11:15:08Z",
       "60": {
-        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXPGATOUR/markets/KXPGATOUR-THRC26-JKOI/candlesticks?start_ts=1794968653&end_ts=1795227853&period_interval=60",
+        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXPGATOUR/markets/KXPGATOUR-THRC26-JKOI/candlesticks?start_ts=1795000508&end_ts=1795259708&period_interval=60",
         "candles": [
-          {
-            "end_period_ts": 1794970800,
-            "end_period_utc": "2026-11-18T03:00:00Z",
-            "price_open": 0.037,
-            "price_high": 0.039,
-            "price_low": 0.037,
-            "price_close": 0.037,
-            "volume_contracts": 1434.49,
-            "open_interest_contracts": 72030.23
-          },
-          {
-            "end_period_ts": 1794974400,
-            "end_period_utc": "2026-11-18T04:00:00Z",
-            "price_open": 0.034,
-            "price_high": 0.035,
-            "price_low": 0.034,
-            "price_close": 0.034,
-            "volume_contracts": 1087.71,
-            "open_interest_contracts": 73117.94
-          },
-          {
-            "end_period_ts": 1794978000,
-            "end_period_utc": "2026-11-18T05:00:00Z",
-            "price_open": 0.034,
-            "price_high": 0.034,
-            "price_low": 0.034,
-            "price_close": 0.034,
-            "volume_contracts": 2967.61,
-            "open_interest_contracts": 76085.55
-          },
-          {
-            "end_period_ts": 1794981600,
-            "end_period_utc": "2026-11-18T06:00:00Z",
-            "price_open": null,
-            "price_high": null,
-            "price_low": null,
-            "price_close": null,
-            "volume_contracts": 0.0,
-            "open_interest_contracts": 76085.55
-          },
-          {
-            "end_period_ts": 1794985200,
-            "end_period_utc": "2026-11-18T07:00:00Z",
-            "price_open": 0.032,
-            "price_high": 0.033,
-            "price_low": 0.032,
-            "price_close": 0.033,
-            "volume_contracts": 14.06,
-            "open_interest_contracts": 76099.61
-          },
-          {
-            "end_period_ts": 1794988800,
-            "end_period_utc": "2026-11-18T08:00:00Z",
-            "price_open": 0.033,
-            "price_high": 0.033,
-            "price_low": 0.033,
-            "price_close": 0.033,
-            "volume_contracts": 3207.06,
-            "open_interest_contracts": 79306.67
-          },
-          {
-            "end_period_ts": 1794992400,
-            "end_period_utc": "2026-11-18T09:00:00Z",
-            "price_open": 0.033,
-            "price_high": 0.033,
-            "price_low": 0.033,
-            "price_close": 0.033,
-            "volume_contracts": 28.38,
-            "open_interest_contracts": 79335.05
-          },
-          {
-            "end_period_ts": 1794996000,
-            "end_period_utc": "2026-11-18T10:00:00Z",
-            "price_open": 0.032,
-            "price_high": 0.032,
-            "price_low": 0.032,
-            "price_close": 0.032,
-            "volume_contracts": 146.33,
-            "open_interest_contracts": 79481.38
-          },
           {
             "end_period_ts": 1795003200,
             "end_period_utc": "2026-11-18T12:00:00Z",
@@ -6106,11 +5360,101 @@
             "price_close": 0.021,
             "volume_contracts": 202.72,
             "open_interest_contracts": 957137.08
+          },
+          {
+            "end_period_ts": 1795230000,
+            "end_period_utc": "2026-11-21T03:00:00Z",
+            "price_open": 0.021,
+            "price_high": 0.023,
+            "price_low": 0.021,
+            "price_close": 0.023,
+            "volume_contracts": 3072.69,
+            "open_interest_contracts": 960154.69
+          },
+          {
+            "end_period_ts": 1795233600,
+            "end_period_utc": "2026-11-21T04:00:00Z",
+            "price_open": 0.022,
+            "price_high": 0.023,
+            "price_low": 0.02,
+            "price_close": 0.021,
+            "volume_contracts": 14322.15,
+            "open_interest_contracts": 966205.44
+          },
+          {
+            "end_period_ts": 1795237200,
+            "end_period_utc": "2026-11-21T05:00:00Z",
+            "price_open": 0.023,
+            "price_high": 0.024,
+            "price_low": 0.021,
+            "price_close": 0.021,
+            "volume_contracts": 3536.5,
+            "open_interest_contracts": 967961.25
+          },
+          {
+            "end_period_ts": 1795240800,
+            "end_period_utc": "2026-11-21T06:00:00Z",
+            "price_open": 0.021,
+            "price_high": 0.024,
+            "price_low": 0.021,
+            "price_close": 0.024,
+            "volume_contracts": 12286.76,
+            "open_interest_contracts": 978770.53
+          },
+          {
+            "end_period_ts": 1795244400,
+            "end_period_utc": "2026-11-21T07:00:00Z",
+            "price_open": 0.023,
+            "price_high": 0.024,
+            "price_low": 0.023,
+            "price_close": 0.024,
+            "volume_contracts": 6741.93,
+            "open_interest_contracts": 985512.46
+          },
+          {
+            "end_period_ts": 1795248000,
+            "end_period_utc": "2026-11-21T08:00:00Z",
+            "price_open": 0.024,
+            "price_high": 0.024,
+            "price_low": 0.024,
+            "price_close": 0.024,
+            "volume_contracts": 438.0,
+            "open_interest_contracts": 985950.46
+          },
+          {
+            "end_period_ts": 1795251600,
+            "end_period_utc": "2026-11-21T09:00:00Z",
+            "price_open": 0.024,
+            "price_high": 0.024,
+            "price_low": 0.024,
+            "price_close": 0.024,
+            "volume_contracts": 273.01,
+            "open_interest_contracts": 986223.47
+          },
+          {
+            "end_period_ts": 1795255200,
+            "end_period_utc": "2026-11-21T10:00:00Z",
+            "price_open": 0.024,
+            "price_high": 0.024,
+            "price_low": 0.024,
+            "price_close": 0.024,
+            "volume_contracts": 43.0,
+            "open_interest_contracts": 986266.47
+          },
+          {
+            "end_period_ts": 1795258800,
+            "end_period_utc": "2026-11-21T11:00:00Z",
+            "price_open": 0.023,
+            "price_high": 0.023,
+            "price_low": 0.023,
+            "price_close": 0.023,
+            "volume_contracts": 108.33,
+            "open_interest_contracts": 986266.47
           }
         ]
       },
       "1440": {
-        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXPGATOUR/markets/KXPGATOUR-THRC26-JKOI/candlesticks?start_ts=1792635853&end_ts=1795227853&period_interval=1440",
+        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXPGATOUR/markets/KXPGATOUR-THRC26-JKOI/candlesticks?start_ts=1792667708&end_ts=1795259708&period_interval=1440",
         "candles": [
           {
             "end_period_ts": 1794805200,
@@ -6161,6 +5505,16 @@
             "price_close": 0.027,
             "volume_contracts": 443812.13,
             "open_interest_contracts": 722376.64
+          },
+          {
+            "end_period_ts": 1795237200,
+            "end_period_utc": "2026-11-21T05:00:00Z",
+            "price_open": 0.028,
+            "price_high": 0.048,
+            "price_low": 0.014,
+            "price_close": 0.021,
+            "volume_contracts": 288042.37,
+            "open_interest_contracts": 967961.25
           }
         ]
       }
@@ -6169,100 +5523,10 @@
       "topic": "golf",
       "series": "KXPGATOUR",
       "title": "The RSM Classic: Michael Thorbjornsen wins",
-      "fetched_at": "2026-11-21T02:24:13Z",
+      "fetched_at": "2026-11-21T11:15:08Z",
       "60": {
-        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXPGATOUR/markets/KXPGATOUR-THRC26-MTHO/candlesticks?start_ts=1794968653&end_ts=1795227853&period_interval=60",
+        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXPGATOUR/markets/KXPGATOUR-THRC26-MTHO/candlesticks?start_ts=1795000508&end_ts=1795259708&period_interval=60",
         "candles": [
-          {
-            "end_period_ts": 1794970800,
-            "end_period_utc": "2026-11-18T03:00:00Z",
-            "price_open": 0.031,
-            "price_high": 0.032,
-            "price_low": 0.031,
-            "price_close": 0.032,
-            "volume_contracts": 1258.36,
-            "open_interest_contracts": 82893.65
-          },
-          {
-            "end_period_ts": 1794974400,
-            "end_period_utc": "2026-11-18T04:00:00Z",
-            "price_open": 0.031,
-            "price_high": 0.032,
-            "price_low": 0.031,
-            "price_close": 0.031,
-            "volume_contracts": 341.58,
-            "open_interest_contracts": 83234.23
-          },
-          {
-            "end_period_ts": 1794978000,
-            "end_period_utc": "2026-11-18T05:00:00Z",
-            "price_open": 0.031,
-            "price_high": 0.031,
-            "price_low": 0.031,
-            "price_close": 0.031,
-            "volume_contracts": 128.04,
-            "open_interest_contracts": 83362.27
-          },
-          {
-            "end_period_ts": 1794981600,
-            "end_period_utc": "2026-11-18T06:00:00Z",
-            "price_open": 0.031,
-            "price_high": 0.031,
-            "price_low": 0.031,
-            "price_close": 0.031,
-            "volume_contracts": 97.84,
-            "open_interest_contracts": 83460.11
-          },
-          {
-            "end_period_ts": 1794985200,
-            "end_period_utc": "2026-11-18T07:00:00Z",
-            "price_open": 0.031,
-            "price_high": 0.031,
-            "price_low": 0.031,
-            "price_close": 0.031,
-            "volume_contracts": 656.3,
-            "open_interest_contracts": 84116.41
-          },
-          {
-            "end_period_ts": 1794988800,
-            "end_period_utc": "2026-11-18T08:00:00Z",
-            "price_open": 0.031,
-            "price_high": 0.031,
-            "price_low": 0.031,
-            "price_close": 0.031,
-            "volume_contracts": 181.24,
-            "open_interest_contracts": 84297.65
-          },
-          {
-            "end_period_ts": 1794992400,
-            "end_period_utc": "2026-11-18T09:00:00Z",
-            "price_open": 0.031,
-            "price_high": 0.031,
-            "price_low": 0.03,
-            "price_close": 0.03,
-            "volume_contracts": 356.44,
-            "open_interest_contracts": 84623.89
-          },
-          {
-            "end_period_ts": 1794996000,
-            "end_period_utc": "2026-11-18T10:00:00Z",
-            "price_open": null,
-            "price_high": null,
-            "price_low": null,
-            "price_close": null,
-            "volume_contracts": 0.0,
-            "open_interest_contracts": 84623.89
-          },
-          {
-            "end_period_ts": 1794999600,
-            "end_period_utc": "2026-11-18T11:00:00Z",
-            "price_open": null,
-            "price_high": null,
-            "price_low": null,
-            "price_close": null,
-            "volume_contracts": 0.0,
-            "open_interest_contracts": 84623.89
-          },
           {
             "end_period_ts": 1795003200,
             "end_period_utc": "2026-11-18T12:00:00Z",
@@ -6882,11 +6146,101 @@
             "price_close": 0.17,
             "volume_contracts": 4828.53,
             "open_interest_contracts": 682702.19
+          },
+          {
+            "end_period_ts": 1795230000,
+            "end_period_utc": "2026-11-21T03:00:00Z",
+            "price_open": 0.16,
+            "price_high": 0.17,
+            "price_low": 0.16,
+            "price_close": 0.17,
+            "volume_contracts": 3805.21,
+            "open_interest_contracts": 680828.67
+          },
+          {
+            "end_period_ts": 1795233600,
+            "end_period_utc": "2026-11-21T04:00:00Z",
+            "price_open": 0.17,
+            "price_high": 0.17,
+            "price_low": 0.16,
+            "price_close": 0.17,
+            "volume_contracts": 4219.9,
+            "open_interest_contracts": 679058.58
+          },
+          {
+            "end_period_ts": 1795237200,
+            "end_period_utc": "2026-11-21T05:00:00Z",
+            "price_open": 0.17,
+            "price_high": 0.17,
+            "price_low": 0.16,
+            "price_close": 0.16,
+            "volume_contracts": 3474.65,
+            "open_interest_contracts": 677382.31
+          },
+          {
+            "end_period_ts": 1795240800,
+            "end_period_utc": "2026-11-21T06:00:00Z",
+            "price_open": 0.17,
+            "price_high": 0.17,
+            "price_low": 0.16,
+            "price_close": 0.17,
+            "volume_contracts": 4823.95,
+            "open_interest_contracts": 680047.42
+          },
+          {
+            "end_period_ts": 1795244400,
+            "end_period_utc": "2026-11-21T07:00:00Z",
+            "price_open": 0.17,
+            "price_high": 0.17,
+            "price_low": 0.15,
+            "price_close": 0.16,
+            "volume_contracts": 10123.61,
+            "open_interest_contracts": 686509.48
+          },
+          {
+            "end_period_ts": 1795248000,
+            "end_period_utc": "2026-11-21T08:00:00Z",
+            "price_open": 0.17,
+            "price_high": 0.17,
+            "price_low": 0.15,
+            "price_close": 0.15,
+            "volume_contracts": 5346.28,
+            "open_interest_contracts": 690657.28
+          },
+          {
+            "end_period_ts": 1795251600,
+            "end_period_utc": "2026-11-21T09:00:00Z",
+            "price_open": 0.17,
+            "price_high": 0.17,
+            "price_low": 0.15,
+            "price_close": 0.17,
+            "volume_contracts": 1330.63,
+            "open_interest_contracts": 691843.9
+          },
+          {
+            "end_period_ts": 1795255200,
+            "end_period_utc": "2026-11-21T10:00:00Z",
+            "price_open": 0.17,
+            "price_high": 0.17,
+            "price_low": 0.15,
+            "price_close": 0.15,
+            "volume_contracts": 5364.94,
+            "open_interest_contracts": 696974.71
+          },
+          {
+            "end_period_ts": 1795258800,
+            "end_period_utc": "2026-11-21T11:00:00Z",
+            "price_open": 0.17,
+            "price_high": 0.17,
+            "price_low": 0.15,
+            "price_close": 0.16,
+            "volume_contracts": 3810.86,
+            "open_interest_contracts": 700119.04
           }
         ]
       },
       "1440": {
-        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXPGATOUR/markets/KXPGATOUR-THRC26-MTHO/candlesticks?start_ts=1792635853&end_ts=1795227853&period_interval=1440",
+        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXPGATOUR/markets/KXPGATOUR-THRC26-MTHO/candlesticks?start_ts=1792667708&end_ts=1795259708&period_interval=1440",
         "candles": [
           {
             "end_period_ts": 1794805200,
@@ -6937,6 +6291,722 @@
             "price_close": 0.13,
             "volume_contracts": 439195.75,
             "open_interest_contracts": 533738.91
+          },
+          {
+            "end_period_ts": 1795237200,
+            "end_period_utc": "2026-11-21T05:00:00Z",
+            "price_open": 0.13,
+            "price_high": 0.22,
+            "price_low": 0.051,
+            "price_close": 0.16,
+            "volume_contracts": 385409.77,
+            "open_interest_contracts": 677382.31
+          }
+        ]
+      }
+    },
+    "KXPGATOUR-THRC26-BBRO": {
+      "topic": "golf",
+      "series": "KXPGATOUR",
+      "title": "The RSM Classic: Blades Brown wins",
+      "fetched_at": "2026-11-21T11:15:08Z",
+      "60": {
+        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXPGATOUR/markets/KXPGATOUR-THRC26-BBRO/candlesticks?start_ts=1795000508&end_ts=1795259708&period_interval=60",
+        "candles": [
+          {
+            "end_period_ts": 1795003200,
+            "end_period_utc": "2026-11-18T12:00:00Z",
+            "price_open": 0.042,
+            "price_high": 0.042,
+            "price_low": 0.038,
+            "price_close": 0.038,
+            "volume_contracts": 956.64,
+            "open_interest_contracts": 212957.85
+          },
+          {
+            "end_period_ts": 1795006800,
+            "end_period_utc": "2026-11-18T13:00:00Z",
+            "price_open": 0.039,
+            "price_high": 0.042,
+            "price_low": 0.039,
+            "price_close": 0.042,
+            "volume_contracts": 1031.38,
+            "open_interest_contracts": 213989.23
+          },
+          {
+            "end_period_ts": 1795010400,
+            "end_period_utc": "2026-11-18T14:00:00Z",
+            "price_open": 0.042,
+            "price_high": 0.042,
+            "price_low": 0.04,
+            "price_close": 0.04,
+            "volume_contracts": 3867.45,
+            "open_interest_contracts": 217856.68
+          },
+          {
+            "end_period_ts": 1795014000,
+            "end_period_utc": "2026-11-18T15:00:00Z",
+            "price_open": 0.038,
+            "price_high": 0.042,
+            "price_low": 0.038,
+            "price_close": 0.042,
+            "volume_contracts": 4415.77,
+            "open_interest_contracts": 222238.95
+          },
+          {
+            "end_period_ts": 1795017600,
+            "end_period_utc": "2026-11-18T16:00:00Z",
+            "price_open": 0.041,
+            "price_high": 0.042,
+            "price_low": 0.035,
+            "price_close": 0.042,
+            "volume_contracts": 9156.71,
+            "open_interest_contracts": 227730.6
+          },
+          {
+            "end_period_ts": 1795021200,
+            "end_period_utc": "2026-11-18T17:00:00Z",
+            "price_open": 0.042,
+            "price_high": 0.045,
+            "price_low": 0.04,
+            "price_close": 0.04,
+            "volume_contracts": 4841.97,
+            "open_interest_contracts": 232349.45
+          },
+          {
+            "end_period_ts": 1795024800,
+            "end_period_utc": "2026-11-18T18:00:00Z",
+            "price_open": 0.043,
+            "price_high": 0.045,
+            "price_low": 0.04,
+            "price_close": 0.045,
+            "volume_contracts": 51072.51,
+            "open_interest_contracts": 283293.26
+          },
+          {
+            "end_period_ts": 1795028400,
+            "end_period_utc": "2026-11-18T19:00:00Z",
+            "price_open": 0.042,
+            "price_high": 0.045,
+            "price_low": 0.042,
+            "price_close": 0.044,
+            "volume_contracts": 12258.67,
+            "open_interest_contracts": 295551.93
+          },
+          {
+            "end_period_ts": 1795032000,
+            "end_period_utc": "2026-11-18T20:00:00Z",
+            "price_open": 0.044,
+            "price_high": 0.044,
+            "price_low": 0.04,
+            "price_close": 0.043,
+            "volume_contracts": 6772.49,
+            "open_interest_contracts": 301888.52
+          },
+          {
+            "end_period_ts": 1795035600,
+            "end_period_utc": "2026-11-18T21:00:00Z",
+            "price_open": 0.042,
+            "price_high": 0.043,
+            "price_low": 0.035,
+            "price_close": 0.043,
+            "volume_contracts": 3477.21,
+            "open_interest_contracts": 305173.55
+          },
+          {
+            "end_period_ts": 1795039200,
+            "end_period_utc": "2026-11-18T22:00:00Z",
+            "price_open": 0.043,
+            "price_high": 0.044,
+            "price_low": 0.038,
+            "price_close": 0.039,
+            "volume_contracts": 27358.24,
+            "open_interest_contracts": 332337.82
+          },
+          {
+            "end_period_ts": 1795042800,
+            "end_period_utc": "2026-11-18T23:00:00Z",
+            "price_open": 0.039,
+            "price_high": 0.045,
+            "price_low": 0.035,
+            "price_close": 0.045,
+            "volume_contracts": 163002.92,
+            "open_interest_contracts": 495292.7
+          },
+          {
+            "end_period_ts": 1795046400,
+            "end_period_utc": "2026-11-19T00:00:00Z",
+            "price_open": 0.045,
+            "price_high": 0.045,
+            "price_low": 0.036,
+            "price_close": 0.037,
+            "volume_contracts": 5611.55,
+            "open_interest_contracts": 499851.01
+          },
+          {
+            "end_period_ts": 1795050000,
+            "end_period_utc": "2026-11-19T01:00:00Z",
+            "price_open": 0.044,
+            "price_high": 0.044,
+            "price_low": 0.037,
+            "price_close": 0.044,
+            "volume_contracts": 4520.02,
+            "open_interest_contracts": 504321.07
+          },
+          {
+            "end_period_ts": 1795053600,
+            "end_period_utc": "2026-11-19T02:00:00Z",
+            "price_open": 0.044,
+            "price_high": 0.044,
+            "price_low": 0.04,
+            "price_close": 0.044,
+            "volume_contracts": 9273.16,
+            "open_interest_contracts": 512935.13
+          },
+          {
+            "end_period_ts": 1795057200,
+            "end_period_utc": "2026-11-19T03:00:00Z",
+            "price_open": 0.044,
+            "price_high": 0.044,
+            "price_low": 0.037,
+            "price_close": 0.044,
+            "volume_contracts": 7845.78,
+            "open_interest_contracts": 520061.65
+          },
+          {
+            "end_period_ts": 1795060800,
+            "end_period_utc": "2026-11-19T04:00:00Z",
+            "price_open": 0.044,
+            "price_high": 0.045,
+            "price_low": 0.04,
+            "price_close": 0.04,
+            "volume_contracts": 26479.28,
+            "open_interest_contracts": 546099.87
+          },
+          {
+            "end_period_ts": 1795064400,
+            "end_period_utc": "2026-11-19T05:00:00Z",
+            "price_open": 0.043,
+            "price_high": 0.045,
+            "price_low": 0.04,
+            "price_close": 0.043,
+            "volume_contracts": 6549.78,
+            "open_interest_contracts": 552627.72
+          },
+          {
+            "end_period_ts": 1795068000,
+            "end_period_utc": "2026-11-19T06:00:00Z",
+            "price_open": 0.043,
+            "price_high": 0.046,
+            "price_low": 0.043,
+            "price_close": 0.044,
+            "volume_contracts": 34650.0,
+            "open_interest_contracts": 587277.72
+          },
+          {
+            "end_period_ts": 1795071600,
+            "end_period_utc": "2026-11-19T07:00:00Z",
+            "price_open": 0.044,
+            "price_high": 0.047,
+            "price_low": 0.044,
+            "price_close": 0.046,
+            "volume_contracts": 10270.7,
+            "open_interest_contracts": 597548.42
+          },
+          {
+            "end_period_ts": 1795075200,
+            "end_period_utc": "2026-11-19T08:00:00Z",
+            "price_open": 0.046,
+            "price_high": 0.046,
+            "price_low": 0.042,
+            "price_close": 0.046,
+            "volume_contracts": 3730.11,
+            "open_interest_contracts": 600556.08
+          },
+          {
+            "end_period_ts": 1795086000,
+            "end_period_utc": "2026-11-19T11:00:00Z",
+            "price_open": 0.046,
+            "price_high": 0.046,
+            "price_low": 0.046,
+            "price_close": 0.046,
+            "volume_contracts": 7787.26,
+            "open_interest_contracts": 608343.34
+          },
+          {
+            "end_period_ts": 1795089600,
+            "end_period_utc": "2026-11-19T12:00:00Z",
+            "price_open": 0.046,
+            "price_high": 0.047,
+            "price_low": 0.045,
+            "price_close": 0.047,
+            "volume_contracts": 2101.78,
+            "open_interest_contracts": 610212.73
+          },
+          {
+            "end_period_ts": 1795093200,
+            "end_period_utc": "2026-11-19T13:00:00Z",
+            "price_open": 0.046,
+            "price_high": 0.047,
+            "price_low": 0.039,
+            "price_close": 0.047,
+            "volume_contracts": 8162.73,
+            "open_interest_contracts": 617280.52
+          },
+          {
+            "end_period_ts": 1795096800,
+            "end_period_utc": "2026-11-19T14:00:00Z",
+            "price_open": 0.047,
+            "price_high": 0.052,
+            "price_low": 0.039,
+            "price_close": 0.048,
+            "volume_contracts": 16292.91,
+            "open_interest_contracts": 633243.98
+          },
+          {
+            "end_period_ts": 1795100400,
+            "end_period_utc": "2026-11-19T15:00:00Z",
+            "price_open": 0.048,
+            "price_high": 0.052,
+            "price_low": 0.04,
+            "price_close": 0.045,
+            "volume_contracts": 23128.85,
+            "open_interest_contracts": 654654.71
+          },
+          {
+            "end_period_ts": 1795104000,
+            "end_period_utc": "2026-11-19T16:00:00Z",
+            "price_open": 0.046,
+            "price_high": 0.046,
+            "price_low": 0.005,
+            "price_close": 0.017,
+            "volume_contracts": 86268.1,
+            "open_interest_contracts": 722573.21
+          },
+          {
+            "end_period_ts": 1795107600,
+            "end_period_utc": "2026-11-19T17:00:00Z",
+            "price_open": 0.02,
+            "price_high": 0.021,
+            "price_low": 0.002,
+            "price_close": 0.015,
+            "volume_contracts": 83665.8,
+            "open_interest_contracts": 796340.31
+          },
+          {
+            "end_period_ts": 1795111200,
+            "end_period_utc": "2026-11-19T18:00:00Z",
+            "price_open": 0.016,
+            "price_high": 0.034,
+            "price_low": 0.016,
+            "price_close": 0.019,
+            "volume_contracts": 35904.49,
+            "open_interest_contracts": 827834.58
+          },
+          {
+            "end_period_ts": 1795114800,
+            "end_period_utc": "2026-11-19T19:00:00Z",
+            "price_open": 0.017,
+            "price_high": 0.018,
+            "price_low": 0.006,
+            "price_close": 0.006,
+            "volume_contracts": 2191.02,
+            "open_interest_contracts": 828467.22
+          },
+          {
+            "end_period_ts": 1795118400,
+            "end_period_utc": "2026-11-19T20:00:00Z",
+            "price_open": 0.008,
+            "price_high": 0.014,
+            "price_low": 0.006,
+            "price_close": 0.014,
+            "volume_contracts": 8137.74,
+            "open_interest_contracts": 833589.26
+          },
+          {
+            "end_period_ts": 1795122000,
+            "end_period_utc": "2026-11-19T21:00:00Z",
+            "price_open": 0.014,
+            "price_high": 0.017,
+            "price_low": 0.013,
+            "price_close": 0.015,
+            "volume_contracts": 16883.52,
+            "open_interest_contracts": 849774.27
+          },
+          {
+            "end_period_ts": 1795125600,
+            "end_period_utc": "2026-11-19T22:00:00Z",
+            "price_open": 0.014,
+            "price_high": 0.015,
+            "price_low": 0.012,
+            "price_close": 0.012,
+            "volume_contracts": 11232.34,
+            "open_interest_contracts": 839483.86
+          },
+          {
+            "end_period_ts": 1795129200,
+            "end_period_utc": "2026-11-19T23:00:00Z",
+            "price_open": 0.013,
+            "price_high": 0.014,
+            "price_low": 0.012,
+            "price_close": 0.013,
+            "volume_contracts": 1800.97,
+            "open_interest_contracts": 839523.73
+          },
+          {
+            "end_period_ts": 1795132800,
+            "end_period_utc": "2026-11-20T00:00:00Z",
+            "price_open": 0.014,
+            "price_high": 0.014,
+            "price_low": 0.013,
+            "price_close": 0.013,
+            "volume_contracts": 8656.33,
+            "open_interest_contracts": 848026.81
+          },
+          {
+            "end_period_ts": 1795136400,
+            "end_period_utc": "2026-11-20T01:00:00Z",
+            "price_open": 0.013,
+            "price_high": 0.013,
+            "price_low": 0.013,
+            "price_close": 0.013,
+            "volume_contracts": 1371.45,
+            "open_interest_contracts": 848026.81
+          },
+          {
+            "end_period_ts": 1795140000,
+            "end_period_utc": "2026-11-20T02:00:00Z",
+            "price_open": 0.013,
+            "price_high": 0.013,
+            "price_low": 0.01,
+            "price_close": 0.01,
+            "volume_contracts": 24386.1,
+            "open_interest_contracts": 828171.22
+          },
+          {
+            "end_period_ts": 1795143600,
+            "end_period_utc": "2026-11-20T03:00:00Z",
+            "price_open": 0.012,
+            "price_high": 0.014,
+            "price_low": 0.012,
+            "price_close": 0.014,
+            "volume_contracts": 1486.45,
+            "open_interest_contracts": 829311.54
+          },
+          {
+            "end_period_ts": 1795147200,
+            "end_period_utc": "2026-11-20T04:00:00Z",
+            "price_open": 0.012,
+            "price_high": 0.014,
+            "price_low": 0.012,
+            "price_close": 0.012,
+            "volume_contracts": 7248.65,
+            "open_interest_contracts": 836136.42
+          },
+          {
+            "end_period_ts": 1795150800,
+            "end_period_utc": "2026-11-20T05:00:00Z",
+            "price_open": 0.012,
+            "price_high": 0.013,
+            "price_low": 0.012,
+            "price_close": 0.012,
+            "volume_contracts": 5181.47,
+            "open_interest_contracts": 841001.43
+          },
+          {
+            "end_period_ts": 1795154400,
+            "end_period_utc": "2026-11-20T06:00:00Z",
+            "price_open": 0.012,
+            "price_high": 0.014,
+            "price_low": 0.01,
+            "price_close": 0.01,
+            "volume_contracts": 13250.77,
+            "open_interest_contracts": 838578.29
+          },
+          {
+            "end_period_ts": 1795158000,
+            "end_period_utc": "2026-11-20T07:00:00Z",
+            "price_open": 0.01,
+            "price_high": 0.013,
+            "price_low": 0.01,
+            "price_close": 0.012,
+            "volume_contracts": 785.67,
+            "open_interest_contracts": 838507.88
+          },
+          {
+            "end_period_ts": 1795161600,
+            "end_period_utc": "2026-11-20T08:00:00Z",
+            "price_open": 0.013,
+            "price_high": 0.013,
+            "price_low": 0.012,
+            "price_close": 0.013,
+            "volume_contracts": 537.39,
+            "open_interest_contracts": 839024.52
+          },
+          {
+            "end_period_ts": 1795165200,
+            "end_period_utc": "2026-11-20T09:00:00Z",
+            "price_open": 0.013,
+            "price_high": 0.013,
+            "price_low": 0.013,
+            "price_close": 0.013,
+            "volume_contracts": 791.46,
+            "open_interest_contracts": 839614.98
+          },
+          {
+            "end_period_ts": 1795168800,
+            "end_period_utc": "2026-11-20T10:00:00Z",
+            "price_open": 0.011,
+            "price_high": 0.013,
+            "price_low": 0.01,
+            "price_close": 0.013,
+            "volume_contracts": 952.14,
+            "open_interest_contracts": 840291.18
+          },
+          {
+            "end_period_ts": 1795172400,
+            "end_period_utc": "2026-11-20T11:00:00Z",
+            "price_open": 0.012,
+            "price_high": 0.014,
+            "price_low": 0.011,
+            "price_close": 0.011,
+            "volume_contracts": 1957.86,
+            "open_interest_contracts": 841446.0
+          },
+          {
+            "end_period_ts": 1795176000,
+            "end_period_utc": "2026-11-20T12:00:00Z",
+            "price_open": 0.012,
+            "price_high": 0.012,
+            "price_low": 0.012,
+            "price_close": 0.012,
+            "volume_contracts": 43.77,
+            "open_interest_contracts": 841443.66
+          },
+          {
+            "end_period_ts": 1795179600,
+            "end_period_utc": "2026-11-20T13:00:00Z",
+            "price_open": 0.013,
+            "price_high": 0.015,
+            "price_low": 0.012,
+            "price_close": 0.013,
+            "volume_contracts": 11509.05,
+            "open_interest_contracts": 851612.86
+          },
+          {
+            "end_period_ts": 1795183200,
+            "end_period_utc": "2026-11-20T14:00:00Z",
+            "price_open": 0.013,
+            "price_high": 0.013,
+            "price_low": 0.009,
+            "price_close": 0.009,
+            "volume_contracts": 124.0,
+            "open_interest_contracts": 851647.13
+          },
+          {
+            "end_period_ts": 1795186800,
+            "end_period_utc": "2026-11-20T15:00:00Z",
+            "price_open": 0.006,
+            "price_high": 0.006,
+            "price_low": 0.001,
+            "price_close": 0.002,
+            "volume_contracts": 27940.35,
+            "open_interest_contracts": 879136.56
+          },
+          {
+            "end_period_ts": 1795190400,
+            "end_period_utc": "2026-11-20T16:00:00Z",
+            "price_open": 0.001,
+            "price_high": 0.005,
+            "price_low": 0.001,
+            "price_close": 0.005,
+            "volume_contracts": 8127.93,
+            "open_interest_contracts": 887264.49
+          },
+          {
+            "end_period_ts": 1795194000,
+            "end_period_utc": "2026-11-20T17:00:00Z",
+            "price_open": 0.001,
+            "price_high": 0.001,
+            "price_low": 0.001,
+            "price_close": 0.001,
+            "volume_contracts": 2958.04,
+            "open_interest_contracts": 890222.53
+          },
+          {
+            "end_period_ts": 1795197600,
+            "end_period_utc": "2026-11-20T18:00:00Z",
+            "price_open": 0.001,
+            "price_high": 0.001,
+            "price_low": 0.001,
+            "price_close": 0.001,
+            "volume_contracts": 915.99,
+            "open_interest_contracts": 891138.52
+          },
+          {
+            "end_period_ts": 1795201200,
+            "end_period_utc": "2026-11-20T19:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 891138.52
+          },
+          {
+            "end_period_ts": 1795204800,
+            "end_period_utc": "2026-11-20T20:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 891138.52
+          },
+          {
+            "end_period_ts": 1795208400,
+            "end_period_utc": "2026-11-20T21:00:00Z",
+            "price_open": 0.001,
+            "price_high": 0.001,
+            "price_low": 0.001,
+            "price_close": 0.001,
+            "volume_contracts": 13281.95,
+            "open_interest_contracts": 901409.58
+          },
+          {
+            "end_period_ts": 1795212000,
+            "end_period_utc": "2026-11-20T22:00:00Z",
+            "price_open": 0.001,
+            "price_high": 0.001,
+            "price_low": 0.001,
+            "price_close": 0.001,
+            "volume_contracts": 915.99,
+            "open_interest_contracts": 902325.57
+          },
+          {
+            "end_period_ts": 1795215600,
+            "end_period_utc": "2026-11-20T23:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 902325.57
+          },
+          {
+            "end_period_ts": 1795219200,
+            "end_period_utc": "2026-11-21T00:00:00Z",
+            "price_open": 0.001,
+            "price_high": 0.001,
+            "price_low": 0.001,
+            "price_close": 0.001,
+            "volume_contracts": 93.49,
+            "open_interest_contracts": 902419.06
+          },
+          {
+            "end_period_ts": 1795222800,
+            "end_period_utc": "2026-11-21T01:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 902419.06
+          },
+          {
+            "end_period_ts": 1795244400,
+            "end_period_utc": "2026-11-21T07:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 902419.06
+          },
+          {
+            "end_period_ts": 1795251600,
+            "end_period_utc": "2026-11-21T09:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 902419.06
+          },
+          {
+            "end_period_ts": 1795258800,
+            "end_period_utc": "2026-11-21T11:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 902419.06
+          }
+        ]
+      },
+      "1440": {
+        "source_url": "https://api.elections.kalshi.com/trade-api/v2/series/KXPGATOUR/markets/KXPGATOUR-THRC26-BBRO/candlesticks?start_ts=1792667708&end_ts=1795259708&period_interval=1440",
+        "candles": [
+          {
+            "end_period_ts": 1794805200,
+            "end_period_utc": "2026-11-16T05:00:00Z",
+            "price_open": null,
+            "price_high": null,
+            "price_low": null,
+            "price_close": null,
+            "volume_contracts": 0.0,
+            "open_interest_contracts": 0.0
+          },
+          {
+            "end_period_ts": 1794891600,
+            "end_period_utc": "2026-11-17T05:00:00Z",
+            "price_open": 0.039,
+            "price_high": 0.052,
+            "price_low": 0.02,
+            "price_close": 0.042,
+            "volume_contracts": 28241.04,
+            "open_interest_contracts": 28241.04
+          },
+          {
+            "end_period_ts": 1794978000,
+            "end_period_utc": "2026-11-18T05:00:00Z",
+            "price_open": 0.042,
+            "price_high": 0.056,
+            "price_low": 0.031,
+            "price_close": 0.039,
+            "volume_contracts": 157064.7,
+            "open_interest_contracts": 177708.43
+          },
+          {
+            "end_period_ts": 1795064400,
+            "end_period_utc": "2026-11-19T05:00:00Z",
+            "price_open": 0.039,
+            "price_high": 0.045,
+            "price_low": 0.035,
+            "price_close": 0.043,
+            "volume_contracts": 382817.31,
+            "open_interest_contracts": 552627.72
+          },
+          {
+            "end_period_ts": 1795150800,
+            "end_period_utc": "2026-11-20T05:00:00Z",
+            "price_open": 0.043,
+            "price_high": 0.052,
+            "price_low": 0.002,
+            "price_close": 0.012,
+            "volume_contracts": 400538.77,
+            "open_interest_contracts": 841001.43
+          },
+          {
+            "end_period_ts": 1795237200,
+            "end_period_utc": "2026-11-21T05:00:00Z",
+            "price_open": 0.012,
+            "price_high": 0.015,
+            "price_low": 0.001,
+            "price_close": 0.001,
+            "volume_contracts": 84185.85,
+            "open_interest_contracts": 902419.06
           }
         ]
       }

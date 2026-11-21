@@ -1,17 +1,17 @@
 {
-  "generated_at": "2026-11-21T02:24:13Z",
+  "generated_at": "2026-11-21T11:15:08Z",
   "api_base": "https://api.elections.kalshi.com/trade-api/v2",
   "docs": "https://docs.kalshi.com/llms.txt",
   "calls_ok": 66,
   "calls_failed": 0,
   "open_markets_per_topic": {
-    "gas": 46,
+    "gas": 29,
     "elections": 15,
     "culture": 0,
     "crypto": 333,
     "golf": 197
   },
-  "resolved_markets_stored": 1112,
+  "resolved_markets_stored": 1292,
   "orderbooks_stored": 12,
   "candle_series_stored": 12,
   "errors": [],
