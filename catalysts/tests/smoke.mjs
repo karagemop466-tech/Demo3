@@ -100,8 +100,39 @@ ok(feedRows.length === (health.feeds || []).length,
 ok(feedRows.every((tr) => /not usable|usable/.test(tr.textContent)),
    "every feed row states whether it may contribute links");
 
-ok(doc.querySelectorAll("#endpoints tbody tr").length === 0,
-   "endpoint table stays empty until a real probe exists (no invented statuses)");
+// Endpoint table: it must mirror the committed probe artifact exactly — no status row
+// while no probe has been committed, and afterwards one row per probed request showing
+// the HTTP status the runner recorded and linking the probed URL and its docs page.
+// (Until 2026-11-21 this check required the table to be empty unconditionally. It was
+// written before the first networked run; as soon as a real probe was committed the
+// check failed, and with it every scheduled run of catalysts.yml — F-3528-01.)
+{
+  const endpointsPath = path.join(SITE, "data", "endpoints.json");
+  const probed = fs.existsSync(endpointsPath)
+    ? (JSON.parse(fs.readFileSync(endpointsPath, "utf8")).endpoints || []) : [];
+  const erows = [...doc.querySelectorAll("#endpoints tbody tr")];
+  const statusRows = erows.filter((tr) => tr.querySelectorAll("td").length === 5);
+  if (!probed.length) {
+    ok(statusRows.length === 0,
+       "endpoint table shows no status row until a real probe exists (no invented statuses)");
+  } else {
+    ok(statusRows.length === probed.length,
+       `endpoint table lists every probed request and nothing else (${statusRows.length} of ${probed.length})`);
+    ok(probed.every((e, i) => {
+      const td = statusRows[i] && statusRows[i].querySelectorAll("td")[2];
+      const shown = td ? td.textContent.trim() : null;
+      return e.http_status ? shown === String(e.http_status) : shown === "\u2014";
+    }), "every endpoint row shows exactly the HTTP status the runner recorded (blank stays blank)");
+    ok(probed.every((e, i) => {
+      const hrefs = statusRows[i]
+        ? [...statusRows[i].querySelectorAll("a")].map((a) => a.getAttribute("href")) : [];
+      return hrefs.includes(e.url) && (!e.doc || hrefs.includes(e.doc));
+    }), "every endpoint row links the probed request URL and its official docs page");
+    ok(probed.every((e, i) => e.filter_honoured !== false ||
+        /filter ignored by this deployment/.test(statusRows[i] ? statusRows[i].textContent : "")),
+       "a filter the demo deployment ignored is flagged on its row, not hidden");
+  }
+}
 
 // chart hook: a swing is auto-selected and its catalyst state is explained, never invented
 const cats = doc.getElementById("chartCatalysts").textContent;
