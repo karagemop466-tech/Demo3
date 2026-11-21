@@ -75,12 +75,21 @@ jobs:
       - name: Live scan of demo candlesticks (>= $0.10 swing study + strategy backtest)
         env:
           KALSHI_API_ROOT: https://external-api.demo.kalshi.co/trade-api/v2
+          # Inputs arrive as environment variables and are checked to be whole numbers before
+          # use; they are not interpolated into the script text (session 3528551d, F-3528-02;
+          # https://docs.github.com/en/actions/concepts/security/script-injections).
+          IN_PER_TOPIC: ${{ github.event.inputs.per_topic || 12 }}
+          IN_HOURS_1M: ${{ github.event.inputs.hours_1m || 48 }}
+          IN_WINDOW_MINUTES: ${{ github.event.inputs.window_minutes || 60 }}
         run: |
           set -o pipefail
+          for v in "$IN_PER_TOPIC" "$IN_HOURS_1M" "$IN_WINDOW_MINUTES"; do
+            [[ "$v" =~ ^[0-9]{1,5}$ ]] || { echo "::error::inputs must be whole numbers"; exit 2; }
+          done
           python3 scripts/scan_swings.py \
-            --per-topic "${{ github.event.inputs.per_topic || 12 }}" \
-            --hours-1m "${{ github.event.inputs.hours_1m || 48 }}" \
-            --window-minutes "${{ github.event.inputs.window_minutes || 60 }}" \
+            --per-topic "$IN_PER_TOPIC" \
+            --hours-1m "$IN_HOURS_1M" \
+            --window-minutes "$IN_WINDOW_MINUTES" \
             --interval-seconds 0.3 --fail-on-empty 2>&1 | tee swing-scan.log
           status=${PIPESTATUS[0]}
           if [ "$status" -ne 0 ]; then

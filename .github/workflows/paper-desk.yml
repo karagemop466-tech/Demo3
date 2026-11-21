@@ -63,11 +63,20 @@ jobs:
         if: ${{ github.event.inputs.build_only != 'true' }}
         env:
           KALSHI_API_ROOT: https://external-api.demo.kalshi.co/trade-api/v2
+          # Inputs arrive as environment variables, are validated, and are passed as an
+          # argument array - never interpolated into the script text (session 3528551d,
+          # F-3528-02; https://docs.github.com/en/actions/concepts/security/script-injections).
+          IN_RESET: ${{ github.event.inputs.reset }}
+          IN_MAX_ORDERS: ${{ github.event.inputs.max_orders }}
         run: |
-          ARGS="run"
-          if [ "${{ github.event.inputs.reset }}" = "true" ]; then ARGS="$ARGS --reset"; fi
-          if [ -n "${{ github.event.inputs.max_orders }}" ]; then ARGS="$ARGS --max-orders ${{ github.event.inputs.max_orders }}"; fi
-          python3 trading/paper_engine.py $ARGS | tee desk-run.json
+          set -o pipefail
+          args=(run)
+          if [ "$IN_RESET" = "true" ]; then args+=(--reset); fi
+          if [ -n "$IN_MAX_ORDERS" ]; then
+            [[ "$IN_MAX_ORDERS" =~ ^[0-9]{1,4}$ ]] || { echo "::error::max_orders must be a whole number"; exit 2; }
+            args+=(--max-orders "$IN_MAX_ORDERS")
+          fi
+          python3 trading/paper_engine.py "${args[@]}" | tee desk-run.json
 
       - name: Rebuild the paper-desk subsite from the ledger
         run: python3 scripts/build_paper_desk.py
