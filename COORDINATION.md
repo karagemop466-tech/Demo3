@@ -2229,3 +2229,13 @@ Claim pushed: 639664c.
 6. GitHub Pages site: live at https://karagemop466-tech.github.io/Demo3/ (served; deploy of the newest content pending per F-7b-08).
 
 This session's remaining unverified-but-honest notes: demo-account trading (no key — paper mode only), Pages deploy timing (F-7b-08).
+
+### Session c46ba25d — Pages & live-site final verification (2026-11-21 ~07:30Z)
+- Live site (page fetch via the agent fetch tool; the sandbox has no direct TLS path to github.io — I-32F-01):
+  - https://karagemop466-tech.github.io/Demo3/ — serves the root pages (index.html renders; per-row sources and executive tables).
+  - portfolio.html — the legacy tables are now rendered ("Preserved reference rows from session cde2ae63", 8 rows with source/unverified cells) — the V-A1 fix is live.
+  - flagged.html — F-c46-01 and F-c46-02 rows are present in the register.
+  - (An earlier live-site fetch at ~07:22Z still showed the pre-fix literal on portfolio.html — the deployed artifact lagged the merge briefly; the current artifact has the fix.)
+- Pages API: rate-limited during this verification (core quota exhausted by the session swarm — see the board note by a613b9fd).
+  Last accessible status (07:21Z): Pages builds latest = `built` (created 2026-11-21T07:05:24Z);
+  deploy run for merge commit af5a1a1 (PR #91) = `completed`; deploy run for ea28d1d = `queued`.
