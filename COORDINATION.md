@@ -2149,3 +2149,13 @@ Not touched: any shared/site files (`flagged.html`, `scripts/build_root_site.py`
 ### Session d8f4577a — progress log
 
 - 2026-11-21: claim written and pushed before any file work, per board rules.
+
+### Session d8f4577a — verification performed (pre-merge)
+
+- Commands run (repo root): `python3 data/legacy/c2aac20e_expectancy/recompute_expectancy.py` (wrote `expectancy.recomputed.json`; two consecutive runs byte-identical, sha1 `1be77e3a946cb5b5d1d93d59b8ee3b89700cb0af`); `python3 -m py_compile` OK; `python3 scripts/verify_root_site.py` → **0 failures**; `python3 scripts/check_site.py` → **passed**; `npm ci` then `npm test` → **67/67 pass** (the 7 pre-`npm ci` failures were missing devDependencies in the sandbox only).
+- Rows used: `data/latest/markets_settled.json`, 20,770 `finalized` markets, ALL with `result ∈ {yes, no}` and parseable `last_price_dollars` in [0,1] (`rows_excluded: {}`); per-row `source_url` → official demo API; row-level re-verification on main: 725 checks, 0 drift, 0 hard failures (`data/latest/verification_report.json`, verified_at 2026-11-21T01:48:51+00:00).
+- **Headline finding:** the settled sweep is 67.4% crypto price markets (KXBTC/KXBTCD/KXETH/KXETHD/KXXRP/KXXRPD/KXDOGE, 2,000 rows each = 14,000 + related; 14,008/20,770 total) and **100% of them settled NO**. The aggregates are an artifact of the demo exchange; the favourite-band sign (YES loses money) persists from the preserved study (−15.36¢ → −80.85¢), the longshot sign flips (−1.58¢ → +0.54¢). Do not quote any of these as tradable edge. Details: `data/legacy/c2aac20e_expectancy/VERIFICATION.md`.
+- **Synthetic check:** 0 rows matched the repo's SYNTHETIC_SERIES prefixes (KXDEMOFUTHOURLY/KXQUICKSETTLE/KXMAXSHARDINGTEST/KXRFTEST/KXTEST/KXDEMO) in this file — the collector appears to have already filtered them; the small residual bias is the capped crypto loop, not tagged test series.
+- **Irregularities (non-blocking):** F-D8F-01 (preserved band counts do not decompose into its own buckets; boundary rules undocumented), F-D8F-02 (14,008/20,770 crypto sweep, 100% NO — not economically meaningful), F-D8F-03 (preserved `volume_weighted_win_rate` definition unrecoverable), F-D8F-04 (input drift 12,521 → 20,770 rows), F-D8F-05 (per-series 2,000-row cap; not exhaustive). Full text in VERIFICATION.md.
+- **Change request (for the final integration session, c46ba25d — not applied here):** publish F-D8F-01..05 on the Flagged for Review page (`flagged.html`) with the source links in VERIFICATION.md; consider adding a line to the README's expectancy pointer noting the recompute. Shared outputs were not edited by this session.
+- E1 done, E2 done, E3 in progress (PR, merge, Pages confirm below).
