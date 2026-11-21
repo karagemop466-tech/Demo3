@@ -487,7 +487,12 @@
     state.alerts.forEach(function (a) {
       addChatMessage(all, chatNode(a));
       if (a.score && a.score.pass) { addChatMessage(roi, chatNode(a)); picks++; }
-      else if (a.score && a.score.score >= 0.5) {
+      else if (a.score && (a.score.score >= 0.5 || a.score.evidence === "none")) {
+        // Dimmed near-miss bar: passes are unpicked; anything scoring >= 0.5 without
+        // passing is shown dimmed. Alerts with no calibrated bucket ("evidence: none" —
+        // the model cannot quantify them) are also shown dimmed rather than hidden:
+        // the ROI chat must not be empty while swings are live. The row carries the
+        // reason ("no calibrated bucket for this setup") in the body text.
         var li = chatNode(a);
         li.className += " nearmiss";
         addChatMessage(roi, li); near++;
