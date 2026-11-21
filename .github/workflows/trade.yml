@@ -90,15 +90,28 @@ jobs:
           KALSHI_DEMO_API_KEY_ID: ${{ secrets.KALSHI_DEMO_API_KEY_ID }}
           KALSHI_DEMO_PRIVATE_KEY: ${{ secrets.KALSHI_DEMO_PRIVATE_KEY }}
           KALSHI_API_ROOT: https://external-api.demo.kalshi.co/trade-api/v2
+          # Workflow inputs reach the script only through the environment, never by
+          # interpolation into the script body (script-injection guidance:
+          # https://docs.github.com/en/actions/concepts/security/script-injections),
+          # and no `eval` is used, so a crafted input cannot become shell syntax.
+          MODE: ${{ inputs.mode }}
+          TICKER: ${{ inputs.ticker }}
+          ACTION: ${{ inputs.action }}
+          SIDE: ${{ inputs.side }}
+          COUNT: ${{ inputs.count }}
+          PRICE: ${{ inputs.price }}
+          STRATEGY_TAG: ${{ inputs.strategy_tag }}
+          DRY_RUN: ${{ inputs.dry_run }}
         run: |
-          ARGS="portfolio"
-          if [ "${{ inputs.mode }}" = "trade" ]; then
-            ARGS="trade --ticker '${{ inputs.ticker }}' --action ${{ inputs.action }} --side ${{ inputs.side }} --count ${{ inputs.count }} --price ${{ inputs.price }} --strategy-tag '${{ inputs.strategy_tag }}'"
-            if [ "${{ inputs.dry_run }}" = "true" ]; then ARGS="$ARGS --dry-run"; fi
-          elif [ "${{ inputs.mode }}" = "settle" ]; then
-            ARGS="settle"
+          ARGS=(portfolio)
+          if [ "$MODE" = "trade" ]; then
+            ARGS=(trade --ticker "$TICKER" --action "$ACTION" --side "$SIDE" \
+                  --count "$COUNT" --price "$PRICE" --strategy-tag "$STRATEGY_TAG")
+            if [ "$DRY_RUN" = "true" ]; then ARGS+=(--dry-run); fi
+          elif [ "$MODE" = "settle" ]; then
+            ARGS=(settle)
           fi
-          eval "python3 trading/kalshi_trade.py $ARGS"
+          python3 trading/kalshi_trade.py "${ARGS[@]}"
 
       - name: Record flag without secrets (writes nothing)
         if: steps.guard.outputs.has_secrets == 'false'
@@ -106,6 +119,8 @@ jobs:
           echo "Unverified: demo credentials not present; no order or portfolio data written." >> "$GITHUB_STEP_SUMMARY"
 
       - name: Commit snapshots
+        env:
+          MODE: ${{ inputs.mode }}
         run: |
           git config user.name "trading-bot"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -115,6 +130,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No trade/portfolio changes to commit"
           else
-            git commit -m "trading: ${{ inputs.mode }} run $(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+            git commit -m "trading: $MODE run $(date -u '+%Y-%m-%dT%H:%M:%SZ')"
             git push origin "HEAD:$GITHUB_REF_NAME"
           fi
