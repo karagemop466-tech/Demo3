@@ -1,3003 +1,3003 @@
 {
  "checks": [
   {
-   "check": "resolution KXDOGE-26NOV2101-T0.2349999 result",
+   "check": "resolution KXETHD-26NOV2103-T1659.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-T0.2349999 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1659.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-T0.2349999 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-T0.2349999' live='KXDOGE-26NOV2101-T0.2349999'",
+   "check": "resolution KXETHD-26NOV2103-T1659.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1659.99' live='KXETHD-26NOV2103-T1659.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-T0.0100000 result",
+   "check": "resolution KXETHD-26NOV2103-T1654.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-T0.0100000 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1654.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-T0.0100000 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-T0.0100000' live='KXDOGE-26NOV2101-T0.0100000'",
+   "check": "resolution KXETHD-26NOV2103-T1654.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1654.99' live='KXETHD-26NOV2103-T1654.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.232 result",
+   "check": "resolution KXETHD-26NOV2103-T1649.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.232 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1649.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.232 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.232' live='KXDOGE-26NOV2101-B0.232'",
+   "check": "resolution KXETHD-26NOV2103-T1649.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1649.99' live='KXETHD-26NOV2103-T1649.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.227 result",
+   "check": "resolution KXETHD-26NOV2103-T1644.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.227 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1644.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.227 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.227' live='KXDOGE-26NOV2101-B0.227'",
+   "check": "resolution KXETHD-26NOV2103-T1644.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1644.99' live='KXETHD-26NOV2103-T1644.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.222 result",
+   "check": "resolution KXETHD-26NOV2103-T1639.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.222 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1639.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.222 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.222' live='KXDOGE-26NOV2101-B0.222'",
+   "check": "resolution KXETHD-26NOV2103-T1639.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1639.99' live='KXETHD-26NOV2103-T1639.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.217 result",
+   "check": "resolution KXETHD-26NOV2103-T1634.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.217 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1634.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.217 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.217' live='KXDOGE-26NOV2101-B0.217'",
+   "check": "resolution KXETHD-26NOV2103-T1634.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1634.99' live='KXETHD-26NOV2103-T1634.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.212 result",
+   "check": "resolution KXETHD-26NOV2103-T1629.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.212 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1629.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.212 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.212' live='KXDOGE-26NOV2101-B0.212'",
+   "check": "resolution KXETHD-26NOV2103-T1629.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1629.99' live='KXETHD-26NOV2103-T1629.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.207 result",
+   "check": "resolution KXETHD-26NOV2103-T1624.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.207 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1624.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.207 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.207' live='KXDOGE-26NOV2101-B0.207'",
+   "check": "resolution KXETHD-26NOV2103-T1624.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1624.99' live='KXETHD-26NOV2103-T1624.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.202 result",
+   "check": "resolution KXETHD-26NOV2103-T1619.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.202 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1619.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.202 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.202' live='KXDOGE-26NOV2101-B0.202'",
+   "check": "resolution KXETHD-26NOV2103-T1619.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1619.99' live='KXETHD-26NOV2103-T1619.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.197 result",
+   "check": "resolution KXETHD-26NOV2103-T1614.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.197 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1614.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.197 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.197' live='KXDOGE-26NOV2101-B0.197'",
+   "check": "resolution KXETHD-26NOV2103-T1614.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1614.99' live='KXETHD-26NOV2103-T1614.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.192 result",
+   "check": "resolution KXETHD-26NOV2103-T999.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.192 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T999.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.192 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.192' live='KXDOGE-26NOV2101-B0.192'",
+   "check": "resolution KXETHD-26NOV2103-T999.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T999.99' live='KXETHD-26NOV2103-T999.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.187 result",
+   "check": "resolution KXETHD-26NOV2103-T994.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.187 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T994.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.187 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.187' live='KXDOGE-26NOV2101-B0.187'",
+   "check": "resolution KXETHD-26NOV2103-T994.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T994.99' live='KXETHD-26NOV2103-T994.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.182 result",
+   "check": "resolution KXETHD-26NOV2103-T989.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.182 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T989.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.182 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.182' live='KXDOGE-26NOV2101-B0.182'",
+   "check": "resolution KXETHD-26NOV2103-T989.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T989.99' live='KXETHD-26NOV2103-T989.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.177 result",
+   "check": "resolution KXETHD-26NOV2103-T984.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.177 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T984.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.177 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.177' live='KXDOGE-26NOV2101-B0.177'",
+   "check": "resolution KXETHD-26NOV2103-T984.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T984.99' live='KXETHD-26NOV2103-T984.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.172 result",
+   "check": "resolution KXETHD-26NOV2103-T979.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.172 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T979.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.172 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.172' live='KXDOGE-26NOV2101-B0.172'",
+   "check": "resolution KXETHD-26NOV2103-T979.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T979.99' live='KXETHD-26NOV2103-T979.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.167 result",
+   "check": "resolution KXETHD-26NOV2103-T974.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.167 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T974.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.167 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.167' live='KXDOGE-26NOV2101-B0.167'",
+   "check": "resolution KXETHD-26NOV2103-T974.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T974.99' live='KXETHD-26NOV2103-T974.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.162 result",
+   "check": "resolution KXETHD-26NOV2103-T969.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.162 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T969.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.162 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.162' live='KXDOGE-26NOV2101-B0.162'",
+   "check": "resolution KXETHD-26NOV2103-T969.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T969.99' live='KXETHD-26NOV2103-T969.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.157 result",
+   "check": "resolution KXETHD-26NOV2103-T964.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.157 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T964.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.157 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.157' live='KXDOGE-26NOV2101-B0.157'",
+   "check": "resolution KXETHD-26NOV2103-T964.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T964.99' live='KXETHD-26NOV2103-T964.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.152 result",
+   "check": "resolution KXETHD-26NOV2103-T959.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.152 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T959.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.152 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.152' live='KXDOGE-26NOV2101-B0.152'",
+   "check": "resolution KXETHD-26NOV2103-T959.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T959.99' live='KXETHD-26NOV2103-T959.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.147 result",
+   "check": "resolution KXETHD-26NOV2103-T954.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.147 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T954.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.147 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.147' live='KXDOGE-26NOV2101-B0.147'",
+   "check": "resolution KXETHD-26NOV2103-T954.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T954.99' live='KXETHD-26NOV2103-T954.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.142 result",
+   "check": "resolution KXETHD-26NOV2103-T949.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.142 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T949.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.142 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.142' live='KXDOGE-26NOV2101-B0.142'",
+   "check": "resolution KXETHD-26NOV2103-T949.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T949.99' live='KXETHD-26NOV2103-T949.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.137 result",
+   "check": "resolution KXETHD-26NOV2103-T2444.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.137 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2444.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.137 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.137' live='KXDOGE-26NOV2101-B0.137'",
+   "check": "resolution KXETHD-26NOV2103-T2444.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2444.99' live='KXETHD-26NOV2103-T2444.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.132 result",
+   "check": "resolution KXETHD-26NOV2103-T2439.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.132 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2439.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.132 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.132' live='KXDOGE-26NOV2101-B0.132'",
+   "check": "resolution KXETHD-26NOV2103-T2439.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2439.99' live='KXETHD-26NOV2103-T2439.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.127 result",
+   "check": "resolution KXETHD-26NOV2103-T2434.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.127 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2434.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.127 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.127' live='KXDOGE-26NOV2101-B0.127'",
+   "check": "resolution KXETHD-26NOV2103-T2434.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2434.99' live='KXETHD-26NOV2103-T2434.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.122 result",
+   "check": "resolution KXETHD-26NOV2103-T2429.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.122 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2429.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.122 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.122' live='KXDOGE-26NOV2101-B0.122'",
+   "check": "resolution KXETHD-26NOV2103-T2429.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2429.99' live='KXETHD-26NOV2103-T2429.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.117 result",
+   "check": "resolution KXETHD-26NOV2103-T2424.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.117 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2424.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.117 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.117' live='KXDOGE-26NOV2101-B0.117'",
+   "check": "resolution KXETHD-26NOV2103-T2424.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2424.99' live='KXETHD-26NOV2103-T2424.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.112 result",
+   "check": "resolution KXETHD-26NOV2103-T2419.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.112 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2419.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.112 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.112' live='KXDOGE-26NOV2101-B0.112'",
+   "check": "resolution KXETHD-26NOV2103-T2419.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2419.99' live='KXETHD-26NOV2103-T2419.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.107 result",
+   "check": "resolution KXETHD-26NOV2103-T2414.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.107 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2414.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.107 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.107' live='KXDOGE-26NOV2101-B0.107'",
+   "check": "resolution KXETHD-26NOV2103-T2414.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2414.99' live='KXETHD-26NOV2103-T2414.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.102 result",
+   "check": "resolution KXETHD-26NOV2103-T2409.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.102 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2409.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.102 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.102' live='KXDOGE-26NOV2101-B0.102'",
+   "check": "resolution KXETHD-26NOV2103-T2409.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2409.99' live='KXETHD-26NOV2103-T2409.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.097 result",
+   "check": "resolution KXETHD-26NOV2103-T2404.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.097 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2404.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.097 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.097' live='KXDOGE-26NOV2101-B0.097'",
+   "check": "resolution KXETHD-26NOV2103-T2404.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2404.99' live='KXETHD-26NOV2103-T2404.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.092 result",
+   "check": "resolution KXETHD-26NOV2103-T2399.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.092 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2399.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.092 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.092' live='KXDOGE-26NOV2101-B0.092'",
+   "check": "resolution KXETHD-26NOV2103-T2399.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2399.99' live='KXETHD-26NOV2103-T2399.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.087 result",
+   "check": "resolution KXETHD-26NOV2103-T2394.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.087 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2394.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.087 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.087' live='KXDOGE-26NOV2101-B0.087'",
+   "check": "resolution KXETHD-26NOV2103-T2394.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2394.99' live='KXETHD-26NOV2103-T2394.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.082 result",
+   "check": "resolution KXETHD-26NOV2103-T2389.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.082 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2389.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.082 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.082' live='KXDOGE-26NOV2101-B0.082'",
+   "check": "resolution KXETHD-26NOV2103-T2389.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2389.99' live='KXETHD-26NOV2103-T2389.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.077 result",
+   "check": "resolution KXETHD-26NOV2103-T2384.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.077 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2384.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.077 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.077' live='KXDOGE-26NOV2101-B0.077'",
+   "check": "resolution KXETHD-26NOV2103-T2384.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2384.99' live='KXETHD-26NOV2103-T2384.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.072 result",
+   "check": "resolution KXETHD-26NOV2103-T2379.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.072 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2379.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.072 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.072' live='KXDOGE-26NOV2101-B0.072'",
+   "check": "resolution KXETHD-26NOV2103-T2379.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2379.99' live='KXETHD-26NOV2103-T2379.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.067 result",
+   "check": "resolution KXETHD-26NOV2103-T2374.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.067 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2374.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.067 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.067' live='KXDOGE-26NOV2101-B0.067'",
+   "check": "resolution KXETHD-26NOV2103-T2374.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2374.99' live='KXETHD-26NOV2103-T2374.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.062 result",
+   "check": "resolution KXETHD-26NOV2103-T2369.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.062 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2369.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.062 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.062' live='KXDOGE-26NOV2101-B0.062'",
+   "check": "resolution KXETHD-26NOV2103-T2369.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2369.99' live='KXETHD-26NOV2103-T2369.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.057 result",
+   "check": "resolution KXETHD-26NOV2103-T2364.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.057 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2364.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.057 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.057' live='KXDOGE-26NOV2101-B0.057'",
+   "check": "resolution KXETHD-26NOV2103-T2364.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2364.99' live='KXETHD-26NOV2103-T2364.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.052 result",
+   "check": "resolution KXETHD-26NOV2103-T2359.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.052 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2359.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.052 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.052' live='KXDOGE-26NOV2101-B0.052'",
+   "check": "resolution KXETHD-26NOV2103-T2359.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2359.99' live='KXETHD-26NOV2103-T2359.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.047 result",
+   "check": "resolution KXETHD-26NOV2103-T2354.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.047 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2354.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.047 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.047' live='KXDOGE-26NOV2101-B0.047'",
+   "check": "resolution KXETHD-26NOV2103-T2354.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2354.99' live='KXETHD-26NOV2103-T2354.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.042 result",
+   "check": "resolution KXETHD-26NOV2103-T2349.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.042 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2349.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.042 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.042' live='KXDOGE-26NOV2101-B0.042'",
+   "check": "resolution KXETHD-26NOV2103-T2349.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2349.99' live='KXETHD-26NOV2103-T2349.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.037 result",
+   "check": "resolution KXETHD-26NOV2103-T2344.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.037 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2344.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.037 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.037' live='KXDOGE-26NOV2101-B0.037'",
+   "check": "resolution KXETHD-26NOV2103-T2344.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2344.99' live='KXETHD-26NOV2103-T2344.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.032 result",
+   "check": "resolution KXETHD-26NOV2103-T2339.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.032 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2339.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.032 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.032' live='KXDOGE-26NOV2101-B0.032'",
+   "check": "resolution KXETHD-26NOV2103-T2339.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2339.99' live='KXETHD-26NOV2103-T2339.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.027 result",
+   "check": "resolution KXETHD-26NOV2103-T2334.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.027 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2334.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.027 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.027' live='KXDOGE-26NOV2101-B0.027'",
+   "check": "resolution KXETHD-26NOV2103-T2334.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2334.99' live='KXETHD-26NOV2103-T2334.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.022 result",
+   "check": "resolution KXETHD-26NOV2103-T2329.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.022 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2329.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.022 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.022' live='KXDOGE-26NOV2101-B0.022'",
+   "check": "resolution KXETHD-26NOV2103-T2329.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2329.99' live='KXETHD-26NOV2103-T2329.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.017 result",
+   "check": "resolution KXETHD-26NOV2103-T2324.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.017 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2324.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.017 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.017' live='KXDOGE-26NOV2101-B0.017'",
+   "check": "resolution KXETHD-26NOV2103-T2324.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2324.99' live='KXETHD-26NOV2103-T2324.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.012 result",
+   "check": "resolution KXETHD-26NOV2103-T2319.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.012 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2319.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2101-B0.012 ticker",
-   "detail": "stored='KXDOGE-26NOV2101-B0.012' live='KXDOGE-26NOV2101-B0.012'",
+   "check": "resolution KXETHD-26NOV2103-T2319.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2319.99' live='KXETHD-26NOV2103-T2319.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.8799 result",
+   "check": "resolution KXETHD-26NOV2103-T2314.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.8799 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2314.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.8799 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.8799' live='KXXRPD-26NOV2101-T0.8799'",
+   "check": "resolution KXETHD-26NOV2103-T2314.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2314.99' live='KXETHD-26NOV2103-T2314.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.6399 result",
+   "check": "resolution KXETHD-26NOV2103-T2309.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.6399 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2309.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.6399 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T1.6399' live='KXXRPD-26NOV2101-T1.6399'",
+   "check": "resolution KXETHD-26NOV2103-T2309.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2309.99' live='KXETHD-26NOV2103-T2309.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.6199 result",
+   "check": "resolution KXETHD-26NOV2103-T2304.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.6199 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2304.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.6199 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T1.6199' live='KXXRPD-26NOV2101-T1.6199'",
+   "check": "resolution KXETHD-26NOV2103-T2304.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2304.99' live='KXETHD-26NOV2103-T2304.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.5999 result",
+   "check": "resolution KXETHD-26NOV2103-T2299.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.5999 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2299.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.5999 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T1.5999' live='KXXRPD-26NOV2101-T1.5999'",
+   "check": "resolution KXETHD-26NOV2103-T2299.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2299.99' live='KXETHD-26NOV2103-T2299.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.5799 result",
+   "check": "resolution KXETHD-26NOV2103-T2294.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.5799 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2294.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.5799 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T1.5799' live='KXXRPD-26NOV2101-T1.5799'",
+   "check": "resolution KXETHD-26NOV2103-T2294.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2294.99' live='KXETHD-26NOV2103-T2294.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.5599 result",
+   "check": "resolution KXETHD-26NOV2103-T2289.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.5599 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2289.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.5599 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T1.5599' live='KXXRPD-26NOV2101-T1.5599'",
+   "check": "resolution KXETHD-26NOV2103-T2289.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2289.99' live='KXETHD-26NOV2103-T2289.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.5399 result",
+   "check": "resolution KXETHD-26NOV2103-T2284.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.5399 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2284.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.5399 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T1.5399' live='KXXRPD-26NOV2101-T1.5399'",
+   "check": "resolution KXETHD-26NOV2103-T2284.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2284.99' live='KXETHD-26NOV2103-T2284.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.5199 result",
+   "check": "resolution KXETHD-26NOV2103-T2279.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.5199 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2279.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.5199 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T1.5199' live='KXXRPD-26NOV2101-T1.5199'",
+   "check": "resolution KXETHD-26NOV2103-T2279.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2279.99' live='KXETHD-26NOV2103-T2279.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.4999 result",
+   "check": "resolution KXETHD-26NOV2103-T2274.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.4999 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2274.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.4999 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T1.4999' live='KXXRPD-26NOV2101-T1.4999'",
+   "check": "resolution KXETHD-26NOV2103-T2274.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2274.99' live='KXETHD-26NOV2103-T2274.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.4799 result",
+   "check": "resolution KXETHD-26NOV2103-T2269.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.4799 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2269.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.4799 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T1.4799' live='KXXRPD-26NOV2101-T1.4799'",
+   "check": "resolution KXETHD-26NOV2103-T2269.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2269.99' live='KXETHD-26NOV2103-T2269.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.4599 result",
+   "check": "resolution KXETHD-26NOV2103-T2264.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.4599 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2264.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.4599 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T1.4599' live='KXXRPD-26NOV2101-T1.4599'",
+   "check": "resolution KXETHD-26NOV2103-T2264.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2264.99' live='KXETHD-26NOV2103-T2264.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.4399 result",
+   "check": "resolution KXETHD-26NOV2103-T2259.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.4399 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2259.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.4399 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T1.4399' live='KXXRPD-26NOV2101-T1.4399'",
+   "check": "resolution KXETHD-26NOV2103-T2259.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2259.99' live='KXETHD-26NOV2103-T2259.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.4199 result",
+   "check": "resolution KXETHD-26NOV2103-T2254.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.4199 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2254.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.4199 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T1.4199' live='KXXRPD-26NOV2101-T1.4199'",
+   "check": "resolution KXETHD-26NOV2103-T2254.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2254.99' live='KXETHD-26NOV2103-T2254.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.3999 result",
+   "check": "resolution KXETHD-26NOV2103-T2249.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.3999 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2249.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.3999 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T1.3999' live='KXXRPD-26NOV2101-T1.3999'",
+   "check": "resolution KXETHD-26NOV2103-T2249.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2249.99' live='KXETHD-26NOV2103-T2249.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.3799 result",
+   "check": "resolution KXETHD-26NOV2103-T2244.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.3799 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2244.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.3799 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T1.3799' live='KXXRPD-26NOV2101-T1.3799'",
+   "check": "resolution KXETHD-26NOV2103-T2244.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2244.99' live='KXETHD-26NOV2103-T2244.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.3599 result",
+   "check": "resolution KXETHD-26NOV2103-T2239.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.3599 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2239.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.3599 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T1.3599' live='KXXRPD-26NOV2101-T1.3599'",
+   "check": "resolution KXETHD-26NOV2103-T2239.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2239.99' live='KXETHD-26NOV2103-T2239.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.3399 result",
+   "check": "resolution KXETHD-26NOV2103-T2234.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.3399 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2234.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.3399 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T1.3399' live='KXXRPD-26NOV2101-T1.3399'",
+   "check": "resolution KXETHD-26NOV2103-T2234.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2234.99' live='KXETHD-26NOV2103-T2234.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.3199 result",
+   "check": "resolution KXETHD-26NOV2103-T2229.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.3199 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2229.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.3199 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T1.3199' live='KXXRPD-26NOV2101-T1.3199'",
+   "check": "resolution KXETHD-26NOV2103-T2229.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2229.99' live='KXETHD-26NOV2103-T2229.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.2999 result",
+   "check": "resolution KXETHD-26NOV2103-T2224.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.2999 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2224.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.2999 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T1.2999' live='KXXRPD-26NOV2101-T1.2999'",
+   "check": "resolution KXETHD-26NOV2103-T2224.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2224.99' live='KXETHD-26NOV2103-T2224.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.2799 result",
+   "check": "resolution KXETHD-26NOV2103-T2219.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.2799 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2219.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.2799 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T1.2799' live='KXXRPD-26NOV2101-T1.2799'",
+   "check": "resolution KXETHD-26NOV2103-T2219.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2219.99' live='KXETHD-26NOV2103-T2219.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.2599 result",
+   "check": "resolution KXETHD-26NOV2103-T2214.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.2599 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2214.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.2599 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T1.2599' live='KXXRPD-26NOV2101-T1.2599'",
+   "check": "resolution KXETHD-26NOV2103-T2214.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2214.99' live='KXETHD-26NOV2103-T2214.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.2399 result",
+   "check": "resolution KXETHD-26NOV2103-T2209.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.2399 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2209.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.2399 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T1.2399' live='KXXRPD-26NOV2101-T1.2399'",
+   "check": "resolution KXETHD-26NOV2103-T2209.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2209.99' live='KXETHD-26NOV2103-T2209.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.2199 result",
+   "check": "resolution KXETHD-26NOV2103-T2204.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.2199 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2204.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.2199 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T1.2199' live='KXXRPD-26NOV2101-T1.2199'",
+   "check": "resolution KXETHD-26NOV2103-T2204.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2204.99' live='KXETHD-26NOV2103-T2204.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.1999 result",
+   "check": "resolution KXETHD-26NOV2103-T2199.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.1999 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2199.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.1999 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T1.1999' live='KXXRPD-26NOV2101-T1.1999'",
+   "check": "resolution KXETHD-26NOV2103-T2199.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2199.99' live='KXETHD-26NOV2103-T2199.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.1799 result",
+   "check": "resolution KXETHD-26NOV2103-T2194.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.1799 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2194.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.1799 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T1.1799' live='KXXRPD-26NOV2101-T1.1799'",
+   "check": "resolution KXETHD-26NOV2103-T2194.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2194.99' live='KXETHD-26NOV2103-T2194.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.1599 result",
+   "check": "resolution KXETHD-26NOV2103-T2189.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.1599 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2189.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.1599 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T1.1599' live='KXXRPD-26NOV2101-T1.1599'",
+   "check": "resolution KXETHD-26NOV2103-T2189.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2189.99' live='KXETHD-26NOV2103-T2189.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.1399 result",
+   "check": "resolution KXETHD-26NOV2103-T2184.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.1399 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2184.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.1399 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T1.1399' live='KXXRPD-26NOV2101-T1.1399'",
+   "check": "resolution KXETHD-26NOV2103-T2184.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2184.99' live='KXETHD-26NOV2103-T2184.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.1199 result",
+   "check": "resolution KXETHD-26NOV2103-T2179.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.1199 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2179.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.1199 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T1.1199' live='KXXRPD-26NOV2101-T1.1199'",
+   "check": "resolution KXETHD-26NOV2103-T2179.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2179.99' live='KXETHD-26NOV2103-T2179.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.0999 result",
+   "check": "resolution KXETHD-26NOV2103-T2174.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.0999 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2174.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.0999 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T1.0999' live='KXXRPD-26NOV2101-T1.0999'",
+   "check": "resolution KXETHD-26NOV2103-T2174.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2174.99' live='KXETHD-26NOV2103-T2174.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.0799 result",
+   "check": "resolution KXETHD-26NOV2103-T2169.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.0799 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2169.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.0799 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T1.0799' live='KXXRPD-26NOV2101-T1.0799'",
+   "check": "resolution KXETHD-26NOV2103-T2169.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2169.99' live='KXETHD-26NOV2103-T2169.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.0599 result",
+   "check": "resolution KXETHD-26NOV2103-T2164.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.0599 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2164.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.0599 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T1.0599' live='KXXRPD-26NOV2101-T1.0599'",
+   "check": "resolution KXETHD-26NOV2103-T2164.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2164.99' live='KXETHD-26NOV2103-T2164.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.0399 result",
+   "check": "resolution KXETHD-26NOV2103-T2159.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.0399 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2159.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.0399 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T1.0399' live='KXXRPD-26NOV2101-T1.0399'",
+   "check": "resolution KXETHD-26NOV2103-T2159.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2159.99' live='KXETHD-26NOV2103-T2159.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.0199 result",
+   "check": "resolution KXETHD-26NOV2103-T2154.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.0199 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2154.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T1.0199 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T1.0199' live='KXXRPD-26NOV2101-T1.0199'",
+   "check": "resolution KXETHD-26NOV2103-T2154.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2154.99' live='KXETHD-26NOV2103-T2154.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.9999 result",
+   "check": "resolution KXETHD-26NOV2103-T2149.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.9999 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2149.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.9999 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.9999' live='KXXRPD-26NOV2101-T0.9999'",
+   "check": "resolution KXETHD-26NOV2103-T2149.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2149.99' live='KXETHD-26NOV2103-T2149.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.9799 result",
+   "check": "resolution KXETHD-26NOV2103-T2144.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.9799 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2144.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.9799 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.9799' live='KXXRPD-26NOV2101-T0.9799'",
+   "check": "resolution KXETHD-26NOV2103-T2144.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2144.99' live='KXETHD-26NOV2103-T2144.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.9599 result",
+   "check": "resolution KXETHD-26NOV2103-T2139.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.9599 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2139.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.9599 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.9599' live='KXXRPD-26NOV2101-T0.9599'",
+   "check": "resolution KXETHD-26NOV2103-T2139.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2139.99' live='KXETHD-26NOV2103-T2139.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.9399 result",
+   "check": "resolution KXETHD-26NOV2103-T2134.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.9399 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2134.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.9399 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.9399' live='KXXRPD-26NOV2101-T0.9399'",
+   "check": "resolution KXETHD-26NOV2103-T2134.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2134.99' live='KXETHD-26NOV2103-T2134.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.9199 result",
+   "check": "resolution KXETHD-26NOV2103-T2129.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.9199 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2129.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.9199 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.9199' live='KXXRPD-26NOV2101-T0.9199'",
+   "check": "resolution KXETHD-26NOV2103-T2129.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2129.99' live='KXETHD-26NOV2103-T2129.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.8999 result",
+   "check": "resolution KXETHD-26NOV2103-T2124.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.8999 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2124.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.8999 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.8999' live='KXXRPD-26NOV2101-T0.8999'",
+   "check": "resolution KXETHD-26NOV2103-T2124.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2124.99' live='KXETHD-26NOV2103-T2124.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.8599 result",
+   "check": "resolution KXETHD-26NOV2103-T2119.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.8599 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2119.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.8599 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.8599' live='KXXRPD-26NOV2101-T0.8599'",
+   "check": "resolution KXETHD-26NOV2103-T2119.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2119.99' live='KXETHD-26NOV2103-T2119.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.8399 result",
+   "check": "resolution KXETHD-26NOV2103-T2114.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.8399 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2114.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.8399 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.8399' live='KXXRPD-26NOV2101-T0.8399'",
+   "check": "resolution KXETHD-26NOV2103-T2114.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2114.99' live='KXETHD-26NOV2103-T2114.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.8199 result",
+   "check": "resolution KXETHD-26NOV2103-T2109.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.8199 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2109.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.8199 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.8199' live='KXXRPD-26NOV2101-T0.8199'",
+   "check": "resolution KXETHD-26NOV2103-T2109.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2109.99' live='KXETHD-26NOV2103-T2109.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.7999 result",
+   "check": "resolution KXETHD-26NOV2103-T2104.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.7999 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2104.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.7999 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.7999' live='KXXRPD-26NOV2101-T0.7999'",
+   "check": "resolution KXETHD-26NOV2103-T2104.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2104.99' live='KXETHD-26NOV2103-T2104.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.7799 result",
+   "check": "resolution KXETHD-26NOV2103-T2099.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.7799 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2099.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.7799 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.7799' live='KXXRPD-26NOV2101-T0.7799'",
+   "check": "resolution KXETHD-26NOV2103-T2099.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2099.99' live='KXETHD-26NOV2103-T2099.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.7599 result",
+   "check": "resolution KXETHD-26NOV2103-T2094.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.7599 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2094.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.7599 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.7599' live='KXXRPD-26NOV2101-T0.7599'",
+   "check": "resolution KXETHD-26NOV2103-T2094.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2094.99' live='KXETHD-26NOV2103-T2094.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.7399 result",
+   "check": "resolution KXETHD-26NOV2103-T2089.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.7399 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2089.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.7399 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.7399' live='KXXRPD-26NOV2101-T0.7399'",
+   "check": "resolution KXETHD-26NOV2103-T2089.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2089.99' live='KXETHD-26NOV2103-T2089.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.7199 result",
+   "check": "resolution KXETHD-26NOV2103-T2084.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.7199 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2084.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.7199 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.7199' live='KXXRPD-26NOV2101-T0.7199'",
+   "check": "resolution KXETHD-26NOV2103-T2084.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2084.99' live='KXETHD-26NOV2103-T2084.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.6999 result",
+   "check": "resolution KXETHD-26NOV2103-T2079.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.6999 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2079.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.6999 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.6999' live='KXXRPD-26NOV2101-T0.6999'",
+   "check": "resolution KXETHD-26NOV2103-T2079.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2079.99' live='KXETHD-26NOV2103-T2079.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.6799 result",
+   "check": "resolution KXETHD-26NOV2103-T2074.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.6799 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2074.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.6799 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.6799' live='KXXRPD-26NOV2101-T0.6799'",
+   "check": "resolution KXETHD-26NOV2103-T2074.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2074.99' live='KXETHD-26NOV2103-T2074.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.6599 result",
+   "check": "resolution KXETHD-26NOV2103-T2069.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.6599 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2069.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.6599 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.6599' live='KXXRPD-26NOV2101-T0.6599'",
+   "check": "resolution KXETHD-26NOV2103-T2069.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2069.99' live='KXETHD-26NOV2103-T2069.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.6399 result",
+   "check": "resolution KXETHD-26NOV2103-T2064.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.6399 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2064.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.6399 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.6399' live='KXXRPD-26NOV2101-T0.6399'",
+   "check": "resolution KXETHD-26NOV2103-T2064.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2064.99' live='KXETHD-26NOV2103-T2064.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.6199 result",
+   "check": "resolution KXETHD-26NOV2103-T2059.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.6199 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2059.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.6199 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.6199' live='KXXRPD-26NOV2101-T0.6199'",
+   "check": "resolution KXETHD-26NOV2103-T2059.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2059.99' live='KXETHD-26NOV2103-T2059.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.5999 result",
+   "check": "resolution KXETHD-26NOV2103-T2054.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.5999 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2054.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.5999 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.5999' live='KXXRPD-26NOV2101-T0.5999'",
+   "check": "resolution KXETHD-26NOV2103-T2054.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2054.99' live='KXETHD-26NOV2103-T2054.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.5799 result",
+   "check": "resolution KXETHD-26NOV2103-T2049.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.5799 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2049.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.5799 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.5799' live='KXXRPD-26NOV2101-T0.5799'",
+   "check": "resolution KXETHD-26NOV2103-T2049.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2049.99' live='KXETHD-26NOV2103-T2049.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.5599 result",
+   "check": "resolution KXETHD-26NOV2103-T2044.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.5599 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2044.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.5599 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.5599' live='KXXRPD-26NOV2101-T0.5599'",
+   "check": "resolution KXETHD-26NOV2103-T2044.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2044.99' live='KXETHD-26NOV2103-T2044.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.5399 result",
+   "check": "resolution KXETHD-26NOV2103-T2039.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.5399 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2039.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.5399 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.5399' live='KXXRPD-26NOV2101-T0.5399'",
+   "check": "resolution KXETHD-26NOV2103-T2039.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2039.99' live='KXETHD-26NOV2103-T2039.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.5199 result",
+   "check": "resolution KXETHD-26NOV2103-T2034.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.5199 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2034.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.5199 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.5199' live='KXXRPD-26NOV2101-T0.5199'",
+   "check": "resolution KXETHD-26NOV2103-T2034.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2034.99' live='KXETHD-26NOV2103-T2034.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.4999 result",
+   "check": "resolution KXETHD-26NOV2103-T2029.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.4999 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2029.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.4999 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.4999' live='KXXRPD-26NOV2101-T0.4999'",
+   "check": "resolution KXETHD-26NOV2103-T2029.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2029.99' live='KXETHD-26NOV2103-T2029.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.4799 result",
+   "check": "resolution KXETHD-26NOV2103-T2024.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.4799 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2024.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.4799 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.4799' live='KXXRPD-26NOV2101-T0.4799'",
+   "check": "resolution KXETHD-26NOV2103-T2024.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2024.99' live='KXETHD-26NOV2103-T2024.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.4599 result",
+   "check": "resolution KXETHD-26NOV2103-T2019.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.4599 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2019.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.4599 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.4599' live='KXXRPD-26NOV2101-T0.4599'",
+   "check": "resolution KXETHD-26NOV2103-T2019.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2019.99' live='KXETHD-26NOV2103-T2019.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.4399 result",
+   "check": "resolution KXETHD-26NOV2103-T2014.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.4399 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2014.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.4399 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.4399' live='KXXRPD-26NOV2101-T0.4399'",
+   "check": "resolution KXETHD-26NOV2103-T2014.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2014.99' live='KXETHD-26NOV2103-T2014.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.4199 result",
+   "check": "resolution KXETHD-26NOV2103-T2009.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.4199 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2009.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.4199 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.4199' live='KXXRPD-26NOV2101-T0.4199'",
+   "check": "resolution KXETHD-26NOV2103-T2009.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2009.99' live='KXETHD-26NOV2103-T2009.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.3999 result",
+   "check": "resolution KXETHD-26NOV2103-T2004.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.3999 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T2004.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.3999 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.3999' live='KXXRPD-26NOV2101-T0.3999'",
+   "check": "resolution KXETHD-26NOV2103-T2004.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T2004.99' live='KXETHD-26NOV2103-T2004.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.3799 result",
+   "check": "resolution KXETHD-26NOV2103-T1999.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.3799 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1999.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.3799 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.3799' live='KXXRPD-26NOV2101-T0.3799'",
+   "check": "resolution KXETHD-26NOV2103-T1999.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1999.99' live='KXETHD-26NOV2103-T1999.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.3599 result",
+   "check": "resolution KXETHD-26NOV2103-T1994.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.3599 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1994.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.3599 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.3599' live='KXXRPD-26NOV2101-T0.3599'",
+   "check": "resolution KXETHD-26NOV2103-T1994.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1994.99' live='KXETHD-26NOV2103-T1994.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.3399 result",
+   "check": "resolution KXETHD-26NOV2103-T1989.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.3399 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1989.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.3399 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.3399' live='KXXRPD-26NOV2101-T0.3399'",
+   "check": "resolution KXETHD-26NOV2103-T1989.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1989.99' live='KXETHD-26NOV2103-T1989.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.3199 result",
+   "check": "resolution KXETHD-26NOV2103-T1984.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.3199 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1984.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.3199 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.3199' live='KXXRPD-26NOV2101-T0.3199'",
+   "check": "resolution KXETHD-26NOV2103-T1984.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1984.99' live='KXETHD-26NOV2103-T1984.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.2999 result",
+   "check": "resolution KXETHD-26NOV2103-T1979.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.2999 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1979.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.2999 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.2999' live='KXXRPD-26NOV2101-T0.2999'",
+   "check": "resolution KXETHD-26NOV2103-T1979.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1979.99' live='KXETHD-26NOV2103-T1979.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.2799 result",
+   "check": "resolution KXETHD-26NOV2103-T1974.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.2799 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1974.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.2799 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.2799' live='KXXRPD-26NOV2101-T0.2799'",
+   "check": "resolution KXETHD-26NOV2103-T1974.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1974.99' live='KXETHD-26NOV2103-T1974.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.2599 result",
+   "check": "resolution KXETHD-26NOV2103-T1969.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.2599 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1969.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.2599 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.2599' live='KXXRPD-26NOV2101-T0.2599'",
+   "check": "resolution KXETHD-26NOV2103-T1969.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1969.99' live='KXETHD-26NOV2103-T1969.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.2399 result",
+   "check": "resolution KXETHD-26NOV2103-T1964.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.2399 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1964.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.2399 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.2399' live='KXXRPD-26NOV2101-T0.2399'",
+   "check": "resolution KXETHD-26NOV2103-T1964.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1964.99' live='KXETHD-26NOV2103-T1964.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.2199 result",
+   "check": "resolution KXETHD-26NOV2103-T1959.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.2199 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1959.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.2199 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.2199' live='KXXRPD-26NOV2101-T0.2199'",
+   "check": "resolution KXETHD-26NOV2103-T1959.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1959.99' live='KXETHD-26NOV2103-T1959.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.1999 result",
+   "check": "resolution KXETHD-26NOV2103-T1954.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.1999 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1954.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.1999 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.1999' live='KXXRPD-26NOV2101-T0.1999'",
+   "check": "resolution KXETHD-26NOV2103-T1954.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1954.99' live='KXETHD-26NOV2103-T1954.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.1799 result",
+   "check": "resolution KXETHD-26NOV2103-T1949.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.1799 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1949.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.1799 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.1799' live='KXXRPD-26NOV2101-T0.1799'",
+   "check": "resolution KXETHD-26NOV2103-T1949.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1949.99' live='KXETHD-26NOV2103-T1949.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.1599 result",
+   "check": "resolution KXETHD-26NOV2103-T1944.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.1599 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1944.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRPD-26NOV2101-T0.1599 ticker",
-   "detail": "stored='KXXRPD-26NOV2101-T0.1599' live='KXXRPD-26NOV2101-T0.1599'",
+   "check": "resolution KXETHD-26NOV2103-T1944.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1944.99' live='KXETHD-26NOV2103-T1944.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-T1.6399 result",
+   "check": "resolution KXETHD-26NOV2103-T1939.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-T1.6399 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1939.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-T1.6399 ticker",
-   "detail": "stored='KXXRP-26NOV2101-T1.6399' live='KXXRP-26NOV2101-T1.6399'",
+   "check": "resolution KXETHD-26NOV2103-T1939.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1939.99' live='KXETHD-26NOV2103-T1939.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-T0.18000 result",
+   "check": "resolution KXETHD-26NOV2103-T1934.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-T0.18000 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1934.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-T0.18000 ticker",
-   "detail": "stored='KXXRP-26NOV2101-T0.18000' live='KXXRP-26NOV2101-T0.18000'",
+   "check": "resolution KXETHD-26NOV2103-T1934.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1934.99' live='KXETHD-26NOV2103-T1934.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.6299500 result",
+   "check": "resolution KXETHD-26NOV2103-T1929.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.6299500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1929.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.6299500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B1.6299500' live='KXXRP-26NOV2101-B1.6299500'",
+   "check": "resolution KXETHD-26NOV2103-T1929.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1929.99' live='KXETHD-26NOV2103-T1929.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.6099500 result",
+   "check": "resolution KXETHD-26NOV2103-T1924.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.6099500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1924.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.6099500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B1.6099500' live='KXXRP-26NOV2101-B1.6099500'",
+   "check": "resolution KXETHD-26NOV2103-T1924.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1924.99' live='KXETHD-26NOV2103-T1924.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.5899500 result",
+   "check": "resolution KXETHD-26NOV2103-T1919.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.5899500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1919.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.5899500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B1.5899500' live='KXXRP-26NOV2101-B1.5899500'",
+   "check": "resolution KXETHD-26NOV2103-T1919.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1919.99' live='KXETHD-26NOV2103-T1919.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.5699500 result",
+   "check": "resolution KXETHD-26NOV2103-T1914.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.5699500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1914.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.5699500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B1.5699500' live='KXXRP-26NOV2101-B1.5699500'",
+   "check": "resolution KXETHD-26NOV2103-T1914.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1914.99' live='KXETHD-26NOV2103-T1914.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.5499500 result",
+   "check": "resolution KXETHD-26NOV2103-T1909.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.5499500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1909.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.5499500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B1.5499500' live='KXXRP-26NOV2101-B1.5499500'",
+   "check": "resolution KXETHD-26NOV2103-T1909.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1909.99' live='KXETHD-26NOV2103-T1909.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.5299500 result",
+   "check": "resolution KXETHD-26NOV2103-T1904.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.5299500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1904.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.5299500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B1.5299500' live='KXXRP-26NOV2101-B1.5299500'",
+   "check": "resolution KXETHD-26NOV2103-T1904.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1904.99' live='KXETHD-26NOV2103-T1904.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.5099500 result",
+   "check": "resolution KXETHD-26NOV2103-T1899.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.5099500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1899.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.5099500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B1.5099500' live='KXXRP-26NOV2101-B1.5099500'",
+   "check": "resolution KXETHD-26NOV2103-T1899.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1899.99' live='KXETHD-26NOV2103-T1899.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.4899500 result",
+   "check": "resolution KXETHD-26NOV2103-T1894.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.4899500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1894.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.4899500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B1.4899500' live='KXXRP-26NOV2101-B1.4899500'",
+   "check": "resolution KXETHD-26NOV2103-T1894.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1894.99' live='KXETHD-26NOV2103-T1894.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.4699500 result",
+   "check": "resolution KXETHD-26NOV2103-T1889.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.4699500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1889.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.4699500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B1.4699500' live='KXXRP-26NOV2101-B1.4699500'",
+   "check": "resolution KXETHD-26NOV2103-T1889.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1889.99' live='KXETHD-26NOV2103-T1889.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.4499500 result",
+   "check": "resolution KXETHD-26NOV2103-T1884.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.4499500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1884.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.4499500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B1.4499500' live='KXXRP-26NOV2101-B1.4499500'",
+   "check": "resolution KXETHD-26NOV2103-T1884.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1884.99' live='KXETHD-26NOV2103-T1884.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.4299500 result",
+   "check": "resolution KXETHD-26NOV2103-T1879.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.4299500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1879.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.4299500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B1.4299500' live='KXXRP-26NOV2101-B1.4299500'",
+   "check": "resolution KXETHD-26NOV2103-T1879.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1879.99' live='KXETHD-26NOV2103-T1879.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.4099500 result",
+   "check": "resolution KXETHD-26NOV2103-T1874.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.4099500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1874.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.4099500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B1.4099500' live='KXXRP-26NOV2101-B1.4099500'",
+   "check": "resolution KXETHD-26NOV2103-T1874.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1874.99' live='KXETHD-26NOV2103-T1874.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.3899500 result",
+   "check": "resolution KXETHD-26NOV2103-T1869.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.3899500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1869.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.3899500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B1.3899500' live='KXXRP-26NOV2101-B1.3899500'",
+   "check": "resolution KXETHD-26NOV2103-T1869.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1869.99' live='KXETHD-26NOV2103-T1869.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.3699500 result",
+   "check": "resolution KXETHD-26NOV2103-T1864.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.3699500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1864.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.3699500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B1.3699500' live='KXXRP-26NOV2101-B1.3699500'",
+   "check": "resolution KXETHD-26NOV2103-T1864.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1864.99' live='KXETHD-26NOV2103-T1864.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.3499500 result",
+   "check": "resolution KXETHD-26NOV2103-T1859.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.3499500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1859.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.3499500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B1.3499500' live='KXXRP-26NOV2101-B1.3499500'",
+   "check": "resolution KXETHD-26NOV2103-T1859.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1859.99' live='KXETHD-26NOV2103-T1859.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.3299500 result",
+   "check": "resolution KXETHD-26NOV2103-T1854.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.3299500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1854.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.3299500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B1.3299500' live='KXXRP-26NOV2101-B1.3299500'",
+   "check": "resolution KXETHD-26NOV2103-T1854.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1854.99' live='KXETHD-26NOV2103-T1854.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.3099500 result",
+   "check": "resolution KXETHD-26NOV2103-T1849.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.3099500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1849.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.3099500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B1.3099500' live='KXXRP-26NOV2101-B1.3099500'",
+   "check": "resolution KXETHD-26NOV2103-T1849.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1849.99' live='KXETHD-26NOV2103-T1849.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.2899500 result",
+   "check": "resolution KXETHD-26NOV2103-T1844.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.2899500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1844.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.2899500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B1.2899500' live='KXXRP-26NOV2101-B1.2899500'",
+   "check": "resolution KXETHD-26NOV2103-T1844.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1844.99' live='KXETHD-26NOV2103-T1844.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.2699500 result",
+   "check": "resolution KXETHD-26NOV2103-T1839.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.2699500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1839.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.2699500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B1.2699500' live='KXXRP-26NOV2101-B1.2699500'",
+   "check": "resolution KXETHD-26NOV2103-T1839.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1839.99' live='KXETHD-26NOV2103-T1839.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.2499500 result",
+   "check": "resolution KXETHD-26NOV2103-T1834.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.2499500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1834.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.2499500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B1.2499500' live='KXXRP-26NOV2101-B1.2499500'",
+   "check": "resolution KXETHD-26NOV2103-T1834.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1834.99' live='KXETHD-26NOV2103-T1834.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.2299500 result",
+   "check": "resolution KXETHD-26NOV2103-T1829.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.2299500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1829.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.2299500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B1.2299500' live='KXXRP-26NOV2101-B1.2299500'",
+   "check": "resolution KXETHD-26NOV2103-T1829.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1829.99' live='KXETHD-26NOV2103-T1829.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.2099500 result",
+   "check": "resolution KXETHD-26NOV2103-T1824.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.2099500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1824.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.2099500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B1.2099500' live='KXXRP-26NOV2101-B1.2099500'",
+   "check": "resolution KXETHD-26NOV2103-T1824.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1824.99' live='KXETHD-26NOV2103-T1824.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.1899500 result",
+   "check": "resolution KXETHD-26NOV2103-T1819.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.1899500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1819.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.1899500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B1.1899500' live='KXXRP-26NOV2101-B1.1899500'",
+   "check": "resolution KXETHD-26NOV2103-T1819.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1819.99' live='KXETHD-26NOV2103-T1819.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.1699500 result",
+   "check": "resolution KXETHD-26NOV2103-T1814.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.1699500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1814.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.1699500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B1.1699500' live='KXXRP-26NOV2101-B1.1699500'",
+   "check": "resolution KXETHD-26NOV2103-T1814.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1814.99' live='KXETHD-26NOV2103-T1814.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.1499500 result",
+   "check": "resolution KXETHD-26NOV2103-T1809.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.1499500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1809.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.1499500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B1.1499500' live='KXXRP-26NOV2101-B1.1499500'",
+   "check": "resolution KXETHD-26NOV2103-T1809.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1809.99' live='KXETHD-26NOV2103-T1809.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.1299500 result",
+   "check": "resolution KXETHD-26NOV2103-T1804.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.1299500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1804.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.1299500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B1.1299500' live='KXXRP-26NOV2101-B1.1299500'",
+   "check": "resolution KXETHD-26NOV2103-T1804.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1804.99' live='KXETHD-26NOV2103-T1804.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.1099500 result",
+   "check": "resolution KXETHD-26NOV2103-T1799.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.1099500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1799.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.1099500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B1.1099500' live='KXXRP-26NOV2101-B1.1099500'",
+   "check": "resolution KXETHD-26NOV2103-T1799.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1799.99' live='KXETHD-26NOV2103-T1799.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.0899500 result",
+   "check": "resolution KXETHD-26NOV2103-T1794.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.0899500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1794.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.0899500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B1.0899500' live='KXXRP-26NOV2101-B1.0899500'",
+   "check": "resolution KXETHD-26NOV2103-T1794.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1794.99' live='KXETHD-26NOV2103-T1794.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.0699500 result",
+   "check": "resolution KXETHD-26NOV2103-T1789.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.0699500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1789.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.0699500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B1.0699500' live='KXXRP-26NOV2101-B1.0699500'",
+   "check": "resolution KXETHD-26NOV2103-T1789.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1789.99' live='KXETHD-26NOV2103-T1789.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.0499500 result",
+   "check": "resolution KXETHD-26NOV2103-T1784.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.0499500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1784.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.0499500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B1.0499500' live='KXXRP-26NOV2101-B1.0499500'",
+   "check": "resolution KXETHD-26NOV2103-T1784.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1784.99' live='KXETHD-26NOV2103-T1784.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.0299500 result",
+   "check": "resolution KXETHD-26NOV2103-T1779.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.0299500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1779.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.0299500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B1.0299500' live='KXXRP-26NOV2101-B1.0299500'",
+   "check": "resolution KXETHD-26NOV2103-T1779.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1779.99' live='KXETHD-26NOV2103-T1779.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.0099500 result",
+   "check": "resolution KXETHD-26NOV2103-T1774.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.0099500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1774.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B1.0099500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B1.0099500' live='KXXRP-26NOV2101-B1.0099500'",
+   "check": "resolution KXETHD-26NOV2103-T1774.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1774.99' live='KXETHD-26NOV2103-T1774.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.9899500 result",
+   "check": "resolution KXETHD-26NOV2103-T1769.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.9899500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1769.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.9899500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.9899500' live='KXXRP-26NOV2101-B0.9899500'",
+   "check": "resolution KXETHD-26NOV2103-T1769.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1769.99' live='KXETHD-26NOV2103-T1769.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.9699500 result",
+   "check": "resolution KXETHD-26NOV2103-T1764.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.9699500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1764.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.9699500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.9699500' live='KXXRP-26NOV2101-B0.9699500'",
+   "check": "resolution KXETHD-26NOV2103-T1764.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1764.99' live='KXETHD-26NOV2103-T1764.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.9499500 result",
+   "check": "resolution KXETHD-26NOV2103-T1759.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.9499500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1759.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.9499500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.9499500' live='KXXRP-26NOV2101-B0.9499500'",
+   "check": "resolution KXETHD-26NOV2103-T1759.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1759.99' live='KXETHD-26NOV2103-T1759.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.9299500 result",
+   "check": "resolution KXETHD-26NOV2103-T1754.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.9299500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1754.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.9299500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.9299500' live='KXXRP-26NOV2101-B0.9299500'",
+   "check": "resolution KXETHD-26NOV2103-T1754.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1754.99' live='KXETHD-26NOV2103-T1754.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.9099500 result",
+   "check": "resolution KXETHD-26NOV2103-T1749.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.9099500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1749.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.9099500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.9099500' live='KXXRP-26NOV2101-B0.9099500'",
+   "check": "resolution KXETHD-26NOV2103-T1749.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1749.99' live='KXETHD-26NOV2103-T1749.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.8899500 result",
+   "check": "resolution KXETHD-26NOV2103-T1744.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.8899500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1744.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.8899500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.8899500' live='KXXRP-26NOV2101-B0.8899500'",
+   "check": "resolution KXETHD-26NOV2103-T1744.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1744.99' live='KXETHD-26NOV2103-T1744.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.8699500 result",
+   "check": "resolution KXETHD-26NOV2103-T1739.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.8699500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1739.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.8699500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.8699500' live='KXXRP-26NOV2101-B0.8699500'",
+   "check": "resolution KXETHD-26NOV2103-T1739.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1739.99' live='KXETHD-26NOV2103-T1739.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.8499500 result",
+   "check": "resolution KXETHD-26NOV2103-T1734.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.8499500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1734.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.8499500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.8499500' live='KXXRP-26NOV2101-B0.8499500'",
+   "check": "resolution KXETHD-26NOV2103-T1734.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1734.99' live='KXETHD-26NOV2103-T1734.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.8299500 result",
+   "check": "resolution KXETHD-26NOV2103-T1729.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.8299500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1729.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.8299500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.8299500' live='KXXRP-26NOV2101-B0.8299500'",
+   "check": "resolution KXETHD-26NOV2103-T1729.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1729.99' live='KXETHD-26NOV2103-T1729.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.8099500 result",
+   "check": "resolution KXETHD-26NOV2103-T1724.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.8099500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1724.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.8099500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.8099500' live='KXXRP-26NOV2101-B0.8099500'",
+   "check": "resolution KXETHD-26NOV2103-T1724.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1724.99' live='KXETHD-26NOV2103-T1724.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.7899500 result",
+   "check": "resolution KXETHD-26NOV2103-T1719.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.7899500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1719.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.7899500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.7899500' live='KXXRP-26NOV2101-B0.7899500'",
+   "check": "resolution KXETHD-26NOV2103-T1719.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1719.99' live='KXETHD-26NOV2103-T1719.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.7699500 result",
+   "check": "resolution KXETHD-26NOV2103-T1714.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.7699500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1714.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.7699500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.7699500' live='KXXRP-26NOV2101-B0.7699500'",
+   "check": "resolution KXETHD-26NOV2103-T1714.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1714.99' live='KXETHD-26NOV2103-T1714.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.7499500 result",
+   "check": "resolution KXETHD-26NOV2103-T1709.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.7499500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1709.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.7499500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.7499500' live='KXXRP-26NOV2101-B0.7499500'",
+   "check": "resolution KXETHD-26NOV2103-T1709.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1709.99' live='KXETHD-26NOV2103-T1709.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.7299500 result",
+   "check": "resolution KXETHD-26NOV2103-T1704.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.7299500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1704.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.7299500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.7299500' live='KXXRP-26NOV2101-B0.7299500'",
+   "check": "resolution KXETHD-26NOV2103-T1704.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1704.99' live='KXETHD-26NOV2103-T1704.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.7099500 result",
+   "check": "resolution KXETHD-26NOV2103-T1699.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.7099500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1699.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.7099500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.7099500' live='KXXRP-26NOV2101-B0.7099500'",
+   "check": "resolution KXETHD-26NOV2103-T1699.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1699.99' live='KXETHD-26NOV2103-T1699.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.6899500 result",
+   "check": "resolution KXETHD-26NOV2103-T1694.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.6899500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1694.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.6899500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.6899500' live='KXXRP-26NOV2101-B0.6899500'",
+   "check": "resolution KXETHD-26NOV2103-T1694.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1694.99' live='KXETHD-26NOV2103-T1694.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.6699500 result",
+   "check": "resolution KXETHD-26NOV2103-T1689.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.6699500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1689.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.6699500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.6699500' live='KXXRP-26NOV2101-B0.6699500'",
+   "check": "resolution KXETHD-26NOV2103-T1689.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1689.99' live='KXETHD-26NOV2103-T1689.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.6499500 result",
+   "check": "resolution KXETHD-26NOV2103-T1684.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.6499500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1684.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.6499500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.6499500' live='KXXRP-26NOV2101-B0.6499500'",
+   "check": "resolution KXETHD-26NOV2103-T1684.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1684.99' live='KXETHD-26NOV2103-T1684.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.6299500 result",
+   "check": "resolution KXETHD-26NOV2103-T1679.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.6299500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1679.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.6299500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.6299500' live='KXXRP-26NOV2101-B0.6299500'",
+   "check": "resolution KXETHD-26NOV2103-T1679.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1679.99' live='KXETHD-26NOV2103-T1679.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.6099500 result",
+   "check": "resolution KXETHD-26NOV2103-T1674.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.6099500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1674.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.6099500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.6099500' live='KXXRP-26NOV2101-B0.6099500'",
+   "check": "resolution KXETHD-26NOV2103-T1674.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1674.99' live='KXETHD-26NOV2103-T1674.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.5899500 result",
+   "check": "resolution KXETHD-26NOV2103-T1669.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.5899500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1669.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.5899500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.5899500' live='KXXRP-26NOV2101-B0.5899500'",
+   "check": "resolution KXETHD-26NOV2103-T1669.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1669.99' live='KXETHD-26NOV2103-T1669.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.5699500 result",
+   "check": "resolution KXETHD-26NOV2103-T1664.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.5699500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1664.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.5699500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.5699500' live='KXXRP-26NOV2101-B0.5699500'",
+   "check": "resolution KXETHD-26NOV2103-T1664.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1664.99' live='KXETHD-26NOV2103-T1664.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.5499500 result",
+   "check": "resolution KXETHD-26NOV2103-T1609.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.5499500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1609.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.5499500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.5499500' live='KXXRP-26NOV2101-B0.5499500'",
+   "check": "resolution KXETHD-26NOV2103-T1609.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1609.99' live='KXETHD-26NOV2103-T1609.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.5299500 result",
+   "check": "resolution KXETHD-26NOV2103-T1604.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.5299500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1604.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.5299500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.5299500' live='KXXRP-26NOV2101-B0.5299500'",
+   "check": "resolution KXETHD-26NOV2103-T1604.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1604.99' live='KXETHD-26NOV2103-T1604.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.5099500 result",
+   "check": "resolution KXETHD-26NOV2103-T1599.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.5099500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1599.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.5099500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.5099500' live='KXXRP-26NOV2101-B0.5099500'",
+   "check": "resolution KXETHD-26NOV2103-T1599.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1599.99' live='KXETHD-26NOV2103-T1599.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.4899500 result",
+   "check": "resolution KXETHD-26NOV2103-T1594.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.4899500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1594.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.4899500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.4899500' live='KXXRP-26NOV2101-B0.4899500'",
+   "check": "resolution KXETHD-26NOV2103-T1594.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1594.99' live='KXETHD-26NOV2103-T1594.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.4699500 result",
+   "check": "resolution KXETHD-26NOV2103-T1589.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.4699500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1589.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.4699500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.4699500' live='KXXRP-26NOV2101-B0.4699500'",
+   "check": "resolution KXETHD-26NOV2103-T1589.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1589.99' live='KXETHD-26NOV2103-T1589.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.4499500 result",
+   "check": "resolution KXETHD-26NOV2103-T1584.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.4499500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1584.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.4499500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.4499500' live='KXXRP-26NOV2101-B0.4499500'",
+   "check": "resolution KXETHD-26NOV2103-T1584.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1584.99' live='KXETHD-26NOV2103-T1584.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.4299500 result",
+   "check": "resolution KXETHD-26NOV2103-T1579.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.4299500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1579.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.4299500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.4299500' live='KXXRP-26NOV2101-B0.4299500'",
+   "check": "resolution KXETHD-26NOV2103-T1579.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1579.99' live='KXETHD-26NOV2103-T1579.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.4099500 result",
+   "check": "resolution KXETHD-26NOV2103-T1574.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.4099500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1574.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.4099500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.4099500' live='KXXRP-26NOV2101-B0.4099500'",
+   "check": "resolution KXETHD-26NOV2103-T1574.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1574.99' live='KXETHD-26NOV2103-T1574.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.3899500 result",
+   "check": "resolution KXETHD-26NOV2103-T1569.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.3899500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1569.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.3899500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.3899500' live='KXXRP-26NOV2101-B0.3899500'",
+   "check": "resolution KXETHD-26NOV2103-T1569.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1569.99' live='KXETHD-26NOV2103-T1569.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.3699500 result",
+   "check": "resolution KXETHD-26NOV2103-T1564.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.3699500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1564.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.3699500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.3699500' live='KXXRP-26NOV2101-B0.3699500'",
+   "check": "resolution KXETHD-26NOV2103-T1564.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1564.99' live='KXETHD-26NOV2103-T1564.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.3499500 result",
+   "check": "resolution KXETHD-26NOV2103-T1559.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.3499500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1559.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.3499500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.3499500' live='KXXRP-26NOV2101-B0.3499500'",
+   "check": "resolution KXETHD-26NOV2103-T1559.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1559.99' live='KXETHD-26NOV2103-T1559.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.3299500 result",
+   "check": "resolution KXETHD-26NOV2103-T1554.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.3299500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1554.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.3299500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.3299500' live='KXXRP-26NOV2101-B0.3299500'",
+   "check": "resolution KXETHD-26NOV2103-T1554.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1554.99' live='KXETHD-26NOV2103-T1554.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.3099500 result",
+   "check": "resolution KXETHD-26NOV2103-T1549.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.3099500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1549.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.3099500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.3099500' live='KXXRP-26NOV2101-B0.3099500'",
+   "check": "resolution KXETHD-26NOV2103-T1549.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1549.99' live='KXETHD-26NOV2103-T1549.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.2899500 result",
+   "check": "resolution KXETHD-26NOV2103-T1544.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.2899500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1544.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.2899500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.2899500' live='KXXRP-26NOV2101-B0.2899500'",
+   "check": "resolution KXETHD-26NOV2103-T1544.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1544.99' live='KXETHD-26NOV2103-T1544.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.2699500 result",
+   "check": "resolution KXETHD-26NOV2103-T1539.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.2699500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1539.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.2699500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.2699500' live='KXXRP-26NOV2101-B0.2699500'",
+   "check": "resolution KXETHD-26NOV2103-T1539.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1539.99' live='KXETHD-26NOV2103-T1539.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.2499500 result",
+   "check": "resolution KXETHD-26NOV2103-T1534.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.2499500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1534.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.2499500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.2499500' live='KXXRP-26NOV2101-B0.2499500'",
+   "check": "resolution KXETHD-26NOV2103-T1534.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1534.99' live='KXETHD-26NOV2103-T1534.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.2299500 result",
+   "check": "resolution KXETHD-26NOV2103-T1529.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.2299500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1529.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.2299500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.2299500' live='KXXRP-26NOV2101-B0.2299500'",
+   "check": "resolution KXETHD-26NOV2103-T1529.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1529.99' live='KXETHD-26NOV2103-T1529.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.2099500 result",
+   "check": "resolution KXETHD-26NOV2103-T1524.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.2099500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1524.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.2099500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.2099500' live='KXXRP-26NOV2101-B0.2099500'",
+   "check": "resolution KXETHD-26NOV2103-T1524.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1524.99' live='KXETHD-26NOV2103-T1524.99'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.1899500 result",
+   "check": "resolution KXETHD-26NOV2103-T1519.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.1899500 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1519.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXXRP-26NOV2101-B0.1899500 ticker",
-   "detail": "stored='KXXRP-26NOV2101-B0.1899500' live='KXXRP-26NOV2101-B0.1899500'",
+   "check": "resolution KXETHD-26NOV2103-T1519.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1519.99' live='KXETHD-26NOV2103-T1519.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2102-T0.2349999 result",
+   "check": "resolution KXETHD-26NOV2103-T1514.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2102-T0.2349999 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1514.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2102-T0.2349999 ticker",
-   "detail": "stored='KXDOGE-26NOV2102-T0.2349999' live='KXDOGE-26NOV2102-T0.2349999'",
+   "check": "resolution KXETHD-26NOV2103-T1514.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1514.99' live='KXETHD-26NOV2103-T1514.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2102-T0.0100000 result",
+   "check": "resolution KXETHD-26NOV2103-T1509.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2102-T0.0100000 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1509.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2102-T0.0100000 ticker",
-   "detail": "stored='KXDOGE-26NOV2102-T0.0100000' live='KXDOGE-26NOV2102-T0.0100000'",
+   "check": "resolution KXETHD-26NOV2103-T1509.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1509.99' live='KXETHD-26NOV2103-T1509.99'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2102-B0.232 result",
+   "check": "resolution KXETHD-26NOV2103-T1504.99 result",
    "detail": "stored='no' live='no'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2102-B0.232 settlement_value_dollars",
+   "check": "resolution KXETHD-26NOV2103-T1504.99 settlement_value_dollars",
    "detail": "stored='0.0000' live='0.0000'",
    "ok": true
   },
   {
-   "check": "resolution KXDOGE-26NOV2102-B0.232 ticker",
-   "detail": "stored='KXDOGE-26NOV2102-B0.232' live='KXDOGE-26NOV2102-B0.232'",
+   "check": "resolution KXETHD-26NOV2103-T1504.99 ticker",
+   "detail": "stored='KXETHD-26NOV2103-T1504.99' live='KXETHD-26NOV2103-T1504.99'",
    "ok": true
   },
   {
@@ -3502,7 +3502,7 @@
   },
   {
    "check": "orderbook KXPRESNOMD-28-BS structure",
-   "detail": "{\"no_dollars\": [[\"0.0300\", \"10.00\"], [\"0.9930\", \"119047.60\"], [\"0.9940\", \"138888.85\"], [\"0.9950\", \"161540.15\"]], \"yes_do",
+   "detail": "{\"no_dollars\": [[\"0.0300\", \"10.00\"], [\"0.9930\", \"119047.60\"], [\"0.9940\", \"138888.85\"], [\"0.9950\", \"161498.48\"]], \"yes_do",
    "ok": true
   },
   {
@@ -3512,7 +3512,7 @@
   },
   {
    "check": "orderbook KXPRESNOMD-28-EWAR structure",
-   "detail": "{\"no_dollars\": [[\"0.9700\", \"5555.55\"], [\"0.9800\", \"8333.33\"], [\"0.9900\", \"16666.66\"]], \"yes_dollars\": []}",
+   "detail": "{\"no_dollars\": [], \"yes_dollars\": []}",
    "ok": true
   },
   {
@@ -3640,5 +3640,5 @@
   "passed": 725
  },
  "tool": "scripts/verify_rows.py v1",
- "verified_at": "2026-11-21T08:30:18+00:00"
+ "verified_at": "2026-11-21T08:37:06+00:00"
 }
