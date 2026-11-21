@@ -27,6 +27,10 @@ let pollCount = 0;
 
 function marketObject(ticker) {
   const m = MARKETS[ticker];
+  // Close time is derived from the wall clock (6h out) so the fixture never rots:
+  // roiScore's time_to_resolution component is 0 once close passes, which once
+  // dropped the smoke score below the 0.5 near-miss cutoff (F-31-01).
+  const closeTime = new Date(Date.now() + 6 * 3600 * 1000).toISOString();
   return {
     ticker, event_ticker: ticker.split("-").slice(0, 2).join("-"), series_ticker: "KXSMOKE",
     title: `Smoke market ${ticker}`, yes_sub_title: ticker, status: "active",
@@ -35,8 +39,8 @@ function marketObject(ticker) {
     yes_bid_size_fp: m.bidSize, yes_ask_size_fp: m.askSize,
     no_bid_dollars: (1 - m.ask).toFixed(4), no_ask_dollars: (1 - m.bid).toFixed(4),
     volume_fp: "120000.00", volume_24h_fp: "40000.00", open_interest_fp: "250000.00",
-    notional_value_dollars: "1.0000", close_time: "2026-11-21T06:00:00Z",
-    latest_expiration_time: "2026-11-21T06:00:00Z",
+    notional_value_dollars: "1.0000", close_time: closeTime,
+    latest_expiration_time: closeTime,
     rules_primary: "If the smoke test passes, this market resolves to Yes.",
     result: "", settlement_ts: "", settlement_value_dollars: "",
   };
