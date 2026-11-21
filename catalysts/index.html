@@ -176,7 +176,9 @@ API record it came from; anything the API did not return is blank and flagged, n
   <p class="small muted">A news feed may only attach a link after the same run actually parsed items
   from it. This table is the proof: per-feed HTTP status, item count and error text written by the
   scheduled run (<span class="mono">catalysts/feeds.json</span> is the allowlist). Failed feeds
-  contribute nothing.</p>
+  contribute nothing. Feeds disabled after a failed probe (AP News, Reuters, ESPN, PGA Tour, Golf
+  Digest, U.S. EIA Petroleum — see F-cat-03 below) are no longer polled; the table reflects the
+  latest run's probe.</p>
   <div class="tablewrap">
     <table id="feeds">
       <thead><tr><th>Feed</th><th>Topics</th><th>Items parsed</th><th>Status</th>
@@ -237,12 +239,18 @@ API record it came from; anything the API did not return is blank and flagged, n
       field ties news to a price. The rule published above decides every link, and the demo
       exchange is explicitly a testing environment whose prices may not track real markets.
       <a href="https://docs.kalshi.com/getting_started/demo_env" target="_blank" rel="noopener">Demo environment docs</a></li>
-    <li><strong>F-cat-03 · the feed allowlist is unverified from this build environment (medium).</strong>
-      The sandbox that assembled this page can reach only github.com / npmjs.org / pypi.org, so no
-      RSS host could be checked here; every entry in <span class="mono">catalysts/feeds.json</span>
-      is labelled <span class="mono">pending_ci_probe</span> and only the scheduled probe can make it
-      usable. Prune anything that keeps failing. (No feed has been dropped either — the health table
-      shows the real result.)</li>
+    <li><strong>F-cat-03 · six feeds failed the live CI probe and are disabled — golf has no working news feed (medium).</strong>
+      The scheduled probe of 2026-11-21T01:43:05Z (<span class="mono">catalysts/data/feed_health.json</span>, mode
+      <span class="mono">live</span>) recorded: AP News HTTP 403; Reuters HTTP 404; ESPN and PGA Tour \u201cfetched but no
+      items parsed\u201d; Golf Digest HTTP 404; U.S. EIA Petroleum HTTP 404. Those six are now
+      <span class="mono">enabled: false</span> in <span class="mono">catalysts/feeds.json</span> (status
+      <span class="mono">failed_ci_probe</span>, per-feed probe evidence inline) and kept for manual review; no URL was
+      added, removed or changed. Working feeds per topic: gas — BBC Business, NPR Business, AAA (3); crypto — BBC
+      Business, NPR Business, CoinDesk, The Block (4); elections — BBC World, NPR News Topics, NPR Politics, The
+      Guardian (4); culture — BBC World, BBC Entertainment, NPR News Topics, The Guardian, Variety (5); golf —
+      <strong>none</strong>. A verified replacement may be added only as a new
+      <span class="mono">pending_ci_probe</span> entry proven by a subsequent CI run. The health table below shows
+      the current run's result per feed.</li>
     <li><strong>F-cat-04 · the demo ledger is thin and partly synthetic (medium).</strong> The
       collector's own notes record synthetic exchange-test series (for example the hourly
       <span class="mono">KXDEMOFUTHOURLY</span> demo-BTC markets) ranking high on demo volume; the

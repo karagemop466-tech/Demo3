@@ -15,7 +15,7 @@ every attribution auditable.
 | Path | What it is |
 |---|---|
 | `scan.py` | Detection + enrichment + catalyst matching + strategy scoring. stdlib only. |
-| `feeds.json` | News-feed allowlist. Every entry is `pending_ci_probe` until a run parses items from it. |
+| `feeds.json` | News-feed allowlist. Every enabled entry is `pending_ci_probe` until a run parses items from it. Per the 2026-11-21T01:43:05Z **live** CI probe (`data/feed_health.json`), six feeds failed (AP News HTTP 403; Reuters HTTP 404; ESPN and PGA Tour “fetched but no items parsed”; Golf Digest HTTP 404; U.S. EIA Petroleum HTTP 404) and are now `enabled: false` with the probe recorded per feed (status `failed_ci_probe`, F-cat-03). No feed URL was added, removed or changed. |
 | `index.html`, `assets/*` | The page: run status, live watch, filters, price chart with swing markers, ledger, strategy table, feed health, endpoint probe, flags. |
 | `data/` | Artifacts written by the scan and committed so the page renders without any network access. |
 | `tests/test_scan.py` | 42 offline unit/integration tests against a mock demo API + mock feed. |
@@ -107,9 +107,15 @@ no order is sent from either.
   needs `KALSHI-ACCESS-*` headers a browser cannot send, so this stays polling-based.
 * The demo exchange is a testing environment (officially: prices/behaviour may not reflect real
   markets), so a demo "jump" may have no real-world cause at all. Links remain candidates.
-* The feed allowlist could not be probed from the build sandbox (its egress allowlist is
-  github.com / npmjs.org / pypi.org only), which is why nothing here claims a feed works — the
-  scheduled probe decides, and the health table shows the truth.
+* The feed allowlist cannot be probed from the build sandbox (its egress allowlist is
+  github.com / npmjs.org / pypi.org only); the scheduled probe decides, and the health table shows the truth.
+  As of the 2026-11-21T01:43:05Z live probe, 11 of 17 allowlist entries parse items; the six that do not
+  (AP News, Reuters, ESPN, PGA Tour, Golf Digest, U.S. EIA Petroleum) are disabled in `feeds.json` and kept
+  for the record. Consequence per topic: golf now has **no** working news feed; gas keeps BBC Business,
+  NPR Business and AAA; crypto keeps BBC Business, NPR Business, CoinDesk and The Block; elections keeps
+  BBC World, NPR News Topics, NPR Politics and The Guardian; culture keeps BBC World, BBC Entertainment,
+  NPR News Topics, The Guardian and Variety. A verified replacement may be added only as a new
+  `pending_ci_probe` entry proven by a CI run.
 * * The demo desk's per-event page URL is **not** published (only the API records and the documented
   host root), because the pattern is undocumented and unverifiable from here — F-cat-09.
 * A large Δ can be a single print against a wide quote: the 2026-11-20 `KXPRESNOMD-28-BOBA` row

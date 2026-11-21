@@ -100,8 +100,18 @@ ok(feedRows.length === (health.feeds || []).length,
 ok(feedRows.every((tr) => /not usable|usable/.test(tr.textContent)),
    "every feed row states whether it may contribute links");
 
-ok(doc.querySelectorAll("#endpoints tbody tr").length === 0,
-   "endpoint table stays empty until a real probe exists (no invented statuses)");
+// endpoint probe table: since the workflow recorded a live endpoint probe (data/endpoints.json),
+// the page renders one row per probed endpoint; nothing may be invented — every status on screen
+// must match the committed artifact.
+const probe = JSON.parse(fs.readFileSync(path.join(SITE, "data", "endpoints.json"), "utf8"));
+const probeRows = [...doc.querySelectorAll("#endpoints tbody tr")];
+ok(probeRows.length === (probe.endpoints || []).length,
+   `endpoint table renders every probed endpoint (${probeRows.length}/${(probe.endpoints || []).length})`);
+ok((probe.endpoints || []).every((e) => !e.http_status ||
+     probeRows.some((tr) => tr.textContent.includes(String(e.http_status)))),
+   "every rendered HTTP status matches the committed probe artifact (no invented statuses)");
+ok((probe.endpoints || []).every((e) => (e.http_status || e.error) && (e.method && e.url && e.purpose)),
+   "every probe endpoint carries an observed result (status or error) plus method/url/purpose");
 
 // chart hook: a swing is auto-selected and its catalyst state is explained, never invented
 const cats = doc.getElementById("chartCatalysts").textContent;
