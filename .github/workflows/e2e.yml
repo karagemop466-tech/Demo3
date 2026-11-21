@@ -1,0 +1,133 @@
+name: Real-browser E2E (live demo API)
+
+# Opens every page of the site in headless Chromium and records what a real browser
+# observes while the pages talk to the LIVE Kalshi demo API: console errors, blocked or
+# failed requests, HTTP statuses, rendered rows/charts, broken same-origin links.
+# jsdom + a mocked API (the other test suites) cannot show any of that.
+#
+#   local     the checkout is served to the browser AS https://karagemop466-tech.github.io/Demo3/
+#             (request interception), so a branch is exercised with the genuine Pages Origin
+#             before it is merged.
+#   deployed  the browser loads what GitHub Pages serves right now.
+#
+# The report (JSON + a readable summary + a few screenshots) is committed under
+# e2e/report/<mode>/ so it can be reviewed without downloading run logs.
+# Demo endpoints: https://docs.kalshi.com/getting_started/demo_env
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "local | deployed | both"
+        required: false
+        default: both
+        type: choice
+        options: [both, local, deployed]
+      pages:
+        description: "all | key | live | comma-separated page paths"
+        required: false
+        default: all
+      shots:
+        description: "key | all | none | comma-separated page paths"
+        required: false
+        default: key
+  push:
+    branches: ['arena/3528551d-demo3']
+    paths:
+      - 'e2e/run.mjs'
+      - 'e2e/flows.mjs'
+      - 'e2e/package.json'
+      - 'e2e/package-lock.json'
+      - 'e2e/trigger.txt'
+      - '.github/workflows/e2e.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        # two runners = two IP addresses, so the two modes do not share a rate-limit budget
+        mode: [local, deployed]
+    concurrency:
+      group: e2e-${{ github.ref }}-${{ matrix.mode }}
+      cancel-in-progress: true
+    env:
+      # Inputs reach the scripts through the environment only - never interpolated into a
+      # shell line (https://docs.github.com/en/actions/concepts/security/script-injections).
+      IN_MODE: ${{ github.event.inputs.mode }}
+      IN_PAGES: ${{ github.event.inputs.pages }}
+      IN_SHOTS: ${{ github.event.inputs.shots }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Read the run parameters (trigger file on push, inputs on dispatch)
+        run: |
+          mode="${IN_MODE:-}"; pages="${IN_PAGES:-}"; shots="${IN_SHOTS:-}"
+          if [ -z "$mode" ] && [ -f e2e/trigger.txt ]; then
+            mode=$(sed -n 's/^mode=//p' e2e/trigger.txt | head -1)
+            pages=$(sed -n 's/^pages=//p' e2e/trigger.txt | head -1)
+            shots=$(sed -n 's/^shots=//p' e2e/trigger.txt | head -1)
+          fi
+          case "$mode" in local|deployed|both) ;; *) mode=both ;; esac
+          {
+            echo "RUN_MODE=$mode"
+            echo "E2E_PAGES=${pages:-all}"
+            echo "E2E_SHOTS=${shots:-key}"
+          } >> "$GITHUB_ENV"
+          echo "mode=$mode pages=${pages:-all} shots=${shots:-key}"
+
+      - name: Install Playwright + Chromium
+        if: env.RUN_MODE == 'both' || env.RUN_MODE == matrix.mode
+        working-directory: e2e
+        run: |
+          npm ci --no-audit --no-fund
+          npx playwright install --with-deps chromium
+
+      # local    = this checkout, served to the browser as the real Pages origin
+      # deployed = whatever GitHub Pages is serving right now
+      - name: Open every page in headless Chromium (${{ matrix.mode }})
+        if: env.RUN_MODE == 'both' || env.RUN_MODE == matrix.mode
+        env:
+          E2E_MODE: ${{ matrix.mode }}
+        run: node e2e/run.mjs
+
+      - name: Step summary
+        if: always()
+        env:
+          E2E_MODE: ${{ matrix.mode }}
+        run: |
+          if [ -f "e2e/report/$E2E_MODE/summary.md" ]; then
+            head -c 60000 "e2e/report/$E2E_MODE/summary.md" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Commit the report
+        if: always() && (env.RUN_MODE == 'both' || env.RUN_MODE == matrix.mode)
+        env:
+          E2E_MODE: ${{ matrix.mode }}
+        run: |
+          git config user.name "e2e-bot"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add "e2e/report/$E2E_MODE" || true
+          if git diff --cached --quiet; then
+            echo "No report changes to commit"
+            exit 0
+          fi
+          git commit -q -m "e2e: real-browser report ($E2E_MODE) $(date -u '+%Y-%m-%dT%H:%M:%SZ') [skip ci]"
+          for i in 1 2 3 4; do
+            if git pull --rebase -q origin "$GITHUB_REF_NAME" && git push -q origin "HEAD:$GITHUB_REF_NAME"; then
+              echo "pushed $(git rev-parse --short HEAD)"; exit 0
+            fi
+            echo "::warning::push attempt $i failed; retrying"
+            sleep $((i * 5))
+          done
+          echo "::error::could not push the report"
+          exit 1

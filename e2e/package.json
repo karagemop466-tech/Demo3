@@ -1,0 +1,13 @@
+{
+  "name": "demo3-e2e",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Real-browser (headless Chromium) end-to-end checks of the published site against the live Kalshi demo API. Runs on GitHub Actions; see README.md.",
+  "scripts": {
+    "e2e": "node run.mjs"
+  },
+  "dependencies": {
+    "playwright": "1.65.1"
+  }
+}

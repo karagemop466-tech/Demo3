@@ -1,0 +1,7 @@
+# Parameters for a push-triggered run of .github/workflows/e2e.yml (edit + push to re-run).
+# mode: local | deployed | both      pages: all | key | live | comma-separated paths
+# shots: key | all | none | comma-separated paths
+mode=both
+pages=all
+shots=key
+run=1 first full run on the claim branch (2026-11-21)
