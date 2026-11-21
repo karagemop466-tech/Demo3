@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-21T07:12:47Z",
+ "generated_at": "2026-11-21T07:37:08Z",
  "api_root": "https://external-api.demo.kalshi.co/trade-api/v2",
  "rule": {
   "threshold_dollars": "0.10",
@@ -19,7 +19,7 @@
    "KXQUICKSETTLE"
   ]
  },
- "snapshot_samples": 372,
+ "snapshot_samples": 384,
  "snapshot_tickers": 24,
  "counts": {
   "alerts": 7,
