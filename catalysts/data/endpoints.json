@@ -1,5 +1,5 @@
 {
- "probed_at": "2026-11-21T08:28:26Z",
+ "probed_at": "2026-11-21T08:34:26Z",
  "api_root": "https://external-api.demo.kalshi.co/trade-api/v2",
  "endpoints": [
   {
@@ -16,7 +16,7 @@
     "trading_active"
    ],
    "error": "",
-   "checked_at": "2026-11-21T08:28:25Z"
+   "checked_at": "2026-11-21T08:34:24Z"
   },
   {
    "method": "GET",
@@ -30,7 +30,7 @@
     "markets"
    ],
    "error": "",
-   "checked_at": "2026-11-21T08:28:25Z",
+   "checked_at": "2026-11-21T08:34:24Z",
    "item_count": 1,
    "item_fields": [
     "can_close_early",
@@ -86,7 +86,7 @@
     "market"
    ],
    "error": "",
-   "checked_at": "2026-11-21T08:28:25Z"
+   "checked_at": "2026-11-21T08:34:24Z"
   },
   {
    "method": "GET",
@@ -100,7 +100,7 @@
     "markets"
    ],
    "error": "",
-   "checked_at": "2026-11-21T08:28:25Z",
+   "checked_at": "2026-11-21T08:34:25Z",
    "item_count": 1,
    "item_fields": [
     "can_close_early",
@@ -156,7 +156,7 @@
     "milestones"
    ],
    "error": "",
-   "checked_at": "2026-11-21T08:28:26Z",
+   "checked_at": "2026-11-21T08:34:25Z",
    "item_count": 200,
    "item_fields": [
     "category",
@@ -184,7 +184,7 @@
     "series"
    ],
    "error": "",
-   "checked_at": "2026-11-21T08:28:26Z"
+   "checked_at": "2026-11-21T08:34:25Z"
   },
   {
    "method": "GET",
@@ -197,7 +197,7 @@
     "orderbook_fp"
    ],
    "error": "",
-   "checked_at": "2026-11-21T08:28:26Z"
+   "checked_at": "2026-11-21T08:34:26Z"
   }
  ],
  "note": "status = what the runner observed on this run; blank/unverified rows stay blank on the site, they are never back-filled"

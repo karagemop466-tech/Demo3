@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-21T08:28:32Z",
+ "generated_at": "2026-11-21T08:34:32Z",
  "threshold_dollars": "0.10",
  "skipped_observations": {
   "s1_hold_to_resolution": 2,
@@ -148,6 +148,24 @@
      "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXAAAGASM-26DEC31-3.30"
     }
    ]
+  },
+  {
+   "strategy": "s2_flat_at_next_sample",
+   "category": "other/up-follow",
+   "n": 1,
+   "wins": 0,
+   "losses": 0,
+   "pushes": 1,
+   "net_pnl_dollars_per_contract": "0.0000",
+   "mean_pnl_dollars_per_contract": "0.0000",
+   "evaluable": false,
+   "markets": [
+    {
+     "ticker": "KXDIESELD-26NOV21-T5.860",
+     "pnl_dollars": "0.0000",
+     "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXDIESELD-26NOV21-T5.860"
+    }
+   ]
   }
  ],
  "portfolio": {
@@ -155,7 +173,7 @@
   "note": "Simulated demo-account trading driven by the alert rules \u2014 no order is sent to Kalshi and no live account is touched. Gross of fees/spread. Numbers below the evaluation floor are published for transparency, not as a result.",
   "books": {
    "s2_flat_at_next_sample": {
-    "n": 7,
+    "n": 8,
     "deduped_duplicates": 5,
     "starting_bankroll_dollars": "1000.0000",
     "contracts_per_trade": "100",
@@ -164,7 +182,7 @@
     "return_on_bankroll_pct": "1.20",
     "wins": 3,
     "losses": 0,
-    "win_rate": "42.9",
+    "win_rate": "37.5",
     "max_drawdown_dollars": "0.0000",
     "evaluable": false,
     "by_topic": {
@@ -179,6 +197,10 @@
      "gas": {
       "n": 1,
       "pnl_dollars": "1.0000"
+     },
+     "other": {
+      "n": 1,
+      "pnl_dollars": "0.0000"
      }
     },
     "equity_curve": [
@@ -237,11 +259,19 @@
       "stake_dollars": "70.0000",
       "ticker": "KXBTCMINY-27JAN01-55000.00",
       "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXBTCMINY-27JAN01-55000.00"
+     },
+     {
+      "ts": "2026-11-21T08:34:28Z",
+      "equity_dollars": "1012.0000",
+      "pnl_dollars": "0.0000",
+      "stake_dollars": "98.0000",
+      "ticker": "KXDIESELD-26NOV21-T5.860",
+      "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXDIESELD-26NOV21-T5.860"
      }
     ]
    }
   }
  },
- "trade_count": 12,
+ "trade_count": 13,
  "disclaimer": "Simulated trades on demo prices. Gross of fees, spread and slippage: the public API publishes no fee estimate for a hypothetical order, so none is assumed. Entry is a trade print, not a book quote \u2014 a real order would cross the spread. Not evidence of profitability."
 }
