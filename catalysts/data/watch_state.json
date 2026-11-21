@@ -124,7 +124,8 @@
    "topic": "gas"
   },
   "KXAAAGASM-26DEC31-3.30": {
-   "topic": "gas"
+   "topic": "gas",
+   "resolved": false
   },
   "KXAAAGASM-26NOV30-4.40": {
    "topic": "gas"
@@ -166,7 +167,8 @@
    "topic": "crypto"
   },
   "KXBTCMINY-27JAN01-55000.00": {
-   "topic": "crypto"
+   "topic": "crypto",
+   "resolved": false
   },
   "KXBTCY-27JAN0100-B117500": {
    "topic": "crypto"
@@ -205,10 +207,12 @@
    "topic": "crypto"
   },
   "KXBTCMINY-27JAN01-45000.00": {
-   "topic": "crypto"
+   "topic": "crypto",
+   "resolved": false
   },
   "KXBTCMINY-27JAN01-50000.00": {
-   "topic": "crypto"
+   "topic": "crypto",
+   "resolved": false
   },
   "KXBTCMINY-27JAN01-60000.00": {
    "topic": "crypto"
@@ -484,6 +488,6 @@
    "topic": "crypto"
   }
  },
- "updated_at": "2026-11-20T21:12:38Z",
+ "updated_at": "2026-11-21T01:42:59Z",
  "policy": "A market is polled until the API reports it settled/finalized with a result; then tracking stops and the yes/no outcome is kept."
 }

@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-20T21:12:38Z",
+ "generated_at": "2026-11-21T01:42:59Z",
  "api_root": "https://external-api.demo.kalshi.co/trade-api/v2",
  "threshold_dollars": "0.10",
  "threshold_note": ">= $0.10 (10 cents) per contract between consecutive samples, either direction; exact decimal arithmetic.",
@@ -9,6 +9,445 @@
  },
  "mode": "live",
  "swings": [
+  {
+   "id": "f37afa0f1862d845",
+   "ticker": "KXAAAGASM-26DEC31-3.30",
+   "topic": "gas",
+   "event_ticker": "KXAAAGASM-26DEC31",
+   "series_ticker": "",
+   "direction": "down",
+   "delta_dollars": "-0.4200",
+   "abs_delta_dollars": "0.4200",
+   "from": {
+    "ts": "2026-11-20T21:12:38Z",
+    "last_price_dollars": "0.7100",
+    "price_field": "last_price_dollars"
+   },
+   "to": {
+    "ts": "2026-11-21T01:42:59Z",
+    "last_price_dollars": "0.2900",
+    "price_field": "last_price_dollars"
+   },
+   "sample_gap_seconds": 16221,
+   "detected_by": "price_tape",
+   "origin": "catalysts/data/tape.jsonl",
+   "detected_at": "2026-11-21T01:42:59Z",
+   "record_source": "GET /markets?tickers= (demo API, this run)",
+   "status": "active",
+   "result": "",
+   "close_time": "2026-12-31T04:59:00Z",
+   "settlement_ts": "",
+   "settlement_value_dollars": "",
+   "volume_fp": "406.94",
+   "open_interest_fp": "210.00",
+   "market_url_pair": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXAAAGASM-26DEC31-2.70,KXAAAGASM-26DEC31-2.90,KXAAAGASM-26DEC31-3.10,KXAAAGASM-26DEC31-3.30,KXAAAGASM-26NOV30-4.40,KXAAAGASM-26NOV30-4.50,KXAAAGASM-26NOV30-4.60,KXAAAGASM-26NOV30-4.70,KXAAAGASM-26NOV30-4.80,KXAAAGASMAXCA-26DEC31-7.20,KXAAAGASMAXCA-26DEC31-7.40,KXAAAGASMAXCA-26DEC31-7.60,KXAAAGASMAXCA-26DEC31-7.80,KXAAAGASMAXCA-26DEC31-8.00,KXAAAGASMAXTX-26DEC31-5.20,KXAAAGASMAXTX-26DEC31-5.40,KXAAAGASMAXTX-26DEC31-5.60,KXAAAGASMAXTX-26DEC31-5.80,KXAAAGASMAXTX-26DEC31-6.00,KXAAAGASMINCA-26DEC31-3.80,KXAAAGASMINCA-26DEC31-3.90,KXAAAGASMINCA-26DEC31-4.00,KXAAAGASMINCA-26DEC31-4.10,KXAAAGASMINTX-26DEC31-1.80,KXAAAGASMINTX-26DEC31-1.90&limit=25",
+   "api_corroboration": {
+    "last_price_dollars": "0.2900",
+    "previous_price_dollars": "0.7000",
+    "yes_bid_dollars": "0.2900",
+    "yes_ask_dollars": "0.7100",
+    "previous_yes_ask_dollars": "0.7000",
+    "previous_yes_bid_dollars": "0.2900",
+    "price_level_structure": "linear_cent",
+    "volume_24h_fp": "21.13",
+    "note": "prices only: the API does not timestamp previous_price_dollars, so the interval in which the move happened stays bounded by the sample gap",
+    "status": "mismatch"
+   },
+   "title": "Will average **gas prices** be above $3.30? \u2014 Above 3.30 / Above 3.30",
+   "resolved": false,
+   "tracking": "active",
+   "links": {
+    "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXAAAGASM-26DEC31-3.30",
+    "fetched_via": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXAAAGASM-26DEC31-2.70,KXAAAGASM-26DEC31-2.90,KXAAAGASM-26DEC31-3.10,KXAAAGASM-26DEC31-3.30,KXAAAGASM-26NOV30-4.40,KXAAAGASM-26NOV30-4.50,KXAAAGASM-26NOV30-4.60,KXAAAGASM-26NOV30-4.70,KXAAAGASM-26NOV30-4.80,KXAAAGASMAXCA-26DEC31-7.20,KXAAAGASMAXCA-26DEC31-7.40,KXAAAGASMAXCA-26DEC31-7.60,KXAAAGASMAXCA-26DEC31-7.80,KXAAAGASMAXCA-26DEC31-8.00,KXAAAGASMAXTX-26DEC31-5.20,KXAAAGASMAXTX-26DEC31-5.40,KXAAAGASMAXTX-26DEC31-5.60,KXAAAGASMAXTX-26DEC31-5.80,KXAAAGASMAXTX-26DEC31-6.00,KXAAAGASMINCA-26DEC31-3.80,KXAAAGASMINCA-26DEC31-3.90,KXAAAGASMINCA-26DEC31-4.00,KXAAAGASMINCA-26DEC31-4.10,KXAAAGASMINTX-26DEC31-1.80,KXAAAGASMINTX-26DEC31-1.90&limit=25",
+    "event_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/events/KXAAAGASM-26DEC31",
+    "kalshi_market_page": "",
+    "kalshi_site_root": "https://demo.kalshi.co/",
+    "kalshi_market_page_note": "Per-event page URL not published: the demo desk's URL pattern for a single event is not documented at https://docs.kalshi.com/getting_started/demo_env and could not be confirmed from this build environment, so guessing it would be an inferred value. The canonical API records above are the verifiable sources.",
+    "series_ticker": ""
+   },
+   "series": {
+    "series_ticker": "KXAAAGASM",
+    "title": "US gas price",
+    "category": "Economics",
+    "frequency": "monthly",
+    "settlement_sources": [
+     {
+      "name": "AAA",
+      "url": "https://gasprices.aaa.com/"
+     }
+    ],
+    "contract_terms_url": "https://assets.kalshi.com/contract_terms/AAAGAS.pdf",
+    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXAAAGASM",
+    "provenance": "GET /series/{ticker} (this run)"
+   },
+   "title_source": "api:markets",
+   "resolution_label": "",
+   "catalysts": [],
+   "catalyst_match": {
+    "items_in_window": 11,
+    "match_status": "items_in_window_but_no_keyword_overlap",
+    "window_start_ts": "2026-11-20T18:12:38Z",
+    "window_end_ts": "2026-11-21T02:42:59Z"
+   },
+   "threshold_dollars": "0.1000"
+  },
+  {
+   "id": "85980ac66ae0d555",
+   "ticker": "KXBTCMINY-27JAN01-45000.00",
+   "topic": "crypto",
+   "event_ticker": "KXBTCMINY-27JAN01",
+   "series_ticker": "",
+   "direction": "down",
+   "delta_dollars": "-0.5300",
+   "abs_delta_dollars": "0.5300",
+   "from": {
+    "ts": "2026-11-20T21:12:38Z",
+    "last_price_dollars": "0.7300",
+    "price_field": "last_price_dollars"
+   },
+   "to": {
+    "ts": "2026-11-21T01:42:59Z",
+    "last_price_dollars": "0.2000",
+    "price_field": "last_price_dollars"
+   },
+   "sample_gap_seconds": 16221,
+   "detected_by": "price_tape",
+   "origin": "catalysts/data/tape.jsonl",
+   "detected_at": "2026-11-21T01:42:59Z",
+   "record_source": "GET /markets?tickers= (demo API, this run)",
+   "status": "active",
+   "result": "",
+   "close_time": "2027-01-01T05:00:00Z",
+   "settlement_ts": "",
+   "settlement_value_dollars": "",
+   "volume_fp": "1345628.96",
+   "open_interest_fp": "986601.29",
+   "market_url_pair": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXAAAGASMINTX-26DEC31-2.10,KXAAAGASMINTX-26DEC31-2.20,KXAAAGASMINTX-26DEC31-2.30,KXAAAGASW-26NOV23-3.6000,KXAAAGASW-26NOV23-3.6200,KXAAAGASW-26NOV23-3.6400,KXAAAGASW-26NOV23-3.6600,KXAAAGASW-26NOV23-3.6800,KXAAAGASWNJ-26NOV23-3.8400,KXAAAGASWNJ-26NOV23-3.8600,KXAAAGASWNJ-26NOV23-3.8800,KXAAAGASWNJ-26NOV23-4.0200,KXAAAGASWNJ-26NOV23-4.0400,KXBTCMAXMON-BTC-26NOV30-8500000,KXBTCMAXMON-BTC-26NOV30-9000000,KXBTCMAXMON-BTC-26NOV30-9250000,KXBTCMAXMON-BTC-26NOV30-9500000,KXBTCMAXMON-BTC-26NOV30-9750000,KXBTCMAXY-26DEC31-109999.99,KXBTCMAXY-26DEC31-119999.99,KXBTCMAXY-26DEC31-139999.99,KXBTCMAXY-26DEC31-199999.99,KXBTCMAXY-26DEC31-99999.99,KXBTCMINY-27JAN01-40000.00,KXBTCMINY-27JAN01-45000.00&limit=25",
+   "api_corroboration": {
+    "last_price_dollars": "0.2000",
+    "previous_price_dollars": "0.0900",
+    "yes_bid_dollars": "0.1900",
+    "yes_ask_dollars": "0.2000",
+    "previous_yes_ask_dollars": "0.1100",
+    "previous_yes_bid_dollars": "0.1000",
+    "price_level_structure": "linear_cent",
+    "volume_24h_fp": "750.25",
+    "note": "prices only: the API does not timestamp previous_price_dollars, so the interval in which the move happened stays bounded by the sample gap",
+    "status": "mismatch"
+   },
+   "title": "Will Bitcoin be below $45000.00 by Jan 1, 2027 at 12:00am ET? \u2014 Below $45,000.00 / Below $45,000.00",
+   "resolved": false,
+   "tracking": "active",
+   "links": {
+    "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXBTCMINY-27JAN01-45000.00",
+    "fetched_via": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXAAAGASMINTX-26DEC31-2.10,KXAAAGASMINTX-26DEC31-2.20,KXAAAGASMINTX-26DEC31-2.30,KXAAAGASW-26NOV23-3.6000,KXAAAGASW-26NOV23-3.6200,KXAAAGASW-26NOV23-3.6400,KXAAAGASW-26NOV23-3.6600,KXAAAGASW-26NOV23-3.6800,KXAAAGASWNJ-26NOV23-3.8400,KXAAAGASWNJ-26NOV23-3.8600,KXAAAGASWNJ-26NOV23-3.8800,KXAAAGASWNJ-26NOV23-4.0200,KXAAAGASWNJ-26NOV23-4.0400,KXBTCMAXMON-BTC-26NOV30-8500000,KXBTCMAXMON-BTC-26NOV30-9000000,KXBTCMAXMON-BTC-26NOV30-9250000,KXBTCMAXMON-BTC-26NOV30-9500000,KXBTCMAXMON-BTC-26NOV30-9750000,KXBTCMAXY-26DEC31-109999.99,KXBTCMAXY-26DEC31-119999.99,KXBTCMAXY-26DEC31-139999.99,KXBTCMAXY-26DEC31-199999.99,KXBTCMAXY-26DEC31-99999.99,KXBTCMINY-27JAN01-40000.00,KXBTCMINY-27JAN01-45000.00&limit=25",
+    "event_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/events/KXBTCMINY-27JAN01",
+    "kalshi_market_page": "",
+    "kalshi_site_root": "https://demo.kalshi.co/",
+    "kalshi_market_page_note": "Per-event page URL not published: the demo desk's URL pattern for a single event is not documented at https://docs.kalshi.com/getting_started/demo_env and could not be confirmed from this build environment, so guessing it would be an inferred value. The canonical API records above are the verifiable sources.",
+    "series_ticker": ""
+   },
+   "series": {
+    "series_ticker": "KXBTCMINY",
+    "title": "How low will Bitcoin fall this year?",
+    "category": "Crypto",
+    "frequency": "annual",
+    "settlement_sources": [
+     {
+      "name": "CF Benchmarks",
+      "url": "https://www.cfbenchmarks.com/data/indices/BRTI?ref=blog.cfbenchmarks.com"
+     }
+    ],
+    "contract_terms_url": "https://assets.kalshi.com/contract_terms/BTCMINMAX.pdf",
+    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXBTCMINY",
+    "provenance": "GET /series/{ticker} (this run)"
+   },
+   "title_source": "api:markets",
+   "resolution_label": "",
+   "catalysts": [
+    {
+     "title": "Binance hack laundering ramps up as $149 million in bitcoin mixed through coinjoins: Elliptic",
+     "link": "https://www.theblock.co/news/markets/2026-11-20-binance-hack-laundering-ramps-up-149-million-bitcoin-mixed-coinjoins-elliptic-444758",
+     "published_ts": "2026-11-20T18:22:39Z",
+     "feed_name": "The Block",
+     "feed_url": "https://www.theblock.co/rss.xml",
+     "matched_keywords": [
+      "bitcoin"
+     ],
+     "lead_seconds": 26420,
+     "in_window_before_swing": true
+    },
+    {
+     "title": "JPMorgan says bitcoin price correction widens gap to estimated $86,000 production cost",
+     "link": "https://www.theblock.co/news/markets/2026-11-20-jpmorgan-bitcoin-price-correction-gap-86000-production-cost-444763",
+     "published_ts": "2026-11-20T18:17:39Z",
+     "feed_name": "The Block",
+     "feed_url": "https://www.theblock.co/rss.xml",
+     "matched_keywords": [
+      "bitcoin"
+     ],
+     "lead_seconds": 26720,
+     "in_window_before_swing": true
+    },
+    {
+     "title": "Bitcoin plunges below $59,000 as rush to cash puts new bear market lows back in play",
+     "link": "https://www.coindesk.com/markets/2026/11/20/bitcoin-plunges-below-usd59-000-as-rush-to-cash-puts-new-bear-market-lows-back-in-play",
+     "published_ts": "2026-11-20T18:13:52Z",
+     "feed_name": "CoinDesk",
+     "feed_url": "https://www.coindesk.com/arc/outboundfeeds/rss/",
+     "matched_keywords": [
+      "bitcoin"
+     ],
+     "lead_seconds": 26947,
+     "in_window_before_swing": true
+    }
+   ],
+   "catalyst_match": {
+    "items_in_window": 12,
+    "match_status": "matched",
+    "window_start_ts": "2026-11-20T18:12:38Z",
+    "window_end_ts": "2026-11-21T02:42:59Z"
+   },
+   "threshold_dollars": "0.1000"
+  },
+  {
+   "id": "2edc722986dae564",
+   "ticker": "KXBTCMINY-27JAN01-50000.00",
+   "topic": "crypto",
+   "event_ticker": "KXBTCMINY-27JAN01",
+   "series_ticker": "",
+   "direction": "up",
+   "delta_dollars": "0.1000",
+   "abs_delta_dollars": "0.1000",
+   "from": {
+    "ts": "2026-11-20T21:12:38Z",
+    "last_price_dollars": "0.2700",
+    "price_field": "last_price_dollars"
+   },
+   "to": {
+    "ts": "2026-11-21T01:42:59Z",
+    "last_price_dollars": "0.3700",
+    "price_field": "last_price_dollars"
+   },
+   "sample_gap_seconds": 16221,
+   "detected_by": "price_tape",
+   "origin": "catalysts/data/tape.jsonl",
+   "detected_at": "2026-11-21T01:42:59Z",
+   "record_source": "GET /markets?tickers= (demo API, this run)",
+   "status": "active",
+   "result": "",
+   "close_time": "2027-01-01T05:00:00Z",
+   "settlement_ts": "",
+   "settlement_value_dollars": "",
+   "volume_fp": "611830.97",
+   "open_interest_fp": "460243.74",
+   "market_url_pair": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTCMINY-27JAN01-50000.00,KXBTCMINY-27JAN01-55000.00,KXBTCMINY-27JAN01-60000.00,KXBTCY-27JAN0100-B117500,KXBTCY-27JAN0100-B122500,KXBTCY-27JAN0100-B137500,KXBTCY-27JAN0100-B142500,KXBTCY-27JAN0100-B42500,KXDANCINGWITHTHESTARS-26DEC31-AGLE,KXDANCINGWITHTHESTARS-26DEC31-CWOO,KXDANCINGWITHTHESTARS-26DEC31-HSHU,KXDANCINGWITHTHESTARS-26DEC31-JSTIL,KXDANCINGWITHTHESTARS-26DEC31-MHIG,KXDIESELD-26NOV21-T5.860,KXDIESELD-26NOV21-T5.935,KXDIESELD-26NOV21-T5.940,KXDIESELD-26NOV21-T5.945,KXDIESELD-26NOV21-T5.950,KXDIESELW-26NOV23-T5.82,KXDIESELW-26NOV23-T5.88,KXDIESELW-26NOV23-T5.90,KXDIESELW-26NOV23-T5.92,KXDIESELW-26NOV23-T6.20,KXETHD-26NOV2016-T1604.99,KXETHD-26NOV2016-T1609.99&limit=25",
+   "api_corroboration": {
+    "last_price_dollars": "0.3700",
+    "previous_price_dollars": "0.5000",
+    "yes_bid_dollars": "0.3700",
+    "yes_ask_dollars": "0.3800",
+    "previous_yes_ask_dollars": "0.2400",
+    "previous_yes_bid_dollars": "0.2300",
+    "price_level_structure": "linear_cent",
+    "volume_24h_fp": "4562.29",
+    "note": "prices only: the API does not timestamp previous_price_dollars, so the interval in which the move happened stays bounded by the sample gap",
+    "status": "mismatch"
+   },
+   "title": "Will Bitcoin be below $50000.00 by Jan 1, 2027 at 12:00am ET? \u2014 Below $50,000.00 / Below $50,000.00",
+   "resolved": false,
+   "tracking": "active",
+   "links": {
+    "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXBTCMINY-27JAN01-50000.00",
+    "fetched_via": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTCMINY-27JAN01-50000.00,KXBTCMINY-27JAN01-55000.00,KXBTCMINY-27JAN01-60000.00,KXBTCY-27JAN0100-B117500,KXBTCY-27JAN0100-B122500,KXBTCY-27JAN0100-B137500,KXBTCY-27JAN0100-B142500,KXBTCY-27JAN0100-B42500,KXDANCINGWITHTHESTARS-26DEC31-AGLE,KXDANCINGWITHTHESTARS-26DEC31-CWOO,KXDANCINGWITHTHESTARS-26DEC31-HSHU,KXDANCINGWITHTHESTARS-26DEC31-JSTIL,KXDANCINGWITHTHESTARS-26DEC31-MHIG,KXDIESELD-26NOV21-T5.860,KXDIESELD-26NOV21-T5.935,KXDIESELD-26NOV21-T5.940,KXDIESELD-26NOV21-T5.945,KXDIESELD-26NOV21-T5.950,KXDIESELW-26NOV23-T5.82,KXDIESELW-26NOV23-T5.88,KXDIESELW-26NOV23-T5.90,KXDIESELW-26NOV23-T5.92,KXDIESELW-26NOV23-T6.20,KXETHD-26NOV2016-T1604.99,KXETHD-26NOV2016-T1609.99&limit=25",
+    "event_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/events/KXBTCMINY-27JAN01",
+    "kalshi_market_page": "",
+    "kalshi_site_root": "https://demo.kalshi.co/",
+    "kalshi_market_page_note": "Per-event page URL not published: the demo desk's URL pattern for a single event is not documented at https://docs.kalshi.com/getting_started/demo_env and could not be confirmed from this build environment, so guessing it would be an inferred value. The canonical API records above are the verifiable sources.",
+    "series_ticker": ""
+   },
+   "series": {
+    "series_ticker": "KXBTCMINY",
+    "title": "How low will Bitcoin fall this year?",
+    "category": "Crypto",
+    "frequency": "annual",
+    "settlement_sources": [
+     {
+      "name": "CF Benchmarks",
+      "url": "https://www.cfbenchmarks.com/data/indices/BRTI?ref=blog.cfbenchmarks.com"
+     }
+    ],
+    "contract_terms_url": "https://assets.kalshi.com/contract_terms/BTCMINMAX.pdf",
+    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXBTCMINY",
+    "provenance": "GET /series/{ticker} (this run)"
+   },
+   "title_source": "api:markets",
+   "resolution_label": "",
+   "catalysts": [
+    {
+     "title": "Binance hack laundering ramps up as $149 million in bitcoin mixed through coinjoins: Elliptic",
+     "link": "https://www.theblock.co/news/markets/2026-11-20-binance-hack-laundering-ramps-up-149-million-bitcoin-mixed-coinjoins-elliptic-444758",
+     "published_ts": "2026-11-20T18:22:39Z",
+     "feed_name": "The Block",
+     "feed_url": "https://www.theblock.co/rss.xml",
+     "matched_keywords": [
+      "bitcoin"
+     ],
+     "lead_seconds": 26420,
+     "in_window_before_swing": true
+    },
+    {
+     "title": "JPMorgan says bitcoin price correction widens gap to estimated $86,000 production cost",
+     "link": "https://www.theblock.co/news/markets/2026-11-20-jpmorgan-bitcoin-price-correction-gap-86000-production-cost-444763",
+     "published_ts": "2026-11-20T18:17:39Z",
+     "feed_name": "The Block",
+     "feed_url": "https://www.theblock.co/rss.xml",
+     "matched_keywords": [
+      "bitcoin"
+     ],
+     "lead_seconds": 26720,
+     "in_window_before_swing": true
+    },
+    {
+     "title": "Bitcoin plunges below $59,000 as rush to cash puts new bear market lows back in play",
+     "link": "https://www.coindesk.com/markets/2026/11/20/bitcoin-plunges-below-usd59-000-as-rush-to-cash-puts-new-bear-market-lows-back-in-play",
+     "published_ts": "2026-11-20T18:13:52Z",
+     "feed_name": "CoinDesk",
+     "feed_url": "https://www.coindesk.com/arc/outboundfeeds/rss/",
+     "matched_keywords": [
+      "bitcoin"
+     ],
+     "lead_seconds": 26947,
+     "in_window_before_swing": true
+    }
+   ],
+   "catalyst_match": {
+    "items_in_window": 12,
+    "match_status": "matched",
+    "window_start_ts": "2026-11-20T18:12:38Z",
+    "window_end_ts": "2026-11-21T02:42:59Z"
+   },
+   "threshold_dollars": "0.1000"
+  },
+  {
+   "id": "c8cd94207033ea60",
+   "ticker": "KXBTCMINY-27JAN01-55000.00",
+   "topic": "crypto",
+   "event_ticker": "KXBTCMINY-27JAN01",
+   "series_ticker": "",
+   "direction": "up",
+   "delta_dollars": "0.2200",
+   "abs_delta_dollars": "0.2200",
+   "from": {
+    "ts": "2026-11-20T21:12:38Z",
+    "last_price_dollars": "0.4800",
+    "price_field": "last_price_dollars"
+   },
+   "to": {
+    "ts": "2026-11-21T01:42:59Z",
+    "last_price_dollars": "0.7000",
+    "price_field": "last_price_dollars"
+   },
+   "sample_gap_seconds": 16221,
+   "detected_by": "price_tape",
+   "origin": "catalysts/data/tape.jsonl",
+   "detected_at": "2026-11-21T01:42:59Z",
+   "record_source": "GET /markets?tickers= (demo API, this run)",
+   "status": "active",
+   "result": "",
+   "close_time": "2027-01-01T05:00:00Z",
+   "settlement_ts": "",
+   "settlement_value_dollars": "",
+   "volume_fp": "818050.41",
+   "open_interest_fp": "499157.35",
+   "market_url_pair": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTCMINY-27JAN01-50000.00,KXBTCMINY-27JAN01-55000.00,KXBTCMINY-27JAN01-60000.00,KXBTCY-27JAN0100-B117500,KXBTCY-27JAN0100-B122500,KXBTCY-27JAN0100-B137500,KXBTCY-27JAN0100-B142500,KXBTCY-27JAN0100-B42500,KXDANCINGWITHTHESTARS-26DEC31-AGLE,KXDANCINGWITHTHESTARS-26DEC31-CWOO,KXDANCINGWITHTHESTARS-26DEC31-HSHU,KXDANCINGWITHTHESTARS-26DEC31-JSTIL,KXDANCINGWITHTHESTARS-26DEC31-MHIG,KXDIESELD-26NOV21-T5.860,KXDIESELD-26NOV21-T5.935,KXDIESELD-26NOV21-T5.940,KXDIESELD-26NOV21-T5.945,KXDIESELD-26NOV21-T5.950,KXDIESELW-26NOV23-T5.82,KXDIESELW-26NOV23-T5.88,KXDIESELW-26NOV23-T5.90,KXDIESELW-26NOV23-T5.92,KXDIESELW-26NOV23-T6.20,KXETHD-26NOV2016-T1604.99,KXETHD-26NOV2016-T1609.99&limit=25",
+   "api_corroboration": {
+    "last_price_dollars": "0.7000",
+    "previous_price_dollars": "0.4000",
+    "yes_bid_dollars": "0.6900",
+    "yes_ask_dollars": "0.7000",
+    "previous_yes_ask_dollars": "0.4700",
+    "previous_yes_bid_dollars": "0.4600",
+    "price_level_structure": "linear_cent",
+    "volume_24h_fp": "2624.34",
+    "note": "prices only: the API does not timestamp previous_price_dollars, so the interval in which the move happened stays bounded by the sample gap",
+    "status": "mismatch"
+   },
+   "title": "Will Bitcoin be below $55000.00 by Jan 1, 2027 at 12:00am ET? \u2014 Below $55,000.00 / Below $55,000.00",
+   "resolved": false,
+   "tracking": "active",
+   "links": {
+    "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXBTCMINY-27JAN01-55000.00",
+    "fetched_via": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTCMINY-27JAN01-50000.00,KXBTCMINY-27JAN01-55000.00,KXBTCMINY-27JAN01-60000.00,KXBTCY-27JAN0100-B117500,KXBTCY-27JAN0100-B122500,KXBTCY-27JAN0100-B137500,KXBTCY-27JAN0100-B142500,KXBTCY-27JAN0100-B42500,KXDANCINGWITHTHESTARS-26DEC31-AGLE,KXDANCINGWITHTHESTARS-26DEC31-CWOO,KXDANCINGWITHTHESTARS-26DEC31-HSHU,KXDANCINGWITHTHESTARS-26DEC31-JSTIL,KXDANCINGWITHTHESTARS-26DEC31-MHIG,KXDIESELD-26NOV21-T5.860,KXDIESELD-26NOV21-T5.935,KXDIESELD-26NOV21-T5.940,KXDIESELD-26NOV21-T5.945,KXDIESELD-26NOV21-T5.950,KXDIESELW-26NOV23-T5.82,KXDIESELW-26NOV23-T5.88,KXDIESELW-26NOV23-T5.90,KXDIESELW-26NOV23-T5.92,KXDIESELW-26NOV23-T6.20,KXETHD-26NOV2016-T1604.99,KXETHD-26NOV2016-T1609.99&limit=25",
+    "event_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/events/KXBTCMINY-27JAN01",
+    "kalshi_market_page": "",
+    "kalshi_site_root": "https://demo.kalshi.co/",
+    "kalshi_market_page_note": "Per-event page URL not published: the demo desk's URL pattern for a single event is not documented at https://docs.kalshi.com/getting_started/demo_env and could not be confirmed from this build environment, so guessing it would be an inferred value. The canonical API records above are the verifiable sources.",
+    "series_ticker": ""
+   },
+   "series": {
+    "series_ticker": "KXBTCMINY",
+    "title": "How low will Bitcoin fall this year?",
+    "category": "Crypto",
+    "frequency": "annual",
+    "settlement_sources": [
+     {
+      "name": "CF Benchmarks",
+      "url": "https://www.cfbenchmarks.com/data/indices/BRTI?ref=blog.cfbenchmarks.com"
+     }
+    ],
+    "contract_terms_url": "https://assets.kalshi.com/contract_terms/BTCMINMAX.pdf",
+    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXBTCMINY",
+    "provenance": "GET /series/{ticker} (this run)"
+   },
+   "title_source": "api:markets",
+   "resolution_label": "",
+   "catalysts": [
+    {
+     "title": "Binance hack laundering ramps up as $149 million in bitcoin mixed through coinjoins: Elliptic",
+     "link": "https://www.theblock.co/news/markets/2026-11-20-binance-hack-laundering-ramps-up-149-million-bitcoin-mixed-coinjoins-elliptic-444758",
+     "published_ts": "2026-11-20T18:22:39Z",
+     "feed_name": "The Block",
+     "feed_url": "https://www.theblock.co/rss.xml",
+     "matched_keywords": [
+      "bitcoin"
+     ],
+     "lead_seconds": 26420,
+     "in_window_before_swing": true
+    },
+    {
+     "title": "JPMorgan says bitcoin price correction widens gap to estimated $86,000 production cost",
+     "link": "https://www.theblock.co/news/markets/2026-11-20-jpmorgan-bitcoin-price-correction-gap-86000-production-cost-444763",
+     "published_ts": "2026-11-20T18:17:39Z",
+     "feed_name": "The Block",
+     "feed_url": "https://www.theblock.co/rss.xml",
+     "matched_keywords": [
+      "bitcoin"
+     ],
+     "lead_seconds": 26720,
+     "in_window_before_swing": true
+    },
+    {
+     "title": "Bitcoin plunges below $59,000 as rush to cash puts new bear market lows back in play",
+     "link": "https://www.coindesk.com/markets/2026/11/20/bitcoin-plunges-below-usd59-000-as-rush-to-cash-puts-new-bear-market-lows-back-in-play",
+     "published_ts": "2026-11-20T18:13:52Z",
+     "feed_name": "CoinDesk",
+     "feed_url": "https://www.coindesk.com/arc/outboundfeeds/rss/",
+     "matched_keywords": [
+      "bitcoin"
+     ],
+     "lead_seconds": 26947,
+     "in_window_before_swing": true
+    }
+   ],
+   "catalyst_match": {
+    "items_in_window": 12,
+    "match_status": "matched",
+    "window_start_ts": "2026-11-20T18:12:38Z",
+    "window_end_ts": "2026-11-21T02:42:59Z"
+   },
+   "threshold_dollars": "0.1000"
+  },
   {
    "id": "2e8d377ff94885a9",
    "ticker": "KXPRESNOMD-28-BOBA",
