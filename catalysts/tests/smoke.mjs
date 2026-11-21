@@ -100,8 +100,36 @@ ok(feedRows.length === (health.feeds || []).length,
 ok(feedRows.every((tr) => /not usable|usable/.test(tr.textContent)),
    "every feed row states whether it may contribute links");
 
-ok(doc.querySelectorAll("#endpoints tbody tr").length === 0,
-   "endpoint table stays empty until a real probe exists (no invented statuses)");
+// endpoint table: exactly the committed probe. Rows appear only when a real probe exists,
+// every status cell equals the value the runner recorded (never invented), and each row
+// links the exact URL that was probed. With no probe the table must stay empty.
+const epData = JSON.parse(fs.readFileSync(path.join(SITE, "data", "endpoints.json"), "utf8"));
+const epList = Array.isArray(epData.endpoints) ? epData.endpoints : [];
+const epRows = [...doc.querySelectorAll("#endpoints tbody tr")];
+if (epList.length === 0) {
+  ok(epRows.length === 0,
+     "endpoint table stays empty until a real probe exists (no invented statuses)");
+} else {
+  ok(epRows.length === epList.length,
+     `endpoint table lists exactly the probed endpoints (${epRows.length}/${epList.length})`);
+  epRows.forEach((tr, i) => {
+    const e = epList[i];
+    const cells = [...tr.querySelectorAll("td")];
+    const statusCell = cells[2];
+    const statusText = statusCell ? statusCell.textContent.trim() : "";
+    if (e.http_status) {
+      ok(statusText === String(e.http_status),
+         `endpoint row ${i + 1} shows only its recorded status (${e.http_status})`);
+    } else {
+      const flagEl = statusCell && statusCell.querySelector("[title]");
+      ok(statusText === "\u2014" || !!(flagEl && /not probed/.test(flagEl.getAttribute("title") || "")),
+         `endpoint row ${i + 1} is marked not-probed instead of a status`);
+    }
+    const urlLink = cells[4] && cells[4].querySelector("a");
+    ok(!!urlLink && urlLink.getAttribute("href") === e.url,
+       `endpoint row ${i + 1} links the exact probed URL`);
+  });
+}
 
 // chart hook: a swing is auto-selected and its catalyst state is explained, never invented
 const cats = doc.getElementById("chartCatalysts").textContent;

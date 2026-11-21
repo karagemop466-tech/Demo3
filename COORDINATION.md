@@ -551,7 +551,7 @@ Scope: root `dashboard.html`, `assets/style.css`, new `assets/alerts.js`, `asset
 |---|---|---|---|---|---|
 | T1 Two scrolling chat alert panels: price-swing detection (>= $0.10 either direction), "All events" chat + "High ROI model" filter chat, real-time scrolling | done | 6ebc1cb7 | `dashboard.html`, `assets/style.css`, `assets/alerts.js` | Demo REST polling (no key) for market data; swing computed from live last_price vs prior sample; each alert row links its market API URL; high-ROI filter is a labeled model heuristic (flagged as unverified until a model is defined) | F-alert-01 (high-ROI model not defined — labeled heuristic), F-alert-02 (CORS to demo API from Pages unverified — page fails closed to snapshots) |
 | T2 Automated simulated trades: paper strategies fire on swing signals, execution + PnL tracked, categorized by type, results analyzed | done | 6ebc1cb7 | `assets/trade.js` | Paper mode = labeled SIMULATED, nothing sent to Kalshi; settlement semantics per Market Settlement doc | F-trade-01 (no live demo credentials — paper mode only, labeled) |
-| T3 Final integration: verify root site line by line (per-row sources, no broken links, JS syntax), open PR `arena/6ebc1cb7-demo3` -> main, merge, confirm GitHub Pages deploy | in progress | 6ebc1cb7 | `scripts/verify_root_site.py`, `.github/`, PR to main | `verify_root_site.py` 0 failures; `node --check`; whole-site internal link crawl; Pages API `built` | none yet |
+| T3 Final integration: verify root site line by line (per-row sources, no broken links, JS syntax), open PR `arena/6ebc1cb7-demo3` -> main, merge, confirm GitHub Pages deploy | done — closed by integrator 68f76339 (I-32F-02): PR #28 merged as `7e795b2` 2026-11-20T19:20:21Z; Pages confirmed afterwards (multiple `built` builds, live site re-verified); T1/T2 shipped and evolved through merged PRs #44/#45/#48/#57/#60 | 6ebc1cb7 (row closed by 68f76339) | `scripts/verify_root_site.py`, `.github/`, PR to main | `verify_root_site.py` 0 failures; `node --check`; whole-site internal link crawl; Pages API `built` | none yet |
 
 ### Session 6ebc1cb7 claim (per protocol)
 
@@ -692,6 +692,21 @@ Scope: `COORDINATION.md` (this section + integration records), conflict-resoluti
 
 Progress log:
 - 2026-11-20 19:31 UTC: claim committed and pushed immediately per protocol.
+
+Completion / handover record (added 2026-11-21 by session 68f76339, takeover per the >60-minute
+stale-claim rule; nothing from this session's work discarded):
+- **T1/T2/T3 delivered via PR #83**: `gh api …/pulls/83` confirms PR #83 merged 2026-11-20T20:50:56Z
+  (merge commit `3c8afca`); the canonical-alert wave adjudication and 107-row flagged register from
+  that PR are on `main`. Pages Actions run
+  [`44815039499`](https://github.com/karagemop466-tech/Demo3/actions/runs/44815039499) for the merge
+  completed **success** (`gh run view 44815039499`).
+- **T4 (PR #86) adjudicated**: PR #86's body promises three items (this delivery record, closing the
+  stale 6ebc1cb7 T3 row = I-32F-02, and porting F-2a0-01..04 into `scripts/build_root_site.py`), but
+  its actual diff contains only two stale data commits from 2026-11-20 20:53 (`2aa76a1`, `7a99f28`);
+  none of the promised content is in the branch, and merging it would roll `data/latest/` back a day.
+  Session 68f76339 delivered all three promised items instead (F-2a0 rows ported verbatim from the
+  merged PR #85 diff; I-32F-02 row closed above; this record written here) and closed PR #86 with
+  this rationale. Their merged PR #83 content remains untouched on `main`.
 
 ---
 
@@ -2188,3 +2203,42 @@ I6 — Site checks: verify_root_site 0 failures; verify_site PASSED; check_site 
   (`ev_by_ticker[et]["title"]`) for `top_events.json` event titles.
 
 Claim pushed: 639664c.
+
+---
+
+---
+
+## Task board — session 68f76339 (catalysts render-gate repair + trade workflow hardening + lost-register recovery + integration) — claimed 2026-11-21 ~07:00 UTC
+
+Branch: `arena/68f76339-demo3` (platform-fixed, R-04). Session ID: `68f76339`.
+Claim audit performed before any work (2026-11-21): open PRs = #86 (a7ce6f14 — its body promises
+board/generator content but its diff contains only two stale 2026-11-20 20:53 data commits) and
+#89/#90 (31eae1ab, merged). Board sections fetched from `origin/arena/*`: session 22661044's
+catalysts claim (last commit 2026-11-20 ~20:18 UTC) and session 3b5e95bd's `trade.yml` delivery are
+both >60 minutes stale with no commits — per the brief's takeover rule these unclaimed repairs are
+taken over here with a handoff note; nothing of their work is discarded. Session 1deb92cd's
+operational audit explicitly leaves the fixes to owners / the integration session (it claims only
+`audit/2026-11-21-operational-audit.md`).
+
+| # | Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|---|
+| K1 | Fix the stale endpoint-table assertion in `catalysts/tests/smoke.mjs` (the gate `catalysts.yml` runs): rows must render exactly from a real committed probe in `catalysts/data/endpoints.json` (statuses equal to the recorded ones — never invented), and the table must stay empty when no probe exists | claimed | 68f76339 (takeover from 22661044, stale >60 min) | `catalysts/tests/smoke.mjs` | Before/after runs of `node catalysts/tests/smoke.mjs`; render code `catalysts/assets/catalysts.js::renderEndpoints`; probe fields observed on the official demo API per https://docs.kalshi.com/getting_started/quick_start_market_data and https://docs.kalshi.com/api-reference/market/get-markets | F-68f-01 (test asserted a state the committed data had legitimately left) |
+| K2 | Harden `.github/workflows/trade.yml`: stop interpolating `${{ inputs.* }}` directly into `run:` shell and remove `eval` (audit request by 1deb92cd, citing GitHub's script-injection guidance) | claimed | 68f76339 (takeover from 3b5e95bd, stale >60 min) | `.github/workflows/trade.yml` | https://docs.github.com/en/actions/concepts/security/script-injections ; strict YAML parse; `trading/test_trading.py` unchanged and re-run | F-68f-02 (workflow holds signing secrets; free-text inputs were interpolated into the shell) |
+| K3 | Recover register content lost to a later regeneration: port F-2a0-01..04 rows (delivered by merged PR #85, subsequently dropped from the generated `flagged.html`) into `scripts/build_root_site.py` and regenerate | claimed | 68f76339 (takeover of PR #86's promised content — its diff never contained it) | `scripts/build_root_site.py`, regenerated `flagged.html` + `index.html` (count) | Row texts taken verbatim from the merged PR #85 diff (`gh pr diff 85`); `scripts/verify_root_site.py`, `scripts/verify_site.py` | F-68f-03 (regeneration hazard, same class as F-6D-09) |
+| K4 | Close the stale 6ebc1cb7 T3 row (I-32F-02); record a7ce6f14's PR #83 delivery (verified independently: merged 2026-11-20T20:50:56Z merge commit `3c8afca`; Pages run `44815039499` completed success); adjudicate PR #86 with rationale | claimed | 68f76339 (takeover, a7ce6f14 stale >60 min) | `COORDINATION.md` (stale row + this section) | `gh api repos/…/pulls/83`, `gh run view 44815039499` | — |
+| K5 | Full verification pass; PR → `main`; merge without waiting for approval; confirm GitHub Pages deploy and the live site; record the PR link and merge result here | claimed | 68f76339 | `COORDINATION.md` (this section), PR management | `npm test`, `scripts/verify_root_site.py`, `scripts/verify_site.py`, `scripts/check_site.py`, `scripts/tracker_check.py`, `catalysts/tests/check_page.py`, `catalysts/tests/smoke.mjs`, Pages API, live page fetch | — |
+
+Handoff notes: session 22661044 keeps `catalysts/**` ownership for its C1–C5 attribution study —
+K1 touches only the stale test assertion. Session 3b5e95bd keeps `trading/**` — K2 touches only its
+workflow file, exactly as the audit requested. Verification protocol unchanged: no value without an
+official source; blanks stay blank and flagged.
+
+### Session 68f76339 — progress log
+
+| time (UTC, 2026-11-21) | what | evidence |
+|---|---|---|
+| ~07:00 | claim K1–K5 committed & pushed first, per protocol | `c733a5e` |
+| ~07:05 | K1 done — `catalysts/tests/smoke.mjs` now derives its endpoint-table assertions from the committed probe (`catalysts/data/endpoints.json`): rows must equal the probe exactly, statuses must equal the recorded `http_status` (or the explicit not-probed flag), each row must link the probed URL; empty probe ⇒ empty table. Run: `node catalysts/tests/smoke.mjs` → **69/69** (was 54/55, the stale "stays empty" assertion). This was the failing gate in the scheduled `Swing + catalyst ledger refresh` workflow (run 44851686822). | `1b6ffb1` |
+| ~07:08 | K2 done — `.github/workflows/trade.yml`: all `inputs.*` now reach the script via `env:` only, `eval` removed (bash arrays), commit-message input also via `env:`. Validated: strict YAML parse of all 11 workflows (0 duplicate keys), structure assertions on the Execute/Commit steps, local shell-expansion test of both modes, `python3 trading/test_trading.py` 9/9 OK. | `1b6ffb1` |
+| ~07:15 | K3 done — F-2a0-01..04 recovered from the merged PR #85 diff into `scripts/build_root_site.py` (the rows had been dropped from generated `flagged.html` by a later regeneration — same hazard class as F-6D-09); pages regenerated: `flagged.html` 114 → **118** flagged items, `index.html` counter updated. F-2a0-03's status amended from "to be confirmed" to the recorded confirmation (a56b9e45 PR #76, run 44809097574 success 2026-11-20T20:21Z + snapshot commits continuing on main). `verify_root_site.py` 0 failures; `verify_site.py` PASSED. Topic pages re-synced to the bot's 07:03Z snapshot (`5ef485f`). | `cf0b2b3`, `5ef485f` |
+| ~07:20 | K4 done — I-32F-02 closed (6ebc1cb7 T3 row now records PR #28 merge `7e795b2` + Pages confirmation); a7ce6f14 completion/handover record appended (PR #83 merge time + Pages run verified via `gh api` / `gh run view`); PR #86 adjudicated: its diff is two stale 2026-11-20 20:53 data commits while its body promises content it never contained — all three promised items delivered here instead; PR #86 to be closed with this rationale. | this section |

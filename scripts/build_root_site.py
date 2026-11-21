@@ -169,6 +169,7 @@ NAV = [
     ("index.html", "Home"),
     ("dashboard.html", "Live dashboard"),
     ("alerts.html", "Swing alerts"),
+    ("catalysts/index.html", "Catalyst links"),
     ("live/index.html", "Alert desk (live)"),
     ("data-tracking.html", "Data tracking"),
     ("gas-prices.html", "Gas prices"),
@@ -423,6 +424,224 @@ def consolidated_flags():
         [f"{DOCS}/api-reference/events/get-event", f"{DOCS}/changelog",
          "https://external-api.demo.kalshi.co/trade-api/v2/events?limit=1"],
         "Flagged — fails closed", "c75f4bf1")
+    # session 2a0ddd99: register rows delivered by merged PR #85, then lost to a later
+    # regeneration of flagged.html (same hazard as F-6D-09). Ported verbatim from the
+    # PR #85 diff by session 68f76339 (takeover of PR #86's promised content) so every
+    # future regeneration keeps them.
+    add("F-2a0-01", "CI / data pipeline",
+        "collect.yml was invalid YAML (duplicate if: key) — scheduled collector could not start",
+        "The merged .github/workflows/collect.yml carried two if: keys on one step (merge "
+        "artifact). GitHub parsed the file as invalid, failed every push run with zero jobs "
+        "(e.g. run 44804863000 on main), and the */10 schedule could not start, so "
+        "data/latest/ went stale. Session f2b0808f delivered the fix (I-F2-08, merged via "
+        "PR #51/#55); session a56b9e45 independently verified the parse (PR #56). Session "
+        "2a0ddd99 found the same defect independently at 19:47 UTC, repaired it, then "
+        "withdrew its duplicate edit when the merged fix was discovered (backup branch only) "
+        "and re-verified: all six workflow files parse with unique step conditions.",
+        ["https://github.com/karagemop466-tech/Demo3/blob/main/.github/workflows/collect.yml",
+         "https://github.com/karagemop466-tech/Demo3/actions/workflows/collect.yml"],
+        "resolved (fix by f2b0808f; verified by a56b9e45 + 2a0ddd99)", "2a0ddd99")
+    add("F-2a0-02", "Alerts",
+        "Exactly-$0.10 swings could be missed (float rounding) — boundary case now test-pinned",
+        "Raw float subtraction (0.8 − 0.9 = −0.09999…) can fail a naive ≥ $0.10 threshold. "
+        "main compares with a 1e-9 epsilon (PR #48 merge) and PR #60 added its own threshold "
+        "test; session 2a0ddd99 independently found the same defect and keeps regression pins "
+        "in tests/regressions-2a0ddd99.test.js.",
+        [f"{DOCS}/api-reference/market/get-markets",
+         "https://github.com/karagemop466-tech/Demo3/blob/main/tests/regressions-2a0ddd99.test.js"],
+        "resolved (fix on main; pins by 2a0ddd99)", "2a0ddd99")
+    add("F-2a0-03", "Data snapshots",
+        "A merge rolled data/latest/ back to an older snapshot while the collector was broken",
+        "Between 19:32 and 19:47 UTC the merge of PR #46 kept branch snapshots older than "
+        "main's latest refresh, while the collector schedule was down (F-2a0-01); main's "
+        "data/latest/meta.json briefly read generated_at 2026-11-20T19:32:01+00:00. Later "
+        "merges restored newer snapshots (generated_at 2026-11-20T19:39:40+00:00 at 8b42b06). "
+        "Recovery of the */10 schedule on main still needs post-fix confirmation.",
+        ["https://github.com/karagemop466-tech/Demo3/blob/main/data/latest/meta.json",
+         "https://github.com/karagemop466-tech/Demo3/pull/46"],
+        "superseded — schedule recovery confirmed after this row was written (a56b9e45 PR #76, "
+        "run 44809097574 success 2026-11-20T20:21Z; snapshot commits continue on main)",
+        "2a0ddd99")
+    add("F-2a0-04", "Process",
+        "GitHub REST rate limit exhausted mid-session (19:47 UTC)",
+        "The 2a0ddd99 session hit the authenticated REST rate limit while auditing Actions "
+        "runs (5,450/hr quota), pausing PR management until the quota reset (~20:11 UTC). "
+        "Local git push was unaffected. Recorded for transparency; no data values were "
+        "affected.",
+        ["https://docs.github.com/en/rest/using-the-rest-api/getting-started-with-the-rest-api#rate-limiting"],
+        "disclosed", "2a0ddd99")
+    # F-c46-01/02 are registered by session c46ba25d's own block below (merged via PR #92);
+    # this session's duplicate copies were dropped during the merge to avoid double rows.
+    # session 31eae1ab
+    add("F-31-01", "Tests / fixture",
+        "Fixed-date test fixture expired (time bomb) in tests/alert_console.test.js",
+        "marketObject() hardcoded close_time/latest_expiration_time = 2026-11-21T06:00:00Z; once "
+        "wall-clock passed that instant, roiScore time_to_resolution = 0 and the smoke score fell "
+        "below the 0.5 near-miss cutoff, failing \"polling two price levels produces one >= $0.10 "
+        "alert in both feeds\" (ROI chat empty). Fix: the fixture derives close time as "
+        "Date.now() + 6h so it is permanently in-window. npm test 67/67 (was 66/67).",
+        ["https://github.com/karagemop466-tech/Demo3/blob/main/tests/alert_console.test.js",
+         "https://github.com/karagemop466-tech/Demo3/pull/89"],
+        "resolved (PR #89/#90)", "31eae1ab")
+    # session 764c370e: change request — add F-764-01..05 to the Flagged page
+    add("F-764-01", "Gas topic classifier",
+        "Crude oil markets (WTI, Brent, crude inventories) are no longer in the gas topic",
+        "Interpretation, for review: crude oil is a separate commodity family; if the owner wants "
+        "oil in \"gas\", add a dedicated topic rather than restoring the old tag rule. Evidence "
+        "(before): data/latest/topic_gas.json on main had 9 events, 8 of them not gas-price "
+        "markets; the old rule classified 286 series as gas, 119 of them not gas-price markets.",
+        ["https://docs.kalshi.com/api-reference/market/get-series-list",
+         "https://github.com/karagemop466-tech/Demo3/blob/main/data/latest/topic_gas.json"],
+        "open — owner decision", "764c370e")
+    add("F-764-02", "Gas topic classifier",
+        "Heating oil, diesel, natural gas and CPI gasoline/gas indices count as gas; one combo market too",
+        "Interpretation, for review: KXHORMUZGASCOMBO (\"Hormuz traffic × gas price\") is in the "
+        "topic because its title contains \"gas price\"; it is a combo, not a pure price market.",
+        ["https://docs.kalshi.com/api-reference/market/get-series-list",
+         "https://github.com/karagemop466-tech/Demo3/blob/main/data/latest/topic_gas.json"],
+        "open — owner decision", "764c370e")
+    add("F-764-03", "Data pipeline / coverage",
+        "topic_gas.json lists 1 gas event although its 300 markets belong to 19 event tickers",
+        "meta.json reports truncated.events: true — the global /events listing is capped, so events "
+        "are not complete per topic. Markets, top events and series data are not affected. Fix "
+        "belongs to the collector owner: fetch events per topic series (/events?series_ticker=) "
+        "rather than from the global list.",
+        ["https://github.com/karagemop466-tech/Demo3/blob/main/data/latest/meta.json",
+         "https://docs.kalshi.com/api-reference/events/get-events"],
+        "open — collector owner", "764c370e")
+    add("F-764-04", "Topic classifier / golf",
+        "Collector counts KXPGASTROKEMARGIN and KXPGASOLHEIM as golf",
+        "Both are PGA-titled sports markets; the titles are verified, the golf-topic intent is not "
+        "stated by Kalshi.",
+        ["https://docs.kalshi.com/api-reference/market/get-series-list",
+         "https://github.com/karagemop466-tech/Demo3/blob/main/scripts/collect_kalshi_data.py"],
+        "open — owner decision", "764c370e")
+    add("F-764-05", "Topic classifier",
+        "Get Series List publishes a categories array as well as the primary category string",
+        "\"A series can have more than one discovery category\" (documented on Get Series List, "
+        "fetched 2026-11-20). The classifier uses only category; the owner to decide whether the "
+        "topic rule should read categories.",
+        ["https://docs.kalshi.com/api-reference/market/get-series-list"],
+        "open — owner decision", "764c370e")
+    # session 22661044: change request CR-22661044-2 — mirror F-cat-01..10 here
+    add("F-cat-01", "Catalysts / detection",
+        "Detection depends on the sampling gap (high)",
+        "A swing is only visible if two samples straddle it, so a move that reverts between samples "
+        "is missed. The scheduled run and the in-browser watch set that gap; Kalshi's WebSocket "
+        "feed would close it entirely, but its handshake requires KALSHI-ACCESS-* headers a browser "
+        "cannot attach, so this layer stays on REST polling.",
+        ["https://docs.kalshi.com/getting_started/quick_start_websockets"],
+        "open — disclosed", "22661044")
+    add("F-cat-02", "Catalysts / attribution",
+        "Catalyst links are correlation, never cause (high)",
+        "No Kalshi field ties news to a price. The published matching rule decides every link, and "
+        "the demo exchange is explicitly a testing environment whose prices may not track real "
+        "markets.",
+        ["https://docs.kalshi.com/getting_started/demo_env"],
+        "open — labelled in UI", "22661044")
+    add("F-cat-03", "Catalysts / feeds",
+        "The feed allowlist is unverified from the build environment (medium)",
+        "The sandbox that assembles the page can reach only github.com / npmjs.org / pypi.org, so no "
+        "RSS host could be checked there; every entry in catalysts/feeds.json was labelled "
+        "pending_ci_probe and only the scheduled probe can make it usable. Prune anything that keeps "
+        "failing. The health table shows the real result.",
+        ["https://github.com/karagemop466-tech/Demo3/blob/main/catalysts/feeds.json"],
+        "open — probe-gated", "22661044")
+    add("F-cat-04", "Catalysts / data quality",
+        "The demo ledger is thin and partly synthetic (medium)",
+        "The collector's own notes record synthetic exchange-test series (for example the hourly "
+        "KXDEMOFUTHOURLY demo-BTC markets) ranking high on demo volume; the seeded swings on the "
+        "catalysts page come from exactly such a market. Treat the ledger as a mechanism proof "
+        "until the owner decides which series count as real.",
+        ["https://docs.kalshi.com/getting_started/demo_env",
+         "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXDEMOFUTHOURLY-26NOV20H12-UP"],
+        "open — disclosed", "22661044")
+    add("F-cat-05", "Catalysts / API behaviour",
+        "GET /events?event_tickers=… ignores its filter on this deployment (verified 2026-11-20)",
+        "The request for one hourly event returned unrelated events, so the catalyst layer looks "
+        "markets up by /markets?tickers= and /markets/{ticker} only. The endpoint table re-checks "
+        "it on every run.",
+        ["https://docs.kalshi.com/api-reference/market/get-events",
+         "https://github.com/karagemop466-tech/Demo3/blob/main/catalysts/data/endpoints.json"],
+        "verified 2026-11-20 — disclosed", "22661044")
+    add("F-cat-06", "Catalysts / API behaviour",
+        "limit is not honoured on GET /series?category= (verified 2026-11-20)",
+        "A request with limit=3 returned the full category page set, so catalog paging here is "
+        "cursor-based — this corroborates F9 recorded by session 6908a11a.",
+        ["https://docs.kalshi.com/api-reference/market/get-series-list"],
+        "verified 2026-11-20 — disclosed", "22661044")
+    add("F-cat-07", "Process / navigation",
+        "Catalysts page was not in the site navigation (process)",
+        "Root nav and the root Flagged page are shared outputs owned by the integration session; "
+        "change requests CR-22661044-1/2 were logged in COORDINATION.md instead of editing them.",
+        ["https://github.com/karagemop466-tech/Demo3/blob/main/catalysts/index.html"],
+        "resolved — nav entry + landing row added by 68f76339", "22661044")
+    add("F-cat-08", "Catalysts / corroboration",
+        "The exchange cross-check covers prices, not the interval",
+        "The official market record publishes previous_price_dollars and last_price_dollars, which "
+        "lets the exchange corroborate a row's two prices (the 2026-11-20 KXPRESNOMD-28-BOBA row is "
+        "labelled exchange-corroborated for exactly that reason: its tape prices 0.0050 → 0.8630 "
+        "reproduce the record's own previous → last). It publishes no timestamp for "
+        "previous_price_dollars, so the time the move took remains bounded only by the sample gap, "
+        "and rows whose record lacks those fields are labelled not cross-checked rather than "
+        "assumed correct.",
+        ["https://docs.kalshi.com/api-reference/market/get-market",
+         "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPRESNOMD-28-BOBA"],
+        "open — labelled in UI", "22661044")
+    add("F-cat-09", "Catalysts / links",
+        "No per-event page URL is published",
+        "The demo desk host is documented (demo.kalshi.co) but the URL pattern for a single event "
+        "is not, and the build environment cannot load the site's app to confirm one. Guessing "
+        "/market/<event> would be an inferred value, so each row links the canonical API records "
+        "(market / event / series) plus the host root instead, and kalshi_market_page is published "
+        "empty with the reason in kalshi_market_page_note.",
+        ["https://docs.kalshi.com/getting_started/demo_env"],
+        "open — fails closed, never inferred", "22661044")
+    add("F-cat-10", "Catalysts / market microstructure",
+        "A \"jump\" can be one print against a wide quote",
+        "The KXPRESNOMD-28-BOBA sample that produced a $0.858 move reported yes_bid_dollars 0.0010 "
+        "against yes_ask_dollars 0.8630 and price_level_structure \"deci_cent\" (1/10-cent ticks, so "
+        "858 ticks in one sample); lifetime volume is 418,777,737 contracts while volume_24h_fp is "
+        "only 63,615. Every row therefore prints the quote and the ladder next to the move: a large "
+        "Δ in a thin book is not a tradable signal, and the page makes no claim that it is.",
+        ["https://docs.kalshi.com/api-reference/market/get-market",
+         "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPRESNOMD-28-BOBA"],
+        "open — labelled in UI", "22661044")
+    # session 68f76339: this session's own flags
+    add("F-68f-01", "CI / tests",
+        "catalysts smoke gate asserted an empty endpoint table after a real probe existed (fixed)",
+        "catalysts/tests/smoke.mjs asserted the endpoint table stays empty, but the scheduled probe "
+        "legitimately populated catalysts/data/endpoints.json (7 endpoints, HTTP 200, checked "
+        "2026-11-21T01:42:52Z), so the gate failed 54/55 and the scheduled \"Swing + catalyst "
+        "ledger refresh\" workflow (run 44851686822) failed. Fixed: the test now derives its "
+        "assertions from the committed probe — rows must equal the probe exactly, statuses must "
+        "equal the recorded http_status (or the explicit not-probed flag), each row must link the "
+        "probed URL; with no probe the table must stay empty. 69/69 after.",
+        ["https://github.com/karagemop466-tech/Demo3/blob/main/catalysts/tests/smoke.mjs",
+         "https://github.com/karagemop466-tech/Demo3/blob/main/catalysts/data/endpoints.json",
+         "https://github.com/karagemop466-tech/Demo3/actions/runs/44851686822"],
+        "fixed (68f76339)", "68f76339")
+    add("F-68f-02", "CI / security",
+        "trade.yml interpolated workflow inputs into run: shell and used eval (fixed)",
+        "The manual demo-trade workflow held KALSHI_DEMO_* signing secrets while interpolating "
+        "${{ inputs.* }} (free-text ticker/price/strategy-tag) directly into its run: script and "
+        "executed it through eval — a crafted workflow_dispatch input could become shell syntax. "
+        "Fixed: inputs reach the script only through env:, bash arrays replace eval, and the "
+        "commit-message input also goes through env:. Validated with a strict YAML parse of all 11 "
+        "workflow files (0 duplicate keys) and trading tests 9/9.",
+        ["https://docs.github.com/en/actions/concepts/security/script-injections",
+         "https://github.com/karagemop466-tech/Demo3/blob/main/.github/workflows/trade.yml"],
+        "fixed (68f76339)", "68f76339")
+    add("F-68f-03", "Generator / registers",
+        "Hand-appended register rows are dropped by the next regeneration (recurring hazard)",
+        "F-2a0-01..04 were delivered by merged PR #85 as a hand-append to the generated flagged.html "
+        "and were dropped by a later regeneration (same hazard class as F-6D-09). They were ported "
+        "into scripts/build_root_site.py by this session so every regeneration keeps them; this row "
+        "records the hazard itself. Rule: register rows belong in the generator, never hand-edited "
+        "into a generated page.",
+        ["https://github.com/karagemop466-tech/Demo3/blob/main/scripts/build_root_site.py",
+         "https://github.com/karagemop466-tech/Demo3/pull/85"],
+        "resolved (rows ported; hazard documented)", "68f76339")
     add("I-11", "Trading", "No demo-account API credentials were provided",
         "Live order execution needs a Kalshi demo API key (created at demo.kalshi.co). Until one is "
         "supplied, the Trade pages run in clearly labeled paper-trading mode against live demo "
@@ -864,6 +1083,7 @@ questions and suggestions before making decisions.</p>
 <tr><td>Track highest-dollar live events, price chart (seconds/minutes/hours), orderbook liquidity, resolutions</td><td><a href="dashboard.html">Live dashboard</a></td><td><a class="src" href="https://docs.kalshi.com/getting_started/quick_start_market_data" target="_blank" rel="noopener">source</a></td></tr>
 <tr><td>Live alerts for price swings ≥ $0.10 (either direction) in two scrolling feeds: all swings, and a high-ROI filter (placeholder rule until the owner supplies the model)</td><td><a href="dashboard.html#alerts">Live alerts</a></td><td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-market" target="_blank" rel="noopener">source</a></td></tr>
 <tr><td>Get a chat-style alert on every &ge; $0.10 price swing, and only the swings the backtest says clear their own cost (calibrated ROI gate, fee-exact)</td><td><a href="alerts.html">Swing alerts</a></td><td><a class="src" href="https://docs.kalshi.com/api-reference/market/get-market-candlesticks" target="_blank" rel="noopener">source</a></td></tr>
+<tr><td>See which official source pages and dated news candidates may have accompanied each &ge; $0.10 jump (timing-matched candidates, correlation labelled — never asserted as cause)</td><td><a href="catalysts/index.html">Catalyst links</a></td><td><a class="src" href="https://docs.kalshi.com/api-reference/events/get-event" target="_blank" rel="noopener">source</a></td></tr>
 <tr><td>Execute trades (demo key or labeled paper mode), analyze performance, categorize trades, build strategies</td><td><a href="portfolio.html">Portfolio</a> · <a href="trades.html">Trades</a></td><td><a class="src" href="https://docs.kalshi.com/api-reference/orders/create-order-v2" target="_blank" rel="noopener">source</a></td></tr>
 <tr><td>Decide before changing anything: questions, missing information, discovery steps</td><td><a href="questions.html">Questions</a> · <a href="suggestions.html">Suggestions</a></td><td><a class="src" href="https://docs.kalshi.com/getting_started/demo_env" target="_blank" rel="noopener">source</a></td></tr>
 <tr><td>Verify every value: per-row sources, flagged items, repo review</td><td><a href="sources.html">Sources</a> · <a href="flagged.html">Flagged</a> · <a href="repo-review.html">Repo review</a></td><td><a class="src" href="https://docs.kalshi.com/getting_started/quick_start_market_data" target="_blank" rel="noopener">source</a></td></tr>
@@ -1284,6 +1504,13 @@ def build_flagged():
 <h1>Flagged for review</h1>
 <p>Irregularities, unverified items and open decisions. <strong>Nothing here blocks the merge</strong>
 — review at any time and request changes. Each row links its evidence.</p>
+<p class="small muted">Sub-registers published elsewhere on this site (part of the same review
+surface): <a href="live/flagged.html">live alert desk flags</a> ·
+<a href="catalysts/index.html#flags">catalyst-link flags</a> ·
+<a href="paper-desk/methodology.html">paper-desk methodology &amp; flags</a> ·
+<a href="audit/index.html">independent audit</a> ·
+<a href="docs/flagged.html">docs/ flag register</a> ·
+<a href="FLAGGED.md">FLAGGED.md</a>.</p>
 <div class="card">{t.render(caption="Consolidated register (all sessions + integration flags).")}</div>
 """
     write_page("flagged.html", "Flagged for review", "flagged.html", body,
