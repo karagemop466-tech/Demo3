@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-21T01:43:05Z",
+ "generated_at": "2026-11-21T07:10:37Z",
  "threshold_dollars": "0.10",
  "skipped_observations": {
   "s1_hold_to_resolution": 2,
@@ -26,15 +26,43 @@
  "results": [
   {
    "strategy": "s2_flat_at_next_sample",
-   "category": "crypto/up-follow",
+   "category": "crypto/down-follow",
    "n": 1,
-   "wins": 1,
+   "wins": 0,
    "losses": 0,
-   "pushes": 0,
-   "net_pnl_dollars_per_contract": "0.1000",
-   "mean_pnl_dollars_per_contract": "0.1000",
+   "pushes": 1,
+   "net_pnl_dollars_per_contract": "0.0000",
+   "mean_pnl_dollars_per_contract": "0.0000",
    "evaluable": false,
    "markets": [
+    {
+     "ticker": "KXBTCMINY-27JAN01-45000.00",
+     "pnl_dollars": "0.0000",
+     "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXBTCMINY-27JAN01-45000.00"
+    }
+   ]
+  },
+  {
+   "strategy": "s2_flat_at_next_sample",
+   "category": "crypto/up-follow",
+   "n": 3,
+   "wins": 2,
+   "losses": 0,
+   "pushes": 1,
+   "net_pnl_dollars_per_contract": "0.1100",
+   "mean_pnl_dollars_per_contract": "0.0367",
+   "evaluable": false,
+   "markets": [
+    {
+     "ticker": "KXBTCMINY-27JAN01-50000.00",
+     "pnl_dollars": "0.0100",
+     "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXBTCMINY-27JAN01-50000.00"
+    },
+    {
+     "ticker": "KXBTCMINY-27JAN01-55000.00",
+     "pnl_dollars": "0.0000",
+     "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXBTCMINY-27JAN01-55000.00"
+    },
     {
      "ticker": "KXDEMOFUTHOURLY-26NOV20H12-UP",
      "pnl_dollars": "0.1000",
@@ -102,6 +130,24 @@
      "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPRESNOMD-28-HBID"
     }
    ]
+  },
+  {
+   "strategy": "s2_flat_at_next_sample",
+   "category": "gas/down-follow",
+   "n": 1,
+   "wins": 1,
+   "losses": 0,
+   "pushes": 0,
+   "net_pnl_dollars_per_contract": "0.0100",
+   "mean_pnl_dollars_per_contract": "0.0100",
+   "evaluable": false,
+   "markets": [
+    {
+     "ticker": "KXAAAGASM-26DEC31-3.30",
+     "pnl_dollars": "0.0100",
+     "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXAAAGASM-26DEC31-3.30"
+    }
+   ]
   }
  ],
  "portfolio": {
@@ -109,26 +155,30 @@
   "note": "Simulated demo-account trading driven by the alert rules \u2014 no order is sent to Kalshi and no live account is touched. Gross of fees/spread. Numbers below the evaluation floor are published for transparency, not as a result.",
   "books": {
    "s2_flat_at_next_sample": {
-    "n": 3,
+    "n": 7,
     "deduped_duplicates": 5,
     "starting_bankroll_dollars": "1000.0000",
     "contracts_per_trade": "100",
-    "realized_pnl_dollars": "10.0000",
-    "ending_equity_dollars": "1010.0000",
-    "return_on_bankroll_pct": "1.00",
-    "wins": 1,
+    "realized_pnl_dollars": "12.0000",
+    "ending_equity_dollars": "1012.0000",
+    "return_on_bankroll_pct": "1.20",
+    "wins": 3,
     "losses": 0,
-    "win_rate": "33.3",
+    "win_rate": "42.9",
     "max_drawdown_dollars": "0.0000",
     "evaluable": false,
     "by_topic": {
      "crypto": {
-      "n": 1,
-      "pnl_dollars": "10.0000"
+      "n": 4,
+      "pnl_dollars": "11.0000"
      },
      "elections": {
       "n": 2,
       "pnl_dollars": "0.0000"
+     },
+     "gas": {
+      "n": 1,
+      "pnl_dollars": "1.0000"
      }
     },
     "equity_curve": [
@@ -155,11 +205,43 @@
       "stake_dollars": "0.3000",
       "ticker": "KXPRESNOMD-28-HBID",
       "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXPRESNOMD-28-HBID"
+     },
+     {
+      "ts": "2026-11-21T07:10:32Z",
+      "equity_dollars": "1011.0000",
+      "pnl_dollars": "1.0000",
+      "stake_dollars": "29.0000",
+      "ticker": "KXAAAGASM-26DEC31-3.30",
+      "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXAAAGASM-26DEC31-3.30"
+     },
+     {
+      "ts": "2026-11-21T07:10:32Z",
+      "equity_dollars": "1011.0000",
+      "pnl_dollars": "0.0000",
+      "stake_dollars": "20.0000",
+      "ticker": "KXBTCMINY-27JAN01-45000.00",
+      "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXBTCMINY-27JAN01-45000.00"
+     },
+     {
+      "ts": "2026-11-21T07:10:32Z",
+      "equity_dollars": "1012.0000",
+      "pnl_dollars": "1.0000",
+      "stake_dollars": "37.0000",
+      "ticker": "KXBTCMINY-27JAN01-50000.00",
+      "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXBTCMINY-27JAN01-50000.00"
+     },
+     {
+      "ts": "2026-11-21T07:10:32Z",
+      "equity_dollars": "1012.0000",
+      "pnl_dollars": "0.0000",
+      "stake_dollars": "70.0000",
+      "ticker": "KXBTCMINY-27JAN01-55000.00",
+      "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXBTCMINY-27JAN01-55000.00"
      }
     ]
    }
   }
  },
- "trade_count": 8,
+ "trade_count": 12,
  "disclaimer": "Simulated trades on demo prices. Gross of fees, spread and slippage: the public API publishes no fee estimate for a hypothetical order, so none is assumed. Entry is a trade print, not a book quote \u2014 a real order would cross the spread. Not evidence of profitability."
 }

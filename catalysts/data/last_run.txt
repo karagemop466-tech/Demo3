@@ -1,20 +1,20 @@
-recorded_at=2026-11-21T01:43:11Z
-job_status=failure
+recorded_at=2026-11-21T07:10:43Z
+job_status=success
 workflow=Swing + catalyst ledger refresh
-event=schedule
-ref=main
-sha=515c12a75fb2668e52f5ea1cccf956e50b0381a4
-run_url=https://github.com/karagemop466-tech/Demo3/actions/runs/44851686822
-status.json: mode=live finished_at=2026-11-21T01:42:59Z requests=25 errors=4 deadline_reached=False tape_rows=828 swings_total=13 simulated_trades=8
-swings.json: 13 swings, 3 with candidate links, 2 resolved; threshold >= $0.10 from=https://external-api.demo.kalshi.co/trade-api/v2
-feed_health.json: 11 of 17 feeds usable (mode=live, checked_at=2026-11-21T01:43:05Z)
+event=push
+ref=arena/3528551d-demo3
+sha=e642f5b2b271323c728af8fae26405759c1ff90e
+run_url=https://github.com/karagemop466-tech/Demo3/actions/runs/44878101805
+status.json: mode=live finished_at=2026-11-21T07:10:32Z requests=24 errors=4 deadline_reached=False tape_rows=972 swings_total=14 simulated_trades=12
+swings.json: 14 swings, 3 with candidate links, 2 resolved; threshold >= $0.10 from=https://external-api.demo.kalshi.co/trade-api/v2
+feed_health.json: 11 of 17 feeds usable (mode=live, checked_at=2026-11-21T07:10:36Z)
   not usable: AP News (hub RSS is not published; homepage listed for manual review) — HTTP 403
   not usable: Reuters — HTTP 404
   not usable: ESPN — Sports Top News — fetched but no items parsed
   not usable: PGA Tour — News — fetched but no items parsed
   not usable: Golf Digest — HTTP 404
   not usable: U.S. EIA — Petroleum (official government statistics feed) — HTTP 404
-endpoints.json: 7 probed, 7 returned HTTP 200 (probed_at=2026-11-21T01:42:54Z)
+endpoints.json: 7 probed, 7 returned HTTP 200 (probed_at=2026-11-21T07:10:27Z)
   note: status = what the runner observed on this run; blank/unverified rows stay blank on the site, they are never back-filled
   filter ignored by this deployment: GET https://external-api.demo.kalshi.co/trade-api/v2/events?event_tickers=KXDEMOFUTHOURLY-26NOV20H12&with_nested_markets=false
-strategies.json: 8 simulated trade(s), 3 categor(y/ies), 0 above the n>=30 floor
+strategies.json: 12 simulated trade(s), 5 categor(y/ies), 0 above the n>=30 floor
