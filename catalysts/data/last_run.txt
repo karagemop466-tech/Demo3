@@ -1,14 +1,14 @@
-recorded_at=2026-11-21T08:34:39Z
+recorded_at=2026-11-21T08:49:49Z
 job_status=success
 workflow=Swing + catalyst ledger refresh
-event=push
+event=schedule
 ref=main
-sha=07ea0b9b3c3143d8bccf22cd59a73dae9cd35661
-run_url=https://github.com/karagemop466-tech/Demo3/actions/runs/44885423402
-status.json: mode=live finished_at=2026-11-21T08:34:28Z requests=17 errors=0 deadline_reached=False tape_rows=1224 swings_total=14 simulated_trades=13
+sha=251f2cb067e534731ae774a90f4af4c30cf70b89
+run_url=https://github.com/karagemop466-tech/Demo3/actions/runs/44886590073
+status.json: mode=live finished_at=2026-11-21T08:49:38Z requests=17 errors=0 deadline_reached=False tape_rows=1356 swings_total=14 simulated_trades=13
 swings.json: 14 swings, 3 with candidate links, 2 resolved; threshold >= $0.10 from=https://external-api.demo.kalshi.co/trade-api/v2
-feed_health.json: 11 of 11 feeds usable (mode=live, checked_at=2026-11-21T08:34:32Z)
-endpoints.json: 7 probed, 7 returned HTTP 200 (probed_at=2026-11-21T08:34:26Z)
+feed_health.json: 11 of 11 feeds usable (mode=live, checked_at=2026-11-21T08:49:42Z)
+endpoints.json: 7 probed, 7 returned HTTP 200 (probed_at=2026-11-21T08:49:36Z)
   note: status = what the runner observed on this run; blank/unverified rows stay blank on the site, they are never back-filled
   filter ignored by this deployment: GET https://external-api.demo.kalshi.co/trade-api/v2/events?event_tickers=KXDEMOFUTHOURLY-26NOV20H12&with_nested_markets=false
 strategies.json: 13 simulated trade(s), 6 categor(y/ies), 0 above the n>=30 floor

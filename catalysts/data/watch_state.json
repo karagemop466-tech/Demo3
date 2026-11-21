@@ -534,6 +534,6 @@
    "topic": "other"
   }
  },
- "updated_at": "2026-11-21T08:34:28Z",
+ "updated_at": "2026-11-21T08:49:38Z",
  "policy": "A market is polled until the API reports it settled/finalized with a result; then tracking stops and the yes/no outcome is kept."
 }
