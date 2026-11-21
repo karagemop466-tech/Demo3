@@ -1,37 +1,7 @@
 {
- "checked_at": "2026-11-21T01:43:05Z",
+ "checked_at": "2026-11-21T08:28:32Z",
  "mode": "live",
  "feeds": [
-  {
-   "name": "AP News (hub RSS is not published; homepage listed for manual review)",
-   "url": "https://apnews.com/hub/ap-top-news/rss",
-   "topics": [
-    "elections",
-    "gas",
-    "culture",
-    "golf",
-    "crypto"
-   ],
-   "items_parsed": 0,
-   "http_status": null,
-   "ok": false,
-   "error": "HTTP 403",
-   "checked_at": "2026-11-21T01:43:01Z"
-  },
-  {
-   "name": "Reuters",
-   "url": "https://www.reuters.com/arc/outboundfeeds/rss/category/business/?outputType=xml",
-   "topics": [
-    "crypto",
-    "gas",
-    "elections"
-   ],
-   "items_parsed": 0,
-   "http_status": null,
-   "ok": false,
-   "error": "HTTP 404",
-   "checked_at": "2026-11-21T01:43:01Z"
-  },
   {
    "name": "BBC News \u2014 World",
    "url": "https://feeds.bbci.co.uk/news/world/rss.xml",
@@ -43,7 +13,7 @@
    "http_status": 200,
    "ok": true,
    "error": "",
-   "checked_at": "2026-11-21T01:43:02Z"
+   "checked_at": "2026-11-21T08:28:30Z"
   },
   {
    "name": "BBC News \u2014 Business",
@@ -56,7 +26,7 @@
    "http_status": 200,
    "ok": true,
    "error": "",
-   "checked_at": "2026-11-21T01:43:02Z"
+   "checked_at": "2026-11-21T08:28:30Z"
   },
   {
    "name": "BBC News \u2014 Entertainment & Arts",
@@ -64,11 +34,11 @@
    "topics": [
     "culture"
    ],
-   "items_parsed": 20,
+   "items_parsed": 26,
    "http_status": 200,
    "ok": true,
    "error": "",
-   "checked_at": "2026-11-21T01:43:02Z"
+   "checked_at": "2026-11-21T08:28:30Z"
   },
   {
    "name": "NPR \u2014 News Topics",
@@ -82,7 +52,7 @@
    "http_status": 200,
    "ok": true,
    "error": "",
-   "checked_at": "2026-11-21T01:43:02Z"
+   "checked_at": "2026-11-21T08:28:31Z"
   },
   {
    "name": "NPR \u2014 Politics",
@@ -94,7 +64,7 @@
    "http_status": 200,
    "ok": true,
    "error": "",
-   "checked_at": "2026-11-21T01:43:03Z"
+   "checked_at": "2026-11-21T08:28:31Z"
   },
   {
    "name": "NPR \u2014 Business",
@@ -107,7 +77,7 @@
    "http_status": 200,
    "ok": true,
    "error": "",
-   "checked_at": "2026-11-21T01:43:03Z"
+   "checked_at": "2026-11-21T08:28:31Z"
   },
   {
    "name": "CoinDesk",
@@ -119,7 +89,7 @@
    "http_status": 200,
    "ok": true,
    "error": "",
-   "checked_at": "2026-11-21T01:43:03Z"
+   "checked_at": "2026-11-21T08:28:31Z"
   },
   {
    "name": "The Block",
@@ -131,44 +101,7 @@
    "http_status": 200,
    "ok": true,
    "error": "",
-   "checked_at": "2026-11-21T01:43:03Z"
-  },
-  {
-   "name": "ESPN \u2014 Sports Top News",
-   "url": "https://www.espn.com/espn/rss/news",
-   "topics": [
-    "golf",
-    "culture"
-   ],
-   "items_parsed": 0,
-   "http_status": "parse_empty",
-   "ok": false,
-   "error": "fetched but no items parsed",
-   "checked_at": "2026-11-21T01:43:03Z"
-  },
-  {
-   "name": "PGA Tour \u2014 News",
-   "url": "https://www.pgatour.com/en/news/rss",
-   "topics": [
-    "golf"
-   ],
-   "items_parsed": 0,
-   "http_status": "parse_empty",
-   "ok": false,
-   "error": "fetched but no items parsed",
-   "checked_at": "2026-11-21T01:43:03Z"
-  },
-  {
-   "name": "Golf Digest",
-   "url": "https://www.golfdigest.com/rss.xml",
-   "topics": [
-    "golf"
-   ],
-   "items_parsed": 0,
-   "http_status": null,
-   "ok": false,
-   "error": "HTTP 404",
-   "checked_at": "2026-11-21T01:43:04Z"
+   "checked_at": "2026-11-21T08:28:31Z"
   },
   {
    "name": "AAA \u2014 Gas Prices (publisher page; no RSS published)",
@@ -180,19 +113,7 @@
    "http_status": 200,
    "ok": true,
    "error": "",
-   "checked_at": "2026-11-21T01:43:04Z"
-  },
-  {
-   "name": "U.S. EIA \u2014 Petroleum (official government statistics feed)",
-   "url": "https://www.eia.gov/feed/petroleum.xml",
-   "topics": [
-    "gas"
-   ],
-   "items_parsed": 0,
-   "http_status": null,
-   "ok": false,
-   "error": "HTTP 404",
-   "checked_at": "2026-11-21T01:43:04Z"
+   "checked_at": "2026-11-21T08:28:31Z"
   },
   {
    "name": "The Guardian \u2014 World",
@@ -205,7 +126,7 @@
    "http_status": 200,
    "ok": true,
    "error": "",
-   "checked_at": "2026-11-21T01:43:04Z"
+   "checked_at": "2026-11-21T08:28:32Z"
   },
   {
    "name": "Variety",
@@ -217,7 +138,7 @@
    "http_status": 200,
    "ok": true,
    "error": "",
-   "checked_at": "2026-11-21T01:43:04Z"
+   "checked_at": "2026-11-21T08:28:32Z"
   }
  ],
  "docs": {

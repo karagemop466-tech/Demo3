@@ -452,7 +452,8 @@
    "topic": "gas"
   },
   "KXDIESELD-26NOV21-T5.860": {
-   "topic": "other"
+   "topic": "other",
+   "resolved": false
   },
   "KXDIESELD-26NOV21-T5.935": {
    "topic": "other"
@@ -486,8 +487,53 @@
   },
   "KXETHD-26NOV2017-T1859.99": {
    "topic": "crypto"
+  },
+  "KXBTCD-26NOV2117-T56999.99": {
+   "topic": "crypto"
+  },
+  "KXBTCD-26NOV2117-T57749.99": {
+   "topic": "crypto"
+  },
+  "KXBTCD-26NOV2117-T57999.99": {
+   "topic": "crypto"
+  },
+  "KXBTCD-26NOV2117-T58249.99": {
+   "topic": "crypto"
+  },
+  "KXBTCD-26NOV2117-T58749.99": {
+   "topic": "crypto"
+  },
+  "KXDIESELMON-26NOV30-T6.90": {
+   "topic": "other"
+  },
+  "KXDIESELMON-26NOV30-T7.00": {
+   "topic": "other"
+  },
+  "KXDIESELMON-26NOV30-T7.10": {
+   "topic": "other"
+  },
+  "KXDIESELMON-26NOV30-T7.20": {
+   "topic": "other"
+  },
+  "KXDIESELMON-26NOV30-T7.30": {
+   "topic": "other"
+  },
+  "KXDOGED-26NOV2117-T0.0449999": {
+   "topic": "other"
+  },
+  "KXDOGED-26NOV2117-T0.0499999": {
+   "topic": "other"
+  },
+  "KXDOGED-26NOV2117-T0.0599999": {
+   "topic": "other"
+  },
+  "KXDOGED-26NOV2117-T0.1399999": {
+   "topic": "other"
+  },
+  "KXDOGED-26NOV2117-T0.1449999": {
+   "topic": "other"
   }
  },
- "updated_at": "2026-11-21T01:42:59Z",
+ "updated_at": "2026-11-21T08:28:29Z",
  "policy": "A market is polled until the API reports it settled/finalized with a result; then tracking stops and the yes/no outcome is kept."
 }
