@@ -30,8 +30,11 @@ jobs:
 
       - name: Pull portfolio, positions and fills (or record missing credentials)
         env:
-          KALSHI_KEY_ID: ${{ secrets.KALSHI_KEY_ID }}
-          KALSHI_PRIVATE_KEY: ${{ secrets.KALSHI_PRIVATE_KEY }}
+          # Either secret pair works (session 3528551d, F-3528-03): trade.yml documents
+          # KALSHI_DEMO_API_KEY_ID / KALSHI_DEMO_PRIVATE_KEY, this workflow documented
+          # KALSHI_KEY_ID / KALSHI_PRIVATE_KEY. Adding one pair now activates both.
+          KALSHI_KEY_ID: ${{ secrets.KALSHI_KEY_ID || secrets.KALSHI_DEMO_API_KEY_ID }}
+          KALSHI_PRIVATE_KEY: ${{ secrets.KALSHI_PRIVATE_KEY || secrets.KALSHI_DEMO_PRIVATE_KEY }}
         run: python scripts/portfolio_pull.py
 
       - name: Commit and push

@@ -1,9 +1,15 @@
 name: Demo trade / portfolio
 
 # Manual execution against the Kalshi DEMO account.
-# Requires repository secrets:
-#   KALSHI_DEMO_API_KEY_ID     - demo API key id (Account & security -> API Keys)
-#   KALSHI_DEMO_PRIVATE_KEY    - demo private key as PEM text
+# Requires repository secrets (ONE pair is enough - both workflows that need the demo key,
+# this one and kalshi-portfolio.yml, accept either pair since session 3528551d, F-3528-03):
+#   KALSHI_DEMO_API_KEY_ID  or  KALSHI_KEY_ID        - demo API key id (Account & security -> API Keys)
+#   KALSHI_DEMO_PRIVATE_KEY or  KALSHI_PRIVATE_KEY   - demo private key as PEM text
+#
+# Security (session 3528551d, F-3528-02): workflow inputs are passed to the shell through
+# environment variables and an argument array. They are never interpolated into the script
+# text and nothing is eval-ed, because this job holds the signing key
+# (https://docs.github.com/en/actions/concepts/security/script-injections).
 # Demo credentials are NOT shared with production
 # (https://docs.kalshi.com/getting_started/demo_env.md).
 # If the secrets are absent this workflow exits successfully with a clear FLAGGED
@@ -30,7 +36,8 @@ on:
         description: "yes | no (trade mode)"
         required: false
         type: choice
-        options: [yes, no]
+        # quoted: bare yes/no are booleans to YAML 1.1 parsers
+        options: ['yes', 'no']
       count:
         description: "Contracts (trade mode)"
         required: false
@@ -71,13 +78,14 @@ jobs:
       - name: Guard - secrets present?
         id: guard
         env:
-          KEY_ID: ${{ secrets.KALSHI_DEMO_API_KEY_ID }}
-          PEM: ${{ secrets.KALSHI_DEMO_PRIVATE_KEY }}
+          KEY_ID: ${{ secrets.KALSHI_DEMO_API_KEY_ID || secrets.KALSHI_KEY_ID }}
+          PEM: ${{ secrets.KALSHI_DEMO_PRIVATE_KEY || secrets.KALSHI_PRIVATE_KEY }}
         run: |
           if [ -z "$KEY_ID" ] || [ -z "$PEM" ]; then
             echo "FLAGGED: demo-account credentials are not configured as repository secrets."
             echo "Portfolio tracking and order execution are implemented but cannot run until"
-            echo "KALSHI_DEMO_API_KEY_ID / KALSHI_DEMO_PRIVATE_KEY are added (demo environment only)."
+            echo "KALSHI_DEMO_API_KEY_ID / KALSHI_DEMO_PRIVATE_KEY (or KALSHI_KEY_ID / KALSHI_PRIVATE_KEY)"
+            echo "are added (demo environment only)."
             echo "See https://demo.kalshi.co and https://docs.kalshi.com/getting_started/demo_env.md"
             echo "has_secrets=false" >> "$GITHUB_OUTPUT"
           else
@@ -87,18 +95,39 @@ jobs:
       - name: Execute (portfolio / trade / settle)
         if: steps.guard.outputs.has_secrets == 'true'
         env:
-          KALSHI_DEMO_API_KEY_ID: ${{ secrets.KALSHI_DEMO_API_KEY_ID }}
-          KALSHI_DEMO_PRIVATE_KEY: ${{ secrets.KALSHI_DEMO_PRIVATE_KEY }}
+          KALSHI_DEMO_API_KEY_ID: ${{ secrets.KALSHI_DEMO_API_KEY_ID || secrets.KALSHI_KEY_ID }}
+          KALSHI_DEMO_PRIVATE_KEY: ${{ secrets.KALSHI_DEMO_PRIVATE_KEY || secrets.KALSHI_PRIVATE_KEY }}
           KALSHI_API_ROOT: https://external-api.demo.kalshi.co/trade-api/v2
+          IN_MODE: ${{ inputs.mode }}
+          IN_TICKER: ${{ inputs.ticker }}
+          IN_ACTION: ${{ inputs.action }}
+          IN_SIDE: ${{ inputs.side }}
+          IN_COUNT: ${{ inputs.count }}
+          IN_PRICE: ${{ inputs.price }}
+          IN_STRATEGY_TAG: ${{ inputs.strategy_tag }}
+          IN_DRY_RUN: ${{ inputs.dry_run }}
         run: |
-          ARGS="portfolio"
-          if [ "${{ inputs.mode }}" = "trade" ]; then
-            ARGS="trade --ticker '${{ inputs.ticker }}' --action ${{ inputs.action }} --side ${{ inputs.side }} --count ${{ inputs.count }} --price ${{ inputs.price }} --strategy-tag '${{ inputs.strategy_tag }}'"
-            if [ "${{ inputs.dry_run }}" = "true" ]; then ARGS="$ARGS --dry-run"; fi
-          elif [ "${{ inputs.mode }}" = "settle" ]; then
-            ARGS="settle"
-          fi
-          eval "python3 trading/kalshi_trade.py $ARGS"
+          set -euo pipefail
+          fail() { echo "::error::$1"; exit 2; }
+          args=(portfolio)
+          case "$IN_MODE" in
+            trade)
+              # Validate every free-text input before it reaches the trading script.
+              [[ "$IN_TICKER" =~ ^[A-Za-z0-9._-]{1,120}$ ]] || fail "ticker must be 1-120 characters of A-Z a-z 0-9 . _ -"
+              [[ "$IN_ACTION" == "buy" || "$IN_ACTION" == "sell" ]] || fail "action must be buy or sell"
+              [[ "$IN_SIDE" == "yes" || "$IN_SIDE" == "no" ]] || fail "side must be yes or no"
+              [[ "$IN_COUNT" =~ ^[1-9][0-9]{0,5}$ ]] || fail "count must be a positive whole number"
+              [[ "$IN_PRICE" =~ ^(0(\.[0-9]{1,4})?|1(\.0{1,4})?)$ ]] || fail "price must be dollars between 0 and 1, e.g. 0.55"
+              [[ "$IN_STRATEGY_TAG" =~ ^[A-Za-z0-9._-]{1,40}$ ]] || fail "strategy_tag must be 1-40 characters of A-Z a-z 0-9 . _ -"
+              args=(trade --ticker "$IN_TICKER" --action "$IN_ACTION" --side "$IN_SIDE"
+                    --count "$IN_COUNT" --price "$IN_PRICE" --strategy-tag "$IN_STRATEGY_TAG")
+              if [ "$IN_DRY_RUN" = "true" ]; then args+=(--dry-run); fi
+              ;;
+            settle) args=(settle) ;;
+            portfolio|"") args=(portfolio) ;;
+            *) fail "mode must be portfolio, trade or settle" ;;
+          esac
+          python3 trading/kalshi_trade.py "${args[@]}"
 
       - name: Record flag without secrets (writes nothing)
         if: steps.guard.outputs.has_secrets == 'false'
@@ -106,7 +135,10 @@ jobs:
           echo "Unverified: demo credentials not present; no order or portfolio data written." >> "$GITHUB_STEP_SUMMARY"
 
       - name: Commit snapshots
+        env:
+          IN_MODE: ${{ inputs.mode }}
         run: |
+          case "$IN_MODE" in portfolio|trade|settle) ;; *) IN_MODE=portfolio ;; esac
           git config user.name "trading-bot"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git fetch origin "$GITHUB_REF_NAME" --quiet
@@ -115,6 +147,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No trade/portfolio changes to commit"
           else
-            git commit -m "trading: ${{ inputs.mode }} run $(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+            git commit -m "trading: $IN_MODE run $(date -u '+%Y-%m-%dT%H:%M:%SZ')"
             git push origin "HEAD:$GITHUB_REF_NAME"
           fi
