@@ -22,7 +22,7 @@
   ]
  },
  "api_root": "https://external-api.demo.kalshi.co/trade-api/v2",
- "generated_at": "2026-11-21T02:43:52Z",
+ "generated_at": "2026-11-21T06:44:01Z",
  "link_rules": {
   "api_record": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers={ticker}",
   "event_page_linked_only_if_probe_200_and_echoed": true,
@@ -31,7 +31,7 @@
    "attempts": [
     {
      "body_bytes": 0,
-     "checked_at": "2026-11-21T02:44:38Z",
+     "checked_at": "2026-11-21T06:44:47Z",
      "error": "HTTP 429",
      "site_root": "https://kalshi.com",
      "status_code": 429,
@@ -41,7 +41,7 @@
     },
     {
      "body_bytes": 0,
-     "checked_at": "2026-11-21T02:44:40Z",
+     "checked_at": "2026-11-21T06:44:49Z",
      "error": "HTTP 404",
      "site_root": "https://demo.kalshi.co",
      "status_code": 404,
@@ -50,7 +50,7 @@
      "url": "https://demo.kalshi.co/event/KXBTCY-27JAN0100"
     }
    ],
-   "checked_at": "2026-11-21T02:44:40Z",
+   "checked_at": "2026-11-21T06:44:49Z",
    "status_code": 429,
    "ticker_echoed": false,
    "verified_root": null
@@ -70,15 +70,15 @@
     "fade_mean_net_dollars": null,
     "fade_n_quotable": null,
     "n_markets": 2,
-    "n_swings": 35,
+    "n_swings": 50,
     "resolved_no": 0,
     "resolved_yes": 0,
     "reversion_rate": 1.0,
     "reversion_rate_ever": 1.0,
-    "reversion_rate_shrunk": 0.991929,
+    "reversion_rate_shrunk": 0.994754,
     "reversion_rate_within_horizon_minutes": 60,
     "strategies": {},
-    "unresolved": 35
+    "unresolved": 50
    },
    "crypto|5-20c|>40c|>14d": {
     "best_mean_net_dollars": -0.0174,
@@ -95,7 +95,7 @@
     "resolved_yes": 0,
     "reversion_rate": 1.0,
     "reversion_rate_ever": 1.0,
-    "reversion_rate_shrunk": 0.947541,
+    "reversion_rate_shrunk": 0.952785,
     "reversion_rate_within_horizon_minutes": 60,
     "strategies": {
      "fade15": {
@@ -144,7 +144,7 @@
     "resolved_yes": 0,
     "reversion_rate": 0.0,
     "reversion_rate_ever": 0.0,
-    "reversion_rate_shrunk": 0.737049,
+    "reversion_rate_shrunk": 0.743342,
     "reversion_rate_within_horizon_minutes": 60,
     "strategies": {},
     "unresolved": 1
@@ -159,12 +159,12 @@
     "fade_mean_net_dollars": -0.0121,
     "fade_n_quotable": 1,
     "n_markets": 1,
-    "n_swings": 84,
+    "n_swings": 118,
     "resolved_no": 0,
     "resolved_yes": 0,
-    "reversion_rate": 0.952381,
-    "reversion_rate_ever": 0.97619,
-    "reversion_rate_shrunk": 0.950969,
+    "reversion_rate": 0.957627,
+    "reversion_rate_ever": 0.983051,
+    "reversion_rate_shrunk": 0.956694,
     "reversion_rate_within_horizon_minutes": 60,
     "strategies": {
      "fade15": {
@@ -189,10 +189,10 @@
       "n_quotable": 2
      }
     },
-    "unresolved": 84
+    "unresolved": 118
    },
    "elections|0-5c|>40c|>14d": {
-    "best_mean_net_dollars": -0.036363,
+    "best_mean_net_dollars": -0.036883,
     "best_strategy": "fade_settle",
     "evidence": "sufficient",
     "evidence_rule": "n_swings >= 8 and n_markets >= 3",
@@ -201,12 +201,12 @@
     "fade_mean_net_dollars": -0.270542,
     "fade_n_quotable": 52,
     "n_markets": 7,
-    "n_swings": 90,
+    "n_swings": 89,
     "resolved_no": 0,
     "resolved_yes": 0,
-    "reversion_rate": 0.866667,
-    "reversion_rate_ever": 0.977778,
-    "reversion_rate_shrunk": 0.868992,
+    "reversion_rate": 0.865169,
+    "reversion_rate_ever": 0.977528,
+    "reversion_rate_shrunk": 0.867922,
     "reversion_rate_within_horizon_minutes": 60,
     "strategies": {
      "fade15": {
@@ -226,19 +226,19 @@
      "fade_settle": {
       "hit_rate": 0.0,
       "hit_rate_shrunk": 0.000489,
-      "mean_gross_dollars": -0.035481,
-      "mean_net_dollars": -0.036363,
+      "mean_gross_dollars": -0.036019,
+      "mean_net_dollars": -0.036883,
       "n_quotable": 52
      },
      "momo60": {
       "hit_rate": 0.0,
-      "hit_rate_shrunk": 0.026667,
-      "mean_gross_dollars": -0.489606,
-      "mean_net_dollars": -0.496496,
-      "n_quotable": 71
+      "hit_rate_shrunk": 0.027027,
+      "mean_gross_dollars": -0.485057,
+      "mean_net_dollars": -0.491889,
+      "n_quotable": 70
      }
     },
-    "unresolved": 90
+    "unresolved": 89
    },
    "elections|80-95c|>40c|>14d": {
     "best_mean_net_dollars": -0.256911,
@@ -255,7 +255,7 @@
     "resolved_yes": 0,
     "reversion_rate": 0.944444,
     "reversion_rate_ever": 0.944444,
-    "reversion_rate_shrunk": 0.94346,
+    "reversion_rate_shrunk": 0.943795,
     "reversion_rate_within_horizon_minutes": 60,
     "strategies": {
      "fade15": {
@@ -304,7 +304,7 @@
     "resolved_yes": 0,
     "reversion_rate": 0.0,
     "reversion_rate_ever": 1.0,
-    "reversion_rate_shrunk": 0.737049,
+    "reversion_rate_shrunk": 0.743342,
     "reversion_rate_within_horizon_minutes": 60,
     "strategies": {
      "fade15": {
@@ -353,7 +353,7 @@
     "resolved_yes": 0,
     "reversion_rate": 1.0,
     "reversion_rate_ever": 1.0,
-    "reversion_rate_shrunk": 0.937049,
+    "reversion_rate_shrunk": 0.943342,
     "reversion_rate_within_horizon_minutes": 60,
     "strategies": {
      "fade15": {
@@ -402,7 +402,7 @@
     "resolved_yes": 0,
     "reversion_rate": 0.0,
     "reversion_rate_ever": 0.0,
-    "reversion_rate_shrunk": 0.737049,
+    "reversion_rate_shrunk": 0.743342,
     "reversion_rate_within_horizon_minutes": 60,
     "strategies": {
      "fade15": {
@@ -451,7 +451,7 @@
    "taker_rate_multiplier": 0.07
   },
   "global_fade_hit_rate": 0.0,
-  "global_reversion_rate": 0.921311,
+  "global_reversion_rate": 0.929178,
   "min_bucket_markets": 3,
   "min_bucket_n": 8,
   "pass_threshold_score": 0.6,
