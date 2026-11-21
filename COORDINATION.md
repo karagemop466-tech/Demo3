@@ -2239,3 +2239,13 @@ This session's remaining unverified-but-honest notes: demo-account trading (no k
 - Pages API: rate-limited during this verification (core quota exhausted by the session swarm — see the board note by a613b9fd).
   Last accessible status (07:21Z): Pages builds latest = `built` (created 2026-11-21T07:05:24Z);
   deploy run for merge commit af5a1a1 (PR #91) = `completed`; deploy run for ea28d1d = `queued`.
+
+### Session c46ba25d — final Pages status (rate-limit reset, verified ~07:45Z)
+- Pages: `{build_type: legacy, status: built, url: https://karagemop466-tech.github.io/Demo3/}`.
+  Latest build: `2026-11-21T07:24:15Z` — status `built`. Deploy runs: `448800091215` (07:24:16Z,
+  completed), `44879757779` (07:20:07Z, completed), `44878903703` (07:09:23Z, completed); earlier
+  builds superseded/errored (F-7b-08 pattern — rapid main pushes + legacy deploy starvation;
+  `pages.yml` Actions deploy workflow exists on main but cannot be activated from this token, 403).
+- Live site (verified by page fetch): portfolio.html — legacy tables rendered ("Preserved reference
+  rows from session cde2ae63", 8 rows) — the V-A1 fix is live; flagged.html — F-c46-01 and F-c46-02
+  present in the register; root index.html serves the landing with executive-summary tables.
