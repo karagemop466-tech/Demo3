@@ -59,13 +59,13 @@
    "unresolved": 1
   },
   "crypto|95-100c|>40c|>14d": {
-   "mean_delta_dollars": 0.959924,
-   "n": 132,
+   "mean_delta_dollars": 0.959925,
+   "n": 133,
    "n_markets": 1,
    "resolved_no": 0,
    "resolved_yes": 0,
-   "reversion_hits": 127,
-   "reversion_hits_ever": 130,
+   "reversion_hits": 129,
+   "reversion_hits_ever": 132,
    "strat": {
     "fade15": {
      "gross_sum": -0.01,
@@ -86,7 +86,7 @@
      "wins": 0
     }
    },
-   "unresolved": 132
+   "unresolved": 133
   },
   "elections|0-5c|>40c|>14d": {
    "mean_delta_dollars": 0.805693,
@@ -285,7 +285,7 @@
    "resolved_yes": 0,
    "reversion_rate": 1.0,
    "reversion_rate_ever": 1.0,
-   "reversion_rate_shrunk": 0.99552,
+   "reversion_rate_shrunk": 0.99571,
    "reversion_rate_within_horizon_minutes": 60,
    "strategies": {},
    "unresolved": 56
@@ -305,7 +305,7 @@
    "resolved_yes": 0,
    "reversion_rate": 1.0,
    "reversion_rate_ever": 1.0,
-   "reversion_rate_shrunk": 0.955197,
+   "reversion_rate_shrunk": 0.957105,
    "reversion_rate_within_horizon_minutes": 60,
    "strategies": {
     "fade15": {
@@ -354,7 +354,7 @@
    "resolved_yes": 0,
    "reversion_rate": 0.0,
    "reversion_rate_ever": 0.0,
-   "reversion_rate_shrunk": 0.746237,
+   "reversion_rate_shrunk": 0.748526,
    "reversion_rate_within_horizon_minutes": 60,
    "strategies": {},
    "unresolved": 1
@@ -369,12 +369,12 @@
    "fade_mean_net_dollars": -0.0121,
    "fade_n_quotable": 1,
    "n_markets": 1,
-   "n_swings": 132,
+   "n_swings": 133,
    "resolved_no": 0,
    "resolved_yes": 0,
-   "reversion_rate": 0.962121,
-   "reversion_rate_ever": 0.984848,
-   "reversion_rate_shrunk": 0.961259,
+   "reversion_rate": 0.969925,
+   "reversion_rate_ever": 0.992481,
+   "reversion_rate_shrunk": 0.968924,
    "reversion_rate_within_horizon_minutes": 60,
    "strategies": {
     "fade15": {
@@ -399,7 +399,7 @@
      "n_quotable": 2
     }
    },
-   "unresolved": 132
+   "unresolved": 133
   },
   "elections|0-5c|>40c|>14d": {
    "best_mean_net_dollars": -0.036781,
@@ -416,7 +416,7 @@
    "resolved_yes": 0,
    "reversion_rate": 0.863636,
    "reversion_rate_ever": 0.977273,
-   "reversion_rate_shrunk": 0.866643,
+   "reversion_rate_shrunk": 0.866768,
    "reversion_rate_within_horizon_minutes": 60,
    "strategies": {
     "fade15": {
@@ -465,7 +465,7 @@
    "resolved_yes": 0,
    "reversion_rate": 0.944444,
    "reversion_rate_ever": 0.944444,
-   "reversion_rate_shrunk": 0.943949,
+   "reversion_rate_shrunk": 0.944071,
    "reversion_rate_within_horizon_minutes": 60,
    "strategies": {
     "fade15": {
@@ -514,7 +514,7 @@
    "resolved_yes": 0,
    "reversion_rate": 0.0,
    "reversion_rate_ever": 1.0,
-   "reversion_rate_shrunk": 0.746237,
+   "reversion_rate_shrunk": 0.748526,
    "reversion_rate_within_horizon_minutes": 60,
    "strategies": {
     "fade15": {
@@ -563,7 +563,7 @@
    "resolved_yes": 0,
    "reversion_rate": 1.0,
    "reversion_rate_ever": 1.0,
-   "reversion_rate_shrunk": 0.946237,
+   "reversion_rate_shrunk": 0.948526,
    "reversion_rate_within_horizon_minutes": 60,
    "strategies": {
     "fade15": {
@@ -612,7 +612,7 @@
    "resolved_yes": 0,
    "reversion_rate": 0.0,
    "reversion_rate_ever": 0.0,
-   "reversion_rate_shrunk": 0.746237,
+   "reversion_rate_shrunk": 0.748526,
    "reversion_rate_within_horizon_minutes": 60,
    "strategies": {
     "fade15": {
@@ -649,8 +649,8 @@
  },
  "counts": {
   "events": 4,
-  "strategy_rows": 1488,
-  "swings": 372
+  "strategy_rows": 1492,
+  "swings": 373
  },
  "meta": {
   "api_root": "https://external-api.demo.kalshi.co/trade-api/v2",
@@ -667,7 +667,7 @@
    "attempts": [
     {
      "body_bytes": 0,
-     "checked_at": "2026-11-21T08:06:26Z",
+     "checked_at": "2026-11-21T08:11:23Z",
      "error": "HTTP 429",
      "site_root": "https://kalshi.com",
      "status_code": 429,
@@ -677,7 +677,7 @@
     },
     {
      "body_bytes": 0,
-     "checked_at": "2026-11-21T08:06:28Z",
+     "checked_at": "2026-11-21T08:11:25Z",
      "error": "HTTP 404",
      "site_root": "https://demo.kalshi.co",
      "status_code": 404,
@@ -686,13 +686,13 @@
      "url": "https://demo.kalshi.co/event/KXBTCY-27JAN0100"
     }
    ],
-   "checked_at": "2026-11-21T08:06:28Z",
+   "checked_at": "2026-11-21T08:11:25Z",
    "status_code": 429,
    "ticker_echoed": false,
    "verified_root": null
   },
   "events_with_swings": 4,
-  "generated_at": "2026-11-21T08:05:29Z",
+  "generated_at": "2026-11-21T08:10:01Z",
   "hours_1m": 48,
   "hours_60m": 168,
   "markets_scanned": 72,
@@ -716,7 +716,7 @@
     "attempts": [
      {
       "body_bytes": 0,
-      "checked_at": "2026-11-21T08:06:26Z",
+      "checked_at": "2026-11-21T08:11:23Z",
       "error": "HTTP 429",
       "site_root": "https://kalshi.com",
       "status_code": 429,
@@ -726,7 +726,7 @@
      },
      {
       "body_bytes": 0,
-      "checked_at": "2026-11-21T08:06:28Z",
+      "checked_at": "2026-11-21T08:11:25Z",
       "error": "HTTP 404",
       "site_root": "https://demo.kalshi.co",
       "status_code": 404,
@@ -735,7 +735,7 @@
       "url": "https://demo.kalshi.co/event/KXBTCY-27JAN0100"
      }
     ],
-    "checked_at": "2026-11-21T08:06:28Z",
+    "checked_at": "2026-11-21T08:11:25Z",
     "status_code": 429,
     "ticker_echoed": false,
     "verified_root": null
@@ -754,7 +754,7 @@
    "universe_units": 72,
    "warnings": []
   },
-  "swings_found": 372,
+  "swings_found": 373,
   "threshold_dollars": 0.1,
   "window_minutes": 60
  },
@@ -769,11 +769,11 @@
      "mean_net_dollars": -0.01475,
      "mean_roi_on_paid": -0.291835,
      "median_net_dollars": -0.01475,
-     "n": 191,
+     "n": 192,
      "n_quotable": 2,
      "not_measurable": 0,
      "total_net_dollars": -0.0295,
-     "unquotable": 189
+     "unquotable": 190
     },
     "elections": {
      "hit_rate": 0.0,
@@ -806,7 +806,7 @@
    },
    "overall": {
     "direction_split": {
-     "down": 225,
+     "down": 226,
      "up": 147
     },
     "hit_rate": 0.0,
@@ -816,11 +816,11 @@
     "mean_net_dollars": -0.266975,
     "mean_roi_on_paid": -0.46044,
     "median_net_dollars": -0.0015,
-    "n": 372,
+    "n": 373,
     "n_quotable": 121,
     "not_measurable": 0,
     "total_net_dollars": -32.304,
-    "unquotable": 251
+    "unquotable": 252
    }
   },
   "fade60": {
@@ -833,11 +833,11 @@
      "mean_net_dollars": -0.01475,
      "mean_roi_on_paid": -0.291835,
      "median_net_dollars": -0.01475,
-     "n": 191,
+     "n": 192,
      "n_quotable": 2,
      "not_measurable": 0,
      "total_net_dollars": -0.0295,
-     "unquotable": 189
+     "unquotable": 190
     },
     "elections": {
      "hit_rate": 0.0,
@@ -870,7 +870,7 @@
    },
    "overall": {
     "direction_split": {
-     "down": 225,
+     "down": 226,
      "up": 147
     },
     "hit_rate": 0.0,
@@ -880,11 +880,11 @@
     "mean_net_dollars": -0.264534,
     "mean_roi_on_paid": -0.455676,
     "median_net_dollars": -0.0015,
-    "n": 372,
+    "n": 373,
     "n_quotable": 125,
     "not_measurable": 0,
     "total_net_dollars": -33.0668,
-    "unquotable": 247
+    "unquotable": 248
    }
   },
   "fade_settle": {
@@ -897,11 +897,11 @@
      "mean_net_dollars": -0.0597,
      "mean_roi_on_paid": -0.062618,
      "median_net_dollars": -0.0597,
-     "n": 191,
+     "n": 192,
      "n_quotable": 1,
      "not_measurable": 0,
      "total_net_dollars": -0.0597,
-     "unquotable": 190
+     "unquotable": 191
     },
     "elections": {
      "hit_rate": 0.0,
@@ -934,7 +934,7 @@
    },
    "overall": {
     "direction_split": {
-     "down": 225,
+     "down": 226,
      "up": 147
     },
     "hit_rate": 0.0068,
@@ -944,11 +944,11 @@
     "mean_net_dollars": -0.1781,
     "mean_roi_on_paid": -0.379731,
     "median_net_dollars": -0.0015,
-    "n": 372,
+    "n": 373,
     "n_quotable": 146,
     "not_measurable": 0,
     "total_net_dollars": -26.0026,
-    "unquotable": 226
+    "unquotable": 227
    }
   },
   "momo60": {
@@ -961,11 +961,11 @@
      "mean_net_dollars": -0.477125,
      "mean_roi_on_paid": -0.551976,
      "median_net_dollars": -0.4761,
-     "n": 191,
+     "n": 192,
      "n_quotable": 4,
      "not_measurable": 0,
      "total_net_dollars": -1.9085,
-     "unquotable": 187
+     "unquotable": 188
     },
     "elections": {
      "hit_rate": 0.0,
@@ -998,7 +998,7 @@
    },
    "overall": {
     "direction_split": {
-     "down": 225,
+     "down": 226,
      "up": 147
     },
     "hit_rate": 0.0,
@@ -1008,11 +1008,11 @@
     "mean_net_dollars": -0.380803,
     "mean_roi_on_paid": -0.518038,
     "median_net_dollars": -0.0056,
-    "n": 372,
+    "n": 373,
     "n_quotable": 143,
     "not_measurable": 0,
     "total_net_dollars": -54.4548,
-    "unquotable": 229
+    "unquotable": 230
    }
   }
  }

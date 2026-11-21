@@ -22,7 +22,7 @@
   ]
  },
  "api_root": "https://external-api.demo.kalshi.co/trade-api/v2",
- "generated_at": "2026-11-21T08:05:29Z",
+ "generated_at": "2026-11-21T08:10:01Z",
  "link_rules": {
   "api_record": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers={ticker}",
   "event_page_linked_only_if_probe_200_and_echoed": true,
@@ -31,7 +31,7 @@
    "attempts": [
     {
      "body_bytes": 0,
-     "checked_at": "2026-11-21T08:06:26Z",
+     "checked_at": "2026-11-21T08:11:23Z",
      "error": "HTTP 429",
      "site_root": "https://kalshi.com",
      "status_code": 429,
@@ -41,7 +41,7 @@
     },
     {
      "body_bytes": 0,
-     "checked_at": "2026-11-21T08:06:28Z",
+     "checked_at": "2026-11-21T08:11:25Z",
      "error": "HTTP 404",
      "site_root": "https://demo.kalshi.co",
      "status_code": 404,
@@ -50,7 +50,7 @@
      "url": "https://demo.kalshi.co/event/KXBTCY-27JAN0100"
     }
    ],
-   "checked_at": "2026-11-21T08:06:28Z",
+   "checked_at": "2026-11-21T08:11:25Z",
    "status_code": 429,
    "ticker_echoed": false,
    "verified_root": null
@@ -75,7 +75,7 @@
     "resolved_yes": 0,
     "reversion_rate": 1.0,
     "reversion_rate_ever": 1.0,
-    "reversion_rate_shrunk": 0.99552,
+    "reversion_rate_shrunk": 0.99571,
     "reversion_rate_within_horizon_minutes": 60,
     "strategies": {},
     "unresolved": 56
@@ -95,7 +95,7 @@
     "resolved_yes": 0,
     "reversion_rate": 1.0,
     "reversion_rate_ever": 1.0,
-    "reversion_rate_shrunk": 0.955197,
+    "reversion_rate_shrunk": 0.957105,
     "reversion_rate_within_horizon_minutes": 60,
     "strategies": {
      "fade15": {
@@ -144,7 +144,7 @@
     "resolved_yes": 0,
     "reversion_rate": 0.0,
     "reversion_rate_ever": 0.0,
-    "reversion_rate_shrunk": 0.746237,
+    "reversion_rate_shrunk": 0.748526,
     "reversion_rate_within_horizon_minutes": 60,
     "strategies": {},
     "unresolved": 1
@@ -159,12 +159,12 @@
     "fade_mean_net_dollars": -0.0121,
     "fade_n_quotable": 1,
     "n_markets": 1,
-    "n_swings": 132,
+    "n_swings": 133,
     "resolved_no": 0,
     "resolved_yes": 0,
-    "reversion_rate": 0.962121,
-    "reversion_rate_ever": 0.984848,
-    "reversion_rate_shrunk": 0.961259,
+    "reversion_rate": 0.969925,
+    "reversion_rate_ever": 0.992481,
+    "reversion_rate_shrunk": 0.968924,
     "reversion_rate_within_horizon_minutes": 60,
     "strategies": {
      "fade15": {
@@ -189,7 +189,7 @@
       "n_quotable": 2
      }
     },
-    "unresolved": 132
+    "unresolved": 133
    },
    "elections|0-5c|>40c|>14d": {
     "best_mean_net_dollars": -0.036781,
@@ -206,7 +206,7 @@
     "resolved_yes": 0,
     "reversion_rate": 0.863636,
     "reversion_rate_ever": 0.977273,
-    "reversion_rate_shrunk": 0.866643,
+    "reversion_rate_shrunk": 0.866768,
     "reversion_rate_within_horizon_minutes": 60,
     "strategies": {
      "fade15": {
@@ -255,7 +255,7 @@
     "resolved_yes": 0,
     "reversion_rate": 0.944444,
     "reversion_rate_ever": 0.944444,
-    "reversion_rate_shrunk": 0.943949,
+    "reversion_rate_shrunk": 0.944071,
     "reversion_rate_within_horizon_minutes": 60,
     "strategies": {
      "fade15": {
@@ -304,7 +304,7 @@
     "resolved_yes": 0,
     "reversion_rate": 0.0,
     "reversion_rate_ever": 1.0,
-    "reversion_rate_shrunk": 0.746237,
+    "reversion_rate_shrunk": 0.748526,
     "reversion_rate_within_horizon_minutes": 60,
     "strategies": {
      "fade15": {
@@ -353,7 +353,7 @@
     "resolved_yes": 0,
     "reversion_rate": 1.0,
     "reversion_rate_ever": 1.0,
-    "reversion_rate_shrunk": 0.946237,
+    "reversion_rate_shrunk": 0.948526,
     "reversion_rate_within_horizon_minutes": 60,
     "strategies": {
      "fade15": {
@@ -402,7 +402,7 @@
     "resolved_yes": 0,
     "reversion_rate": 0.0,
     "reversion_rate_ever": 0.0,
-    "reversion_rate_shrunk": 0.746237,
+    "reversion_rate_shrunk": 0.748526,
     "reversion_rate_within_horizon_minutes": 60,
     "strategies": {
      "fade15": {
@@ -451,7 +451,7 @@
    "taker_rate_multiplier": 0.07
   },
   "global_fade_hit_rate": 0.0,
-  "global_reversion_rate": 0.932796,
+  "global_reversion_rate": 0.935657,
   "min_bucket_markets": 3,
   "min_bucket_n": 8,
   "pass_threshold_score": 0.6,
