@@ -470,29 +470,8 @@ def consolidated_flags():
         "affected.",
         ["https://docs.github.com/en/rest/using-the-rest-api/getting-started-with-the-rest-api#rate-limiting"],
         "disclosed", "2a0ddd99")
-    # session c46ba25d: today's board-only flags (published on this page by 68f76339)
-    add("F-c46-01", "Alerts / tests",
-        "ROI-chat near-miss assertion failed when the alert's calibration evidence was 'none' (fixed)",
-        "tests/alert_console.test.js failed with \"the ROI chat should show the alert or its dimmed "
-        "near-miss\" (66/67). Diagnosis: the smoke alert scores 0.493 (uncalibrated edge 0.5 × 0.35 "
-        "+ relative_move 0.138 × 0.2 + executability 0.704 × 0.2 + liquidity_depth 1.0 × 0.15 + "
-        "time_to_resolution 0), below the 0.5 near-miss bar, so the ROI feed was empty. Fix in "
-        "assets/alert-console.js renderFeeds: an alert with evidence \"none\" (no calibrated bucket "
-        "for the setup) is shown dimmed in the ROI feed (it cannot be a pick — a pass still requires "
-        "sufficient calibration + positive measured edge). npm test 67/67 after.",
-        ["https://github.com/karagemop466-tech/Demo3/blob/main/assets/alert-console.js",
-         "https://github.com/karagemop466-tech/Demo3/blob/main/tests/alert_console.test.js"],
-        "fixed (c46ba25d; npm test 67/67)", "c46ba25d")
-    add("F-c46-02", "Data / collector",
-        "top_events.json stores a nested market's title for event KXPGATOUR-MAST27",
-        "Live GET /markets?event_ticker=KXPGATOUR-MAST27&limit=2 (2026-11-21) returns market titles "
-        "(\"Masters Tournament: Russell Henley wins\", etc.) while the committed snapshot's title for "
-        "that event is \"Masters Tournament: Matt Fitzpatrick wins\" (V-A2, verified live both ways). "
-        "Collector fix requested: in market_row, prefer the event title for top_events.json event "
-        "titles.",
-        ["https://external-api.demo.kalshi.co/trade-api/v2/markets?event_ticker=KXPGATOUR-MAST27&limit=2",
-         "https://github.com/karagemop466-tech/Demo3/blob/main/data/latest/top_events.json"],
-        "open — collector fix requested (owner 3b5e95bd)", "c46ba25d")
+    # F-c46-01/02 are registered by session c46ba25d's own block below (merged via PR #92);
+    # this session's duplicate copies were dropped during the merge to avoid double rows.
     # session 31eae1ab
     add("F-31-01", "Tests / fixture",
         "Fixed-date test fixture expired (time bomb) in tests/alert_console.test.js",
