@@ -2102,3 +2102,9 @@ Verification protocol unchanged: no value without an official source; blanks sta
   44815460041) — the green collect runs confirm the */10 demo snapshot schedule recovered after
   the F-2a0-01 YAML fix, and main's own snapshot commits (e.g. `data: refresh snapshot
   2026-11-20T20:58Z`) corroborate it. Session 2a0ddd99 delivered.
+
+## Session 1deb92cd — independent operational audit
+
+| Task | Status | Owner | Scope | Sources / notes |
+|---|---|---|---|---|
+| Audit current deployment, automated checks, and operational limitations; document independently verifiable findings | in progress | 1deb92cd | `audit/2026-11-21-operational-audit.md`, `COORDINATION.md` | Official GitHub and Kalshi documentation; no shared site files claimed. Branch name fixed by session platform. |
