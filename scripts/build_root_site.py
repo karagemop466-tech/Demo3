@@ -649,6 +649,37 @@ def consolidated_flags():
         "blank and flagged (see I-12 and F-3B-03).",
         [f"{DOCS}/getting_started/demo_env", "https://help.kalshi.com/en/articles/13823775-creating-and-using-a-demo-account"],
         "open - needs a user-created demo key", "6d201d19")
+    # session c46ba25d — integration pass (2026-11-21)
+    add("F-c46-01", "Alert console", "ROI chat empty for alerts without calibration (fixed at integration)",
+        "The live swing-alert console's ROI feed was empty for alerts whose setup has no calibrated "
+        "bucket: the uncalibrated edge component scored 0.5 and the smoke alert scored 0.493, just below "
+        "the 0.5 dimmed-near-miss bar, so the ROI chat showed nothing. tests/alert_console.test.js "
+        "asserted \"the ROI chat should show the alert or its dimmed near-miss\" and failed "
+        "(npm test: 66 pass / 1 fail). Fixed in assets/alert-console.js renderFeeds(): an alert with "
+        "evidence \"none\" (no calibrated bucket for the setup) is now shown dimmed in the ROI feed; "
+        "pass still requires sufficient calibration plus a positive measured edge. npm test 67/67 after "
+        "the fix (scoring path reproduced in node: 0.35*0.5 + 0.2*0.1375 + 0.2*0.704 + 0.15*1.0 = 0.493).",
+        [f"{DOCS}/api-reference/market/get-markets",
+         "https://github.com/karagemop466-tech/Demo3/blob/main/assets/alert-console.js",
+         "https://github.com/karagemop466-tech/Demo3/blob/main/assets/swing-core.js",
+         "https://github.com/karagemop466-tech/Demo3/blob/main/tests/alert_console.test.js"],
+        "resolved - test-covered", "c46ba25d")
+    add("F-c46-02", "Data pipeline", "data/latest/top_events.json stores a nested market's title for KXPGATOUR-MAST27",
+        "The committed event title for KXPGATOUR-MAST27 in data/latest/top_events.json is \"Masters "
+        "Tournament: Matt Fitzpatrick wins\", but the live exchange records the event title \"2027 The "
+        "Masters Champion\" (GET /events/KXPGATOUR-MAST27, live 2026-11-21) and per-golfer market titles "
+        "(e.g. \"Masters Tournament: Russell Henley wins\" for KXPGATOUR-MAST27-RHEN, GET "
+        "/markets?event_ticker=KXPGATOUR-MAST27&limit=2, live 2026-11-21). The collector prefers the "
+        "event title from the events catalog (aggregation: ev_by_ticker[et][\"title\"]); the committed row "
+        "shows a nested market title, so either the event record was missing from /events when the "
+        "snapshot was generated or the title changed since. Collector owner 3b5e95bd: re-run "
+        "scripts/collect_kalshi_data.py and confirm data/latest/top_events.json shows the live event "
+        "title.",
+        ["https://external-api.demo.kalshi.co/trade-api/v2/events/KXPGATOUR-MAST27",
+         "https://external-api.demo.kalshi.co/trade-api/v2/markets?event_ticker=KXPGATOUR-MAST27&limit=2",
+         f"{DOCS}/api-reference/events/get-event", f"{DOCS}/api-reference/market/get-markets",
+         "https://github.com/karagemop466-tech/Demo3/blob/main/data/latest/top_events.json"],
+        "open - collector owner", "c46ba25d")
     return rows
 
 

@@ -110,9 +110,9 @@
      "wins": 0
     },
     "fade_settle": {
-     "gross_sum": -1.8619999999999988,
+     "gross_sum": -1.873,
      "n": 50,
-     "net_sum": -1.9058000000000006,
+     "net_sum": -1.9167999999999994,
      "wins": 0
     },
     "momo60": {
@@ -402,7 +402,7 @@
    "unresolved": 121
   },
   "elections|0-5c|>40c|>14d": {
-   "best_mean_net_dollars": -0.038116,
+   "best_mean_net_dollars": -0.038336,
    "best_strategy": "fade_settle",
    "evidence": "sufficient",
    "evidence_rule": "n_swings >= 8 and n_markets >= 3",
@@ -436,8 +436,8 @@
     "fade_settle": {
      "hit_rate": 0.0,
      "hit_rate_shrunk": 0.000494,
-     "mean_gross_dollars": -0.03724,
-     "mean_net_dollars": -0.038116,
+     "mean_gross_dollars": -0.03746,
+     "mean_net_dollars": -0.038336,
      "n_quotable": 50
     },
     "momo60": {
@@ -667,7 +667,7 @@
    "attempts": [
     {
      "body_bytes": 0,
-     "checked_at": "2026-11-21T07:09:11Z",
+     "checked_at": "2026-11-21T07:06:35Z",
      "error": "HTTP 429",
      "site_root": "https://kalshi.com",
      "status_code": 429,
@@ -677,7 +677,7 @@
     },
     {
      "body_bytes": 0,
-     "checked_at": "2026-11-21T07:09:13Z",
+     "checked_at": "2026-11-21T07:06:38Z",
      "error": "HTTP 404",
      "site_root": "https://demo.kalshi.co",
      "status_code": 404,
@@ -686,13 +686,13 @@
      "url": "https://demo.kalshi.co/event/KXBTCY-27JAN0100"
     }
    ],
-   "checked_at": "2026-11-21T07:09:13Z",
+   "checked_at": "2026-11-21T07:06:38Z",
    "status_code": 429,
    "ticker_echoed": false,
    "verified_root": null
   },
   "events_with_swings": 4,
-  "generated_at": "2026-11-21T07:07:48Z",
+  "generated_at": "2026-11-21T07:05:45Z",
   "hours_1m": 48,
   "hours_60m": 168,
   "markets_scanned": 72,
@@ -716,7 +716,7 @@
     "attempts": [
      {
       "body_bytes": 0,
-      "checked_at": "2026-11-21T07:09:11Z",
+      "checked_at": "2026-11-21T07:06:35Z",
       "error": "HTTP 429",
       "site_root": "https://kalshi.com",
       "status_code": 429,
@@ -726,7 +726,7 @@
      },
      {
       "body_bytes": 0,
-      "checked_at": "2026-11-21T07:09:13Z",
+      "checked_at": "2026-11-21T07:06:38Z",
       "error": "HTTP 404",
       "site_root": "https://demo.kalshi.co",
       "status_code": 404,
@@ -735,7 +735,7 @@
       "url": "https://demo.kalshi.co/event/KXBTCY-27JAN0100"
      }
     ],
-    "checked_at": "2026-11-21T07:09:13Z",
+    "checked_at": "2026-11-21T07:06:38Z",
     "status_code": 429,
     "ticker_echoed": false,
     "verified_root": null
@@ -907,14 +907,14 @@
      "hit_rate": 0.0,
      "hit_rate_gross": 0.0,
      "mean_fees_dollars": 0.002782,
-     "mean_gross_dollars": -0.173041,
-     "mean_net_dollars": -0.175823,
-     "mean_roi_on_paid": -0.388229,
+     "mean_gross_dollars": -0.173116,
+     "mean_net_dollars": -0.175898,
+     "mean_roi_on_paid": -0.388305,
      "median_net_dollars": -0.0015,
      "n": 179,
      "n_quotable": 146,
      "not_measurable": 0,
-     "total_net_dollars": -25.6701,
+     "total_net_dollars": -25.6811,
      "unquotable": 33
     },
     "gas": {
@@ -940,14 +940,14 @@
     "hit_rate": 0.0067,
     "hit_rate_gross": 0.0067,
     "mean_fees_dollars": 0.003079,
-    "mean_gross_dollars": -0.170293,
-    "mean_net_dollars": -0.173372,
-    "mean_roi_on_paid": -0.388586,
+    "mean_gross_dollars": -0.170367,
+    "mean_net_dollars": -0.173445,
+    "mean_roi_on_paid": -0.38866,
     "median_net_dollars": -0.0015,
     "n": 357,
     "n_quotable": 150,
     "not_measurable": 0,
-    "total_net_dollars": -26.0058,
+    "total_net_dollars": -26.0168,
     "unquotable": 207
    }
   },

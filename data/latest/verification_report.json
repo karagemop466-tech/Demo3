@@ -3502,7 +3502,7 @@
   },
   {
    "check": "orderbook KXPRESNOMD-28-BS structure",
-   "detail": "{\"no_dollars\": [[\"0.0300\", \"10.00\"], [\"0.9930\", \"119047.60\"], [\"0.9940\", \"138888.85\"], [\"0.9950\", \"162103.56\"]], \"yes_do",
+   "detail": "{\"no_dollars\": [[\"0.0300\", \"10.00\"], [\"0.9930\", \"119047.60\"], [\"0.9940\", \"138888.85\"], [\"0.9950\", \"162127.08\"]], \"yes_do",
    "ok": true
   },
   {
@@ -3512,7 +3512,7 @@
   },
   {
    "check": "orderbook KXPRESNOMD-28-EWAR structure",
-   "detail": "{\"no_dollars\": [[\"0.9700\", \"5555.55\"], [\"0.9800\", \"8333.33\"], [\"0.9900\", \"16650.44\"]], \"yes_dollars\": []}",
+   "detail": "{\"no_dollars\": [[\"0.9700\", \"5555.55\"], [\"0.9800\", \"8333.33\"], [\"0.9900\", \"16666.66\"]], \"yes_dollars\": []}",
    "ok": true
   },
   {
@@ -3626,7 +3626,26 @@
    "ok": true
   }
  ],
- "drift_notices": [],
+ "drift_notices": [
+  {
+   "field": "status",
+   "live": "closed",
+   "row": "KXETHD-26NOV2102-T1289.99",
+   "stored": "active"
+  },
+  {
+   "field": "status",
+   "live": "closed",
+   "row": "KXBTC-26NOV2102-B68250",
+   "stored": "active"
+  },
+  {
+   "field": "status",
+   "live": "closed",
+   "row": "KXBTC-26NOV2102-B67950",
+   "stored": "active"
+  }
+ ],
  "hard_failures": [],
  "policy": {
   "dynamic_fields": "drift tolerated (live market), reported only",
@@ -3635,10 +3654,10 @@
  },
  "summary": {
   "checked": 725,
-  "drift_notices": 0,
+  "drift_notices": 3,
   "hard_failures": 0,
   "passed": 725
  },
  "tool": "scripts/verify_rows.py v1",
- "verified_at": "2026-11-21T07:03:24+00:00"
+ "verified_at": "2026-11-21T07:00:15+00:00"
 }
