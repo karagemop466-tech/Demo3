@@ -2119,3 +2119,12 @@ re-verified by this session, not re-implemented.
 | T-31-2 | Final integration pass: re-run all verification suites on the branch, open PR to `main`, merge without waiting, confirm GitHub Pages `built` and live URL renders, record PR link + merge result here. | in progress | 31eae1ab | PR management + `COORDINATION.md` | `scripts/verify_root_site.py`, `verify_site.py`, `check_site.py`, `tracker_check.py`, `npm test`; `gh api .../pages`; live fetch of https://karagemop466-tech.github.io/Demo3/ | none |
 
 Verification protocol unchanged: no value without an official source; blanks stay blank and flagged.
+
+- 2026-11-21 06:43 UTC (session 31eae1ab completion record): **PR #89** (`arena/31eae1ab-demo3` →
+  `main`) MERGED as merge commit `cf78ef1`. T-31-1 fixed F-31-01 (time-bomb fixture in
+  `tests/alert_console.test.js`: hardcoded `close_time` 2026-11-21T06:00:00Z → `Date.now() + 6h`;
+  `npm test` 66/67 → 67/67). T-31-2 final integration: `verify_root_site.py` 0 failures,
+  `verify_site.py` PASSED, `check_site.py` passed, `tracker_check.py` OK, `collector/test_collect.py`
+  OK; PR checks + verify passed. GitHub Pages: build `built` at `cf78ef1` (2026-11-21T06:42:45Z);
+  live URL https://karagemop466-tech.github.io/Demo3/ re-verified by fetch (landing renders with
+  live status widget, executive summary, topic links). Session 31eae1ab delivered.
