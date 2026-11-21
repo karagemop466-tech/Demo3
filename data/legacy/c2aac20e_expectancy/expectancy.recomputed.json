@@ -1,0 +1,438 @@
+{
+ "title": "Expectancy, recomputed on current main data (session d8f4577a)",
+ "formula": "yes_expectancy = win_rate_yes - avg_yes_price; no_expectancy = (1 - win_rate_yes) - (1 - avg_yes_price). Both in dollars per $1 contract, fees excluded.",
+ "input_file": "data/latest/markets_settled.json",
+ "input_retrieved_at": "2026-11-21T07:32:14+00:00",
+ "input_count_field": 20783,
+ "rows_usable": 20783,
+ "rows_excluded": {},
+ "synthetic_series_prefixes": [
+  "KXDEMOFUTHOURLY",
+  "KXQUICKSETTLE",
+  "KXMAXSHARDINGTEST",
+  "KXRFTEST",
+  "KXTEST",
+  "KXDEMO"
+ ],
+ "synthetic_rows_included_in_totals": 0,
+ "buckets": [
+  {
+   "bucket": "<=0.10",
+   "n": 19967,
+   "yes": 1084,
+   "no": 18883,
+   "win_rate_yes": 0.0543,
+   "avg_yes_price": 0.0013,
+   "yes_expectancy_per_contract": 0.053,
+   "no_expectancy_per_contract": -0.053,
+   "volume_weighted_win_rate": 0.004,
+   "contracts_traded": 838095339.59
+  },
+  {
+   "bucket": "0.10-0.20",
+   "n": 97,
+   "yes": 3,
+   "no": 94,
+   "win_rate_yes": 0.0309,
+   "avg_yes_price": 0.1489,
+   "yes_expectancy_per_contract": -0.1179,
+   "no_expectancy_per_contract": 0.1179,
+   "volume_weighted_win_rate": 0.067,
+   "contracts_traded": 2286271.95
+  },
+  {
+   "bucket": "0.20-0.40",
+   "n": 113,
+   "yes": 19,
+   "no": 94,
+   "win_rate_yes": 0.1681,
+   "avg_yes_price": 0.2953,
+   "yes_expectancy_per_contract": -0.1272,
+   "no_expectancy_per_contract": 0.1272,
+   "volume_weighted_win_rate": 0.0939,
+   "contracts_traded": 1360268.25
+  },
+  {
+   "bucket": "0.40-0.60",
+   "n": 48,
+   "yes": 16,
+   "no": 32,
+   "win_rate_yes": 0.3333,
+   "avg_yes_price": 0.5038,
+   "yes_expectancy_per_contract": -0.1704,
+   "no_expectancy_per_contract": 0.1704,
+   "volume_weighted_win_rate": 0.0768,
+   "contracts_traded": 2773179.06
+  },
+  {
+   "bucket": "0.60-0.80",
+   "n": 63,
+   "yes": 15,
+   "no": 48,
+   "win_rate_yes": 0.2381,
+   "avg_yes_price": 0.7071,
+   "yes_expectancy_per_contract": -0.469,
+   "no_expectancy_per_contract": 0.469,
+   "volume_weighted_win_rate": 0.8658,
+   "contracts_traded": 1870885.5
+  },
+  {
+   "bucket": "0.80-0.90",
+   "n": 65,
+   "yes": 11,
+   "no": 54,
+   "win_rate_yes": 0.1692,
+   "avg_yes_price": 0.8697,
+   "yes_expectancy_per_contract": -0.7005,
+   "no_expectancy_per_contract": 0.7005,
+   "volume_weighted_win_rate": 0.0004,
+   "contracts_traded": 69039052.05
+  },
+  {
+   "bucket": "0.90-0.99",
+   "n": 428,
+   "yes": 60,
+   "no": 368,
+   "win_rate_yes": 0.1402,
+   "avg_yes_price": 0.9769,
+   "yes_expectancy_per_contract": -0.8367,
+   "no_expectancy_per_contract": 0.8367,
+   "volume_weighted_win_rate": 0.6928,
+   "contracts_traded": 29376300.7
+  },
+  {
+   "bucket": ">0.99",
+   "n": 2,
+   "yes": 2,
+   "no": 0,
+   "win_rate_yes": 1.0,
+   "avg_yes_price": 0.996,
+   "yes_expectancy_per_contract": 0.004,
+   "no_expectancy_per_contract": -0.004,
+   "volume_weighted_win_rate": 1.0,
+   "contracts_traded": 500576.57
+  }
+ ],
+ "favourite_band_0_80_to_0_99": {
+  "definition": "0.8 <= last_price_dollars <= 0.99",
+  "n": 497,
+  "yes": 72,
+  "no": 425,
+  "win_rate_yes": 0.1449,
+  "avg_yes_price": 0.9615,
+  "yes_expectancy_per_contract": -0.8166,
+  "no_expectancy_per_contract": 0.8166,
+  "volume_weighted_win_rate": 0.207,
+  "contracts_traded": 98453339.71
+ },
+ "longshot_band_0_01_to_0_20": {
+  "definition": "0.01 <= last_price_dollars <= 0.2",
+  "n": 965,
+  "yes": 41,
+  "no": 924,
+  "win_rate_yes": 0.0425,
+  "avg_yes_price": 0.0387,
+  "yes_expectancy_per_contract": 0.0038,
+  "no_expectancy_per_contract": -0.0038,
+  "volume_weighted_win_rate": 0.0057,
+  "contracts_traded": 616141107.77
+ },
+ "all_rows": {
+  "n": 20783,
+  "yes": 1210,
+  "no": 19573,
+  "win_rate_yes": 0.0582,
+  "avg_yes_price": 0.0298,
+  "yes_expectancy_per_contract": 0.0284,
+  "no_expectancy_per_contract": -0.0284,
+  "volume_weighted_win_rate": 0.0279,
+  "contracts_traded": 945301873.67
+ },
+ "per_topic": {
+  "crypto": {
+   "n": 14008,
+   "yes": 0,
+   "no": 14008,
+   "win_rate_yes": 0.0,
+   "avg_yes_price": 0.0076,
+   "yes_expectancy_per_contract": -0.0076,
+   "no_expectancy_per_contract": 0.0076,
+   "volume_weighted_win_rate": 0.0,
+   "contracts_traded": 43078401.54
+  },
+  "culture": {
+   "n": 166,
+   "yes": 33,
+   "no": 133,
+   "win_rate_yes": 0.1988,
+   "avg_yes_price": 0.3325,
+   "yes_expectancy_per_contract": -0.1337,
+   "no_expectancy_per_contract": 0.1337,
+   "volume_weighted_win_rate": 0.0263,
+   "contracts_traded": 8481983.87
+  },
+  "elections": {
+   "n": 25,
+   "yes": 1,
+   "no": 24,
+   "win_rate_yes": 0.04,
+   "avg_yes_price": 0.1296,
+   "yes_expectancy_per_contract": -0.0896,
+   "no_expectancy_per_contract": 0.0896,
+   "volume_weighted_win_rate": 0.034,
+   "contracts_traded": 571993582.93
+  },
+  "gas": {
+   "n": 1959,
+   "yes": 720,
+   "no": 1239,
+   "win_rate_yes": 0.3675,
+   "avg_yes_price": 0.0242,
+   "yes_expectancy_per_contract": 0.3434,
+   "no_expectancy_per_contract": -0.3434,
+   "volume_weighted_win_rate": 0.6083,
+   "contracts_traded": 8960063.51
+  },
+  "golf": {
+   "n": 3890,
+   "yes": 181,
+   "no": 3709,
+   "win_rate_yes": 0.0465,
+   "avg_yes_price": 0.0836,
+   "yes_expectancy_per_contract": -0.0371,
+   "no_expectancy_per_contract": 0.0371,
+   "volume_weighted_win_rate": 0.004,
+   "contracts_traded": 312772076.19
+  },
+  "other": {
+   "n": 735,
+   "yes": 275,
+   "no": 460,
+   "win_rate_yes": 0.3741,
+   "avg_yes_price": 0.1106,
+   "yes_expectancy_per_contract": 0.2635,
+   "no_expectancy_per_contract": -0.2635,
+   "volume_weighted_win_rate": 0.1973,
+   "contracts_traded": 15765.63
+  }
+ },
+ "synthetic_excluded": {
+  "rows_usable": 20783,
+  "buckets": [
+   {
+    "bucket": "<=0.10",
+    "n": 19967,
+    "yes": 1084,
+    "no": 18883,
+    "win_rate_yes": 0.0543,
+    "avg_yes_price": 0.0013,
+    "yes_expectancy_per_contract": 0.053,
+    "no_expectancy_per_contract": -0.053,
+    "volume_weighted_win_rate": 0.004,
+    "contracts_traded": 838095339.59
+   },
+   {
+    "bucket": "0.10-0.20",
+    "n": 97,
+    "yes": 3,
+    "no": 94,
+    "win_rate_yes": 0.0309,
+    "avg_yes_price": 0.1489,
+    "yes_expectancy_per_contract": -0.1179,
+    "no_expectancy_per_contract": 0.1179,
+    "volume_weighted_win_rate": 0.067,
+    "contracts_traded": 2286271.95
+   },
+   {
+    "bucket": "0.20-0.40",
+    "n": 113,
+    "yes": 19,
+    "no": 94,
+    "win_rate_yes": 0.1681,
+    "avg_yes_price": 0.2953,
+    "yes_expectancy_per_contract": -0.1272,
+    "no_expectancy_per_contract": 0.1272,
+    "volume_weighted_win_rate": 0.0939,
+    "contracts_traded": 1360268.25
+   },
+   {
+    "bucket": "0.40-0.60",
+    "n": 48,
+    "yes": 16,
+    "no": 32,
+    "win_rate_yes": 0.3333,
+    "avg_yes_price": 0.5038,
+    "yes_expectancy_per_contract": -0.1704,
+    "no_expectancy_per_contract": 0.1704,
+    "volume_weighted_win_rate": 0.0768,
+    "contracts_traded": 2773179.06
+   },
+   {
+    "bucket": "0.60-0.80",
+    "n": 63,
+    "yes": 15,
+    "no": 48,
+    "win_rate_yes": 0.2381,
+    "avg_yes_price": 0.7071,
+    "yes_expectancy_per_contract": -0.469,
+    "no_expectancy_per_contract": 0.469,
+    "volume_weighted_win_rate": 0.8658,
+    "contracts_traded": 1870885.5
+   },
+   {
+    "bucket": "0.80-0.90",
+    "n": 65,
+    "yes": 11,
+    "no": 54,
+    "win_rate_yes": 0.1692,
+    "avg_yes_price": 0.8697,
+    "yes_expectancy_per_contract": -0.7005,
+    "no_expectancy_per_contract": 0.7005,
+    "volume_weighted_win_rate": 0.0004,
+    "contracts_traded": 69039052.05
+   },
+   {
+    "bucket": "0.90-0.99",
+    "n": 428,
+    "yes": 60,
+    "no": 368,
+    "win_rate_yes": 0.1402,
+    "avg_yes_price": 0.9769,
+    "yes_expectancy_per_contract": -0.8367,
+    "no_expectancy_per_contract": 0.8367,
+    "volume_weighted_win_rate": 0.6928,
+    "contracts_traded": 29376300.7
+   },
+   {
+    "bucket": ">0.99",
+    "n": 2,
+    "yes": 2,
+    "no": 0,
+    "win_rate_yes": 1.0,
+    "avg_yes_price": 0.996,
+    "yes_expectancy_per_contract": 0.004,
+    "no_expectancy_per_contract": -0.004,
+    "volume_weighted_win_rate": 1.0,
+    "contracts_traded": 500576.57
+   }
+  ],
+  "favourite_band_0_80_to_0_99": {
+   "definition": "0.8 <= last_price_dollars <= 0.99",
+   "n": 497,
+   "yes": 72,
+   "no": 425,
+   "win_rate_yes": 0.1449,
+   "avg_yes_price": 0.9615,
+   "yes_expectancy_per_contract": -0.8166,
+   "no_expectancy_per_contract": 0.8166,
+   "volume_weighted_win_rate": 0.207,
+   "contracts_traded": 98453339.71
+  },
+  "longshot_band_0_01_to_0_20": {
+   "definition": "0.01 <= last_price_dollars <= 0.2",
+   "n": 965,
+   "yes": 41,
+   "no": 924,
+   "win_rate_yes": 0.0425,
+   "avg_yes_price": 0.0387,
+   "yes_expectancy_per_contract": 0.0038,
+   "no_expectancy_per_contract": -0.0038,
+   "volume_weighted_win_rate": 0.0057,
+   "contracts_traded": 616141107.77
+  },
+  "all_rows": {
+   "n": 20783,
+   "yes": 1210,
+   "no": 19573,
+   "win_rate_yes": 0.0582,
+   "avg_yes_price": 0.0298,
+   "yes_expectancy_per_contract": 0.0284,
+   "no_expectancy_per_contract": -0.0284,
+   "volume_weighted_win_rate": 0.0279,
+   "contracts_traded": 945301873.67
+  },
+  "per_topic": {
+   "crypto": {
+    "n": 14008,
+    "yes": 0,
+    "no": 14008,
+    "win_rate_yes": 0.0,
+    "avg_yes_price": 0.0076,
+    "yes_expectancy_per_contract": -0.0076,
+    "no_expectancy_per_contract": 0.0076,
+    "volume_weighted_win_rate": 0.0,
+    "contracts_traded": 43078401.54
+   },
+   "culture": {
+    "n": 166,
+    "yes": 33,
+    "no": 133,
+    "win_rate_yes": 0.1988,
+    "avg_yes_price": 0.3325,
+    "yes_expectancy_per_contract": -0.1337,
+    "no_expectancy_per_contract": 0.1337,
+    "volume_weighted_win_rate": 0.0263,
+    "contracts_traded": 8481983.87
+   },
+   "elections": {
+    "n": 25,
+    "yes": 1,
+    "no": 24,
+    "win_rate_yes": 0.04,
+    "avg_yes_price": 0.1296,
+    "yes_expectancy_per_contract": -0.0896,
+    "no_expectancy_per_contract": 0.0896,
+    "volume_weighted_win_rate": 0.034,
+    "contracts_traded": 571993582.93
+   },
+   "gas": {
+    "n": 1959,
+    "yes": 720,
+    "no": 1239,
+    "win_rate_yes": 0.3675,
+    "avg_yes_price": 0.0242,
+    "yes_expectancy_per_contract": 0.3434,
+    "no_expectancy_per_contract": -0.3434,
+    "volume_weighted_win_rate": 0.6083,
+    "contracts_traded": 8960063.51
+   },
+   "golf": {
+    "n": 3890,
+    "yes": 181,
+    "no": 3709,
+    "win_rate_yes": 0.0465,
+    "avg_yes_price": 0.0836,
+    "yes_expectancy_per_contract": -0.0371,
+    "no_expectancy_per_contract": 0.0371,
+    "volume_weighted_win_rate": 0.004,
+    "contracts_traded": 312772076.19
+   },
+   "other": {
+    "n": 735,
+    "yes": 275,
+    "no": 460,
+    "win_rate_yes": 0.3741,
+    "avg_yes_price": 0.1106,
+    "yes_expectancy_per_contract": 0.2635,
+    "no_expectancy_per_contract": -0.2635,
+    "volume_weighted_win_rate": 0.1973,
+    "contracts_traded": 15765.63
+   }
+  }
+ },
+ "buckets_excluded_note": "synthetic_excluded re-runs the identical formulas over the rows whose series_ticker does NOT match the repo's SYNTHETIC_SERIES prefixes. The all_rows figures include those synthetic markets and are dominated by them; quote synthetic_excluded for anything strategy-related.",
+ "caveats": [
+  "last_price_dollars is the last traded price, not the average price paid by holders.",
+  "Fees are excluded; Kalshi series carry fee_type (quadratic/flat) and a fee_multiplier.",
+  "Only markets in the collector's settled-market sweep (data/latest/markets_settled.json) are counted; coverage is capped and not exhaustive.",
+  "market.result reflects the settlement outcome (yes/no); scalar/other results are excluded and counted above.",
+  "Demo-environment data; demo prices may not reflect real markets.",
+  "Historical expectancy does not predict future results.",
+  "volume_weighted_win_rate is defined here as sum(volume_fp where result == 'yes') / sum(volume_fp); the preserved file's internal definition is not recoverable from this repo."
+ ],
+ "sources": [
+  "data/latest/markets_settled.json (per-row source_url \u2192 official demo API, e.g. https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=<TICKER>)",
+  "https://docs.kalshi.com/getting_started/market_settlement (settlement semantics: market.result yes/no)",
+  "https://docs.kalshi.com/getting_started/demo_env (demo data caveat)"
+ ]
+}

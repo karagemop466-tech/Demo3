@@ -23,3 +23,11 @@ originating branch, e.g. `https://external-api.demo.kalshi.co/trade-api/v2/marke
 settlement semantics per https://docs.kalshi.com/getting_started/market_settlement.
 Re-verification path: recompute the same formula over `data/latest/resolutions.json`
 (1,000 most recent) or extend the collector sweep, then publish with per-row sources.
+
+**Update 2026-11-21 (session d8f4577a): recomputed on current `main` data.** The same formulas were
+re-run over `data/latest/markets_settled.json` (20,783 finalized demo markets as of the 2026-11-21T07:32Z re-check, per-row `source_url`) by
+`recompute_expectancy.py`; see `VERIFICATION.md` and `expectancy.recomputed.json` in this folder. Headline:
+the settled sweep is 67.4% crypto price markets, all settled NO, so the aggregates are an artifact of the
+demo exchange and must not be quoted as tradable edge. The favourite-band sign (YES loses money) persists;
+the longshot sign flips (+0.38¢). Irregularities F-D8F-01..05 are logged there and remain flagged for review.
+The preserved `expectancy.json` is kept intact for provenance.
