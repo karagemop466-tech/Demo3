@@ -2102,3 +2102,28 @@ Verification protocol unchanged: no value without an official source; blanks sta
   44815460041) — the green collect runs confirm the */10 demo snapshot schedule recovered after
   the F-2a0-01 YAML fix, and main's own snapshot commits (e.g. `data: refresh snapshot
   2026-11-20T20:58Z`) corroborate it. Session 2a0ddd99 delivered.
+
+---
+
+## Task board — session c46ba25d (final integration: independent audit, gap fixes, PR/merge/Pages)
+
+Branch: `arena/c46ba25d-demo3` (platform-fixed; see R-04). Session ID: `c46ba25d`.
+Claimed 2026-11-21 (UTC) as the final integration session for this brief: independent line-by-line
+audit of the combined root site vs official sources, gap fixes or documentation, site-build/link
+checks, Pages confirmation, then PR → merge. Audit artifacts in `integration-audit/**` (new folder —
+`audit/**` is claimed by session d7d7a733, so this session adds its own).
+
+| # | Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|------|--------|-------|------------|------------------------|----------------|
+| I1 | Audit: executive summary + landing claims (`EXECUTIVE_SUMMARY.md`, `index.html`, `docs/` landing) | claimed | c46ba25d | `integration-audit/**` | docs.kalshi.com + replayable demo URLs per claim | — |
+| I2 | Audit: dashboard data correctness (`assets/dashboard.js` ranking math, topics, source links, liquidity display; spot-verify rows vs live demo API) | claimed | c46ba25d | `integration-audit/**` | same as I1 | — |
+| I3 | Audit: portfolio/trades/strategies pages vs official sources; honesty of "execute trades" claims (live key unavailable) | claimed | c46ba25d | `integration-audit/**` | same as I1 | — |
+| I4 | Audit: automation chain — `collect.yml`, `paper-desk.yml`, `trade.yml`; no-manual-input check (collector, paper cycles) | claimed | c46ba25d | `integration-audit/**` | Actions run history + workflow files + official docs | — |
+| I5 | Gaps found → fix or document (owner decisions: dollar-volume metric, WS streaming, live trading credentials, coverage caps) | in progress | c46ba25d | per-finding; shared outputs owned by integration session | — | — |
+| I6 | Site checks: `verify_root_site.py`, `verify_site.py`, `check_site.py`, `npm test`, full link crawl | in progress | c46ba25d | — | checker outputs | — |
+| I7 | Pages: confirm deploy status + live site fetches | in progress | c46ba25d | — | Pages API, page fetch | — |
+| I8 | PR `arena/c46ba25d-demo3` → `main` (no approval wait), merge, Pages confirm, record PR link + merge result | in progress | c46ba25d | `COORDINATION.md` | gh, Pages API | — |
+
+### Session c46ba25d — progress log
+
+- 2026-11-21: claim written to this board; `integration-audit/**` is this session's new folder.
