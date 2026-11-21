@@ -37,6 +37,7 @@ without an official source link, blank/flagged values are unverified and never i
 
 | 81c58501 | `arena/81c58501-demo3` | active — final integration: live-chat resolutions + automation-restore fix + canonicalization of open alert PRs + PR/merge/Pages | `assets/alerts.js`, `assets/dashboard.js`, `tests/alerts-resolutions.test.js`, `COORDINATION.md` | Canonical alert-chat base = the implementation already merged on `main` (PR #28 `assets/alerts.js`, PR #44 settlement-source context, `dashboard.js` resolution table). Gaps found by line-by-line audit on 2026-11-20 ~19:55 UTC: (1) live chats have no yes/no resolution messages (grep `result|resolved` in `assets/alerts.js` = 0 hits; matches earlier review CR-6D-1), (2) `autoTrade` checkbox never restored from persisted state (`dashboard.js` init has a no-op placeholder). See task board section "session 81c58501" below. | Ownership note: `assets/alerts.js`/`assets/dashboard.js` were merged by sessions `6ebc1cb7`/`b13c6a8d`; those sessions show no commits after 19:42 UTC. This is the final-integration handoff; file-ownership request logged here per rules. |
 | 7a570f35 | `arena/7a570f35-demo3` | claimed 2026-11-20 UTC - live endpoint re-verification of the executive summary (board + verification record only) | `COORDINATION.md` only | No site/data/script changes; reads official docs.kalshi.com and external-api.demo.kalshi.co live | See section below |
+| f9dd82bb | `arena/f9dd82bb-demo3` | claimed 2026-11-21 UTC - catalyst feed allowlist reconciliation (disable feeds that failed the live CI probe) + final independent audit | `catalysts/feeds.json`, `catalysts/README.md`, `catalysts/index.html`, `COORDINATION.md` | Source of the probe evidence: `catalysts/data/feed_health.json` (mode `live`, checked_at 2026-11-21T01:43:05Z, committed by the scheduled workflow). Tests run only, never edited data: `catalysts/tests/test_scan.py`, `catalysts/tests/check_page.py`, repo-wide verify scripts | F-cat-03 |
 
 ## Task board — session d7ee554b (live ≥$0.10 swing alerts): WITHDRAWN as duplicate
 
@@ -2238,3 +2239,26 @@ Claim pushed: 639664c.
 - **Change request for the final integration session (c46ba25d):** publish F-D8F-01..05 on the Flagged for Review page (`flagged.html`) with the source links in `VERIFICATION.md` (F-D8F-02 is high-impact: any site text quoting "demo expectancy" must carry the crypto-sweep caveat). Shared outputs were not edited by this session.
 - **Parallel session:** c46ba25d (final integration audit) merged PR #92 during this session; its files were preserved verbatim throughout; scopes stayed non-overlapping (`integration-audit/**` vs `data/legacy/c2aac20e_expectancy/**`).
 - Session d8f4577a delivered. E1–E3 done.
+
+## Task board — session f9dd82bb (catalyst feed allowlist reconciliation + final independent audit, `arena/f9dd82bb-demo3`)
+
+Claimed 2026-11-21 UTC (branch base = `main` @ `7fb2a21`, current tip). The brief asks for
+"website links that may have caused a sharp jump" in contract price; the repo answers that with the
+probe-gated candidate-catalyst layer in `catalysts/`. The allowlist in `catalysts/feeds.json` still
+carried every feed as `pending_ci_probe` even though the scheduled workflow has since recorded a
+**live** probe of every feed (`catalysts/data/feed_health.json`, `checked_at` 2026-11-21T01:43:05Z,
+`mode: live`). Six feeds failed that probe and the documented policy (F-cat-03; page flag F-cat-03)
+says feeds that never return items are flagged for removal/pruning. This session disables (never
+deletes, never re-URLs) the six failing feeds, records the probe evidence per feed, updates the
+subsite copy, and runs the full verification suite. File scope: `catalysts/feeds.json`,
+`catalysts/README.md`, `catalysts/index.html`, `COORDINATION.md`. No other session's file is
+edited; `catalysts/data/feed_health.json` is CI-owned and is read, never hand-edited.
+
+| # | Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|---|
+| P1 | Claim + board row (this entry) | done | f9dd82bb | `COORDINATION.md` | branch is `main` tip; `git fetch` confirms | — |
+| P2 | Disable the six feeds that failed the 2026-11-21T01:43:05Z live CI probe, with per-feed probe evidence; keep enabled feeds `pending_ci_probe` (test-enforced) | done (see completion record) | f9dd82bb | `catalysts/feeds.json` | `catalysts/data/feed_health.json` (live, 2026-11-21T01:43:05Z): AP News HTTP 403; Reuters HTTP 404; ESPN fetched but no items parsed; PGA Tour fetched but no items parsed; Golf Digest HTTP 404; U.S. EIA — Petroleum HTTP 404 | F-cat-03 |
+| P3 | Sync subsite copy with the probe outcome (page flag F-cat-03, README feeds table); note golf and gas coverage now rest on zero/one working news feed each until replacements are verified in CI | done (see completion record) | f9dd82bb | `catalysts/index.html`, `catalysts/README.md` | Pages rendered feed health from `feed_health.json` at run time; copy must not claim unverified coverage | F-cat-03 |
+| P4 | Run the verification suite (catalyst unit tests, page gate, repo-wide verify scripts, `npm test`, Pages API), PR → merge → Pages, record | done (see completion record) | f9dd82bb | `COORDINATION.md` | see completion record | — |
+
+Verification protocol unchanged: no value without a source; blanks stay blank and flagged.
