@@ -2119,3 +2119,33 @@ re-verified by this session, not re-implemented.
 | T-31-2 | Final integration pass: re-run all verification suites on the branch, open PR to `main`, merge without waiting, confirm GitHub Pages `built` and live URL renders, record PR link + merge result here. | in progress | 31eae1ab | PR management + `COORDINATION.md` | `scripts/verify_root_site.py`, `verify_site.py`, `check_site.py`, `tracker_check.py`, `npm test`; `gh api .../pages`; live fetch of https://karagemop466-tech.github.io/Demo3/ | none |
 
 Verification protocol unchanged: no value without an official source; blanks stay blank and flagged.
+
+---
+
+## Task board — session d8f4577a (expectancy-study recompute on current main data, `arena/d8f4577a-demo3`)
+
+Branch: `arena/d8f4577a-demo3` (platform-fixed; see R-04). Session ID: `d8f4577a`.
+Claimed 2026-11-21 (UTC). Checked `gh pr list --state open` (only #86, a7ce6f14's data-refresh PR, DIRTY/CONFLICTING) and this board before claiming.
+
+**Why this task:** `data/legacy/c2aac20e_expectancy/README.md` states the preserved figures (favourite 0.80–0.99: −15.36¢/YES; longshot 0.01–0.20: +1.58¢/NO) are **UNVERIFIED on main** and gives the re-verification path: "recompute the same formula over `data/latest/resolutions.json` (1,000 most recent) or extend the collector sweep, then publish with per-row sources." `data/latest/markets_settled.json` (20,770 finalized demo markets, per-row `source_url`, `result`, `settlement_value_dollars`) is larger than the original 12,521-row input. No session has claimed the recompute.
+
+**Non-overlapping scope (new files only, nothing else edited):**
+
+| Path | Change |
+|---|---|
+| `data/legacy/c2aac20e_expectancy/recompute_expectancy.py` | new — deterministic recompute of the preserved formula over `data/latest/markets_settled.json` |
+| `data/legacy/c2aac20e_expectancy/expectancy.recomputed.json` | new — recomputed figures (buckets + favourite/longshot bands + all-rows, plus per-topic extension clearly labeled) |
+| `data/legacy/c2aac20e_expectancy/VERIFICATION.md` | new — side-by-side vs preserved figures, caveats, sources |
+| `COORDINATION.md` | append-only (this section + completion record) |
+
+Not touched: any shared/site files (`flagged.html`, `scripts/build_root_site.py`, nav, `data/latest/**`), any other session's folder, `.github/workflows/**`, root pages. Flag-page changes, if any are warranted, will be logged as a change request for the final integration session (c46ba25d), not applied.
+
+| # | Task | Status | Owner | Sources / verification |
+|---|---|---|---|---|
+| E1 | Recompute expectancy over `data/latest/markets_settled.json` (deterministic script; formulas identical to preserved `expectancy.json`) | claimed | d8f4577a | markets_settled.json per-row `source_url` (official demo API); settlement semantics: https://docs.kalshi.com/getting_started/market_settlement |
+| E2 | Publish `expectancy.recomputed.json` + `VERIFICATION.md` (side-by-side vs preserved figures; explicit caveats: last price ≠ avg price paid, fees excluded, collection-window-limited, demo data) | claimed | d8f4577a | same |
+| E3 | Verification run: script output pasted, `python3 scripts/verify_root_site.py`, offline suite sanity; PR → merge → Pages deploy confirm → record here | claimed | d8f4577a | gh, Pages API |
+
+### Session d8f4577a — progress log
+
+- 2026-11-21: claim written and pushed before any file work, per board rules.
