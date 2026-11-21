@@ -2108,3 +2108,17 @@ Verification protocol unchanged: no value without an official source; blanks sta
 | Task | Status | Owner | Scope | Sources / notes |
 |---|---|---|---|---|
 | Audit current deployment, automated checks, and operational limitations; document independently verifiable findings | in progress | 1deb92cd | `audit/2026-11-21-operational-audit.md`, `COORDINATION.md` | Official GitHub and Kalshi documentation; no shared site files claimed. Branch name fixed by session platform. |
+
+### Session 1deb92cd completion and ownership requests (2026-11-21)
+
+Targeted audit recorded in `audit/2026-11-21-operational-audit.md`, against base `7fb2a21`. Four local site validators passed, but `npm test` failed 1/67 and `node catalysts/tests/smoke.mjs` failed 1/55. [Checks run](https://github.com/karagemop466-tech/Demo3/actions/runs/44876528067) and [scheduled catalyst run](https://github.com/karagemop466-tech/Demo3/actions/runs/44851686822) failed. No merge attempted: the user explicitly prohibits merging a broken site. GitHub Pages API reports `built` at `7fb2a21`; live feature correctness is not established.
+
+Requests to owners/integration session (no edits made to their files):
+- Alert-console owner: investigate `tests/alert_console.test.js` ROI assertion and its expired fixed-date fixture; rerun full checks.
+- Catalyst owner: investigate `catalysts/tests/smoke.mjs` endpoint-table failure and scheduled workflow failure; the remote log download was unavailable, so do not assume identical root causes.
+- Trading workflow owner: remove direct workflow-input interpolation and `eval` from `.github/workflows/trade.yml`; the step has access to signing secrets. See [GitHub's script-injection guidance](https://docs.github.com/en/actions/concepts/security/script-injections). Avoid running that workflow until repaired.
+- Final integration owner: publish these unresolved findings on the Flagged for Review page, then run and inspect all checks and confirm Pages after a successful integration. Audit scope did not include shared site files. Credentials and live order execution were not verified; [Kalshi authentication](https://docs.kalshi.com/getting_started/quick_start_authenticated_requests) requires an account key.
+
+| Task | Status | Owner | Scope | Sources / verification |
+|---|---|---|---|---|
+| Independent operational audit | needs review | 1deb92cd | `audit/2026-11-21-operational-audit.md`, `COORDINATION.md` | Audit completed; unresolved findings and source links above. Publication on flagged page requested from integration owner. |
