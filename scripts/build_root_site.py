@@ -1020,7 +1020,7 @@ balance, positions, fills and orders are read from the demo exchange.</li>
 </div>
 <div class="card">
   <h2>Preserved portfolio notes (session cde2ae63)</h2>
-  ''' + legacy_table('portfolio.html', 'portfolio.html', 'Extracted verbatim from the earlier root portfolio.html (data/legacy/cde2ae63_rows.json).') + '''
+  """ + legacy_table('portfolio.html', 'portfolio.html', 'Extracted verbatim from the earlier root portfolio.html (data/legacy/cde2ae63_rows.json).') + """
 </div>
 <div class="card">
   <h2>Positions &amp; fills</h2>
@@ -1065,7 +1065,7 @@ clearly labeled — nothing is sent to Kalshi). Every trade is journaled, catego
 </div>
 <div class="card">
   <h2>Preserved execution reference (session cde2ae63)</h2>
-  ''' + legacy_table('trades.html', 'trades.html', 'Extracted verbatim from the earlier root trades.html (data/legacy/cde2ae63_rows.json).') + '''
+  """ + legacy_table('trades.html', 'trades.html', 'Extracted verbatim from the earlier root trades.html (data/legacy/cde2ae63_rows.json).') + """
 </div>
 <div class="card">
   <h2>Blotter &amp; journal</h2>

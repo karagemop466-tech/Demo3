@@ -2127,3 +2127,64 @@ checks, Pages confirmation, then PR → merge. Audit artifacts in `integration-a
 ### Session c46ba25d — progress log
 
 - 2026-11-21: claim written to this board; `integration-audit/**` is this session's new folder.
+
+### Session c46ba25d — audit findings, fixes and flags (2026-11-21 ~07:30 UTC)
+
+I1 — EXECUTIVE_SUMMARY.md re-verification vs official sources (live demo API via the page-fetch
+tool; docs.kalshi.com pages fetched on 2026-11-21):
+- Endpoint table (demo REST + also-supported, WS variants): matches demo_env table ✓ [demo_env]
+- Signing spec (KALSHI-ACCESS-* headers, pre-sign = timestamp+method+path-without-query, Ed25519 /
+  RSA-PSS SHA-256, ms timestamps, ±30 s): matches api_keys ✓ [api_keys]
+- Settlement ($1/contract winner, yes/no) ✓ [market_settlement + live KXGOVCA-26-CBIA]
+- Dollar-volume estimate = contracts × last price, labeled estimate ✓ [get-markets]
+- Focus series live-verified: gas KXAAAGASW (series exists; open markets [] — F-3B-02 stands),
+  elections KXPRES28/KXPRESNOMD-28 family (live), culture Oscar markets (KXGOVCA series live),
+  crypto KXBTC family (live), golf KXPGATOUR (live, settlement sources ESPN/Fox Sports/PGATOUR).
+- Live records verified: /exchange/status (trading_active true), /markets?limit=3, /series?limit=3,
+  /markets?tickers=..., /markets?event_ticker=KXPRESNOMD-28&limit=3, /markets/KXPRESNOMD-28-HBID
+  (live 0.0050/0.0030/0.0020/0.0050 — matches committed open row), /markets/KXGOVCA-26-CBIA (live
+  result "no", status "finalized", settlement_value_dollars "0.0000" — matches committed settled row),
+  /markets?tickers=KXGOVCA-26-CBIA&status=settled (same record), /markets/KXPRESNOMD-28-HBID/orderbook
+  (best YES bid 0.0030@111111.10, implied NO-bid ladder ascending), /markets/trades?ticker=...
+  (count_fp, yes/no_price_dollars, taker_outcome_side, created_time — matches dashboard.js),
+  /series/KXPRESNOMD/markets/KXPRESNOMD-28-HBID/candlesticks (path + envelope matches dashboard.js),
+  /events/KXPRESNOMD-28 (settlement_sources Kosovo Democratic Party → democrats.org),
+  /series/KXPGATOUR (settlement_sources ESPN/Fox Sports/PGATOUR), /portfolio/balance
+  (unauthenticated → fetch error, no data).
+I2 — Dashboard correctness: ranking = contracts × last price (contracts, last = live values —
+  est. $ labeled everywhere per the verification rule); coverage caps disclosed in UI
+  (top-25 table; depth 15/topic, "All matched series (slower)" option — F7b-03); chart windows
+  30s–24h with seconds/minutes/hours labels (the brief's "seconds" granularity = the 30 s window);
+  candlesticks period_interval: 1 minute for windows ≤6h, 60 for >6h — matches get-market-candlesticks
+  (1/60/1440); orderbook ladder shows contracts at each price; liquidity summary = Σ price×contracts
+  (resting liquidity) + total contracts — matches Get Market Orderbook + orderbook_responses.
+I3 — Portfolio/Trades: **V-A1 fixed** — portfolio.html/trades.html carried literal
+  `''' + legacy_table(...) + '''` fragments (legacy preserved tables missing — live defect).
+  Generator `scripts/build_root_site.py` (build_portfolio/build_trades) + regenerated pages.
+  Legacy rows render with per-row source discipline (unverified pills where the old rows had no
+  official source — matches the "no hallucinated values" rule). Live-trading path is credential-gated
+  by design (user-created demo key required per demo_env: credentials are separate from production;
+  no key exists in this environment — honest "paper mode, live blocked" states retained).
+I4 — Automation: collect.yml every 10 min on main (W-167-01/F-6D-10 fix already merged; schedule live);
+  paper-desk.yml every 20 min on main (desk cycle + ledger + Pages rebuild request). No manual input.
+I6 — Site checks: verify_root_site 0 failures; verify_site PASSED; check_site passed; npm test 67/67;
+  git diff --check OK; regeneration drift on untouched pages is volume-number updates from committed
+  snapshots (crypto/golf/gas-prices) and BUILD-U 29→46 (+17, the preserved legacy rows).
+
+### Session c46ba25d — flags (F-c46-01..02)
+
+- F-c46-01 (fixed in this integration): tests/alert_console.test.js — "the ROI chat should show the
+  alert or its dimmed near-miss" (67/1 before fix). Diagnosis: the smoke alert scores 0.493
+  (uncalibrated edge 0.5 × 0.35 + relative_move 0.138 × 0.2 + executability 0.704 × 0.2 +
+  liquidity_depth 1.0 × 0.15 + time_to_resolution 0), below the 0.5 near-miss bar, so the ROI feed
+  was empty. Fix in assets/alert-console.js renderFeeds: an alert with `evidence: "none"` (no
+  calibrated bucket for the setup) is now shown dimmed in the ROI feed (it cannot be a "pick" —
+  pass still requires sufficient calibration + positive measured edge). npm test 67/67 after.
+- F-c46-02 (owner: collector session 3b5e95bd): `data/latest/top_events.json` stores a nested
+  market's title for event KXPGATOUR-MAST27 — live `GET /markets?event_ticker=KXPGATOUR-MAST27&limit=2`
+  (2026-11-21) returns market titles ("Masters Tournament: Russell Henley wins", etc.) while the
+  committed snapshot's `title` for that event is "Masters Tournament: Matt Fitzpatrick wins"
+  (V-A2, verified live both ways). Collector fix: in `market_row`, prefer the event title
+  (`ev_by_ticker[et]["title"]`) for `top_events.json` event titles.
+
+Claim pushed: 639664c.
