@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-20T20:37:28Z",
+  "generated_at": "2026-11-21T02:24:13Z",
   "api_base": "https://api.elections.kalshi.com/trade-api/v2",
   "docs": "https://docs.kalshi.com/llms.txt",
   "calls_ok": 66,
@@ -8,10 +8,10 @@
     "gas": 46,
     "elections": 15,
     "culture": 0,
-    "crypto": 273,
+    "crypto": 333,
     "golf": 197
   },
-  "resolved_markets_stored": 912,
+  "resolved_markets_stored": 1112,
   "orderbooks_stored": 12,
   "candle_series_stored": 12,
   "errors": [],
