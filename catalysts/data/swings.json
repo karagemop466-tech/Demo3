@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-11-21T01:42:59Z",
+ "generated_at": "2026-11-21T07:08:48Z",
  "api_root": "https://external-api.demo.kalshi.co/trade-api/v2",
  "threshold_dollars": "0.10",
  "threshold_note": ">= $0.10 (10 cents) per contract between consecutive samples, either direction; exact decimal arithmetic.",
@@ -9,6 +9,88 @@
  },
  "mode": "live",
  "swings": [
+  {
+   "id": "024a9050b700ef1b",
+   "ticker": "KXDIESELD-26NOV21-T5.860",
+   "topic": "other",
+   "event_ticker": "KXDIESELD-26NOV21",
+   "series_ticker": "",
+   "direction": "up",
+   "delta_dollars": "0.1300",
+   "abs_delta_dollars": "0.1300",
+   "from": {
+    "ts": "2026-11-21T01:42:59Z",
+    "last_price_dollars": "0.8500",
+    "price_field": "last_price_dollars"
+   },
+   "to": {
+    "ts": "2026-11-21T07:08:48Z",
+    "last_price_dollars": "0.9800",
+    "price_field": "last_price_dollars"
+   },
+   "sample_gap_seconds": 19549,
+   "detected_by": "price_tape",
+   "origin": "catalysts/data/tape.jsonl",
+   "detected_at": "2026-11-21T07:08:48Z",
+   "record_source": "GET /markets?tickers= (demo API, this run)",
+   "status": "closed",
+   "result": "",
+   "close_time": "2026-11-21T04:59:00Z",
+   "settlement_ts": "",
+   "settlement_value_dollars": "",
+   "volume_fp": "41.00",
+   "open_interest_fp": "26.00",
+   "market_url_pair": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTCMAXMON-BTC-26NOV30-9250000,KXBTCMAXMON-BTC-26NOV30-9500000,KXBTCMAXMON-BTC-26NOV30-9750000,KXBTCMAXY-26DEC31-109999.99,KXBTCMAXY-26DEC31-119999.99,KXBTCMAXY-26DEC31-139999.99,KXBTCMAXY-26DEC31-199999.99,KXBTCMAXY-26DEC31-99999.99,KXBTCMINY-27JAN01-40000.00,KXBTCMINY-27JAN01-45000.00,KXBTCMINY-27JAN01-50000.00,KXBTCMINY-27JAN01-55000.00,KXBTCMINY-27JAN01-60000.00,KXBTCY-27JAN0100-B117500,KXBTCY-27JAN0100-B122500,KXBTCY-27JAN0100-B137500,KXBTCY-27JAN0100-B142500,KXBTCY-27JAN0100-B42500,KXDANCINGWITHTHESTARS-26DEC31-AGLE,KXDANCINGWITHTHESTARS-26DEC31-CWOO,KXDANCINGWITHTHESTARS-26DEC31-HSHU,KXDANCINGWITHTHESTARS-26DEC31-JSTIL,KXDANCINGWITHTHESTARS-26DEC31-MHIG,KXDIESELD-26NOV21-T5.860,KXDIESELD-26NOV21-T5.935&limit=25",
+   "api_corroboration": {
+    "last_price_dollars": "0.9800",
+    "previous_price_dollars": "0.0000",
+    "yes_bid_dollars": "0.0000",
+    "yes_ask_dollars": "1.0000",
+    "previous_yes_ask_dollars": "0.0000",
+    "previous_yes_bid_dollars": "0.0000",
+    "price_level_structure": "linear_cent",
+    "volume_24h_fp": "41.00",
+    "note": "prices only: the API does not timestamp previous_price_dollars, so the interval in which the move happened stays bounded by the sample gap",
+    "status": "mismatch"
+   },
+   "title": "Will Diesel Price on November 21, 2026 be above $5.860? \u2014 Above $5.860 / Above $5.860",
+   "resolved": false,
+   "tracking": "active",
+   "links": {
+    "market_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/markets/KXDIESELD-26NOV21-T5.860",
+    "fetched_via": "https://external-api.demo.kalshi.co/trade-api/v2/markets?tickers=KXBTCMAXMON-BTC-26NOV30-9250000,KXBTCMAXMON-BTC-26NOV30-9500000,KXBTCMAXMON-BTC-26NOV30-9750000,KXBTCMAXY-26DEC31-109999.99,KXBTCMAXY-26DEC31-119999.99,KXBTCMAXY-26DEC31-139999.99,KXBTCMAXY-26DEC31-199999.99,KXBTCMAXY-26DEC31-99999.99,KXBTCMINY-27JAN01-40000.00,KXBTCMINY-27JAN01-45000.00,KXBTCMINY-27JAN01-50000.00,KXBTCMINY-27JAN01-55000.00,KXBTCMINY-27JAN01-60000.00,KXBTCY-27JAN0100-B117500,KXBTCY-27JAN0100-B122500,KXBTCY-27JAN0100-B137500,KXBTCY-27JAN0100-B142500,KXBTCY-27JAN0100-B42500,KXDANCINGWITHTHESTARS-26DEC31-AGLE,KXDANCINGWITHTHESTARS-26DEC31-CWOO,KXDANCINGWITHTHESTARS-26DEC31-HSHU,KXDANCINGWITHTHESTARS-26DEC31-JSTIL,KXDANCINGWITHTHESTARS-26DEC31-MHIG,KXDIESELD-26NOV21-T5.860,KXDIESELD-26NOV21-T5.935&limit=25",
+    "event_api_url": "https://external-api.demo.kalshi.co/trade-api/v2/events/KXDIESELD-26NOV21",
+    "kalshi_market_page": "",
+    "kalshi_site_root": "https://demo.kalshi.co/",
+    "kalshi_market_page_note": "Per-event page URL not published: the demo desk's URL pattern for a single event is not documented at https://docs.kalshi.com/getting_started/demo_env and could not be confirmed from this build environment, so guessing it would be an inferred value. The canonical API records above are the verifiable sources.",
+    "series_ticker": ""
+   },
+   "series": {
+    "series_ticker": "KXDIESELD",
+    "title": "Daily Diesel Price",
+    "category": "Economics",
+    "frequency": "one_off",
+    "settlement_sources": [
+     {
+      "name": "AAA",
+      "url": "https://gasprices.aaa.com/"
+     }
+    ],
+    "contract_terms_url": "https://assets.kalshi.com/contract_terms/AAADIESEL.pdf",
+    "source_url": "https://external-api.demo.kalshi.co/trade-api/v2/series/KXDIESELD",
+    "provenance": "GET /series/{ticker} (this run)"
+   },
+   "title_source": "api:markets",
+   "resolution_label": "",
+   "catalysts": [],
+   "catalyst_match": {
+    "items_in_window": 0,
+    "match_status": "no_feed_item_in_window",
+    "window_start_ts": "2026-11-20T22:42:59Z",
+    "window_end_ts": "2026-11-21T08:08:48Z"
+   },
+   "threshold_dollars": "0.1000"
+  },
   {
    "id": "f37afa0f1862d845",
    "ticker": "KXAAAGASM-26DEC31-3.30",
