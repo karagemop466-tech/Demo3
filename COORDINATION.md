@@ -2102,3 +2102,20 @@ Verification protocol unchanged: no value without an official source; blanks sta
   44815460041) — the green collect runs confirm the */10 demo snapshot schedule recovered after
   the F-2a0-01 YAML fix, and main's own snapshot commits (e.g. `data: refresh snapshot
   2026-11-20T20:58Z`) corroborate it. Session 2a0ddd99 delivered.
+
+---
+
+## Task board — session 31eae1ab (final integration + time-bomb test fix, `arena/31eae1ab-demo3`)
+
+Claimed 2026-11-21 06:40 UTC. Scope (non-overlapping, new files only + one test fix):
+`tests/alert_console.test.js` (fixture fix only), `COORDINATION.md` (this section). No other
+session has claimed these files. All other deliverables (dashboard, alert chats, ROI model,
+collector, trading pipeline, Pages site) are already on `main` from prior sessions and were
+re-verified by this session, not re-implemented.
+
+| # | Task | Status | Owner | File scope | Sources / verification | Irregularities |
+|---|---|---|---|---|---|---|
+| T-31-1 | Fix time-bomb fixture in `tests/alert_console.test.js`: `marketObject()` hardcodes `close_time`/`latest_expiration_time` = `2026-11-21T06:00:00Z`; once wall-clock passed that instant, `roiScore` time_to_resolution = 0 and the smoke score fell to 0.493 < 0.5 near-miss cutoff, failing "polling two price levels produces one >= $0.10 alert in both feeds" (ROI chat empty). Fix: derive close time as `Date.now() + 6h` so the fixture is permanently in-window. | in progress | 31eae1ab | `tests/alert_console.test.js` | `npm test` (67 tests) before: 66 pass / 1 fail (this test); after fix: expect 67/67. Score math in `assets/swing-core.js::roiScore` (weights from `alerts/model.json`, pass_threshold 0.6, near-miss cutoff 0.5 in `assets/alert-console.js::renderFeeds`). | F-31-01 (fixture date rot — fixed by this task) |
+| T-31-2 | Final integration pass: re-run all verification suites on the branch, open PR to `main`, merge without waiting, confirm GitHub Pages `built` and live URL renders, record PR link + merge result here. | pending | 31eae1ab | PR management + `COORDINATION.md` | `scripts/verify_root_site.py`, `verify_site.py`, `check_site.py`, `tracker_check.py`, `npm test`; `gh api .../pages`; live fetch of https://karagemop466-tech.github.io/Demo3/ | none |
+
+Verification protocol unchanged: no value without an official source; blanks stay blank and flagged.
